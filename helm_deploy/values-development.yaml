@@ -5,10 +5,11 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: single-accommodation-service-ui-dev.hmpps.service.justice.gov.uk
+    host: single-accommodation-service-dev.hmpps.service.justice.gov.uk
+    tlsSecretName: hmpps-single-accommodation-service-dev-cert
 
   env:
-    INGRESS_URL: "https://single-accommodation-service-ui-dev.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://single-accommodation-service-dev.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     EXAMPLE_API_URL: 'https://template-kotlin-dev.hmpps.service.justice.gov.uk'

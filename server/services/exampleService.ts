@@ -1,9 +1,10 @@
-import ExampleApiClient from '../data/exampleApiClient'
+import SasClient from '../data/sasClient'
+import { HelloWorldData } from '../interfaces/helloWorldData'
 
 export default class ExampleService {
-  constructor(private readonly exampleApiClient: ExampleApiClient) {}
+  constructor(private readonly sasClient: SasClient) {}
 
-  getCurrentTime() {
-    return this.exampleApiClient.getCurrentTime()
+  getHelloWorld(token: string): Promise<HelloWorldData> {
+    return this.sasClient.getHelloWorld(token)
   }
 }

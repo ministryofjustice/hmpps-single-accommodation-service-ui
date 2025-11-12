@@ -8,9 +8,9 @@ export default function routes({ auditService, exampleService }: Services): Rout
 
   router.get('/', async (req, res, next) => {
     await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-
-    const currentTime = await exampleService.getCurrentTime()
-    return res.render('pages/index', { currentTime })
+    const token = res.locals?.user?.token
+    const helloWorldData = await exampleService.getHelloWorld(token)
+    return res.render('pages/index', { helloWorldData })
   })
 
   return router

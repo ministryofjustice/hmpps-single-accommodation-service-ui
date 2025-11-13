@@ -2,7 +2,7 @@ import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import config from '../config'
 import logger from '../../logger'
-import api from '../paths/api'
+import apiPaths from '../paths/api'
 
 export type CaseSummary = {
   name: string
@@ -60,6 +60,6 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string) {
-    return this.get<Array<CaseSummary>>({ path: '/cases' }, asUser(token))
+    return this.get<Array<CaseSummary>>({ path: apiPaths.cases({}) }, asUser(token))
   }
 }

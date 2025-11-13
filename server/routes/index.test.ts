@@ -2,13 +2,15 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
-import ExampleService from '../services/exampleService'
+import CasesService from '../services/casesService'
+import { CaseSummary } from '../data/casesClient'
+import logger from '../../logger'
 
 jest.mock('../services/auditService')
-jest.mock('../services/exampleService')
+jest.mock('../services/casesService')
 
 const auditService = new AuditService(null) as jest.Mocked<AuditService>
-const exampleService = new ExampleService(null) as jest.Mocked<ExampleService>
+const casesService = new CasesService(null) as jest.Mocked<CasesService>
 
 let app: Express
 
@@ -16,7 +18,7 @@ beforeEach(() => {
   app = appWithAllRoutes({
     services: {
       auditService,
-      exampleService,
+      casesService,
     },
     userSupplier: () => user,
   })
@@ -28,27 +30,33 @@ afterEach(() => {
 
 describe('GET /', () => {
   it('should render index page', () => {
+    const cases: Array<CaseSummary> = [
+      {
+        name: 'John Smith',
+      },
+    ]
     auditService.logPageView.mockResolvedValue(null)
-    exampleService.getCurrentTime.mockResolvedValue('2025-01-01T12:00:00.000')
+    casesService.getCases.mockResolvedValue(cases)
 
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('This site is under construction...')
-        expect(res.text).toContain('The time is currently 2025-01-01T12:00:00.000')
-        expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXAMPLE_PAGE, {
+        expect(res.text).toContain('Cases')
+        expect(res.text).toContain('John Smith')
+        expect(auditService.logPageView).toHaveBeenCalledWith(Page.CASES, {
           who: user.username,
           correlationId: expect.any(String),
         })
-        expect(exampleService.getCurrentTime).toHaveBeenCalled()
+        expect(casesService.getCases).toHaveBeenCalled()
       })
   })
 
   it('service errors are handled', () => {
+    jest.spyOn(logger, 'error').mockImplementation()
     auditService.logPageView.mockResolvedValue(null)
-    exampleService.getCurrentTime.mockRejectedValue(new Error('Some problem calling external api!'))
+    casesService.getCases.mockRejectedValue(new Error('Some problem calling external api!'))
 
     return request(app)
       .get('/')

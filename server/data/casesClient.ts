@@ -1,11 +1,16 @@
-import { RestClient, asSystem } from '@ministryofjustice/hmpps-rest-client'
+import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import config from '../config'
 import logger from '../../logger'
+import api from '../paths/api'
 
-export default class ExampleApiClient extends RestClient {
+export type CaseSummary = {
+  name: string
+}
+
+export default class CasesClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Example API', config.apis.exampleApi, logger, authenticationClient)
+    super('Cases client', config.apis.singleAccommodationServiceApi, logger, authenticationClient)
   }
 
   /**
@@ -14,10 +19,13 @@ export default class ExampleApiClient extends RestClient {
    * Use this pattern to call the API with a system token that is not tied to a specific user.
    * This is useful for service-to-service authorization when no user context is required.
    *
+   * ```
+   * import { asUser } from '@ministryofjustice/hmpps-rest-client'
+   * getCurrentTime() {
+   *   return this.get<string>({ path: '/example/time' }, asSystem())
+   * }
+   * ```
    */
-  getCurrentTime() {
-    return this.get<string>({ path: '/example/time' }, asSystem())
-  }
 
   /**
    * Example: Making a request with the user's own token
@@ -50,4 +58,8 @@ export default class ExampleApiClient extends RestClient {
    * }
    * ```
    */
+
+  getCases(token: string) {
+    return this.get<Array<CaseSummary>>({ path: '/cases' }, asUser(token))
+  }
 }

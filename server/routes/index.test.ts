@@ -4,6 +4,7 @@ import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import { CaseSummary } from '../data/casesClient'
+import logger from '../../logger'
 
 jest.mock('../services/auditService')
 jest.mock('../services/casesService')
@@ -53,6 +54,7 @@ describe('GET /', () => {
   })
 
   it('service errors are handled', () => {
+    jest.spyOn(logger, 'error').mockImplementation()
     auditService.logPageView.mockResolvedValue(null)
     casesService.getCases.mockRejectedValue(new Error('Some problem calling external api!'))
 

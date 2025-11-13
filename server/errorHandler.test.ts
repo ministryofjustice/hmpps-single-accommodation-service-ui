@@ -1,8 +1,11 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from './routes/testutils/appSetup'
+import logger from '../logger'
 
 let app: Express
+
+jest.mock('../logger')
 
 beforeEach(() => {
   app = appWithAllRoutes({})
@@ -21,6 +24,10 @@ describe('GET 404', () => {
       .expect(res => {
         expect(res.text).toContain('NotFoundError: Not Found')
         expect(res.text).not.toContain('Something went wrong. The error has been logged. Please try again')
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error handling request for '/unknown', user 'user1'",
+          expect.any(Error),
+        )
       })
   })
 
@@ -32,6 +39,10 @@ describe('GET 404', () => {
       .expect(res => {
         expect(res.text).toContain('Something went wrong. The error has been logged. Please try again')
         expect(res.text).not.toContain('NotFoundError: Not Found')
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error handling request for '/unknown', user 'user1'",
+          expect.any(Error),
+        )
       })
   })
 })

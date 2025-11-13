@@ -2,6 +2,9 @@ import { mockClient } from 'aws-sdk-client-mock'
 import { SendMessageCommand, SendMessageCommandInput, SQSClient } from '@aws-sdk/client-sqs'
 
 import HmppsAuditClient, { SqsMessage } from './hmppsAuditClient'
+import logger from '../../logger'
+
+jest.mock('../../logger')
 
 describe('hmppsAuditClient', () => {
   const sqsMock = mockClient(SQSClient)
@@ -62,6 +65,7 @@ describe('hmppsAuditClient', () => {
       expect(Date.now() - eventTime).toBeLessThan(1000)
 
       expect(sqsMock.calls().length).toEqual(1)
+      expect(logger.info).toHaveBeenCalledWith('HMPPS Audit SQS message sent (123)')
     })
 
     it("shouldn't send sqs message to audit queue if client disabled", async () => {
@@ -90,8 +94,12 @@ describe('hmppsAuditClient', () => {
         )
       }
 
-      expect(trySendMessage()).resolves.not.toThrow()
+      await expect(trySendMessage()).resolves.not.toThrow()
       expect(sqsMock.calls().length).toEqual(1)
+      expect(logger.error).toHaveBeenCalledWith(
+        'Error sending HMPPS Audit SQS message, ',
+        Error('Error sending sqs message'),
+      )
     })
 
     it('should throw an error if sqs message cannot be sent', async () => {
@@ -105,8 +113,12 @@ describe('hmppsAuditClient', () => {
         })
       }
 
-      expect(trySendMessage()).rejects.toThrow('Error sending sqs message')
+      await expect(trySendMessage()).rejects.toThrow('Error sending sqs message')
       expect(sqsMock.calls().length).toEqual(1)
+      expect(logger.error).toHaveBeenCalledWith(
+        'Error sending HMPPS Audit SQS message, ',
+        Error('Error sending sqs message'),
+      )
     })
   })
 })

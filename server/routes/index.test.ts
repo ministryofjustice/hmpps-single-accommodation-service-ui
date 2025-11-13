@@ -3,6 +3,7 @@ import request from 'supertest'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
 import ExampleService from '../services/exampleService'
+import logger from '../../logger'
 
 jest.mock('../services/auditService')
 jest.mock('../services/exampleService')
@@ -51,6 +52,7 @@ describe('GET /', () => {
   })
 
   it('service errors are handled', () => {
+    jest.spyOn(logger, 'error').mockImplementation()
     auditService.logPageView.mockResolvedValue(null)
     exampleService.getHelloWorld.mockRejectedValue(new Error('Some problem calling external api!'))
 

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import exampleApi from '../mockApis/exampleApi'
+import sasAPI from '../mockApis/sasApi'
 
 import { login, resetStubs } from '../testUtils'
 import ExamplePage from '../pages/examplePage'
@@ -9,17 +9,17 @@ test.describe('Example', () => {
     await resetStubs()
   })
 
-  test('Time from exampleApi is visible on page', async ({ page }) => {
-    await exampleApi.stubExampleTime()
+  test('The message from hello-world endpoint in SAS API is visible on page', async ({ page }) => {
+    await sasAPI.stubHelloWorld()
     await login(page)
 
     const examplePage = await ExamplePage.verifyOnPage(page)
 
-    expect(examplePage.timestamp).toHaveText('The time is currently 2025-01-01T12:00:00Z')
+    expect(examplePage.message).toHaveText('Hello World!')
   })
 
-  test('ExampleApi failure shows error page', async ({ page }) => {
-    await exampleApi.stubExampleTime(500)
+  test('SAS API failure shows error page', async ({ page }) => {
+    await sasAPI.stubHelloWorld500()
 
     await login(page)
 

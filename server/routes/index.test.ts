@@ -29,26 +29,30 @@ afterEach(() => {
 describe('GET /', () => {
   it('should render index page', () => {
     auditService.logPageView.mockResolvedValue(null)
-    exampleService.getCurrentTime.mockResolvedValue('2025-01-01T12:00:00.000')
+    const helloWorldResponse = {
+      message: 'Hello world',
+    }
+    exampleService.getHelloWorld.mockResolvedValue(helloWorldResponse)
 
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('This site is under construction...')
-        expect(res.text).toContain('The time is currently 2025-01-01T12:00:00.000')
+        expect(res.text).toContain(`The response message from SAS API's...`)
+        expect(res.text).toContain('GET /hello-world endpoint is:')
+        expect(res.text).toContain(helloWorldResponse.message)
         expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXAMPLE_PAGE, {
           who: user.username,
           correlationId: expect.any(String),
         })
-        expect(exampleService.getCurrentTime).toHaveBeenCalled()
+        expect(exampleService.getHelloWorld).toHaveBeenCalled()
       })
   })
 
   it('service errors are handled', () => {
     auditService.logPageView.mockResolvedValue(null)
-    exampleService.getCurrentTime.mockRejectedValue(new Error('Some problem calling external api!'))
+    exampleService.getHelloWorld.mockRejectedValue(new Error('Some problem calling external api!'))
 
     return request(app)
       .get('/')

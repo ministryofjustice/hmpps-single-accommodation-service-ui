@@ -6,7 +6,7 @@ export default class HomePage extends AbstractPage {
 
   private constructor(page: Page) {
     super(page)
-    this.header = page.locator('h1', { hasText: 'This site is under construction...' })
+    this.header = page.locator('h1', { hasText: `The response message from SAS API's...` })
   }
 
   static async verifyOnPage(page: Page): Promise<HomePage> {

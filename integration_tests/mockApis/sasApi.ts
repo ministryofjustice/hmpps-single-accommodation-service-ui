@@ -6,7 +6,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/example-api/health/ping',
+        urlPattern: '/health/ping',
       },
       response: {
         status: httpStatus,
@@ -15,16 +15,29 @@ export default {
       },
     }),
 
-  stubExampleTime: (httpStatus = 200): SuperAgentRequest =>
+  stubHelloWorld: (): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/example-api/example/time',
+        urlPattern: '/hello-world',
       },
       response: {
-        status: httpStatus,
-        headers: { 'Content-Type': 'application/text;charset=UTF-8' },
-        body: '2025-01-01T12:00:00Z',
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+        jsonBody: {
+          message: 'Hello World!',
+        },
+      },
+    }),
+
+  stubHelloWorld500: (): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/hello-world',
+      },
+      response: {
+        status: 500,
       },
     }),
 }

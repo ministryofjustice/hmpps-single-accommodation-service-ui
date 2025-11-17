@@ -14,30 +14,4 @@ export default {
         jsonBody: { status: httpStatus === 200 ? 'UP' : 'DOWN' },
       },
     }),
-
-  stubHelloWorld: (): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/hello-world',
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-        jsonBody: {
-          message: 'Hello World!',
-        },
-      },
-    }),
-
-  stubHelloWorld500: (): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/hello-world',
-      },
-      response: {
-        status: 500,
-      },
-    }),
 }

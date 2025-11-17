@@ -11,11 +11,14 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            name: 'John Foobar',
-          },
-        ],
+        jsonBody: {
+          cases: [
+            {
+              name: 'John Foobar',
+              crn: 'X123456',
+            },
+          ],
+        },
       },
     }),
   stubGetCases500: (): SuperAgentRequest =>

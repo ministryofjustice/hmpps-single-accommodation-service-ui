@@ -32,8 +32,8 @@ describe('GET /', () => {
   it('should render index page', () => {
     auditService.logPageView.mockResolvedValue(null)
 
-    const cases: Array<CaseSummary> = [{ name: 'John Smith' }]
-    casesService.getCases.mockResolvedValue(cases)
+    const cases: Array<CaseSummary> = [{ name: 'John Smith', crn: 'X999888' }]
+    casesService.getCases.mockResolvedValue({ cases })
 
     return request(app)
       .get('/')
@@ -41,7 +41,7 @@ describe('GET /', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Cases')
-        expect(res.text).toContain('John Smith')
+        expect(res.text).toContain('John Smith, X999888')
         expect(auditService.logPageView).toHaveBeenCalledWith(Page.CASES_LIST, {
           who: user.username,
           correlationId: expect.any(String),

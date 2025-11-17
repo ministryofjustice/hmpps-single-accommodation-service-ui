@@ -10,6 +10,6 @@ test.describe('List of cases', () => {
 
     const casesListPage = await CasesListPage.verifyOnPage(page)
 
-    await expect(casesListPage.casesList).toContainText('John Foobar')
+    await expect(casesListPage.casesList).toContainText('John Foobar, X123456')
   })
 })

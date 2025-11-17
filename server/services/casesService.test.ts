@@ -16,11 +16,11 @@ describe('CasesService', () => {
   it('should call getCases on the api client and return its result', async () => {
     const cases = [] as Array<CaseSummary>
 
-    casesClient.getCases.mockResolvedValue(cases)
+    casesClient.getCases.mockResolvedValue({ cases })
 
     const result = await casesService.getCases(token)
 
     expect(casesClient.getCases).toHaveBeenCalledWith(token)
-    expect(result).toEqual(cases)
+    expect(result).toEqual({ cases })
   })
 })

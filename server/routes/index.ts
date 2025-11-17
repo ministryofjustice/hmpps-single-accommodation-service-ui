@@ -10,7 +10,7 @@ export default function routes({ auditService, casesService }: Services): Router
     await auditService.logPageView(Page.CASES_LIST, { who: res.locals.user.username, correlationId: req.id })
     const token = res.locals?.user?.token
 
-    const cases = await casesService.getCases(token)
+    const { cases } = await casesService.getCases(token)
     return res.render('pages/index', { cases })
   })
 

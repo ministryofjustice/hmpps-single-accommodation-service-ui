@@ -5,6 +5,7 @@ import logger from '../../logger'
 
 export type CaseSummary = {
   name: string
+  crn: string
 }
 
 export default class CasesClient extends RestClient {
@@ -59,6 +60,6 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string) {
-    return this.get<Array<CaseSummary>>({ path: '/cases' }, asUser(token))
+    return this.get<{ cases: Array<CaseSummary> }>({ path: '/cases' }, asUser(token))
   }
 }

@@ -18,11 +18,14 @@ describe('cases client', () => {
 
   describe('getCurrentTime', () => {
     it('should make a GET request to /cases using user token and return the response body', async () => {
-      nock(config.apis.sasApi.url).get('/cases').matchHeader('authorization', 'Bearer test-user-token').reply(200, [])
+      nock(config.apis.sasApi.url)
+        .get('/cases')
+        .matchHeader('authorization', 'Bearer test-user-token')
+        .reply(200, { cases: [] })
 
       const response = await casesClient.getCases('test-user-token')
 
-      expect(response).toEqual([])
+      expect(response).toEqual({ cases: [] })
     })
   })
 })

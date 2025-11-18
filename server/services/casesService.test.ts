@@ -1,4 +1,5 @@
-import CasesClient, { CaseSummary } from '../data/casesClient'
+import { CasesResponse } from '@sas/api'
+import CasesClient from '../data/casesClient'
 import CasesService from './casesService'
 
 jest.mock('../data/casesClient')
@@ -14,13 +15,13 @@ describe('CasesService', () => {
   })
 
   it('should call getCases on the api client and return its result', async () => {
-    const cases = [] as Array<CaseSummary>
+    const casesResponse: CasesResponse = { cases: [] }
 
-    casesClient.getCases.mockResolvedValue({ cases })
+    casesClient.getCases.mockResolvedValue(casesResponse)
 
     const result = await casesService.getCases(token)
 
     expect(casesClient.getCases).toHaveBeenCalledWith(token)
-    expect(result).toEqual({ cases })
+    expect(result).toEqual(casesResponse)
   })
 })

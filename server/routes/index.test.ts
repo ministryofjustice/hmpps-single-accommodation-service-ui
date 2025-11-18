@@ -1,10 +1,10 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { CasesResponse } from '@sas/api'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import logger from '../../logger'
-import { CaseSummary } from '../data/casesClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/casesService')
@@ -32,8 +32,8 @@ describe('GET /', () => {
   it('should render index page', () => {
     auditService.logPageView.mockResolvedValue(null)
 
-    const cases: Array<CaseSummary> = [{ name: 'John Smith', crn: 'X999888' }]
-    casesService.getCases.mockResolvedValue({ cases })
+    const casesResponse: CasesResponse = { cases: [{ name: 'John Smith', crn: 'X999888' }] }
+    casesService.getCases.mockResolvedValue(casesResponse)
 
     return request(app)
       .get('/')

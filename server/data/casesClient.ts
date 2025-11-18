@@ -1,12 +1,8 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import { CasesResponse } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
-
-export type CaseSummary = {
-  name: string
-  crn: string
-}
 
 export default class CasesClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -60,6 +56,6 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string) {
-    return this.get<{ cases: Array<CaseSummary> }>({ path: '/cases' }, asUser(token))
+    return this.get<CasesResponse>({ path: '/cases' }, asUser(token))
   }
 }

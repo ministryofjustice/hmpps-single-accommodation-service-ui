@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test'
 import hmppsAuth from '../mockApis/hmppsAuth'
-import sasApi from '../mockApis/sasApi'
+import casesApi from '../mockApis/cases'
 
 import { login, resetStubs } from '../testUtils'
-import HomePage from '../pages/homePage'
+import CasesListPage from '../pages/cases/listPage'
 
 test.describe('SignIn', () => {
   test.beforeEach(async () => {
-    await sasApi.stubHelloWorld()
+    await casesApi.stubGetCases()
   })
 
   test.afterEach(async () => {
@@ -31,24 +31,24 @@ test.describe('SignIn', () => {
   test('User name visible in header', async ({ page }) => {
     await login(page, { name: 'A TestUser' })
 
-    const homePage = await HomePage.verifyOnPage(page)
+    const casesListPage = await CasesListPage.verifyOnPage(page)
 
-    await expect(homePage.usersName).toHaveText('A. Testuser')
+    await expect(casesListPage.usersName).toHaveText('A. Testuser')
   })
 
   test('Phase banner visible in header', async ({ page }) => {
     await login(page)
 
-    const homePage = await HomePage.verifyOnPage(page)
+    const casesListPage = await CasesListPage.verifyOnPage(page)
 
-    await expect(homePage.phaseBanner).toHaveText('dev')
+    await expect(casesListPage.phaseBanner).toHaveText('dev')
   })
 
   test('User can sign out', async ({ page }) => {
     await login(page)
 
-    const homePage = await HomePage.verifyOnPage(page)
-    await homePage.signOut()
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+    await casesListPage.signOut()
 
     await expect(page.getByRole('heading')).toHaveText('Sign in')
   })
@@ -58,8 +58,8 @@ test.describe('SignIn', () => {
 
     await hmppsAuth.stubManageDetailsPage()
 
-    const homePage = await HomePage.verifyOnPage(page)
-    await homePage.clickManageUserDetails()
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+    await casesListPage.clickManageUserDetails()
 
     await expect(page.getByRole('heading')).toHaveText('Your account details')
   })
@@ -77,7 +77,7 @@ test.describe('SignIn', () => {
 
     await login(page, { name: 'Some OtherTestUser', active: true })
 
-    const homePage = await HomePage.verifyOnPage(page)
-    await expect(homePage.usersName).toHaveText('S. Othertestuser')
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+    await expect(casesListPage.usersName).toHaveText('S. Othertestuser')
   })
 })

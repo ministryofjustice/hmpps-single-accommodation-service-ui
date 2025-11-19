@@ -1,3 +1,7 @@
+/* eslint-disable */
+import dotenv from 'dotenv'
+dotenv.config()
+
 import express from 'express'
 
 import createError from 'http-errors'

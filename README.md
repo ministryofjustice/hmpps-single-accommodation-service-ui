@@ -1,137 +1,70 @@
-# hmpps-single-accommodation-service-ui
+# HMPPS Single Accommodation Service (SAS UI)
 
 [![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-single-accommodation-service-ui/badge?style=flat)](https://github-community.service.justice.gov.uk/repository-standards/hmpps-single-accommodation-service-ui)
 [![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-single-accommodation-service-ui)
 
-Template github repo used for new Typescript based projects.
+Repository for the UI for the Single Accommodation Service (SAS).
 
-# Instructions
+## Requirements
 
-If this is a HMPPS project then the creation of new services is automated and cloning/forking this repository is not required.
+- [Node.js](https://nodejs.org/en/) version 24
+- [Docker](https://www.docker.com/) (if running against a containerised local stack)
 
-Documentation to create new services is located [here](https://tech-docs.hmpps.service.justice.gov.uk/creating-new-services/).
+## Install dependencies
 
-This project is community managed by the mojdt `#typescript` slack channel.
-Please raise any questions or queries there. Contributions welcome!
+```shell
+npm install
+```
 
-Our security policy is located [here](https://github.com/ministryofjustice/hmpps-single-accommodation-service-ui/security/policy).
+## Running the application
 
-More information about the template project including features can be
-found [here](https://dsdmoj.atlassian.net/wiki/spaces/NDSS/pages/3488677932/Typescript+template+project).
+To run the SAS service locally, first copy the `.env.template` file to `.env`. The default variables should be sufficient for local development against a containerised local stack:
 
-## Creating a Cloud Platform namespace
+```shell
+cp .env.template .env
+```
 
-When deploying to a new namespace, you may wish to use the
-[templates project namespace](https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev)
-as the basis for your new namespace. This namespace contains both the kotlin and typescript template projects, which
-is the usual way that projects are setup. This namespace includes an AWS elasticache setup - which is required by this
-template project.
+### Running against a containerised local stack
 
-Copy this folder and update all the existing namespace references. If you only need the typescript configuration then
-remove all kotlin references. Submit a PR to the Cloud Platform team in #ask-cloud-platform. Further instructions from
-the Cloud Platform team can be found in
-the [Cloud Platform User Guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
+First, bring up the local stack:
 
-## Customising the new project
+```shell
+docker compose up --scale=app=0
+```
 
-As part of the automation to create the new service, various parts of the codebase will be updated to reflect it's specific name.
+You can then start the SAS UI service: 
 
-## Oauth2 Credentials
+```shell
+npm run start:dev
+```
 
-The template project is set up to run with two sets of credentials, each one support a different oauth2 flows.
-These need to be requested from the auth team by filling in
-this [template](https://dsdmoj.atlassian.net/browse/HAAR-140) and raising on their slack channel.
+The service will be available at http://localhost:3000. You can login with the following credentials:
 
-### Auth Code flow
+- username: `AUTH_USER`
+- password: `password123456`
 
-These are used to allow authenticated users to access the application. After the user is redirected from auth back to
-the application, the typescript app will use the returned auth code to request a JWT token for that user containing the
-user's roles. The JWT token will be verified and then stored in the user's session.
+### Running against the dev stack
 
-These credentials are configured using the following env variables:
+You can also run the local service against the dev external service (HMPPS Auth and SAS API). Get the `.env` file from the CAS vault of the [MoJ 1Password](https://ministryofjustice.1password.eu/signin) account.
 
-- AUTH_CODE_CLIENT_ID
-- AUTH_CODE_CLIENT_SECRET
+You can then start the SAS UI service: 
 
-### Client Credentials flow
+```shell
+npm run start:dev
+```
 
-These are used by the application to request tokens to make calls to APIs. These are system accounts that will have
-their own sets of roles.
+The service will be available at http://localhost:3000. You can then login using any of the CAS test credentials available in the CAS vault in 1Password.
 
-Most API calls that occur as part of the request/response cycle will be on behalf of a user.
-To make a call on behalf of a user, a username should be passed when requesting a system token. The username will then
-become part of the JWT and can be used downstream for auditing purposes.
+## Local development
 
-These tokens are cached until expiration.
+Commit hooks have been set up to run linters, typecheck and unit tests on commit. You can also run these manually.
 
-These credentials are configured using the following env variables:
-
-- CLIENT_CREDS_CLIENT_ID
-- CLIENT_CREDS_CLIENT_SECRET
-
-### Dependencies
-
-### HMPPS Auth
-
-To allow authenticated users to access your application you need to point it to a running instance of `hmpps-auth`.
-By default the application is configured to run against an instance running in docker that can be started
-via `docker-compose`.
-
-**NB:** It's common for developers to run against the instance of auth running in the development/T3 environment for
-local development.
-Most APIs don't have images with cached data that you can run with docker: setting up realistic stubbed data in sync
-across a variety of services is very difficult.
-
-### REDIS
-
-When deployed to an environment with multiple pods we run applications with an instance of REDIS/Elasticache to provide
-a distributed cache of sessions.
-The template app is, by default, configured not to use REDIS when running locally.
-
-## Running the app via docker-compose
-
-The easiest way to run the app is to use docker compose to create the service and all dependencies.
-
-`docker compose pull`
-
-`docker compose up`
-
-### Running the app for development
-
-To start the main services excluding the example typescript template app:
-
-`docker compose up --scale=app=0`
-
-Create an environment file by copying `.env.example` -> `.env`
-Environment variables set in here will be available when running `start:dev`
-
-Install dependencies using `npm install`, ensuring you are using `node v20`
-
-Note: Using `nvm` (or [fnm](https://github.com/Schniz/fnm)), run `nvm install --latest-npm` within the repository folder
-to use the correct version of node, and the latest version of npm. This matches the `engines` config in `package.json`
-and the github pipeline build config.
-
-And then, to build the assets and start the app with esbuild:
-
-`npm run start:dev`
-
-### Logging in with a test user
-
-Once the application is running you should then be able to login with:
-
-username: AUTH_USER
-password: password123456
-
-To request specific users and roles then raise a PR
-to [update the seed data](https://github.com/ministryofjustice/hmpps-auth/blob/main/src/main/resources/db/dev/data/auth/V900_3__users.sql)
-for the in-memory DB used by Auth
-
-### Run linter
+### Running linter
 
 - `npm run lint` runs `eslint`.
 - `npm run typecheck` runs the TypeScript compiler `tsc`.
 
-### Run unit tests
+### Running unit tests
 
 `npm run test`
 

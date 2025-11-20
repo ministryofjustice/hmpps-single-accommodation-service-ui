@@ -35,12 +35,59 @@
     "node": "^24",
     "npm": "^11"
   },
+  "jest": {
+    "preset": "ts-jest",
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "isolatedModules": true
+        }
+      ]
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "server/**/*.{ts,js,jsx,mjs}",
+      "!server/middleware/*.ts"
+    ],
+    "testMatch": [
+      "<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/server/testutils/jest.setup.ts"
+    ],
+    "testEnvironment": "node",
+    "reporters": [
+      "default",
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "test_results/jest/"
+        }
+      ],
+      [
+        "./node_modules/jest-html-reporter",
+        {
+          "outputPath": "test_results/unit-test-reports.html"
+        }
+      ]
+    ],
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "json",
+      "node",
+      "ts"
+    ]
+  },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.919.0",
     "@ministryofjustice/frontend": "^7.1.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.0",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "@ministryofjustice/hmpps-rest-client": "^1.0.0",
+    "@pact-foundation/pact": "^16.0.2",
+    "@pactflow/openapi-pact-comparator": "^1.10.0",
     "@playwright/test": "^1.56.1",
     "applicationinsights": "^2.9.8",
     "body-parser": "^2.2.0",
@@ -55,6 +102,7 @@
     "govuk-frontend": "^5.13.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
+    "jest-pact": "^0.13.0",
     "jwt-decode": "^4.0.0",
     "nocache": "^4.0.0",
     "nunjucks": "^3.2.4",

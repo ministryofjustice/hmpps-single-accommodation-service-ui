@@ -1,9 +1,8 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import nock from 'nock'
 import CasesClient from './casesClient'
-import config from '../config'
+import describeClient from '../testutils/describeClient'
 
-describe('cases client', () => {
+describeClient('CasesClient', provider => {
   let casesClient: CasesClient
   let mockAuthenticationClient: jest.Mocked<AuthenticationClient>
 
@@ -11,21 +10,24 @@ describe('cases client', () => {
     casesClient = new CasesClient(mockAuthenticationClient)
   })
 
-  afterEach(() => {
-    nock.cleanAll()
-    jest.resetAllMocks()
-  })
-
-  describe('getCurrentTime', () => {
-    it('should make a GET request to /cases using user token and return the response body', async () => {
-      nock(config.apis.sasApi.url)
-        .get('/cases')
-        .matchHeader('authorization', 'Bearer test-user-token')
-        .reply(200, { cases: [] })
-
-      const response = await casesClient.getCases('test-user-token')
-
-      expect(response).toEqual({ cases: [] })
+  it('should make a GET request to /cases using user token and return the response body', async () => {
+    await provider.addInteraction({
+      state: 'Cases exist for user',
+      uponReceiving: 'a request to get user cases',
+      withRequest: {
+        method: 'GET',
+        path: '/cases',
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: { cases: [] },
+      },
     })
+
+    const response = await casesClient.getCases('test-user-token')
+    expect(response).toEqual({ cases: [] })
   })
 })

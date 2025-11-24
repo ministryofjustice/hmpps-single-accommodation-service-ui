@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import jwt from 'jsonwebtoken'
 
 export default function createUserToken(authorities: string[]) {

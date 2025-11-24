@@ -57,7 +57,7 @@ jobs:
       - name: Check coverage
         run: |
           npx nyc report -t ./coverage --reporter=text --reporter=text-summary
-          npx nyc check-coverage --lines 50 --functions 50 -t ./coverage
+          npx nyc check-coverage -t ./coverage
   # generic node integration tests using wiremock - feel free to override with local tests if required
   node_integration_tests:
     name: node integration tests

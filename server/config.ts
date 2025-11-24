@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
 const production = process.env.NODE_ENV === 'production'

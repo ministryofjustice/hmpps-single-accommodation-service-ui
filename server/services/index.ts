@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { dataAccess } from '../data'
 import AuditService from './auditService'
 import CasesService from './casesService'

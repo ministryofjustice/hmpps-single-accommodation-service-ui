@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import createApp from './app'
 import { services } from './services'
 

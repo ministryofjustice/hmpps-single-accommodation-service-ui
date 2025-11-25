@@ -41,6 +41,7 @@ describe('GET /', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Cases')
+        expect(res.text).toContain('1 person assigned to you')
         expect(res.text).toContain('John Smith, X999888')
         expect(auditService.logPageView).toHaveBeenCalledWith(Page.CASES_LIST, {
           who: user.username,

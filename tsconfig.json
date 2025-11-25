@@ -15,7 +15,8 @@
     "typeRoots": ["./server/@types", "./node_modules/@types"],
     "paths": {
       "@sas/api": ["./server/@types/shared/index.d.ts"],
-      "@sas/ui": ["./server/@types/ui/index.d.ts"]
+      "@sas/ui": ["./server/@types/ui/index.d.ts"],
+      "@govuk/ui": ["./server/@types/ui/govuk.d.ts"]
     }
   },
   "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "esbuild", "eslint.config.mjs"],

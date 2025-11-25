@@ -1,0 +1,41 @@
+name: Generate Types
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  NODE_ENV: test
+
+jobs:
+  generate-types:
+    runs-on: [self-hosted, hmpps-github-actions-runner]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+
+      - name: Generate Token
+        uses: actions/create-github-app-token@v2
+        id: generate-token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Generate Types
+        run: ./script/generate-types ${{ vars.SAS_API_SPEC_URL }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          title: 'API model updates'
+          commit-message: 'Updating hmpps-single-accommodation-service-api models from OpenAPI specification'
+          body: 'Updating hmpps-single-accommodation-service-api models from OpenAPI specification.  This PR was created automatically from the generate-types.yml Workflow'
+          delete-branch: true
+          branch: update-api-types

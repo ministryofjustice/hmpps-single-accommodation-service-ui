@@ -5,7 +5,12 @@
     "lib": ["es5", "dom", "es2015.promise"],
     "types": ["@playwright/test"],
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@sas/ui": ["../server/@types/ui/index.d.ts"],
+      "@sas/api": ["../server/@types/shared/index.d.ts"],
+      "@govuk/ui": ["../server/@types/ui/govuk.d.ts"]
+    }
   },
   "include": ["**/*.ts"]
 }

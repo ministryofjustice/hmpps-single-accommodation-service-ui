@@ -1,4 +1,4 @@
-import { convertToTitleCase, initialiseName } from './utils'
+import { convertToTitleCase, htmlContent, initialiseName, textContent } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -26,5 +26,27 @@ describe('initialise name', () => {
     ['Double barrelled', 'Robert-John Smith-Jones-Wilson', 'R. Smith-Jones-Wilson'],
   ])('%s initialiseName(%s, %s)', (_: string, a: string, expected: string) => {
     expect(initialiseName(a)).toEqual(expected)
+  })
+})
+
+describe('textContent', () => {
+  it.each([
+    ['null', null, ''],
+    ['undefined', undefined, ''],
+    ['Empty string', '', ''],
+    ['Some content', 'Some content', 'Some content'],
+  ])('%s textContent(%s)', (_: string, a: string, expected: string) => {
+    expect(textContent(a)).toEqual({ text: expected })
+  })
+})
+
+describe('htmlContent', () => {
+  it.each([
+    ['null', null, ''],
+    ['undefined', undefined, ''],
+    ['Empty string', '', ''],
+    ['Some content', '<p>Some content</p>', '<p>Some content</p>'],
+  ])('%s htmlContent(%s)', (_: string, a: string, expected: string) => {
+    expect(htmlContent(a)).toEqual({ html: expected })
   })
 })

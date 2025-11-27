@@ -1,4 +1,4 @@
-import { type Locator, type Page } from '@playwright/test'
+import { expect, type Locator, type Page } from '@playwright/test'
 
 export default class AbstractPage {
   readonly page: Page
@@ -29,5 +29,11 @@ export default class AbstractPage {
 
   async clickManageUserDetails() {
     await this.manageUserDetails.first().click()
+  }
+
+  async shouldShowTableHeaders(headers: string[]) {
+    for await (const header of headers) {
+      await expect(this.page.getByRole('columnheader', { name: header })).toBeVisible()
+    }
   }
 }

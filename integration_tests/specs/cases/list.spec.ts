@@ -1,15 +1,17 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import CasesListPage from '../../pages/cases/listPage'
+import { caseFactory } from '../../../server/testutils/factories'
 
 test.describe('List of cases', () => {
   test('Should list all cases', async ({ page }) => {
-    await casesApi.stubGetCases()
+    const cases = caseFactory.buildList(5)
+    await casesApi.stubGetCases(cases)
     await login(page)
 
     const casesListPage = await CasesListPage.verifyOnPage(page)
 
-    await expect(casesListPage.casesList).toContainText('John Foobar, X123456')
+    await casesListPage.shouldShowCases(cases)
   })
 })

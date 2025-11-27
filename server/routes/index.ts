@@ -1,18 +1,12 @@
 import { Router } from 'express'
+import { Services } from '../services'
+import { controllers } from '../controllers'
 
-import type { Services } from '../services'
-import { Page } from '../services/auditService'
-
-export default function routes({ auditService, casesService }: Services): Router {
+export default function routes(services: Services): Router {
   const router = Router()
+  const { casesController } = controllers(services)
 
-  router.get('/', async (req, res, next) => {
-    await auditService.logPageView(Page.CASES_LIST, { who: res.locals.user.username, correlationId: req.id })
-    const token = res.locals?.user?.token
-
-    const { cases } = await casesService.getCases(token)
-    return res.render('pages/index', { cases })
-  })
+  router.get('/', casesController.index())
 
   return router
 }

@@ -1,7 +1,7 @@
 import type { SuperAgentRequest } from 'superagent'
 import { Case } from '@sas/api'
 import { stubFor } from './wiremock'
-import { casesResponseFactory } from '../../server/testutils/factories'
+import { caseFactory } from '../../server/testutils/factories'
 
 export default {
   stubGetCases: (cases?: Case[]): SuperAgentRequest =>
@@ -13,7 +13,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: casesResponseFactory.build(cases ? { cases } : {}),
+        jsonBody: cases || caseFactory.buildList(5),
       },
     }),
   stubGetCases500: (): SuperAgentRequest =>

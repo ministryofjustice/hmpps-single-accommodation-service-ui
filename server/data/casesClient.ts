@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { CasesResponse } from '@sas/api'
+import { Case } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 
@@ -56,6 +56,6 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string) {
-    return this.get<CasesResponse>({ path: '/cases' }, asUser(token))
+    return this.get<Case[]>({ path: '/cases' }, asUser(token))
   }
 }

@@ -1,0 +1,21 @@
+.sas-person-details {
+  @include govuk-font($size: 16, $weight: 'normal');
+  display: flex;
+  flex-wrap: wrap;
+  gap: govuk-spacing(1);
+
+  & div {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  & dd {
+    margin-left: 0;
+    margin-right: govuk-spacing(1);
+    color: govuk-colour('dark-grey');
+
+    &:after {
+      content: ":"
+    }
+  }
+}

@@ -1,9 +1,13 @@
 import { Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
+import { nunjucksInline } from './nunjucksSetup'
 
 export const casesTableCaption = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'} assigned to you`
 
-export const casesToRows = (cases: Case[]): TableRow[] =>
-  cases.map(c => [htmlContent(`${c.name}, ${c.crn}`), htmlContent()])
+export const personCell = (c: Case): string => {
+  return nunjucksInline.render('cases/partials/personCell.njk', { person: c })
+}
+
+export const casesToRows = (cases: Case[]): TableRow[] => cases.map(c => [htmlContent(personCell(c)), htmlContent()])

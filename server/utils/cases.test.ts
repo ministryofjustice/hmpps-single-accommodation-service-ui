@@ -1,5 +1,5 @@
 import { Case } from '@sas/api'
-import { casesTableCaption, casesToRows } from './cases'
+import { casesTableCaption, casesToRows, personCell } from './cases'
 import { caseFactory } from '../testutils/factories'
 
 describe('cases utilities', () => {
@@ -17,6 +17,14 @@ describe('cases utilities', () => {
     })
   })
 
+  describe('personCell', () => {
+    it('returns a formatted cell for a given person', () => {
+      const person = caseFactory.build({ name: 'Dave Foo', crn: 'C321654' })
+
+      expect(personCell(person)).toMatchSnapshot()
+    })
+  })
+
   describe('casesToRows', () => {
     it('returns formatted rows for a given list of cases', () => {
       const cases: Case[] = [
@@ -26,7 +34,7 @@ describe('cases utilities', () => {
         },
       ]
 
-      expect(casesToRows(cases)).toEqual([[{ html: 'John Smith, C321654' }, { html: '' }]])
+      expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }, { html: '' }]])
     })
   })
 })

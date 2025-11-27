@@ -1,0 +1,57 @@
+$mappa-colour: #4c2c92;
+$tier-colour: #28a197;
+
+.sas-risk-tags {
+  display: flex;
+  flex-flow: row wrap;
+  gap: govuk-spacing(1);
+}
+
+.sas-risk-tag {
+  @extend .moj-badge;
+  @extend .moj-badge--large;
+  display: flex;
+  flex-flow: row-reverse;
+  gap: govuk-spacing(1);
+  margin: 0;
+  border-color: #0b0c0c;
+  color: #0b0c0c;
+
+  & dt {
+    @include govuk-typography-weight-regular();
+    text-transform: none;
+  }
+
+  & dd {
+    margin: 0;
+  }
+}
+
+.sas-risk-tag--low {
+  border-color: #85994b;
+  color: #485b10;
+}
+.sas-risk-tag--medium {
+  border-color: #f47738;
+  color: #a34e00;
+}
+.sas-risk-tag--high {
+  border-color: #d4351c;
+  color: #942514;
+}
+.sas-risk-tag--very-high {
+  border-color: #942514;
+  color: #711a0d;
+}
+.sas-risk-tag--no {
+  border-color: #525a5f;
+  color: #525a5f;
+}
+.sas-risk-tag--mappa {
+  border-color: $mappa-colour;
+  color: $mappa-colour;
+}
+.sas-risk-tag--tier {
+  border-color: $tier-colour;
+  color: $tier-colour;
+}

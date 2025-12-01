@@ -29,7 +29,8 @@
     "precommit:secrets": "gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml --gitleaks-ignore-path .gitleaks/.gitleaksignore",
     "precommit:lint": "lint-staged",
     "precommit:verify": "npm run typecheck && npm test",
-    "generate-types": "script/generate-types"
+    "generate-types": "script/generate-types",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
     "node": "^24",
@@ -86,6 +87,7 @@
     "@ministryofjustice/frontend": "^7.1.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.0",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@ministryofjustice/hmpps-rest-client": "^1.0.0",
     "@pact-foundation/pact": "^16.0.2",
     "@pactflow/openapi-pact-comparator": "^1.10.0",

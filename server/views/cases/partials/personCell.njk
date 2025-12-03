@@ -1,13 +1,12 @@
+{% from "components/riskLevelTag.njk" import riskLevelTag %}
+
 <div class="sas-person-cell">
   <div class="govuk-!-margin-bottom-2">
     <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="{{ link }}">{{ person.name }}</a>
   </div>
 
   <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
-    <div class="sas-risk-tag sas-risk-tag--high">
-      <dt>RoSH</dt>
-      <dd>{{ person.rosh }}</dd>
-    </div>
+    {{ riskLevelTag(person.riskLevel) }}
     <div class="sas-risk-tag sas-risk-tag--tier">
       <dt>Tier</dt>
       <dd>{{ person.tier }}</dd>
@@ -17,7 +16,7 @@
   <dl class="sas-person-details govuk-!-margin-0">
     <div>
       <dt>Date of birth</dt>
-      <dd>{{ person.dateOfBirth }} ({{ age }})</dd>
+      <dd>{{ person.dateOfBirth | date }} ({{ age }})</dd>
     </div>
     <div>
       <dt>CRN</dt>

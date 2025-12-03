@@ -19,7 +19,14 @@ describe('cases utilities', () => {
 
   describe('personCell', () => {
     it('returns a formatted cell for a given person', () => {
-      const person = caseFactory.build({ name: 'Dave Foo', crn: 'C321654' })
+      const person = caseFactory.build({
+        name: 'Dave Foo',
+        crn: 'C321654',
+        prisonNumber: 'A1234BC',
+        dateOfBirth: '1980-10-09',
+        tier: 'B2',
+        riskLevel: 'VERY_HIGH',
+      })
 
       expect(personCell(person)).toMatchSnapshot()
     })
@@ -27,12 +34,7 @@ describe('cases utilities', () => {
 
   describe('casesToRows', () => {
     it('returns formatted rows for a given list of cases', () => {
-      const cases: Case[] = [
-        {
-          name: 'John Smith',
-          crn: 'C321654',
-        },
-      ]
+      const cases: Case[] = caseFactory.buildList(1)
 
       expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }, { html: '' }]])
     })

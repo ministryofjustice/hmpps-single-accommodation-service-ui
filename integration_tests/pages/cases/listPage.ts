@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
+import { formatDate, formatRiskLevel } from '../../../server/utils/format'
 
 export default class CasesListPage extends AbstractPage {
   readonly header: Locator
@@ -30,7 +31,11 @@ export default class CasesListPage extends AbstractPage {
 
     for await (const person of cases) {
       const row = this.page.getByRole('row', { name: person.name })
-      await expect(row).toContainText(person.crn)
+      await expect(row).toContainText(formatRiskLevel(person.riskLevel as Case['riskLevel']))
+      await expect(row).toContainText(person.tier as string)
+      await expect(row).toContainText(formatDate(person.dateOfBirth as string))
+      await expect(row).toContainText(person.crn as string)
+      await expect(row).toContainText(person.prisonNumber as string)
     }
   }
 }

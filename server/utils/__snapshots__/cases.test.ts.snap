@@ -1,26 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cases utilities personCell returns a formatted cell for a given person 1`] = `
-"<div class="sas-person-cell">
+"
+
+<div class="sas-person-cell">
   <div class="govuk-!-margin-bottom-2">
     <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="">Dave Foo</a>
   </div>
 
   <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
-    <div class="sas-risk-tag sas-risk-tag--high">
-      <dt>RoSH</dt>
-      <dd></dd>
-    </div>
+    
+  
+
+  <div class="sas-risk-tag sas-risk-tag--very-high">
+    <dt>RoSH</dt>
+    <dd>Very high</dd>
+  </div>
+
     <div class="sas-risk-tag sas-risk-tag--tier">
       <dt>Tier</dt>
-      <dd></dd>
+      <dd>B2</dd>
     </div>
   </dl>
 
   <dl class="sas-person-details govuk-!-margin-0">
     <div>
       <dt>Date of birth</dt>
-      <dd> ()</dd>
+      <dd>9 October 1980 (45)</dd>
     </div>
     <div>
       <dt>CRN</dt>
@@ -28,7 +34,7 @@ exports[`cases utilities personCell returns a formatted cell for a given person 
     </div>
     <div>
       <dt>Prison number</dt>
-      <dd></dd>
+      <dd>A1234BC</dd>
     </div>
   </dl>
 </div>

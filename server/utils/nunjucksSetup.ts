@@ -8,12 +8,19 @@ import fs from 'fs'
 import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
+import { formatDate, formatRiskLevel } from './format'
 
 const NUNJUCKS_TEMPLATE_PATHS = [
   path.join(__dirname, '../../server/views'),
   'node_modules/govuk-frontend/dist/',
   'node_modules/@ministryofjustice/frontend/',
 ]
+
+const addFilters = (env: nunjucks.Environment) => {
+  env.addFilter('initialiseName', initialiseName)
+  env.addFilter('date', formatDate)
+  env.addFilter('riskLevel', formatRiskLevel)
+}
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -38,8 +45,15 @@ export default function nunjucksSetup(app: express.Express): void {
     express: app,
   })
 
-  njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+
+  addFilters(njkEnv)
 }
 
-export const nunjucksInline = nunjucks.configure(NUNJUCKS_TEMPLATE_PATHS, { autoescape: true })
+export const nunjucksInline = () => {
+  const njkEnv = nunjucks.configure(NUNJUCKS_TEMPLATE_PATHS, { autoescape: true })
+
+  addFilters(njkEnv)
+
+  return nunjucks
+}

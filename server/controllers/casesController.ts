@@ -18,4 +18,18 @@ export default class CasesController {
       return res.render('pages/index', { tableCaption: casesTableCaption(cases), casesRows: casesToRows(cases) })
     }
   }
+
+  show(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.params
+      await this.auditService.logPageView(Page.CASE_PROFILE_TRACKER, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+      const token = res.locals?.user?.token
+      const caseData = await this.casesService.getCase(token, crn)
+
+      return res.render('pages/show', { caseData: caseData[0] })
+    }
+  }
 }

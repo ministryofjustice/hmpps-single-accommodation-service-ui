@@ -6,4 +6,8 @@ export default class CasesService {
   getCases(token: string) {
     return this.casesClient.getCases(token)
   }
+
+  getCase(token: string, crn: string) {
+    return this.casesClient.getCase(token, crn)
+  }
 }

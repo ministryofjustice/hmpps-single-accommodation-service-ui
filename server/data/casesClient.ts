@@ -56,6 +56,10 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string) {
-    return this.get<Case[]>({ path: '/cases' }, asUser(token))
+    return this.get<Case[]>({ path: '/mock/cases' }, asUser(token))
+  }
+
+  getCase(token: string, crn: string) {
+    return this.get<Case[]>({ path: `/mock/cases/${crn}` }, asUser(token))
   }
 }

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Case } from '@sas/api'
+import { CaseDto as Case } from '@sas/api'
 
 const riskLevels = ['LOW', 'MEDIUM', 'HIGH', 'VERY_HIGH'] as const
 

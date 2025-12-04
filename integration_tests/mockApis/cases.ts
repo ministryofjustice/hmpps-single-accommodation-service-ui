@@ -1,5 +1,5 @@
 import type { SuperAgentRequest } from 'superagent'
-import { Case } from '@sas/api'
+import { CaseDto as Case } from '@sas/api'
 import { stubFor } from './wiremock'
 import { caseFactory } from '../../server/testutils/factories'
 

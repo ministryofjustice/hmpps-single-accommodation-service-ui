@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type NextAccommodation = {
+export type NextAccommodationDto = {
     type: string;
     startDate: string;
 };

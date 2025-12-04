@@ -1,4 +1,4 @@
-import { Case } from '@sas/api'
+import { CaseDto as Case } from '@sas/api'
 import { casesTableCaption, casesToRows, personCell } from './cases'
 import { caseFactory } from '../testutils/factories'
 

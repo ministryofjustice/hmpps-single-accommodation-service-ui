@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type CurrentAccommodation = {
-    type: string;
-    endDate: string;
+export type AssignedToDto = {
+    id: number;
+    name: string;
 };
 

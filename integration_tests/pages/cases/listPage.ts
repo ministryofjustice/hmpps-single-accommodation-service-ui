@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { Case } from '@sas/api'
+import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate, formatRiskLevel } from '../../../server/utils/format'
 

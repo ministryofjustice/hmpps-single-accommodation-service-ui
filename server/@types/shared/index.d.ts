@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type { AssignedTo } from './models/AssignedTo';
-export type { Case } from './models/Case';
-export type { CurrentAccommodation } from './models/CurrentAccommodation';
-export type { NextAccommodation } from './models/NextAccommodation';
+export type { AssignedToDto } from './models/AssignedToDto';
+export type { CaseDto } from './models/CaseDto';
+export type { CurrentAccommodationDto } from './models/CurrentAccommodationDto';
+export type { NextAccommodationDto } from './models/NextAccommodationDto';

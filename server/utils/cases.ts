@@ -12,3 +12,7 @@ export const personCell = (c: Case): string => {
 }
 
 export const casesToRows = (cases: Case[]): TableRow[] => cases.map(c => [htmlContent(personCell(c)), htmlContent()])
+
+export const caseAssignedTo = (c: Case, id: string): string => {
+  return String(c.assignedTo?.id) === id ? `You (${c.assignedTo.name})` : c.assignedTo?.name
+}

@@ -1,7 +1,8 @@
 import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { casesTableCaption, casesToRows } from '../utils/cases'
+import { casesTableCaption, casesToRows, caseAssignedTo } from '../utils/cases'
+import { calculateAge } from '../utils/person'
 
 export default class CasesController {
   constructor(
@@ -29,7 +30,11 @@ export default class CasesController {
       const token = res.locals?.user?.token
       const caseData = await this.casesService.getCase(token, crn)
 
-      return res.render('pages/show', { caseData: caseData[0] })
+      return res.render('pages/show', {
+        caseData,
+        age: calculateAge(caseData.dateOfBirth),
+        assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+      })
     }
   }
 }

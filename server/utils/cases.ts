@@ -1,4 +1,4 @@
-import { Case } from '@sas/api'
+import { CaseDto as Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'

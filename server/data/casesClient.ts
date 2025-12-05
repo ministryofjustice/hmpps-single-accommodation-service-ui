@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { Case } from '@sas/api'
+import { CaseDto as Case } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 

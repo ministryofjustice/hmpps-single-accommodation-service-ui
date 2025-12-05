@@ -6,6 +6,7 @@ import prisonNumber from '../prisonNumber'
 import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
+import assignedUserFactory from './assignedUser'
 
 export default Factory.define<Case>(() => ({
   name: faker.person.fullName(),
@@ -15,7 +16,7 @@ export default Factory.define<Case>(() => ({
   tier: tier(),
   riskLevel: riskLevel(),
   pncReference: pncReference(),
-  // assignedTo?: AssignedTo;
+  assignedTo: assignedUserFactory.build(),
   // currentAccommodation?: CurrentAccommodation;
   // nextAccommodation?: NextAccommodation;
 }))

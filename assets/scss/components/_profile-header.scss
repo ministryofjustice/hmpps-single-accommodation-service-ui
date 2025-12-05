@@ -43,12 +43,13 @@
 }
 
 .sas-profile-image {
-    flex: 0 0 auto;
-    height: auto;
-    width: 135px;
-    display: block;
-    @media (min-width: 640px) {
-        margin-bottom: 0;
-        max-width: 180px;
-    }
+  display: block;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  flex: 0 0 auto;
+
+  @include govuk-media-query($from: tablet) {
+    max-width: 135px;
+  }
 }

@@ -33,4 +33,28 @@ describeClient('CasesClient', provider => {
     const response = await casesClient.getCases('test-user-token')
     expect(response).toEqual(cases)
   })
+
+  it('should make a GET request to /cases/:crn using user token and return the response body', async () => {
+    const caseData = caseFactory.build()
+    const { crn } = caseData
+
+    await provider.addInteraction({
+      state: `Case with CRN ${crn} exists for user`,
+      uponReceiving: 'a request to get a user case by CRN',
+      withRequest: {
+        method: 'GET',
+        path: `/cases/${crn}`,
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: caseData,
+      },
+    })
+
+    const response = await casesClient.getCase('test-user-token', crn)
+    expect(response).toEqual(caseData)
+  })
 })

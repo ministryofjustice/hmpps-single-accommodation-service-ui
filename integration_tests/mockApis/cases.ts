@@ -26,4 +26,26 @@ export default {
         status: 500,
       },
     }),
+  stubGetCaseByCrn: (crn: string, caseData?: Case): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/cases/${crn}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: caseData || caseFactory.build({ crn }),
+      },
+    }),
+  stubGetCaseByCrn500: (crn: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/cases/${crn}`,
+      },
+      response: {
+        status: 500,
+      },
+    }),
 }

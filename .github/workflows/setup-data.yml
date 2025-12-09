@@ -1,0 +1,29 @@
+name: Setup test data
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_cas3_application:
+        description: Create CAS3 application?
+        type: boolean
+        default: true
+        required: true
+      create_cas3_referral:
+        description: Create CAS3 referral?
+        type: boolean
+        default: true
+        required: true
+
+jobs:
+  create-data:
+    uses: ./.github/workflows/setup-data-test-runner.yml
+    with:
+      directory: test-data-setup
+      projects: '["create-cas-data"]'
+      env: |
+        {
+          "CREATE_CAS3_APPLICATION": "${{ inputs.create_cas3_application }}",
+          "CREATE_CAS3_REFERRAL": "${{ inputs.create_cas3_referral }}"
+        }
+      workers: 1
+    secrets: inherit

@@ -1,0 +1,59 @@
+.sas-profile-page {
+    padding-top: 0;
+}
+
+.sas-profile-header {
+    border-bottom: 1px solid govuk-colour("mid-grey");
+    background: none;
+    padding: 0 0 govuk-spacing(2) 0;
+    margin: govuk-spacing(4) 0;
+    display: flex;
+    align-items: flex-start;
+    gap: govuk-spacing(4);
+}
+
+.sas-profile-header__details {
+    color: govuk-colour('black');
+    margin-top: 0px;
+    display: inline-block;
+
+    & dt {
+        float: left;
+        margin-right: govuk-spacing(1);
+        color: govuk-colour('dark-grey');
+        
+        &:after {
+            content: ":";
+        }
+    }
+
+    & dd {
+        margin-left: 0;
+        float: left;
+        margin-right: govuk-spacing(2);
+        padding-right: govuk-spacing(2);
+        border-right: 1px solid govuk-colour("mid-grey");
+
+        &:last-of-type {
+            border: 0;
+            padding-right: 0;
+            margin-right: 0;
+        }
+    }
+
+    & dt:not(:first-of-type) {
+        margin-left: 3px;
+    }
+}
+
+.sas-profile-image {
+  display: block;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  flex: 0 0 auto;
+
+  @include govuk-media-query($from: tablet) {
+    max-width: 135px;
+  }
+}

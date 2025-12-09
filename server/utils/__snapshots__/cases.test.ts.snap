@@ -5,7 +5,7 @@ exports[`cases utilities personCell returns a formatted cell for a given person 
 
 <div class="sas-person-cell">
   <div class="govuk-!-margin-bottom-2">
-    <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="">Dave Foo</a>
+  <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="/cases/C321654">Dave Foo</a>
   </div>
 
   <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">

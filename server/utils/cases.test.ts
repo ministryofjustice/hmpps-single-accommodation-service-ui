@@ -1,5 +1,5 @@
 import { CaseDto as Case } from '@sas/api'
-import { casesTableCaption, casesToRows, personCell } from './cases'
+import { caseAssignedTo, casesTableCaption, casesToRows, personCell } from './cases'
 import { caseFactory } from '../testutils/factories'
 
 describe('cases utilities', () => {
@@ -37,6 +37,23 @@ describe('cases utilities', () => {
       const cases: Case[] = caseFactory.buildList(1)
 
       expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }, { html: '' }]])
+    })
+  })
+
+  describe('caseAssignedTo', () => {
+    it('returns "You (name)" when the assignedTo id matches the given id', () => {
+      const person = caseFactory.build({
+        assignedTo: { id: 123, name: 'Alice Smith' },
+      })
+
+      expect(caseAssignedTo(person, '123')).toEqual('You (Alice Smith)')
+    })
+
+    it('returns the assignedTo name when the assignedTo id does not match the given id', () => {
+      const person = caseFactory.build({
+        assignedTo: { id: 456, name: 'Bob Johnson' },
+      })
+      expect(caseAssignedTo(person, '123')).toEqual('Bob Johnson')
     })
   })
 })

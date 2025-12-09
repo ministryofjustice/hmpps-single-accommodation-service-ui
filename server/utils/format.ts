@@ -1,7 +1,7 @@
 import { CaseDto as Case } from '@sas/api'
 
-export const formatDate = (date: string) =>
-  new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+export const formatDate = (date?: string) =>
+  date ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (

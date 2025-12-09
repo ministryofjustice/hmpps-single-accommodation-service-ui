@@ -7,6 +7,7 @@ export default function routes(services: Services): Router {
   const { casesController } = controllers(services)
 
   router.get('/', casesController.index())
+  router.get('/cases/:crn', casesController.show())
 
   return router
 }

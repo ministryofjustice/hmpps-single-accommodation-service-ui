@@ -4,6 +4,9 @@ import { CaseDto as Case } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 
+// TODO: remove specific type once API response updated
+export type CaseSummary = Case
+
 export default class CasesClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
     super('Cases client', config.apis.sasApi, logger, authenticationClient)
@@ -56,7 +59,7 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string) {
-    return this.get<Case[]>({ path: '/cases' }, asUser(token))
+    return this.get<CaseSummary[]>({ path: '/cases' }, asUser(token))
   }
 
   getCase(token: string, crn: string) {

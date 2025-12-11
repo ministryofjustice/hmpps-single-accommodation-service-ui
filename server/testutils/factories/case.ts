@@ -1,4 +1,4 @@
-import { CaseDto as Case } from '@sas/api'
+import { CurrentAccommodationDto, NextAccommodationDto } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import crn from '../crn'
@@ -7,8 +7,10 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
+import accommodationFactory from './accommodation'
+import { CaseSummary } from '../../data/casesClient'
 
-export default Factory.define<Case>(() => ({
+export default Factory.define<CaseSummary>(() => ({
   name: faker.person.fullName(),
   crn: crn(),
   dateOfBirth: faker.date.birthdate().toISOString().substring(0, 10),
@@ -17,6 +19,6 @@ export default Factory.define<Case>(() => ({
   riskLevel: riskLevel(),
   pncReference: pncReference(),
   assignedTo: assignedUserFactory.build(),
-  // currentAccommodation?: CurrentAccommodation;
-  // nextAccommodation?: NextAccommodation;
+  currentAccommodation: accommodationFactory.build() as CurrentAccommodationDto,
+  nextAccommodation: accommodationFactory.build() as NextAccommodationDto,
 }))

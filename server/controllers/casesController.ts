@@ -2,7 +2,6 @@ import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import { casesTableCaption, casesToRows, caseAssignedTo, referralHistoryToRows } from '../utils/cases'
-import { calculateAge } from '../utils/person'
 import ReferralsService from '../services/referralsService'
 
 export default class CasesController {
@@ -37,7 +36,6 @@ export default class CasesController {
 
       return res.render('pages/show', {
         caseData,
-        age: calculateAge(caseData.dateOfBirth),
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         referralHistory: referralHistoryToRows(referralHistory),
       })

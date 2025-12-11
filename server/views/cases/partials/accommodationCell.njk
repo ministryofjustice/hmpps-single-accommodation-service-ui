@@ -1,0 +1,11 @@
+{{ heading | safe }}
+
+{%- if cellType === 'current' %}
+  {%- set days = endDate | date('days') -%}
+  <br>
+  <span class="govuk-hint">until {{ endDate | date }}</span><br>
+  {{ days }} {{ 'day' if days == 1 else 'days' }} left
+{% else %}
+  <br>
+  <span class="govuk-hint">from {{ startDate | date }}</span>
+{% endif -%}

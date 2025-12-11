@@ -1,8 +1,9 @@
 import type { SuperAgentRequest } from 'superagent'
-import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
+import { AccommodationReferralDto as Referral } from '@sas/api'
 import { stubFor } from './wiremock'
 import { caseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
+import { Case } from '../../server/data/casesClient'
 
 export default {
   stubGetCases: (cases?: Case[]): SuperAgentRequest =>

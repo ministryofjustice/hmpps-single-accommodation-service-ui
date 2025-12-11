@@ -1,6 +1,7 @@
-import { CaseDto as Case } from '@sas/api'
-import { caseAssignedTo, casesTableCaption, casesToRows, personCell } from './cases'
-import { caseFactory } from '../testutils/factories'
+import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
+import { caseAssignedTo, casesTableCaption, casesToRows, personCell, referralHistoryToRows } from './cases'
+import { caseFactory, referralFactory } from '../testutils/factories'
+import { dateCell, linksCell, statusCell, textCell } from './tables'
 
 describe('cases utilities', () => {
   describe('casesTableCaption', () => {
@@ -54,6 +55,24 @@ describe('cases utilities', () => {
         assignedTo: { id: 456, name: 'Bob Johnson' },
       })
       expect(caseAssignedTo(person, '123')).toEqual('Bob Johnson')
+    })
+  })
+
+  describe('referralHistoryToRows', () => {
+    it('returns formatted rows for a given list of referrals', () => {
+      const referrals: Referral[] = referralFactory.buildList(1)
+
+      expect(referralHistoryToRows(referrals)).toEqual([
+        [
+          textCell(referrals[0].type),
+          statusCell(referrals[0].status),
+          dateCell(referrals[0].date),
+          linksCell([
+            { text: 'View', href: '#' },
+            { text: 'Notes', href: '#' },
+          ]),
+        ],
+      ])
     })
   })
 })

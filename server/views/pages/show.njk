@@ -1,4 +1,5 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "components/riskLevelTag.njk" import riskLevelTag %}
 {% extends "partials/layout.njk" %}
@@ -49,4 +50,36 @@
             </div>
         </div>
     </div>
+    <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
+    {% if (referralHistory | length > 0) %}
+        <div class="govuk-summary-card">
+            <div class="govuk-summary-card__title-wrapper">
+                <h2 class="govuk-summary-card__title">
+                            Referral history
+                        </h2>
+            </div>
+            <div class="govuk-summary-card__content">
+                <dl class="govuk-summary-list">
+                    {{ govukTable({
+                        firstCellIsHeader: true,
+                        head: [
+                            {
+                            text: "Type"
+                            },
+                            {
+                            text: "Status"
+                            },
+                            {
+                            text: "Date"
+                            },
+                            {
+                            text: ""
+                            }
+                        ],
+                        rows: referralHistory
+                    }) }}
+                </dl>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

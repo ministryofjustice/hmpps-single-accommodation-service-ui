@@ -1,0 +1,100 @@
+name: End-to-end tests
+
+on:
+  # Re-use in other workflows
+  workflow_call:
+    inputs:
+      directory:
+        description: Directory containing test files
+        type: string
+        default: tests
+      projects:
+        description: A JSON array of projects to run e.g. '["create-cas-data"]'
+        type: string
+        required: true
+      env:
+        description: Extra environment variables to pass-through to the tests
+        type: string
+        default: ''
+      workers:
+        description: The maximum number of concurrent worker processes that run in parallel.
+        type: number
+        default: 16
+
+jobs:
+  test:
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
+    timeout-minutes: 60
+    outputs:
+      failed-projects: ${{ steps.json.outputs.failed-projects }}
+      passed-projects: ${{ steps.json.outputs.passed-projects }}
+      report-url: ${{ steps.html.outputs.report-url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false # Remove this line of code which is a work around, once fix is in place as per the - https://github.com/JamesIves/github-pages-deploy-action/issues/1928
+
+      - name: Get tests to run - specific tests
+        run: |
+          if ! echo "$projects" | jq empty; then echo 'Invalid JSON'; exit 1; fi
+          echo "projects=$projects" | tee -a "$GITHUB_ENV"
+        env:
+          projects: ${{ inputs.projects }}
+
+      - name: Get report output directory
+        run: echo "report-dir=playwright-report/test/$REF/$(date '+%Y-%m-%d')/${{ github.sha }}/${{ github.run_id }}/${{ github.run_attempt }}" | tee -a "$GITHUB_ENV"
+        env:
+          REF: ${{ github.ref_name }}
+
+      - name: Parse environment variables
+        if: inputs.env != ''
+        run: echo "$ENV_VARS" | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' | tee -a "$GITHUB_ENV"
+        env:
+          ENV_VARS: ${{ inputs.env }}
+
+      - uses: actions/setup-node@v6
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npx playwright install
+
+      - name: Run Playwright tests
+        id: tests
+        run: echo '${{ env.projects }}' | jq -r '.[]' | xargs npx playwright test --reporter=html,junit,json,line --workers="$WORKERS"
+        env:
+          TZ: Europe/London
+          ENV: test
+          TEST_DIR: ${{ inputs.directory || 'tests' }}
+          WORKERS: ${{ inputs.workers || '16' }}
+          PLAYWRIGHT_JUNIT_OUTPUT_NAME: junit.xml
+          PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
+          # URLs
+          CAS3_TRANSITIONAL_ACCOMMODATION_URL: https://transitional-accommodation-dev.hmpps.service.justice.gov.uk
+
+      - name: Parse JSON results
+        if: always()
+        id: json
+        run: |
+          if [ -f results.json ]; then
+            skipped_projects=$(echo "$all_projects" | jq -r '.[]' | while read -r project; do if [ ! -d "tests/$project" ]; then echo "$project"; fi; done | jq --raw-input . | jq --slurp --compact-output .)
+            failed_projects=$(jq -r '.suites[].specs[] | select(.ok == false).file' results.json | xargs -n1 dirname | sort -u | jq --raw-input . | jq --slurp --compact-output .)
+            passed_projects=$(jq --compact-output --null-input --argjson all "$all_projects" --argjson failed "$failed_projects" --argjson skipped "$skipped_projects" '{all: $all, failed: $failed, skipped: $skipped} | .all - .failed - .skipped')
+            passed_projects=$(echo "$projects" | jq -sc '.[0] - (.[0] - .[1])')
+          fi
+          echo "skipped-projects=${skipped_projects:-'[]'}" | tee -a "$GITHUB_OUTPUT"
+          echo "failed-projects=${failed_projects:-'[]'}" | tee -a "$GITHUB_OUTPUT"
+          echo "passed-projects=${passed_projects:-'[]'}" | tee -a "$GITHUB_OUTPUT"
+        env:
+          all_projects: ${{ env.projects }}
+
+      - name: Publish JUnit report
+        if: always()
+        uses: mikepenz/action-junit-report@e08919a3b1fb83a78393dfb775a9c37f17d8eea6 # v6.0.1
+        id: junit
+        with:
+          check_name: End-to-end test results
+          report_paths: junit.xml

@@ -1,4 +1,5 @@
 import { HtmlContent, TextContent } from '@govuk/ui'
+import { CasReferralStatus } from '@sas/api'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -27,3 +28,16 @@ export const initialiseName = (fullName?: string): string | null => {
 export const textContent = (text?: string): TextContent => ({ text: text || '' })
 
 export const htmlContent = (html?: string): HtmlContent => ({ html: html || '' })
+
+export const statusTag = (status: CasReferralStatus): string => {
+  switch (status) {
+    case 'PENDING':
+      return `<strong class="govuk-tag govuk-tag--yellow">${properCaseName(status)}</strong>`
+    case 'REJECTED':
+      return `<strong class="govuk-tag govuk-tag--grey">${properCaseName(status)}</strong>`
+    case 'ACCEPTED':
+      return `<strong class="govuk-tag govuk-tag--green">${properCaseName(status)}</strong>`
+    default:
+      return `<strong class="govuk-tag govuk-tag--grey">${properCaseName(status)}</strong>`
+  }
+}

@@ -7,3 +7,6 @@ export type { AssignedToDto } from './models/AssignedToDto';
 export type { CaseDto } from './models/CaseDto';
 export type { CurrentAccommodationDto } from './models/CurrentAccommodationDto';
 export type { NextAccommodationDto } from './models/NextAccommodationDto';
+export type { Referral } from './models/Referral';
+export type { CasType } from './models/CasType';
+export type { CasReferralStatus } from './models/CasReferralStatus';

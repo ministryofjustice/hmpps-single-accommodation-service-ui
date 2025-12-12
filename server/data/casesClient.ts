@@ -1,8 +1,9 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { CaseDto as Case } from '@sas/api'
+import { CaseDto as Case, Referral } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
+// import referral from '../testutils/factories/referral'
 
 export default class CasesClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -61,5 +62,11 @@ export default class CasesClient extends RestClient {
 
   getCase(token: string, crn: string) {
     return this.get<Case>({ path: `/cases/${crn}` }, asUser(token))
+  }
+
+  getReferralHistory(token: string, crn: string) {
+    // const referrals = referral.buildList(3)
+    // return referrals
+    return this.get<Referral[]>({ path: `/cases/${crn}/referral-history` }, asUser(token))
   }
 }

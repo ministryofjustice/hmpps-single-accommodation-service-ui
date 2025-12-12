@@ -1,0 +1,13 @@
+<div class="govuk-summary-list__actions govuk-!-padding-0">
+    <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+            {% if links and links.length %}
+                {% for link in links %}
+                    <li class="govuk-summary-list__actions-list-item">
+                        <a class="govuk-link govuk-link--no-visited-state" href="{{ link.href }}">{{ link.text }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </span>
+</div>

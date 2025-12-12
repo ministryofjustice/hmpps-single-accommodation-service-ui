@@ -1,4 +1,5 @@
-import { convertToTitleCase, htmlContent, initialiseName, textContent } from './utils'
+import { CasReferralStatus } from '@sas/api'
+import { convertToTitleCase, htmlContent, initialiseName, statusTag, textContent } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -48,5 +49,15 @@ describe('htmlContent', () => {
     ['Some content', '<p>Some content</p>', '<p>Some content</p>'],
   ])('%s htmlContent(%s)', (_: string, a: string, expected: string) => {
     expect(htmlContent(a)).toEqual({ html: expected })
+  })
+})
+
+describe('statusTag', () => {
+  it('returns the correct tag for given status', () => {
+    expect(statusTag('PENDING')).toEqual('<strong class="govuk-tag govuk-tag--yellow">Pending</strong>')
+  })
+
+  it('returns the default tag for unknown status', () => {
+    expect(statusTag('OTHER' as CasReferralStatus)).toEqual('<strong class="govuk-tag govuk-tag--grey">Other</strong>')
   })
 })

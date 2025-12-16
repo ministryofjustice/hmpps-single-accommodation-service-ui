@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type NextAccommodationDto = {
-    type: string;
-    startDate: string;
+    type?: 'CAS1_MOCK' | 'CAS2_MOCK' | 'CAS3_MOCK' | 'PRIVATE_ADDRESS_MOCK';
+    startDate?: string;
 };
 

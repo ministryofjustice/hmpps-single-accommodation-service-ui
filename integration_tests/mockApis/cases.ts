@@ -1,5 +1,5 @@
 import type { SuperAgentRequest } from 'superagent'
-import { CaseDto as Case } from '@sas/api'
+import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
 import { stubFor } from './wiremock'
 import { caseFactory } from '../../server/testutils/factories'
 
@@ -43,6 +43,28 @@ export default {
       request: {
         method: 'GET',
         urlPattern: `/cases/${crn}`,
+      },
+      response: {
+        status: 500,
+      },
+    }),
+  stubGetReferralHistory: (crn: string, referrals?: Referral[]): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/application-histories/${crn}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: referrals || [],
+      },
+    }),
+  stubGetReferralHistory500: (crn: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/application-histories/${crn}`,
       },
       response: {
         status: 500,

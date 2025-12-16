@@ -1,8 +1,9 @@
-import { CaseDto as Case } from '@sas/api'
+import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { calculateAge } from './person'
+import { linksCell, dateCell, statusCell, textCell } from './tables'
 
 export const casesTableCaption = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'} assigned to you`
@@ -15,4 +16,16 @@ export const casesToRows = (cases: Case[]): TableRow[] => cases.map(c => [htmlCo
 
 export const caseAssignedTo = (c: Case, id: string): string => {
   return String(c.assignedTo?.id) === id ? `You (${c.assignedTo.name})` : c.assignedTo?.name
+}
+
+export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
+  return referrals.map(referral => [
+    textCell(referral.type),
+    statusCell(referral.status),
+    dateCell(referral.date),
+    linksCell([
+      { text: 'View', href: '#' },
+      { text: 'Notes', href: '#' },
+    ]),
+  ])
 }

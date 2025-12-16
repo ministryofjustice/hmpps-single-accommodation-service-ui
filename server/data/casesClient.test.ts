@@ -1,7 +1,8 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import CasesClient from './casesClient'
 import describeClient from '../testutils/describeClient'
-import { caseFactory } from '../testutils/factories'
+import { caseFactory, referralFactory } from '../testutils/factories'
+import crnFactory from '../testutils/crn'
 
 describeClient('CasesClient', provider => {
   let casesClient: CasesClient
@@ -56,5 +57,29 @@ describeClient('CasesClient', provider => {
 
     const response = await casesClient.getCase('test-user-token', crn)
     expect(response).toEqual(caseData)
+  })
+
+  it('should make a GET request to /application-histories/:crn using user token and return the response body', async () => {
+    const referrals = referralFactory.buildList(3)
+    const crn = crnFactory()
+
+    await provider.addInteraction({
+      state: `Referral history exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to get referral history for a user case by CRN',
+      withRequest: {
+        method: 'GET',
+        path: `/application-histories/${crn}`,
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: referrals,
+      },
+    })
+
+    const response = await casesClient.getReferralHistory('test-user-token', crn)
+    expect(response).toEqual(referrals)
   })
 })

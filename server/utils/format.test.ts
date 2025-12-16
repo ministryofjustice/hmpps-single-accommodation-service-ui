@@ -1,4 +1,4 @@
-import { formatDate, formatRiskLevel } from './format'
+import { formatDate, formatRiskLevel, formatStatus, referralStatusTag } from './format'
 
 describe('formatting utilities', () => {
   describe('formatDate', () => {
@@ -21,6 +21,20 @@ describe('formatting utilities', () => {
       ['Unknown', 'UNKNOWN' as const],
     ])('renders %s for risk level %s', (expected, level) => {
       expect(formatRiskLevel(level)).toEqual(expected)
+    })
+  })
+
+  describe('referralStatusTag', () => {
+    it.each([
+      ['yellow', 'PENDING' as const],
+      ['green', 'ACCEPTED' as const],
+      ['grey', 'REJECTED' as const],
+      ['grey', undefined],
+      ['grey', 'UNKNOWN' as const],
+    ])('renders %s for risk level %s', (tagColour, status) => {
+      expect(referralStatusTag(status)).toEqual(
+        `<strong class="govuk-tag govuk-tag--${tagColour}">${formatStatus(status)}</strong>`,
+      )
     })
   })
 })

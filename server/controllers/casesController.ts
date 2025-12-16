@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { casesTableCaption, casesToRows, caseAssignedTo } from '../utils/cases'
+import { casesTableCaption, casesToRows, caseAssignedTo, referralHistoryToRows } from '../utils/cases'
 import { calculateAge } from '../utils/person'
 
 export default class CasesController {
@@ -28,12 +28,16 @@ export default class CasesController {
         correlationId: req.id,
       })
       const token = res.locals?.user?.token
-      const caseData = await this.casesService.getCase(token, crn)
+      const [caseData, referralHistory] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.casesService.getReferralHistory(token, crn),
+      ])
 
       return res.render('pages/show', {
         caseData,
         age: calculateAge(caseData.dateOfBirth),
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+        referralHistory: referralHistoryToRows(referralHistory),
       })
     }
   }

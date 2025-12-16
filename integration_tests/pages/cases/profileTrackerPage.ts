@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { CaseDto as Case } from '@sas/api'
+import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { formatDate, formatRiskLevel } from '../../../server/utils/format'
+import { formatDate, formatRiskLevel, formatStatus } from '../../../server/utils/format'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -31,6 +31,23 @@ export default class ProfileTrackerPage extends AbstractPage {
     for await (const detail of details) {
       const dd = this.page.locator(`dt:has-text("${detail.label}") + dd`)
       await expect(dd).toContainText(detail.value ?? '')
+    }
+  }
+
+  async shouldShowReferralHistory(referrals: Referral[]) {
+    const card = this.page.locator('.govuk-summary-card').filter({
+      has: this.page.getByRole('heading', { name: 'Referral history' }),
+    })
+    const table = card.locator('table.govuk-table')
+    for await (const referral of referrals) {
+      const i = referrals.indexOf(referral)
+      const row = table.locator('tbody tr').nth(i)
+
+      await expect(row).toContainText(referral.type)
+      await expect(row).toContainText(formatStatus(referral.status))
+      await expect(row).toContainText(formatDate(referral.date))
+      await expect(row).toContainText('View')
+      await expect(row).toContainText('Notes')
     }
   }
 }

@@ -10,8 +10,4 @@ export default class CasesService {
   getCase(token: string, crn: string) {
     return this.casesClient.getCase(token, crn)
   }
-
-  getReferralHistory(token: string, crn: string) {
-    return this.casesClient.getReferralHistory(token, crn)
-  }
 }

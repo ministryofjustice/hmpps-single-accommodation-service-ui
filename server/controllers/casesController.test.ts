@@ -3,6 +3,7 @@ import { mock } from 'jest-mock-extended'
 import CasesController from './casesController'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
+import ReferralsService from '../services/referralsService'
 import { user } from '../routes/testutils/appSetup'
 import { caseFactory } from '../testutils/factories'
 import { casesTableCaption, casesToRows } from '../utils/cases'
@@ -14,11 +15,12 @@ describe('casesController', () => {
 
   const auditService = mock<AuditService>()
   const casesService = mock<CasesService>()
+  const referralsService = mock<ReferralsService>()
 
   let casesController: CasesController
 
   beforeEach(() => {
-    casesController = new CasesController(auditService, casesService)
+    casesController = new CasesController(auditService, casesService, referralsService)
   })
 
   describe('index', () => {

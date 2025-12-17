@@ -47,7 +47,6 @@ export default class ProfileTrackerPage extends AbstractPage {
       await expect(row).toContainText(formatStatus(referral.status))
       await expect(row).toContainText(formatDate(referral.date))
       await expect(row).toContainText('View')
-      await expect(row).toContainText('Notes')
     }
   }
 }

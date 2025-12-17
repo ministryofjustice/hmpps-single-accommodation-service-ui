@@ -23,9 +23,6 @@ export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
     textCell(referral.type),
     statusCell(referral.status),
     dateCell(referral.date),
-    linksCell([
-      { text: 'View', href: '#' },
-      { text: 'Notes', href: '#' },
-    ]),
+    linksCell([{ text: 'View', href: '#' }]),
   ])
 }

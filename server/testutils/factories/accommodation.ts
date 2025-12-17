@@ -19,13 +19,13 @@ class AccommodationFactory extends Factory<AccommodationDto> {
   current(date?: string) {
     return this.params({
       startDate: undefined,
-      endDate: date || faker.date.future().toISOString().substring(0, 10),
+      endDate: date || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
     })
   }
 
   next(date?: string) {
     return this.params({
-      startDate: date || faker.date.future().toISOString().substring(0, 10),
+      startDate: date || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
       endDate: undefined,
     })
   }
@@ -34,7 +34,7 @@ class AccommodationFactory extends Factory<AccommodationDto> {
     return this.params({
       type: 'prison',
       subtype: undefined,
-      name: `HMP ${faker.word.words(2)}`,
+      name: `HMP ${faker.location.city()}`,
       isSettled: undefined,
       qualifier: faker.helpers.maybe(() => faker.helpers.arrayElement(qualifiers)),
     })
@@ -79,7 +79,7 @@ export default AccommodationFactory.define(() => {
     id: faker.string.uuid(),
     type,
     subtype: type === 'private' ? faker.helpers.arrayElement(subtypes) : undefined,
-    name: `${type === 'prison' ? 'HMP ' : ''}${faker.word.words(2)}`,
+    name: type === 'prison' ? `HMP ${faker.location.city()}` : faker.word.words(2),
     isSettled: type === 'private' ? faker.datatype.boolean() : undefined,
     qualifier: type === 'prison' ? faker.helpers.arrayElement(qualifiers) : undefined,
     startDate: faker.date.past().toISOString().substring(0, 10),

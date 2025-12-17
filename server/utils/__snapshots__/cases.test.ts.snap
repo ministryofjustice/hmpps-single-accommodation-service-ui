@@ -50,7 +50,7 @@ exports[`cases utilities accommodationCell for current accommodation returns a f
 `;
 
 exports[`cases utilities accommodationCell for current accommodation returns a formatted cell for a Private address accommodation 1`] = `
-"Private address (bail)<br>Parents' home (settled)<br>
+"Private address (lodging)<br>Parents' home (settled)<br>
   <span class="govuk-hint">until 10 September 2026</span><br>
   274 days left
 "
@@ -106,7 +106,7 @@ exports[`cases utilities accommodationCell for next accommodation returns a form
 `;
 
 exports[`cases utilities accommodationCell for next accommodation returns a formatted cell for a Private address accommodation 1`] = `
-"Private address (bail)<br>Parents' home (settled)
+"Private address (lodging)<br>Parents' home (settled)
   <br>
   <span class="govuk-hint">from 10 September 2026</span>
 "

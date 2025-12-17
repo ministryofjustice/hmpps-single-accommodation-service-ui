@@ -62,7 +62,7 @@ describe('cases utilities', () => {
       const cas3Accommodation = factory('2026-07-31').cas('cas3').build()
       const privateAccommodation = factory('2026-09-10')
         .privateAddress()
-        .build({ name: "Parents' home", qualifier: 'bail', isSettled: true })
+        .build({ name: "Parents' home", subtype: 'lodging', isSettled: true })
       const noFixedAbode = factory('2026-09-10').noFixedAbode().build()
 
       it.each<[string, AccommodationDto]>([

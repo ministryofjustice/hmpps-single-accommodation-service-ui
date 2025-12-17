@@ -14,14 +14,14 @@ export const personCell = (c: Case): string => {
 }
 
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDto): string => {
-  const { type, qualifier, name, isSettled } = accommodation
+  const { type, subtype, qualifier, name, isSettled } = accommodation
 
   let heading: string
 
   if (type === 'prison') {
     heading = `${name}${qualifier ? ` (${qualifier})` : ''}`
   } else if (type === 'private') {
-    heading = `Private address${qualifier ? ` (${qualifier})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
+    heading = `Private address${subtype ? ` (${subtype})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
   } else if (type === 'nfa') {
     heading = 'No fixed abode'
   } else if (type === 'cas1') {

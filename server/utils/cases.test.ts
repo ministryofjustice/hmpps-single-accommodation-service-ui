@@ -67,10 +67,7 @@ describe('cases utilities', () => {
           textCell(referrals[0].type),
           statusCell(referrals[0].status),
           dateCell(referrals[0].date),
-          linksCell([
-            { text: 'View', href: '#' },
-            { text: 'Notes', href: '#' },
-          ]),
+          linksCell([{ text: 'View', href: '#' }]),
         ],
       ])
     })

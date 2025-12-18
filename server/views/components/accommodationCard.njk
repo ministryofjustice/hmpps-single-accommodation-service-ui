@@ -1,14 +1,25 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
 
+{% if type === 'nfa' %}
+  {% set html %}
+    From {{ startDate | date }} (in {{ startDate | date('days') }})
+  {% endset %}
+
+  {{ mojAlert({
+    variant: "warning",
+    title: "No fixed abode",
+    showTitleAsHeading: true,
+    dismissible: false,
+    html: html
+  }) }}
+{% else %}
 <div class="sas-card govuk-!-margin-bottom-4">
   <h3 class="govuk-heading-m">{{ 'Current' if cardType == 'current' else 'Next' }} accommodation</h3>
 
-  {{
-    govukSummaryList({
-      rows: [
-        { key: { text: 'Type' }, value: { text: accommodation.type } },
-        { key: { text: 'Address' }, value: { html: accommodation.address } }
-      ]
-    })
-  }}
+  {{ govukSummaryList({
+    classes: 'govuk-summary-card__content govuk-!-margin-bottom-0',
+    rows: rows
+  }) }}
 </div>
+{% endif %}

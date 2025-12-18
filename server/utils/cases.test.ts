@@ -1,5 +1,5 @@
 import { AccommodationReferralDto as Referral } from '@sas/api'
-import { AccommodationDto } from '@sas/ui'
+import { AccommodationDto, AddressDto } from '@sas/ui'
 import {
   caseAssignedTo,
   accommodationCell,
@@ -7,6 +7,7 @@ import {
   casesToRows,
   personCell,
   referralHistoryToRows,
+  accommodationCard,
 } from './cases'
 import { accommodationFactory, caseFactory, referralFactory } from '../testutils/factories'
 import { dateCell, linksCell, statusCell, textCell } from './tables'
@@ -41,7 +42,7 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('accommodationCell', () => {
+  describe('accommodation renderers', () => {
     beforeEach(() => {
       jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
     })
@@ -52,19 +53,32 @@ describe('cases utilities', () => {
 
     describe.each(['current', 'next'])('for %s accommodation', (cellType: 'current' | 'next') => {
       const factory = (date: string) =>
-        cellType === 'current' ? accommodationFactory.current(date) : accommodationFactory.next(date)
-      const prison = factory('2026-01-01').prison().build({ name: 'HMP Foobar', qualifier: 'licence' })
-      const prisonNoQualifier = factory('2025-12-11').prison().build({ name: 'HMP Foobar', qualifier: undefined })
-      const cas1Accommodation = factory('2026-02-03').cas('cas1').build()
-      const cas2Accommodation = factory('2026-03-12').cas('cas2').build()
-      const cas2v2Accommodation = factory('2026-05-23').cas('cas2v2').build()
-      const cas3Accommodation = factory('2026-07-31').cas('cas3').build()
+        cellType === 'current'
+          ? accommodationFactory.current(date)
+          : accommodationFactory.next(date).params({ status: 'confirmed' })
+
+      const address: AddressDto = {
+        line1: '9 Foo Bar',
+        line2: undefined,
+        region: undefined,
+        city: 'Foocity',
+        postcode: 'FO0 1BA',
+      }
+
+      const prison = factory('2026-01-01').prison().build({ name: 'HMP Foobar', qualifier: 'licence', address })
+      const prisonNoQualifier = factory('2025-12-11')
+        .prison()
+        .build({ name: 'HMP Foobar', qualifier: undefined, address })
+      const cas1Accommodation = factory('2026-02-03').cas('cas1').build({ address })
+      const cas2Accommodation = factory('2026-03-12').cas('cas2').build({ address })
+      const cas2v2Accommodation = factory('2026-05-23').cas('cas2v2').build({ address })
+      const cas3Accommodation = factory('2026-07-31').cas('cas3').build({ address })
       const privateAccommodation = factory('2026-09-10')
         .privateAddress()
-        .build({ name: "Parents' home", subtype: 'owned', qualifier: 'bail', isSettled: true })
-      const noFixedAbode = factory('2026-09-10').noFixedAbode().build()
+        .build({ name: "Parents' home", subtype: 'owned', qualifier: 'bail', isSettled: true, address })
+      const noFixedAbode = factory('2026-09-10').noFixedAbode().build({ address })
 
-      it.each<[string, AccommodationDto]>([
+      const testCases: [string, AccommodationDto][] = [
         ['Prison', prison],
         ['Prison (no qualifier)', prisonNoQualifier],
         ['CAS1', cas1Accommodation],
@@ -73,8 +87,14 @@ describe('cases utilities', () => {
         ['CAS3', cas3Accommodation],
         ['Private address', privateAccommodation],
         ['No fixed abode', noFixedAbode],
-      ])('returns a formatted cell for a %s accommodation', (_, accommodation: AccommodationDto) => {
+      ]
+
+      it.each(testCases)('returns a formatted cell for a %s accommodation', (_, accommodation) => {
         expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
+      })
+
+      it.each(testCases)('returns a formatted card for a %s accommodation', (_, accommodation) => {
+        expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
       })
     })
   })
@@ -125,4 +145,6 @@ describe('cases utilities', () => {
       ])
     })
   })
+
+  describe('accommodationCard', () => {})
 })

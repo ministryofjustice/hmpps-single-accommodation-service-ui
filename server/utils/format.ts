@@ -2,14 +2,22 @@ import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
 import { convertToTitleCase } from './utils'
 import { calculateAge } from './person'
 
-export const formatDate = (date?: string, format?: 'days' | 'age') => {
+export const formatDate = (date?: string, format?: 'days' | 'age' | 'long') => {
   if (!date || Number.isNaN(new Date(date).getTime())) return 'Invalid Date'
 
   if (format === 'age') return `${calculateAge(date)}`
 
-  if (format === 'days') return `${Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 3600 * 24))}`
+  if (format === 'days') {
+    const days = Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 3600 * 24))
+    return `${days} day${days !== 1 ? 's' : ''}`
+  }
 
-  return new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  return new Date(date).toLocaleDateString('en-GB', {
+    weekday: format === 'long' ? 'long' : undefined,
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
 }
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {

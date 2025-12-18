@@ -14,6 +14,7 @@ export type AccommodationDto = {
   name?: string // free text, eg "parent's home", etc or Prison name or CAS premises name
   isSettled?: boolean // false for CAS?
   qualifier?: 'remand' | 'licence' | 'bail'
+  status?: 'confirmed' | 'pending'
   startDate?: string // known move in date or CAS booking start date, etc
   endDate?: string // actual end date (prison release or CAS booking end date) or licence end, etc
   address?: AddressDto

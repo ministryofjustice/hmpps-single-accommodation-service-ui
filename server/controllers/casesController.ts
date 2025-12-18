@@ -9,7 +9,6 @@ import {
   accommodationCard,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
-import { caseFactory, referralFactory } from '../testutils/factories'
 
 export default class CasesController {
   constructor(
@@ -37,10 +36,8 @@ export default class CasesController {
       })
       const token = res.locals?.user?.token
       const [caseData, referralHistory] = await Promise.all([
-        // this.casesService.getCase(token, crn),
-        caseFactory.build({ crn }),
-        // this.referralsService.getReferralHistory(token, crn),
-        referralFactory.buildList(3),
+        this.casesService.getCase(token, crn),
+        this.referralsService.getReferralHistory(token, crn),
       ])
 
       return res.render('pages/show', {

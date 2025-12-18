@@ -14,6 +14,7 @@ export const types: Readonly<AccommodationDto['type'][]> = [
 ]
 const subtypes: Readonly<AccommodationDto['subtype'][]> = ['owned', 'rented', 'lodging']
 const qualifiers: Readonly<AccommodationDto['qualifier'][]> = ['bail', 'licence', 'remand']
+const statuses: Readonly<AccommodationDto['status'][]> = ['pending', 'confirmed', undefined]
 
 class AccommodationFactory extends Factory<AccommodationDto> {
   current(date?: string) {
@@ -27,6 +28,7 @@ class AccommodationFactory extends Factory<AccommodationDto> {
     return this.params({
       startDate: date || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
       endDate: undefined,
+      status: faker.helpers.arrayElement(statuses),
     })
   }
 

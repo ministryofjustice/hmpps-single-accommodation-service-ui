@@ -15,9 +15,10 @@ describe('formatting utilities', () => {
     })
 
     it.each([
-      ['2025-12-03', '-7'],
-      ['2026-01-24', '45'],
-      ['2025-12-10', '0'],
+      ['2025-12-03', '-7 days'],
+      ['2025-12-11', '1 day'],
+      ['2026-01-24', '45 days'],
+      ['2025-12-10', '0 days'],
       ['not a date', 'Invalid Date'],
     ])('formats %s as the number of days %s', (date, expected) => {
       expect(formatDate(date, 'days')).toEqual(expected)

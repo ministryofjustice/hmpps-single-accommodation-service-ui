@@ -1,10 +1,11 @@
 import { AccommodationReferralDto as Referral } from '@sas/api'
-import { TableRow } from '@govuk/ui'
+import { SummaryListRow, TableRow } from '@govuk/ui'
 import { AccommodationDto } from '@sas/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
 import { Case } from '../data/casesClient'
+import { formatDate } from './format'
 
 export const casesTableCaption = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'} assigned to you`
@@ -13,30 +14,92 @@ export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
 }
 
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDto): string => {
+const accommodationType = (accommodation: AccommodationDto): string => {
   const { type, subtype, qualifier, name, isSettled } = accommodation
 
-  let heading: string
+  switch (type) {
+    case 'prison':
+      return `${name}${qualifier ? ` (${qualifier})` : ''}`
+    case 'private':
+      return `Private address${subtype ? ` (${subtype})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
+    case 'nfa':
+      return 'No fixed abode'
+    case 'cas1':
+      return 'Approved Premises (CAS1)'
+    case 'cas2':
+      return 'CAS2 for HDC'
+    case 'cas2v2':
+      return 'CAS2 for Bail'
+    case 'cas3':
+      return 'Temporary Accommodation (CAS3)'
+    default:
+      return 'Unknown'
+  }
+}
 
-  if (type === 'prison') {
-    heading = `${name}${qualifier ? ` (${qualifier})` : ''}`
-  } else if (type === 'private') {
-    heading = `Private address${subtype ? ` (${subtype})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
-  } else if (type === 'nfa') {
-    heading = 'No fixed abode'
-  } else if (type === 'cas1') {
-    heading = 'Approved Premises (CAS1)'
-  } else if (type === 'cas2') {
-    heading = 'CAS2 for HDC'
-  } else if (type === 'cas2v2') {
-    heading = 'CAS2 for Bail'
-  } else if (type === 'cas3') {
-    heading = 'Temporary Accommodation (CAS3)'
+export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDto): string =>
+  nunjucksInline().render('cases/partials/accommodationCell.njk', {
+    cellType,
+    heading: accommodationType(accommodation),
+    ...accommodation,
+  })
+
+const summaryListRow = (label: string, value: string, renderAs: 'text' | 'html' = 'text'): SummaryListRow => ({
+  key: { text: label },
+  value: renderAs === 'html' ? { html: value } : { text: value },
+})
+
+export const accommodationCard = (cardType: 'current' | 'next', accommodation: AccommodationDto) => {
+  const { type } = accommodation
+  const heading = cardType === 'current' ? 'Current accommodation' : 'Next accommodation'
+  const rows = []
+
+  if (type !== 'nfa') {
+    if (cardType === 'current') {
+      rows.push(summaryListRow('Type', accommodationType(accommodation), 'html'))
+
+      const endDateHtml = `
+        ${formatDate(accommodation.endDate)}
+        <br>
+        ${formatDate(accommodation.endDate, 'days')} left
+      `
+      rows.push(summaryListRow('End date', endDateHtml, 'html'))
+    }
+
+    if (cardType === 'next') {
+      const { startDate, endDate, status } = accommodation
+
+      let datesHtml: string
+
+      if (startDate && endDate) {
+        datesHtml = `
+          From ${formatDate(startDate, 'long')}
+          <br>
+          to ${formatDate(endDate, 'long')}
+        `
+      } else if (startDate) {
+        datesHtml = `From ${formatDate(startDate, 'long')}`
+      } else if (endDate) {
+        datesHtml = `Until ${formatDate(endDate, 'long')}`
+      }
+
+      const statusHtml = `
+        <p>
+          <strong>${accommodationType(accommodation)}</strong>
+          ${datesHtml ? `<br><span class="govuk-hint">${datesHtml}</span>` : ''}
+        </p>
+        ${status ? `<span class="govuk-tag govuk-tag--green">Confirmed</span>` : ''}
+      `
+      rows.push(summaryListRow('Status', statusHtml, 'html'))
+    }
+
+    rows.push(summaryListRow('Address', Object.values(accommodation.address).filter(Boolean).join('<br>'), 'html'))
   }
 
-  return nunjucksInline().render('cases/partials/accommodationCell.njk', {
-    cellType,
+  return nunjucksInline().render('components/accommodationCard.njk', {
+    cardType,
     heading,
+    rows,
     ...accommodation,
   })
 }
@@ -60,8 +123,4 @@ export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
     dateCell(referral.date),
     linksCell([{ text: 'View', href: '#' }]),
   ])
-}
-
-export const accommodationCard = (type: 'current' | 'next', accommodation: AccommodationDto) => {
-  return nunjucksInline().render('components/accommodationCard.njk', { cardType: type, ...accommodation })
 }

@@ -18,6 +18,12 @@ export const caseAssignedTo = (c: Case, id: string): string => {
   return String(c.assignedTo?.id) === id ? `You (${c.assignedTo.name})` : c.assignedTo?.name
 }
 
+export const referralHistoryTable = (referrals: Referral[]): string => {
+  return nunjucksInline().render('components/tables/referralHistoryTable.njk', {
+    referralHistory: referralHistoryToRows(referrals),
+  })
+}
+
 export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
   return referrals.map(referral => [
     textCell(referral.type),

@@ -1,7 +1,13 @@
 import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { casesTableCaption, casesToRows, caseAssignedTo, referralHistoryToRows } from '../utils/cases'
+import {
+  casesTableCaption,
+  casesToRows,
+  caseAssignedTo,
+  referralHistoryToRows,
+  accommodationCard,
+} from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 
 export default class CasesController {
@@ -37,6 +43,8 @@ export default class CasesController {
       return res.render('pages/show', {
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+        nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
         referralHistory: referralHistoryToRows(referralHistory),
       })
     }

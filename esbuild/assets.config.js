@@ -49,4 +49,20 @@ const getAssetsConfig = buildConfig => ({
   ],
 })
 
-module.exports = { getAssetsConfig, getAdditionalAssetsConfig }
+/**
+ * Copy view templates into distribution
+ */
+const getViewTemplatesConfig = buildConfig => ({
+  entryPoints: buildConfig.views.entryPoints,
+  outdir: buildConfig.views.outDir,
+  loader: { '.njk': 'text' },
+  plugins: [
+    copy({
+      resolveFrom: 'cwd',
+      assets: buildConfig.views.copy,
+    }),
+    buildNotificationPlugin('View templates', buildConfig.isWatchMode),
+  ],
+})
+
+module.exports = { getAssetsConfig, getAdditionalAssetsConfig, getViewTemplatesConfig }

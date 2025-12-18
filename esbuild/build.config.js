@@ -18,12 +18,6 @@ const getBuildConfig = () => {
       entryPoints: globSync([path.join(cwd, '*.ts'), path.join(cwd, 'server/**/*.ts')]).filter(
         file => !file.endsWith('.test.ts') && !file.endsWith('.config.ts'),
       ),
-      copy: [
-        {
-          from: path.join(cwd, 'server/views/**/*'),
-          to: path.join(cwd, 'dist/server/views'),
-        },
-      ],
     },
 
     assets: {
@@ -36,6 +30,17 @@ const getBuildConfig = () => {
         },
       ],
       clear: globSync([path.join(cwd, 'dist/assets/{css,js}')]),
+    },
+
+    views: {
+      outDir: path.join(cwd, 'dist/server/views'),
+      entryPoints: globSync([path.join(cwd, 'server/views/**/*.njk')]),
+      copy: [
+        {
+          from: path.join(cwd, 'server/views/**/*'),
+          to: path.join(cwd, 'dist/server/views'),
+        },
+      ],
     },
   }
 }

@@ -2,6 +2,7 @@ import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients
 import CasesClient from './casesClient'
 import describeClient from '../testutils/describeClient'
 import { caseFactory } from '../testutils/factories'
+import apiPaths from '../paths/api'
 
 describeClient('CasesClient', provider => {
   let casesClient: CasesClient
@@ -19,7 +20,7 @@ describeClient('CasesClient', provider => {
       uponReceiving: 'a request to get user cases',
       withRequest: {
         method: 'GET',
-        path: '/cases',
+        path: apiPaths.cases.index({}),
         headers: {
           authorization: 'Bearer test-user-token',
         },
@@ -43,7 +44,7 @@ describeClient('CasesClient', provider => {
       uponReceiving: 'a request to get a user case by CRN',
       withRequest: {
         method: 'GET',
-        path: `/cases/${crn}`,
+        path: apiPaths.cases.show({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },

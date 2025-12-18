@@ -3,6 +3,7 @@ import ReferralsClient from './referralsClient'
 import describeClient from '../testutils/describeClient'
 import { referralFactory } from '../testutils/factories'
 import crnFactory from '../testutils/crn'
+import apiPaths from '../paths/api'
 
 describeClient('ReferralsClient', provider => {
   let referralsClient: ReferralsClient
@@ -21,7 +22,7 @@ describeClient('ReferralsClient', provider => {
       uponReceiving: 'a request to get referral history for a user case by CRN',
       withRequest: {
         method: 'GET',
-        path: `/application-histories/${crn}`,
+        path: apiPaths.referrals.history({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },

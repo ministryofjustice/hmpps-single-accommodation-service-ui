@@ -9,6 +9,7 @@ import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { formatDate, formatRiskLevel } from './format'
+import uiPaths from '../paths/ui'
 
 const NUNJUCKS_TEMPLATE_PATHS = [
   path.join(__dirname, '../../server/views'),
@@ -20,6 +21,12 @@ const addFilters = (env: nunjucks.Environment) => {
   env.addFilter('initialiseName', initialiseName)
   env.addFilter('date', formatDate)
   env.addFilter('riskLevel', formatRiskLevel)
+}
+
+const addGlobals = (env: nunjucks.Environment) => {
+  env.addGlobal('paths', {
+    ...uiPaths,
+  })
 }
 
 export default function nunjucksSetup(app: express.Express): void {
@@ -47,11 +54,15 @@ export default function nunjucksSetup(app: express.Express): void {
 
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
 
+  addGlobals(njkEnv)
+
   addFilters(njkEnv)
 }
 
 export const nunjucksInline = () => {
   const njkEnv = nunjucks.configure(NUNJUCKS_TEMPLATE_PATHS, { autoescape: true })
+
+  addGlobals(njkEnv)
 
   addFilters(njkEnv)
 

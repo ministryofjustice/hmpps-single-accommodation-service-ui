@@ -3,6 +3,7 @@ import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients
 import { AccommodationReferralDto as Referral } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
+import apiPaths from '../paths/api'
 
 export default class ReferralsClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -10,6 +11,6 @@ export default class ReferralsClient extends RestClient {
   }
 
   getReferralHistory(token: string, crn: string) {
-    return this.get<Referral[]>({ path: `/application-histories/${crn}` }, asUser(token))
+    return this.get<Referral[]>({ path: apiPaths.referrals.history({ crn }) }, asUser(token))
   }
 }

@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate, formatRiskLevel } from '../../../server/utils/format'
+import { Case } from '../../../server/data/casesClient'
 
 export default class CasesListPage extends AbstractPage {
   readonly header: Locator

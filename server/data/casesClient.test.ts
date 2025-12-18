@@ -1,8 +1,14 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import CasesClient from './casesClient'
+import CasesClient, { Case } from './casesClient'
 import describeClient from '../testutils/describeClient'
 import { caseFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
+
+// TODO: Remove override when API response type updated
+const overrideProperties: Partial<Case> = {
+  currentAccommodation: undefined,
+  nextAccommodation: undefined,
+}
 
 describeClient('CasesClient', provider => {
   let casesClient: CasesClient
@@ -13,7 +19,7 @@ describeClient('CasesClient', provider => {
   })
 
   it('should make a GET request to /cases using user token and return the response body', async () => {
-    const cases = caseFactory.buildList(5)
+    const cases = caseFactory.buildList(5, overrideProperties)
 
     await provider.addInteraction({
       state: 'Cases exist for user',
@@ -36,7 +42,7 @@ describeClient('CasesClient', provider => {
   })
 
   it('should make a GET request to /cases/:crn using user token and return the response body', async () => {
-    const caseData = caseFactory.build()
+    const caseData = caseFactory.build(overrideProperties)
     const { crn } = caseData
 
     await provider.addInteraction({

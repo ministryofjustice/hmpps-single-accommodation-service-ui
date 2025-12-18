@@ -1,8 +1,15 @@
 import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { casesTableCaption, casesToRows, caseAssignedTo, referralHistoryToRows } from '../utils/cases'
+import {
+  casesTableCaption,
+  casesToRows,
+  caseAssignedTo,
+  referralHistoryToRows,
+  accommodationCard,
+} from '../utils/cases'
 import ReferralsService from '../services/referralsService'
+import { caseFactory, referralFactory } from '../testutils/factories'
 
 export default class CasesController {
   constructor(
@@ -30,13 +37,17 @@ export default class CasesController {
       })
       const token = res.locals?.user?.token
       const [caseData, referralHistory] = await Promise.all([
-        this.casesService.getCase(token, crn),
-        this.referralsService.getReferralHistory(token, crn),
+        // this.casesService.getCase(token, crn),
+        caseFactory.build({ crn }),
+        // this.referralsService.getReferralHistory(token, crn),
+        referralFactory.buildList(3),
       ])
 
       return res.render('pages/show', {
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+        nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
         referralHistory: referralHistoryToRows(referralHistory),
       })
     }

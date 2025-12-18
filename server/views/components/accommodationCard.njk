@@ -1,0 +1,14 @@
+{%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
+
+<div class="sas-card govuk-!-margin-bottom-4">
+  <h3 class="govuk-heading-m">{{ 'Current' if cardType == 'current' else 'Next' }} accommodation</h3>
+
+  {{
+    govukSummaryList({
+      rows: [
+        { key: { text: 'Type' }, value: { text: accommodation.type } },
+        { key: { text: 'Address' }, value: { html: accommodation.address } }
+      ]
+    })
+  }}
+</div>

@@ -61,3 +61,7 @@ export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
     linksCell([{ text: 'View', href: '#' }]),
   ])
 }
+
+export const accommodationCard = (type: 'current' | 'next', accommodation: AccommodationDto) => {
+  return nunjucksInline().render('components/accommodationCard.njk', { cardType: type, ...accommodation })
+}

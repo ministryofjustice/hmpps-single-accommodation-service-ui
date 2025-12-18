@@ -3,6 +3,7 @@ import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients
 import { CaseDto as Case } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
+import apiPaths from '../paths/api'
 
 export default class CasesClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -56,10 +57,10 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string) {
-    return this.get<Case[]>({ path: '/cases' }, asUser(token))
+    return this.get<Case[]>({ path: apiPaths.cases.index({}) }, asUser(token))
   }
 
   getCase(token: string, crn: string) {
-    return this.get<Case>({ path: `/cases/${crn}` }, asUser(token))
+    return this.get<Case>({ path: apiPaths.cases.show({ crn }) }, asUser(token))
   }
 }

@@ -1,0 +1,36 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+            Referral history
+        </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        {% if (referralHistory | length > 0) %}
+            <div class="govuk-summary-list">
+                {{ govukTable({
+                    firstCellIsHeader: true,
+                    head: [
+                        {
+                        text: "Type"
+                        },
+                        {
+                        text: "Status"
+                        },
+                        {
+                        text: "Date"
+                        },
+                        {
+                        text: ""
+                        }
+                    ],
+                    rows: referralHistory
+                }) }}
+            </div>
+        {% else %}
+            <p class="govuk-body">No previous referrals</p>
+        {% endif %}
+    </div>
+</div>

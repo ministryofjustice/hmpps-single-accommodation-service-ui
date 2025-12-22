@@ -2,9 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AccommodationDetail } from './AccommodationDetail';
 import type { AssignedToDto } from './AssignedToDto';
-import type { CurrentAccommodationDto } from './CurrentAccommodationDto';
-import type { NextAccommodationDto } from './NextAccommodationDto';
 export type CaseDto = {
     name: string;
     dateOfBirth?: string;
@@ -15,7 +14,7 @@ export type CaseDto = {
     riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH';
     pncReference?: string;
     assignedTo?: AssignedToDto;
-    currentAccommodation?: CurrentAccommodationDto;
-    nextAccommodation?: NextAccommodationDto;
+    currentAccommodation?: AccommodationDetail;
+    nextAccommodation?: AccommodationDetail;
 };
 

@@ -3,10 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export type { AccommodationDetail } from './models/AccommodationDetail';
+export type { AccommodationDto } from './models/AccommodationDto';
 export type { AccommodationReferralDto } from './models/AccommodationReferralDto';
+export type { AddressDetails } from './models/AddressDetails';
 export type { AssignedToDto } from './models/AssignedToDto';
 export type { CaseDto } from './models/CaseDto';
-export type { CurrentAccommodationDto } from './models/CurrentAccommodationDto';
+export type { DutyToReferDto } from './models/DutyToReferDto';
 export type { EligibilityDto } from './models/EligibilityDto';
-export type { NextAccommodationDto } from './models/NextAccommodationDto';
 export type { ServiceResult } from './models/ServiceResult';
+export type { SuitableApplication } from './models/SuitableApplication';

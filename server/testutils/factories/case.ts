@@ -1,4 +1,3 @@
-import { CaseDto as Case } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import crn from '../crn'
@@ -7,16 +6,23 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
+import accommodationFactory from './accommodation'
+import { Case } from '../../data/casesClient'
 
-export default Factory.define<Case>(() => ({
-  name: faker.person.fullName(),
-  crn: crn(),
-  dateOfBirth: faker.date.birthdate().toISOString().substring(0, 10),
-  prisonNumber: prisonNumber(),
-  tier: tier(),
-  riskLevel: riskLevel(),
-  pncReference: pncReference(),
-  assignedTo: assignedUserFactory.build(),
-  // currentAccommodation?: CurrentAccommodation;
-  // nextAccommodation?: NextAccommodation;
-}))
+export default Factory.define<Case>(() => {
+  const currentAccommodation = accommodationFactory.current().build()
+  const nextAccommodation = accommodationFactory.next(currentAccommodation.endDate).build()
+
+  return {
+    name: faker.person.fullName(),
+    crn: crn(),
+    dateOfBirth: faker.date.birthdate().toISOString().substring(0, 10),
+    prisonNumber: prisonNumber(),
+    tier: tier(),
+    riskLevel: riskLevel(),
+    pncReference: pncReference(),
+    assignedTo: assignedUserFactory.build(),
+    currentAccommodation,
+    nextAccommodation,
+  }
+})

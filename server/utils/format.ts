@@ -44,7 +44,7 @@ export const referralStatusTag = (status?: Referral['status']): string => {
   }
 }
 
-export const eligibilityStatusTag = (status: ServiceResult['serviceStatus']): string => {
+export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): string => {
   switch (status) {
     case 'NOT_STARTED':
       return `<strong class="govuk-tag govuk-tag--red">${formatEligibilityStatus(status)}</strong>`

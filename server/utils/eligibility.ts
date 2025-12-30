@@ -27,7 +27,7 @@ export const serviceStatusToCardStatus = (status: string) => {
   }
 }
 
-const linksForStatus = (serviceStatus?: string) => {
+export const linksForStatus = (serviceStatus?: string) => {
   switch (serviceStatus) {
     case 'NOT_ELIGIBLE':
     case 'UPCOMING':
@@ -40,17 +40,17 @@ const linksForStatus = (serviceStatus?: string) => {
     case 'CONFIRMED':
       return [{ text: 'Referral and notes', href: '#' }]
     default:
-      return null
+      return []
   }
 }
 
-const eligibilityCard = (title: string, eligibility: ServiceResult): string => {
+const eligibilityCard = (title: string, service?: ServiceResult): string => {
   return nunjucksInline().render('components/eligibilityCard.njk', {
     title,
-    serviceStatus: eligibility.serviceStatus,
-    serviceStatusTag: eligibilityStatusTag(eligibility.serviceStatus),
-    actions: eligibility.actions,
-    links: linksForStatus(eligibility?.serviceStatus),
+    serviceStatus: service?.serviceStatus,
+    serviceStatusTag: eligibilityStatusTag(service?.serviceStatus),
+    actions: service?.actions,
+    links: linksForStatus(service?.serviceStatus),
   })
 }
 

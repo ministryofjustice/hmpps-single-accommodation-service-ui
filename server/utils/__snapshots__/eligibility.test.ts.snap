@@ -5,21 +5,23 @@ exports[`eligibility utilities eligibilityToEligibilityCards returns a formatted
 
 <article class="sas-card">
 	<header class="sas-card__head">
-		<h3 class="govuk-heading-m">Approved premises (CAS1)</h3>
+		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Approved premises (CAS1)</h3>
 		<strong class="govuk-tag govuk-tag--red">Not Started</strong>
 	</header>
 
 	<div class="sas-card__footer">
 		
-			
-				<p class="sas-card__prompt">Action1!</p>
-			
-				<p class="sas-card__prompt">Action2!</p>
-			
+			<ul class="govuk-list govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+				
+					<li class="govuk-!-margin-bottom-0">Action1!</li>
+				
+					<li class="govuk-!-margin-bottom-0">Action2!</li>
+				
+			</ul>
 		
 
 		
-			<div class="sas-card__actions">
+			<div class="sas-card__links">
 				
 					<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Start referral</a>
 				

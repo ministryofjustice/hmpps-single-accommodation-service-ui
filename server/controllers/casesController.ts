@@ -4,12 +4,15 @@ import CasesService from '../services/casesService'
 import { casesTableCaption, casesToRows, caseAssignedTo, referralHistoryToRows } from '../utils/cases'
 import { calculateAge } from '../utils/person'
 import ReferralsService from '../services/referralsService'
+import EligibilityService from '../services/eligibilityService'
+import { eligibilityToEligibilityCards } from '../utils/eligibility'
 
 export default class CasesController {
   constructor(
     private readonly auditService: AuditService,
     private readonly casesService: CasesService,
     private readonly referralsService: ReferralsService,
+    private readonly eligibilityService: EligibilityService,
   ) {}
 
   index(): RequestHandler {
@@ -30,9 +33,10 @@ export default class CasesController {
         correlationId: req.id,
       })
       const token = res.locals?.user?.token
-      const [caseData, referralHistory] = await Promise.all([
+      const [caseData, referralHistory, eligibility] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.referralsService.getReferralHistory(token, crn),
+        this.eligibilityService.getEligibility(token, crn),
       ])
 
       return res.render('pages/show', {
@@ -40,6 +44,7 @@ export default class CasesController {
         age: calculateAge(caseData.dateOfBirth),
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         referralHistory: referralHistoryToRows(referralHistory),
+        eligibilityCards: eligibilityToEligibilityCards(eligibility),
       })
     }
   }

@@ -48,6 +48,13 @@
             </div>
         </div>
     </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% for card in eligibilityCards %}
+                {{ card | safe }}
+            {% endfor %}
+        </div>
+    </div>
     <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
     {{ referralHistory | safe }}
 {% endblock %}

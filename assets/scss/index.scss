@@ -7,6 +7,7 @@ $govuk-page-width: $moj-page-width;
 @import "govuk-frontend/dist/govuk/index";
 @import "@ministryofjustice/frontend/moj/all";
 
+@import './components/eligibility-card';
 @import './components/header-bar';
 @import './components/person-details';
 @import './components/profile-header';

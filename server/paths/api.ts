@@ -11,4 +11,7 @@ export default {
   referrals: {
     history: path('/application-histories/:crn'),
   },
+  eligibility: {
+    show: casesPath.path(':crn/eligibility'),
+  },
 }

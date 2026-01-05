@@ -9,7 +9,41 @@ import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
 import accommodationFactory from './accommodation'
 
-export default Factory.define<Case>(() => {
+class CaseFactory extends Factory<Case> {
+  confirmed() {
+    return this.params({
+      currentAccommodation: faker.helpers.arrayElement([
+        accommodationFactory.current().cas().build(),
+        accommodationFactory.current().privateAddress().build(),
+        accommodationFactory.current().prison().build(),
+      ]),
+      nextAccommodation: faker.helpers.arrayElement([
+        accommodationFactory.next().privateAddress().build(),
+        accommodationFactory.next().cas().build(),
+      ]),
+    })
+  }
+
+  noFixedAbodeNext() {
+    return this.params({
+      currentAccommodation: faker.helpers.arrayElement([
+        accommodationFactory.current().cas().build(),
+        accommodationFactory.current().privateAddress().build(),
+        accommodationFactory.current().prison().build(),
+      ]),
+      nextAccommodation: accommodationFactory.next().noFixedAbode().build(),
+    })
+  }
+
+  noFixedAbodeCurrent() {
+    return this.params({
+      currentAccommodation: accommodationFactory.current().noFixedAbode().build(),
+      nextAccommodation: undefined,
+    })
+  }
+}
+
+export default CaseFactory.define(() => {
   const currentAccommodation = accommodationFactory.current().build()
   const nextAccommodation = accommodationFactory.next(currentAccommodation.endDate).build()
 

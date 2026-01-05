@@ -1,8 +1,15 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { CaseDto as Case, EligibilityDto as Eligibility, AccommodationReferralDto as Referral } from '@sas/api'
+import {
+  CaseDto as Case,
+  EligibilityDto as Eligibility,
+  AccommodationReferralDto as Referral,
+  AccommodationDetail,
+} from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { formatDate, formatEligibilityStatus, formatRiskLevel, formatStatus } from '../../../server/utils/format'
+import { formatDate, formatRiskLevel, formatStatus, formatEligibilityStatus } from '../../../server/utils/format'
 import { linksForStatus } from '../../../server/utils/eligibility'
+import paths from '../../../server/paths/ui'
+import { addressTitle } from '../../../server/utils/cases'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -16,6 +23,11 @@ export default class ProfileTrackerPage extends AbstractPage {
     const profileTrackerPage = new ProfileTrackerPage(page, caseData)
     await expect(profileTrackerPage.header).toBeVisible()
     return profileTrackerPage
+  }
+
+  static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
+    await page.goto(paths.cases.show({ crn: caseData.crn as string }))
+    return ProfileTrackerPage.verifyOnPage(page, caseData)
   }
 
   async shouldShowCaseDetails(caseData: Case) {
@@ -63,6 +75,45 @@ export default class ProfileTrackerPage extends AbstractPage {
         expect(card.getByRole('link', { name: link.text })).toBeVisible()
       }
     }
+  }
+
+  async shouldShowAddress(accommodation: AccommodationDetail, card: Locator) {
+    const addressParts = Object.values(accommodation.address || {}).filter(Boolean)
+    await this.shouldShowSummaryItem('Address', addressParts, card)
+  }
+
+  async shouldShowNextAccommodationCard(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.sas-card', { hasText: 'Next accommodation' })
+
+    const addressTitleParts = addressTitle(accommodation).split('<br>')
+    await this.shouldShowSummaryItem('Status', addressTitleParts, card)
+
+    await this.shouldShowAddress(accommodation, card)
+  }
+
+  async shouldShowNextAccommodationAlert(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.moj-alert', { hasText: /No fixed abode/ })
+    const { startDate } = accommodation
+    await expect(card).toContainText(`From ${formatDate(startDate, 'long')} (${formatDate(startDate, 'days for/in')})`)
+  }
+
+  async shouldShowCurrentAccommodationCard(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.sas-card', { hasText: 'Current accommodation' })
+
+    const addressTitleParts = addressTitle(accommodation).split('<br>')
+    await this.shouldShowSummaryItem('Type', addressTitleParts, card)
+    await this.shouldShowSummaryItem(
+      'End date',
+      [formatDate(accommodation.endDate), formatDate(accommodation.endDate, 'days for/left')],
+      card,
+    )
+    await this.shouldShowAddress(accommodation, card)
+  }
+
+  async shouldShowCurrentAccommodationAlert(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.moj-alert', { hasText: 'Currently no fixed abode' })
+    const { startDate } = accommodation
+    await expect(card).toContainText(`Since ${formatDate(startDate, 'long')} (${formatDate(startDate, 'days for/in')})`)
   }
 
   async shouldShowReferralHistory(referrals: Referral[]) {

@@ -16,16 +16,16 @@ const subTypes: Readonly<AccommodationDetail['subType'][]> = ['OWNED', 'RENTED',
 const offenderReleaseTypes: Readonly<AccommodationDetail['offenderReleaseType'][]> = ['BAIL', 'LICENCE', 'REMAND']
 
 class AccommodationFactory extends Factory<AccommodationDetail> {
-  current(date?: string) {
+  current(endDate?: string, startDate?: string) {
     return this.params({
-      startDate: undefined,
-      endDate: date || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
+      startDate: startDate || faker.date.past().toISOString().substring(0, 10),
+      endDate: endDate || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
     })
   }
 
-  next(date?: string) {
+  next(startDate?: string) {
     return this.params({
-      startDate: date || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
+      startDate: startDate || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
       endDate: undefined,
     })
   }

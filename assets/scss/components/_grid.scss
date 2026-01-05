@@ -1,0 +1,7 @@
+.govuk-grid-row--reverse {
+  @media #{govuk-from-breakpoint(desktop)} {
+    & > [class^=govuk-grid-column-] {
+      float: right;
+    }
+  }
+}

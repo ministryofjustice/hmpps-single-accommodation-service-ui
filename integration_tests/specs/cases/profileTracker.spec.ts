@@ -1,4 +1,5 @@
 import { test } from '@playwright/test'
+import { AccommodationDetail } from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import eligibilityApi from '../../mockApis/eligibility'
@@ -34,5 +35,44 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowCaseDetails(caseData)
     await profileTrackerPage.shouldShowEligibility(eligibility)
     await profileTrackerPage.shouldShowReferralHistory(referrals)
+  })
+
+  test.describe('accommodation cards', () => {
+    const crn = 'X123456'
+
+    test(`should render next and current cards for a confirmed case`, async ({ page }) => {
+      const caseData = caseFactory.confirmed().build({ crn })
+      await casesApi.stubGetCaseByCrn(crn, caseData)
+      await casesApi.stubGetReferralHistory(crn)
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldShowNextAccommodationCard(caseData.nextAccommodation as AccommodationDetail)
+      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation as AccommodationDetail)
+    })
+
+    test(`should render next as alert and current as card for a NFA case`, async ({ page }) => {
+      const caseData = caseFactory.noFixedAbodeNext().build({ crn })
+      await casesApi.stubGetCaseByCrn(crn, caseData)
+      await casesApi.stubGetReferralHistory(crn)
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldShowNextAccommodationAlert(caseData.nextAccommodation as AccommodationDetail)
+      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation as AccommodationDetail)
+    })
+
+    test(`should render only current alert for a currently NFA case`, async ({ page }) => {
+      const caseData = caseFactory.noFixedAbodeCurrent().build({ crn })
+      await casesApi.stubGetCaseByCrn(crn, caseData)
+      await casesApi.stubGetReferralHistory(crn)
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldShowCurrentAccommodationAlert(caseData.currentAccommodation as AccommodationDetail)
+    })
   })
 })

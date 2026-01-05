@@ -2,29 +2,29 @@
 
 <div class="sas-person-cell">
   <div class="govuk-!-margin-bottom-2">
-  <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="{{ paths.cases.show({ crn: person.crn }) }}">{{ person.name }}</a>
+    <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="{{ paths.cases.show({ crn: crn }) }}">{{ name }}</a>
   </div>
 
   <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
-    {{ riskLevelTag(person.riskLevel) }}
+    {{ riskLevelTag(riskLevel) }}
     <div class="sas-risk-tag sas-risk-tag--tier">
       <dt>Tier</dt>
-      <dd>{{ person.tier }}</dd>
+      <dd>{{ tier }}</dd>
     </div>
   </dl>
 
   <dl class="sas-person-details govuk-!-margin-0">
     <div>
       <dt>Date of birth</dt>
-      <dd>{{ person.dateOfBirth | date }} ({{ age }})</dd>
+      <dd>{{ dateOfBirth | date }} ({{ dateOfBirth | date('age') }})</dd>
     </div>
     <div>
       <dt>CRN</dt>
-      <dd>{{ person.crn }}</dd>
+      <dd>{{ crn }}</dd>
     </div>
     <div>
       <dt>Prison number</dt>
-      <dd>{{ person.prisonNumber }}</dd>
+      <dd>{{ prisonNumber }}</dd>
     </div>
   </dl>
 </div>

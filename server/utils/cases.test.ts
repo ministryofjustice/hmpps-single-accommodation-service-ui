@@ -1,13 +1,14 @@
-import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
+import { AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
 import {
+  accommodationCell,
   caseAssignedTo,
   casesTableCaption,
   casesToRows,
   personCell,
-  referralHistoryToRows,
   referralHistoryTable,
+  referralHistoryToRows,
 } from './cases'
-import { caseFactory, referralFactory } from '../testutils/factories'
+import { accommodationFactory, caseFactory, referralFactory } from '../testutils/factories'
 import { dateCell, linksCell, statusCell, textCell } from './tables'
 
 describe('cases utilities', () => {
@@ -40,11 +41,59 @@ describe('cases utilities', () => {
     })
   })
 
+  describe('accommodationCell', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    describe.each(['current', 'next'])('for %s accommodation', (cellType: 'current' | 'next') => {
+      const factory = (date: string) =>
+        cellType === 'current' ? accommodationFactory.current(date) : accommodationFactory.next(date)
+      const prison = factory('2026-01-01').prison().build({ name: 'HMP Foobar', offenderReleaseType: 'LICENCE' })
+      const prisonNoQualifier = factory('2025-12-11')
+        .prison()
+        .build({ name: 'HMP Foobar', offenderReleaseType: undefined })
+      const cas1Accommodation = factory('2026-02-03').cas('CAS1').build()
+      const cas2Accommodation = factory('2026-03-12').cas('CAS2').build()
+      const cas2v2Accommodation = factory('2026-05-23').cas('CAS2V2').build()
+      const cas3Accommodation = factory('2026-07-31').cas('CAS3').build()
+      const privateAccommodation = factory('2026-09-10')
+        .privateAddress()
+        .build({ name: "Parents' home", subType: 'LODGING', isSettled: true })
+      const noFixedAbode = factory('2026-09-10').noFixedAbode().build()
+
+      it.each<[string, AccommodationDetail]>([
+        ['Prison', prison],
+        ['Prison (no qualifier)', prisonNoQualifier],
+        ['CAS1', cas1Accommodation],
+        ['CAS2', cas2Accommodation],
+        ['CAS2v2', cas2v2Accommodation],
+        ['CAS3', cas3Accommodation],
+        ['Private address', privateAccommodation],
+        ['No fixed abode', noFixedAbode],
+        ['Undefined', undefined],
+      ])('returns a formatted cell for a %s accommodation', (_, accommodation: AccommodationDetail) => {
+        expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
+      })
+    })
+  })
+
   describe('casesToRows', () => {
     it('returns formatted rows for a given list of cases', () => {
-      const cases: Case[] = caseFactory.buildList(1)
+      const cases = caseFactory.buildList(1)
 
-      expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }, { html: '' }]])
+      expect(casesToRows(cases)).toEqual([
+        [
+          { html: personCell(cases[0]) },
+          { html: accommodationCell('current', cases[0].currentAccommodation) },
+          { html: accommodationCell('next', cases[0].nextAccommodation) },
+          { html: '' },
+        ],
+      ])
     })
   })
 

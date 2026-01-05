@@ -41,7 +41,7 @@
             <div class="govuk-body-s govuk-!-margin-bottom-0">
                 <dl class="sas-profile-header__details govuk-!-margin-bottom-1">
                     <dt>Date of birth</dt>
-                    <dd>{{ caseData.dateOfBirth | date }} ({{ age }})</dd>
+                    <dd>{{ caseData.dateOfBirth | date }} ({{ caseData.dateOfBirth | date('age') }})</dd>
                     <dt>Assigned to</dt>
                     <dd>{{ assignedTo }}</dd>
                 </dl>

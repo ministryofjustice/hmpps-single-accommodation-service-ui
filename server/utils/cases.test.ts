@@ -1,5 +1,4 @@
-import { AccommodationReferralDto as Referral } from '@sas/api'
-import { AccommodationDto } from '@sas/ui'
+import { AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
 import {
   accommodationCell,
   caseAssignedTo,
@@ -54,18 +53,20 @@ describe('cases utilities', () => {
     describe.each(['current', 'next'])('for %s accommodation', (cellType: 'current' | 'next') => {
       const factory = (date: string) =>
         cellType === 'current' ? accommodationFactory.current(date) : accommodationFactory.next(date)
-      const prison = factory('2026-01-01').prison().build({ name: 'HMP Foobar', qualifier: 'licence' })
-      const prisonNoQualifier = factory('2025-12-11').prison().build({ name: 'HMP Foobar', qualifier: undefined })
-      const cas1Accommodation = factory('2026-02-03').cas('cas1').build()
-      const cas2Accommodation = factory('2026-03-12').cas('cas2').build()
-      const cas2v2Accommodation = factory('2026-05-23').cas('cas2v2').build()
-      const cas3Accommodation = factory('2026-07-31').cas('cas3').build()
+      const prison = factory('2026-01-01').prison().build({ name: 'HMP Foobar', offenderReleaseType: 'LICENCE' })
+      const prisonNoQualifier = factory('2025-12-11')
+        .prison()
+        .build({ name: 'HMP Foobar', offenderReleaseType: undefined })
+      const cas1Accommodation = factory('2026-02-03').cas('CAS1').build()
+      const cas2Accommodation = factory('2026-03-12').cas('CAS2').build()
+      const cas2v2Accommodation = factory('2026-05-23').cas('CAS2V2').build()
+      const cas3Accommodation = factory('2026-07-31').cas('CAS3').build()
       const privateAccommodation = factory('2026-09-10')
         .privateAddress()
-        .build({ name: "Parents' home", subtype: 'lodging', isSettled: true })
+        .build({ name: "Parents' home", subType: 'LODGING', isSettled: true })
       const noFixedAbode = factory('2026-09-10').noFixedAbode().build()
 
-      it.each<[string, AccommodationDto]>([
+      it.each<[string, AccommodationDetail]>([
         ['Prison', prison],
         ['Prison (no qualifier)', prisonNoQualifier],
         ['CAS1', cas1Accommodation],
@@ -74,7 +75,7 @@ describe('cases utilities', () => {
         ['CAS3', cas3Accommodation],
         ['Private address', privateAccommodation],
         ['No fixed abode', noFixedAbode],
-      ])('returns a formatted cell for a %s accommodation', (_, accommodation: AccommodationDto) => {
+      ])('returns a formatted cell for a %s accommodation', (_, accommodation: AccommodationDetail) => {
         expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
       })
     })

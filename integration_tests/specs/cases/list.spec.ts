@@ -9,10 +9,10 @@ test.describe('List of cases', () => {
     const cases = [
       caseFactory.build({ currentAccommodation: accommodationFactory.prison().build() }),
       caseFactory.build({ currentAccommodation: accommodationFactory.privateAddress().build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('cas1').build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('cas2').build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('cas2v2').build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('cas3').build() }),
+      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS1').build() }),
+      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS2').build() }),
+      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS2V2').build() }),
+      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS3').build() }),
     ]
     await casesApi.stubGetCases(cases)
     await login(page)

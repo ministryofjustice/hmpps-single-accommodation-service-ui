@@ -1,8 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { AccommodationReferralDto as Referral } from '@sas/api'
+import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate, formatRiskLevel, formatStatus } from '../../../server/utils/format'
-import { Case } from '../../../server/data/casesClient'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator

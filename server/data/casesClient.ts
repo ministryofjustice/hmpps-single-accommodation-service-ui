@@ -1,20 +1,9 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { CaseDto } from '@sas/api'
-import { AccommodationDto } from '@sas/ui'
+import { CaseDto as Case } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
-
-// TODO: remove type overwrite once API response updated
-type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
-export type Case = Overwrite<
-  CaseDto,
-  {
-    currentAccommodation: AccommodationDto
-    nextAccommodation: AccommodationDto
-  }
->
 
 export default class CasesClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {

@@ -1,3 +1,4 @@
+import { CaseDto as Case } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import crn from '../crn'
@@ -7,7 +8,6 @@ import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
 import accommodationFactory from './accommodation'
-import { Case } from '../../data/casesClient'
 
 export default Factory.define<Case>(() => {
   const currentAccommodation = accommodationFactory.current().build()

@@ -1,10 +1,20 @@
-import { AccommodationReferralDto as Referral } from '@sas/api'
+import { CaseDto as Case, AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { AccommodationDto } from '@sas/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
-import { Case } from '../data/casesClient'
+
+const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
+  REMAND: 'remand',
+  LICENCE: 'licence',
+  BAIL: 'bail',
+}
+
+const subTypes: Record<AccommodationDetail['subType'], string> = {
+  OWNED: 'owned',
+  LODGING: 'lodging',
+  RENTED: 'rented',
+}
 
 export const casesTableCaption = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'} assigned to you`
@@ -13,24 +23,24 @@ export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
 }
 
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDto): string => {
-  const { type, subtype, qualifier, name, isSettled } = accommodation
+export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string => {
+  const { type, subType, offenderReleaseType, name, isSettled } = accommodation
 
   let heading: string
 
-  if (type === 'prison') {
-    heading = `${name}${qualifier ? ` (${qualifier})` : ''}`
-  } else if (type === 'private') {
-    heading = `Private address${subtype ? ` (${subtype})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
-  } else if (type === 'nfa') {
+  if (type === 'PRISON') {
+    heading = `${name}${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
+  } else if (type === 'PRIVATE') {
+    heading = `Private address${subType ? ` (${subTypes[subType]})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
+  } else if (type === 'NO_FIXED_ABODE') {
     heading = 'No fixed abode'
-  } else if (type === 'cas1') {
+  } else if (type === 'CAS1') {
     heading = 'Approved Premises (CAS1)'
-  } else if (type === 'cas2') {
+  } else if (type === 'CAS2') {
     heading = 'CAS2 for HDC'
-  } else if (type === 'cas2v2') {
+  } else if (type === 'CAS2V2') {
     heading = 'CAS2 for Bail'
-  } else if (type === 'cas3') {
+  } else if (type === 'CAS3') {
     heading = 'Temporary Accommodation (CAS3)'
   }
 

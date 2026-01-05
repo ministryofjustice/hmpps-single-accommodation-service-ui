@@ -23,33 +23,35 @@ export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
 }
 
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string => {
+const addressTitle = (accommodation: AccommodationDetail): string => {
   const { type, subType, offenderReleaseType, name, isSettled } = accommodation
 
-  let heading: string
-
-  if (type === 'PRISON') {
-    heading = `${name}${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
-  } else if (type === 'PRIVATE') {
-    heading = `Private address${subType ? ` (${subTypes[subType]})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
-  } else if (type === 'NO_FIXED_ABODE') {
-    heading = 'No fixed abode'
-  } else if (type === 'CAS1') {
-    heading = 'Approved Premises (CAS1)'
-  } else if (type === 'CAS2') {
-    heading = 'CAS2 for HDC'
-  } else if (type === 'CAS2V2') {
-    heading = 'CAS2 for Bail'
-  } else if (type === 'CAS3') {
-    heading = 'Temporary Accommodation (CAS3)'
+  switch (type) {
+    case 'PRISON':
+      return `${name}${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
+    case 'PRIVATE':
+      return `Private address${subType ? ` (${subTypes[subType]})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
+    case 'NO_FIXED_ABODE':
+      return 'No fixed abode'
+    case 'CAS1':
+      return 'Approved Premises (CAS1)'
+    case 'CAS2':
+      return 'CAS2 for HDC'
+    case 'CAS2V2':
+      return 'CAS2 for Bail'
+    case 'CAS3':
+      return 'Temporary Accommodation (CAS3)'
+    default:
+      return ''
   }
+}
 
-  return nunjucksInline().render('cases/partials/accommodationCell.njk', {
+export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
+  nunjucksInline().render('cases/partials/accommodationCell.njk', {
     cellType,
-    heading,
+    heading: addressTitle(accommodation),
     ...accommodation,
   })
-}
 
 export const casesToRows = (cases: Case[]): TableRow[] =>
   cases.map(c => [

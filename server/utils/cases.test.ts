@@ -1,5 +1,12 @@
 import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
-import { caseAssignedTo, casesTableCaption, casesToRows, personCell, referralHistoryToRows } from './cases'
+import {
+  caseAssignedTo,
+  casesTableCaption,
+  casesToRows,
+  personCell,
+  referralHistoryToRows,
+  referralHistoryTable,
+} from './cases'
 import { caseFactory, referralFactory } from '../testutils/factories'
 import { dateCell, linksCell, statusCell, textCell } from './tables'
 
@@ -55,6 +62,29 @@ describe('cases utilities', () => {
         assignedTo: { id: 456, name: 'Bob Johnson' },
       })
       expect(caseAssignedTo(person, '123')).toEqual('Bob Johnson')
+    })
+  })
+
+  describe('referralHistoryTable', () => {
+    it('returns referral history table for a given list of referrals', () => {
+      const referral1 = referralFactory.build({
+        id: '123456',
+        type: 'CAS1',
+        status: 'ACCEPTED',
+        date: '2023-01-15',
+      })
+      const referral2 = referralFactory.build({
+        id: '789012',
+        type: 'CAS2',
+        status: 'PENDING',
+        date: '2023-02-20',
+      })
+      const referrals = [referral1, referral2]
+      expect(referralHistoryTable(referrals)).toMatchSnapshot()
+    })
+
+    it('returns an empty table when there are no referrals', () => {
+      expect(referralHistoryTable([])).toMatchSnapshot()
     })
   })
 

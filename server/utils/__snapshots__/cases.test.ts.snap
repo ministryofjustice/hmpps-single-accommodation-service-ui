@@ -56,6 +56,8 @@ exports[`cases utilities accommodationCell for current accommodation returns a f
 "
 `;
 
+exports[`cases utilities accommodationCell for current accommodation returns a formatted cell for a Undefined accommodation 1`] = `""`;
+
 exports[`cases utilities accommodationCell for next accommodation returns a formatted cell for a CAS1 accommodation 1`] = `
 "Approved Premises (CAS1)
   <br>
@@ -111,6 +113,8 @@ exports[`cases utilities accommodationCell for next accommodation returns a form
   <span class="govuk-hint">from 10 September 2026</span>
 "
 `;
+
+exports[`cases utilities accommodationCell for next accommodation returns a formatted cell for a Undefined accommodation 1`] = `""`;
 
 exports[`cases utilities personCell returns a formatted cell for a given person 1`] = `
 "

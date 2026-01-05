@@ -75,6 +75,7 @@ describe('cases utilities', () => {
         ['CAS3', cas3Accommodation],
         ['Private address', privateAccommodation],
         ['No fixed abode', noFixedAbode],
+        ['Undefined', undefined],
       ])('returns a formatted cell for a %s accommodation', (_, accommodation: AccommodationDetail) => {
         expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
       })

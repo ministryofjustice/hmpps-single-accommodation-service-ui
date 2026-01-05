@@ -23,7 +23,7 @@ export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
 }
 
-const addressTitle = (accommodation: AccommodationDetail): string => {
+const addressTitle = (accommodation?: AccommodationDetail): string => {
   const { type, subType, offenderReleaseType, name, isSettled } = accommodation
 
   switch (type) {
@@ -47,11 +47,13 @@ const addressTitle = (accommodation: AccommodationDetail): string => {
 }
 
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
-  nunjucksInline().render('cases/partials/accommodationCell.njk', {
-    cellType,
-    heading: addressTitle(accommodation),
-    ...accommodation,
-  })
+  accommodation
+    ? nunjucksInline().render('cases/partials/accommodationCell.njk', {
+        cellType,
+        heading: addressTitle(accommodation),
+        ...accommodation,
+      })
+    : ''
 
 export const casesToRows = (cases: Case[]): TableRow[] =>
   cases.map(c => [

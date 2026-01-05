@@ -1,0 +1,27 @@
+{% set cardClass = 'sas-card--not-eligible' if serviceStatus == 'NOT_ELIGIBLE' else '' %}
+
+<article class="sas-card{{ ' ' + cardClass if cardClass }}">
+	<header class="sas-card__head">
+		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Duty to Refer (DTR)</h3>
+		{{ statusTag | safe }}
+	</header>
+
+	<div class="sas-card__footer">
+		{% if actions and (actions | length > 0) %}
+			<dl class="govuk-summary-list sas-card-summary-list">
+				{% for action in actions %}
+					<dt>{{ action.term }}</dt>
+					<dd>{{ action.description }}</dd>
+				{% endfor %}
+            </dl>
+		{% endif %}
+
+		{% if links and(links | length > 0) %}
+			<div class="sas-card__links">
+				{% for link in links %}
+					<a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ link.href }}">{{ link.text }}</a>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+</article>

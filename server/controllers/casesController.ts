@@ -1,10 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, referralHistoryTable } from '../utils/cases'
+import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, referralHistoryTable, dutyToReferToCard } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
+import DutyToReferService from '../services/dutyToReferService'
 
 export default class CasesController {
   constructor(
@@ -12,6 +13,7 @@ export default class CasesController {
     private readonly casesService: CasesService,
     private readonly referralsService: ReferralsService,
     private readonly eligibilityService: EligibilityService,
+    private readonly dutyToReferService: DutyToReferService,
   ) {}
 
   index(): RequestHandler {
@@ -32,10 +34,11 @@ export default class CasesController {
         correlationId: req.id,
       })
       const token = res.locals?.user?.token
-      const [caseData, referralHistory, eligibility] = await Promise.all([
+      const [caseData, referralHistory, eligibility, dutyToRefer] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.referralsService.getReferralHistory(token, crn),
         this.eligibilityService.getEligibility(token, crn),
+        this.dutyToReferService.getDutyToRefer(token, crn),
       ])
 
       return res.render('pages/show', {
@@ -45,6 +48,7 @@ export default class CasesController {
         currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
         referralHistory: referralHistoryTable(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility),
+        dutyToReferCard: dutyToReferToCard(dutyToRefer[0]),
       })
     }
   }

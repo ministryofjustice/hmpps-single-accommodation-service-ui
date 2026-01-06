@@ -1,4 +1,11 @@
-import { formatDate, formatRiskLevel, formatStatus, referralStatusTag } from './format'
+import {
+  eligibilityStatusTag,
+  formatDate,
+  formatEligibilityStatus,
+  formatRiskLevel,
+  formatStatus,
+  referralStatusTag,
+} from './format'
 
 describe('formatting utilities', () => {
   describe('formatDate', () => {
@@ -56,6 +63,19 @@ describe('formatting utilities', () => {
     ])('renders %s for risk level %s', (tagColour, status) => {
       expect(referralStatusTag(status)).toEqual(
         `<strong class="govuk-tag govuk-tag--${tagColour}">${formatStatus(status)}</strong>`,
+      )
+    })
+  })
+
+  describe('eligibilityStatusTag', () => {
+    it.each([
+      ['red', 'NOT_STARTED' as const],
+      ['yellow', 'UPCOMING' as const],
+      ['green', 'ARRIVED' as const],
+      ['grey', 'NOT_ELIGIBLE' as const],
+    ])('renders %s for service status %s', (tagColour, status) => {
+      expect(eligibilityStatusTag(status)).toEqual(
+        `<strong class="govuk-tag govuk-tag--${tagColour}">${formatEligibilityStatus(status)}</strong>`,
       )
     })
   })

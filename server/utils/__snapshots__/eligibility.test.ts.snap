@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`eligibility utilities eligibilityToEligibilityCards returns a formatted eligibility card 1`] = `
+"
+
+<article class="sas-card">
+	<header class="sas-card__head">
+		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Approved premises (CAS1)</h3>
+		<strong class="govuk-tag govuk-tag--red">Not Started</strong>
+	</header>
+
+	<div class="sas-card__footer">
+		
+			<ul class="govuk-list govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+				
+					<li class="govuk-!-margin-bottom-0">Action1!</li>
+				
+					<li class="govuk-!-margin-bottom-0">Action2!</li>
+				
+			</ul>
+		
+
+		
+			<div class="sas-card__links">
+				
+					<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Start referral</a>
+				
+					<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Notes</a>
+				
+			</div>
+		
+	</div>
+</article>"
+`;

@@ -1,7 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
+import { CaseDto as Case, EligibilityDto as Eligibility, AccommodationReferralDto as Referral } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { formatDate, formatRiskLevel, formatStatus } from '../../../server/utils/format'
+import { formatDate, formatEligibilityStatus, formatRiskLevel, formatStatus } from '../../../server/utils/format'
+import { linksForStatus } from '../../../server/utils/eligibility'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -31,6 +32,36 @@ export default class ProfileTrackerPage extends AbstractPage {
     for await (const detail of details) {
       const dd = this.page.locator(`dt:has-text("${detail.label}") + dd`)
       await expect(dd).toContainText(detail.value ?? '')
+    }
+  }
+
+  async shouldShowEligibility(eligibility: Eligibility) {
+    const cardConfigs = [
+      { title: 'Approved premises (CAS1)', service: eligibility.cas1 },
+      { title: 'CAS2 for HDC', service: eligibility.cas2Hdc },
+      { title: 'CAS2 for court bail', service: eligibility.cas2CourtBail },
+      { title: 'CAS2 for prison bail', service: eligibility.cas2PrisonBail },
+      { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3 },
+    ]
+
+    // TODO remove filter once the API always returns eligibility for all services
+    const expectedCards = cardConfigs.filter(card => !!card.service)
+    await expect(this.page.locator('.sas-card')).toHaveCount(expectedCards.length)
+
+    for await (const { title, service } of expectedCards) {
+      const card = this.page.locator('.sas-card').filter({
+        has: this.page.getByRole('heading', { name: title }),
+      })
+
+      await expect(card.locator('.govuk-tag')).toContainText(formatEligibilityStatus(service?.serviceStatus))
+
+      for (const action of service?.actions ?? []) {
+        expect(card).toContainText(action)
+      }
+
+      for (const link of linksForStatus(service?.serviceStatus)) {
+        expect(card.getByRole('link', { name: link.text })).toBeVisible()
+      }
     }
   }
 

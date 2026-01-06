@@ -7,6 +7,7 @@ import ReferralsService from '../services/referralsService'
 import { user } from '../routes/testutils/appSetup'
 import { caseFactory } from '../testutils/factories'
 import { casesTableCaption, casesToRows } from '../utils/cases'
+import EligibilityService from '../services/eligibilityService'
 
 describe('casesController', () => {
   const request = mock<Request>({ id: 'request-id' })
@@ -16,11 +17,12 @@ describe('casesController', () => {
   const auditService = mock<AuditService>()
   const casesService = mock<CasesService>()
   const referralsService = mock<ReferralsService>()
+  const eligibilityService = mock<EligibilityService>()
 
   let casesController: CasesController
 
   beforeEach(() => {
-    casesController = new CasesController(auditService, casesService, referralsService)
+    casesController = new CasesController(auditService, casesService, referralsService, eligibilityService)
   })
 
   describe('index', () => {

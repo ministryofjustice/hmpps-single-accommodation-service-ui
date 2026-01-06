@@ -11,6 +11,6 @@ export default class EligibilityClient extends RestClient {
   }
 
   getEligibility(token: string, crn: string) {
-    return this.get<EligibilityDto>({ path: apiPaths.eligibility.show({ crn }) }, asUser(token))
+    return this.get<EligibilityDto>({ path: apiPaths.cases.eligibility({ crn }) }, asUser(token))
   }
 }

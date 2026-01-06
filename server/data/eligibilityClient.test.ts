@@ -22,7 +22,7 @@ describeClient('EligibilityClient', provider => {
       uponReceiving: 'a request to get eligibility for a user case by CRN',
       withRequest: {
         method: 'GET',
-        path: apiPaths.eligibility.show({ crn }),
+        path: apiPaths.cases.eligibility({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },

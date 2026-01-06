@@ -1,6 +1,6 @@
 import type { SuperAgentRequest } from 'superagent'
 import { EligibilityDto } from '@sas/api'
-import { stubFor } from './wiremock'
+import { stubFor, stubApiError } from './wiremock'
 import { eligibilityFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
@@ -9,7 +9,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.eligibility.show({ crn }),
+        urlPattern: apiPaths.cases.eligibility({ crn }),
       },
       response: {
         status: 200,
@@ -17,14 +17,5 @@ export default {
         jsonBody: eligibilityData || eligibilityFactory.build(),
       },
     }),
-  stubGetEligibilityByCrn500: (crn: string): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: apiPaths.eligibility.show({ crn }),
-      },
-      response: {
-        status: 500,
-      },
-    }),
+  stubGetEligibilityByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.eligibility({ crn })),
 }

@@ -1,6 +1,6 @@
 import type { SuperAgentRequest } from 'superagent'
 import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
-import { stubFor } from './wiremock'
+import { stubFor, stubApiError } from './wiremock'
 import { caseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
@@ -17,16 +17,7 @@ export default {
         jsonBody: cases || caseFactory.buildList(5),
       },
     }),
-  stubGetCases500: (): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: apiPaths.cases.index({}),
-      },
-      response: {
-        status: 500,
-      },
-    }),
+  stubGetCases500: (): SuperAgentRequest => stubApiError(apiPaths.cases.index({})),
   stubGetCaseByCrn: (crn: string, caseData?: Case): SuperAgentRequest =>
     stubFor({
       request: {
@@ -39,16 +30,7 @@ export default {
         jsonBody: caseData || caseFactory.build({ crn }),
       },
     }),
-  stubGetCaseByCrn500: (crn: string): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: apiPaths.cases.show({ crn }),
-      },
-      response: {
-        status: 500,
-      },
-    }),
+  stubGetCaseByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.show({ crn })),
   stubGetReferralHistory: (crn: string, referrals?: Referral[]): SuperAgentRequest =>
     stubFor({
       request: {
@@ -61,14 +43,5 @@ export default {
         jsonBody: referrals || [],
       },
     }),
-  stubGetReferralHistory500: (crn: string): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: apiPaths.referrals.history({ crn }),
-      },
-      response: {
-        status: 500,
-      },
-    }),
+  stubGetReferralHistory500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.referrals.history({ crn })),
 }

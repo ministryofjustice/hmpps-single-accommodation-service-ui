@@ -33,14 +33,20 @@ describe('eligibility utilities', () => {
       expect(card).toMatchSnapshot()
     })
 
-    it('returns the correct links for a given status', () => {
+    it.each([
+      [['Start referral', 'Notes'], 'NOT_STARTED' as const],
+      [['Notes'], 'NOT_ELIGIBLE' as const],
+      [['Notes'], 'UPCOMING' as const],
+      [['Referral and notes'], 'ARRIVED' as const],
+    ])('renders links %s for status %s', (links, status) => {
       const eligibility = eligibilityFactory.build({
-        cas1: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),
+        cas1: serviceResultFactory.build({ serviceStatus: status }),
       })
 
       const [card] = eligibilityToEligibilityCards(eligibility)
-
-      expect(card).toContain('Start referral')
+      for (const link of links) {
+        expect(card).toContain(link)
+      }
     })
   })
 })

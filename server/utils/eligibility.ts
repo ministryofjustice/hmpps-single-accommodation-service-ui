@@ -37,7 +37,7 @@ export const linksForStatus = (serviceStatus?: string) => {
         { text: 'Start referral', href: '#' },
         { text: 'Notes', href: '#' },
       ]
-    case 'CONFIRMED':
+    case 'ARRIVED':
       return [{ text: 'Referral and notes', href: '#' }]
     default:
       return []
@@ -63,6 +63,7 @@ export const eligibilityToEligibilityCards = (eligibility: EligibilityDto): stri
     { title: 'CAS3 (transitional accommodation)', eligibility: eligibility.cas3 },
   ]
 
+  // TODO remove filter once the API always returns eligibility for all services
   return cardConfigs
     .filter(config => config.eligibility)
     .map(config => eligibilityCard(config.title, config.eligibility))

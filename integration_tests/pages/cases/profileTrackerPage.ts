@@ -44,6 +44,7 @@ export default class ProfileTrackerPage extends AbstractPage {
       { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3 },
     ]
 
+    // TODO remove filter once the API always returns eligibility for all services
     const expectedCards = cardConfigs.filter(card => !!card.service)
     await expect(this.page.locator('.sas-card')).toHaveCount(expectedCards.length)
 

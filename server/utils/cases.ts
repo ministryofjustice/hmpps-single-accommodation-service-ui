@@ -24,7 +24,7 @@ export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
 }
 
-export const addressTitle = (accommodation?: AccommodationDetail): string => {
+export const addressTitle = (accommodation: AccommodationDetail): string => {
   const { type, subType, offenderReleaseType, name, isSettled } = accommodation
 
   switch (type) {

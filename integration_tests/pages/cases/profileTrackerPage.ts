@@ -56,12 +56,16 @@ export default class ProfileTrackerPage extends AbstractPage {
       { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3 },
     ]
 
+    const referralCards = this.page
+      .locator('section', { has: this.page.getByRole('heading', { name: 'Accommodation referrals' }) })
+      .locator('.sas-card')
+
     // TODO remove filter once the API always returns eligibility for all services
     const expectedCards = cardConfigs.filter(card => !!card.service)
-    await expect(this.page.locator('.sas-card')).toHaveCount(expectedCards.length)
+    await expect(referralCards).toHaveCount(expectedCards.length)
 
     for await (const { title, service } of expectedCards) {
-      const card = this.page.locator('.sas-card').filter({
+      const card = referralCards.filter({
         has: this.page.getByRole('heading', { name: title }),
       })
 

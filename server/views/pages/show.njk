@@ -50,17 +50,19 @@
     </div>
 
     <div class="govuk-grid-row govuk-grid-row--reverse">
-      <div class="govuk-grid-column-one-third-from-desktop">
+      <section class="govuk-grid-column-one-third-from-desktop">
+        <h2 class="govuk-visually-hidden">Current situation</h2>
         {{ nextAccommodationCard | safe }}
 
         {{ currentAccommodationCard | safe }}
-      </div>
+      </section>
 
-      <div class="govuk-grid-column-two-thirds-from-desktop">
+      <section class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-visually-hidden">Accommodation referrals</h2>
         {% for card in eligibilityCards %}
           {{ card | safe }}
         {% endfor %}
-      </div>
+      </section>
     </div>
 
     <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>

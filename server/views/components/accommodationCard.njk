@@ -1,0 +1,25 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
+
+{%- if type === 'NO_FIXED_ABODE' -%}
+  {%- set html %}
+    {{ 'Since' if (startDate | date('days') < 0) else 'From' }} {{ startDate | date('long') }} ({{ startDate | date('days for/in') }})
+  {% endset -%}
+
+  {{ mojAlert({
+    variant: "warning",
+    title: "Currently no fixed abode" if cardType == 'current' else "No fixed abode",
+    showTitleAsHeading: true,
+    dismissible: false,
+    html: html
+  }) }}
+{%- else -%}
+<div class="sas-card govuk-!-margin-bottom-4">
+  <h3 class="govuk-heading-m">{{ 'Current' if cardType == 'current' else 'Next' }} accommodation</h3>
+
+  {{ govukSummaryList({
+    classes: 'govuk-summary-card__content govuk-!-margin-bottom-0',
+    rows: rows
+  }) }}
+</div>
+{%- endif -%}

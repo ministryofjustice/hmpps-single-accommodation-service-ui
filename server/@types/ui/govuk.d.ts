@@ -8,7 +8,11 @@ export type HtmlContent = {
   text?: never
 }
 
-export type TableCell = (TextContent | HtmlContent) & {
+export type TextOrHtmlContent = TextContent | HtmlContent
+
+export type HtmlAttributes = Record<string, string>
+
+export type TableCell = TextOrHtmlContent & {
   /**
    * Specify format of a cell. Currently only "numeric" is used.
    */
@@ -32,7 +36,32 @@ export type TableCell = (TextContent | HtmlContent) & {
   /**
    * HTML attributes to add to the cell.
    */
-  attributes?: Record<string, string>
+  attributes?: HtmlAttributes
 }
 
 export type TableRow = TableCell[]
+
+export type SummaryListActionItem = TextOrHtmlContent & {
+  href: string
+  visuallyHiddenText?: string
+  classes?: string
+  attributes?: HtmlAttributes
+}
+
+export type SummaryListActions = {
+  items?: SummaryListActionItem[]
+  classes?: string
+}
+
+export type SummaryListRow = {
+  classes?: string
+  key: TextOrHtmlContent & { classes?: string }
+  value: TextOrHtmlContent & { classes?: string }
+  actions?: SummaryListActions
+}
+
+export type SummaryList = {
+  classes?: string
+  attributes?: HtmlAttributes
+  rows: SummaryListRow[]
+}

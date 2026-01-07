@@ -8,11 +8,15 @@ import {
 } from './format'
 
 describe('formatting utilities', () => {
-  describe('formatDate', () => {
-    beforeEach(() => {
-      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
-    })
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+  })
 
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  describe('formatDate', () => {
     it.each([
       ['2025-12-03', '3 December 2025'],
       ['2026-01-24', '24 January 2026'],
@@ -22,12 +26,28 @@ describe('formatting utilities', () => {
     })
 
     it.each([
-      ['2025-12-03', '-7'],
-      ['2026-01-24', '45'],
-      ['2025-12-10', '0'],
-      ['not a date', 'Invalid Date'],
-    ])('formats %s as the number of days %s', (date, expected) => {
-      expect(formatDate(date, 'days')).toEqual(expected)
+      ['2025-12-03', 'days' as const, '-7'],
+      ['2025-12-03', 'days ago/in' as const, '7 days ago'],
+      ['2025-12-03', 'days for/in' as const, 'for 7 days'],
+      ['2025-12-03', 'days for/left' as const, 'for 7 days'],
+      ['2025-12-09', 'days' as const, '-1'],
+      ['2025-12-09', 'days ago/in' as const, '1 day ago'],
+      ['2025-12-09', 'days for/in' as const, 'for 1 day'],
+      ['2025-12-09', 'days for/left' as const, 'for 1 day'],
+      ['2025-12-10', 'days' as const, '0'],
+      ['2025-12-10', 'days ago/in' as const, 'today'],
+      ['2025-12-10', 'days for/in' as const, 'today'],
+      ['2025-12-10', 'days for/left' as const, 'today'],
+      ['2025-12-11', 'days' as const, '1'],
+      ['2025-12-11', 'days ago/in' as const, 'in 1 day'],
+      ['2025-12-11', 'days for/in' as const, 'in 1 day'],
+      ['2025-12-11', 'days for/left' as const, '1 day left'],
+      ['2025-12-22', 'days' as const, '12'],
+      ['2025-12-22', 'days ago/in' as const, 'in 12 days'],
+      ['2025-12-22', 'days for/in' as const, 'in 12 days'],
+      ['2025-12-22', 'days for/left' as const, '12 days left'],
+    ])('formats %s with %s', (date, format, expected) => {
+      expect(formatDate(date, format)).toEqual(expected)
     })
 
     it.each([

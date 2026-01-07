@@ -48,13 +48,23 @@
             </div>
         </div>
     </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            {% for card in eligibilityCards %}
-                {{ card | safe }}
-            {% endfor %}
-        </div>
+
+    <div class="govuk-grid-row govuk-grid-row--reverse">
+      <section class="govuk-grid-column-one-third-from-desktop">
+        <h2 class="govuk-visually-hidden">Current situation</h2>
+        {{ nextAccommodationCard | safe }}
+
+        {{ currentAccommodationCard | safe }}
+      </section>
+
+      <section class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-visually-hidden">Accommodation referrals</h2>
+        {% for card in eligibilityCards %}
+          {{ card | safe }}
+        {% endfor %}
+      </section>
     </div>
+
     <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
     {{ referralHistory | safe }}
 {% endblock %}

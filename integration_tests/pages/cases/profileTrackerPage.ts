@@ -1,8 +1,15 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { CaseDto as Case, EligibilityDto as Eligibility, AccommodationReferralDto as Referral } from '@sas/api'
+import {
+  CaseDto as Case,
+  EligibilityDto as Eligibility,
+  AccommodationReferralDto as Referral,
+  AccommodationDetail,
+} from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { formatDate, formatEligibilityStatus, formatRiskLevel, formatStatus } from '../../../server/utils/format'
+import { formatDate, formatRiskLevel, formatStatus, formatEligibilityStatus } from '../../../server/utils/format'
 import { linksForStatus } from '../../../server/utils/eligibility'
+import paths from '../../../server/paths/ui'
+import { accommodationType } from '../../../server/utils/cases'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -16,6 +23,11 @@ export default class ProfileTrackerPage extends AbstractPage {
     const profileTrackerPage = new ProfileTrackerPage(page, caseData)
     await expect(profileTrackerPage.header).toBeVisible()
     return profileTrackerPage
+  }
+
+  static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
+    await page.goto(paths.cases.show({ crn: caseData.crn as string }))
+    return ProfileTrackerPage.verifyOnPage(page, caseData)
   }
 
   async shouldShowCaseDetails(caseData: Case) {
@@ -44,12 +56,16 @@ export default class ProfileTrackerPage extends AbstractPage {
       { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3 },
     ]
 
+    const referralCards = this.page
+      .locator('section', { has: this.page.getByRole('heading', { name: 'Accommodation referrals' }) })
+      .locator('.sas-card')
+
     // TODO remove filter once the API always returns eligibility for all services
     const expectedCards = cardConfigs.filter(card => !!card.service)
-    await expect(this.page.locator('.sas-card')).toHaveCount(expectedCards.length)
+    await expect(referralCards).toHaveCount(expectedCards.length)
 
     for await (const { title, service } of expectedCards) {
-      const card = this.page.locator('.sas-card').filter({
+      const card = referralCards.filter({
         has: this.page.getByRole('heading', { name: title }),
       })
 
@@ -63,6 +79,46 @@ export default class ProfileTrackerPage extends AbstractPage {
         expect(card.getByRole('link', { name: link.text })).toBeVisible()
       }
     }
+  }
+
+  async shouldShowAddress(accommodation: AccommodationDetail, card: Locator) {
+    const addressParts = Object.values(accommodation.address || {}).filter(Boolean)
+    await this.shouldShowSummaryItem('Address', addressParts, card)
+  }
+
+  async shouldShowNextAccommodationCard(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.sas-card', { hasText: 'Next accommodation' })
+
+    const addressTitleParts = accommodationType(accommodation).split('<br>')
+    await this.shouldShowSummaryItem('Status', addressTitleParts, card)
+
+    await this.shouldShowAddress(accommodation, card)
+  }
+
+  async shouldShowNextAccommodationAlert(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.moj-alert', { hasText: /No fixed abode/ })
+    const { startDate } = accommodation
+    await expect(card).toContainText(`From ${formatDate(startDate, 'long')} (${formatDate(startDate, 'days for/in')})`)
+  }
+
+  async shouldShowCurrentAccommodationCard(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.sas-card', { hasText: 'Current accommodation' })
+
+    const addressTitleParts = accommodationType(accommodation).split('<br>')
+    await this.shouldShowSummaryItem('Type', addressTitleParts, card)
+    const endDateLabel = accommodation.type === 'PRISON' ? 'Release date' : 'End date'
+    await this.shouldShowSummaryItem(
+      endDateLabel,
+      [formatDate(accommodation.endDate), formatDate(accommodation.endDate, 'days for/left')],
+      card,
+    )
+    await this.shouldShowAddress(accommodation, card)
+  }
+
+  async shouldShowCurrentAccommodationAlert(accommodation: AccommodationDetail) {
+    const card = this.page.locator('.moj-alert', { hasText: 'Currently no fixed abode' })
+    const { startDate } = accommodation
+    await expect(card).toContainText(`Since ${formatDate(startDate, 'long')} (${formatDate(startDate, 'days for/in')})`)
   }
 
   async shouldShowReferralHistory(referrals: Referral[]) {

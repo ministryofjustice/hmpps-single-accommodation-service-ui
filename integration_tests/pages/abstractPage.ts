@@ -36,4 +36,17 @@ export default class AbstractPage {
       await expect(this.page.getByRole('columnheader', { name: header })).toBeVisible()
     }
   }
+
+  async shouldShowSummaryItem(key: string, value: string | string[], container?: Locator) {
+    const summaryItem = (container || this.page)
+      .locator('.govuk-summary-list__row', {
+        has: this.page.locator('.govuk-summary-list__key', { hasText: key }),
+      })
+      .locator('.govuk-summary-list__value')
+
+    const values = Array.isArray(value) ? value : [value]
+    for await (const item of values) {
+      await expect(summaryItem).toContainText(item)
+    }
+  }
 }

@@ -6,6 +6,7 @@
     "types": ["@playwright/test"],
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "strict": false,
     "paths": {
       "@sas/ui": ["../server/@types/ui/index.d.ts"],
       "@sas/api": ["../server/@types/shared/index.d.ts"],

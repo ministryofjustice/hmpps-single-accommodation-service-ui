@@ -1,8 +1,9 @@
 import { CaseDto as Case, AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
-import { TableRow } from '@govuk/ui'
+import { SummaryListRow, TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
+import { formatDate } from './format'
 
 const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
   REMAND: 'remand',
@@ -23,14 +24,14 @@ export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
 }
 
-const addressTitle = (accommodation?: AccommodationDetail): string => {
-  const { type, subType, offenderReleaseType, name, isSettled } = accommodation
+export const accommodationType = (accommodation: AccommodationDetail): string => {
+  const { type, subType, offenderReleaseType } = accommodation
 
   switch (type) {
     case 'PRISON':
-      return `${name}${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
+      return `Prison${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
     case 'PRIVATE':
-      return `Private address${subType ? ` (${subTypes[subType]})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
+      return `Private address${subType ? ` (${subTypes[subType]})` : ''}`
     case 'NO_FIXED_ABODE':
       return 'No fixed abode'
     case 'CAS1':
@@ -46,14 +47,92 @@ const addressTitle = (accommodation?: AccommodationDetail): string => {
   }
 }
 
+export const addressTitle = (accommodation: AccommodationDetail): string => {
+  const { type, name, isSettled } = accommodation
+  switch (type) {
+    case 'PRISON':
+      return `${name}`
+    case 'PRIVATE':
+      if (isSettled !== undefined) return `${name} (${isSettled ? 'settled' : 'transient'})`
+      return `${name}`
+    default:
+      return ''
+  }
+}
+
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
   accommodation
     ? nunjucksInline().render('cases/partials/accommodationCell.njk', {
         cellType,
-        heading: addressTitle(accommodation),
+        accommodationType: accommodationType(accommodation),
+        addressTitle: addressTitle(accommodation),
         ...accommodation,
       })
     : ''
+
+const summaryListRow = (label: string, value: string, renderAs: 'text' | 'html' = 'text'): SummaryListRow => ({
+  key: { text: label },
+  value: renderAs === 'html' ? { html: value } : { text: value },
+})
+
+export const accommodationCard = (cardType: 'current' | 'next', accommodation?: AccommodationDetail) => {
+  if (!accommodation) return ''
+
+  const { type } = accommodation
+  const heading = cardType === 'current' ? 'Current accommodation' : 'Next accommodation'
+  const rows = []
+
+  if (type !== 'NO_FIXED_ABODE') {
+    if (cardType === 'current') {
+      rows.push(summaryListRow('Type', accommodationType(accommodation), 'html'))
+
+      if (accommodation.endDate) {
+        const endDateHtml = `
+          ${formatDate(accommodation.endDate)}
+          <br />
+          ${formatDate(accommodation.endDate, 'days for/left')}
+        `
+        rows.push(summaryListRow(type === 'PRISON' ? 'Release date' : 'End date', endDateHtml, 'html'))
+      }
+    }
+
+    if (cardType === 'next') {
+      const { startDate, endDate } = accommodation
+
+      let datesHtml = ''
+
+      if (startDate) {
+        datesHtml += `From ${formatDate(startDate, 'long')}`
+      }
+      if (endDate) {
+        datesHtml += `${startDate ? `<br />to ` : 'Until'} ${formatDate(endDate, 'long')}`
+      }
+
+      const statusHtml = `
+        <p>
+          <strong>${accommodationType(accommodation)}</strong>
+          ${datesHtml ? `<br /><span class="govuk-hint">${datesHtml}</span>` : ''}
+        </p>
+      `
+
+      rows.push(summaryListRow('Status', statusHtml, 'html'))
+    }
+
+    const addressLines = [
+      addressTitle(accommodation) ? `<strong>${addressTitle(accommodation)}</strong>` : '',
+      ...Object.values(accommodation.address || {}),
+    ].filter(Boolean)
+
+    if (addressLines.length > 0) rows.push(summaryListRow('Address', addressLines.join('<br />'), 'html'))
+  }
+
+  return nunjucksInline().render('components/accommodationCard.njk', {
+    cardType,
+    heading,
+    rows,
+    ...accommodation,
+  })
+}
 
 export const casesToRows = (cases: Case[]): TableRow[] =>
   cases.map(c => [

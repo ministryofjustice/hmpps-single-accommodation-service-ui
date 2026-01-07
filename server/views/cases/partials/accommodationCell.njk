@@ -1,12 +1,24 @@
-{{ heading | safe }}
+{% if type === 'PRISON' %}
+  {{ accommodationType | replace('Prison', name) }}
+{% else %}
+  {{ accommodationType }}
+  {% if addressTitle %}<br />{{ addressTitle }}{% endif %}
+{% endif %}
 
 {%- if cellType === 'current' %}
-  {%- set days = endDate | date('days') -%}
-  <br>
-  <span class="govuk-hint">until {{ endDate | date }}</span>
-  <br>
-  <span class="govuk-!-display-inline-block govuk-!-margin-top-1">{{ days }} {{ 'day' if days == 1 else 'days' }} left</span>
+  {%- if endDate %}
+    <br />
+    <span class="govuk-hint">until {{ endDate | date }}</span>
+    <br />
+    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">{{ endDate | date('days for/left') }}</span>
+  {% endif -%}
 {% else %}
-  <br>
-  <span class="govuk-hint">from {{ startDate | date }}</span>
+  {%- if startDate %}
+    <br />
+    <span class="govuk-hint">from {{ startDate | date }}</span>
+  {% endif -%}
+  {%- if endDate %}
+    <br />
+    <span class="govuk-hint">{{ 'to' if startDate else 'until' }} {{ endDate | date }}</span>
+  {% endif -%}
 {% endif -%}

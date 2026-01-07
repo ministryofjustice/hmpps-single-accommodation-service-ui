@@ -11,27 +11,29 @@ import accommodationFactory from './accommodation'
 
 class CaseFactory extends Factory<Case> {
   confirmed() {
+    const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
     return this.params({
       currentAccommodation: faker.helpers.arrayElement([
-        accommodationFactory.current().cas().build(),
-        accommodationFactory.current().privateAddress().build(),
-        accommodationFactory.current().prison().build(),
+        accommodationFactory.current(currentEndDate).cas().build(),
+        accommodationFactory.current(currentEndDate).privateAddress().build(),
+        accommodationFactory.current(currentEndDate).prison().build(),
       ]),
       nextAccommodation: faker.helpers.arrayElement([
-        accommodationFactory.next().privateAddress().build(),
-        accommodationFactory.next().cas().build(),
+        accommodationFactory.next(currentEndDate).privateAddress().build(),
+        accommodationFactory.next(currentEndDate).cas().build(),
       ]),
     })
   }
 
   noFixedAbodeNext() {
+    const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
     return this.params({
       currentAccommodation: faker.helpers.arrayElement([
-        accommodationFactory.current().cas().build(),
-        accommodationFactory.current().privateAddress().build(),
-        accommodationFactory.current().prison().build(),
+        accommodationFactory.current(currentEndDate).cas().build(),
+        accommodationFactory.current(currentEndDate).privateAddress().build(),
+        accommodationFactory.current(currentEndDate).prison().build(),
       ]),
-      nextAccommodation: accommodationFactory.next().noFixedAbode().build(),
+      nextAccommodation: accommodationFactory.next(currentEndDate).noFixedAbode().build(),
     })
   }
 

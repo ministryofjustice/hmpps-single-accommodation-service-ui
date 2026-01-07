@@ -2,18 +2,11 @@ import { test } from '@playwright/test'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import CasesListPage from '../../pages/cases/listPage'
-import { accommodationFactory, caseFactory } from '../../../server/testutils/factories'
+import { caseFactory } from '../../../server/testutils/factories'
 
 test.describe('List of cases', () => {
   test('Should list all cases', async ({ page }) => {
-    const cases = [
-      caseFactory.build({ currentAccommodation: accommodationFactory.prison().build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.privateAddress().build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS1').build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS2').build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS2V2').build() }),
-      caseFactory.build({ currentAccommodation: accommodationFactory.cas('CAS3').build() }),
-    ]
+    const cases = [...Array(25)].map(() => caseFactory.confirmed().build())
     await casesApi.stubGetCases(cases)
     await login(page)
 

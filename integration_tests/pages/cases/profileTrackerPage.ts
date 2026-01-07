@@ -9,7 +9,7 @@ import AbstractPage from '../abstractPage'
 import { formatDate, formatRiskLevel, formatStatus, formatEligibilityStatus } from '../../../server/utils/format'
 import { linksForStatus } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
-import { addressTitle } from '../../../server/utils/cases'
+import { accommodationType } from '../../../server/utils/cases'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -89,7 +89,7 @@ export default class ProfileTrackerPage extends AbstractPage {
   async shouldShowNextAccommodationCard(accommodation: AccommodationDetail) {
     const card = this.page.locator('.sas-card', { hasText: 'Next accommodation' })
 
-    const addressTitleParts = addressTitle(accommodation).split('<br>')
+    const addressTitleParts = accommodationType(accommodation).split('<br>')
     await this.shouldShowSummaryItem('Status', addressTitleParts, card)
 
     await this.shouldShowAddress(accommodation, card)
@@ -104,10 +104,11 @@ export default class ProfileTrackerPage extends AbstractPage {
   async shouldShowCurrentAccommodationCard(accommodation: AccommodationDetail) {
     const card = this.page.locator('.sas-card', { hasText: 'Current accommodation' })
 
-    const addressTitleParts = addressTitle(accommodation).split('<br>')
+    const addressTitleParts = accommodationType(accommodation).split('<br>')
     await this.shouldShowSummaryItem('Type', addressTitleParts, card)
+    const endDateLabel = accommodation.type === 'PRISON' ? 'Release date' : 'End date'
     await this.shouldShowSummaryItem(
-      'End date',
+      endDateLabel,
       [formatDate(accommodation.endDate), formatDate(accommodation.endDate, 'days for/left')],
       card,
     )

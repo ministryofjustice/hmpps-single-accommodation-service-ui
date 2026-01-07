@@ -24,14 +24,14 @@ export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
 }
 
-export const addressTitle = (accommodation: AccommodationDetail): string => {
-  const { type, subType, offenderReleaseType, name, isSettled } = accommodation
+export const accommodationType = (accommodation: AccommodationDetail): string => {
+  const { type, subType, offenderReleaseType } = accommodation
 
   switch (type) {
     case 'PRISON':
-      return `${name}${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
+      return `Prison${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
     case 'PRIVATE':
-      return `Private address${subType ? ` (${subTypes[subType]})` : ''}<br>${name} (${isSettled ? 'settled' : 'transient'})`
+      return `Private address${subType ? ` (${subTypes[subType]})` : ''}`
     case 'NO_FIXED_ABODE':
       return 'No fixed abode'
     case 'CAS1':
@@ -47,11 +47,25 @@ export const addressTitle = (accommodation: AccommodationDetail): string => {
   }
 }
 
+export const addressTitle = (accommodation: AccommodationDetail): string => {
+  const { type, name, isSettled } = accommodation
+  switch (type) {
+    case 'PRISON':
+      return `${name}`
+    case 'PRIVATE':
+      if (isSettled !== undefined) return `${name} (${isSettled ? 'settled' : 'transient'})`
+      return `${name}`
+    default:
+      return ''
+  }
+}
+
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
   accommodation
     ? nunjucksInline().render('cases/partials/accommodationCell.njk', {
         cellType,
-        heading: addressTitle(accommodation),
+        accommodationType: accommodationType(accommodation),
+        addressTitle: addressTitle(accommodation),
         ...accommodation,
       })
     : ''
@@ -70,14 +84,16 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
 
   if (type !== 'NO_FIXED_ABODE') {
     if (cardType === 'current') {
-      rows.push(summaryListRow('Type', addressTitle(accommodation), 'html'))
+      rows.push(summaryListRow('Type', accommodationType(accommodation), 'html'))
 
-      const endDateHtml = `
-        ${formatDate(accommodation.endDate)}
-        <br>
-        ${formatDate(accommodation.endDate, 'days for/left')}
-      `
-      rows.push(summaryListRow('End date', endDateHtml, 'html'))
+      if (accommodation.endDate) {
+        const endDateHtml = `
+          ${formatDate(accommodation.endDate)}
+          <br />
+          ${formatDate(accommodation.endDate, 'days for/left')}
+        `
+        rows.push(summaryListRow(type === 'PRISON' ? 'Release date' : 'End date', endDateHtml, 'html'))
+      }
     }
 
     if (cardType === 'next') {
@@ -89,20 +105,25 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
         datesHtml += `From ${formatDate(startDate, 'long')}`
       }
       if (endDate) {
-        datesHtml += `${startDate ? `<br>to ` : 'Until'} ${formatDate(endDate, 'long')}`
+        datesHtml += `${startDate ? `<br />to ` : 'Until'} ${formatDate(endDate, 'long')}`
       }
 
       const statusHtml = `
         <p>
-          <strong>${addressTitle(accommodation)}</strong>
-          ${datesHtml ? `<br><span class="govuk-hint">${datesHtml}</span>` : ''}
+          <strong>${accommodationType(accommodation)}</strong>
+          ${datesHtml ? `<br /><span class="govuk-hint">${datesHtml}</span>` : ''}
         </p>
         <span class="govuk-tag govuk-tag--green">Confirmed</span>
       `
       rows.push(summaryListRow('Status', statusHtml, 'html'))
     }
 
-    rows.push(summaryListRow('Address', Object.values(accommodation.address).filter(Boolean).join('<br>'), 'html'))
+    const addressLines = [
+      addressTitle(accommodation) ? `<strong>${addressTitle(accommodation)}</strong>` : '',
+      ...Object.values(accommodation.address),
+    ].filter(Boolean)
+
+    if (addressLines.length > 0) rows.push(summaryListRow('Address', addressLines.join('<br />'), 'html'))
   }
 
   return nunjucksInline().render('components/accommodationCard.njk', {

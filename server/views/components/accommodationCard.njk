@@ -1,10 +1,10 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
 
-{% if type === 'NO_FIXED_ABODE' %}
-  {% set html %}
+{%- if type === 'NO_FIXED_ABODE' -%}
+  {%- set html %}
     {{ 'Since' if (startDate | date('days') < 0) else 'From' }} {{ startDate | date('long') }} ({{ startDate | date('days for/in') }})
-  {% endset %}
+  {% endset -%}
 
   {{ mojAlert({
     variant: "warning",
@@ -13,7 +13,7 @@
     dismissible: false,
     html: html
   }) }}
-{% else %}
+{%- else -%}
 <div class="sas-card govuk-!-margin-bottom-4">
   <h3 class="govuk-heading-m">{{ 'Current' if cardType == 'current' else 'Next' }} accommodation</h3>
 
@@ -22,4 +22,4 @@
     rows: rows
   }) }}
 </div>
-{% endif %}
+{%- endif -%}

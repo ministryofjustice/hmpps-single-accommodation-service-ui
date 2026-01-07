@@ -44,7 +44,7 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
     return this.params({
       type: 'PRIVATE',
       subType: faker.helpers.arrayElement(subTypes),
-      name: faker.word.words(2),
+      name: faker.helpers.arrayElement(['Relatives', 'Family', 'Friends']),
       isSettled: faker.datatype.boolean(),
       offenderReleaseType: undefined,
     })

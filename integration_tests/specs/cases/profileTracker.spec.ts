@@ -43,6 +43,7 @@ test.describe('Profile Tracker Page', () => {
     test(`should render next and current cards for a confirmed case`, async ({ page }) => {
       const caseData = caseFactory.confirmed().build({ crn })
       await casesApi.stubGetCaseByCrn(crn, caseData)
+      await eligibilityApi.stubGetEligibilityByCrn(crn)
       await casesApi.stubGetReferralHistory(crn)
       await login(page)
 

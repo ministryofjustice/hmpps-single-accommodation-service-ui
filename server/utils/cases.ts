@@ -113,14 +113,14 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
           <strong>${accommodationType(accommodation)}</strong>
           ${datesHtml ? `<br /><span class="govuk-hint">${datesHtml}</span>` : ''}
         </p>
-        <span class="govuk-tag govuk-tag--green">Confirmed</span>
       `
+
       rows.push(summaryListRow('Status', statusHtml, 'html'))
     }
 
     const addressLines = [
       addressTitle(accommodation) ? `<strong>${addressTitle(accommodation)}</strong>` : '',
-      ...Object.values(accommodation.address),
+      ...Object.values(accommodation.address || {}),
     ].filter(Boolean)
 
     if (addressLines.length > 0) rows.push(summaryListRow('Address', addressLines.join('<br />'), 'html'))

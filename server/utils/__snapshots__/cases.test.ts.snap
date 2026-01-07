@@ -536,7 +536,6 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
                 <strong>Approved Premises (CAS1)</strong>
                 <br /><span class="govuk-hint">From Tuesday 3 February 2026</span>
               </p>
-              <span class="govuk-tag govuk-tag--green">Confirmed</span>
     </dd>
     
   </div>
@@ -580,7 +579,6 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
                 <strong>CAS2 for HDC</strong>
                 <br /><span class="govuk-hint">From Thursday 12 March 2026</span>
               </p>
-              <span class="govuk-tag govuk-tag--green">Confirmed</span>
     </dd>
     
   </div>
@@ -624,7 +622,6 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
                 <strong>CAS2 for Bail</strong>
                 <br /><span class="govuk-hint">From Saturday 23 May 2026</span>
               </p>
-              <span class="govuk-tag govuk-tag--green">Confirmed</span>
     </dd>
     
   </div>
@@ -668,7 +665,6 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
                 <strong>Temporary Accommodation (CAS3)</strong>
                 <br /><span class="govuk-hint">From Friday 31 July 2026</span>
               </p>
-              <span class="govuk-tag govuk-tag--green">Confirmed</span>
     </dd>
     
   </div>
@@ -737,7 +733,6 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
                 <strong>Prison</strong>
                 <br /><span class="govuk-hint">From Thursday 11 December 2025</span>
               </p>
-              <span class="govuk-tag govuk-tag--green">Confirmed</span>
     </dd>
     
   </div>
@@ -781,7 +776,6 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
                 <strong>Prison (licence)</strong>
                 <br /><span class="govuk-hint">From Thursday 1 January 2026</span>
               </p>
-              <span class="govuk-tag govuk-tag--green">Confirmed</span>
     </dd>
     
   </div>
@@ -825,7 +819,6 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
                 <strong>Private address (lodging)</strong>
                 <br /><span class="govuk-hint">From Thursday 10 September 2026</span>
               </p>
-              <span class="govuk-tag govuk-tag--green">Confirmed</span>
     </dd>
     
   </div>

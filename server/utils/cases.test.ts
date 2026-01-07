@@ -169,6 +169,4 @@ describe('cases utilities', () => {
       ])
     })
   })
-
-  describe('accommodationCard', () => {})
 })

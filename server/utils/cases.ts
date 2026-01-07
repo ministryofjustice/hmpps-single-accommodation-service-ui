@@ -1,15 +1,9 @@
-import {
-  CaseDto as Case,
-  AccommodationDetail,
-  DutyToReferDto,
-  AccommodationReferralDto as Referral,
-  ServiceResult,
-} from '@sas/api'
+import { CaseDto as Case, AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
 import { SummaryListRow, TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
-import { eligibilityStatusTag, formatDate } from './format'
+import { formatDate } from './format'
 
 const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
   REMAND: 'remand',
@@ -165,24 +159,4 @@ export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
     dateCell(referral.date),
     linksCell([{ text: 'View', href: '#' }]),
   ])
-}
-
-export const dutyToReferToCard = (dutyToRefer: DutyToReferDto): string => {
-  const actions = [
-    { term: 'Submitted to', description: dutyToRefer.submittedTo },
-    { term: 'Reference', description: dutyToRefer.reference },
-    {
-      term: 'Submitted',
-      description: `${formatDate(dutyToRefer.submitted)} (${formatDate(dutyToRefer.submitted, 'days')} ago)`,
-    },
-  ]
-  const links = [
-    { text: 'Add outcome', href: '#' },
-    { text: 'Notes', href: '#' },
-  ]
-  return nunjucksInline().render('components/dutyToReferCard.njk', {
-    statusTag: eligibilityStatusTag(dutyToRefer.status as ServiceResult['serviceStatus']),
-    links,
-    actions,
-  })
 }

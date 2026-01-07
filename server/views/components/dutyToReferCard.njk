@@ -1,4 +1,4 @@
-{% set cardClass = 'sas-card--not-eligible' if serviceStatus == 'NOT_ELIGIBLE' else '' %}
+{% set cardClass = 'sas-card--not-eligible' if status == 'NOT_ELIGIBLE' else '' %}
 
 <article class="sas-card{{ ' ' + cardClass if cardClass }}">
 	<header class="sas-card__head">

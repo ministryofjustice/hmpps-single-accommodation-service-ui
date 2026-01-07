@@ -48,6 +48,10 @@ export const formatRiskLevel = (level?: Case['riskLevel']) => {
   )
 }
 
+export const formatDutyToReferStatus = (status?: string): string => {
+  return convertToTitleCase(status?.split('_').join(' ') || 'Unknown')
+}
+
 export const formatEligibilityStatus = (status?: string): string => {
   return convertToTitleCase(status?.split('_').join(' ') || 'Unknown')
 }
@@ -84,5 +88,19 @@ export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): s
     case 'NOT_ELIGIBLE':
     default:
       return `<strong class="govuk-tag govuk-tag--grey">${formatEligibilityStatus(status)}</strong>`
+  }
+}
+
+export const dutyToReferStatusTag = (status?: string): string => {
+  switch (status) {
+    case 'NOT_STARTED':
+      return `<strong class="govuk-tag govuk-tag--red">${formatDutyToReferStatus(status)}</strong>`
+    case 'UPCOMING':
+      return `<strong class="govuk-tag govuk-tag--yellow">${formatDutyToReferStatus(status)}</strong>`
+    case 'SUBMITTED':
+      return `<strong class="govuk-tag govuk-tag--green">${formatDutyToReferStatus(status)}</strong>`
+    case 'NOT_ELIGIBLE':
+    default:
+      return `<strong class="govuk-tag govuk-tag--grey">${formatDutyToReferStatus(status)}</strong>`
   }
 }

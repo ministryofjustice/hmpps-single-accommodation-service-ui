@@ -1,5 +1,4 @@
 import { test } from '@playwright/test'
-import { AccommodationDetail } from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import eligibilityApi from '../../mockApis/eligibility'
@@ -49,8 +48,8 @@ test.describe('Profile Tracker Page', () => {
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-      await profileTrackerPage.shouldShowNextAccommodationCard(caseData.nextAccommodation as AccommodationDetail)
-      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation as AccommodationDetail)
+      await profileTrackerPage.shouldShowNextAccommodationCard(caseData.nextAccommodation)
+      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation)
     })
 
     test(`should render next as alert and current as card for a NFA case`, async ({ page }) => {
@@ -61,8 +60,8 @@ test.describe('Profile Tracker Page', () => {
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-      await profileTrackerPage.shouldShowNextAccommodationAlert(caseData.nextAccommodation as AccommodationDetail)
-      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation as AccommodationDetail)
+      await profileTrackerPage.shouldShowNextAccommodationAlert(caseData.nextAccommodation)
+      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation)
     })
 
     test(`should render only current alert for a currently NFA case`, async ({ page }) => {
@@ -73,7 +72,7 @@ test.describe('Profile Tracker Page', () => {
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-      await profileTrackerPage.shouldShowCurrentAccommodationAlert(caseData.currentAccommodation as AccommodationDetail)
+      await profileTrackerPage.shouldShowCurrentAccommodationAlert(caseData.currentAccommodation)
     })
   })
 })

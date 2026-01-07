@@ -1,0 +1,90 @@
+{
+  "J804868": [],
+  "K918242": [
+    {
+      "id": "ea524fce-904e-4387-9c82-98bd8d760727",
+      "type": "CAS3",
+      "status": "REJECTED",
+      "date": "2025-07-20T22:14:28.678Z"
+    }
+  ],
+  "Q522367": [
+    {
+      "id": "83e274bf-497a-4f7a-a71e-910840416b4f",
+      "type": "CAS1",
+      "status": "REJECTED",
+      "date": "2025-11-05T14:30:37.852Z"
+    },
+    {
+      "id": "921422f0-8c77-4ae2-b532-dde3c7dcd0c0",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-01-17T09:22:37.498Z"
+    }
+  ],
+  "E144685": [],
+  "P595114": [],
+  "X530083": [
+    {
+      "id": "9f1219e4-9195-451d-bd2a-aeb196cfae2b",
+      "type": "CAS2v2",
+      "status": "ACCEPTED",
+      "date": "2026-01-07T12:55:10.085Z"
+    },
+    {
+      "id": "ba3969c3-59bf-4a4f-be1c-3d43f39ba4cb",
+      "type": "CAS2",
+      "status": "ACCEPTED",
+      "date": "2025-06-20T01:32:41.974Z"
+    },
+    {
+      "id": "75a67f8d-11bf-4e14-8029-f956380b97f9",
+      "type": "CAS2",
+      "status": "ACCEPTED",
+      "date": "2025-11-25T20:24:29.145Z"
+    }
+  ],
+  "T185772": [],
+  "V778605": [
+    {
+      "id": "aaa1eb41-b03b-4f02-a08c-1d9c41658422",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-08-12T12:53:12.267Z"
+    }
+  ],
+  "O344441": [
+    {
+      "id": "63164dcb-5195-4b96-a5e9-0624af157cdc",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-09-08T09:02:06.523Z"
+    },
+    {
+      "id": "f171fb73-11cc-4de6-8314-e4cdf6720b21",
+      "type": "CAS2v2",
+      "status": "ACCEPTED",
+      "date": "2025-04-12T15:12:02.862Z"
+    },
+    {
+      "id": "8dfc37f9-aa3f-4413-a59f-5d85da86aebe",
+      "type": "CAS2",
+      "status": "REJECTED",
+      "date": "2025-07-19T09:27:38.076Z"
+    }
+  ],
+  "H318340": [
+    {
+      "id": "482ec808-41aa-4c7a-ace1-3ff08f5971eb",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-04-08T19:01:01.715Z"
+    },
+    {
+      "id": "0ddc756d-28a0-40ce-bccf-545b594da362",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-04-25T09:54:40.645Z"
+    }
+  ]
+}

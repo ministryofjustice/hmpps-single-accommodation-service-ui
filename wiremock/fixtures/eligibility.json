@@ -1,0 +1,252 @@
+{
+  "J804868": {
+    "crn": "J804868",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "PENDING_PLACEMENT_REQUEST",
+      "actions": ["Action1!", "Action4!", "Action3!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "AWAITING_PLACEMENT",
+      "actions": ["Action3!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": ["Action1!", "Action2!"]
+    },
+    "cas3": {
+      "serviceStatus": "AWAITING_ASSESSMENT",
+      "actions": []
+    }
+  },
+  "K918242": {
+    "crn": "K918242",
+    "caseStatus": "ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "UPCOMING_PLACEMENT",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "UPCOMING",
+      "actions": ["Action4!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "UPCOMING",
+      "actions": ["Action1!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "ASSESSMENT_IN_PROGRESS",
+      "actions": ["Action4!", "Action1!", "Action2!"]
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": ["Action1!"]
+    }
+  },
+  "Q522367": {
+    "crn": "Q522367",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "UPCOMING",
+      "actions": ["Action4!", "Action1!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "DEPARTED",
+      "actions": ["Action3!", "Action2!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "CANCELLED",
+      "actions": ["Action2!", "Action1!", "Action3!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": ["Action1!", "Action3!", "Action2!"]
+    },
+    "cas3": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": ["Action1!", "Action3!", "Action4!"]
+    }
+  },
+  "E144685": {
+    "crn": "E144685",
+    "caseStatus": "ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "PENDING_PLACEMENT_REQUEST",
+      "actions": ["Action4!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "CANCELLED",
+      "actions": ["Action2!", "Action1!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "CANCELLED",
+      "actions": ["Action3!", "Action2!", "Action1!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "DEPARTED",
+      "actions": ["Action1!", "Action4!", "Action3!"]
+    },
+    "cas3": {
+      "serviceStatus": "PENDING_PLACEMENT_REQUEST",
+      "actions": ["Action2!", "Action4!"]
+    }
+  },
+  "P595114": {
+    "crn": "P595114",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "CANCELLED",
+      "actions": ["Action3!", "Action4!", "Action1!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "REQUEST_FOR_FURTHER_INFORMATION",
+      "actions": ["Action4!", "Action3!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "UPCOMING_PLACEMENT",
+      "actions": ["Action2!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "ARRIVED",
+      "actions": ["Action4!", "Action2!"]
+    },
+    "cas3": {
+      "serviceStatus": "UNALLOCATED_ASSESSMENT",
+      "actions": ["Action3!", "Action1!", "Action4!"]
+    }
+  },
+  "X530083": {
+    "crn": "X530083",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "DEPARTED",
+      "actions": ["Action4!", "Action3!", "Action1!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "AWAITING_PLACEMENT",
+      "actions": ["Action2!", "Action1!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "REQUEST_FOR_FURTHER_INFORMATION",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ARRIVED",
+      "actions": ["Action4!", "Action2!"]
+    },
+    "cas3": {
+      "serviceStatus": "AWAITING_ASSESSMENT",
+      "actions": []
+    }
+  },
+  "T185772": {
+    "crn": "T185772",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": ["Action4!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "ASSESSMENT_IN_PROGRESS",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": ["Action3!", "Action1!"]
+    },
+    "cas3": {
+      "serviceStatus": "UPCOMING",
+      "actions": ["Action2!"]
+    }
+  },
+  "V778605": {
+    "crn": "V778605",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "DEPARTED",
+      "actions": ["Action1!", "Action2!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "DEPARTED",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "ASSESSMENT_IN_PROGRESS",
+      "actions": ["Action2!", "Action4!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "UNALLOCATED_ASSESSMENT",
+      "actions": ["Action4!"]
+    },
+    "cas3": {
+      "serviceStatus": "CANCELLED",
+      "actions": []
+    }
+  },
+  "O344441": {
+    "crn": "O344441",
+    "caseStatus": "ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "ARRIVED",
+      "actions": ["Action3!", "Action2!", "Action1!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "AWAITING_ASSESSMENT",
+      "actions": ["Action3!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "UPCOMING",
+      "actions": ["Action4!", "Action3!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "ASSESSMENT_IN_PROGRESS",
+      "actions": ["Action2!"]
+    },
+    "cas3": {
+      "serviceStatus": "REQUEST_FOR_FURTHER_INFORMATION",
+      "actions": ["Action3!", "Action2!", "Action1!"]
+    }
+  },
+  "H318340": {
+    "crn": "H318340",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "ASSESSMENT_IN_PROGRESS",
+      "actions": ["Action2!", "Action4!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "AWAITING_PLACEMENT",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": ["Action2!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "ASSESSMENT_IN_PROGRESS",
+      "actions": ["Action4!"]
+    },
+    "cas3": {
+      "serviceStatus": "PENDING_PLACEMENT_REQUEST",
+      "actions": ["Action3!", "Action2!"]
+    }
+  }
+}

@@ -7,6 +7,7 @@ export const controllers = (services: Services) => ({
     services.casesService,
     services.referralsService,
     services.eligibilityService,
+    services.dutyToReferService,
   ),
 })
 

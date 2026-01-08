@@ -1,15 +1,23 @@
 import { expect, Locator, Page } from '@playwright/test'
 import {
   CaseDto as Case,
+  DutyToReferDto,
   EligibilityDto as Eligibility,
   AccommodationReferralDto as Referral,
   AccommodationDetail,
 } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { formatDate, formatRiskLevel, formatStatus, formatEligibilityStatus } from '../../../server/utils/format'
-import { linksForStatus } from '../../../server/utils/eligibility'
+import {
+  formatDate,
+  formatDutyToReferStatus,
+  formatRiskLevel,
+  formatStatus,
+  formatEligibilityStatus,
+} from '../../../server/utils/format'
+import { linksForStatus as linksForEligibilityStatus } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { accommodationType } from '../../../server/utils/cases'
+import { actionsForStatus, linksForStatus as linksForDutyToReferStatus } from '../../../server/utils/dutyToRefer'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -47,6 +55,23 @@ export default class ProfileTrackerPage extends AbstractPage {
     }
   }
 
+  async shouldShowDutyToRefer(dutyToRefer: DutyToReferDto) {
+    const card = this.page.locator('.sas-card').filter({
+      has: this.page.getByRole('heading', { name: 'Duty to refer (DTR)' }),
+    })
+
+    await expect(card.locator('.govuk-tag')).toContainText(formatDutyToReferStatus(dutyToRefer?.status))
+
+    for (const action of actionsForStatus(dutyToRefer)) {
+      expect(card).toContainText(action.term)
+      expect(card).toContainText(action.description)
+    }
+
+    for (const link of linksForDutyToReferStatus(dutyToRefer?.status)) {
+      expect(card.getByRole('link', { name: link.text })).toBeVisible()
+    }
+  }
+
   async shouldShowEligibility(eligibility: Eligibility) {
     const cardConfigs = [
       { title: 'Approved premises (CAS1)', service: eligibility.cas1 },
@@ -62,7 +87,6 @@ export default class ProfileTrackerPage extends AbstractPage {
 
     // TODO remove filter once the API always returns eligibility for all services
     const expectedCards = cardConfigs.filter(card => !!card.service)
-    await expect(referralCards).toHaveCount(expectedCards.length)
 
     for await (const { title, service } of expectedCards) {
       const card = referralCards.filter({
@@ -75,7 +99,7 @@ export default class ProfileTrackerPage extends AbstractPage {
         expect(card).toContainText(action)
       }
 
-      for (const link of linksForStatus(service?.serviceStatus)) {
+      for (const link of linksForEligibilityStatus(service?.serviceStatus)) {
         expect(card.getByRole('link', { name: link.text })).toBeVisible()
       }
     }

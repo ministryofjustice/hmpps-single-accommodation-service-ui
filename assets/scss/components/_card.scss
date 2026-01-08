@@ -36,3 +36,22 @@
   padding-left: govuk-spacing(2);
   border-left: 1px solid govuk-colour("mid-grey");
 }
+
+.sas-card-summary-list {
+    @include govuk-font($size: 16);
+    margin-top: govuk-spacing(4);
+    margin-bottom: 0;
+    display: grid;
+    grid-template-columns: fit-content(50%) 1fr;
+    column-gap: govuk-spacing(3);
+}
+
+.sas-card-summary-list dt {
+    color: govuk-colour("dark-grey");
+}
+
+.sas-card-summary-list dt, .sas-card-summary-list dd {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin: 0;
+}

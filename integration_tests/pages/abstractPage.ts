@@ -15,19 +15,25 @@ export default class AbstractPage {
   /** link to manage user details */
   readonly manageUserDetails: Locator
 
+  /** button to open the account/user menu */
+  readonly userMenuToggle: Locator
+
   protected constructor(page: Page) {
     this.page = page
     this.phaseBanner = page.getByTestId('header-phase-banner')
     this.usersName = page.getByTestId('header-user-name')
+    this.userMenuToggle = page.getByTestId('header-user-menu-toggle')
     this.signoutLink = page.getByText('Sign out')
     this.manageUserDetails = page.getByTestId('manageDetails')
   }
 
   async signOut() {
+    await this.userMenuToggle.first().click()
     await this.signoutLink.first().click()
   }
 
   async clickManageUserDetails() {
+    await this.userMenuToggle.first().click()
     await this.manageUserDetails.first().click()
   }
 

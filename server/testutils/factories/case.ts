@@ -47,7 +47,10 @@ class CaseFactory extends Factory<Case> {
 
 export default CaseFactory.define(() => {
   const currentAccommodation = accommodationFactory.current().build()
-  const nextAccommodation = accommodationFactory.next(currentAccommodation.endDate).build()
+  const nextAccommodation =
+    currentAccommodation.type === 'NO_FIXED_ABODE'
+      ? undefined
+      : accommodationFactory.next(currentAccommodation.endDate).build()
 
   return {
     name: faker.person.fullName(),

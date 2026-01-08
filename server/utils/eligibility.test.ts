@@ -13,11 +13,12 @@ describe('eligibility utilities', () => {
 
       const cards = eligibilityToEligibilityCards(eligibility)
 
-      expect(cards).toHaveLength(4)
+      expect(cards).toHaveLength(5)
       expect(cards[0]).toContain('Approved premises (CAS1)')
       expect(cards[1]).toContain('CAS2 for HDC')
       expect(cards[2]).toContain('CAS2 for court bail')
-      expect(cards[3]).toContain('CAS3 (transitional accommodation)')
+      expect(cards[3]).toContain('CAS2 for prison bail')
+      expect(cards[4]).toContain('CAS3 (transitional accommodation)')
     })
 
     it('returns a formatted eligibility card', () => {

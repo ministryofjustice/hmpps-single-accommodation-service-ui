@@ -10,6 +10,7 @@
     "build": "node esbuild/esbuild",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
     "start:dev": "node esbuild/esbuild --watch",
+    "start:dev:wiremock": "npm run start-wiremock && npx ts-node wiremock/api.ts && SAS_API_URL=http://localhost:9091 npm run start:dev",
     "start-feature": " node $NODE_DEBUG_OPTION --env-file=feature.env dist/server.js | bunyan -o short",
     "start-feature:dev": "node esbuild/esbuild --watch --env feature.env",
     "start-wiremock": "docker compose -f docker-compose-test.yml up -d",

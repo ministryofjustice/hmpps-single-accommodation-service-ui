@@ -1,0 +1,133 @@
+{
+  "D839729": [
+    {
+      "id": "edcdf99d-c26a-4301-89be-5aec2f242f64",
+      "type": "CAS2v2",
+      "status": "ACCEPTED",
+      "date": "2025-11-04T05:22:06.103Z"
+    },
+    {
+      "id": "724265ff-c971-4f61-a679-c1edfdb67eb8",
+      "type": "CAS2v2",
+      "status": "PENDING",
+      "date": "2025-08-09T00:37:16.605Z"
+    },
+    {
+      "id": "06dbeb0c-a9b7-4d24-99cc-022194e4fd5d",
+      "type": "CAS2",
+      "status": "ACCEPTED",
+      "date": "2025-10-15T09:03:33.624Z"
+    }
+  ],
+  "B522822": [],
+  "L685010": [],
+  "H004106": [
+    {
+      "id": "aa9245bc-0f87-4629-801c-d9aa55f3d84f",
+      "type": "CAS2v2",
+      "status": "PENDING",
+      "date": "2025-11-09T19:52:10.350Z"
+    },
+    {
+      "id": "01972ccd-ce8c-41ae-8904-074723fdf582",
+      "type": "CAS2",
+      "status": "PENDING",
+      "date": "2025-02-19T23:41:18.266Z"
+    },
+    {
+      "id": "e3f993ea-56a9-4d32-9ad9-fc08da70a05f",
+      "type": "CAS1",
+      "status": "PENDING",
+      "date": "2025-03-22T20:09:11.170Z"
+    }
+  ],
+  "B050529": [
+    {
+      "id": "e1a84cba-e66f-44a7-a793-4c41c75b9f5c",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-11-13T03:42:32.623Z"
+    },
+    {
+      "id": "262a3d5f-af1c-4f85-9ebf-b4d9501ae977",
+      "type": "CAS2v2",
+      "status": "REJECTED",
+      "date": "2025-09-12T09:57:57.105Z"
+    }
+  ],
+  "B218512": [],
+  "A603331": [
+    {
+      "id": "04198c1b-c372-4fe5-aede-711553a5818c",
+      "type": "CAS3",
+      "status": "PENDING",
+      "date": "2025-05-01T11:50:30.626Z"
+    },
+    {
+      "id": "f2d1f257-e46b-43a0-8a68-834190d39946",
+      "type": "CAS3",
+      "status": "PENDING",
+      "date": "2025-07-23T14:25:15.344Z"
+    },
+    {
+      "id": "ac58191d-4ce7-400e-ae93-55ba70a400a0",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-08-27T15:20:15.167Z"
+    }
+  ],
+  "B717037": [
+    {
+      "id": "983cf018-4a52-4be9-b7c9-148e291fb2a6",
+      "type": "CAS2",
+      "status": "ACCEPTED",
+      "date": "2025-02-25T05:18:30.105Z"
+    },
+    {
+      "id": "a80cbad7-f177-4530-9452-4a2aa7acdafa",
+      "type": "CAS3",
+      "status": "PENDING",
+      "date": "2025-11-02T13:34:14.589Z"
+    }
+  ],
+  "S025854": [
+    {
+      "id": "82e8da42-91ea-4149-a212-1348bf936304",
+      "type": "CAS2v2",
+      "status": "ACCEPTED",
+      "date": "2025-12-13T13:35:08.911Z"
+    },
+    {
+      "id": "9710d485-8268-4f33-84cf-57cbccbce1a1",
+      "type": "CAS3",
+      "status": "PENDING",
+      "date": "2025-11-12T11:11:47.918Z"
+    },
+    {
+      "id": "370a8334-4a38-4d25-a96c-3d329f154482",
+      "type": "CAS1",
+      "status": "REJECTED",
+      "date": "2025-07-11T20:32:19.404Z"
+    }
+  ],
+  "A993355": [
+    {
+      "id": "c373cf03-8ea3-4048-8c82-e15b8251cf37",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-09-12T09:37:43.147Z"
+    },
+    {
+      "id": "4fe7334b-105a-4010-9823-b40f1cbce1d6",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-05-18T22:57:29.345Z"
+    },
+    {
+      "id": "42ff0870-8a4f-494a-a752-e5b7b0ee8727",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-06-26T21:59:42.123Z"
+    }
+  ]
+}

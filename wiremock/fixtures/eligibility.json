@@ -1,0 +1,252 @@
+{
+  "D839729": {
+    "crn": "D839729",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "B522822": {
+    "crn": "B522822",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "UNALLOCATED_ASSESSMENT",
+      "actions": ["Action1!", "Action3!"]
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "L685010": {
+    "crn": "L685010",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "AWAITING_PLACEMENT",
+      "actions": ["Action1!", "Action4!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "H004106": {
+    "crn": "H004106",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "AWAITING_PLACEMENT",
+      "actions": ["Action4!"]
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "B050529": {
+    "crn": "B050529",
+    "caseStatus": "ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas3": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": ["Action2!", "Action4!"]
+    }
+  },
+  "B218512": {
+    "crn": "B218512",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "DEPARTED",
+      "actions": ["Action3!", "Action1!"]
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "A603331": {
+    "crn": "A603331",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "UNALLOCATED_ASSESSMENT",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "B717037": {
+    "crn": "B717037",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_STARTED",
+      "actions": ["Action3!", "Action2!"]
+    },
+    "cas2Hdc": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "S025854": {
+    "crn": "S025854",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "AWAITING_ASSESSMENT",
+      "actions": ["Action2!", "Action4!", "Action1!"]
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  },
+  "A993355": {
+    "crn": "A993355",
+    "caseStatus": "NO_ACTION_NEEDED",
+    "caseActions": [],
+    "cas1": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2Hdc": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2CourtBail": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    },
+    "cas2PrisonBail": {
+      "serviceStatus": "AWAITING_PLACEMENT",
+      "actions": ["Action3!", "Action4!", "Action1!"]
+    },
+    "cas3": {
+      "serviceStatus": "NOT_ELIGIBLE",
+      "actions": []
+    }
+  }
+}

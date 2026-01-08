@@ -1,0 +1,377 @@
+[
+  {
+    "name": "Drew Runolfsson",
+    "crn": "D839729",
+    "dateOfBirth": "1980-02-03",
+    "prisonNumber": "W7449UH",
+    "tier": "D1",
+    "riskLevel": "LOW",
+    "pncReference": "2018/2956983",
+    "assignedTo": {
+      "id": 6731939075613703,
+      "name": "Allan Rowe"
+    },
+    "currentAccommodation": {
+      "type": "CAS3",
+      "name": "barring grubby",
+      "startDate": "2025-01-24",
+      "endDate": "2026-02-18",
+      "address": {
+        "line1": "561 Lime Grove",
+        "city": "Old Veumford",
+        "postcode": "PE6 0LC"
+      }
+    },
+    "nextAccommodation": {
+      "type": "CAS2",
+      "name": "when geez",
+      "startDate": "2026-02-18",
+      "address": {
+        "line1": "9 Derick Orchard",
+        "line2": "Apt. 823",
+        "region": "East Sussex",
+        "city": "Crooks-over-Schumm",
+        "postcode": "EI7 1AP"
+      }
+    }
+  },
+  {
+    "name": "James Runte",
+    "crn": "B522822",
+    "dateOfBirth": "1979-08-03",
+    "prisonNumber": "H1478XQ",
+    "tier": "D2S",
+    "riskLevel": "LOW",
+    "pncReference": "2020/0698972",
+    "assignedTo": {
+      "id": 2998014799772247,
+      "name": "Emma Lubowitz"
+    },
+    "currentAccommodation": {
+      "type": "PRIVATE",
+      "subType": "LODGING",
+      "name": "yum considering",
+      "isSettled": true,
+      "startDate": "2025-12-05",
+      "endDate": "2026-01-20",
+      "address": {
+        "line1": "4 Wellington Road",
+        "region": "Cumbria",
+        "city": "Nether Ziemeingham",
+        "postcode": "PN40 2GR"
+      }
+    },
+    "nextAccommodation": {
+      "type": "PRISON",
+      "name": "HMP Port Jalyn",
+      "offenderReleaseType": "BAIL",
+      "startDate": "2026-01-20",
+      "address": {
+        "line1": "524 Lime Grove",
+        "line2": "Apt. 114",
+        "city": "Great Lehner",
+        "postcode": "OY6 1WR"
+      }
+    }
+  },
+  {
+    "name": "Rose Fadel",
+    "crn": "L685010",
+    "dateOfBirth": "1981-08-28",
+    "prisonNumber": "X4409PN",
+    "tier": "B3",
+    "riskLevel": "MEDIUM",
+    "pncReference": "2020/2286635",
+    "assignedTo": {
+      "id": 731108384991581,
+      "name": "Kirk Johnson"
+    },
+    "currentAccommodation": {
+      "type": "PRISON",
+      "name": "HMP Fargo",
+      "offenderReleaseType": "LICENCE",
+      "startDate": "2025-06-20",
+      "endDate": "2026-01-28",
+      "address": {
+        "line1": "5 Kertzmann-Herzog Orchard",
+        "region": "Dumfries and Galloway",
+        "city": "Quigley Heath",
+        "postcode": "HL7 9WH"
+      }
+    },
+    "nextAccommodation": {
+      "type": "PRIVATE",
+      "subType": "LODGING",
+      "name": "unhappy chiffonier",
+      "isSettled": true,
+      "startDate": "2026-01-28",
+      "address": {
+        "line1": "80 Clarence Street",
+        "region": "Durham",
+        "city": "Upton Stiedemann",
+        "postcode": "QP4 1UG"
+      }
+    }
+  },
+  {
+    "name": "Andrea Mohr",
+    "crn": "H004106",
+    "dateOfBirth": "1994-11-03",
+    "prisonNumber": "J1262UU",
+    "tier": "A3",
+    "riskLevel": "HIGH",
+    "pncReference": "2023/6963752",
+    "assignedTo": {
+      "id": 4076667232645192,
+      "name": "Randal Klein DDS"
+    },
+    "currentAccommodation": {
+      "type": "CAS2V2",
+      "name": "license waft",
+      "startDate": "2025-02-02",
+      "endDate": "2026-03-04",
+      "address": {
+        "line1": "420 Gusikowski Drove",
+        "line2": "Apt. 154",
+        "region": "Cleveland",
+        "city": "High Goldnerhill",
+        "postcode": "VD48 4YN"
+      }
+    },
+    "nextAccommodation": {
+      "type": "PRISON",
+      "name": "HMP West Susanaport",
+      "offenderReleaseType": "LICENCE",
+      "startDate": "2026-03-04",
+      "address": {
+        "line1": "2 Dana Meadow",
+        "city": "Old Mills",
+        "postcode": "CD23 0CF"
+      }
+    }
+  },
+  {
+    "name": "Dr. Bernadette Wilderman",
+    "crn": "B050529",
+    "dateOfBirth": "1998-07-28",
+    "prisonNumber": "O5333VH",
+    "tier": "A1S",
+    "riskLevel": "MEDIUM",
+    "pncReference": "2024/2479686",
+    "assignedTo": {
+      "id": 44585843341067,
+      "name": "Irvin McDermott"
+    },
+    "currentAccommodation": {
+      "type": "PRISON",
+      "name": "HMP Lake Clevelandville",
+      "offenderReleaseType": "BAIL",
+      "startDate": "2025-05-14",
+      "endDate": "2026-01-22",
+      "address": {
+        "line1": "76 Poplar Road",
+        "region": "Derbyshire",
+        "city": "Castle McKenzie",
+        "postcode": "FG9 9VH"
+      }
+    },
+    "nextAccommodation": {
+      "type": "CAS2V2",
+      "name": "nor really",
+      "startDate": "2026-01-22",
+      "address": {
+        "line1": "8 Hillside",
+        "line2": "Suite 786",
+        "region": "West Glamorgan",
+        "city": "Paucekhampton",
+        "postcode": "KO1 9VL"
+      }
+    }
+  },
+  {
+    "name": "Tanya Collier V",
+    "crn": "B218512",
+    "dateOfBirth": "1990-03-13",
+    "prisonNumber": "X4047AT",
+    "tier": "A3",
+    "riskLevel": "HIGH",
+    "pncReference": "2017/5544009",
+    "assignedTo": {
+      "id": 5027891743275123,
+      "name": "Vickie Prohaska"
+    },
+    "currentAccommodation": {
+      "type": "CAS3",
+      "name": "snuggle unwieldy",
+      "startDate": "2025-09-01",
+      "endDate": "2026-02-02",
+      "address": {
+        "line1": "17 Mante Brae",
+        "region": "Somerset",
+        "city": "Swift-le-Monahan",
+        "postcode": "TN6 9KB"
+      }
+    },
+    "nextAccommodation": {
+      "type": "NO_FIXED_ABODE",
+      "name": "finally spice",
+      "startDate": "2026-02-02",
+      "address": {
+        "line1": "9 Nico Place",
+        "line2": "Apt. 885",
+        "region": "West Sussex",
+        "city": "Upper Howellley",
+        "postcode": "PZ33 7RI"
+      }
+    }
+  },
+  {
+    "name": "Benny Larkin",
+    "crn": "A603331",
+    "dateOfBirth": "2006-02-03",
+    "prisonNumber": "D1123BK",
+    "tier": "C2",
+    "riskLevel": "HIGH",
+    "pncReference": "2021/4512744",
+    "assignedTo": {
+      "id": 1659879650427615,
+      "name": "Mr. Glen Kerluke"
+    },
+    "currentAccommodation": {
+      "type": "CAS1",
+      "name": "beneath wherever",
+      "startDate": "2025-08-01",
+      "endDate": "2026-01-18",
+      "address": {
+        "line1": "5 Mraz Terrace",
+        "line2": "Apt. 249",
+        "city": "Prohaska-le-Williamson",
+        "postcode": "JV1 2BH"
+      }
+    },
+    "nextAccommodation": {
+      "type": "PRIVATE",
+      "subType": "RENTED",
+      "name": "miserably whoever",
+      "isSettled": true,
+      "startDate": "2026-01-18",
+      "address": {
+        "line1": "8 Rempel Chase",
+        "line2": "Apt. 672",
+        "region": "Hertfordshire",
+        "city": "Doylewick",
+        "postcode": "KF0 4SC"
+      }
+    }
+  },
+  {
+    "name": "Gregory Sipes",
+    "crn": "B717037",
+    "dateOfBirth": "1972-06-07",
+    "prisonNumber": "R7342DA",
+    "tier": "A3S",
+    "riskLevel": "LOW",
+    "pncReference": "2017/7279294",
+    "assignedTo": {
+      "id": 1115993071670555,
+      "name": "Jaime Schulist"
+    },
+    "currentAccommodation": {
+      "type": "CAS3",
+      "name": "aboard plait",
+      "startDate": "2025-05-16",
+      "endDate": "2026-01-30",
+      "address": {
+        "line1": "692 Koss Hill",
+        "line2": "Apt. 994",
+        "region": "Norfolk",
+        "city": "Old Williamson",
+        "postcode": "FJ87 6QX"
+      }
+    },
+    "nextAccommodation": {
+      "type": "NO_FIXED_ABODE",
+      "name": "minor rebel",
+      "startDate": "2026-01-30",
+      "address": {
+        "line1": "44 Hoeger Row",
+        "line2": "Suite 667",
+        "city": "Lower Heaney Cross",
+        "postcode": "GA2 5AH"
+      }
+    }
+  },
+  {
+    "name": "Miss Lula Schowalter",
+    "crn": "S025854",
+    "dateOfBirth": "2004-04-05",
+    "prisonNumber": "R2985ZJ",
+    "tier": "D3",
+    "riskLevel": "HIGH",
+    "pncReference": "2020/9756383",
+    "assignedTo": {
+      "id": 2860096486814593,
+      "name": "Marcia Powlowski"
+    },
+    "currentAccommodation": {
+      "type": "CAS1",
+      "name": "yippee hm",
+      "startDate": "2025-08-29",
+      "endDate": "2026-01-23",
+      "address": {
+        "line1": "168 Clay Lane",
+        "line2": "Apt. 431",
+        "region": "Wiltshire",
+        "city": "Newton Fadelwood",
+        "postcode": "CJ6 4RQ"
+      }
+    },
+    "nextAccommodation": {
+      "type": "CAS3",
+      "name": "that lovingly",
+      "startDate": "2026-01-23",
+      "address": {
+        "line1": "2 Broad Street",
+        "line2": "Suite 915",
+        "city": "North Lowe Green",
+        "postcode": "YE55 4ZH"
+      }
+    }
+  },
+  {
+    "name": "Barry Lowe",
+    "crn": "A993355",
+    "dateOfBirth": "1993-03-26",
+    "prisonNumber": "O9318AK",
+    "tier": "D2",
+    "riskLevel": "VERY_HIGH",
+    "pncReference": "2020/0906332",
+    "assignedTo": {
+      "id": 5043503049586385,
+      "name": "Gerard Klein"
+    },
+    "currentAccommodation": {
+      "type": "CAS2",
+      "name": "privilege faithfully",
+      "startDate": "2025-04-09",
+      "endDate": "2026-01-14",
+      "address": {
+        "line1": "6 Steuber Meadow",
+        "region": "Wiltshire",
+        "city": "Heaney Cross",
+        "postcode": "HI9 2EQ"
+      }
+    },
+    "nextAccommodation": {
+      "type": "PRISON",
+      "name": "HMP Grapevine",
+      "offenderReleaseType": "BAIL",
+      "startDate": "2026-01-14",
+      "address": {
+        "line1": "439 Javon Glade",
+        "city": "Rowe-upon-Upton",
+        "postcode": "IF6 4TN"
+      }
+    }
+  }
+]

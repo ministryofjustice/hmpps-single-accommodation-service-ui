@@ -21,7 +21,13 @@ const serviceStatuses: Array<ServiceResult['serviceStatus']> = [
 
 const actions = ['Action1!', 'Action2!', 'Action3!', 'Action4!']
 
-export default Factory.define<ServiceResult>(() => ({
+class ServiceResultFactory extends Factory<ServiceResult> {
+  notEligible() {
+    return this.params({ serviceStatus: 'NOT_ELIGIBLE', actions: [], suitableApplication: undefined })
+  }
+}
+
+export default ServiceResultFactory.define(() => ({
   serviceStatus: faker.helpers.arrayElement(serviceStatuses),
   actions: faker.helpers.arrayElements(actions, { min: 0, max: 3 }),
 }))

@@ -33,6 +33,9 @@
 
 {% block bodyEnd %}
   <script type="module" src="{{ '/assets/js/index.js' | assetMap }}"></script>
+{% endblock %}
+
+{% block extraScripts %}
   {% for js in feComponents.jsIncludes %}
       <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
   {% endfor %}

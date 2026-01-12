@@ -41,7 +41,8 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
-  app.use(
+  app.get(
+    '/{*any}',
     pdsComponents.getPageComponents({
       pdsUrl: config.apis.probationApi.url,
       logger,

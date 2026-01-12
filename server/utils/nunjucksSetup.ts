@@ -15,6 +15,7 @@ const NUNJUCKS_TEMPLATE_PATHS = [
   path.join(__dirname, '../../server/views'),
   'node_modules/govuk-frontend/dist/',
   'node_modules/@ministryofjustice/frontend/',
+  'node_modules/@ministryofjustice/hmpps-probation-frontend-components/dist/assets/',
 ]
 
 const addFilters = (env: nunjucks.Environment) => {

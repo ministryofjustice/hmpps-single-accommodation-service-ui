@@ -25,6 +25,5 @@ services:
     environment:
       - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
       - SAS_API_URL=http://localhost:8080
-
 networks:
   hmpps:

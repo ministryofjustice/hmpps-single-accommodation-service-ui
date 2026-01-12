@@ -2,12 +2,15 @@
 
 {% block head %}
   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
+  {% for css in feComponents.cssIncludes %}
+      <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+  {% endfor %}
 {% endblock %}
 
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
 
 {% block header %}
-  {% include "./header.njk" %}
+  {{ feComponents.header | safe }}
   <section aria-label="Service information" class="govuk-service-navigation"
     data-module="govuk-service-navigation">
     <div class="govuk-width-container">
@@ -25,9 +28,15 @@
 {% block bodyStart %}{% endblock %}
 
 {% block footer %}
-  {% include "./footer.njk" %}
+  {{ feComponents.footer | safe }}
 {% endblock %}
 
 {% block bodyEnd %}
   <script type="module" src="{{ '/assets/js/index.js' | assetMap }}"></script>
+{% endblock %}
+
+{% block extraScripts %}
+  {% for js in feComponents.jsIncludes %}
+      <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+  {% endfor %}
 {% endblock %}

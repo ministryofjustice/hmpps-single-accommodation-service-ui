@@ -36,14 +36,6 @@ test.describe('SignIn', () => {
     await expect(casesListPage.usersName).toHaveText('A. Testuser')
   })
 
-  test('Phase banner visible in header', async ({ page }) => {
-    await login(page)
-
-    const casesListPage = await CasesListPage.verifyOnPage(page)
-
-    await expect(casesListPage.phaseBanner).toHaveText('dev')
-  })
-
   test('User can sign out', async ({ page }) => {
     await login(page)
 
@@ -51,17 +43,6 @@ test.describe('SignIn', () => {
     await casesListPage.signOut()
 
     await expect(page.getByRole('heading')).toHaveText('Sign in')
-  })
-
-  test('User can manage their details', async ({ page }) => {
-    await login(page, { name: 'A TestUser' })
-
-    await hmppsAuth.stubManageDetailsPage()
-
-    const casesListPage = await CasesListPage.verifyOnPage(page)
-    await casesListPage.clickManageUserDetails()
-
-    await expect(page.getByRole('heading')).toHaveText('Your account details')
   })
 
   test('Token verification failure takes user to sign in page', async ({ page }) => {

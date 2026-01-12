@@ -15,6 +15,7 @@ generic-service:
     SAS_API_URL: 'https://single-accommodation-service-api-dev.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
+    COMPONENT_API_URL: "https://probation-frontend-components-dev.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

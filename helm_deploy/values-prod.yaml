@@ -11,6 +11,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     SAS_API_URL: 'https://single-accommodation-service-api.hmpps.service.justice.gov.uk'
     AUDIT_ENABLED: "false"
+    COMPONENT_API_URL: "https://probation-frontend-components.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

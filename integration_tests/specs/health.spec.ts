@@ -4,6 +4,7 @@ import hmppsAuth from '../mockApis/hmppsAuth'
 import tokenVerification from '../mockApis/tokenVerification'
 
 import { resetStubs } from '../testUtils'
+import frontendComponents from '../mockApis/frontendComponents'
 
 test.describe('Health', () => {
   test.afterEach(async () => {
@@ -12,7 +13,12 @@ test.describe('Health', () => {
 
   test.describe('All healthy', () => {
     test.beforeEach(async () => {
-      await Promise.all([hmppsAuth.stubPing(), sasApi.stubPing(), tokenVerification.stubPing()])
+      await Promise.all([
+        hmppsAuth.stubPing(),
+        sasApi.stubPing(),
+        tokenVerification.stubPing(),
+        frontendComponents.stubPing(),
+      ])
     })
 
     test('Health check is accessible and status is UP', async ({ page }) => {
@@ -36,7 +42,12 @@ test.describe('Health', () => {
 
   test.describe('Some unhealthy', () => {
     test.beforeEach(async () => {
-      await Promise.all([hmppsAuth.stubPing(), sasApi.stubPing(), tokenVerification.stubPing(500)])
+      await Promise.all([
+        hmppsAuth.stubPing(),
+        sasApi.stubPing(),
+        tokenVerification.stubPing(500),
+        frontendComponents.stubPing(),
+      ])
     })
 
     test('Health check status is down', async ({ page }) => {

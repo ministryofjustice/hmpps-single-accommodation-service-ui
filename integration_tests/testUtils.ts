@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import tokenVerification from './mockApis/tokenVerification'
 import hmppsAuth, { type UserToken } from './mockApis/hmppsAuth'
+import frontendComponents from './mockApis/frontendComponents'
 import { resetStubs } from './mockApis/wiremock'
 
 export { resetStubs }
@@ -24,6 +25,7 @@ export const login = async (
     hmppsAuth.stubSignOutPage(),
     hmppsAuth.token({ name, roles, authSource }),
     tokenVerification.stubVerifyToken(active),
+    frontendComponents.stubComponents(),
   ])
   await attemptHmppsAuthLogin(page)
 }

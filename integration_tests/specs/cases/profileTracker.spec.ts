@@ -1,11 +1,13 @@
 import { test } from '@playwright/test'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
+import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import {
   caseFactory,
   referralFactory,
+  dutyToReferFactory,
   eligibilityFactory,
   serviceResultFactory,
 } from '../../../server/testutils/factories'
@@ -15,6 +17,7 @@ test.describe('Profile Tracker Page', () => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
     const cases = [caseData]
+    const dutyToRefer = dutyToReferFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
       cas1: serviceResultFactory.build(),
       cas2Hdc: serviceResultFactory.build(),
@@ -23,6 +26,7 @@ test.describe('Profile Tracker Page', () => {
     const referrals = referralFactory.buildList(3)
     await casesApi.stubGetCases(cases)
     await casesApi.stubGetCaseByCrn(crn, caseData)
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, [dutyToRefer])
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
     await casesApi.stubGetReferralHistory(crn, referrals)
     await login(page)
@@ -32,6 +36,7 @@ test.describe('Profile Tracker Page', () => {
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
+    await profileTrackerPage.shouldShowDutyToRefer(dutyToRefer)
     await profileTrackerPage.shouldShowEligibility(eligibility)
     await profileTrackerPage.shouldShowReferralHistory(referrals)
   })

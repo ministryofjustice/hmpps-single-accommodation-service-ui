@@ -21,6 +21,7 @@ import SasClient from './sasClient'
 import CasesClient from './casesClient'
 import ReferralsClient from './referralsClient'
 import EligibilityClient from './eligibilityClient'
+import DutyToReferClient from './dutyToReferClient'
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -37,9 +38,18 @@ export const dataAccess = () => {
     casesClient: new CasesClient(hmppsAuthClient),
     referralsClient: new ReferralsClient(hmppsAuthClient),
     eligibilityClient: new EligibilityClient(hmppsAuthClient),
+    dutyToReferClient: new DutyToReferClient(hmppsAuthClient),
   }
 }
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuthenticationClient, HmppsAuditClient, SasClient, CasesClient, ReferralsClient, EligibilityClient }
+export {
+  AuthenticationClient,
+  HmppsAuditClient,
+  SasClient,
+  CasesClient,
+  ReferralsClient,
+  EligibilityClient,
+  DutyToReferClient,
+}

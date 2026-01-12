@@ -11,4 +11,5 @@ export default {
   referrals: {
     history: path('/application-histories/:crn'),
   },
+  dutyToRefer: path('/dtrs/:crn'),
 }

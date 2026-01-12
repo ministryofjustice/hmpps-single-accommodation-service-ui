@@ -59,6 +59,9 @@
 
       <section class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-visually-hidden">Accommodation referrals</h2>
+            {% if dutyToReferCard %}
+                {{ dutyToReferCard | safe }}
+            {% endif %}
         {% for card in eligibilityCards %}
           {{ card | safe }}
         {% endfor %}

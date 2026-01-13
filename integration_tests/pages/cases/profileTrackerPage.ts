@@ -17,7 +17,7 @@ import {
 import { linksForStatus as linksForEligibilityStatus } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { accommodationType } from '../../../server/utils/cases'
-import { actionsForStatus, linksForStatus as linksForDutyToReferStatus } from '../../../server/utils/dutyToRefer'
+import { detailsForStatus, linksForStatus as linksForDutyToReferStatus } from '../../../server/utils/dutyToRefer'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -62,9 +62,9 @@ export default class ProfileTrackerPage extends AbstractPage {
 
     await expect(card.locator('.govuk-tag')).toContainText(formatDutyToReferStatus(dutyToRefer?.status))
 
-    for (const action of actionsForStatus(dutyToRefer)) {
-      expect(card).toContainText(action.key.text)
-      expect(card).toContainText(action.value.text)
+    for (const detail of detailsForStatus(dutyToRefer)) {
+      expect(card).toContainText(detail.key.text)
+      expect(card).toContainText(detail.value.text)
     }
 
     for (const link of linksForDutyToReferStatus(dutyToRefer?.status)) {

@@ -9,10 +9,10 @@
 	</header>
 
 	<div class="sas-card__footer">
-		{% if actions and(actions | length > 0) %}
+		{% if details and (details | length > 0) %}
 			{{ govukSummaryList({
 				classes: 'sas-card-summary-list govuk-summary-list--no-border',
-				rows: actions
+				rows: details
 			}) }}
 		{% endif %}
 

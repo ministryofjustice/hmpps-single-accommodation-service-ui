@@ -33,9 +33,8 @@ export const linksForStatus = (serviceStatus?: string) => {
 }
 
 const summaryListRow = (label: string, value: string): SummaryListRow => ({
-  key: { text: label, classes: 'sas-card-summary-list__key' },
-  value: { text: value ?? '', classes: 'sas-card-summary-list__value' },
-  classes: 'sas-card-summary-list__row',
+  key: { text: label },
+  value: { text: value ?? '' },
 })
 
 export const actionsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {

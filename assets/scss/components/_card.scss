@@ -44,20 +44,20 @@
   display: grid;
   grid-template-columns: fit-content(50%) 1fr;
   column-gap: govuk-spacing(3);
-}
 
-.sas-card-summary-list__row {
-  display: contents;
-}
+  .govuk-summary-list__row {
+    display: contents;
+  }
 
-.sas-card-summary-list__key {
-  color: govuk-colour("dark-grey");
-  font-weight: normal;
-  width: max-content;
-}
+  .govuk-summary-list__key {
+    color: govuk-colour("dark-grey");
+    font-weight: normal;
+    width: max-content;
+  }
 
-.sas-card .sas-card-summary-list__key,
-.sas-card .sas-card-summary-list__value {
-  margin: 0;
-  padding: 2px 0;
+  .govuk-summary-list__key,
+  .govuk-summary-list__value {
+    margin: 0;
+    padding: 2px 0;
+  }
 }

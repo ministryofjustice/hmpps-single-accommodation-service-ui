@@ -2,31 +2,76 @@
 import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
-import { caseFactory, eligibilityFactory, referralFactory } from '../server/testutils/factories'
+import { CaseDto } from '@sas/api'
+import { caseFactory, dutyToReferFactory, eligibilityFactory, referralFactory } from '../server/testutils/factories'
 
-const cases = caseFactory.buildList(10)
-const eligibility = cases.reduce(
-  (responses, c) => ({
-    ...responses,
-    [c.crn]: eligibilityFactory.build({ crn: c.crn }),
-  }),
-  {},
-)
-const referrals = cases.reduce(
-  (responses, c) => ({
-    ...responses,
-    [c.crn]: referralFactory.buildList(faker.number.int({ min: 0, max: 3 })),
-  }),
-  {},
-)
+import casesFixture from './fixtures/cases.json'
 
-try {
-  fs.writeFileSync(path.join(__dirname, 'fixtures', 'cases.json'), JSON.stringify(cases, null, 2))
-  console.log('Written test cases data to wiremock/fixtures/cases.json')
-  fs.writeFileSync(path.join(__dirname, 'fixtures', 'eligibility.json'), JSON.stringify(eligibility, null, 2))
-  console.log('Written test eligibility data to wiremock/fixtures/eligibility.json')
-  fs.writeFileSync(path.join(__dirname, 'fixtures', 'referrals.json'), JSON.stringify(referrals, null, 2))
-  console.log('Written test referral history data to wiremock/fixtures/referrals.json')
-} catch (error) {
-  console.error(error)
+/**
+ * Generate data for wiremock fixtures.
+ *
+ * Usage: npx ts-node wiremock/generateData.ts [--all] [--eligibility] [--referrals] [--dtr]
+ */
+
+const generateCases = process.argv.includes('--all')
+const generate = {
+  cases: generateCases,
+  eligibility: generateCases || process.argv.includes('--eligibility'),
+  referrals: generateCases || process.argv.includes('--referrals'),
+  dutyToRefer: generateCases || process.argv.includes('--dtr'),
+}
+
+if (Object.values(generate).filter(Boolean).length === 0) {
+  console.log('No data selected. Specify --all, --eligibility, --referrals or --dtr')
+  process.exit(1)
+}
+
+const saveToFixture = (fixtureName: string, data: unknown) => {
+  try {
+    fs.writeFileSync(path.join(__dirname, 'fixtures', `${fixtureName}.json`), JSON.stringify(data, null, 2))
+    console.log(`Written new fixture data to wiremock/fixtures/${fixtureName}.json`)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+let cases: CaseDto[]
+if (generate.cases) {
+  cases = caseFactory.buildList(10)
+  saveToFixture('cases', cases)
+} else {
+  cases = casesFixture as CaseDto[]
+}
+
+if (generate.eligibility) {
+  const eligibility = cases.reduce(
+    (responses, c) => ({
+      ...responses,
+      [c.crn]: eligibilityFactory.build({ crn: c.crn }),
+    }),
+    {},
+  )
+  saveToFixture('eligibility', eligibility)
+}
+
+if (generate.referrals) {
+  const referrals = cases.reduce(
+    (responses, c) => ({
+      ...responses,
+      [c.crn]: referralFactory.buildList(faker.number.int({ min: 0, max: 3 })),
+    }),
+    {},
+  )
+  saveToFixture('referrals', referrals)
+}
+
+if (generate.dutyToRefer) {
+  const dutyToRefer = cases.reduce(
+    (responses, c) => ({
+      ...responses,
+      [c.crn]: dutyToReferFactory.build({ crn: c.crn }),
+    }),
+    {},
+  )
+  saveToFixture('dutyToRefer', dutyToRefer)
 }

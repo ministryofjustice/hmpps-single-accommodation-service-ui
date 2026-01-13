@@ -58,10 +58,11 @@ describe('duty to refer utils', () => {
     }
 
     it.each([
-      [[], 'NOT_ELIGIBLE' as const],
-      [[], 'UPCOMING' as const],
-      [[{ term: 'Local authority (likely)', description: baseDutyToRefer.submittedTo }], 'NOT_STARTED' as const],
+      ['NOT_ELIGIBLE' as const, []],
+      ['UPCOMING' as const, []],
+      ['NOT_STARTED' as const, [{ term: 'Local authority (likely)', description: baseDutyToRefer.submittedTo }]],
       [
+        'SUBMITTED' as const,
         [
           { term: 'Submitted to', description: baseDutyToRefer.submittedTo },
           { term: 'Reference', description: baseDutyToRefer.reference },
@@ -70,10 +71,9 @@ describe('duty to refer utils', () => {
             description: `${formatDate(baseDutyToRefer.submitted)} (${formatDate(baseDutyToRefer.submitted, 'days ago/in')})`,
           },
         ],
-        'SUBMITTED' as const,
       ],
-      [[], 'UNKNOWN' as const],
-    ])('returns actions %s for status %s', (expectedActions, status) => {
+      ['UNKNOWN' as const, []],
+    ])('returns actions for status %s', (status, expectedActions) => {
       const dutyToRefer = dutyToReferFactory.build({
         status,
         ...baseDutyToRefer,
@@ -81,8 +81,26 @@ describe('duty to refer utils', () => {
 
       const actions = actionsForStatus(dutyToRefer)
 
-      expect(actions).toEqual(expect.arrayContaining(expectedActions.map(a => expect.objectContaining(a))))
+      const expectedRows = expectedActions.map(action =>
+        expect.objectContaining({
+          key: expect.objectContaining({ text: action.term }),
+          value: expect.objectContaining({ text: action.description }),
+        }),
+      )
+
+      expect(actions).toEqual(expect.arrayContaining(expectedRows))
       expect(actions).toHaveLength(expectedActions.length)
+    })
+
+    it('returns empty action when field is missing', () => {
+      const dutyToRefer = dutyToReferFactory.build({
+        status: 'NOT_STARTED',
+        submittedTo: undefined,
+      })
+
+      const actions = actionsForStatus(dutyToRefer)
+
+      expect(actions).toEqual([expect.objectContaining({ value: expect.objectContaining({ text: '' }) })])
     })
   })
 

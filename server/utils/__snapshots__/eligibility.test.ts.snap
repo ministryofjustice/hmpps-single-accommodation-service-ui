@@ -6,7 +6,7 @@ exports[`eligibility utilities eligibilityToEligibilityCards returns a formatted
 <article class="sas-card">
 	<header class="sas-card__head">
 		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Approved premises (CAS1)</h3>
-		<strong class="govuk-tag govuk-tag--red">Not Started</strong>
+		<strong class="govuk-tag govuk-tag--red">Not started</strong>
 	</header>
 
 	<div class="sas-card__footer">

@@ -38,20 +38,26 @@
 }
 
 .sas-card-summary-list {
-    @include govuk-font($size: 16);
-    margin-top: govuk-spacing(4);
-    margin-bottom: 0;
-    display: grid;
-    grid-template-columns: fit-content(50%) 1fr;
-    column-gap: govuk-spacing(3);
+  @include govuk-font($size: 16);
+  margin-top: govuk-spacing(4);
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: fit-content(50%) 1fr;
+  column-gap: govuk-spacing(3);
 }
 
-.sas-card-summary-list dt {
-    color: govuk-colour("dark-grey");
+.sas-card-summary-list__row {
+  display: contents;
 }
 
-.sas-card-summary-list dt, .sas-card-summary-list dd {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin: 0;
+.sas-card-summary-list__key {
+  color: govuk-colour("dark-grey");
+  font-weight: normal;
+  width: max-content;
+}
+
+.sas-card .sas-card-summary-list__key,
+.sas-card .sas-card-summary-list__value {
+  margin: 0;
+  padding: 2px 0;
 }

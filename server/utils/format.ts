@@ -1,5 +1,4 @@
-import { CaseDto as Case, AccommodationReferralDto as Referral, ServiceResult } from '@sas/api'
-import { convertToTitleCase } from './utils'
+import { CaseDto as Case, DutyToReferDto, AccommodationReferralDto as Referral, ServiceResult } from '@sas/api'
 import { calculateAge } from './person'
 
 export const formatDate = (
@@ -44,20 +43,50 @@ export const formatRiskLevel = (level?: Case['riskLevel']) => {
       MEDIUM: 'Medium',
       HIGH: 'High',
       VERY_HIGH: 'Very high',
-    }[level as NonNullable<typeof level>] || 'Unknown'
+    }[level] || 'Unknown'
   )
 }
 
-export const formatDutyToReferStatus = (status?: string): string => {
-  return convertToTitleCase(status?.split('_').join(' ') || 'Unknown')
+export const formatDutyToReferStatus = (status?: DutyToReferDto['status']): string => {
+  return (
+    {
+      NOT_STARTED: 'Not started',
+      UPCOMING: 'Upcoming',
+      SUBMITTED: 'Submitted',
+      NOT_ELIGIBLE: 'Not eligible',
+    }[status] || 'Unknown'
+  )
 }
 
-export const formatEligibilityStatus = (status?: string): string => {
-  return convertToTitleCase(status?.split('_').join(' ') || 'Unknown')
+export const formatEligibilityStatus = (status?: ServiceResult['serviceStatus']): string => {
+  return (
+    {
+      NOT_STARTED: 'Not started',
+      NOT_ELIGIBLE: 'Not eligible',
+      UPCOMING: 'Upcoming',
+      AWAITING_ASSESSMENT: 'Awaiting assessment',
+      UNALLOCATED_ASSESSMENT: 'Unallocated assessment',
+      ASSESSMENT_IN_PROGRESS: 'Assessment in progress',
+      AWAITING_PLACEMENT: 'Awaiting placement',
+      REQUEST_FOR_FURTHER_INFORMATION: 'Request for further information',
+      PENDING_PLACEMENT_REQUEST: 'Pending placement request',
+      ARRIVED: 'Arrived',
+      UPCOMING_PLACEMENT: 'Upcoming placement',
+      DEPARTED: 'Departed',
+      NOT_ARRIVED: 'Not arrived',
+      CANCELLED: 'Cancelled',
+    }[status] || 'Unknown'
+  )
 }
 
 export const formatStatus = (status?: Referral['status']): string => {
-  return convertToTitleCase(status || 'Unknown')
+  return (
+    {
+      PENDING: 'Pending',
+      REJECTED: 'Rejected',
+      ACCEPTED: 'Accepted',
+    }[status] || 'Unknown'
+  )
 }
 
 export const referralStatusTag = (status?: Referral['status']): string => {

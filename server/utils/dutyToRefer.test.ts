@@ -4,6 +4,14 @@ import { formatDate } from './format'
 
 describe('duty to refer utils', () => {
   describe('dutyToReferToCard', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
     it('returns duty to refer card', () => {
       const dutyToRefer = dutyToReferFactory.build()
 

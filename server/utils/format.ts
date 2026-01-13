@@ -89,47 +89,41 @@ export const formatStatus = (status?: Referral['status']): string => {
   )
 }
 
+const renderStatusTag = (text: string, colour: string) =>
+  `<strong class="govuk-tag govuk-tag--${colour}">${text}</strong>`
+
+const referralStatusColours: Record<string, string> = {
+  PENDING: 'yellow',
+  ACCEPTED: 'green',
+  REJECTED: 'grey',
+}
+
 export const referralStatusTag = (status?: Referral['status']): string => {
-  switch (status) {
-    case 'PENDING':
-      return `<strong class="govuk-tag govuk-tag--yellow">${formatStatus(status)}</strong>`
-    case 'REJECTED':
-      return `<strong class="govuk-tag govuk-tag--grey">${formatStatus(status)}</strong>`
-    case 'ACCEPTED':
-      return `<strong class="govuk-tag govuk-tag--green">${formatStatus(status)}</strong>`
-    default:
-      return `<strong class="govuk-tag govuk-tag--grey">${formatStatus(status)}</strong>`
-  }
+  return renderStatusTag(formatStatus(status), referralStatusColours[status] || 'grey')
+}
+
+const eligibilityStatusColours: Record<string, string> = {
+  NOT_STARTED: 'red',
+  UPCOMING: 'yellow',
+  ARRIVED: 'green',
+  AWAITING_PLACEMENT: 'green',
+  AWAITING_ASSESSMENT: 'green',
+  ASSESSMENT_IN_PROGRESS: 'green',
+  PENDING_PLACEMENT_REQUEST: 'green',
+  NOT_ELIGIBLE: 'grey',
 }
 
 export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): string => {
-  switch (status) {
-    case 'NOT_STARTED':
-      return `<strong class="govuk-tag govuk-tag--red">${formatEligibilityStatus(status)}</strong>`
-    case 'UPCOMING':
-      return `<strong class="govuk-tag govuk-tag--yellow">${formatEligibilityStatus(status)}</strong>`
-    case 'ARRIVED':
-    case 'AWAITING_PLACEMENT':
-    case 'AWAITING_ASSESSMENT':
-    case 'ASSESSMENT_IN_PROGRESS':
-    case 'PENDING_PLACEMENT_REQUEST':
-      return `<strong class="govuk-tag govuk-tag--green">${formatEligibilityStatus(status)}</strong>`
-    case 'NOT_ELIGIBLE':
-    default:
-      return `<strong class="govuk-tag govuk-tag--grey">${formatEligibilityStatus(status)}</strong>`
-  }
+  return renderStatusTag(formatEligibilityStatus(status), eligibilityStatusColours[status] || 'grey')
+}
+
+const dutyToReferStatusColours: Record<string, string> = {
+  NOT_STARTED: 'red',
+  UPCOMING: 'yellow',
+  SUBMITTED: 'green',
+  NOT_ELIGIBLE: 'grey',
 }
 
 export const dutyToReferStatusTag = (status?: string): string => {
-  switch (status) {
-    case 'NOT_STARTED':
-      return `<strong class="govuk-tag govuk-tag--red">${formatDutyToReferStatus(status)}</strong>`
-    case 'UPCOMING':
-      return `<strong class="govuk-tag govuk-tag--yellow">${formatDutyToReferStatus(status)}</strong>`
-    case 'SUBMITTED':
-      return `<strong class="govuk-tag govuk-tag--green">${formatDutyToReferStatus(status)}</strong>`
-    case 'NOT_ELIGIBLE':
-    default:
-      return `<strong class="govuk-tag govuk-tag--grey">${formatDutyToReferStatus(status)}</strong>`
-  }
+  return renderStatusTag(formatDutyToReferStatus(status), dutyToReferStatusColours[status] || 'grey')
 }

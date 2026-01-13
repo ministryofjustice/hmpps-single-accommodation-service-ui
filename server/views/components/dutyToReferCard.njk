@@ -1,3 +1,5 @@
+{%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
+
 {% set cardClass = 'sas-card--not-eligible' if status == 'NOT_ELIGIBLE' else '' %}
 
 <article class="sas-card{{ ' ' + cardClass if cardClass }}">
@@ -7,13 +9,11 @@
 	</header>
 
 	<div class="sas-card__footer">
-		{% if actions and (actions | length > 0) %}
-			<dl class="govuk-summary-list sas-card-summary-list">
-				{% for action in actions %}
-					<dt>{{ action.term }}</dt>
-					<dd>{{ action.description }}</dd>
-				{% endfor %}
-            </dl>
+		{% if actions and(actions | length > 0) %}
+			{{ govukSummaryList({
+				classes: 'sas-card-summary-list govuk-summary-list--no-border',
+				rows: actions
+			}) }}
 		{% endif %}
 
 		{% if links and(links | length > 0) %}

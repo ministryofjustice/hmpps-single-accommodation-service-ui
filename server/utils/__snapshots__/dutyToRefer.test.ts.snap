@@ -6,7 +6,7 @@ exports[`duty to refer utils dutyToReferToCard returns a NOT_ELIGIBLE duty to re
 <article class="sas-card sas-card--not-eligible">
 	<header class="sas-card__head">
 		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Duty to Refer (DTR)</h3>
-		<strong class="govuk-tag govuk-tag--grey">Not Eligible</strong>
+		<strong class="govuk-tag govuk-tag--grey">Not eligible</strong>
 	</header>
 
 	<div class="sas-card__footer">
@@ -29,17 +29,30 @@ exports[`duty to refer utils dutyToReferToCard returns a NOT_STARTED duty to ref
 <article class="sas-card">
 	<header class="sas-card__head">
 		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Duty to Refer (DTR)</h3>
-		<strong class="govuk-tag govuk-tag--red">Not Started</strong>
+		<strong class="govuk-tag govuk-tag--red">Not started</strong>
 	</header>
 
 	<div class="sas-card__footer">
 		
-			<dl class="govuk-summary-list sas-card-summary-list">
-				
-					<dt>Local authority (likely)</dt>
-					<dd>Local Authority One</dd>
-				
-            </dl>
+			
+
+  
+<dl class="govuk-summary-list sas-card-summary-list govuk-summary-list--no-border">
+
+  
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Local authority (likely)
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Local Authority One
+    </dd>
+    
+  </div>
+  
+
+</dl>
+
 		
 
 		
@@ -66,18 +79,53 @@ exports[`duty to refer utils dutyToReferToCard returns a SUBMITTED duty to refer
 
 	<div class="sas-card__footer">
 		
-			<dl class="govuk-summary-list sas-card-summary-list">
-				
-					<dt>Submitted to</dt>
-					<dd>Local Authority One</dd>
-				
-					<dt>Reference</dt>
-					<dd>Jane Doe</dd>
-				
-					<dt>Submitted</dt>
-					<dd>1 December 2025 (38 days ago)</dd>
-				
-            </dl>
+			
+
+  
+
+  
+
+  
+<dl class="govuk-summary-list sas-card-summary-list govuk-summary-list--no-border">
+
+  
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Submitted to
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Local Authority One
+    </dd>
+    
+  </div>
+  
+
+  
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Reference
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Jane Doe
+    </dd>
+    
+  </div>
+  
+
+  
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Submitted
+    </dt>
+    <dd class="govuk-summary-list__value">
+      1 December 2025 (9 days ago)
+    </dd>
+    
+  </div>
+  
+
+</dl>
+
 		
 
 		

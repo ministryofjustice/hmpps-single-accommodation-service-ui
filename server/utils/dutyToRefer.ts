@@ -1,4 +1,5 @@
 import { DutyToReferDto } from '@sas/api'
+import { SummaryListRow } from '@govuk/ui'
 import { dutyToReferStatusTag, formatDate } from './format'
 import { nunjucksInline } from './nunjucksSetup'
 
@@ -31,22 +32,27 @@ export const linksForStatus = (serviceStatus?: string) => {
   }
 }
 
-export const actionsForStatus = (dutyToRefer: DutyToReferDto): { term: string; description: string }[] => {
+const summaryListRow = (label: string, value: string): SummaryListRow => ({
+  key: { text: label },
+  value: { text: value ?? '' },
+})
+
+export const actionsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
   const { status } = dutyToRefer
   switch (status) {
     case 'NOT_ELIGIBLE':
     case 'UPCOMING':
       return []
     case 'NOT_STARTED':
-      return [{ term: 'Local authority (likely)', description: dutyToRefer?.submittedTo ?? '' }]
+      return [summaryListRow('Local authority (likely)', dutyToRefer?.submittedTo)]
     case 'SUBMITTED':
       return [
-        { term: 'Submitted to', description: dutyToRefer?.submittedTo ?? '' },
-        { term: 'Reference', description: dutyToRefer?.reference ?? '' },
-        {
-          term: 'Submitted',
-          description: `${formatDate(dutyToRefer?.submitted)} (${formatDate(dutyToRefer?.submitted, 'days ago/in')})`,
-        },
+        summaryListRow('Submitted to', dutyToRefer?.submittedTo),
+        summaryListRow('Reference', dutyToRefer?.reference),
+        summaryListRow(
+          'Submitted',
+          `${formatDate(dutyToRefer?.submitted)} (${formatDate(dutyToRefer?.submitted, 'days ago/in')})`,
+        ),
       ]
     default:
       return []

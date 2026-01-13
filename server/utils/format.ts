@@ -1,5 +1,4 @@
-import { CaseDto as Case, AccommodationReferralDto as Referral, ServiceResult } from '@sas/api'
-import { convertToTitleCase } from './utils'
+import { CaseDto as Case, DutyToReferDto, AccommodationReferralDto as Referral, ServiceResult } from '@sas/api'
 import { calculateAge } from './person'
 
 export const formatDate = (
@@ -44,63 +43,87 @@ export const formatRiskLevel = (level?: Case['riskLevel']) => {
       MEDIUM: 'Medium',
       HIGH: 'High',
       VERY_HIGH: 'Very high',
-    }[level as NonNullable<typeof level>] || 'Unknown'
+    }[level] || 'Unknown'
   )
 }
 
-export const formatDutyToReferStatus = (status?: string): string => {
-  return convertToTitleCase(status?.split('_').join(' ') || 'Unknown')
+export const formatDutyToReferStatus = (status?: DutyToReferDto['status']): string => {
+  return (
+    {
+      NOT_STARTED: 'Not started',
+      UPCOMING: 'Upcoming',
+      SUBMITTED: 'Submitted',
+      NOT_ELIGIBLE: 'Not eligible',
+    }[status] || 'Unknown'
+  )
 }
 
-export const formatEligibilityStatus = (status?: string): string => {
-  return convertToTitleCase(status?.split('_').join(' ') || 'Unknown')
+export const formatEligibilityStatus = (status?: ServiceResult['serviceStatus']): string => {
+  return (
+    {
+      NOT_STARTED: 'Not started',
+      NOT_ELIGIBLE: 'Not eligible',
+      UPCOMING: 'Upcoming',
+      AWAITING_ASSESSMENT: 'Awaiting assessment',
+      UNALLOCATED_ASSESSMENT: 'Unallocated assessment',
+      ASSESSMENT_IN_PROGRESS: 'Assessment in progress',
+      AWAITING_PLACEMENT: 'Awaiting placement',
+      REQUEST_FOR_FURTHER_INFORMATION: 'Request for further information',
+      PENDING_PLACEMENT_REQUEST: 'Pending placement request',
+      ARRIVED: 'Arrived',
+      UPCOMING_PLACEMENT: 'Upcoming placement',
+      DEPARTED: 'Departed',
+      NOT_ARRIVED: 'Not arrived',
+      CANCELLED: 'Cancelled',
+    }[status] || 'Unknown'
+  )
 }
 
 export const formatStatus = (status?: Referral['status']): string => {
-  return convertToTitleCase(status || 'Unknown')
+  return (
+    {
+      PENDING: 'Pending',
+      REJECTED: 'Rejected',
+      ACCEPTED: 'Accepted',
+    }[status] || 'Unknown'
+  )
+}
+
+const renderStatusTag = (text: string, colour: string) =>
+  `<strong class="govuk-tag govuk-tag--${colour}">${text}</strong>`
+
+const referralStatusColours: Record<string, string> = {
+  PENDING: 'yellow',
+  ACCEPTED: 'green',
+  REJECTED: 'grey',
 }
 
 export const referralStatusTag = (status?: Referral['status']): string => {
-  switch (status) {
-    case 'PENDING':
-      return `<strong class="govuk-tag govuk-tag--yellow">${formatStatus(status)}</strong>`
-    case 'REJECTED':
-      return `<strong class="govuk-tag govuk-tag--grey">${formatStatus(status)}</strong>`
-    case 'ACCEPTED':
-      return `<strong class="govuk-tag govuk-tag--green">${formatStatus(status)}</strong>`
-    default:
-      return `<strong class="govuk-tag govuk-tag--grey">${formatStatus(status)}</strong>`
-  }
+  return renderStatusTag(formatStatus(status), referralStatusColours[status] || 'grey')
+}
+
+const eligibilityStatusColours: Record<string, string> = {
+  NOT_STARTED: 'red',
+  UPCOMING: 'yellow',
+  ARRIVED: 'green',
+  AWAITING_PLACEMENT: 'green',
+  AWAITING_ASSESSMENT: 'green',
+  ASSESSMENT_IN_PROGRESS: 'green',
+  PENDING_PLACEMENT_REQUEST: 'green',
+  NOT_ELIGIBLE: 'grey',
 }
 
 export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): string => {
-  switch (status) {
-    case 'NOT_STARTED':
-      return `<strong class="govuk-tag govuk-tag--red">${formatEligibilityStatus(status)}</strong>`
-    case 'UPCOMING':
-      return `<strong class="govuk-tag govuk-tag--yellow">${formatEligibilityStatus(status)}</strong>`
-    case 'ARRIVED':
-    case 'AWAITING_PLACEMENT':
-    case 'AWAITING_ASSESSMENT':
-    case 'ASSESSMENT_IN_PROGRESS':
-    case 'PENDING_PLACEMENT_REQUEST':
-      return `<strong class="govuk-tag govuk-tag--green">${formatEligibilityStatus(status)}</strong>`
-    case 'NOT_ELIGIBLE':
-    default:
-      return `<strong class="govuk-tag govuk-tag--grey">${formatEligibilityStatus(status)}</strong>`
-  }
+  return renderStatusTag(formatEligibilityStatus(status), eligibilityStatusColours[status] || 'grey')
+}
+
+const dutyToReferStatusColours: Record<string, string> = {
+  NOT_STARTED: 'red',
+  UPCOMING: 'yellow',
+  SUBMITTED: 'green',
+  NOT_ELIGIBLE: 'grey',
 }
 
 export const dutyToReferStatusTag = (status?: string): string => {
-  switch (status) {
-    case 'NOT_STARTED':
-      return `<strong class="govuk-tag govuk-tag--red">${formatDutyToReferStatus(status)}</strong>`
-    case 'UPCOMING':
-      return `<strong class="govuk-tag govuk-tag--yellow">${formatDutyToReferStatus(status)}</strong>`
-    case 'SUBMITTED':
-      return `<strong class="govuk-tag govuk-tag--green">${formatDutyToReferStatus(status)}</strong>`
-    case 'NOT_ELIGIBLE':
-    default:
-      return `<strong class="govuk-tag govuk-tag--grey">${formatDutyToReferStatus(status)}</strong>`
-  }
+  return renderStatusTag(formatDutyToReferStatus(status), dutyToReferStatusColours[status] || 'grey')
 }

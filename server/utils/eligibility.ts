@@ -49,7 +49,7 @@ const eligibilityCard = (title: string, service?: ServiceResult): string => {
     title,
     serviceStatus: service?.serviceStatus,
     serviceStatusTag: eligibilityStatusTag(service?.serviceStatus),
-    actions: service?.actions,
+    details: service?.actions,
     links: linksForStatus(service?.serviceStatus),
   })
 }

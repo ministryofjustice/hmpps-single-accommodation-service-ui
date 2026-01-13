@@ -1,4 +1,4 @@
-import { actionsForStatus, dutyToReferToCard, linksForStatus } from './dutyToRefer'
+import { detailsForStatus, dutyToReferToCard, linksForStatus } from './dutyToRefer'
 import { dutyToReferFactory } from '../testutils/factories'
 import { formatDate } from './format'
 
@@ -58,7 +58,7 @@ describe('duty to refer utils', () => {
     })
   })
 
-  describe('actionsForStatus', () => {
+  describe('detailsForStatus', () => {
     const baseDutyToRefer = {
       submittedTo: 'Local Authority One',
       reference: 'Jane Doe',
@@ -81,34 +81,34 @@ describe('duty to refer utils', () => {
         ],
       ],
       ['UNKNOWN' as const, []],
-    ])('returns actions for status %s', (status, expectedActions) => {
+    ])('returns details for status %s', (status, expectedDetails) => {
       const dutyToRefer = dutyToReferFactory.build({
         status,
         ...baseDutyToRefer,
       })
 
-      const actions = actionsForStatus(dutyToRefer)
+      const details = detailsForStatus(dutyToRefer)
 
-      const expectedRows = expectedActions.map(action =>
+      const expectedRows = expectedDetails.map(detail =>
         expect.objectContaining({
-          key: expect.objectContaining({ text: action.term }),
-          value: expect.objectContaining({ text: action.description }),
+          key: expect.objectContaining({ text: detail.term }),
+          value: expect.objectContaining({ text: detail.description }),
         }),
       )
 
-      expect(actions).toEqual(expect.arrayContaining(expectedRows))
-      expect(actions).toHaveLength(expectedActions.length)
+      expect(details).toEqual(expect.arrayContaining(expectedRows))
+      expect(details).toHaveLength(expectedDetails.length)
     })
 
-    it('returns empty action when field is missing', () => {
+    it('returns empty detail when field is missing', () => {
       const dutyToRefer = dutyToReferFactory.build({
         status: 'NOT_STARTED',
         submittedTo: undefined,
       })
 
-      const actions = actionsForStatus(dutyToRefer)
+      const details = detailsForStatus(dutyToRefer)
 
-      expect(actions).toEqual([expect.objectContaining({ value: expect.objectContaining({ text: '' }) })])
+      expect(details).toEqual([expect.objectContaining({ value: expect.objectContaining({ text: '' }) })])
     })
   })
 

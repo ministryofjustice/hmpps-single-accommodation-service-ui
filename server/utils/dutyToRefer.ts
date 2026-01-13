@@ -8,7 +8,7 @@ export const dutyToReferToCard = (dutyToRefer: DutyToReferDto): string => {
     status: dutyToRefer.status,
     statusTag: dutyToReferStatusTag(dutyToRefer.status),
     links: linksForStatus(dutyToRefer.status),
-    actions: actionsForStatus(dutyToRefer),
+    details: detailsForStatus(dutyToRefer),
   })
 }
 
@@ -37,7 +37,7 @@ const summaryListRow = (label: string, value: string): SummaryListRow => ({
   value: { text: value ?? '' },
 })
 
-export const actionsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
+export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
   const { status } = dutyToRefer
   switch (status) {
     case 'NOT_ELIGIBLE':

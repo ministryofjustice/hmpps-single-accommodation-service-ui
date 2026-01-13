@@ -7,10 +7,10 @@
 	</header>
 
 	<div class="sas-card__footer">
-		{% if actions and (actions | length > 0) %}
+		{% if details and (details | length > 0) %}
 			<ul class="govuk-list govuk-!-margin-bottom-0 govuk-!-margin-top-4">
-				{% for action in actions %}
-					<li class="govuk-!-margin-bottom-0">{{ action }}</li>
+				{% for detail in details %}
+					<li class="govuk-!-margin-bottom-0">{{ detail }}</li>
 				{% endfor %}
 			</ul>
 		{% endif %}

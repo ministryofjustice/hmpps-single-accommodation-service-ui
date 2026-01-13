@@ -7,6 +7,7 @@ import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
+import uiPaths from '../paths/ui'
 
 export default class CasesController {
   constructor(
@@ -23,7 +24,21 @@ export default class CasesController {
       const token = res.locals?.user?.token
 
       const cases = await this.casesService.getCases(token)
-      return res.render('pages/index', { tableCaption: casesTableCaption(cases), casesRows: casesToRows(cases) })
+      return res.render('pages/index', {
+        tableCaption: casesTableCaption(cases),
+        casesRows: casesToRows(cases),
+        params: req.query,
+      })
+    }
+  }
+
+  search(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.query
+      if (!crn) {
+        return res.redirect(uiPaths.cases.index({}))
+      }
+      return res.redirect(uiPaths.cases.show({ crn: crn as string }))
     }
   }
 
@@ -35,22 +50,30 @@ export default class CasesController {
         correlationId: req.id,
       })
       const token = res.locals?.user?.token
-      const [caseData, referralHistory, eligibility, dutyToRefer] = await Promise.all([
-        this.casesService.getCase(token, crn),
-        this.referralsService.getReferralHistory(token, crn),
-        this.eligibilityService.getEligibility(token, crn),
-        this.dutyToReferService.getDutyToRefer(token, crn),
-      ])
+      try {
+        const [caseData, referralHistory, eligibility, dutyToRefer] = await Promise.all([
+          this.casesService.getCase(token, crn),
+          this.referralsService.getReferralHistory(token, crn),
+          this.eligibilityService.getEligibility(token, crn),
+          this.dutyToReferService.getDutyToRefer(token, crn),
+        ])
 
-      return res.render('pages/show', {
-        caseData,
-        assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
-        nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
-        currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
-        referralHistory: referralHistoryTable(referralHistory),
-        eligibilityCards: eligibilityToEligibilityCards(eligibility),
-        dutyToReferCard: dutyToReferToCard(dutyToRefer[0]),
-      })
+        return res.render('pages/show', {
+          caseData,
+          assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+          nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
+          currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
+          referralHistory: referralHistoryTable(referralHistory),
+          eligibilityCards: eligibilityToEligibilityCards(eligibility),
+          dutyToReferCard: dutyToReferToCard(dutyToRefer[0]),
+        })
+      } catch (error) {
+        if (error.responseStatus === 404) {
+          return res.redirect(`${uiPaths.cases.index({})}?crn=${encodeURIComponent(crn)}`)
+        }
+
+        throw error
+      }
     }
   }
 }

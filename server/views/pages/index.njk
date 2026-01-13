@@ -1,3 +1,5 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% extends "partials/layout.njk" %}
 
@@ -6,7 +8,31 @@
 
 {% block content %}
   <h1>Cases</h1>
+    <div class="govuk-template govuk-!-padding-8 govuk-!-padding-bottom-static-3 govuk-!-margin-bottom-8">
+        <form action="{{ paths.cases.search({}) }}" method="get">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {{ govukInput(
+              {
+                  label: {
+                  classes: 'govuk-label--m',
+                  text: 'Search by CRN' 
+              },
+                  hint: {
+                  text: 'For example, XD7364CD'
+              },
+                  name: 'crn',
+                  id: 'crn',
+                  value: params.crn
+              }
+          ) }}
 
+          <div class="govuk-button-group">
+              {{ govukButton({ text: "Search", attributes: { id: 'search-button' }, preventDoubleClick: true}) }}
+
+              <a class="govuk-link" href="/">Clear</a>
+          </div>
+      </form>
+    </div>
   {{
     govukTable({
       caption: tableCaption,

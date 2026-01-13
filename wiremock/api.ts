@@ -1,10 +1,12 @@
 /* eslint-disable */
 import casesApi from '../integration_tests/mockApis/cases'
 import eligibilityApi from '../integration_tests/mockApis/eligibility'
+import dutyToReferApi from '../integration_tests/mockApis/dutyToRefer'
 import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
 import referrals from './fixtures/referrals.json'
-import { AccommodationReferralDto, CaseDto, EligibilityDto } from '@sas/api'
+import dutyToRefer from './fixtures/dutyToRefer.json'
+import { AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto } from '@sas/api'
 import { resetStubs } from '../integration_tests/mockApis/wiremock'
 
 async function stubCaseList() {
@@ -35,7 +37,15 @@ async function stubReferrals() {
   }
 }
 
+async function stubDutyToRefer() {
+  for await (const caseDto of cases) {
+    await dutyToReferApi.stubGetDutyToReferByCrn(caseDto.crn, [
+      (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn],
+    ])
+  }
+}
+
 ;(async function () {
   await resetStubs()
-  await Promise.all([stubCaseList(), stubCases(), stubEligibility(), stubReferrals()])
+  await Promise.all([stubCaseList(), stubCases(), stubEligibility(), stubReferrals(), stubDutyToRefer()])
 })()

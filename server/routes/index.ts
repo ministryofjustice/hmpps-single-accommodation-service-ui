@@ -8,6 +8,7 @@ export default function routes(services: Services): Router {
   const { casesController } = controllers(services)
 
   router.get(uiPaths.cases.index.pattern, casesController.index())
+  router.get(uiPaths.cases.search.pattern, casesController.search())
   router.get(uiPaths.cases.show.pattern, casesController.show())
 
   return router

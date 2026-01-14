@@ -6,5 +6,6 @@ export default {
   cases: {
     index: path('/'),
     show: casesPath.path(':crn'),
+    search: casesPath.path('search'),
   },
 }

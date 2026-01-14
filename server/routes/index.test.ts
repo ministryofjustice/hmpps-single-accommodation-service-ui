@@ -9,6 +9,7 @@ const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'
 
 const casesController = mock<CasesController>({
   index: mockHandler,
+  search: mockHandler,
   show: mockHandler,
 })
 

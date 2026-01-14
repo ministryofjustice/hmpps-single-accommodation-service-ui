@@ -47,6 +47,9 @@ describe('casesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         tableCaption: casesTableCaption(cases),
         casesRows: casesToRows(cases),
+        params: request.query,
+        errors: {},
+        errorSummary: [],
       })
     })
   })

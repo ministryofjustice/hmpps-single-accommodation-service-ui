@@ -8,6 +8,7 @@ import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
 import uiPaths from '../paths/ui'
+import { fetchErrors } from '../utils/validation'
 
 export default class CasesController {
   constructor(
@@ -22,12 +23,15 @@ export default class CasesController {
     return async (req: Request, res: Response) => {
       await this.auditService.logPageView(Page.CASES_LIST, { who: res.locals.user.username, correlationId: req.id })
       const token = res.locals?.user?.token
+      const { errors, errorSummary } = fetchErrors(req)
 
       const cases = await this.casesService.getCases(token)
       return res.render('pages/index', {
         tableCaption: casesTableCaption(cases),
         casesRows: casesToRows(cases),
         params: req.query,
+        errors,
+        errorSummary,
       })
     }
   }
@@ -36,6 +40,8 @@ export default class CasesController {
     return async (req: Request, res: Response) => {
       const { crn } = req.query
       if (!crn) {
+        req.flash('errors', JSON.stringify({ crnSearch: { text: 'Enter a CRN' } }))
+        req.flash('errorSummary', JSON.stringify([{ text: 'Enter a CRN', href: '#crn' }]))
         return res.redirect(uiPaths.cases.index({}))
       }
       return res.redirect(uiPaths.cases.show({ crn: crn as string }))
@@ -69,6 +75,11 @@ export default class CasesController {
         })
       } catch (error) {
         if (error.responseStatus === 404) {
+          req.flash('errors', JSON.stringify({ crnSearch: { text: 'This CRN does not exist or cannot be shown' } }))
+          req.flash(
+            'errorSummary',
+            JSON.stringify([{ text: 'This CRN does not exist or cannot be shown', href: '#crn' }]),
+          )
           return res.redirect(`${uiPaths.cases.index({})}?crn=${encodeURIComponent(crn)}`)
         }
 

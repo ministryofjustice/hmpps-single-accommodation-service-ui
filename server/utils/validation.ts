@@ -28,14 +28,26 @@ export const errorMessage = (field: string, text: string): ErrorMessage => {
 }
 
 export const generateErrorSummary = (errors: Record<string, string>): Array<ErrorSummary> => {
-  return Object.entries(errors).map(([field, text]) => errorSummary(field, text))
+  if (!errors) return []
+  return Object.entries(errors)
+    .filter(([_, text]) => text)
+    .map(([field, text]) => errorSummary(field, text))
 }
 
 export const generateErrorMessages = (errors: Record<string, string>): ErrorMessages => {
-  return Object.entries(errors).reduce<ErrorMessages>((errorMessages, [field, text]) => {
-    return {
-      ...errorMessages,
-      [field]: errorMessage(field, text),
-    }
-  }, {})
+  if (!errors) return {}
+  return Object.entries(errors)
+    .filter(([_, text]) => text)
+    .reduce<ErrorMessages>((errorMessages, [field, text]) => {
+      return {
+        ...errorMessages,
+        [field]: errorMessage(field, text),
+      }
+    }, {})
+}
+
+export const addErrorToFlash = (request: Request, field: string, error: string): void => {
+  const errors = { [field]: error }
+  request.flash('errors', JSON.stringify(generateErrorMessages(errors)))
+  request.flash('errorSummary', JSON.stringify(generateErrorSummary(errors)))
 }

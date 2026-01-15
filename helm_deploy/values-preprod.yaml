@@ -6,6 +6,7 @@ generic-service:
 
   ingress:
     host: single-accommodation-service-ui-preprod.hmpps.service.justice.gov.uk
+    tlsSecretName: hmpps-single-accommodation-service-preprod-cert
 
   env:
     INGRESS_URL: "https://single-accommodation-service-ui-preprod.hmpps.service.justice.gov.uk"

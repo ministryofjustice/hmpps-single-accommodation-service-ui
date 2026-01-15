@@ -35,6 +35,17 @@ passport.use(
   ),
 )
 
+export const setUpAuthenticationErrorRoute = () => {
+  const router = Router()
+
+  router.get('/autherror', (req, res) => {
+    res.status(401)
+    return res.render('autherror')
+  })
+
+  return router
+}
+
 export default function setupAuthentication() {
   const router = Router()
   const tokenVerificationClient = new VerificationClient(config.apis.tokenVerification, logger)
@@ -42,11 +53,6 @@ export default function setupAuthentication() {
   router.use(passport.initialize())
   router.use(passport.session())
   router.use(flash())
-
-  router.get('/autherror', (req, res) => {
-    res.status(401)
-    return res.render('autherror')
-  })
 
   router.get('/sign-in', passport.authenticate('oauth2'))
 

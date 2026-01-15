@@ -16,6 +16,7 @@ generic-service:
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
     COMPONENT_API_URL: "https://probation-frontend-components-dev.hmpps.service.justice.gov.uk"
+    SAS_ALLOWED_ROLES: "ROLE_PROBATION"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

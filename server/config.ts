@@ -101,4 +101,7 @@ export default {
   },
   ingressUrl: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  allowedRoles: get('SAS_ALLOWED_ROLES', '', requiredInProduction)
+    .split(/[\s,]+/)
+    .filter(Boolean),
 }

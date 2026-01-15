@@ -61,4 +61,10 @@ test.describe('SignIn', () => {
     const casesListPage = await CasesListPage.verifyOnPage(page)
     await expect(casesListPage.usersName).toHaveText('S. Othertestuser')
   })
+
+  test('User without allowed role sees permission error page', async ({ page }) => {
+    await login(page, { name: 'A TestUser', roles: ['ROLE_NOT_ALLOWED'] })
+
+    await expect(page.getByRole('heading')).toHaveText('Authorisation Error')
+  })
 })

@@ -5,8 +5,11 @@ export const fetchErrors = (request: Request) => {
   const errorsFlash = request.flash('errors')
   const errorSummaryFlash = request.flash('errorSummary')
 
-  const errors = errorsFlash?.length ? JSON.parse(errorsFlash[0]) : {}
-  const errorSummary = errorSummaryFlash?.length ? JSON.parse(errorSummaryFlash[0]) : []
+  const errors = errorsFlash?.length
+    ? errorsFlash.map(err => JSON.parse(err)).reduce((obj, error) => ({ ...obj, ...error }), {})
+    : {}
+
+  const errorSummary = errorSummaryFlash?.length ? errorSummaryFlash.map(err => JSON.parse(err)).flat() : []
 
   return { errors, errorSummary }
 }

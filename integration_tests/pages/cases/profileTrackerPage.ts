@@ -157,4 +157,14 @@ export default class ProfileTrackerPage extends AbstractPage {
       await expect(row).toContainText('View')
     }
   }
+
+  async shouldShowProposedAddresses() {
+    const proposedAddressesSection = this.page.locator('section', {
+      has: this.page.getByRole('heading', { name: 'Private addresses' }),
+    })
+
+    await expect(proposedAddressesSection).toBeVisible()
+    await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute('href', `#`)
+    await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')
+  }
 }

@@ -6,68 +6,79 @@
 {% set mainClasses = "sas-profile-page" %}
 
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Case List",
-                href: "/"
-            }
-        ]
-    }) }}
+  {{ govukBreadcrumbs({
+      items: [
+          {
+              text: "Case List",
+              href: "/"
+          }
+      ]
+  }) }}
 {% endblock %}
 
 {% block content %}
-    <div class="sas-profile-header">
-        {# <img class="sas-profile-image" alt="Photo of {{ caseData.name }}" src=""> #}
-        <div>
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ caseData.name }}</h1>
-            <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-2">
-                {{ riskLevelTag(caseData.riskLevel) }}
-                <div class="sas-risk-tag sas-risk-tag--tier">
-                    <dt>Tier</dt>
-                    <dd>{{ caseData.tier }}</dd>
-                </div>
-            </dl>
-            <div class="govuk-body-s govuk-!-margin-bottom-0">
-                <dl class="sas-profile-header__details govuk-!-margin-bottom-1">
-                    <dt>CRN</dt>
-                    <dd>{{ caseData.crn }}</dd>
-                    <dt>Prison number</dt>
-                    <dd>{{ caseData.prisonNumber }}</dd>
-                    <dt>PNC reference</dt>
-                    <dd>{{ caseData.pncReference }}</dd>
-                </dl>
-            </div>
-            <div class="govuk-body-s govuk-!-margin-bottom-0">
-                <dl class="sas-profile-header__details govuk-!-margin-bottom-1">
-                    <dt>Date of birth</dt>
-                    <dd>{{ caseData.dateOfBirth | date }} ({{ caseData.dateOfBirth | date('age') }})</dd>
-                    <dt>Assigned to</dt>
-                    <dd>{{ assignedTo }}</dd>
-                </dl>
-            </div>
+  <div class="sas-profile-header">
+    {# <img class="sas-profile-image" alt="Photo of {{ caseData.name }}" src=""> #}
+    <div>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ caseData.name }}</h1>
+      <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-2">
+        {{ riskLevelTag(caseData.riskLevel) }}
+        <div class="sas-risk-tag sas-risk-tag--tier">
+          <dt>Tier</dt>
+          <dd>{{ caseData.tier }}</dd>
         </div>
+      </dl>
+      <div class="govuk-body-s govuk-!-margin-bottom-0">
+        <dl class="sas-profile-header__details govuk-!-margin-bottom-1">
+          <dt>CRN</dt>
+          <dd>{{ caseData.crn }}</dd>
+          <dt>Prison number</dt>
+          <dd>{{ caseData.prisonNumber }}</dd>
+          <dt>PNC reference</dt>
+          <dd>{{ caseData.pncReference }}</dd>
+        </dl>
+      </div>
+      <div class="govuk-body-s govuk-!-margin-bottom-0">
+        <dl class="sas-profile-header__details govuk-!-margin-bottom-1">
+          <dt>Date of birth</dt>
+          <dd>{{ caseData.dateOfBirth | date }} ({{ caseData.dateOfBirth | date('age') }})</dd>
+          <dt>Assigned to</dt>
+          <dd>{{ assignedTo }}</dd>
+        </dl>
+      </div>
     </div>
+  </div>
 
-    <div class="govuk-grid-row govuk-grid-row--reverse">
-      <section class="govuk-grid-column-one-third-from-desktop">
-        <h2 class="govuk-visually-hidden">Current situation</h2>
-        {{ nextAccommodationCard | safe }}
+  <div class="govuk-grid-row govuk-grid-row--reverse">
+    <section class="govuk-grid-column-one-third-from-desktop">
+      <h2 class="govuk-visually-hidden">Current situation</h2>
+      {{ nextAccommodationCard | safe }}
 
-        {{ currentAccommodationCard | safe }}
-      </section>
+      {{ currentAccommodationCard | safe }}
+    </section>
 
-      <section class="govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <section>
         <h2 class="govuk-visually-hidden">Accommodation referrals</h2>
-            {% if dutyToReferCard %}
-                {{ dutyToReferCard | safe }}
-            {% endif %}
+        {% if dutyToReferCard %}
+          {{ dutyToReferCard | safe }}
+        {% endif %}
         {% for card in eligibilityCards %}
           {{ card | safe }}
         {% endfor %}
       </section>
-    </div>
 
-    <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
-    {{ referralHistory | safe }}
+      <section>
+        <header class="sas-section__header">
+          <h2 class="govuk-heading-m">Private addresses</h2>
+          <a href="#">Add an address</a>
+        </header>
+
+        <p>No proposed addresses have been added.</p>
+      </section>
+    </div>
+  </div>
+
+  <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
+  {{ referralHistory | safe }}
 {% endblock %}

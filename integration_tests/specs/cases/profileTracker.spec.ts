@@ -38,6 +38,7 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowCaseDetails(caseData)
     await profileTrackerPage.shouldShowDutyToRefer(dutyToRefer)
     await profileTrackerPage.shouldShowEligibility(eligibility)
+    await profileTrackerPage.shouldShowProposedAddresses()
     await profileTrackerPage.shouldShowReferralHistory(referrals)
   })
 

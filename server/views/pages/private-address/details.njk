@@ -1,0 +1,95 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% extends "pages/private-address/layout.njk" %}
+
+{% set pageTitle = "Enter the address " + applicationName %}
+{% set mainClasses = "govuk-body" %}
+
+{% set backLinkHref = paths.cases.show({crn: crn}) %}
+{% set formAction = paths.privateAddress.type({crn: crn}) %}
+{% set formMethod = "get" %}
+
+{% block formContent %}
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+            Enter the address
+        </h1>
+    </legend>
+    {{ govukInput(
+            {
+                fieldset: {
+                    legend: {
+                        text: "Enter the address",
+                        classes: "govuk-fieldset__legend--l"
+                    }
+                },
+                label: {
+                    text: 'Address line 1' 
+                },
+                hint: {
+                    text: 'Include flat and floor numbers, where appropriate'
+                },
+                name: 'addressLine1',
+                id: 'addressLine1',
+                autocomplete: "address-line1",
+                value: address.line1,
+                errorMessage: errors.addressLine1
+              }
+          ) }}
+    {{ govukInput(
+              {
+                  label: {
+                      text: 'Address line 2 (optional)' 
+                  },
+                  name: 'addressLine2',
+                  id: 'addressLine2',
+                  value: address.line2
+              }
+          ) }}
+    {{ govukInput(
+              {
+                  label: {
+                      text: 'Town or city' 
+                  },
+                  classes: "govuk-input--width-20",
+                  name: 'addressTown',
+                  id: 'addressTown',
+                  value: address.city,
+                  errorMessage: errors.addressTown
+              }
+          ) }}
+    {{ govukInput(
+              {
+                  label: {
+                      text: 'County (optional)' 
+                  },
+                  classes: "govuk-input--width-20",
+                  name: 'addressCounty',
+                  id: 'addressCounty',
+                  value: address.region
+              }
+          ) }}
+    {{ govukInput(
+              {
+                  label: {
+                      text: 'Postal code or zip code (if you have one)' 
+                  },
+                  classes: "govuk-input--width-10",
+                  name: 'addressPostcode',
+                  id: 'addressPostcode',
+                  value: address.postcode,
+                  errorMessage: errors.addressPostcode
+              }
+          ) }}
+    {{ govukInput(
+              {
+                  label: {
+                      text: 'Country' 
+                  },
+                  name: 'addressCountry',
+                  id: 'addressCountry',
+                  value: address.country,
+                  errorMessage: errors.addressCountry
+              }
+          ) }}
+{% endblock %}

@@ -3,11 +3,8 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "What is the status of the address checks? " + applicationName %}
-{% set mainClasses = "govuk-body" %}
-
 {% set backLinkHref = paths.proposedAddresses.type({ crn: crn }) %}
 {% set formAction = paths.proposedAddresses.checkYourAnswers({ crn: crn }) %}
-{% set formMethod = "get" %}
 
 {% block formContent %}
 {{ govukRadios({

@@ -1,16 +1,29 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "What will be the person's housing arrangement at this address? " + applicationName %}
-{% set mainClasses = "govuk-body" %}
 {% set backLinkHref = paths.proposedAddresses.details({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.status({crn: crn}) %}
-{% set formMethod = "get" %}
+
+{% set conditionalHtml %}
+    {{ govukInput(
+        {
+            label: {
+                text: 'What is the other housing arrangement?'
+            },
+            name: 'housingArrangementTypeDescription',
+            id: 'housingArrangementTypeDescription',
+            value: proposedAddress.housingArrangementTypeDescription,
+            errorMessage: errors.housingArrangementTypeDescription
+        }
+    ) }}
+{% endset %}
 
 {% block formContent %}
   {{ govukRadios({
-      name: "arrangement",
+      name: "housingArrangementType",
       fieldset: {
           legend: {
               text: "What will be the SOMEONE's housing arrangement at this address?",
@@ -21,38 +34,41 @@
           {
               value: "friendOrFamily",
               text: "Friends or family (not tenant or owner)",
-              checked: proposedAddress.arrangement == "friendOrFamily"
+              checked: proposedAddress.housingArrangementType == "friendOrFamily"
           },
           {
               value: "socialRent",
               text: "Social rent (tenant)",
-              checked: proposedAddress.arrangement == "socialRent"
+              checked: proposedAddress.housingArrangementType == "socialRent"
           },
           {
               value: "privateRentWholeProperty",
               text: "Private rent, whole property (tenant)",
-              checked: proposedAddress.arrangement == "privateRentWholeProperty"
+              checked: proposedAddress.housingArrangementType == "privateRentWholeProperty"
           },
           {
               value: "privateRentRoomShare",
               text: "Private rent, room/share (tenant)",
-              checked: proposedAddress.arrangement == "privateRentRoomShare"
+              checked: proposedAddress.housingArrangementType == "privateRentRoomShare"
           },
           {
               value: "owned",
               text: "Owned (named on deeds/mortgage)",
-              checked: proposedAddress.arrangement == "owned"
+              checked: proposedAddress.housingArrangementType == "owned"
           },
           {
               value: "other",
               text: "Other",
-              checked: proposedAddress.arrangement == "other"
+              checked: proposedAddress.housingArrangementType == "other",
+              conditional: {
+                html: conditionalHtml
+              }
           }
       ],
-      errorMessage: errors.arrangement
+      errorMessage: errors.housingArrangementType
   }) }}
 {{ govukRadios({
-      name: "type",
+      name: "settledType",
       fieldset: {
           legend: {
               text: "Will it be settled or transient?",
@@ -63,14 +79,14 @@
           {
               value: "settled",
               text: "Settled",
-              checked: proposedAddress.type == "settled"
+              checked: proposedAddress.settledType == "settled"
           },
           {
               value: "transient",
               text: "Transient",
-              checked: proposedAddress.type == "transient"
+              checked: proposedAddress.settledType == "transient"
           }
       ],
-      errorMessage: errors.type
+      errorMessage: errors.settledType
   }) }}
 {% endblock %}

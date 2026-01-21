@@ -1,5 +1,4 @@
 import { Request, RequestHandler, Response } from 'express'
-import { AddressDetails } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from '../utils/multiPageFormManager'
@@ -45,7 +44,7 @@ export default class ProposedAddressesController {
       const { errors, errorSummary } = fetchErrors(req)
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
 
-      res.render('pages/proposed-address/details', {
+      return res.render('pages/proposed-address/details', {
         crn: req.params.crn,
         address: proposedAddressFormSessionData?.address || {},
         errors,
@@ -71,7 +70,7 @@ export default class ProposedAddressesController {
         }
       }
 
-      res.render('pages/proposed-address/type', {
+      return res.render('pages/proposed-address/type', {
         crn: req.params.crn,
         proposedAddress: proposedAddressFormSessionData,
         errors,
@@ -97,7 +96,7 @@ export default class ProposedAddressesController {
         }
       }
 
-      res.render('pages/proposed-address/status', {
+      return res.render('pages/proposed-address/status', {
         crn: req.params.crn,
         proposedAddress: proposedAddressFormSessionData,
         errors,
@@ -121,7 +120,7 @@ export default class ProposedAddressesController {
       }
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn)
-      res.render('pages/proposed-address/check-your-answers', {
+      return res.render('pages/proposed-address/check-your-answers', {
         crn: req.params.crn,
         tableRows,
       })
@@ -140,7 +139,7 @@ export default class ProposedAddressesController {
       await this.proposedAddressesService.submit(token, req.params.crn, proposedAddressFormSessionData)
 
       this.formData.remove(req.params.crn, req.session)
-      res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
+      return res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
     }
   }
 
@@ -152,7 +151,7 @@ export default class ProposedAddressesController {
       })
 
       this.formData.remove(req.params.crn, req.session)
-      res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
+      return res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
     }
   }
 }

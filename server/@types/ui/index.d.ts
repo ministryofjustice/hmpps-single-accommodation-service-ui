@@ -46,7 +46,8 @@ export type PrivateAddressFormData = {
     country: string
   }
   settledType: string
-  type: string
+  housingArrangementType: string
+  housingArrangementTypeDescription: string
   status: string
 }
 

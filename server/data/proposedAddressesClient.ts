@@ -3,6 +3,7 @@ import { ProposedAddressDto } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
+import { ProposedAddressFormData } from '@sas/ui'
 import apiPaths from '../paths/api'
 
 export default class ProposedAddressesClient extends RestClient {

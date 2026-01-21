@@ -18,7 +18,7 @@ export const summaryListRows = (proposedAddressFormSessionData: ProposedAddressF
     },
     {
       key: textContent("What will be James Taylor's housing arrangement at this address?"),
-      value: textContent(proposedAddressFormSessionData.type),
+      value: htmlContent(formatArrangement(proposedAddressFormSessionData)),
       actions: {
         items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
       },
@@ -40,7 +40,18 @@ export const summaryListRows = (proposedAddressFormSessionData: ProposedAddressF
   ]
 }
 
-export const updateAddressFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+const formatArrangement = (data: ProposedAddressFormData) => {
+  const type = data.housingArrangementType || ''
+  if (type === 'other') {
+    return [type, data.housingArrangementTypeDescription].join('<br />')
+  }
+  return type
+}
+
+export const updateAddressFromQuery = async (
+  req: Request,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
+) => {
   const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.query || {}
   if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
     const addressParams = {
@@ -61,17 +72,31 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
   const address = sessionData?.address
   const errors: Record<string, string> = {}
 
-  if (!address.line1) {
-    errors.addressLine1 = 'Enter address line 1'
+  if (!address?.line1) {
+    errors.addressLine1 = 'Enter address line 1, typically the building and street'
+  } else if (address.line1.length > 200) {
+    errors.addressLine1 = 'Address line 1 must be 200 characters or less'
   }
-  if (!address.postcode) {
+  if (address?.line2 && address?.line2.length > 200) {
+    errors.addressLine2 = 'Address line 2 must be 200 characters or less'
+  }
+  if (!address?.postcode) {
     errors.addressPostcode = 'Enter postcode'
+  } else if (address.postcode.length > 20) {
+    errors.addressPostcode = 'Postal code or zip code must be 20 characters or less'
   }
-  if (!address.city) {
+  if (!address?.city) {
     errors.addressTown = 'Enter town or city'
+  } else if (address.city.length > 100) {
+    errors.addressTown = 'Town or city must be 100 characters or less'
   }
-  if (!address.country) {
+  if (address?.region && address?.region.length > 100) {
+    errors.addressCounty = 'County must be 100 characters or less'
+  }
+  if (!address?.country) {
     errors.addressCountry = 'Enter country'
+  } else if (address.country.length > 100) {
+    errors.addressCountry = 'Country must be 100 characters or less'
   }
 
   if (Object.keys(errors).length > 0) {
@@ -84,25 +109,23 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
   return true
 }
 
-export const updateTypeFromQuery = async (
-  req: Request,
-  formDataManager: MultiPageFormManager<'proposedAddress'>,
-) => {
-  const { type, settledType } = req.query || {}
-  if (type || settledType) {
-    {
-      await formDataManager.update(req.params.crn, req.session, {
-        type: (type as string) || '',
-        settledType: (settledType as string) || '',
-      })
-    }
+export const updateTypeFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+  const { housingArrangementType, housingArrangementTypeDescription, settledType } = req.query || {}
+  if (housingArrangementType || settledType) {
+    await formDataManager.update(req.params.crn, req.session, {
+      housingArrangementType: (housingArrangementType as string) || '',
+      housingArrangementTypeDescription: (housingArrangementTypeDescription as string) || '',
+      settledType: (settledType as string) || '',
+    })
   }
 }
 
 export const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
-  if (!sessionData?.type) {
-    errors.type = 'Select a type'
+  if (!sessionData?.housingArrangementType) {
+    errors.housingArrangementType = 'Select a arrangement type'
+  } else if (sessionData.housingArrangementType === 'other' && !sessionData.housingArrangementTypeDescription) {
+    errors.housingArrangementTypeDescription = 'Enter the other arrangement type'
   }
   if (!sessionData?.settledType) {
     errors.settledType = 'Select a settled type'
@@ -121,11 +144,9 @@ export const validateTypeFromSession = (req: Request, sessionData: ProposedAddre
 export const updateStatusFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
   const { status } = req.query || {}
   if (status) {
-    {
-      await formDataManager.update(req.params.crn, req.session, {
-        status: (status as string) || '',
-      })
-    }
+    await formDataManager.update(req.params.crn, req.session, {
+      status: (status as string) || '',
+    })
   }
 }
 

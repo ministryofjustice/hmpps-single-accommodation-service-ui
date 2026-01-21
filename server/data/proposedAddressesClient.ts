@@ -2,6 +2,7 @@ import { AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-
 import { ProposedAddressDto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
+import { ProposedAddressFormData } from '@sas/ui'
 import apiPaths from '../paths/api'
 
 export default class ProposedAddressesClient extends RestClient {

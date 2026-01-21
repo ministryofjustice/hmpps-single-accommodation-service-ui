@@ -3,11 +3,8 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Enter the address " + applicationName %}
-{% set mainClasses = "govuk-body" %}
-
 {% set backLinkHref = paths.cases.show({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.type({crn: crn}) %}
-{% set formMethod = "get" %}
 
 {% block formContent %}
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -31,7 +28,6 @@
                 },
                 name: 'addressLine1',
                 id: 'addressLine1',
-                autocomplete: "address-line1",
                 value: address.line1,
                 errorMessage: errors.addressLine1
               }
@@ -43,7 +39,8 @@
                   },
                   name: 'addressLine2',
                   id: 'addressLine2',
-                  value: address.line2
+                  value: address.line2,
+                  errorMessage: errors.addressLine2
               }
           ) }}
     {{ govukInput(
@@ -66,7 +63,8 @@
                   classes: "govuk-input--width-20",
                   name: 'addressCounty',
                   id: 'addressCounty',
-                  value: address.region
+                  value: address.region,
+                  errorMessage: errors.addressCounty
               }
           ) }}
     {{ govukInput(

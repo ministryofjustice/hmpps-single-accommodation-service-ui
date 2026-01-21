@@ -18,7 +18,8 @@ export type ProposedAddressFormData = {
     country: string
   }
   settledType: string
-  type: string
+  housingArrangementType: string
+  housingArrangementTypeDescription: string
   status: string
 }
 

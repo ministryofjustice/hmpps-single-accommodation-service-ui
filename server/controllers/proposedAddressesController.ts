@@ -6,48 +6,48 @@ import MultiPageFormManager from '../utils/multiPageFormManager'
 import {
   summaryListRows,
   updateAddressFromQuery,
-  updateArrangementFromQuery,
+  updateTypeFromQuery,
   updateStatusFromQuery,
   validateAddressFromSession,
-  validateArrangementFromSession,
+  validateTypeFromSession,
   validateStatusFromSession,
-} from '../utils/privateAddress'
-import { addErrorToFlash, fetchErrors } from '../utils/validation'
-import PrivateAddressService from '../services/privateAddressService'
+} from '../utils/proposedAddresses'
+import { fetchErrors } from '../utils/validation'
+import ProposedAddressesService from '../services/proposedAddressesService'
 
-export default class PrivateAddressController {
-  formData: MultiPageFormManager<'privateAddress'>
+export default class ProposedAddressesController {
+  formData: MultiPageFormManager<'proposedAddress'>
 
   constructor(
     private readonly auditService: AuditService,
-    private readonly privateAddressService: PrivateAddressService,
+    private readonly proposedAddressesService: ProposedAddressesService,
   ) {
-    this.formData = new MultiPageFormManager('privateAddress')
+    this.formData = new MultiPageFormManager('proposedAddress')
   }
 
   start(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PRIVATE_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
 
-      return res.redirect(uiPaths.privateAddress.details({ crn: req.params.crn }))
+      return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
     }
   }
 
   details(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PRIVATE_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
-      const privateAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
 
-      res.render('pages/private-address/details', {
+      res.render('pages/proposed-address/details', {
         crn: req.params.crn,
-        address: privateAddressFormSessionData?.address || {},
+        address: proposedAddressFormSessionData?.address || {},
         errors,
         errorSummary,
       })
@@ -56,7 +56,7 @@ export default class PrivateAddressController {
 
   type(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PRIVATE_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -64,16 +64,16 @@ export default class PrivateAddressController {
 
       await updateAddressFromQuery(req, this.formData)
 
-      const privateAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!errors || Object.keys(errors).length === 0) {
-        if (!validateAddressFromSession(req, privateAddressFormSessionData)) {
-          return res.redirect(uiPaths.privateAddress.details({ crn: req.params.crn }))
+        if (!validateAddressFromSession(req, proposedAddressFormSessionData)) {
+          return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
         }
       }
 
-      res.render('pages/private-address/type', {
+      res.render('pages/proposed-address/type', {
         crn: req.params.crn,
-        privateAddress: privateAddressFormSessionData,
+        proposedAddress: proposedAddressFormSessionData,
         errors,
         errorSummary,
       })
@@ -82,24 +82,24 @@ export default class PrivateAddressController {
 
   status(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PRIVATE_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
 
-      await updateArrangementFromQuery(req, this.formData)
+      await updateTypeFromQuery(req, this.formData)
 
-      const privateAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!errors || Object.keys(errors).length === 0) {
-        if (!validateArrangementFromSession(req, privateAddressFormSessionData)) {
-          return res.redirect(uiPaths.privateAddress.type({ crn: req.params.crn }))
+        if (!validateTypeFromSession(req, proposedAddressFormSessionData)) {
+          return res.redirect(uiPaths.proposedAddresses.type({ crn: req.params.crn }))
         }
       }
 
-      res.render('pages/private-address/status', {
+      res.render('pages/proposed-address/status', {
         crn: req.params.crn,
-        privateAddress: privateAddressFormSessionData,
+        proposedAddress: proposedAddressFormSessionData,
         errors,
         errorSummary,
       })
@@ -108,20 +108,20 @@ export default class PrivateAddressController {
 
   checkYourAnswers(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PRIVATE_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
 
       await updateStatusFromQuery(req, this.formData)
 
-      const privateAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-      if (!validateStatusFromSession(req, privateAddressFormSessionData)) {
-        return res.redirect(uiPaths.privateAddress.status({ crn: req.params.crn }))
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      if (!validateStatusFromSession(req, proposedAddressFormSessionData)) {
+        return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
       }
 
-      const tableRows = summaryListRows(privateAddressFormSessionData, req.params.crn)
-      res.render('pages/private-address/check-your-answers', {
+      const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn)
+      res.render('pages/proposed-address/check-your-answers', {
         crn: req.params.crn,
         tableRows,
       })
@@ -130,14 +130,14 @@ export default class PrivateAddressController {
 
   submit(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PRIVATE_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
       const token = res.locals?.user?.token
-      const privateAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
 
-      await this.privateAddressService.submit(token, req.params.crn, privateAddressFormSessionData)
+      await this.proposedAddressesService.submit(token, req.params.crn, proposedAddressFormSessionData)
 
       this.formData.remove(req.params.crn, req.session)
       res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
@@ -146,7 +146,7 @@ export default class PrivateAddressController {
 
   cancel(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PRIVATE_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })

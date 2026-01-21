@@ -32,7 +32,7 @@ export default class AbstractPage {
   async shouldShowSummaryItem(key: string, value: string | string[], container?: Locator) {
     const summaryItem = (container || this.page)
       .locator('.govuk-summary-list__row', {
-        has: this.page.locator('.govuk-summary-list__key', { hasText: key }),
+        has: this.page.locator('.govuk-summary-list__key').getByText(key, { exact: true }),
       })
       .locator('.govuk-summary-list__value')
 
@@ -42,11 +42,11 @@ export default class AbstractPage {
     }
   }
 
-  async shouldShowCard(cardData: StatusCard, container?: Locator) {
-    const card = (container || this.page).locator('.sas-card')
+  async shouldShowCard(title: string, cardData: StatusCard) {
+    const card = this.page.locator('.sas-card', { hasText: title })
 
     if (cardData.inactive) {
-      await expect(card).toHaveClass('sas-card--inactive')
+      await expect(card).toHaveClass(/sas-card--inactive/)
     }
 
     await expect(card.getByRole('heading', { name: cardData.heading })).toBeVisible()
@@ -56,7 +56,7 @@ export default class AbstractPage {
       await expect(tag).toBeVisible()
 
       if (cardData.status.colour) {
-        await expect(tag).toHaveClass(`govuk-tag--${cardData.status.colour}`)
+        await expect(tag).toHaveClass(`govuk-tag govuk-tag--${cardData.status.colour}`)
       }
     }
 

@@ -1,5 +1,6 @@
 import { AccommodationDetail } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
+import { AddressDetails } from '@sas/api'
 
 export interface ErrorSummary {
   text: string
@@ -38,4 +39,17 @@ export interface StatusCard {
     text: string
     href: string
   }[]
+}
+
+export type PrivateAddressFormData = {
+  address: AddressDetails & {
+    country: string
+  }
+  arrangement: string
+  type: string
+  status: string
+}
+
+export type MultiPageFormData = {
+  privateAddress?: Record<string, PrivateAddressFormData>
 }

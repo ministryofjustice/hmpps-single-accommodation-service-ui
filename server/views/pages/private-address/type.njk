@@ -1,0 +1,76 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% extends "pages/private-address/layout.njk" %}
+
+{% set pageTitle = "What will be the person's housing arrangement at this address? " + applicationName %}
+{% set mainClasses = "govuk-body" %}
+{% set backLinkHref = paths.privateAddress.details({crn: crn}) %}
+{% set formAction = paths.privateAddress.status({crn: crn}) %}
+{% set formMethod = "get" %}
+
+{% block formContent %}
+  {{ govukRadios({
+      name: "arrangement",
+      fieldset: {
+          legend: {
+              text: "What will be the SOMEONE's housing arrangement at this address?",
+              classes: "govuk-fieldset__legend--l"
+          }
+      },
+      items: [
+          {
+              value: "friendOrFamily",
+              text: "Friends or family (not tenant or owner)",
+              checked: privateAddress.arrangement == "friendOrFamily"
+          },
+          {
+              value: "socialRent",
+              text: "Social rent (tenant)",
+              checked: privateAddress.arrangement == "socialRent"
+          },
+          {
+              value: "privateRentWholeProperty",
+              text: "Private rent, whole property (tenant)",
+              checked: privateAddress.arrangement == "privateRentWholeProperty"
+          },
+          {
+              value: "privateRentRoomShare",
+              text: "Private rent, room/share (tenant)",
+              checked: privateAddress.arrangement == "privateRentRoomShare"
+          },
+          {
+              value: "owned",
+              text: "Owned (named on deeds/mortgage)",
+              checked: privateAddress.arrangement == "owned"
+          },
+          {
+              value: "other",
+              text: "Other",
+              checked: privateAddress.arrangement == "other"
+          }
+      ],
+      errorMessage: errors.arrangement
+  }) }}
+{{ govukRadios({
+      name: "type",
+      fieldset: {
+          legend: {
+              text: "Will it be settled or transient?",
+              classes: "govuk-fieldset__legend--m"
+          }
+      },
+      items: [
+          {
+              value: "settled",
+              text: "Settled",
+              checked: privateAddress.type == "settled"
+          },
+          {
+              value: "transient",
+              text: "Transient",
+              checked: privateAddress.type == "transient"
+          }
+      ],
+      errorMessage: errors.type
+  }) }}
+{% endblock %}

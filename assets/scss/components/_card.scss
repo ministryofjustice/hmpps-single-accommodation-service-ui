@@ -4,7 +4,7 @@
   margin-bottom: govuk-spacing(3);
 }
 
-.sas-card--not-eligible h3 {
+.sas-card--inactive h3 {
   color: govuk-colour("dark-grey");
   @include govuk-font($size: 19, $weight: 'regular');
 }

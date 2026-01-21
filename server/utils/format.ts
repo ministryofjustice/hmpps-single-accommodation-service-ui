@@ -101,7 +101,7 @@ export const referralStatusTag = (status?: Referral['status']): string => {
   return renderStatusTag(formatStatus(status), referralStatusColours[status] || 'grey')
 }
 
-const eligibilityStatusColours: Record<string, string> = {
+export const eligibilityStatusColours: Record<string, string> = {
   NOT_ELIGIBLE: 'grey',
   UPCOMING: 'yellow',
   NOT_STARTED: 'red',
@@ -111,11 +111,7 @@ const eligibilityStatusColours: Record<string, string> = {
   CONFIRMED: 'green',
 }
 
-export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): string => {
-  return renderStatusTag(formatEligibilityStatus(status), eligibilityStatusColours[status] || 'grey')
-}
-
-const dutyToReferStatusColours: Record<string, string> = {
+export const dutyToReferStatusColours: Record<string, string> = {
   NOT_STARTED: 'red',
   UPCOMING: 'yellow',
   SUBMITTED: 'green',

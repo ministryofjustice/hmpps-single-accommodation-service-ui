@@ -1,4 +1,5 @@
 import { AccommodationDetail } from '@sas/api'
+import { SummaryListRow } from '@govuk/ui'
 
 export interface ErrorSummary {
   text: string
@@ -19,4 +20,21 @@ export type ProposedAddressDto = {
   settledType: AccommodationDetail['settledType']
   status: AccommodationDetail['status']
   address: AccommodationDetail['address']
+}
+
+export interface StatusTag {
+  text: string
+  colour?: string
+}
+
+export interface StatusCard {
+  heading: string
+  classes?: string
+  inactive?: boolean
+  details?: SummaryListRow[]
+  status?: StatusTag
+  links?: {
+    text: string
+    href: string
+  }[]
 }

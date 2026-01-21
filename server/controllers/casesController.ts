@@ -2,13 +2,14 @@ import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, referralHistoryTable } from '../utils/cases'
-import { dutyToReferToCard } from '../utils/dutyToRefer'
+import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
 import uiPaths from '../paths/ui'
 import { fetchErrors, addErrorToFlash } from '../utils/validation'
+import { statusCard } from '../utils/components'
 
 export default class CasesController {
   constructor(
@@ -69,8 +70,8 @@ export default class CasesController {
           nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
           currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
           referralHistory: referralHistoryTable(referralHistory),
-          eligibilityCards: eligibilityToEligibilityCards(eligibility),
-          dutyToReferCard: dutyToReferToCard(dutyToRefer[0]),
+          eligibilityCards: eligibilityToEligibilityCards(eligibility).map(statusCard),
+          dutyToReferCard: statusCard(dutyToReferStatusCard(dutyToRefer[0])),
         })
       } catch (error) {
         if (error.responseStatus === 404) {

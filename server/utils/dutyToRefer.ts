@@ -1,16 +1,18 @@
 import { DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
-import { dutyToReferStatusTag, formatDate } from './format'
-import { nunjucksInline } from './nunjucksSetup'
+import { StatusCard } from '@sas/ui'
+import { dutyToReferStatusColours, formatDate, formatDutyToReferStatus } from './format'
 
-export const dutyToReferToCard = (dutyToRefer: DutyToReferDto): string => {
-  return nunjucksInline().render('components/dutyToReferCard.njk', {
-    status: dutyToRefer.status,
-    statusTag: dutyToReferStatusTag(dutyToRefer.status),
-    links: linksForStatus(dutyToRefer.status),
-    details: detailsForStatus(dutyToRefer),
-  })
-}
+export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => ({
+  heading: 'Duty to Refer (DTR)',
+  inactive: dutyToRefer.status === 'NOT_ELIGIBLE',
+  status: {
+    text: formatDutyToReferStatus(dutyToRefer.status),
+    colour: dutyToReferStatusColours[dutyToRefer.status] || 'grey',
+  },
+  details: detailsForStatus(dutyToRefer),
+  links: linksForStatus(dutyToRefer.status),
+})
 
 export const linksForStatus = (serviceStatus?: string) => {
   switch (serviceStatus) {

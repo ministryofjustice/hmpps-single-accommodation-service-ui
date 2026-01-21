@@ -63,13 +63,13 @@ export default class ProfileTrackerPage extends AbstractPage {
 
     await expect(card.locator('.govuk-tag')).toContainText(formatDutyToReferStatus(dutyToRefer?.status))
 
-    for (const detail of detailsForStatus(dutyToRefer)) {
-      expect(card).toContainText(detail.key.text)
-      expect(card).toContainText(detail.value.text)
+    for await (const detail of detailsForStatus(dutyToRefer)) {
+      await expect(card).toContainText(detail.key.text)
+      await expect(card).toContainText(detail.value.text)
     }
 
-    for (const link of linksForDutyToReferStatus(dutyToRefer?.status)) {
-      expect(card.getByRole('link', { name: link.text })).toBeVisible()
+    for await (const link of linksForDutyToReferStatus(dutyToRefer?.status)) {
+      await expect(card.getByRole('link', { name: link.text })).toBeVisible()
     }
   }
 

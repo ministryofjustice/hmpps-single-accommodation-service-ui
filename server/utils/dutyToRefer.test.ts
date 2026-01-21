@@ -1,9 +1,9 @@
-import { detailsForStatus, dutyToReferToCard, linksForStatus } from './dutyToRefer'
+import { detailsForStatus, dutyToReferStatusCard, linksForStatus } from './dutyToRefer'
 import { dutyToReferFactory } from '../testutils/factories'
 import { formatDate } from './format'
 
 describe('duty to refer utils', () => {
-  describe('dutyToReferToCard', () => {
+  describe('dutyToReferStatusCard', () => {
     beforeEach(() => {
       jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
     })
@@ -12,31 +12,31 @@ describe('duty to refer utils', () => {
       jest.useRealTimers()
     })
 
-    it('returns duty to refer card', () => {
+    it('returns a duty to refer status card object', () => {
       const dutyToRefer = dutyToReferFactory.build()
 
-      const card = dutyToReferToCard(dutyToRefer)
+      const card = dutyToReferStatusCard(dutyToRefer)
 
-      expect(card).toContain('Duty to Refer (DTR)')
+      expect(card.heading).toEqual('Duty to Refer (DTR)')
     })
 
-    it('returns a NOT_STARTED duty to refer card', () => {
+    it('returns a NOT_STARTED duty to refer status card object', () => {
       const dutyToRefer = dutyToReferFactory.build({ status: 'NOT_STARTED', submittedTo: 'Local Authority One' })
 
-      const card = dutyToReferToCard(dutyToRefer)
+      const card = dutyToReferStatusCard(dutyToRefer)
 
       expect(card).toMatchSnapshot()
     })
 
-    it('returns a NOT_ELIGIBLE duty to refer card', () => {
+    it('returns a NOT_ELIGIBLE duty to refer status card object', () => {
       const dutyToRefer = dutyToReferFactory.build({ status: 'NOT_ELIGIBLE' })
 
-      const card = dutyToReferToCard(dutyToRefer)
+      const card = dutyToReferStatusCard(dutyToRefer)
 
       expect(card).toMatchSnapshot()
     })
 
-    it('returns a SUBMITTED duty to refer card', () => {
+    it('returns a SUBMITTED duty to refer status card object', () => {
       const dutyToRefer = dutyToReferFactory.build({
         status: 'SUBMITTED',
         submittedTo: 'Local Authority One',
@@ -44,7 +44,7 @@ describe('duty to refer utils', () => {
         submitted: '2025-12-01',
       })
 
-      const card = dutyToReferToCard(dutyToRefer)
+      const card = dutyToReferStatusCard(dutyToRefer)
 
       expect(card).toMatchSnapshot()
     })
@@ -52,7 +52,7 @@ describe('duty to refer utils', () => {
     it('returns an empty duty to refer card for unknown status', () => {
       const dutyToRefer = dutyToReferFactory.build({ status: 'UNKNOWN' })
 
-      const card = dutyToReferToCard(dutyToRefer)
+      const card = dutyToReferStatusCard(dutyToRefer)
 
       expect(card).toMatchSnapshot()
     })

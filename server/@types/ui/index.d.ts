@@ -45,11 +45,11 @@ export type PrivateAddressFormData = {
   address: AddressDetails & {
     country: string
   }
-  arrangement: string
+  settledType: string
   type: string
   status: string
 }
 
 export type MultiPageFormData = {
-  privateAddress?: Record<string, PrivateAddressFormData>
+  proposedAddress?: Record<string, ProposedAddressFormData>
 }

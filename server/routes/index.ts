@@ -5,19 +5,19 @@ import uiPaths from '../paths/ui'
 
 export default function routes(services: Services): Router {
   const router = Router()
-  const { casesController, privateAddressController } = controllers(services)
+  const { casesController, proposedAddressesController } = controllers(services)
 
   router.get(uiPaths.cases.index.pattern, casesController.index())
   router.get(uiPaths.cases.search.pattern, casesController.search())
   router.get(uiPaths.cases.show.pattern, casesController.show())
 
-  router.get(uiPaths.privateAddress.start.pattern, privateAddressController.start())
-  router.get(uiPaths.privateAddress.details.pattern, privateAddressController.details())
-  router.get(uiPaths.privateAddress.type.pattern, privateAddressController.type())
-  router.get(uiPaths.privateAddress.status.pattern, privateAddressController.status())
-  router.get(uiPaths.privateAddress.checkYourAnswers.pattern, privateAddressController.checkYourAnswers())
-  router.post(uiPaths.privateAddress.submit.pattern, privateAddressController.submit())
-  router.get(uiPaths.privateAddress.cancel.pattern, privateAddressController.cancel())
+  router.get(uiPaths.proposedAddresses.start.pattern, proposedAddressesController.start())
+  router.get(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.details())
+  router.get(uiPaths.proposedAddresses.type.pattern, proposedAddressesController.type())
+  router.get(uiPaths.proposedAddresses.status.pattern, proposedAddressesController.status())
+  router.get(uiPaths.proposedAddresses.checkYourAnswers.pattern, proposedAddressesController.checkYourAnswers())
+  router.post(uiPaths.proposedAddresses.submit.pattern, proposedAddressesController.submit())
+  router.get(uiPaths.proposedAddresses.cancel.pattern, proposedAddressesController.cancel())
 
   return router
 }

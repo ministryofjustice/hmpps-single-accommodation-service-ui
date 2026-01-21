@@ -1,13 +1,13 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
-{% extends "pages/private-address/layout.njk" %}
+{% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Check your answers before adding the address " + applicationName %}
 {% set mainClasses = "govuk-body" %}
 
-{% set backLinkHref = paths.privateAddress.status({ crn: crn }) %}
-{% set formAction = paths.privateAddress.submit({ crn: crn }) %}
+{% set backLinkHref = paths.proposedAddresses.status({ crn: crn }) %}
+{% set formAction = paths.proposedAddresses.submit({ crn: crn }) %}
 {% set buttonText = "Save" %}
 
 {% block formContent %}

@@ -1,46 +1,46 @@
 import { Request } from 'express'
-import { PrivateAddressFormData } from '@sas/ui'
+import { ProposedAddressFormData } from '@sas/ui'
 import { textContent, htmlContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { addErrorToFlash } from './validation'
 
-export const summaryListRows = (privateAddressFormSessionData: PrivateAddressFormData, crn: string) => {
-  const addressLines = [...Object.values(privateAddressFormSessionData.address || {})].filter(Boolean)
+export const summaryListRows = (proposedAddressFormSessionData: ProposedAddressFormData, crn: string) => {
+  const addressLines = [...Object.values(proposedAddressFormSessionData.address || {})].filter(Boolean)
 
   return [
     {
       key: textContent('Address'),
       value: htmlContent(addressLines.join('<br />')),
       actions: {
-        items: [{ text: 'Change', href: uiPaths.privateAddress.details({ crn }) }],
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.details({ crn }) }],
       },
     },
     {
       key: textContent("What will be James Taylor's housing arrangement at this address?"),
-      value: textContent(privateAddressFormSessionData.arrangement),
+      value: textContent(proposedAddressFormSessionData.type),
       actions: {
-        items: [{ text: 'Change', href: uiPaths.privateAddress.type({ crn }) }],
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
       },
     },
     {
       key: textContent('Will it be settled or transient?'),
-      value: textContent(privateAddressFormSessionData.type),
+      value: textContent(proposedAddressFormSessionData.settledType),
       actions: {
-        items: [{ text: 'Change', href: uiPaths.privateAddress.type({ crn }) }],
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
       },
     },
     {
       key: textContent('What is the status of the address checks?'),
-      value: textContent(privateAddressFormSessionData.status),
+      value: textContent(proposedAddressFormSessionData.status),
       actions: {
-        items: [{ text: 'Change', href: uiPaths.privateAddress.status({ crn }) }],
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) }],
       },
     },
   ]
 }
 
-export const updateAddressFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'privateAddress'>) => {
+export const updateAddressFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
   const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.query || {}
   if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
     const addressParams = {
@@ -57,7 +57,7 @@ export const updateAddressFromQuery = async (req: Request, formDataManager: Mult
   }
 }
 
-export const validateAddressFromSession = (req: Request, sessionData: PrivateAddressFormData) => {
+export const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const address = sessionData?.address
   const errors: Record<string, string> = {}
 
@@ -84,28 +84,28 @@ export const validateAddressFromSession = (req: Request, sessionData: PrivateAdd
   return true
 }
 
-export const updateArrangementFromQuery = async (
+export const updateTypeFromQuery = async (
   req: Request,
-  formDataManager: MultiPageFormManager<'privateAddress'>,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
 ) => {
-  const { arrangement, type } = req.query || {}
-  if (arrangement || type) {
+  const { type, settledType } = req.query || {}
+  if (type || settledType) {
     {
       await formDataManager.update(req.params.crn, req.session, {
-        arrangement: (arrangement as string) || '',
         type: (type as string) || '',
+        settledType: (settledType as string) || '',
       })
     }
   }
 }
 
-export const validateArrangementFromSession = (req: Request, sessionData: PrivateAddressFormData) => {
+export const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
-  if (!sessionData?.arrangement) {
-    errors.arrangement = 'Select an arrangement'
-  }
   if (!sessionData?.type) {
     errors.type = 'Select a type'
+  }
+  if (!sessionData?.settledType) {
+    errors.settledType = 'Select a settled type'
   }
 
   if (Object.keys(errors).length > 0) {
@@ -118,7 +118,7 @@ export const validateArrangementFromSession = (req: Request, sessionData: Privat
   return true
 }
 
-export const updateStatusFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'privateAddress'>) => {
+export const updateStatusFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
   const { status } = req.query || {}
   if (status) {
     {
@@ -129,7 +129,7 @@ export const updateStatusFromQuery = async (req: Request, formDataManager: Multi
   }
 }
 
-export const validateStatusFromSession = (req: Request, sessionData: PrivateAddressFormData) => {
+export const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
   if (!sessionData?.status) {
     errors.status = 'Select a status'

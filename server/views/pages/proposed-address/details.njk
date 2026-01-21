@@ -1,12 +1,12 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% extends "pages/private-address/layout.njk" %}
+{% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Enter the address " + applicationName %}
 {% set mainClasses = "govuk-body" %}
 
 {% set backLinkHref = paths.cases.show({crn: crn}) %}
-{% set formAction = paths.privateAddress.type({crn: crn}) %}
+{% set formAction = paths.proposedAddresses.type({crn: crn}) %}
 {% set formMethod = "get" %}
 
 {% block formContent %}

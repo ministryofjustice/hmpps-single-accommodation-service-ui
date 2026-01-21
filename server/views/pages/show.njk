@@ -67,7 +67,7 @@
         {% endfor %}
       </section>
     </div>
-    <a href="{{ paths.privateAddress.start({ crn: caseData.crn }) }}" class="govuk-link govuk-!-margin-top-6 govuk-!-display-block">Add an address</a>
+    <a href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}" class="govuk-link govuk-!-margin-top-6 govuk-!-display-block">Add an address</a>
     <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
     {{ referralHistory | safe }}
 {% endblock %}

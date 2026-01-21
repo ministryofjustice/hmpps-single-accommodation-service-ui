@@ -6,22 +6,22 @@
 
 {% block beforeContent %}
     {{ govukBackLink({
-    text: "Back",
-    href: backLinkHref
-  }) }}
+        text: "Back",
+        href: backLinkHref
+    }) }}
 {% endblock %}
 
 {% block content %}
     {% if errorSummary and errorSummary.length %}
         {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: errorSummary
-    }) }}
+            titleText: "There is a problem",
+            errorList: errorSummary
+        }) }}
     {% endif %}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-            <form action="{{ formAction }}" method="{{ formMethod | default('post') }}" novalidate>
+            <form action="{{ formAction }}" method="{{ formMethod | default('get') }}">
                 <fieldset class="govuk-fieldset">
                     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 

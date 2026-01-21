@@ -11,7 +11,10 @@ export const controllers = (services: Services) => ({
     services.dutyToReferService,
     services.proposedAddressesService,
   ),
-  proposedAddressesController: new ProposedAddressesController(services.auditService, services.proposedAddressesService),
+  proposedAddressesController: new ProposedAddressesController(
+    services.auditService,
+    services.proposedAddressesService,
+  ),
 })
 
 export type Controllers = ReturnType<typeof controllers>

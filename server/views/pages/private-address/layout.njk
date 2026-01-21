@@ -1,0 +1,43 @@
+{% extends "partials/layout.njk" %}
+
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block beforeContent %}
+    {{ govukBackLink({
+    text: "Back",
+    href: backLinkHref
+  }) }}
+{% endblock %}
+
+{% block content %}
+    {% if errorSummary and errorSummary.length %}
+        {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errorSummary
+    }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <form action="{{ formAction }}" method="{{ formMethod | default('post') }}" novalidate>
+                <fieldset class="govuk-fieldset">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+                    {% block formContent %}{% endblock %}
+                </fieldset>
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: buttonText | default("Continue"),
+                        attributes: { id: 'continue-button' },
+                        preventDoubleClick: true
+                    }) }}
+                </div>
+                <p>
+                    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.privateAddress.cancel({ crn: crn }) }}">Cancel</a>
+                </p>
+            </form>
+        </div>
+    </div>
+{% endblock %}

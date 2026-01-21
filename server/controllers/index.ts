@@ -1,5 +1,6 @@
 import { Services } from '../services'
 import CasesController from './casesController'
+import PrivateAddressController from './privateAddressController'
 
 export const controllers = (services: Services) => ({
   casesController: new CasesController(
@@ -10,6 +11,7 @@ export const controllers = (services: Services) => ({
     services.dutyToReferService,
     services.proposedAddressesService,
   ),
+  privateAddressController: new PrivateAddressController(services.auditService, services.privateAddressService),
 })
 
 export type Controllers = ReturnType<typeof controllers>

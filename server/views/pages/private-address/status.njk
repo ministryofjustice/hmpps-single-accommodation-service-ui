@@ -1,0 +1,40 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% extends "pages/private-address/layout.njk" %}
+
+{% set pageTitle = "What is the status of the address checks? " + applicationName %}
+{% set mainClasses = "govuk-body" %}
+
+{% set backLinkHref = paths.privateAddress.type({ crn: crn }) %}
+{% set formAction = paths.privateAddress.checkYourAnswers({ crn: crn }) %}
+{% set formMethod = "get" %}
+
+{% block formContent %}
+{{ govukRadios({
+      name: "status",
+      fieldset: {
+          legend: {
+              text: "What is the status of the address checks?",
+              classes: "govuk-fieldset__legend--l"
+          }
+      },
+      items: [
+          {
+              value: "notCheckedYet",
+              text: "Not checked yet",
+              checked: privateAddress.status == "notCheckedYet"
+          },
+          {
+              value: "passed",
+              text: "Passed",
+              checked: privateAddress.status == "passed"
+          },
+          {
+              value: "failed",
+              text: "Failed",
+              checked: privateAddress.status == "failed"
+          }
+      ],
+      errorMessage: errors.status
+  }) }}
+{% endblock %}

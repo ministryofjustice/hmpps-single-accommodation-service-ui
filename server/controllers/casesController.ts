@@ -8,7 +8,7 @@ import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
 import uiPaths from '../paths/ui'
-import { fetchErrors } from '../utils/validation'
+import { fetchErrors, addErrorToFlash } from '../utils/validation'
 
 export default class CasesController {
   constructor(
@@ -40,8 +40,7 @@ export default class CasesController {
     return async (req: Request, res: Response) => {
       const { crn } = req.query
       if (!crn) {
-        req.flash('errors', JSON.stringify({ crnSearch: { text: 'Enter a CRN' } }))
-        req.flash('errorSummary', JSON.stringify([{ text: 'Enter a CRN', href: '#crn' }]))
+        addErrorToFlash(req, 'crn', 'Enter a CRN')
         return res.redirect(uiPaths.cases.index({}))
       }
       return res.redirect(uiPaths.cases.show({ crn: crn as string }))
@@ -75,11 +74,7 @@ export default class CasesController {
         })
       } catch (error) {
         if (error.responseStatus === 404) {
-          req.flash('errors', JSON.stringify({ crnSearch: { text: 'This CRN does not exist or cannot be shown' } }))
-          req.flash(
-            'errorSummary',
-            JSON.stringify([{ text: 'This CRN does not exist or cannot be shown', href: '#crn' }]),
-          )
+          addErrorToFlash(req, 'crn', 'This CRN does not exist or cannot be shown')
           return res.redirect(`${uiPaths.cases.index({})}?crn=${encodeURIComponent(crn)}`)
         }
 

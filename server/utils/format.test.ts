@@ -2,6 +2,7 @@ import { AccommodationAddressDetails } from '@sas/api'
 import {
   addressLines,
   eligibilityStatusTag,
+  formatAddress,
   formatDate,
   formatDateAndDaysAgo,
   formatEligibilityStatus,
@@ -175,6 +176,20 @@ describe('formatting utilities', () => {
 
     it('returns and empty array when no address parts are present', () => {
       expect(addressLines()).toEqual([])
+    })
+  })
+
+  describe('formatAddress', () => {
+    it('returns an address in short format', () => {
+      const address = addressFactory.build({
+        line1: '123 Fake Street',
+        line2: 'Some address part',
+        region: 'Yorkshire',
+        city: 'London',
+        postcode: 'FA1 2BA',
+      })
+
+      expect(formatAddress(address)).toEqual('123 Fake Street, London, FA1 2BA')
     })
   })
 })

@@ -4,6 +4,7 @@ import {
   AccommodationReferralDto as Referral,
   ServiceResult,
   AccommodationAddressDetails,
+  AddressDetails,
 } from '@sas/api'
 import { calculateAge } from './person'
 
@@ -140,4 +141,9 @@ export const addressLines = (address: AccommodationAddressDetails = {}): string[
   ]
     .map(part => part.trim())
     .filter(Boolean)
+}
+
+export const formatAddress = (address: AddressDetails): string => {
+  const { line1, city, postcode } = address
+  return [line1, city, postcode].join(', ')
 }

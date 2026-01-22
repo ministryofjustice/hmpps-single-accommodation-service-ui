@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker'
 import { Factory } from 'fishery'
+import { faker } from '@faker-js/faker'
 import { ProposedAddressDto } from '@sas/ui'
 
 const housingArrangementTypes: ProposedAddressDto['housingArrangementType'][] = [
@@ -18,6 +18,7 @@ export default Factory.define<ProposedAddressDto>(() => {
   const housingArrangementType = faker.helpers.arrayElement(housingArrangementTypes)
 
   return {
+    id: faker.string.uuid(),
     housingArrangementType,
     housingArrangementTypeDescription: housingArrangementType === 'OTHER' ? faker.lorem.sentence() : '',
     settledType: faker.helpers.arrayElement(settledTypes),

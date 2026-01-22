@@ -1,4 +1,4 @@
-import { AccommodationAddressDetails } from '@sas/api'
+import { AccommodationAddressDetails, AddressDetailsDto } from '@sas/api'
 import {
   addressLines,
   eligibilityStatusTag,
@@ -10,7 +10,7 @@ import {
   formatStatus,
   referralStatusTag,
 } from './format'
-import { addressFactory } from '../testutils/factories'
+import { addressDetailsFactory } from '../testutils/factories'
 
 describe('formatting utilities', () => {
   beforeEach(() => {
@@ -180,16 +180,38 @@ describe('formatting utilities', () => {
   })
 
   describe('formatAddress', () => {
-    it('returns an address in short format', () => {
-      const address = addressFactory.build({
-        line1: '123 Fake Street',
-        line2: 'Some address part',
-        region: 'Yorkshire',
-        city: 'London',
-        postcode: 'FA1 2BA',
-      })
+    it.each([
+      [
+        'with building number',
+        {
+          buildingNumber: '123',
+          thoroughfareName: 'Fake Street',
+          county: 'Yorkshire',
+          postTown: 'London',
+          postcode: 'FA1 2BA',
+        },
+        '123 Fake Street, London, FA1 2BA',
+      ],
+      [
+        'with building name',
+        { buildingName: 'Fake House', thoroughfareName: 'Fake Street', postTown: 'London', postcode: 'FA1 2BA' },
+        'Fake House, Fake Street, London, FA1 2BA',
+      ],
+      [
+        'with sub-building name',
+        {
+          subBuildingName: 'Flat 4',
+          buildingName: 'Fake House',
+          thoroughfareName: 'Grand Street',
+          postTown: 'Manchester',
+          postcode: 'M21 0BF',
+        },
+        'Flat 4, Fake House, Grand Street, Manchester, M21 0BF',
+      ],
+    ])('returns an address %s in short format', (_, params: Partial<AddressDetailsDto>, expected) => {
+      const address = addressDetailsFactory.minimal().build(params)
 
-      expect(formatAddress(address)).toEqual('123 Fake Street, London, FA1 2BA')
+      expect(formatAddress(address)).toEqual(expected)
     })
   })
 })

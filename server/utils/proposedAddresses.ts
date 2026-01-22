@@ -1,5 +1,5 @@
 import { StatusCard } from '@sas/ui'
-import { ProposedAddressDto } from '../testutils/factories/proposedAddress'
+import { ProposedAddressDto } from '@sas/api'
 import {
   formatAddress,
   formatDateAndDaysAgo,
@@ -26,7 +26,7 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAddressDto): 
 
 const linksForStatus = (status: ProposedAddressDto['status']) => {
   switch (status) {
-    case 'CHECKED':
+    case 'PASSED':
       return [
         { text: 'Confirm as next address', href: '#' },
         { text: 'Notes', href: '#' },

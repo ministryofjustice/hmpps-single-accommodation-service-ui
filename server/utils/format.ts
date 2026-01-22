@@ -5,6 +5,8 @@ import {
   ServiceResult,
   AccommodationAddressDetails,
   AddressDetails,
+  ProposedAddressDto,
+  AddressDetailsDto,
 } from '@sas/api'
 import { calculateAge } from './person'
 
@@ -148,7 +150,7 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDto['status'
     {
       NOT_CHECKED_YET: 'Not checked',
       FAILED: 'Checks failed',
-      CHECKED: 'Checks passed',
+      PASSED: 'Checks passed',
       CONFIRMED: 'Confirmed',
     }[status] || 'Unknown'
   )
@@ -157,11 +159,14 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDto['status'
 export const proposedAddressStatusColours: Record<ProposedAddressDto['status'], string> = {
   NOT_CHECKED_YET: 'grey',
   FAILED: 'red',
-  CHECKED: 'yellow',
+  PASSED: 'yellow',
   CONFIRMED: 'green',
 }
 
-export const formatAddress = (address: AddressDetails): string => {
-  const { line1, city, postcode } = address
-  return [line1, city, postcode].join(', ')
+export const formatAddress = (address: AddressDetailsDto): string => {
+  const { subBuildingName, buildingName, buildingNumber, thoroughfareName, postTown, postcode } = address
+  return [subBuildingName, buildingName, `${buildingNumber || ''} ${thoroughfareName || ''}`, postTown, postcode]
+    .filter(Boolean)
+    .map(part => part.trim())
+    .join(', ')
 }

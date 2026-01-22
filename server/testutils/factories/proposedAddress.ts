@@ -1,6 +1,7 @@
 import { Factory } from 'fishery'
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker/locale/en_GB'
 import { ProposedAddressDto } from '@sas/ui'
+import addressDetailsFactory from './addressDetails'
 
 const housingArrangementTypes: ProposedAddressDto['housingArrangementType'][] = [
   'FRIENDS_OR_FAMILY',
@@ -23,17 +24,7 @@ export default Factory.define<ProposedAddressDto>(() => {
     housingArrangementTypeDescription: housingArrangementType === 'OTHER' ? faker.lorem.sentence() : '',
     settledType: faker.helpers.arrayElement(settledTypes),
     status: faker.helpers.arrayElement(statuses),
-    address: {
-      postcode: faker.location.zipCode(),
-      subBuildingName: faker.location.secondaryAddress(),
-      buildingName: faker.location.street(),
-      buildingNumber: faker.location.buildingNumber(),
-      thoroughfareName: faker.location.street(),
-      dependentLocality: faker.location.city(),
-      postTown: faker.location.city(),
-      county: faker.location.state(),
-      country: faker.location.country(),
-      uprn: faker.string.alphanumeric({ length: 12 }),
-    },
+    address: addressDetailsFactory.build(),
+    createdAt: faker.date.recent().toISOString(),
   }
 })

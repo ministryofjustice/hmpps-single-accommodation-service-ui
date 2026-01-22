@@ -1,4 +1,4 @@
-import { addressFactory, proposedAddressFactory } from '../testutils/factories'
+import { addressDetailsFactory, proposedAddressFactory } from '../testutils/factories'
 import { proposedAddressStatusCard } from './proposedAddresses'
 
 describe('Proposed addresses utilities', () => {
@@ -9,11 +9,12 @@ describe('Proposed addresses utilities', () => {
       housingArrangementType: 'OTHER',
       housingArrangementTypeDescription: "Somebody's attic",
       settledType: 'SETTLED',
-      address: addressFactory.build({
-        line1: '345 Foo Drive',
-        line2: 'Barville',
-        region: 'The North',
-        city: 'Winklechester',
+      address: addressDetailsFactory.minimal().build({
+        buildingNumber: '345',
+        thoroughfareName: 'Foo Drive',
+        dependentLocality: 'Barville',
+        county: 'The North',
+        postTown: 'Winklechester',
         postcode: 'ZZ1 1ZZ',
       }),
     })
@@ -59,7 +60,7 @@ describe('Proposed addresses utilities', () => {
     it('returns a "checks made" proposed address status card object', () => {
       const proposedAddress = proposedAddressFactory.build({
         ...baseProposedAddress,
-        status: 'CHECKED',
+        status: 'PASSED',
         createdAt: '2026-01-20T09:30:00.000Z',
       })
 

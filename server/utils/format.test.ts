@@ -3,6 +3,7 @@ import {
   addressLines,
   eligibilityStatusTag,
   formatDate,
+  formatDateAndDaysAgo,
   formatEligibilityStatus,
   formatRiskLevel,
   formatStatus,
@@ -12,7 +13,7 @@ import { addressFactory } from '../testutils/factories'
 
 describe('formatting utilities', () => {
   beforeEach(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    jest.useFakeTimers().setSystemTime(new Date('2025-12-10T12:00:00.000Z'))
   })
 
   afterEach(() => {
@@ -24,6 +25,7 @@ describe('formatting utilities', () => {
       ['2025-12-03', '3 December 2025'],
       ['2026-01-24', '24 January 2026'],
       ['not a date', 'Invalid Date'],
+      [undefined, 'Invalid Date'],
     ])('formats %s as the date %s', (date, expected) => {
       expect(formatDate(date)).toEqual(expected)
     })
@@ -60,6 +62,18 @@ describe('formatting utilities', () => {
       ['not a date', 'Invalid Date'],
     ])('formats %s as the age %s', (date, expected) => {
       expect(formatDate(date, 'age')).toEqual(expected)
+    })
+  })
+
+  describe('formatDateAndDaysAgo', () => {
+    it.each([
+      ['2025-12-03', '3 December 2025 (7 days ago)'],
+      ['2025-12-09', '9 December 2025 (1 day ago)'],
+      ['2025-12-10', '10 December 2025 (today)'],
+      ['not a date', 'Invalid Date'],
+      [undefined, 'Invalid Date'],
+    ])('formats %s as the date and days ago %s', (date, expected) => {
+      expect(formatDateAndDaysAgo(date)).toEqual(expected)
     })
   })
 

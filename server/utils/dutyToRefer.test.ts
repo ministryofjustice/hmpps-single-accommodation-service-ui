@@ -1,6 +1,6 @@
 import { detailsForStatus, dutyToReferStatusCard, linksForStatus } from './dutyToRefer'
 import { dutyToReferFactory } from '../testutils/factories'
-import { formatDate } from './format'
+import { formatDateAndDaysAgo } from './format'
 
 describe('duty to refer utils', () => {
   describe('dutyToReferStatusCard', () => {
@@ -74,10 +74,7 @@ describe('duty to refer utils', () => {
         [
           { term: 'Submitted to', description: baseDutyToRefer.submittedTo },
           { term: 'Reference', description: baseDutyToRefer.reference },
-          {
-            term: 'Submitted',
-            description: `${formatDate(baseDutyToRefer.submitted)} (${formatDate(baseDutyToRefer.submitted, 'days ago/in')})`,
-          },
+          { term: 'Submitted', description: formatDateAndDaysAgo(baseDutyToRefer.submitted) },
         ],
       ],
       ['UNKNOWN' as const, []],

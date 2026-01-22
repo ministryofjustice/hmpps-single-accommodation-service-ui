@@ -1,7 +1,7 @@
 import { DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 import { StatusCard } from '@sas/ui'
-import { dutyToReferStatusColours, formatDate, formatDutyToReferStatus } from './format'
+import { dutyToReferStatusColours, formatDateAndDaysAgo, formatDutyToReferStatus } from './format'
 
 export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => ({
   heading: 'Duty to Refer (DTR)',
@@ -51,10 +51,7 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
       return [
         summaryListRow('Submitted to', dutyToRefer?.submittedTo),
         summaryListRow('Reference', dutyToRefer?.reference),
-        summaryListRow(
-          'Submitted',
-          `${formatDate(dutyToRefer?.submitted)} (${formatDate(dutyToRefer?.submitted, 'days ago/in')})`,
-        ),
+        summaryListRow('Submitted', formatDateAndDaysAgo(dutyToRefer?.submitted)),
       ]
     default:
       return []

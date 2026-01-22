@@ -7,11 +7,13 @@ import {
 } from '@sas/api'
 import { calculateAge } from './person'
 
+const isValidDate = (date?: string) => date && !Number.isNaN(new Date(date).getTime())
+
 export const formatDate = (
   date?: string,
   format?: 'age' | 'long' | 'days' | 'days for/in' | 'days ago/in' | 'days for/left',
 ): string => {
-  if (!date || Number.isNaN(new Date(date).getTime())) return 'Invalid Date'
+  if (!isValidDate(date)) return 'Invalid Date'
 
   if (format === 'age') return `${calculateAge(date)}`
 
@@ -40,6 +42,12 @@ export const formatDate = (
       year: 'numeric',
     })
     .replace(',', '')
+}
+
+export const formatDateAndDaysAgo = (date?: string): string => {
+  if (!isValidDate(date)) return 'Invalid Date'
+
+  return `${formatDate(date)} (${formatDate(date, 'days ago/in')})`
 }
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {

@@ -5,10 +5,18 @@ import CasesService from './casesService'
 import ReferralsService from './referralsService'
 import EligibilityService from './eligibilityService'
 import DutyToReferService from './dutyToReferService'
+import ProposedAddressesService from './proposedAddressesService'
 
 export const services = () => {
-  const { applicationInfo, hmppsAuditClient, casesClient, referralsClient, eligibilityClient, dutyToReferClient } =
-    dataAccess()
+  const {
+    applicationInfo,
+    hmppsAuditClient,
+    casesClient,
+    referralsClient,
+    eligibilityClient,
+    dutyToReferClient,
+    proposedAddressesClient,
+  } = dataAccess()
 
   return {
     applicationInfo,
@@ -17,6 +25,7 @@ export const services = () => {
     referralsService: new ReferralsService(referralsClient),
     eligibilityService: new EligibilityService(eligibilityClient),
     dutyToReferService: new DutyToReferService(dutyToReferClient),
+    proposedAddressesService: new ProposedAddressesService(proposedAddressesClient),
   }
 }
 

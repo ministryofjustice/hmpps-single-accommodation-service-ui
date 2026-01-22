@@ -10,6 +10,8 @@ import DutyToReferService from '../services/dutyToReferService'
 import uiPaths from '../paths/ui'
 import { fetchErrors, addErrorToFlash } from '../utils/validation'
 import { statusCard } from '../utils/components'
+import ProposedAddressesService from '../services/proposedAddressesService'
+import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 
 export default class CasesController {
   constructor(
@@ -18,6 +20,7 @@ export default class CasesController {
     private readonly referralsService: ReferralsService,
     private readonly eligibilityService: EligibilityService,
     private readonly dutyToReferService: DutyToReferService,
+    private readonly proposedAddressesService: ProposedAddressesService,
   ) {}
 
   index(): RequestHandler {
@@ -27,6 +30,7 @@ export default class CasesController {
       const { errors, errorSummary } = fetchErrors(req)
 
       const cases = await this.casesService.getCases(token)
+
       return res.render('pages/index', {
         tableCaption: casesTableCaption(cases),
         casesRows: casesToRows(cases),
@@ -57,11 +61,12 @@ export default class CasesController {
       })
       const token = res.locals?.user?.token
       try {
-        const [caseData, referralHistory, eligibility, dutyToRefer] = await Promise.all([
+        const [caseData, referralHistory, eligibility, dutyToRefer, proposedAddresses] = await Promise.all([
           this.casesService.getCase(token, crn),
           this.referralsService.getReferralHistory(token, crn),
           this.eligibilityService.getEligibility(token, crn),
           this.dutyToReferService.getDutyToRefer(token, crn),
+          this.proposedAddressesService.getProposedAddresses(token, crn),
         ])
 
         return res.render('pages/show', {
@@ -72,6 +77,7 @@ export default class CasesController {
           referralHistory: referralHistoryTable(referralHistory),
           eligibilityCards: eligibilityToEligibilityCards(eligibility).map(statusCard),
           dutyToReferCard: statusCard(dutyToReferStatusCard(dutyToRefer[0])),
+          proposedAddresses: proposedAddresses.map(proposedAddressStatusCard).map(statusCard),
         })
       } catch (error) {
         if (error.responseStatus === 404) {

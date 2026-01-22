@@ -12,6 +12,7 @@ export default {
     eligibility: casePath.path('eligibility'),
     referrals: casePath.path('applications'),
     proposedAddresses: {
+      index: proposedAddressesPath,
       submit: proposedAddressesPath,
     },
   },

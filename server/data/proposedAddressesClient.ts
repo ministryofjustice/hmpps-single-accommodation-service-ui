@@ -9,6 +9,12 @@ export default class ProposedAddressesClient extends RestClient {
     super('Proposed addresses client', config.apis.sasApi, logger, authenticationClient)
   }
 
+  async getProposedAddresses(crn: string) {
+    return this.get<ProposedAddressDto[]>({
+      path: apiPaths.cases.proposedAddresses.index({ crn }),
+    })
+  }
+
   async submit(crn: string, proposedAddressData: ProposedAddressDto) {
     return this.post<void>({
       path: apiPaths.cases.proposedAddresses.submit({ crn }),

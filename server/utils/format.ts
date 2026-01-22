@@ -143,6 +143,24 @@ export const addressLines = (address: AccommodationAddressDetails = {}): string[
     .filter(Boolean)
 }
 
+export const formatProposedAddressStatus = (status?: ProposedAddressDto['status']): string => {
+  return (
+    {
+      NOT_CHECKED_YET: 'Not checked',
+      FAILED: 'Checks failed',
+      CHECKED: 'Checks passed',
+      CONFIRMED: 'Confirmed',
+    }[status] || 'Unknown'
+  )
+}
+
+export const proposedAddressStatusColours: Record<ProposedAddressDto['status'], string> = {
+  NOT_CHECKED_YET: 'grey',
+  FAILED: 'red',
+  CHECKED: 'yellow',
+  CONFIRMED: 'green',
+}
+
 export const formatAddress = (address: AddressDetails): string => {
   const { line1, city, postcode } = address
   return [line1, city, postcode].join(', ')

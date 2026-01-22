@@ -72,7 +72,7 @@ export const accommodationCell = (cellType: 'current' | 'next', accommodation?: 
       })
     : ''
 
-const summaryListRow = (label: string, value: string, renderAs: 'text' | 'html' = 'text'): SummaryListRow => ({
+export const summaryListRow = (label: string, value: string, renderAs: 'text' | 'html' = 'text'): SummaryListRow => ({
   key: { text: label },
   value: renderAs === 'html' ? { html: value } : { text: value },
 })

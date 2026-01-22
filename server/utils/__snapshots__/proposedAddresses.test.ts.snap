@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks failed" proposed address status card object 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "5 January 2026 (16 days ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": true,
+  "links": [
+    {
+      "href": "#",
+      "text": "Notes",
+    },
+  ],
+  "status": {
+    "colour": "red",
+    "text": "Checks failed",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks made" proposed address status card object 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 January 2026 (1 day ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "Confirm as next address",
+    },
+    {
+      "href": "#",
+      "text": "Notes",
+    },
+  ],
+  "status": {
+    "colour": "yellow",
+    "text": "Checks passed",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confirmed" proposed address status card object 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 December 2025 (32 days ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "Notes",
+    },
+  ],
+  "status": {
+    "colour": "green",
+    "text": "Confirmed",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not checked yet" proposed address status card object 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 January 2026 (1 day ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "Add checks",
+    },
+    {
+      "href": "#",
+      "text": "Notes",
+    },
+  ],
+  "status": {
+    "colour": "grey",
+    "text": "Not checked",
+  },
+}
+`;

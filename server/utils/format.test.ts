@@ -51,7 +51,23 @@ describe('formatting utilities', () => {
       ['2025-12-22', 'days ago/in' as const, 'in 12 days'],
       ['2025-12-22', 'days for/in' as const, 'in 12 days'],
       ['2025-12-22', 'days for/left' as const, '12 days left'],
-    ])('formats %s with %s', (date, format, expected) => {
+      ['2025-12-09T23:59:59.000Z', 'days' as const, '-1'],
+      ['2025-12-09T23:59:59.000Z', 'days ago/in' as const, '1 day ago'],
+      ['2025-12-09T23:59:59.000Z', 'days for/in' as const, 'for 1 day'],
+      ['2025-12-09T23:59:59.000Z', 'days for/left' as const, 'for 1 day'],
+      ['2025-12-09T00:00:00.000Z', 'days' as const, '-1'],
+      ['2025-12-09T00:00:00.000Z', 'days ago/in' as const, '1 day ago'],
+      ['2025-12-09T00:00:00.000Z', 'days for/in' as const, 'for 1 day'],
+      ['2025-12-09T00:00:00.000Z', 'days for/left' as const, 'for 1 day'],
+      ['2025-12-11T00:00:00.000Z', 'days' as const, '1'],
+      ['2025-12-11T00:00:00.000Z', 'days ago/in' as const, 'in 1 day'],
+      ['2025-12-11T00:00:00.000Z', 'days for/in' as const, 'in 1 day'],
+      ['2025-12-11T00:00:00.000Z', 'days for/left' as const, '1 day left'],
+      ['2025-12-11T23:59:59.000Z', 'days' as const, '1'],
+      ['2025-12-11T23:59:59.000Z', 'days ago/in' as const, 'in 1 day'],
+      ['2025-12-11T23:59:59.000Z', 'days for/in' as const, 'in 1 day'],
+      ['2025-12-11T23:59:59.000Z', 'days for/left' as const, '1 day left'],
+    ])('formats %s as a %s relative date', (date, format, expected) => {
       expect(formatDate(date, format)).toEqual(expected)
     })
 

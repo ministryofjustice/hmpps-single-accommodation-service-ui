@@ -18,7 +18,7 @@ export const formatDate = (
   if (format === 'age') return `${calculateAge(date)}`
 
   if (format?.startsWith('days')) {
-    const days = Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 3600 * 24))
+    const days = Math.ceil((new Date(date.substring(0, 10)).getTime() - Date.now()) / (1000 * 3600 * 24))
     const daysLabel = Math.abs(days) === 1 ? 'day' : 'days'
 
     if (days === 0 && format !== 'days') return 'today'

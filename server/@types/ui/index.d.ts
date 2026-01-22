@@ -5,7 +5,6 @@ export interface ErrorSummary {
 
 export interface ErrorMessage {
   text: string
-  attributes: Record<string, string | boolean>
 }
 
 export interface ErrorMessages {

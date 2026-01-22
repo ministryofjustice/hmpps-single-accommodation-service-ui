@@ -1,10 +1,10 @@
 import { Request } from 'express'
-import { createMock } from '@golevelup/ts-jest'
+import { mock } from 'jest-mock-extended'
 import { ErrorMessages, ErrorSummary } from '@sas/ui'
 import { addErrorToFlash, fetchErrors, generateErrorMessages, generateErrorSummary } from './validation'
 
 describe('fetchErrors', () => {
-  const request = createMock<Request>({})
+  const request = mock<Request>({})
 
   let errors: ErrorMessages
   let errorSummary: ErrorSummary[]
@@ -25,8 +25,14 @@ describe('fetchErrors', () => {
   })
 
   it('fetches the values from the flash', () => {
-    errors = { errorField: { text: "there's an error", attributes: {} } }
-    errorSummary = [{ text: "there's an error", href: '#errorField' }]
+    errors = {
+      errorField1: { text: "there's an error 1" },
+      errorField2: { text: "there's an error 2" },
+    }
+    errorSummary = [
+      { text: "there's an error 1", href: '#errorField1' },
+      { text: "there's an error 2", href: '#errorField2' },
+    ]
 
     const result = fetchErrors(request)
     expect(result).toEqual({ errors, errorSummary })
@@ -34,21 +40,18 @@ describe('fetchErrors', () => {
 })
 
 describe('addErrorToFlash', () => {
-  const request = createMock<Request>({})
+  const request = mock<Request>({})
 
   it('adds error to flash', () => {
-    const field = 'error'
+    const field = 'errorField'
     const errorText = 'there was an error'
 
     addErrorToFlash(request, field, errorText)
     expect(request.flash).toHaveBeenCalledWith(
       'errors',
       JSON.stringify({
-        [field]: {
-          text: errorText,
-          attributes: {
-            [`data-cy-error-${field}`]: true,
-          },
+        errorField: {
+          text: 'there was an error',
         },
       }),
     )
@@ -56,8 +59,8 @@ describe('addErrorToFlash', () => {
       'errorSummary',
       JSON.stringify([
         {
-          text: errorText,
-          href: `#${field}`,
+          text: 'there was an error',
+          href: `#errorField`,
         },
       ]),
     )
@@ -106,8 +109,8 @@ describe('generateErrorMessages', () => {
     }
     const result = generateErrorMessages(errors)
     expect(result).toEqual({
-      field1: { text: 'error 1', attributes: { 'data-cy-error-field1': true } },
-      field2: { text: 'error 2', attributes: { 'data-cy-error-field2': true } },
+      field1: { text: 'error 1' },
+      field2: { text: 'error 2' },
     })
   })
 })

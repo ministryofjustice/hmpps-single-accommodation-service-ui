@@ -40,7 +40,7 @@ export default class CasesController {
     return async (req: Request, res: Response) => {
       const { crn } = req.query
       if (!crn) {
-        addErrorToFlash(req, 'crnSearch', 'Enter a CRN')
+        addErrorToFlash(req, 'crn', 'Enter a CRN')
         return res.redirect(uiPaths.cases.index({}))
       }
       return res.redirect(uiPaths.cases.show({ crn: crn as string }))
@@ -74,7 +74,7 @@ export default class CasesController {
         })
       } catch (error) {
         if (error.responseStatus === 404) {
-          addErrorToFlash(req, 'crnSearch', 'This CRN does not exist or cannot be shown')
+          addErrorToFlash(req, 'crn', 'This CRN does not exist or cannot be shown')
           return res.redirect(`${uiPaths.cases.index({})}?crn=${encodeURIComponent(crn)}`)
         }
 

@@ -5,11 +5,8 @@ export const fetchErrors = (request: Request) => {
   const errorsFlash = request.flash('errors')
   const errorSummaryFlash = request.flash('errorSummary')
 
-  const errors = errorsFlash?.length
-    ? errorsFlash.map(err => JSON.parse(err)).reduce((obj, error) => ({ ...obj, ...error }), {})
-    : {}
-
-  const errorSummary = errorSummaryFlash?.length ? errorSummaryFlash.map(err => JSON.parse(err)).flat() : []
+  const errors = (errorsFlash || []).map(err => JSON.parse(err)).reduce((obj, error) => ({ ...obj, ...error }), {})
+  const errorSummary = (errorSummaryFlash || []).map(err => JSON.parse(err)).flat()
 
   return { errors, errorSummary }
 }
@@ -21,12 +18,9 @@ export const errorSummary = (field: string, text: string): ErrorSummary => {
   }
 }
 
-export const errorMessage = (field: string, text: string): ErrorMessage => {
+export const errorMessage = (text: string): ErrorMessage => {
   return {
     text,
-    attributes: {
-      [`data-cy-error-${field}`]: true,
-    },
   }
 }
 
@@ -44,7 +38,7 @@ export const generateErrorMessages = (errors: Record<string, string>): ErrorMess
     .reduce<ErrorMessages>((errorMessages, [field, text]) => {
       return {
         ...errorMessages,
-        [field]: errorMessage(field, text),
+        [field]: errorMessage(text),
       }
     }, {})
 }

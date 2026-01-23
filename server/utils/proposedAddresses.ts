@@ -13,6 +13,10 @@ import { textContent, htmlContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { addErrorToFlash } from './validation'
+import {
+  formatProposedAddressArrangement,
+  formatProposedAddressSettledType,
+} from './format'
 
 // eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
@@ -76,8 +80,8 @@ const displayStatus = (
   return status
 }
 
-export const summaryListRows = (proposedAddressFormSessionData: ProposedAddressFormData, crn: string) => {
-  const addressLines = [...Object.values(proposedAddressFormSessionData.address || {})].filter(Boolean)
+export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string) => {
+  const addressLines = [...Object.values(sessionData.address || {})].filter(Boolean)
 
   return [
     {
@@ -89,21 +93,21 @@ export const summaryListRows = (proposedAddressFormSessionData: ProposedAddressF
     },
     {
       key: textContent("What will be James Taylor's housing arrangement at this address?"),
-      value: htmlContent(formatArrangement(proposedAddressFormSessionData)),
+      value: htmlContent(formatArrangementWithDescription(sessionData)),
       actions: {
         items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
       },
     },
     {
       key: textContent('Will it be settled or transient?'),
-      value: textContent(proposedAddressFormSessionData.settledType),
+      value: textContent(formatProposedAddressSettledType(sessionData.settledType)),
       actions: {
         items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
       },
     },
     {
       key: textContent('What is the status of the address checks?'),
-      value: textContent(proposedAddressFormSessionData.status),
+      value: textContent(formatProposedAddressStatus(sessionData.status)),
       actions: {
         items: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) }],
       },
@@ -111,10 +115,10 @@ export const summaryListRows = (proposedAddressFormSessionData: ProposedAddressF
   ]
 }
 
-const formatArrangement = (data: ProposedAddressFormData) => {
-  const type = data.housingArrangementType || ''
-  if (type === 'other') {
-    return [type, data.housingArrangementTypeDescription].join('<br />')
+const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
+  const type = formatProposedAddressArrangement(data.housingArrangementType)
+  if (type === 'Other') {
+    return [type, data.housingArrangementTypeDescription || ''].join('<br />')
   }
   return type
 }
@@ -126,12 +130,12 @@ export const updateAddressFromQuery = async (
   const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.query || {}
   if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
     const addressParams = {
-      line1: (addressLine1 as string) || '',
-      line2: (addressLine2 as string) || '',
-      city: (addressTown as string) || '',
-      region: (addressCounty as string) || '',
-      postcode: (addressPostcode as string) || '',
-      country: (addressCountry as string) || '',
+      line1: String(addressLine1) || '',
+      line2: String(addressLine2) || '',
+      city: String(addressTown) || '',
+      region: String(addressCounty) || '',
+      postcode: String(addressPostcode) || '',
+      country: String(addressCountry) || '',
     }
     await formDataManager.update(req.params.crn, req.session, {
       address: addressParams,
@@ -148,22 +152,27 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
   } else if (address.line1.length > 200) {
     errors.addressLine1 = 'Address line 1 must be 200 characters or less'
   }
+
   if (address?.line2 && address?.line2.length > 200) {
     errors.addressLine2 = 'Address line 2 must be 200 characters or less'
   }
+
   if (!address?.postcode) {
     errors.addressPostcode = 'Enter postcode'
   } else if (address.postcode.length > 20) {
     errors.addressPostcode = 'Postal code or zip code must be 20 characters or less'
   }
+
   if (!address?.city) {
     errors.addressTown = 'Enter town or city'
   } else if (address.city.length > 100) {
     errors.addressTown = 'Town or city must be 100 characters or less'
   }
+
   if (address?.region && address?.region.length > 100) {
     errors.addressCounty = 'County must be 100 characters or less'
   }
+
   if (!address?.country) {
     errors.addressCountry = 'Enter country'
   } else if (address.country.length > 100) {
@@ -182,11 +191,11 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
 
 export const updateTypeFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
   const { housingArrangementType, housingArrangementTypeDescription, settledType } = req.query || {}
-  if (housingArrangementType || settledType) {
+  if (housingArrangementType || settledType || housingArrangementTypeDescription) {
     await formDataManager.update(req.params.crn, req.session, {
-      housingArrangementType: (housingArrangementType as string) || '',
-      housingArrangementTypeDescription: (housingArrangementTypeDescription as string) || '',
-      settledType: (settledType as string) || '',
+      housingArrangementType: String(housingArrangementType) || '',
+      housingArrangementTypeDescription: String(housingArrangementTypeDescription) || '',
+      settledType: String(settledType) || '',
     })
   }
 }
@@ -194,8 +203,8 @@ export const updateTypeFromQuery = async (req: Request, formDataManager: MultiPa
 export const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
   if (!sessionData?.housingArrangementType) {
-    errors.housingArrangementType = 'Select a arrangement type'
-  } else if (sessionData.housingArrangementType === 'other' && !sessionData.housingArrangementTypeDescription) {
+    errors.housingArrangementType = 'Select an arrangement type'
+  } else if (sessionData.housingArrangementType === 'OTHER' && !sessionData.housingArrangementTypeDescription) {
     errors.housingArrangementTypeDescription = 'Enter the other arrangement type'
   }
   if (!sessionData?.settledType) {
@@ -216,7 +225,7 @@ export const updateStatusFromQuery = async (req: Request, formDataManager: Multi
   const { status } = req.query || {}
   if (status) {
     await formDataManager.update(req.params.crn, req.session, {
-      status: (status as string) || '',
+      status: String(status),
     })
   }
 }

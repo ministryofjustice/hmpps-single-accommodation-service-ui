@@ -172,3 +172,25 @@ export const formatAddress = (address: AccommodationAddressDetails): string => {
     .map(part => part.trim())
     .join(', ')
 }
+
+export const formatProposedAddressSettledType = (type?: string): string => {
+  return (
+    {
+      SETTLED: 'Settled',
+      TRANSIENT: 'Transient',
+    }[type || ''] || 'Unknown'
+  )
+}
+
+export const formatProposedAddressArrangement = (type?: string): string => {
+  return (
+    {
+      FRIEND_OR_FAMILY: 'Friend or family (not tenant or owner)',
+      SOCIAL_RENTED: 'Social rent (tenant)',
+      PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rented, whole property (tenant)',
+      PRIVATE_RENTED_ROOM: 'Private rented, room/share (tenant)',
+      OWNED: 'Owned (named on deed/mortgage)',
+      OTHER: 'Other',
+    }[type || ''] || 'Unknown'
+  )
+}

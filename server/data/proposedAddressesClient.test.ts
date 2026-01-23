@@ -36,4 +36,39 @@ describeClient('ProposedAddressesClient', provider => {
 
     await proposedAddressesClient.getProposedAddresses(token, crn)
   })
+
+it('should make a POST request to /cases/:crn/private-addresses', async () => {
+    const crn = crnFactory()
+    const proposedAddressData = {
+      address: {
+        line1: '10 Moonlight Road',
+        line2: '',
+        town: 'London',
+        county: 'Greater London',
+        postcode: 'NW1 6XE',
+        country: 'UK',
+      },
+      housingArrangementType: 'FRIEND_OR_FAMILY',
+      settledType: 'SETTLED',
+      status: 'PASSED',
+    } as ProposedAddressDto
+
+    await provider.addInteraction({
+      state: `Proposed address can be submitted for case with CRN ${crn}`,
+      uponReceiving: 'a request to submit a proposed address for a case by CRN',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.proposedAddresses.submit({ crn }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: proposedAddressData,
+      },
+      willRespondWith: {
+        status: 200,
+      },
+    })
+
+    await proposedAddressesClient.submit(crn, proposedAddressData)
+  })
 })

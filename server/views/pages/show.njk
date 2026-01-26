@@ -74,7 +74,13 @@
           <a href="#">Add an address</a>
         </header>
 
-        <p>No proposed addresses have been added.</p>
+        {% if proposedAddresses | length %}
+          {% for card in proposedAddresses %}
+            {{ card | safe }}
+          {% endfor %}
+        {% else %}
+          <p>No private addresses have been added.</p>
+        {% endif %}
       </section>
     </div>
   </div>

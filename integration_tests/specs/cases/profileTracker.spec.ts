@@ -1,4 +1,5 @@
 import { test } from '@playwright/test'
+import { AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto, ProposedAddressDto } from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
@@ -10,13 +11,36 @@ import {
   dutyToReferFactory,
   eligibilityFactory,
   serviceResultFactory,
+  proposedAddressFactory,
 } from '../../../server/testutils/factories'
 
 test.describe('Profile Tracker Page', () => {
+  const setupStubs = async ({
+    crn,
+    caseData,
+    dutyToRefer,
+    eligibility,
+    referrals,
+    proposedAddresses,
+  }: {
+    crn: string
+    caseData: CaseDto
+    dutyToRefer?: DutyToReferDto
+    eligibility?: EligibilityDto
+    referrals?: AccommodationReferralDto[]
+    proposedAddresses?: ProposedAddressDto[]
+  }) => {
+    await casesApi.stubGetCases([caseData])
+    await casesApi.stubGetCaseByCrn(crn, caseData)
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, dutyToRefer ? [dutyToRefer] : undefined)
+    await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
+    await casesApi.stubGetReferralHistory(crn, referrals)
+    await casesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
+  }
+
   test('Should display profile tracker for a specific case', async ({ page }) => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
-    const cases = [caseData]
     const dutyToRefer = dutyToReferFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
       cas1: serviceResultFactory.build(),
@@ -24,11 +48,9 @@ test.describe('Profile Tracker Page', () => {
       cas3: serviceResultFactory.build(),
     })
     const referrals = referralFactory.buildList(3)
-    await casesApi.stubGetCases(cases)
-    await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, [dutyToRefer])
-    await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
-    await casesApi.stubGetReferralHistory(crn, referrals)
+    const proposedAddresses = proposedAddressFactory.buildList(2)
+
+    await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses })
     await login(page)
 
     await page.getByRole('link', { name: caseData.name }).click()
@@ -38,7 +60,7 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowCaseDetails(caseData)
     await profileTrackerPage.shouldShowDutyToRefer(dutyToRefer)
     await profileTrackerPage.shouldShowEligibility(eligibility)
-    await profileTrackerPage.shouldShowProposedAddresses()
+    await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
     await profileTrackerPage.shouldShowReferralHistory(referrals)
   })
 
@@ -47,9 +69,7 @@ test.describe('Profile Tracker Page', () => {
 
     test(`should render next and current cards for a confirmed case`, async ({ page }) => {
       const caseData = caseFactory.confirmed().build({ crn })
-      await casesApi.stubGetCaseByCrn(crn, caseData)
-      await eligibilityApi.stubGetEligibilityByCrn(crn)
-      await casesApi.stubGetReferralHistory(crn)
+      await setupStubs({ crn, caseData })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
@@ -60,8 +80,7 @@ test.describe('Profile Tracker Page', () => {
 
     test(`should render next as alert and current as card for a NFA case`, async ({ page }) => {
       const caseData = caseFactory.noFixedAbodeNext().build({ crn })
-      await casesApi.stubGetCaseByCrn(crn, caseData)
-      await casesApi.stubGetReferralHistory(crn)
+      await setupStubs({ crn, caseData })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
@@ -72,13 +91,25 @@ test.describe('Profile Tracker Page', () => {
 
     test(`should render only current alert for a currently NFA case`, async ({ page }) => {
       const caseData = caseFactory.noFixedAbodeCurrent().build({ crn })
-      await casesApi.stubGetCaseByCrn(crn, caseData)
-      await casesApi.stubGetReferralHistory(crn)
+      await setupStubs({ crn, caseData })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
       await profileTrackerPage.shouldShowCurrentAccommodationAlert(caseData.currentAccommodation)
+    })
+  })
+
+  test.describe('proposed addresses', () => {
+    test('should display a message if there are no proposed addresses', async ({ page }) => {
+      const crn = 'X123456'
+      const caseData = caseFactory.build({ crn })
+      await setupStubs({ crn, caseData })
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldShowProposedAddresses()
     })
   })
 })

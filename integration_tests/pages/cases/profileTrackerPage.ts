@@ -5,10 +5,10 @@ import {
   EligibilityDto as Eligibility,
   AccommodationReferralDto as Referral,
   AccommodationDetail,
+  ProposedAddressDto,
 } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import {
-  formatDate,
+import { formatAddress, formatDate,
   formatRiskLevel,
   formatStatus,
   addressLines,
@@ -17,6 +17,7 @@ import { eligibilityStatusCard } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { accommodationType } from '../../../server/utils/cases'
 import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
+import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -131,13 +132,20 @@ export default class ProfileTrackerPage extends AbstractPage {
     }
   }
 
-  async shouldShowProposedAddresses() {
+  async shouldShowProposedAddresses(proposedAddresses?: ProposedAddressDto[]) {
     const proposedAddressesSection = this.page.locator('section', {
       has: this.page.getByRole('heading', { name: 'Private addresses' }),
     })
 
     await expect(proposedAddressesSection).toBeVisible()
     await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute('href', `#`)
-    await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')
+
+    if (proposedAddresses?.length) {
+      for await (const proposedAddress of proposedAddresses) {
+        await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
+      }
+    } else {
+      await expect(proposedAddressesSection).toContainText('No private addresses have been added.')
+    }
   }
 }

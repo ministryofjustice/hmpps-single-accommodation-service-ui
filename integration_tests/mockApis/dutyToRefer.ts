@@ -14,7 +14,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: dutyToReferData || dutyToReferFactory.build(),
+        jsonBody: dutyToReferData || dutyToReferFactory.buildList(1),
       },
     }),
   stubGetDutyToReferByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.dutyToRefer({ crn })),

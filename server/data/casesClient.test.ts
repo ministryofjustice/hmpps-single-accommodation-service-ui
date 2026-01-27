@@ -1,7 +1,7 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import CasesClient from './casesClient'
 import describeClient from '../testutils/describeClient'
-import { accommodationFactory, caseFactory } from '../testutils/factories'
+import { caseFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 
 describeClient('CasesClient', provider => {
@@ -13,11 +13,7 @@ describeClient('CasesClient', provider => {
   })
 
   it('should make a GET request to /cases using user token and return the response body', async () => {
-    // FIXME: remove accommodation overrides when API response updated to include these properties
-    const cases = caseFactory.buildList(2, {
-      nextAccommodation: accommodationFactory.build({ name: undefined, offenderReleaseType: undefined }),
-      currentAccommodation: accommodationFactory.build({ name: undefined, offenderReleaseType: undefined }),
-    })
+    const cases = caseFactory.buildList(2)
 
     await provider.addInteraction({
       state: 'Cases exist for user',
@@ -40,11 +36,7 @@ describeClient('CasesClient', provider => {
   })
 
   it('should make a GET request to /cases/:crn using user token and return the response body', async () => {
-    // FIXME: remove accommodation overrides when API response updated to include these properties
-    const caseData = caseFactory.build({
-      nextAccommodation: accommodationFactory.build({ name: undefined, offenderReleaseType: undefined }),
-      currentAccommodation: accommodationFactory.build({ name: undefined, offenderReleaseType: undefined }),
-    })
+    const caseData = caseFactory.build()
     const { crn } = caseData
 
     await provider.addInteraction({

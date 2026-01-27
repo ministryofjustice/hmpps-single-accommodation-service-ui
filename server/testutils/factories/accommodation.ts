@@ -93,5 +93,6 @@ export default AccommodationFactory.define(() => {
     startDate: faker.date.past().toISOString().substring(0, 10),
     endDate: faker.date.future().toISOString().substring(0, 10),
     address: addressFactory.build(),
+    createdAt: faker.date.recent().toISOString(),
   }
 })

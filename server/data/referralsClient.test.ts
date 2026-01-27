@@ -22,7 +22,7 @@ describeClient('ReferralsClient', provider => {
       uponReceiving: 'a request to get referral history for a user case by CRN',
       withRequest: {
         method: 'GET',
-        path: apiPaths.referrals.history({ crn }),
+        path: apiPaths.cases.referrals({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },

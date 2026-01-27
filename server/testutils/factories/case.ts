@@ -48,7 +48,7 @@ class CaseFactory extends Factory<Case> {
 export default CaseFactory.define(() => {
   const currentAccommodation = accommodationFactory.current().build()
   const nextAccommodation =
-    currentAccommodation.type === 'NO_FIXED_ABODE'
+    currentAccommodation.arrangementType === 'NO_FIXED_ABODE'
       ? undefined
       : accommodationFactory.next(currentAccommodation.endDate).build()
 

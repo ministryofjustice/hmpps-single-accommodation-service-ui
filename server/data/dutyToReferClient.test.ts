@@ -22,7 +22,7 @@ describeClient('DutyToReferClient', provider => {
       uponReceiving: 'a request to get dutyToRefer for a user case by CRN',
       withRequest: {
         method: 'GET',
-        path: apiPaths.dutyToRefer({ crn }),
+        path: apiPaths.cases.dutyToRefer({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },

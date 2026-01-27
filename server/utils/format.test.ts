@@ -1,4 +1,6 @@
+import { AccommodationAddressDetails } from '@sas/api'
 import {
+  addressLines,
   eligibilityStatusTag,
   formatDate,
   formatEligibilityStatus,
@@ -6,6 +8,7 @@ import {
   formatStatus,
   referralStatusTag,
 } from './format'
+import { addressFactory } from '../testutils/factories'
 
 describe('formatting utilities', () => {
   beforeEach(() => {
@@ -97,6 +100,48 @@ describe('formatting utilities', () => {
       expect(eligibilityStatusTag(status)).toEqual(
         `<strong class="govuk-tag govuk-tag--${tagColour}">${formatEligibilityStatus(status)}</strong>`,
       )
+    })
+  })
+
+  describe('addressLines', () => {
+    it.each([
+      [
+        'with building number',
+        {
+          buildingNumber: '123',
+          thoroughfareName: 'Fake Street',
+          county: 'Yorkshire',
+          postTown: 'London',
+          postcode: 'FA1 2BA',
+        },
+        ['123 Fake Street', 'London', 'FA1 2BA'],
+      ],
+      [
+        'with building name',
+        { buildingName: 'Fake House', thoroughfareName: 'Fake Street', postTown: 'London', postcode: 'FA1 2BA' },
+        ['Fake House', 'Fake Street', 'London', 'FA1 2BA'],
+      ],
+      [
+        'with sub-building name',
+        {
+          subBuildingName: 'Flat 4',
+          buildingName: 'Fake House',
+          thoroughfareName: 'Grand Street',
+          postTown: 'Manchester',
+          postcode: 'M21 0BF',
+        },
+        ['Flat 4 Fake House', 'Grand Street', 'Manchester', 'M21 0BF'],
+      ],
+    ])(
+      'returns relevant lines for an address %s',
+      (_, addressParts: Partial<AccommodationAddressDetails>, expected) => {
+        const address = addressFactory.minimal().build(addressParts)
+        expect(addressLines(address)).toEqual(expected)
+      },
+    )
+
+    it('returns and empty array when no address parts are present', () => {
+      expect(addressLines()).toEqual([])
     })
   })
 })

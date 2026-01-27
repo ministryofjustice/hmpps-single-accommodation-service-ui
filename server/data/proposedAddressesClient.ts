@@ -1,5 +1,5 @@
 import { AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
-import { ProposedAddressDto } from '@sas/api'
+import { ProposedAddressDto } from '@sas/ui'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -11,7 +11,7 @@ export default class ProposedAddressesClient extends RestClient {
 
   async submit(crn: string, proposedAddressData: ProposedAddressDto) {
     return this.post<void>({
-      path: apiPaths.proposedAddresses.submit({ crn }),
+      path: apiPaths.cases.proposedAddresses.submit({ crn }),
       data: proposedAddressData,
     })
   }

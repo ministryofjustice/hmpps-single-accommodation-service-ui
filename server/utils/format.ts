@@ -1,4 +1,10 @@
-import { CaseDto as Case, DutyToReferDto, AccommodationReferralDto as Referral, ServiceResult } from '@sas/api'
+import {
+  CaseDto as Case,
+  DutyToReferDto,
+  AccommodationReferralDto as Referral,
+  ServiceResult,
+  AccommodationAddressDetails,
+} from '@sas/api'
 import { calculateAge } from './person'
 
 export const formatDate = (
@@ -126,4 +132,16 @@ const dutyToReferStatusColours: Record<string, string> = {
 
 export const dutyToReferStatusTag = (status?: string): string => {
   return renderStatusTag(formatDutyToReferStatus(status), dutyToReferStatusColours[status] || 'grey')
+}
+
+export const addressLines = (address: AccommodationAddressDetails = {}): string[] => {
+  const { subBuildingName, buildingName, buildingNumber, thoroughfareName, postTown, postcode } = address
+  return [
+    `${subBuildingName || ''} ${buildingName || ''}`,
+    `${buildingNumber || ''} ${thoroughfareName || ''}`,
+    `${postTown || ''}`,
+    `${postcode || ''}`,
+  ]
+    .map(part => part.trim())
+    .filter(Boolean)
 }

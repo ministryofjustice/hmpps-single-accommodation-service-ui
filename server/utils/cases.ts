@@ -3,7 +3,7 @@ import { SummaryListRow, TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
-import { formatDate } from './format'
+import { addressLines, formatDate } from './format'
 
 const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
   REMAND: 'remand',
@@ -11,10 +11,13 @@ const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], s
   BAIL: 'bail',
 }
 
-const subTypes: Record<AccommodationDetail['subType'], string> = {
-  OWNED: 'owned',
-  LODGING: 'lodging',
-  RENTED: 'rented',
+const subTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
+  FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
+  SOCIAL_RENTED: 'Social rent (tenant)',
+  PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
+  PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
+  OWNED: 'Owned (named on deeds/mortgage)',
+  OTHER: 'Other',
 }
 
 export const casesTableCaption = (cases: Case[]): string =>
@@ -25,13 +28,13 @@ export const personCell = (c: Case): string => {
 }
 
 export const accommodationType = (accommodation: AccommodationDetail): string => {
-  const { type, subType, offenderReleaseType } = accommodation
+  const { arrangementType, offenderReleaseType } = accommodation
 
-  switch (type) {
+  switch (arrangementType) {
     case 'PRISON':
       return `Prison${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
     case 'PRIVATE':
-      return `Private address${subType ? ` (${subTypes[subType]})` : ''}`
+      return `Private address${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
     case 'NO_FIXED_ABODE':
       return 'No fixed abode'
     case 'CAS1':
@@ -48,13 +51,12 @@ export const accommodationType = (accommodation: AccommodationDetail): string =>
 }
 
 export const addressTitle = (accommodation: AccommodationDetail): string => {
-  const { type, name, isSettled } = accommodation
-  switch (type) {
+  const { arrangementType, name, arrangementSubType } = accommodation
+  switch (arrangementType) {
     case 'PRISON':
       return `${name}`
     case 'PRIVATE':
-      if (isSettled !== undefined) return `${name} (${isSettled ? 'settled' : 'transient'})`
-      return `${name}`
+      return subTypes[arrangementSubType]
     default:
       return ''
   }
@@ -78,11 +80,11 @@ const summaryListRow = (label: string, value: string, renderAs: 'text' | 'html' 
 export const accommodationCard = (cardType: 'current' | 'next', accommodation?: AccommodationDetail) => {
   if (!accommodation) return ''
 
-  const { type } = accommodation
+  const { arrangementType } = accommodation
   const heading = cardType === 'current' ? 'Current accommodation' : 'Next accommodation'
   const rows = []
 
-  if (type !== 'NO_FIXED_ABODE') {
+  if (arrangementType !== 'NO_FIXED_ABODE') {
     if (cardType === 'current') {
       rows.push(summaryListRow('Type', accommodationType(accommodation), 'html'))
 
@@ -92,7 +94,7 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
           <br />
           ${formatDate(accommodation.endDate, 'days for/left')}
         `
-        rows.push(summaryListRow(type === 'PRISON' ? 'Release date' : 'End date', endDateHtml, 'html'))
+        rows.push(summaryListRow(arrangementType === 'PRISON' ? 'Release date' : 'End date', endDateHtml, 'html'))
       }
     }
 
@@ -118,12 +120,12 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
       rows.push(summaryListRow('Status', statusHtml, 'html'))
     }
 
-    const addressLines = [
+    const address = [
       addressTitle(accommodation) ? `<strong>${addressTitle(accommodation)}</strong>` : '',
-      ...Object.values(accommodation.address || {}),
+      ...addressLines(accommodation.address),
     ].filter(Boolean)
 
-    if (addressLines.length > 0) rows.push(summaryListRow('Address', addressLines.join('<br />'), 'html'))
+    if (address.length > 0) rows.push(summaryListRow('Address', address.join('<br />'), 'html'))
   }
 
   return nunjucksInline().render('components/accommodationCard.njk', {

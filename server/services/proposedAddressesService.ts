@@ -1,4 +1,4 @@
-import { ProposedAddressDto } from '@sas/api'
+import { ProposedAddressDto } from '@sas/ui'
 import { ProposedAddressesClient } from '../data'
 
 export default class ProposedAddressesService {

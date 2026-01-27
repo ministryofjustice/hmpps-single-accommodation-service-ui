@@ -13,6 +13,7 @@ import {
   formatRiskLevel,
   formatStatus,
   formatEligibilityStatus,
+  addressLines,
 } from '../../../server/utils/format'
 import { linksForStatus as linksForEligibilityStatus } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
@@ -106,7 +107,7 @@ export default class ProfileTrackerPage extends AbstractPage {
   }
 
   async shouldShowAddress(accommodation: AccommodationDetail, card: Locator) {
-    const addressParts = Object.values(accommodation.address || {}).filter(Boolean)
+    const addressParts = addressLines(accommodation.address)
     await this.shouldShowSummaryItem('Address', addressParts, card)
   }
 
@@ -130,7 +131,7 @@ export default class ProfileTrackerPage extends AbstractPage {
 
     const addressTitleParts = accommodationType(accommodation).split('<br>')
     await this.shouldShowSummaryItem('Type', addressTitleParts, card)
-    const endDateLabel = accommodation.type === 'PRISON' ? 'Release date' : 'End date'
+    const endDateLabel = accommodation.arrangementType === 'PRISON' ? 'Release date' : 'End date'
     await this.shouldShowSummaryItem(
       endDateLabel,
       [formatDate(accommodation.endDate), formatDate(accommodation.endDate, 'days for/left')],

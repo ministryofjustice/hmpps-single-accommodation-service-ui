@@ -380,7 +380,7 @@ exports[`cases utilities accommodation renderers for current accommodation retur
       Type
     </dt>
     <dd class="govuk-summary-list__value">
-      Private address (lodging)
+      Private address
     </dd>
     
   </div>
@@ -406,7 +406,7 @@ exports[`cases utilities accommodation renderers for current accommodation retur
       Address
     </dt>
     <dd class="govuk-summary-list__value">
-      <strong>Parents' home (settled)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
+      <strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
     </dd>
     
   </div>
@@ -503,8 +503,8 @@ exports[`cases utilities accommodation renderers for current accommodation retur
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a Private address accommodation 1`] = `
 "
-  Private address (lodging)
-  <br />Parents&#39; home (settled)
+  Private address
+  <br />Friends or family (not tenant or owner)
 
     <br />
     <span class="govuk-hint">until 10 September 2026</span>
@@ -816,7 +816,7 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
     </dt>
     <dd class="govuk-summary-list__value">
       <p>
-                <strong>Private address (lodging)</strong>
+                <strong>Private address</strong>
                 <br /><span class="govuk-hint">From Thursday 10 September 2026</span>
               </p>
     </dd>
@@ -830,7 +830,7 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
       Address
     </dt>
     <dd class="govuk-summary-list__value">
-      <strong>Parents' home (settled)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
+      <strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
     </dd>
     
   </div>
@@ -913,8 +913,8 @@ exports[`cases utilities accommodation renderers for next accommodation returns 
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a Private address accommodation 1`] = `
 "
-  Private address (lodging)
-  <br />Parents&#39; home (settled)
+  Private address
+  <br />Friends or family (not tenant or owner)
 
     <br />
     <span class="govuk-hint">from 10 September 2026</span>

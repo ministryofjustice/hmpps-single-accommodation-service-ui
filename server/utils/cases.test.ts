@@ -1,4 +1,4 @@
-import { AccommodationDetail, AccommodationReferralDto as Referral, AddressDetails } from '@sas/api'
+import { AccommodationDetail, AccommodationReferralDto as Referral, AccommodationAddressDetails } from '@sas/api'
 import {
   accommodationCell,
   caseAssignedTo,
@@ -9,7 +9,7 @@ import {
   referralHistoryToRows,
   accommodationCard,
 } from './cases'
-import { accommodationFactory, caseFactory, referralFactory } from '../testutils/factories'
+import { accommodationFactory, addressFactory, caseFactory, referralFactory } from '../testutils/factories'
 import { dateCell, linksCell, statusCell, textCell } from './tables'
 
 describe('cases utilities', () => {
@@ -55,13 +55,12 @@ describe('cases utilities', () => {
       const factory = (date: string) =>
         cellType === 'current' ? accommodationFactory.current(date, '2025-12-01') : accommodationFactory.next(date)
 
-      const address: AddressDetails = {
-        line1: '9 Foo Bar',
-        line2: undefined,
-        region: undefined,
-        city: 'Foocity',
+      const address: AccommodationAddressDetails = addressFactory.minimal().build({
+        buildingNumber: '9',
+        thoroughfareName: 'Foo Bar',
+        postTown: 'Foocity',
         postcode: 'FO0 1BA',
-      }
+      })
 
       const prison = factory('2026-01-01')
         .prison()
@@ -75,7 +74,7 @@ describe('cases utilities', () => {
       const cas3Accommodation = factory('2026-07-31').cas('CAS3').build({ address })
       const privateAccommodation = factory('2026-09-10')
         .privateAddress()
-        .build({ name: "Parents' home", subType: 'LODGING', isSettled: true, address })
+        .build({ name: "Parents' home", arrangementSubType: 'FRIENDS_OR_FAMILY', address })
       const noFixedAbode = factory('2026-09-10').noFixedAbode().build()
 
       const testCases: [string, AccommodationDetail][] = [

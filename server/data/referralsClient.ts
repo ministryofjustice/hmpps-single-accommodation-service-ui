@@ -11,6 +11,6 @@ export default class ReferralsClient extends RestClient {
   }
 
   getReferralHistory(token: string, crn: string) {
-    return this.get<Referral[]>({ path: apiPaths.referrals.history({ crn }) }, asUser(token))
+    return this.get<Referral[]>({ path: apiPaths.cases.referrals({ crn }) }, asUser(token))
   }
 }

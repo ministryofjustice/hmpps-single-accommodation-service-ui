@@ -17,19 +17,19 @@
       },
       items: [
           {
-              value: "notCheckedYet",
+              value: "NOT_YET_CHECKED",
               text: "Not checked yet",
-              checked: proposedAddress.status == "notCheckedYet"
+              checked: proposedAddress.status == "NOT_YET_CHECKED"
           },
           {
-              value: "passed",
+              value: "PASSED",
               text: "Passed",
-              checked: proposedAddress.status == "passed"
+              checked: proposedAddress.status == "PASSED"
           },
           {
-              value: "failed",
+              value: "FAILED",
               text: "Failed",
-              checked: proposedAddress.status == "failed"
+              checked: proposedAddress.status == "FAILED"
           }
       ],
       errorMessage: errors.status

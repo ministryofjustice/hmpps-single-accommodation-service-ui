@@ -9,6 +9,7 @@ import {
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { Request } from 'express'
 import { ProposedAddressFormData } from '@sas/ui'
+import { ProposedAddressDto } from '@sas/api'
 import { textContent, htmlContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
@@ -92,7 +93,7 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
       },
     },
     {
-      key: textContent("What will be James Taylor's housing arrangement at this address?"),
+      key: textContent(`What will be ${name}'s housing arrangement at this address?`),
       value: htmlContent(formatArrangementWithDescription(sessionData)),
       actions: {
         items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
@@ -123,19 +124,16 @@ const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
   return type
 }
 
-export const updateAddressFromQuery = async (
-  req: Request,
-  formDataManager: MultiPageFormManager<'proposedAddress'>,
-) => {
-  const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.query || {}
+export const updateAddressFromBody = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+  const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.body || {}
   if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
     const addressParams = {
-      line1: String(addressLine1) || '',
-      line2: String(addressLine2) || '',
-      city: String(addressTown) || '',
-      region: String(addressCounty) || '',
-      postcode: String(addressPostcode) || '',
-      country: String(addressCountry) || '',
+      line1: String(addressLine1 || ''),
+      line2: String(addressLine2 || ''),
+      city: String(addressTown || ''),
+      region: String(addressCounty || ''),
+      postcode: String(addressPostcode || ''),
+      country: String(addressCountry || ''),
     }
     await formDataManager.update(req.params.crn, req.session, {
       address: addressParams,
@@ -189,13 +187,13 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
   return true
 }
 
-export const updateTypeFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
-  const { housingArrangementType, housingArrangementTypeDescription, settledType } = req.query || {}
+export const updateTypeFromBody = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+  const { housingArrangementType, housingArrangementTypeDescription, settledType } = req.body || {}
   if (housingArrangementType || settledType || housingArrangementTypeDescription) {
     await formDataManager.update(req.params.crn, req.session, {
-      housingArrangementType: String(housingArrangementType) || '',
-      housingArrangementTypeDescription: String(housingArrangementTypeDescription) || '',
-      settledType: String(settledType) || '',
+      housingArrangementType: String(housingArrangementType || ''),
+      housingArrangementTypeDescription: String(housingArrangementTypeDescription || ''),
+      settledType: String(settledType || ''),
     })
   }
 }
@@ -221,8 +219,8 @@ export const validateTypeFromSession = (req: Request, sessionData: ProposedAddre
   return true
 }
 
-export const updateStatusFromQuery = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
-  const { status } = req.query || {}
+export const updateStatusFromBody = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+  const { status } = req.body || {}
   if (status) {
     await formDataManager.update(req.params.crn, req.session, {
       status: String(status),
@@ -244,4 +242,23 @@ export const validateStatusFromSession = (req: Request, sessionData: ProposedAdd
   }
 
   return true
+}
+
+export const mapAddressFormToAddressDto = (formData: ProposedAddressFormData): ProposedAddressDto => {
+  const addressDto: ProposedAddressDto = {
+    housingArrangementType: formData.housingArrangementType,
+    housingArrangementTypeDescription: formData.housingArrangementTypeDescription,
+    settledType: formData.settledType,
+    status: formData.status,
+    address: {
+      postcode: formData.address.postcode,
+      subBuildingName: formData.address.line2 ?? '',
+      buildingName: formData.address.line1,
+      postTown: formData.address.city,
+      county: formData.address.region ?? '',
+      country: formData.address.country,
+    },
+  }
+
+  return addressDto
 }

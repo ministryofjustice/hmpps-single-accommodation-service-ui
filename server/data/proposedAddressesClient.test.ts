@@ -37,14 +37,14 @@ describeClient('ProposedAddressesClient', provider => {
     await proposedAddressesClient.getProposedAddresses(token, crn)
   })
 
-it('should make a POST request to /cases/:crn/private-addresses', async () => {
+  it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
     const proposedAddressData = {
       address: {
         line1: '10 Moonlight Road',
         line2: '',
-        town: 'London',
-        county: 'Greater London',
+        city: 'London',
+        region: 'Greater London',
         postcode: 'NW1 6XE',
         country: 'UK',
       },

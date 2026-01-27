@@ -1,4 +1,4 @@
-import { ProposedAddressDto } from '@sas/ui'
+import { ProposedAddressFormData } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
 import { ProposedAddressesClient } from '../data'
 
@@ -17,7 +17,7 @@ export default class ProposedAddressesService {
     }
   }
 
-  submit(token: string, crn: string, proposedAddressData: ProposedAddressDto) {
+  submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
     return this.proposedAddressesClient.submit(crn, proposedAddressData)
   }
 }

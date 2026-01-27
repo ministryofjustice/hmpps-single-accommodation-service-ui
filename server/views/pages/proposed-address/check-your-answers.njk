@@ -6,7 +6,6 @@
 {% set pageTitle = "Check your answers before adding the address " + applicationName %}
 {% set backLinkHref = paths.proposedAddresses.status({ crn: crn }) %}
 {% set formAction = paths.proposedAddresses.submit({ crn: crn }) %}
-{% set formMethod = "post" %}
 {% set buttonText = "Save" %}
 
 {% block formContent %}

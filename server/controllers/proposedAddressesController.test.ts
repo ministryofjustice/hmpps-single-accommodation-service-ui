@@ -8,20 +8,22 @@ import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import {
   summaryListRows,
-  updateAddressFromQuery,
-  updateTypeFromQuery,
-  updateStatusFromQuery,
+  updateAddressFromBody,
+  updateTypeFromBody,
+  updateStatusFromBody,
   validateAddressFromSession,
   validateTypeFromSession,
   validateStatusFromSession,
 } from '../utils/proposedAddresses'
 import { fetchErrors } from '../utils/validation'
+import CasesService from '../services/casesService'
+import { getCaseData } from '../utils/cases'
 
 jest.mock('../utils/proposedAddresses', () => ({
   summaryListRows: jest.fn(),
-  updateAddressFromQuery: jest.fn(),
-  updateTypeFromQuery: jest.fn(),
-  updateStatusFromQuery: jest.fn(),
+  updateAddressFromBody: jest.fn(),
+  updateTypeFromBody: jest.fn(),
+  updateStatusFromBody: jest.fn(),
   validateAddressFromSession: jest.fn(),
   validateTypeFromSession: jest.fn(),
   validateStatusFromSession: jest.fn(),
@@ -29,6 +31,10 @@ jest.mock('../utils/proposedAddresses', () => ({
 
 jest.mock('../utils/validation', () => ({
   fetchErrors: jest.fn(),
+}))
+
+jest.mock('../utils/cases', () => ({
+  getCaseData: jest.fn(),
 }))
 
 describe('proposedAddressesController', () => {
@@ -44,6 +50,7 @@ describe('proposedAddressesController', () => {
 
   const auditService = mock<AuditService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
+  const casesService = mock<CasesService>()
   const sessionData: ProposedAddressFormData = {
     address: {
       line1: 'Line 1',
@@ -62,8 +69,9 @@ describe('proposedAddressesController', () => {
   let controller: ProposedAddressesController
 
   beforeEach(() => {
-    controller = new ProposedAddressesController(auditService, proposedAddressesService)
+    controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
     ;(fetchErrors as jest.Mock).mockReturnValue({ errors: {}, errorSummary: [] })
+    ;(getCaseData as jest.Mock).mockReturnValue({ name: 'James Smith' })
 
     jest.spyOn(controller.formData, 'update')
     jest.spyOn(controller.formData, 'remove')
@@ -116,7 +124,7 @@ describe('proposedAddressesController', () => {
   })
 
   describe('type', () => {
-    it('renders arrangement page', async () => {
+    it('renders arrangement type page', async () => {
       ;(validateAddressFromSession as jest.Mock).mockReturnValue(true)
 
       await controller.type()(request, response, next)
@@ -124,12 +132,13 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         proposedAddress: undefined,
+        name: 'James Smith',
         errors: {},
         errorSummary: [],
       })
     })
 
-    it('renders arrangement page with session data', async () => {
+    it('renders arrangement type page with session data', async () => {
       jest.spyOn(controller.formData, 'get').mockReturnValue(sessionData)
       ;(validateAddressFromSession as jest.Mock).mockReturnValue(true)
 
@@ -138,6 +147,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         proposedAddress: sessionData,
+        name: 'James Smith',
         errors: {},
         errorSummary: [],
       })
@@ -148,7 +158,7 @@ describe('proposedAddressesController', () => {
 
       await controller.type()(request, response, next)
 
-      expect(updateAddressFromQuery).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateAddressFromBody).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
     })
   })
@@ -186,7 +196,7 @@ describe('proposedAddressesController', () => {
 
       await controller.status()(request, response, next)
 
-      expect(updateTypeFromQuery).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateTypeFromBody).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
     })
   })
@@ -200,7 +210,7 @@ describe('proposedAddressesController', () => {
 
       await controller.checkYourAnswers()(request, response, next)
 
-      expect(updateStatusFromQuery).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
         tableRows: [{ key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' } }],
@@ -212,7 +222,7 @@ describe('proposedAddressesController', () => {
 
       await controller.checkYourAnswers()(request, response, next)
 
-      expect(updateStatusFromQuery).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
   })

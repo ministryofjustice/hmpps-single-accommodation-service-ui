@@ -4,15 +4,17 @@ import uiPaths from '../paths/ui'
 import MultiPageFormManager from '../utils/multiPageFormManager'
 import {
   summaryListRows,
-  updateAddressFromQuery,
-  updateTypeFromQuery,
-  updateStatusFromQuery,
+  updateAddressFromBody,
+  updateTypeFromBody,
+  updateStatusFromBody,
   validateAddressFromSession,
   validateTypeFromSession,
   validateStatusFromSession,
 } from '../utils/proposedAddresses'
 import { fetchErrors } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
+import CasesService from '../services/casesService'
+import { getCaseData } from '../utils/cases'
 
 export default class ProposedAddressesController {
   formData: MultiPageFormManager<'proposedAddress'>
@@ -20,6 +22,7 @@ export default class ProposedAddressesController {
   constructor(
     private readonly auditService: AuditService,
     private readonly proposedAddressesService: ProposedAddressesService,
+    private readonly casesService: CasesService,
   ) {
     this.formData = new MultiPageFormManager('proposedAddress')
   }
@@ -61,7 +64,7 @@ export default class ProposedAddressesController {
       })
       const { errors, errorSummary } = fetchErrors(req)
 
-      await updateAddressFromQuery(req, this.formData)
+      await updateAddressFromBody(req, this.formData)
 
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!errors || Object.keys(errors).length === 0) {
@@ -70,9 +73,12 @@ export default class ProposedAddressesController {
         }
       }
 
+      const caseData = await getCaseData(req, res, this.casesService)
+
       return res.render('pages/proposed-address/type', {
         crn: req.params.crn,
         proposedAddress: proposedAddressFormSessionData,
+        name: caseData.name,
         errors,
         errorSummary,
       })
@@ -87,7 +93,7 @@ export default class ProposedAddressesController {
       })
       const { errors, errorSummary } = fetchErrors(req)
 
-      await updateTypeFromQuery(req, this.formData)
+      await updateTypeFromBody(req, this.formData)
 
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!errors || Object.keys(errors).length === 0) {
@@ -112,14 +118,16 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
 
-      await updateStatusFromQuery(req, this.formData)
+      await updateStatusFromBody(req, this.formData)
 
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!validateStatusFromSession(req, proposedAddressFormSessionData)) {
         return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
       }
 
-      const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn)
+      const caseData = await getCaseData(req, res, this.casesService)
+
+      const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn, caseData.name)
       return res.render('pages/proposed-address/check-your-answers', {
         crn: req.params.crn,
         tableRows,

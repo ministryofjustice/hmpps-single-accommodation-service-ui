@@ -5,11 +5,11 @@ import { ProposedAddressFormData } from '@sas/ui'
 import { mock } from 'jest-mock-extended'
 import {
   summaryListRows,
-  updateAddressFromQuery,
+  updateAddressFromBody,
   validateAddressFromSession,
-  updateTypeFromQuery,
+  updateTypeFromBody,
   validateTypeFromSession,
-  updateStatusFromQuery,
+  updateStatusFromBody,
   validateStatusFromSession,
 } from './proposedAddresses'
 import { addErrorToFlash } from './validation'
@@ -95,7 +95,7 @@ describe('proposedAddresses', () => {
     jest.clearAllMocks()
     req = mock<Request>({
       params: { crn },
-      query: {},
+      body: {},
       session: {},
     })
   })
@@ -116,7 +116,7 @@ describe('proposedAddresses', () => {
         status: 'PASSED',
       } as ProposedAddressFormData
 
-      const rows = summaryListRows(data, 'CRN123')
+      const rows = summaryListRows(data, 'CRN123', 'James Taylor')
 
       const addressHtml = rows[0].value.html ?? rows[0].value
       const arrangementHtml = rows[1].value.html ?? rows[1].value
@@ -135,7 +135,7 @@ describe('proposedAddresses', () => {
         housingArrangementTypeDescription: 'Hostel',
       } as ProposedAddressFormData
 
-      const rows = summaryListRows(data, 'CRN123')
+      const rows = summaryListRows(data, 'CRN123', 'James Taylor')
 
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
@@ -144,16 +144,16 @@ describe('proposedAddresses', () => {
     })
   })
 
-  describe('updateAddressFromQuery', () => {
+  describe('updateAddressFromBody', () => {
     it('updates form data when address exists', async () => {
-      req.query = {
+      req.body = {
         addressLine1: 'Line 1',
         addressTown: 'Town',
         addressPostcode: 'PC1 1PC',
         addressCountry: 'UK',
       }
 
-      await updateAddressFromQuery(req, formDataManager)
+      await updateAddressFromBody(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         address: {
@@ -168,10 +168,10 @@ describe('proposedAddresses', () => {
     })
 
     it('updates address with empty default values for missing fields', async () => {
-      req.query = {
+      req.body = {
         addressLine2: 'Line 2',
       }
-      await updateAddressFromQuery(req, formDataManager)
+      await updateAddressFromBody(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         address: {
@@ -185,16 +185,16 @@ describe('proposedAddresses', () => {
       })
     })
 
-    it('does not update when query is empty', async () => {
-      req.query = {}
-      await updateAddressFromQuery(req, formDataManager)
+    it('does not update when body is empty', async () => {
+      req.body = {}
+      await updateAddressFromBody(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
 
-    it('does not update when query is undefined', async () => {
-      req.query = undefined
-      await updateAddressFromQuery(req, formDataManager)
+    it('does not update when body is undefined', async () => {
+      req.body = undefined
+      await updateAddressFromBody(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
@@ -220,7 +220,7 @@ describe('proposedAddresses', () => {
     })
 
     it('adds errors for blank fields', () => {
-      req.query = {}
+      req.body = {}
       const sessionData = { address: {} } as ProposedAddressFormData
 
       const result = validateAddressFromSession(req, sessionData)
@@ -258,15 +258,15 @@ describe('proposedAddresses', () => {
     })
   })
 
-  describe('updateTypeFromQuery', () => {
+  describe('updateTypeFromBody', () => {
     it('updates form data when type exists', async () => {
-      req.query = {
+      req.body = {
         housingArrangementType: 'OTHER',
         housingArrangementTypeDescription: 'Some description',
         settledType: 'TRANSIENT',
       }
 
-      await updateTypeFromQuery(req, formDataManager)
+      await updateTypeFromBody(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         housingArrangementType: 'OTHER',
@@ -276,10 +276,10 @@ describe('proposedAddresses', () => {
     })
 
     it('updates arrangement with empty default values for missing fields', async () => {
-      req.query = {
+      req.body = {
         housingArrangementType: 'FAILED',
       }
-      await updateTypeFromQuery(req, formDataManager)
+      await updateTypeFromBody(req, formDataManager)
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         housingArrangementType: 'FAILED',
         housingArrangementTypeDescription: '',
@@ -288,15 +288,15 @@ describe('proposedAddresses', () => {
     })
 
     it('does not update when no type provided', async () => {
-      req.query = {}
-      await updateTypeFromQuery(req, formDataManager)
+      req.body = {}
+      await updateTypeFromBody(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
 
-    it('does not update when query is undefined', async () => {
-      req.query = undefined
-      await updateTypeFromQuery(req, formDataManager)
+    it('does not update when body is undefined', async () => {
+      req.body = undefined
+      await updateTypeFromBody(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
@@ -343,26 +343,26 @@ describe('proposedAddresses', () => {
     })
   })
 
-  describe('updateStatusFromQuery', () => {
+  describe('updateStatusFromBody', () => {
     it('updates form data when status provided', async () => {
-      req.query = { status: 'FAILED' }
+      req.body = { status: 'FAILED' }
 
-      await updateStatusFromQuery(req, formDataManager)
+      await updateStatusFromBody(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { status: 'FAILED' })
     })
 
     it('does not update when status missing', async () => {
-      req.query = {}
+      req.body = {}
 
-      await updateStatusFromQuery(req, formDataManager)
+      await updateStatusFromBody(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
 
-    it('does not update when query is undefined', async () => {
-      req.query = undefined
-      await updateStatusFromQuery(req, formDataManager)
+    it('does not update when body is undefined', async () => {
+      req.body = undefined
+      await updateStatusFromBody(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })

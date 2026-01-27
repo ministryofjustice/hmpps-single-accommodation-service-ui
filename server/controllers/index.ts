@@ -14,6 +14,7 @@ export const controllers = (services: Services) => ({
   proposedAddressesController: new ProposedAddressesController(
     services.auditService,
     services.proposedAddressesService,
+    services.casesService,
   ),
 })
 

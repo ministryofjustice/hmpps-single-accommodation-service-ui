@@ -26,40 +26,40 @@
       name: "housingArrangementType",
       fieldset: {
           legend: {
-              text: "What will be the SOMEONE's housing arrangement at this address?",
+              text: "What will be the " + name + "'s housing arrangement at this address?",
               classes: "govuk-fieldset__legend--l"
           }
       },
       items: [
           {
-              value: "friendOrFamily",
+              value: "FRIEND_OR_FAMILY",
               text: "Friends or family (not tenant or owner)",
-              checked: proposedAddress.housingArrangementType == "friendOrFamily"
+              checked: proposedAddress.housingArrangementType == "FRIEND_OR_FAMILY"
           },
           {
-              value: "socialRent",
+              value: "SOCIAL_RENT",
               text: "Social rent (tenant)",
-              checked: proposedAddress.housingArrangementType == "socialRent"
+              checked: proposedAddress.housingArrangementType == "SOCIAL_RENT"
           },
           {
-              value: "privateRentWholeProperty",
+              value: "PRIVATE_RENT_WHOLE_PROPERTY",
               text: "Private rent, whole property (tenant)",
-              checked: proposedAddress.housingArrangementType == "privateRentWholeProperty"
+              checked: proposedAddress.housingArrangementType == "PRIVATE_RENT_WHOLE_PROPERTY"
           },
           {
-              value: "privateRentRoomShare",
+              value: "PRIVATE_RENT_ROOM_SHARE",
               text: "Private rent, room/share (tenant)",
-              checked: proposedAddress.housingArrangementType == "privateRentRoomShare"
+              checked: proposedAddress.housingArrangementType == "PRIVATE_RENT_ROOM_SHARE"
           },
           {
-              value: "owned",
+              value: "OWNED",
               text: "Owned (named on deeds/mortgage)",
-              checked: proposedAddress.housingArrangementType == "owned"
+              checked: proposedAddress.housingArrangementType == "OWNED"
           },
           {
-              value: "other",
+              value: "OTHER",
               text: "Other",
-              checked: proposedAddress.housingArrangementType == "other",
+              checked: proposedAddress.housingArrangementType == "OTHER",
               conditional: {
                 html: conditionalHtml
               }
@@ -77,14 +77,14 @@
       },
       items: [
           {
-              value: "settled",
+              value: "SETTLED",
               text: "Settled",
-              checked: proposedAddress.settledType == "settled"
+              checked: proposedAddress.settledType == "SETTLED"
           },
           {
-              value: "transient",
+              value: "TRANSIENT",
               text: "Transient",
-              checked: proposedAddress.settledType == "transient"
+              checked: proposedAddress.settledType == "TRANSIENT"
           }
       ],
       errorMessage: errors.settledType

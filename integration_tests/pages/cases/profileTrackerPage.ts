@@ -149,4 +149,8 @@ export default class ProfileTrackerPage extends AbstractPage {
       await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
     }
   }
+
+  clickAddAddressLink() {
+    return this.page.getByRole('link', { name: 'Add an address' }).click()
+  }
 }

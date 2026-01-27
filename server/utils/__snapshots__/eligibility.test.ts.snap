@@ -53,22 +53,17 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": [],
     "status": {
-      "colour": "green",
-      "text": "Awaiting assessment",
+      "colour": "yellow",
+      "text": "Submitted",
     },
   },
   {
     "heading": "CAS3 (transitional accommodation)",
     "inactive": false,
-    "links": [
-      {
-        "href": "#",
-        "text": "Referral and notes",
-      },
-    ],
+    "links": [],
     "status": {
       "colour": "green",
-      "text": "Arrived",
+      "text": "Confirmed",
     },
   },
 ]

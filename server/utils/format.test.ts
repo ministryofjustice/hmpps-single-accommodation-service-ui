@@ -1,4 +1,4 @@
-import { AccommodationAddressDetails, AddressDetailsDto } from '@sas/api'
+import { AccommodationAddressDetails } from '@sas/api'
 import {
   addressLines,
   eligibilityStatusTag,
@@ -10,7 +10,7 @@ import {
   formatStatus,
   referralStatusTag,
 } from './format'
-import { addressDetailsFactory } from '../testutils/factories'
+import { addressFactory } from '../testutils/factories'
 
 describe('formatting utilities', () => {
   beforeEach(() => {
@@ -208,8 +208,8 @@ describe('formatting utilities', () => {
         },
         'Flat 4, Fake House, Grand Street, Manchester, M21 0BF',
       ],
-    ])('returns an address %s in short format', (_, params: Partial<AddressDetailsDto>, expected) => {
-      const address = addressDetailsFactory.minimal().build(params)
+    ])('returns an address %s in short format', (_, params: Partial<AccommodationAddressDetails>, expected) => {
+      const address = addressFactory.minimal().build(params)
 
       expect(formatAddress(address)).toEqual(expected)
     })

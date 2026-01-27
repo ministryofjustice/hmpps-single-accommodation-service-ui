@@ -1,7 +1,7 @@
+import { faker } from '@faker-js/faker'
 import { Factory } from 'fishery'
-import { faker } from '@faker-js/faker/locale/en_GB'
 import { ProposedAddressDto } from '@sas/ui'
-import addressDetailsFactory from './addressDetails'
+import addressFactory from './accommodationAddressDetails'
 
 const housingArrangementTypes: ProposedAddressDto['housingArrangementType'][] = [
   'FRIENDS_OR_FAMILY',
@@ -19,12 +19,10 @@ export default Factory.define<ProposedAddressDto>(() => {
   const housingArrangementType = faker.helpers.arrayElement(housingArrangementTypes)
 
   return {
-    id: faker.string.uuid(),
     housingArrangementType,
     housingArrangementTypeDescription: housingArrangementType === 'OTHER' ? faker.lorem.sentence() : '',
     settledType: faker.helpers.arrayElement(settledTypes),
     status: faker.helpers.arrayElement(statuses),
-    address: addressDetailsFactory.build(),
-    createdAt: faker.date.recent().toISOString(),
+    address: addressFactory.build(),
   }
 })

@@ -22,6 +22,12 @@ const subTypes: Readonly<AccommodationDetail['arrangementSubType'][]> = [
 ]
 const offenderReleaseTypes: Readonly<AccommodationDetail['offenderReleaseType'][]> = ['BAIL', 'LICENCE', 'REMAND']
 const settledTypes: Readonly<AccommodationDetail['settledType'][]> = ['SETTLED', 'TRANSIENT']
+const statuses: Readonly<AccommodationDetail['status'][]> = [
+  'NOT_CHECKED_YET',
+  'CHECKS_PASSED',
+  'CHECKS_FAILED',
+  'CONFIRMED',
+]
 
 class AccommodationFactory extends Factory<AccommodationDetail> {
   current(endDate?: string, startDate?: string) {
@@ -78,6 +84,10 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
       address: undefined,
     })
   }
+
+  proposed() {
+    return this.privateAddress()
+  }
 }
 
 export default AccommodationFactory.define(() => {
@@ -93,6 +103,6 @@ export default AccommodationFactory.define(() => {
     startDate: faker.date.past().toISOString().substring(0, 10),
     endDate: faker.date.future().toISOString().substring(0, 10),
     address: addressFactory.build(),
-    createdAt: faker.date.recent().toISOString(),
+    createdAt: faker.date.recent({ days: 10 }).toISOString(),
   }
 })

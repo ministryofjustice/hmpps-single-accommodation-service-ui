@@ -1,5 +1,6 @@
-import { AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import { ProposedAddressDto } from '@sas/ui'
+import { AccommodationDetail } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -9,10 +10,13 @@ export default class ProposedAddressesClient extends RestClient {
     super('Proposed addresses client', config.apis.sasApi, logger, authenticationClient)
   }
 
-  async getProposedAddresses(crn: string) {
-    return this.get<ProposedAddressDto[]>({
-      path: apiPaths.cases.proposedAddresses.index({ crn }),
-    })
+  async getProposedAddresses(token: string, crn: string) {
+    return this.get<AccommodationDetail[]>(
+      {
+        path: apiPaths.cases.proposedAddresses.index({ crn }),
+      },
+      asUser(token),
+    )
   }
 
   async submit(crn: string, proposedAddressData: ProposedAddressDto) {

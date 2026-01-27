@@ -1,5 +1,5 @@
 import type { SuperAgentRequest } from 'superagent'
-import { CaseDto as Case, AccommodationReferralDto as Referral, ProposedAddressDto } from '@sas/api'
+import { CaseDto as Case, AccommodationReferralDto as Referral, AccommodationDetail } from '@sas/api'
 import { stubFor, stubApiError } from './wiremock'
 import { caseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
@@ -44,7 +44,7 @@ export default {
       },
     }),
   stubGetReferralHistory500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.referrals({ crn })),
-  stubGetProposedAddressesByCrn: (crn: string, proposedAddresses?: ProposedAddressDto[]): SuperAgentRequest =>
+  stubGetProposedAddressesByCrn: (crn: string, proposedAddresses?: AccommodationDetail[]): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',

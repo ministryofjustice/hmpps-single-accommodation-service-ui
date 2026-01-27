@@ -5,14 +5,9 @@ import {
   EligibilityDto as Eligibility,
   AccommodationReferralDto as Referral,
   AccommodationDetail,
-  ProposedAddressDto,
 } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { formatAddress, formatDate,
-  formatRiskLevel,
-  formatStatus,
-  addressLines,
-} from '../../../server/utils/format'
+import { formatAddress, formatDate, formatRiskLevel, formatStatus, addressLines } from '../../../server/utils/format'
 import { eligibilityStatusCard } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { accommodationType } from '../../../server/utils/cases'
@@ -132,7 +127,7 @@ export default class ProfileTrackerPage extends AbstractPage {
     }
   }
 
-  async shouldShowProposedAddresses(proposedAddresses?: ProposedAddressDto[]) {
+  async shouldShowProposedAddresses(proposedAddresses?: AccommodationDetail[]) {
     const proposedAddressesSection = this.page.locator('section', {
       has: this.page.getByRole('heading', { name: 'Private addresses' }),
     })

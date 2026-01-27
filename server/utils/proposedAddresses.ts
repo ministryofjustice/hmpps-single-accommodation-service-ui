@@ -1,5 +1,5 @@
 import { StatusCard } from '@sas/ui'
-import { ProposedAddressDto } from '@sas/api'
+import { AccommodationDetail, ProposedAddressDto } from '@sas/api'
 import {
   formatAddress,
   formatDateAndDaysAgo,
@@ -9,9 +9,9 @@ import {
 import { summaryListRow } from './cases'
 
 // eslint-disable-next-line import/prefer-default-export
-export const proposedAddressStatusCard = (proposedAddress: ProposedAddressDto): StatusCard => ({
+export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => ({
   heading: formatAddress(proposedAddress.address),
-  inactive: proposedAddress.status === 'FAILED',
+  inactive: proposedAddress.status === 'CHECKS_FAILED',
   status: {
     text: formatProposedAddressStatus(proposedAddress.status),
     colour: proposedAddressStatusColours[proposedAddress.status],
@@ -26,7 +26,7 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAddressDto): 
 
 const linksForStatus = (status: ProposedAddressDto['status']) => {
   switch (status) {
-    case 'PASSED':
+    case 'CHECKS_PASSED':
       return [
         { text: 'Confirm as next address', href: '#' },
         { text: 'Notes', href: '#' },

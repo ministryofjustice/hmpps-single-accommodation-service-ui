@@ -1,5 +1,5 @@
 import { eligibilityStatusCard, eligibilityToEligibilityCards } from './eligibility'
-import { eligibilityFactory, ruleActionFactory, serviceResultFactory } from '../testutils/factories'
+import { eligibilityFactory, serviceResultFactory } from '../testutils/factories'
 
 describe('eligibility utilities', () => {
   describe('eligibilityStatusCard', () => {
@@ -7,7 +7,7 @@ describe('eligibility utilities', () => {
       [['Start referral', 'Notes'], 'NOT_STARTED' as const],
       [['Notes'], 'NOT_ELIGIBLE' as const],
       [['Notes'], 'UPCOMING' as const],
-      [['Referral and notes'], 'ARRIVED' as const],
+      [[], 'CONFIRMED' as const],
     ])('renders links %s for status %s', (links, status) => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
@@ -18,6 +18,7 @@ describe('eligibility utilities', () => {
     })
   })
 })
+
 describe('eligibilityToEligibilityCards', () => {
   it('returns eligibility cards for each service', () => {
     const eligibility = eligibilityFactory.build()
@@ -37,7 +38,7 @@ describe('eligibilityToEligibilityCards', () => {
       cas1: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),
       cas2Hdc: serviceResultFactory.build({ serviceStatus: 'UPCOMING' }),
       cas2CourtBail: serviceResultFactory.build({ serviceStatus: 'NOT_ELIGIBLE' }),
-      cas2PrisonBail: serviceResultFactory.build({ serviceStatus: 'AWAITING_ASSESSMENT' }),
+      cas2PrisonBail: serviceResultFactory.build({ serviceStatus: 'SUBMITTED' }),
       cas3: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }),
     })
 

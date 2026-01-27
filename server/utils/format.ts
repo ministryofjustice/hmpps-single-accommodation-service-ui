@@ -4,9 +4,7 @@ import {
   AccommodationReferralDto as Referral,
   ServiceResult,
   AccommodationAddressDetails,
-  AddressDetails,
   ProposedAddressDto,
-  AddressDetailsDto,
 } from '@sas/api'
 import { calculateAge } from './person'
 
@@ -122,6 +120,10 @@ export const eligibilityStatusColours: Record<string, string> = {
   CONFIRMED: 'green',
 }
 
+export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): string => {
+  return renderStatusTag(formatEligibilityStatus(status), eligibilityStatusColours[status] || 'grey')
+}
+
 export const dutyToReferStatusColours: Record<string, string> = {
   NOT_STARTED: 'red',
   UPCOMING: 'yellow',
@@ -149,8 +151,8 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDto['status'
   return (
     {
       NOT_CHECKED_YET: 'Not checked',
-      FAILED: 'Checks failed',
-      PASSED: 'Checks passed',
+      CHECKS_FAILED: 'Checks failed',
+      CHECKS_PASSED: 'Checks passed',
       CONFIRMED: 'Confirmed',
     }[status] || 'Unknown'
   )
@@ -158,12 +160,12 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDto['status'
 
 export const proposedAddressStatusColours: Record<ProposedAddressDto['status'], string> = {
   NOT_CHECKED_YET: 'grey',
-  FAILED: 'red',
-  PASSED: 'yellow',
+  CHECKS_FAILED: 'red',
+  CHECKS_PASSED: 'yellow',
   CONFIRMED: 'green',
 }
 
-export const formatAddress = (address: AddressDetailsDto): string => {
+export const formatAddress = (address: AccommodationAddressDetails): string => {
   const { subBuildingName, buildingName, buildingNumber, thoroughfareName, postTown, postcode } = address
   return [subBuildingName, buildingName, `${buildingNumber || ''} ${thoroughfareName || ''}`, postTown, postcode]
     .filter(Boolean)

@@ -6,10 +6,10 @@ import CasesService from '../services/casesService'
 import ReferralsService from '../services/referralsService'
 import { user } from '../routes/testutils/appSetup'
 import {
+  accommodationFactory,
   caseFactory,
   dutyToReferFactory,
   eligibilityFactory,
-  proposedAddressFactory,
   referralFactory,
 } from '../testutils/factories'
 import { accommodationCard, caseAssignedTo, casesTableCaption, casesToRows, referralHistoryTable } from '../utils/cases'
@@ -79,7 +79,7 @@ describe('casesController', () => {
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
       const dutyToRefer = dutyToReferFactory.buildList(1)
-      const proposedAddresses = proposedAddressFactory.buildList(2)
+      const proposedAddresses = accommodationFactory.proposed().buildList(2)
 
       casesService.getCase.mockResolvedValue(caseData)
       referralsService.getReferralHistory.mockResolvedValue(referralHistory)

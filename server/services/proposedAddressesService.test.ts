@@ -1,5 +1,5 @@
 import ProposedAddressesClient from '../data/proposedAddressesClient'
-import { proposedAddressFactory } from '../testutils/factories'
+import { accommodationFactory, proposedAddressFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
 
 jest.mock('../data/proposedAddressesClient')
@@ -17,12 +17,12 @@ describe('ProposedAddressesService', () => {
 
   describe('getProposedAddresses', () => {
     it('should call getProposedAddresses on the api client', async () => {
-      const proposedAddressesData = proposedAddressFactory.buildList(3)
+      const proposedAddressesData = accommodationFactory.proposed().buildList(3)
       proposedAddressesClient.getProposedAddresses.mockResolvedValue(proposedAddressesData)
 
       const result = await proposedAddressesService.getProposedAddresses(token, crn)
 
-      expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(crn)
+      expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn)
       expect(result).toEqual(proposedAddressesData)
     })
   })

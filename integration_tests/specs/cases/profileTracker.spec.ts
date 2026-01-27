@@ -1,5 +1,5 @@
 import { test } from '@playwright/test'
-import { AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto, ProposedAddressDto } from '@sas/api'
+import { AccommodationDetail, AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto } from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
@@ -11,7 +11,7 @@ import {
   dutyToReferFactory,
   eligibilityFactory,
   serviceResultFactory,
-  proposedAddressFactory,
+  accommodationFactory,
 } from '../../../server/testutils/factories'
 
 test.describe('Profile Tracker Page', () => {
@@ -28,7 +28,7 @@ test.describe('Profile Tracker Page', () => {
     dutyToRefer?: DutyToReferDto
     eligibility?: EligibilityDto
     referrals?: AccommodationReferralDto[]
-    proposedAddresses?: ProposedAddressDto[]
+    proposedAddresses?: AccommodationDetail[]
   }) => {
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
@@ -48,7 +48,7 @@ test.describe('Profile Tracker Page', () => {
       cas3: serviceResultFactory.build(),
     })
     const referrals = referralFactory.buildList(3)
-    const proposedAddresses = proposedAddressFactory.buildList(2)
+    const proposedAddresses = accommodationFactory.proposed().buildList(2)
 
     await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses })
     await login(page)

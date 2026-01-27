@@ -11,7 +11,7 @@ export type ProposedAddressDto = {
     | 'OTHER'
   housingArrangementTypeDescription: string
   settledType: 'SETTLED' | 'TRANSIENT'
-  status: 'NOT_CHECKED_YET' | 'PASSED' | 'FAILED' | 'CONFIRMED'
+  status: 'NOT_CHECKED_YET' | 'CHECKS_PASSED' | 'CHECKS_FAILED' | 'CONFIRMED'
   address: AddressDetailsDto
   createdAt?: string
 }

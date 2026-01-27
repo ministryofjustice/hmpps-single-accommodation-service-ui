@@ -3,14 +3,20 @@ import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
 import { CaseDto } from '@sas/api'
-import { caseFactory, dutyToReferFactory, eligibilityFactory, referralFactory } from '../server/testutils/factories'
+import {
+  accommodationFactory,
+  caseFactory,
+  dutyToReferFactory,
+  eligibilityFactory,
+  referralFactory,
+} from '../server/testutils/factories'
 
 import casesFixture from './fixtures/cases.json'
 
 /**
  * Generate data for wiremock fixtures.
  *
- * Usage: npx ts-node wiremock/generateData.ts [--all] [--eligibility] [--referrals] [--dtr]
+ * Usage: npx ts-node wiremock/generateData.ts [--all] [--eligibility] [--referrals] [--dtr] [--proposed-addresses]
  */
 
 const generateCases = process.argv.includes('--all')
@@ -19,10 +25,11 @@ const generate = {
   eligibility: generateCases || process.argv.includes('--eligibility'),
   referrals: generateCases || process.argv.includes('--referrals'),
   dutyToRefer: generateCases || process.argv.includes('--dtr'),
+  proposedAddresses: generateCases || process.argv.includes('--proposed-addresses'),
 }
 
 if (Object.values(generate).filter(Boolean).length === 0) {
-  console.log('No data selected. Specify --all, --eligibility, --referrals or --dtr')
+  console.log('No data selected. Specify --all, --eligibility, --referrals, --dtr or --proposed-addresses')
   process.exit(1)
 }
 
@@ -74,4 +81,15 @@ if (generate.dutyToRefer) {
     {},
   )
   saveToFixture('dutyToRefer', dutyToRefer)
+}
+
+if (generate.proposedAddresses) {
+  const proposedAddresses = cases.reduce(
+    (responses, c) => ({
+      ...responses,
+      [c.crn]: [...Array(faker.number.int({ min: 0, max: 3 }))].map(() => accommodationFactory.proposed().build()),
+    }),
+    {},
+  )
+  saveToFixture('proposedAddresses', proposedAddresses)
 }

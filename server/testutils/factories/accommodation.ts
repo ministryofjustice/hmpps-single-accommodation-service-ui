@@ -86,7 +86,9 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
   }
 
   proposed() {
-    return this.privateAddress()
+    return this.privateAddress().params({
+      status: faker.helpers.arrayElement(statuses),
+    })
   }
 }
 

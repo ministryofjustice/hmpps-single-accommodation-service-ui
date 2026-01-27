@@ -6,7 +6,8 @@ import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
 import referrals from './fixtures/referrals.json'
 import dutyToRefer from './fixtures/dutyToRefer.json'
-import { AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto } from '@sas/api'
+import proposedAddresses from './fixtures/proposedAddresses.json'
+import { AccommodationDetail, AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto } from '@sas/api'
 import { resetStubs } from '../integration_tests/mockApis/wiremock'
 
 async function stubCaseList() {
@@ -45,7 +46,26 @@ async function stubDutyToRefer() {
   }
 }
 
+async function stubProposedAddresses() {
+  for await (const caseDto of cases) {
+    await casesApi.stubGetProposedAddressesByCrn(
+      caseDto.crn,
+      (proposedAddresses as Record<string, AccommodationDetail[]>)[caseDto.crn],
+    )
+  }
+}
+
 ;(async function () {
+  console.log('Resetting wiremock stubs...')
   await resetStubs()
-  await Promise.all([stubCaseList(), stubCases(), stubEligibility(), stubReferrals(), stubDutyToRefer()])
+  console.log('Stubbing endpoints...')
+  await Promise.all([
+    stubCaseList(),
+    stubCases(),
+    stubEligibility(),
+    stubReferrals(),
+    stubDutyToRefer(),
+    stubProposedAddresses(),
+  ])
+  console.log('Done!')
 })()

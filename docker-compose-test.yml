@@ -9,5 +9,16 @@ services:
     ports:
       - "9091:8080"
 
+  redis:
+    image: "redis:latest"
+    networks:
+      - hmpps_int
+    container_name: redis
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+
 networks:
   hmpps_int:

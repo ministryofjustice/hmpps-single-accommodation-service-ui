@@ -18,12 +18,11 @@ describe('ProposedAddressesService', () => {
   describe('submit', () => {
     it('should call submit on the api client', async () => {
       const proposedAddressData = proposedAddressFactory.build()
-      proposedAddressesClient.submit.mockResolvedValue(proposedAddressData)
 
       const result = await proposedAddressesService.submit(token, crn, proposedAddressData)
 
       expect(proposedAddressesClient.submit).toHaveBeenCalledWith(crn, proposedAddressData)
-      expect(result).toEqual(proposedAddressData)
+      expect(result).toEqual(undefined)
     })
   })
 })

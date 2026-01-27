@@ -11,6 +11,6 @@ export default class DutyToReferClient extends RestClient {
   }
 
   getDutyToRefer(token: string, crn: string) {
-    return this.get<DutyToReferDto[]>({ path: apiPaths.dutyToRefer({ crn }) }, asUser(token))
+    return this.get<DutyToReferDto[]>({ path: apiPaths.cases.dutyToRefer({ crn }) }, asUser(token))
   }
 }

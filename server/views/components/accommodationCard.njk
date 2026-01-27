@@ -1,7 +1,7 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
 
-{%- if type === 'NO_FIXED_ABODE' -%}
+{%- if arrangementType === 'NO_FIXED_ABODE' -%}
   {%- set html %}
     {{ 'Since' if (startDate | date('days') < 0) else 'From' }} {{ startDate | date('long') }} ({{ startDate | date('days for/in') }})
   {% endset -%}

@@ -40,7 +40,7 @@ if (generate.cases) {
   cases = caseFactory.buildList(10)
   saveToFixture('cases', cases)
 } else {
-  cases = casesFixture as CaseDto[]
+  cases = casesFixture as unknown as CaseDto[]
 }
 
 if (generate.eligibility) {

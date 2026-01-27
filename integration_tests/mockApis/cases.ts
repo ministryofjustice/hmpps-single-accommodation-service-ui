@@ -35,7 +35,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.referrals.history({ crn }),
+        urlPattern: apiPaths.cases.referrals({ crn }),
       },
       response: {
         status: 200,
@@ -43,5 +43,5 @@ export default {
         jsonBody: referrals || [],
       },
     }),
-  stubGetReferralHistory500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.referrals.history({ crn })),
+  stubGetReferralHistory500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.referrals({ crn })),
 }

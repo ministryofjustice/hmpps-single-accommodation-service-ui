@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { Factory } from 'fishery'
-import { ProposedAddressDto } from '@sas/api'
+import { ProposedAddressDto } from '@sas/ui'
 
 const housingArrangementTypes: ProposedAddressDto['housingArrangementType'][] = [
   'FRIENDS_OR_FAMILY',

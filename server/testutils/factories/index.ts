@@ -1,7 +1,7 @@
 export { default as caseFactory } from './case'
 export { default as assignedUserFactory } from './assignedUser'
 export { default as referralFactory } from './referral'
-export { default as addressFactory } from './address'
+export { default as addressFactory } from './accommodationAddressDetails'
 export { default as accommodationFactory } from './accommodation'
 export { default as dutyToReferFactory } from './dutyToRefer'
 export { default as eligibilityFactory } from './eligibility'

@@ -2,9 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type SuitableApplication = {
-    id: string;
-    applicationStatus: string;
-    placementStatus?: string;
+export type RuleAction = {
+    text: string;
+    isUpcoming: boolean;
 };
 

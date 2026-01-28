@@ -11,6 +11,6 @@ export type EligibilityDto = {
     cas2CourtBail?: ServiceResult;
     cas3?: ServiceResult;
     caseActions: Array<string>;
-    caseStatus: 'NO_ACTION_NEEDED' | 'ACTION_UPCOMING' | 'ACTION_NEEDED';
+    caseStatus: 'NO_ACTION_REQUIRED' | 'ACTION_UPCOMING' | 'ACTION_NEEDED';
 };
 

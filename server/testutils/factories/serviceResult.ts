@@ -1,33 +1,25 @@
 import { ServiceResult } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
+import ruleActionFactory from './ruleAction'
 
 const serviceStatuses: Array<ServiceResult['serviceStatus']> = [
-  'NOT_STARTED',
   'NOT_ELIGIBLE',
   'UPCOMING',
-  'AWAITING_ASSESSMENT',
-  'UNALLOCATED_ASSESSMENT',
-  'ASSESSMENT_IN_PROGRESS',
-  'AWAITING_PLACEMENT',
-  'REQUEST_FOR_FURTHER_INFORMATION',
-  'PENDING_PLACEMENT_REQUEST',
-  'ARRIVED',
-  'UPCOMING_PLACEMENT',
-  'DEPARTED',
-  'NOT_ARRIVED',
-  'CANCELLED',
+  'NOT_STARTED',
+  'REJECTED',
+  'WITHDRAWN',
+  'SUBMITTED',
+  'CONFIRMED',
 ]
-
-const actions = ['Action1!', 'Action2!', 'Action3!', 'Action4!']
 
 class ServiceResultFactory extends Factory<ServiceResult> {
   notEligible() {
-    return this.params({ serviceStatus: 'NOT_ELIGIBLE', actions: [], suitableApplication: undefined })
+    return this.params({ serviceStatus: 'NOT_ELIGIBLE', action: undefined, suitableApplicationId: undefined })
   }
 }
 
 export default ServiceResultFactory.define(() => ({
   serviceStatus: faker.helpers.arrayElement(serviceStatuses),
-  actions: faker.helpers.arrayElements(actions, { min: 0, max: 3 }),
+  action: faker.helpers.maybe(() => ruleActionFactory.build()),
 }))

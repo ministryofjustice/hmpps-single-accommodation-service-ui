@@ -11,16 +11,6 @@ exports[`eligibility utilities eligibilityToEligibilityCards returns a formatted
 
 	<div class="sas-card__footer">
 		
-			<ul class="govuk-list govuk-!-margin-bottom-0 govuk-!-margin-top-4">
-				
-					<li class="govuk-!-margin-bottom-0">Action1!</li>
-				
-					<li class="govuk-!-margin-bottom-0">Action2!</li>
-				
-			</ul>
-		
-
-		
 			<div class="sas-card__links">
 				
 					<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Start referral</a>
@@ -30,5 +20,6 @@ exports[`eligibility utilities eligibilityToEligibilityCards returns a formatted
 			</div>
 		
 	</div>
-</article>"
+</article>
+"
 `;

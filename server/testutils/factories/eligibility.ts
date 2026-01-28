@@ -18,7 +18,7 @@ export default Factory.define<EligibilityDto>(() => {
 
   return {
     crn: crn(),
-    caseStatus: faker.helpers.arrayElement(['NO_ACTION_NEEDED', 'ACTION_NEEDED', 'ACTION_UPCOMING']),
+    caseStatus: faker.helpers.arrayElement(['NO_ACTION_REQUIRED', 'ACTION_NEEDED', 'ACTION_UPCOMING']),
     caseActions: [],
     ...allServiceResults,
   }

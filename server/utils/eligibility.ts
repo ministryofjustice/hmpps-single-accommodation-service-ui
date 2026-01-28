@@ -2,32 +2,7 @@ import { EligibilityDto, ServiceResult } from '@sas/api'
 import { nunjucksInline } from './nunjucksSetup'
 import { eligibilityStatusTag } from './format'
 
-export const serviceStatusToCardStatus = (status: string) => {
-  switch (status) {
-    case 'NOT_ELIGIBLE':
-      return 'NOT_ELIGIBLE' // NOT ELIGIBLE
-    case 'NOT_STARTED':
-    case 'UPCOMING':
-      return 'NOT_STARTED' // NO APPLICATION
-    case 'AWAITING_ASSESSMENT':
-    case 'UNALLOCATED_ASSESSMENT':
-    case 'ASSESSMENT_IN_PROGRESS':
-    case 'AWAITING_PLACEMENT':
-    case 'REQUEST_FOR_FURTHER_INFORMATION':
-    case 'PENDING_PLACEMENT_REQUEST':
-    case 'DEPARTED':
-    case 'NOT_ARRIVED':
-    case 'CANCELLED':
-      return 'UPCOMING' // SUITABLE APPLICATION, PLACEMENT NEEDED
-    case 'ARRIVED':
-    case 'UPCOMING_PLACEMENT':
-      return 'CONFIRMED' // SUITABLE APPLICATION AND NO ACTION NEEDED
-    default:
-      return ''
-  }
-}
-
-export const linksForStatus = (serviceStatus?: string) => {
+export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) => {
   switch (serviceStatus) {
     case 'NOT_ELIGIBLE':
     case 'UPCOMING':
@@ -37,8 +12,6 @@ export const linksForStatus = (serviceStatus?: string) => {
         { text: 'Start referral', href: '#' },
         { text: 'Notes', href: '#' },
       ]
-    case 'ARRIVED':
-      return [{ text: 'Referral and notes', href: '#' }]
     default:
       return []
   }
@@ -49,7 +22,6 @@ const eligibilityCard = (title: string, service?: ServiceResult): string => {
     title,
     serviceStatus: service?.serviceStatus,
     serviceStatusTag: eligibilityStatusTag(service?.serviceStatus),
-    details: service?.actions,
     links: linksForStatus(service?.serviceStatus),
   })
 }

@@ -1,5 +1,5 @@
 import { eligibilityToEligibilityCards } from './eligibility'
-import { eligibilityFactory, serviceResultFactory } from '../testutils/factories'
+import { eligibilityFactory, ruleActionFactory, serviceResultFactory } from '../testutils/factories'
 
 describe('eligibility utilities', () => {
   describe('eligibilityToEligibilityCards', () => {
@@ -8,7 +8,7 @@ describe('eligibility utilities', () => {
         cas1: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),
         cas2Hdc: serviceResultFactory.build({ serviceStatus: 'UPCOMING' }),
         cas2CourtBail: serviceResultFactory.build({ serviceStatus: 'NOT_ELIGIBLE' }),
-        cas3: serviceResultFactory.build({ serviceStatus: 'ARRIVED' }),
+        cas3: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }),
       })
 
       const cards = eligibilityToEligibilityCards(eligibility)
@@ -25,7 +25,10 @@ describe('eligibility utilities', () => {
       const eligibility = eligibilityFactory.build({
         cas1: serviceResultFactory.build({
           serviceStatus: 'NOT_STARTED',
-          actions: ['Action1!', 'Action2!'],
+          action: ruleActionFactory.build({
+            text: 'Start referral',
+            isUpcoming: true,
+          }),
         }),
       })
 
@@ -38,7 +41,10 @@ describe('eligibility utilities', () => {
       [['Start referral', 'Notes'], 'NOT_STARTED' as const],
       [['Notes'], 'NOT_ELIGIBLE' as const],
       [['Notes'], 'UPCOMING' as const],
-      [['Referral and notes'], 'ARRIVED' as const],
+      [[], 'REJECTED' as const],
+      [[], 'WITHDRAWN' as const],
+      [[], 'SUBMITTED' as const],
+      [[], 'CONFIRMED' as const],
     ])('renders links %s for status %s', (links, status) => {
       const eligibility = eligibilityFactory.build({
         cas1: serviceResultFactory.build({ serviceStatus: status }),

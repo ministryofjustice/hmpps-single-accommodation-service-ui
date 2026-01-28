@@ -11,5 +11,5 @@ export type { AssignedToDto } from './models/AssignedToDto';
 export type { CaseDto } from './models/CaseDto';
 export type { DutyToReferDto } from './models/DutyToReferDto';
 export type { EligibilityDto } from './models/EligibilityDto';
+export type { RuleAction } from './models/RuleAction';
 export type { ServiceResult } from './models/ServiceResult';
-export type { SuitableApplication } from './models/SuitableApplication';

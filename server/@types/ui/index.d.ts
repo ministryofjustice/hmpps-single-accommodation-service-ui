@@ -1,6 +1,5 @@
 import { AccommodationDetail } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
-import { AddressDetails } from '@sas/api'
 
 export interface ErrorSummary {
   text: string
@@ -15,7 +14,7 @@ export interface ErrorMessages {
   [key: string]: ErrorMessage
 }
 
-export type ProposedAddressDto = {
+export type ProposedAddressFormData = {
   housingArrangementType: AccommodationDetail['arrangementSubType']
   housingArrangementTypeDescription: string
   settledType: AccommodationDetail['settledType']

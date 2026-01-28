@@ -17,19 +17,24 @@
       },
       items: [
           {
-              value: "NOT_YET_CHECKED",
+              value: "NOT_CHECKED_YET",
               text: "Not checked yet",
-              checked: proposedAddress.status == "NOT_YET_CHECKED"
+              checked: proposedAddress.status == "NOT_CHECKED_YET"
           },
           {
-              value: "PASSED",
+              value: "CHECKS_PASSED",
               text: "Passed",
-              checked: proposedAddress.status == "PASSED"
+              checked: proposedAddress.status == "CHECKS_PASSED"
           },
           {
-              value: "FAILED",
+              value: "CHECKS_FAILED",
               text: "Failed",
-              checked: proposedAddress.status == "FAILED"
+              checked: proposedAddress.status == "CHECKS_FAILED"
+          },
+          {
+                value: "CONFIRMED",
+                text: "Confirmed",
+                checked: proposedAddress.status == "CONFIRMED"
           }
       ],
       errorMessage: errors.status

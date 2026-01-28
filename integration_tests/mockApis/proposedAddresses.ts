@@ -7,7 +7,7 @@ export default {
     stubFor({
       request: {
         method: 'POST',
-        urlPattern: apiPaths.proposedAddresses.submit({ crn }),
+        urlPattern: apiPaths.cases.proposedAddresses.submit({ crn }),
       },
       response: {
         status: 200,
@@ -16,5 +16,5 @@ export default {
     })
   },
   stubSubmitProposedAddress500: (crn: string): SuperAgentRequest =>
-    stubApiError(apiPaths.proposedAddresses.submit({ crn }), 'POST'),
+    stubApiError(apiPaths.cases.proposedAddresses.submit({ crn }), 'POST'),
 }

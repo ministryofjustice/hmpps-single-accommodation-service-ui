@@ -53,17 +53,17 @@ describe('proposedAddressesController', () => {
   const casesService = mock<CasesService>()
   const sessionData: ProposedAddressFormData = {
     address: {
-      line1: 'Line 1',
-      line2: 'Line 2',
-      city: 'Town',
-      region: 'Region',
+      buildingName: 'Line 1',
+      subBuildingName: 'Line 2',
+      postTown: 'Town',
+      county: 'Region',
       postcode: 'AB1 2CD',
       country: 'UK',
     },
-    housingArrangementType: 'FRIEND_OR_FAMILY',
+    housingArrangementType: 'FRIENDS_OR_FAMILY',
     housingArrangementTypeDescription: '',
     settledType: 'SETTLED',
-    status: 'PASSED',
+    status: 'CHECKS_PASSED',
   }
 
   let controller: ProposedAddressesController
@@ -110,10 +110,10 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
         address: {
-          line1: 'Line 1',
-          line2: 'Line 2',
-          city: 'Town',
-          region: 'Region',
+          buildingName: 'Line 1',
+          subBuildingName: 'Line 2',
+          postTown: 'Town',
+          county: 'Region',
           postcode: 'AB1 2CD',
           country: 'UK',
         },

@@ -1,5 +1,5 @@
 import { StatusCard } from '@sas/ui'
-import { AccommodationDetail, ProposedAddressDto } from '@sas/api'
+import { AccommodationDetail } from '@sas/api'
 import {
   formatAddress,
   formatDateAndDaysAgo,
@@ -24,7 +24,7 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
   links: linksForStatus(proposedAddress.status),
 })
 
-const linksForStatus = (status: ProposedAddressDto['status']) => {
+const linksForStatus = (status: AccommodationDetail['status']) => {
   switch (status) {
     case 'CHECKS_PASSED':
       return [

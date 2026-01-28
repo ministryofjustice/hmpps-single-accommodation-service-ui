@@ -4,7 +4,7 @@ import {
   AccommodationReferralDto as Referral,
   ServiceResult,
   AccommodationAddressDetails,
-  ProposedAddressDto,
+  AccommodationDetail,
 } from '@sas/api'
 import { calculateAge } from './person'
 
@@ -147,7 +147,7 @@ export const addressLines = (address: AccommodationAddressDetails = {}): string[
     .filter(Boolean)
 }
 
-export const formatProposedAddressStatus = (status?: ProposedAddressDto['status']): string => {
+export const formatProposedAddressStatus = (status?: AccommodationDetail['status']): string => {
   return (
     {
       NOT_CHECKED_YET: 'Not checked',
@@ -158,7 +158,7 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDto['status'
   )
 }
 
-export const proposedAddressStatusColours: Record<ProposedAddressDto['status'], string> = {
+export const proposedAddressStatusColours: Record<AccommodationDetail['status'], string> = {
   NOT_CHECKED_YET: 'grey',
   CHECKS_FAILED: 'red',
   CHECKS_PASSED: 'yellow',

@@ -77,7 +77,8 @@ export default class CasesController {
           referralHistory: referralHistoryTable(referralHistory),
           eligibilityCards: eligibilityToEligibilityCards(eligibility).map(statusCard),
           dutyToReferCard: statusCard(dutyToReferStatusCard(dutyToRefer[0])),
-          proposedAddresses: proposedAddresses.map(proposedAddressStatusCard).map(statusCard),
+          proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard).map(statusCard),
+          failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard).map(statusCard),
         })
       } catch (error) {
         if (error.responseStatus === 404) {

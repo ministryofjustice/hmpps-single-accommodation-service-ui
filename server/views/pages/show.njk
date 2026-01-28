@@ -78,7 +78,16 @@
           {% for card in proposedAddresses %}
             {{ card | safe }}
           {% endfor %}
-        {% else %}
+        {% endif %}
+
+        {% if failedChecksAddresses | length %}
+          <h3 class="govuk-heading-m govuk-!-margin-top-5">Addresses that failed checks</h3>
+          {% for card in failedChecksAddresses %}
+            {{ card | safe }}
+          {% endfor %}
+        {% endif %}
+
+        {% if not (proposedAddresses | length) and not (failedChecksAddresses | length) %}
           <p>No private addresses have been added.</p>
         {% endif %}
       </section>

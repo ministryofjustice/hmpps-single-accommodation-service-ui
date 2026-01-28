@@ -48,7 +48,10 @@ test.describe('Profile Tracker Page', () => {
       cas3: serviceResultFactory.build(),
     })
     const referrals = referralFactory.buildList(3)
-    const proposedAddresses = accommodationFactory.proposed().buildList(2)
+    const proposedAddresses = [
+      accommodationFactory.proposed().build({ status: 'NOT_CHECKED_YET' }),
+      accommodationFactory.proposed().build({ status: 'CHECKS_FAILED' }),
+    ]
 
     await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses })
     await login(page)

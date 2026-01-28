@@ -79,13 +79,14 @@ describe('casesController', () => {
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
       const dutyToRefer = dutyToReferFactory.buildList(1)
-      const proposedAddresses = accommodationFactory.proposed().buildList(2)
+      const proposed = accommodationFactory.proposed().buildList(2, { status: 'NOT_CHECKED_YET' })
+      const failedChecks = accommodationFactory.proposed().buildList(1, { status: 'CHECKS_FAILED' })
 
       casesService.getCase.mockResolvedValue(caseData)
       referralsService.getReferralHistory.mockResolvedValue(referralHistory)
       eligibilityService.getEligibility.mockResolvedValue(eligibility)
       dutyToReferService.getDutyToRefer.mockResolvedValue(dutyToRefer)
-      proposedAddressesService.getProposedAddresses.mockResolvedValue(proposedAddresses)
+      proposedAddressesService.getProposedAddresses.mockResolvedValue({ proposed, failedChecks })
 
       await casesController.show()(request, response, next)
 
@@ -107,7 +108,8 @@ describe('casesController', () => {
         referralHistory: referralHistoryTable(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility).map(statusCard),
         dutyToReferCard: statusCard(dutyToReferStatusCard(dutyToRefer[0])),
-        proposedAddresses: proposedAddresses.map(proposedAddressStatusCard).map(statusCard),
+        proposedAddresses: proposed.map(proposedAddressStatusCard).map(statusCard),
+        failedChecksAddresses: failedChecks.map(proposedAddressStatusCard).map(statusCard),
       })
     })
   })

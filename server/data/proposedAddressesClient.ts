@@ -20,6 +20,7 @@ export default class ProposedAddressesClient extends RestClient {
   }
 
   async submit(crn: string, proposedAddressData: ProposedAddressFormData) {
+    // TODO map form data to accommodation detail
     return this.post<void>({
       path: apiPaths.cases.proposedAddresses.submit({ crn }),
       data: proposedAddressData,

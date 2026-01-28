@@ -123,10 +123,28 @@ describe('proposedAddressesController', () => {
     })
   })
 
-  describe('type', () => {
-    it('renders arrangement type page', async () => {
+  describe('saveDetails', () => {
+    it('redirects to type when address valid', async () => {
       ;(validateAddressFromSession as jest.Mock).mockReturnValue(true)
 
+      await controller.saveDetails()(request, response, next)
+
+      expect(updateAddressFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+    })
+
+    it('redirects to details when address invalid', async () => {
+      ;(validateAddressFromSession as jest.Mock).mockReturnValue(false)
+
+      await controller.saveDetails()(request, response, next)
+
+      expect(updateAddressFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
+    })
+  })
+
+  describe('type', () => {
+    it('renders arrangement type page', async () => {
       await controller.type()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
@@ -140,7 +158,6 @@ describe('proposedAddressesController', () => {
 
     it('renders arrangement type page with session data', async () => {
       jest.spyOn(controller.formData, 'get').mockReturnValue(sessionData)
-      ;(validateAddressFromSession as jest.Mock).mockReturnValue(true)
 
       await controller.type()(request, response, next)
 
@@ -152,21 +169,30 @@ describe('proposedAddressesController', () => {
         errorSummary: [],
       })
     })
+  })
 
-    it('redirects to details page when address validation fails', async () => {
-      ;(validateAddressFromSession as jest.Mock).mockReturnValue(false)
+  describe('saveType', () => {
+    it('redirects to status when arrangement type valid', async () => {
+      ;(validateTypeFromSession as jest.Mock).mockReturnValue(true)
 
-      await controller.type()(request, response, next)
+      await controller.saveType()(request, response, next)
 
-      expect(updateAddressFromBody).toHaveBeenCalledWith(request, controller.formData)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
+      expect(updateTypeFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+    })
+
+    it('redirects to arrangement type when arrangement type invalid', async () => {
+      ;(validateTypeFromSession as jest.Mock).mockReturnValue(false)
+
+      await controller.saveType()(request, response, next)
+
+      expect(updateTypeFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
     })
   })
 
   describe('status', () => {
     it('renders status page', async () => {
-      ;(validateTypeFromSession as jest.Mock).mockReturnValue(true)
-
       await controller.status()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
@@ -179,7 +205,6 @@ describe('proposedAddressesController', () => {
 
     it('renders status page with session data', async () => {
       jest.spyOn(controller.formData, 'get').mockReturnValue(sessionData)
-      ;(validateTypeFromSession as jest.Mock).mockReturnValue(true)
 
       await controller.status()(request, response, next)
 
@@ -190,40 +215,40 @@ describe('proposedAddressesController', () => {
         errorSummary: [],
       })
     })
+  })
 
-    it('redirects to type page when type validation fails', async () => {
-      ;(validateTypeFromSession as jest.Mock).mockReturnValue(false)
+  describe('saveStatus', () => {
+    it('redirects to check your answers when status valid', async () => {
+      ;(validateStatusFromSession as jest.Mock).mockReturnValue(true)
 
-      await controller.status()(request, response, next)
+      await controller.saveStatus()(request, response, next)
 
-      expect(updateTypeFromBody).toHaveBeenCalledWith(request, controller.formData)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
+    })
+
+    it('redirects to status when status invalid', async () => {
+      ;(validateStatusFromSession as jest.Mock).mockReturnValue(false)
+
+      await controller.saveStatus()(request, response, next)
+
+      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
   })
 
   describe('checkYourAnswers', () => {
     it('renders check your answers', async () => {
-      ;(validateStatusFromSession as jest.Mock).mockReturnValue(true)
       ;(summaryListRows as jest.Mock).mockReturnValue([
         { key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' } },
       ])
 
       await controller.checkYourAnswers()(request, response, next)
 
-      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
         tableRows: [{ key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' } }],
       })
-    })
-
-    it('redirects to status page when status validation fails', async () => {
-      ;(validateStatusFromSession as jest.Mock).mockReturnValue(false)
-
-      await controller.checkYourAnswers()(request, response, next)
-
-      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
   })
 

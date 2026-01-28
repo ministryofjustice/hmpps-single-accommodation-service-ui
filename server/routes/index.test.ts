@@ -17,8 +17,11 @@ const casesController = mock<CasesController>({
 const proposedAddressesController = mock<ProposedAddressesController>({
   start: mockHandler,
   details: mockHandler,
+  saveDetails: mockHandler,
   type: mockHandler,
+  saveType: mockHandler,
   status: mockHandler,
+  saveStatus: mockHandler,
   checkYourAnswers: mockHandler,
   submit: mockHandler,
   cancel: mockHandler,

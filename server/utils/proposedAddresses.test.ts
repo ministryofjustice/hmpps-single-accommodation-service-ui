@@ -7,8 +7,8 @@ describe('Proposed addresses utilities', () => {
       status: 'CHECKS_PASSED',
       createdAt: '2026-01-20T11:00:00.000Z',
       arrangementType: 'PRIVATE',
-      arrangementSubType: 'OTHER',
-      arrangementSubTypeDescription: "Somebody's attic",
+      arrangementSubType: 'FRIENDS_OR_FAMILY',
+      arrangementSubTypeDescription: undefined,
       settledType: 'SETTLED',
       address: addressFactory.minimal().build({
         buildingNumber: '345',
@@ -42,6 +42,9 @@ describe('Proposed addresses utilities', () => {
       const proposedAddress = accommodationFactory.build({
         ...baseAccommodationDetails,
         status: 'CHECKS_FAILED',
+        arrangementSubType: 'OTHER',
+        arrangementSubTypeDescription: "Somebody's attic",
+        settledType: 'TRANSIENT',
         createdAt: '2026-01-05T10:45:00.000Z',
       })
 
@@ -52,6 +55,7 @@ describe('Proposed addresses utilities', () => {
       const proposedAddress = accommodationFactory.build({
         ...baseAccommodationDetails,
         status: 'NOT_CHECKED_YET',
+        arrangementSubType: 'OWNED',
         createdAt: '2026-01-20T09:30:00.000Z',
       })
 
@@ -62,6 +66,8 @@ describe('Proposed addresses utilities', () => {
       const proposedAddress = accommodationFactory.build({
         ...baseAccommodationDetails,
         status: 'CHECKS_PASSED',
+        arrangementSubType: 'PRIVATE_RENTED_ROOM',
+        settledType: undefined,
         createdAt: '2026-01-20T09:30:00.000Z',
       })
 

@@ -6,7 +6,7 @@ import {
   formatProposedAddressStatus,
   proposedAddressStatusColours,
 } from './format'
-import { summaryListRow } from './cases'
+import { arrangementSubTypes, summaryListRow } from './cases'
 
 // eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => ({
@@ -17,7 +17,7 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
     colour: proposedAddressStatusColours[proposedAddress.status],
   },
   details: [
-    summaryListRow('Housing arrangement', ''),
+    summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
     summaryListRow('Added by', ''),
     summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
   ],
@@ -38,5 +38,22 @@ const linksForStatus = (status: ProposedAddressDto['status']) => {
       ]
     default:
       return [{ text: 'Notes', href: '#' }]
+  }
+}
+
+const settledTypes: Record<AccommodationDetail['settledType'], string> = {
+  SETTLED: 'Settled',
+  TRANSIENT: 'Transient',
+}
+
+const arrangementLabel = (proposedAddress: AccommodationDetail) => {
+  const { arrangementSubType, arrangementSubTypeDescription, settledType } = proposedAddress
+  const settledLabel = settledType ? `${settledTypes[settledType]}.` : ''
+
+  switch (arrangementSubType) {
+    case 'OTHER':
+      return `Other: ${arrangementSubTypeDescription}. ${settledLabel}`
+    default:
+      return `${arrangementSubTypes[arrangementSubType]}. ${settledLabel}`
   }
 }

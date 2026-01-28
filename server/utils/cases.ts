@@ -11,7 +11,7 @@ const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], s
   BAIL: 'bail',
 }
 
-const subTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
+export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
   FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
   SOCIAL_RENTED: 'Social rent (tenant)',
   PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
@@ -56,7 +56,7 @@ export const addressTitle = (accommodation: AccommodationDetail): string => {
     case 'PRISON':
       return `${name}`
     case 'PRIVATE':
-      return subTypes[arrangementSubType]
+      return arrangementSubTypes[arrangementSubType]
     default:
       return ''
   }

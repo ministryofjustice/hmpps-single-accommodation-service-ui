@@ -8,7 +8,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "",
+        "text": "Other: Somebody's attic. Transient.",
       },
     },
     {
@@ -51,7 +51,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "",
+        "text": "Private rent, room/share (tenant). ",
       },
     },
     {
@@ -98,7 +98,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confi
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "",
+        "text": "Friends or family (not tenant or owner). Settled.",
       },
     },
     {
@@ -141,7 +141,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "",
+        "text": "Owned (named on deeds/mortgage). Settled.",
       },
     },
     {

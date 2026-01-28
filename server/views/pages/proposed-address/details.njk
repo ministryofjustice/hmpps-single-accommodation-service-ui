@@ -4,7 +4,7 @@
 
 {% set pageTitle = "Enter the address " + applicationName %}
 {% set backLinkHref = paths.cases.show({crn: crn}) %}
-{% set formAction = paths.proposedAddresses.type({crn: crn}) %}
+{% set formAction = paths.proposedAddresses.details({crn: crn}) %}
 
 {% block formContent %}
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -14,12 +14,6 @@
     </legend>
     {{ govukInput(
             {
-                fieldset: {
-                    legend: {
-                        text: "Enter the address",
-                        classes: "govuk-fieldset__legend--l"
-                    }
-                },
                 label: {
                     text: 'Address line 1' 
                 },

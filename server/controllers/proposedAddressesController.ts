@@ -33,6 +33,7 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
+      this.formData.remove(req.params.crn, req.session)
 
       return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
     }
@@ -56,6 +57,19 @@ export default class ProposedAddressesController {
     }
   }
 
+  saveDetails(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await updateAddressFromBody(req, this.formData)
+
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      if (!validateAddressFromSession(req, proposedAddressFormSessionData)) {
+        return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
+      }
+
+      return res.redirect(uiPaths.proposedAddresses.type({ crn: req.params.crn }))
+    }
+  }
+
   type(): RequestHandler {
     return async (req: Request, res: Response) => {
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
@@ -63,15 +77,7 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
-
-      await updateAddressFromBody(req, this.formData)
-
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-      if (!errors || Object.keys(errors).length === 0) {
-        if (!validateAddressFromSession(req, proposedAddressFormSessionData)) {
-          return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
-        }
-      }
 
       const caseData = await getCaseData(req, res, this.casesService)
 
@@ -85,6 +91,19 @@ export default class ProposedAddressesController {
     }
   }
 
+  saveType(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await updateTypeFromBody(req, this.formData)
+
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      if (!validateTypeFromSession(req, proposedAddressFormSessionData)) {
+        return res.redirect(uiPaths.proposedAddresses.type({ crn: req.params.crn }))
+      }
+
+      return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
+    }
+  }
+
   status(): RequestHandler {
     return async (req: Request, res: Response) => {
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
@@ -92,15 +111,7 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
-
-      await updateTypeFromBody(req, this.formData)
-
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-      if (!errors || Object.keys(errors).length === 0) {
-        if (!validateTypeFromSession(req, proposedAddressFormSessionData)) {
-          return res.redirect(uiPaths.proposedAddresses.type({ crn: req.params.crn }))
-        }
-      }
 
       return res.render('pages/proposed-address/status', {
         crn: req.params.crn,
@@ -111,13 +122,8 @@ export default class ProposedAddressesController {
     }
   }
 
-  checkYourAnswers(): RequestHandler {
+  saveStatus(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
-        who: res.locals.user.username,
-        correlationId: req.id,
-      })
-
       await updateStatusFromBody(req, this.formData)
 
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
@@ -125,6 +131,18 @@ export default class ProposedAddressesController {
         return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
       }
 
+      return res.redirect(uiPaths.proposedAddresses.checkYourAnswers({ crn: req.params.crn }))
+    }
+  }
+
+  checkYourAnswers(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       const caseData = await getCaseData(req, res, this.casesService)
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn, caseData.name)

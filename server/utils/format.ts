@@ -135,13 +135,18 @@ export const dutyToReferStatusTag = (status?: string): string => {
   return renderStatusTag(formatDutyToReferStatus(status), dutyToReferStatusColours[status] || 'grey')
 }
 
-export const addressLines = (address: AccommodationAddressDetails = {}): string[] => {
+export const addressLines = (
+  address: AccommodationAddressDetails = {},
+  type: 'simple' | 'full' = 'simple',
+): string[] => {
   const { subBuildingName, buildingName, buildingNumber, thoroughfareName, postTown, postcode } = address
   return [
     `${subBuildingName || ''} ${buildingName || ''}`,
     `${buildingNumber || ''} ${thoroughfareName || ''}`,
     `${postTown || ''}`,
+    type === 'full' ? `${address.county || ''}` : '',
     `${postcode || ''}`,
+    type === 'full' ? `${address.country || ''}` : '',
   ]
     .map(part => part.trim())
     .filter(Boolean)

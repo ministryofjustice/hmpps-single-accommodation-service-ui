@@ -14,6 +14,7 @@ import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { addErrorToFlash } from './validation'
 import {
+  addressLines,
   formatProposedAddressArrangement,
   formatProposedAddressSettledType,
 } from './format'
@@ -68,13 +69,13 @@ const arrangementLabel = (proposedAddress: AccommodationDetail) => {
   }
 }
 
-export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string) => {
-  const addressLines = [...Object.values(sessionData.address || {})].filter(Boolean)
+export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string, name: string) => {
+  const addressParts = addressLines(sessionData.address || {}, 'full')
 
   return [
     {
       key: textContent('Address'),
-      value: htmlContent(addressLines.join('<br />')),
+      value: htmlContent(addressParts.join('<br />')),
       actions: {
         items: [{ text: 'Change', href: uiPaths.proposedAddresses.details({ crn }) }],
       },
@@ -217,6 +218,7 @@ export const updateStatusFromBody = async (req: Request, formDataManager: MultiP
 
 export const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
+
   if (!sessionData?.status) {
     errors.status = 'Select a status'
   }

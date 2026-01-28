@@ -4,7 +4,7 @@
 
 {% set pageTitle = "What is the status of the address checks? " + applicationName %}
 {% set backLinkHref = paths.proposedAddresses.type({ crn: crn }) %}
-{% set formAction = paths.proposedAddresses.checkYourAnswers({ crn: crn }) %}
+{% set formAction = paths.proposedAddresses.status({ crn: crn }) %}
 
 {% block formContent %}
 {{ govukRadios({

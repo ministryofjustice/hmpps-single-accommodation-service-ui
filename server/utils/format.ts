@@ -185,7 +185,7 @@ export const formatProposedAddressSettledType = (type?: string): string => {
 export const formatProposedAddressArrangement = (type?: string): string => {
   return (
     {
-      FRIEND_OR_FAMILY: 'Friend or family (not tenant or owner)',
+      FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
       SOCIAL_RENTED: 'Social rent (tenant)',
       PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rented, whole property (tenant)',
       PRIVATE_RENTED_ROOM: 'Private rented, room/share (tenant)',

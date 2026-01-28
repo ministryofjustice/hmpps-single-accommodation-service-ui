@@ -1,5 +1,5 @@
 import ProposedAddressesClient from '../data/proposedAddressesClient'
-import { accommodationFactory, proposedAddressFactory } from '../testutils/factories'
+import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
 
 jest.mock('../data/proposedAddressesClient')
@@ -45,7 +45,7 @@ describe('ProposedAddressesService', () => {
 
   describe('submit', () => {
     it('should call submit on the api client', async () => {
-      const proposedAddressData = proposedAddressFactory.build()
+      const proposedAddressData = proposedAddressFormFactory.build()
 
       const result = await proposedAddressesService.submit(token, crn, proposedAddressData)
 

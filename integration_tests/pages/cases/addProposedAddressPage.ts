@@ -1,7 +1,11 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { ProposedAddressFormData } from '@sas/ui'
 import AbstractPage from '../abstractPage'
-import { formatProposedAddressArrangement } from '../../../server/utils/format'
+import {
+  formatProposedAddressArrangement,
+  formatProposedAddressSettledType,
+  formatProposedAddressStatus,
+} from '../../../server/utils/format'
 
 export default class AddProposedAddressPage extends AbstractPage {
   readonly header: Locator
@@ -19,12 +23,14 @@ export default class AddProposedAddressPage extends AbstractPage {
 
   async completeAddressForm(proposedAddressData: ProposedAddressFormData) {
     const { address } = proposedAddressData
-    await this.page.fill('input[name="addressLine1"]', address.line1)
-    if (address.line2) {
-      await this.page.fill('input[name="addressLine2"]', address.line2)
+    await this.page.fill('input[name="addressLine1"]', address.buildingName)
+    if (address.subBuildingName) {
+      await this.page.fill('input[name="addressLine2"]', address.subBuildingName)
     }
-    await this.page.fill('input[name="addressTown"]', address.city)
-    await this.page.fill('input[name="addressCounty"]', address.region)
+    await this.page.fill('input[name="addressTown"]', address.postTown)
+    if (address.county) {
+      await this.page.fill('input[name="addressCounty"]', address.county)
+    }
     await this.page.fill('input[name="addressPostcode"]', address.postcode)
     await this.page.fill('input[name="addressCountry"]', address.country)
   }
@@ -53,29 +59,28 @@ export default class AddProposedAddressPage extends AbstractPage {
 
     const { address } = proposedAddressData
     const addressLines = [
-      address.line1,
-      address.line2,
-      address.city,
-      address.region,
+      address.buildingName,
+      address.subBuildingName,
+      address.postTown,
+      address.county,
       address.postcode,
       address.country,
     ].filter(Boolean)
-
     for (const line of addressLines) {
-      await expect(row('Address')).toContainText(line)
+      expect(row('Address')).toContainText(line)
     }
-    const housingArrangementText = [
+
+    const arrangementRow = row(`What will be ${caseName}'s housing arrangement at this address?`)
+    await expect(arrangementRow).toContainText(
       formatProposedAddressArrangement(proposedAddressData.housingArrangementType),
-      proposedAddressData.housingArrangementTypeDescription,
-    ]
-      .filter(Boolean)
-      .join('\n')
-    await expect(row(`What will be the ${caseName}'s housing arrangement at this address?`)).toContainText(
-      housingArrangementText,
     )
-    const settledTypeText = proposedAddressData.settledType === 'SETTLED' ? 'Settled' : 'Transient'
+    if (proposedAddressData.housingArrangementTypeDescription) {
+      await expect(arrangementRow).toContainText(proposedAddressData.housingArrangementTypeDescription)
+    }
+
+    const settledTypeText = formatProposedAddressSettledType(proposedAddressData.settledType)
     await expect(row('Will it be settled or transient?')).toContainText(settledTypeText)
-    const statusText = proposedAddressData.status === 'PASSED' ? 'Passed' : 'Failed'
+    const statusText = formatProposedAddressStatus(proposedAddressData.status)
     await expect(row('What is the status of the address checks?')).toContainText(statusText)
   }
 

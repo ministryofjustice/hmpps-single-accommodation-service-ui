@@ -3,7 +3,7 @@ import describeClient from '../testutils/describeClient'
 import ProposedAddressesClient from './proposedAddressesClient'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
-import { accommodationFactory } from '../testutils/factories'
+import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 
 describeClient('ProposedAddressesClient', provider => {
   let proposedAddressesClient: ProposedAddressesClient
@@ -39,26 +39,14 @@ describeClient('ProposedAddressesClient', provider => {
 
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
-    const proposedAddressData = {
-      address: {
-        line1: '10 Moonlight Road',
-        line2: '',
-        city: 'London',
-        region: 'Greater London',
-        postcode: 'NW1 6XE',
-        country: 'UK',
-      },
-      housingArrangementType: 'FRIEND_OR_FAMILY',
-      settledType: 'SETTLED',
-      status: 'PASSED',
-    } as ProposedAddressDto
+    const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
 
     await provider.addInteraction({
       state: `Proposed address can be submitted for case with CRN ${crn}`,
       uponReceiving: 'a request to submit a proposed address for a case by CRN',
       withRequest: {
         method: 'POST',
-        path: apiPaths.proposedAddresses.submit({ crn }),
+        path: apiPaths.cases.proposedAddresses.submit({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },

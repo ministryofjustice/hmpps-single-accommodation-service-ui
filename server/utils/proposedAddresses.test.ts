@@ -15,6 +15,7 @@ import {
 } from './proposedAddresses'
 import { addErrorToFlash } from './validation'
 import MultiPageFormManager from './multiPageFormManager'
+import { proposedAddressFormFactory } from '../testutils/factories'
 
 
 describe('Proposed addresses utilities', () => {
@@ -121,16 +122,16 @@ describe('proposedAddresses', () => {
     it('formats address, arrangement and status', () => {
       const data = {
         address: {
-          line1: '10 Moonlight Road',
-          line2: '',
-          city: 'London',
-          region: 'Greater London',
+          buildingName: '10 Moonlight Road',
+          subBuildingName: '',
+          postTown: 'London',
+          county: 'Greater London',
           postcode: 'NW1 6XE',
           country: 'UK',
         },
-        housingArrangementType: 'FRIEND_OR_FAMILY',
+        housingArrangementType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
-        status: 'PASSED',
+        status: 'CHECKS_PASSED',
       } as ProposedAddressFormData
 
       const rows = summaryListRows(data, 'CRN123', 'James Taylor')
@@ -139,20 +140,19 @@ describe('proposedAddresses', () => {
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
       expect(addressHtml).toBe('10 Moonlight Road<br />London<br />Greater London<br />NW1 6XE<br />UK')
-      expect(arrangementHtml).toBe('Friend or family (not tenant or owner)')
+      expect(arrangementHtml).toBe('Friends or family (not tenant or owner)')
       expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
       expect(rows[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
       expect(rows[2].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
       expect(rows[3].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
     })
 
-    it('formats arrangement when other type select', () => {
-      const data = {
+    it('formats arrangement when other type selected', () => {
+      const sessionData = proposedAddressFormFactory.manualAddress().build({
         housingArrangementType: 'OTHER',
         housingArrangementTypeDescription: 'Hostel',
-      } as ProposedAddressFormData
-
-      const rows = summaryListRows(data, 'CRN123', 'James Taylor')
+      })
+      const rows = summaryListRows(sessionData, 'CRN123', 'James Taylor')
 
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
@@ -174,10 +174,10 @@ describe('proposedAddresses', () => {
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         address: {
-          line1: 'Line 1',
-          line2: '',
-          city: 'Town',
-          region: '',
+          buildingName: 'Line 1',
+          subBuildingName: '',
+          postTown: 'Town',
+          county: '',
           postcode: 'PC1 1PC',
           country: 'UK',
         },
@@ -192,10 +192,10 @@ describe('proposedAddresses', () => {
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         address: {
-          line1: '',
-          line2: 'Line 2',
-          city: '',
-          region: '',
+          buildingName: '',
+          subBuildingName: 'Line 2',
+          postTown: '',
+          county: '',
           postcode: '',
           country: '',
         },
@@ -218,17 +218,8 @@ describe('proposedAddresses', () => {
   })
 
   describe('validateAddressFromSession', () => {
-    it('returns true for valid address and does not add errors', () => {
-      const sessionData = {
-        address: {
-          line1: 'Line 1',
-          line2: 'Line 2',
-          city: 'Town',
-          region: 'Region',
-          postcode: 'AB1 2CD',
-          country: 'UK',
-        },
-      } as ProposedAddressFormData
+    it('returns true for valid address', () => {
+      const sessionData = proposedAddressFormFactory.manualAddress().build()
 
       const result = validateAddressFromSession(req, sessionData)
 
@@ -237,8 +228,9 @@ describe('proposedAddresses', () => {
     })
 
     it('adds errors for blank fields', () => {
-      req.body = {}
-      const sessionData = { address: {} } as ProposedAddressFormData
+      const sessionData = proposedAddressFormFactory.manualAddress().build({
+        address: null,
+      })
 
       const result = validateAddressFromSession(req, sessionData)
 
@@ -251,16 +243,16 @@ describe('proposedAddresses', () => {
     })
 
     it('adds errors for fields exceeding length limits', () => {
-      const sessionData = {
+      const sessionData = proposedAddressFormFactory.manualAddress().build({
         address: {
-          line1: 'x'.repeat(201),
-          line2: 'x'.repeat(201),
-          city: 'x'.repeat(101),
-          region: 'x'.repeat(101),
+          buildingName: 'x'.repeat(201),
+          subBuildingName: 'x'.repeat(201),
+          postTown: 'x'.repeat(101),
+          county: 'x'.repeat(101),
           postcode: 'x'.repeat(21),
           country: 'x'.repeat(101),
         },
-      } as ProposedAddressFormData
+      })
 
       const result = validateAddressFromSession(req, sessionData)
 
@@ -321,7 +313,9 @@ describe('proposedAddresses', () => {
 
   describe('validateTypeFromSession', () => {
     it('returns false and adds errors when arrangement type missing', () => {
-      const sessionData = { settledType: 'SETTLED' } as ProposedAddressFormData
+      const sessionData = proposedAddressFormFactory
+        .manualAddress()
+        .build({ settledType: 'SETTLED', housingArrangementType: undefined })
 
       const result = validateTypeFromSession(req, sessionData)
 
@@ -330,8 +324,10 @@ describe('proposedAddresses', () => {
     })
 
     it('requires description when type is other', () => {
-      const sessionData = { housingArrangementType: 'OTHER', settledType: 'SETTLED' } as ProposedAddressFormData
-
+      const sessionData = proposedAddressFormFactory.manualAddress().build({
+        housingArrangementType: 'OTHER',
+        housingArrangementTypeDescription: '',
+      })
       const result = validateTypeFromSession(req, sessionData)
 
       expect(result).toBe(false)
@@ -339,7 +335,9 @@ describe('proposedAddresses', () => {
     })
 
     it('requires settled type', () => {
-      const sessionData = { housingArrangementType: 'FRIEND_OR_FAMILY', settledType: '' } as ProposedAddressFormData
+      const sessionData = proposedAddressFormFactory
+        .manualAddress()
+        .build({ housingArrangementType: 'FRIENDS_OR_FAMILY', settledType: undefined })
 
       const result = validateTypeFromSession(req, sessionData)
 
@@ -348,10 +346,10 @@ describe('proposedAddresses', () => {
     })
 
     it('returns true for valid data', () => {
-      const sessionData = {
-        housingArrangementType: 'FRIEND_OR_FAMILY',
+      const sessionData = proposedAddressFormFactory.manualAddress().build({
+        housingArrangementType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
-      } as ProposedAddressFormData
+      })
 
       const result = validateTypeFromSession(req, sessionData)
 
@@ -362,11 +360,11 @@ describe('proposedAddresses', () => {
 
   describe('updateStatusFromBody', () => {
     it('updates form data when status provided', async () => {
-      req.body = { status: 'FAILED' }
+      req.body = { status: 'CHECKS_FAILED' }
 
       await updateStatusFromBody(req, formDataManager)
 
-      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { status: 'FAILED' })
+      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { status: 'CHECKS_FAILED' })
     })
 
     it('does not update when status missing', async () => {
@@ -387,7 +385,7 @@ describe('proposedAddresses', () => {
 
   describe('validateStatusFromSession', () => {
     it('returns false and adds error when status missing', () => {
-      const sessionData = {} as ProposedAddressFormData
+      const sessionData = proposedAddressFormFactory.manualAddress().build({ status: undefined })
 
       const result = validateStatusFromSession(req, sessionData)
 
@@ -396,7 +394,7 @@ describe('proposedAddresses', () => {
     })
 
     it('returns true when status present', () => {
-      const sessionData = { status: 'pending' } as ProposedAddressFormData
+      const sessionData = proposedAddressFormFactory.manualAddress().build({ status: 'CHECKS_PASSED' })
 
       const result = validateStatusFromSession(req, sessionData)
 

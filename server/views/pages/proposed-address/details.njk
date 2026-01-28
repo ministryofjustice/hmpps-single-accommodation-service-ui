@@ -28,7 +28,7 @@
                 },
                 name: 'addressLine1',
                 id: 'addressLine1',
-                value: address.line1,
+                value: address.buildingName,
                 errorMessage: errors.addressLine1
               }
           ) }}
@@ -39,7 +39,7 @@
                   },
                   name: 'addressLine2',
                   id: 'addressLine2',
-                  value: address.line2,
+                  value: address.subBuildingName,
                   errorMessage: errors.addressLine2
               }
           ) }}
@@ -51,7 +51,7 @@
                   classes: "govuk-input--width-20",
                   name: 'addressTown',
                   id: 'addressTown',
-                  value: address.city,
+                  value: address.postTown,
                   errorMessage: errors.addressTown
               }
           ) }}
@@ -63,7 +63,7 @@
                   classes: "govuk-input--width-20",
                   name: 'addressCounty',
                   id: 'addressCounty',
-                  value: address.region,
+                  value: address.county,
                   errorMessage: errors.addressCounty
               }
           ) }}

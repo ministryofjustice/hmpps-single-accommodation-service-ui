@@ -9,7 +9,6 @@ import {
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { Request } from 'express'
 import { ProposedAddressFormData } from '@sas/ui'
-import { ProposedAddressDto } from '@sas/api'
 import { textContent, htmlContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
@@ -128,10 +127,10 @@ export const updateAddressFromBody = async (req: Request, formDataManager: Multi
   const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.body || {}
   if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
     const addressParams = {
-      line1: String(addressLine1 || ''),
-      line2: String(addressLine2 || ''),
-      city: String(addressTown || ''),
-      region: String(addressCounty || ''),
+      buildingName: String(addressLine1 || ''),
+      subBuildingName: String(addressLine2 || ''),
+      postTown: String(addressTown || ''),
+      county: String(addressCounty || ''),
       postcode: String(addressPostcode || ''),
       country: String(addressCountry || ''),
     }
@@ -145,13 +144,13 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
   const address = sessionData?.address
   const errors: Record<string, string> = {}
 
-  if (!address?.line1) {
+  if (!address?.buildingName) {
     errors.addressLine1 = 'Enter address line 1, typically the building and street'
-  } else if (address.line1.length > 200) {
+  } else if (address.buildingName.length > 200) {
     errors.addressLine1 = 'Address line 1 must be 200 characters or less'
   }
 
-  if (address?.line2 && address?.line2.length > 200) {
+  if (address?.subBuildingName && address?.subBuildingName.length > 200) {
     errors.addressLine2 = 'Address line 2 must be 200 characters or less'
   }
 
@@ -161,13 +160,13 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
     errors.addressPostcode = 'Postal code or zip code must be 20 characters or less'
   }
 
-  if (!address?.city) {
+  if (!address?.postTown) {
     errors.addressTown = 'Enter town or city'
-  } else if (address.city.length > 100) {
+  } else if (address.postTown.length > 100) {
     errors.addressTown = 'Town or city must be 100 characters or less'
   }
 
-  if (address?.region && address?.region.length > 100) {
+  if (address?.county && address?.county.length > 100) {
     errors.addressCounty = 'County must be 100 characters or less'
   }
 
@@ -191,9 +190,9 @@ export const updateTypeFromBody = async (req: Request, formDataManager: MultiPag
   const { housingArrangementType, housingArrangementTypeDescription, settledType } = req.body || {}
   if (housingArrangementType || settledType || housingArrangementTypeDescription) {
     await formDataManager.update(req.params.crn, req.session, {
-      housingArrangementType: String(housingArrangementType || ''),
+      housingArrangementType: String(housingArrangementType || '') as ProposedAddressFormData['housingArrangementType'],
       housingArrangementTypeDescription: String(housingArrangementTypeDescription || ''),
-      settledType: String(settledType || ''),
+      settledType: String(settledType || '') as ProposedAddressFormData['settledType'],
     })
   }
 }
@@ -223,7 +222,7 @@ export const updateStatusFromBody = async (req: Request, formDataManager: MultiP
   const { status } = req.body || {}
   if (status) {
     await formDataManager.update(req.params.crn, req.session, {
-      status: String(status),
+      status: String(status) as ProposedAddressFormData['status'],
     })
   }
 }
@@ -242,23 +241,4 @@ export const validateStatusFromSession = (req: Request, sessionData: ProposedAdd
   }
 
   return true
-}
-
-export const mapAddressFormToAddressDto = (formData: ProposedAddressFormData): ProposedAddressDto => {
-  const addressDto: ProposedAddressDto = {
-    housingArrangementType: formData.housingArrangementType,
-    housingArrangementTypeDescription: formData.housingArrangementTypeDescription,
-    settledType: formData.settledType,
-    status: formData.status,
-    address: {
-      postcode: formData.address.postcode,
-      subBuildingName: formData.address.line2 ?? '',
-      buildingName: formData.address.line1,
-      postTown: formData.address.city,
-      county: formData.address.region ?? '',
-      country: formData.address.country,
-    },
-  }
-
-  return addressDto
 }

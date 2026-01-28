@@ -67,20 +67,13 @@ export const formatDutyToReferStatus = (status?: DutyToReferDto['status']): stri
 export const formatEligibilityStatus = (status?: ServiceResult['serviceStatus']): string => {
   return (
     {
-      NOT_STARTED: 'Not started',
       NOT_ELIGIBLE: 'Not eligible',
       UPCOMING: 'Upcoming',
-      AWAITING_ASSESSMENT: 'Awaiting assessment',
-      UNALLOCATED_ASSESSMENT: 'Unallocated assessment',
-      ASSESSMENT_IN_PROGRESS: 'Assessment in progress',
-      AWAITING_PLACEMENT: 'Awaiting placement',
-      REQUEST_FOR_FURTHER_INFORMATION: 'Request for further information',
-      PENDING_PLACEMENT_REQUEST: 'Pending placement request',
-      ARRIVED: 'Arrived',
-      UPCOMING_PLACEMENT: 'Upcoming placement',
-      DEPARTED: 'Departed',
-      NOT_ARRIVED: 'Not arrived',
-      CANCELLED: 'Cancelled',
+      NOT_STARTED: 'Not started',
+      REJECTED: 'Rejected',
+      WITHDRAWN: 'Withdrawn',
+      SUBMITTED: 'Submitted',
+      CONFIRMED: 'Confirmed',
     }[status] || 'Unknown'
   )
 }
@@ -109,14 +102,13 @@ export const referralStatusTag = (status?: Referral['status']): string => {
 }
 
 const eligibilityStatusColours: Record<string, string> = {
-  NOT_STARTED: 'red',
-  UPCOMING: 'yellow',
-  ARRIVED: 'green',
-  AWAITING_PLACEMENT: 'green',
-  AWAITING_ASSESSMENT: 'green',
-  ASSESSMENT_IN_PROGRESS: 'green',
-  PENDING_PLACEMENT_REQUEST: 'green',
   NOT_ELIGIBLE: 'grey',
+  UPCOMING: 'yellow',
+  NOT_STARTED: 'red',
+  REJECTED: 'red',
+  WITHDRAWN: 'grey',
+  SUBMITTED: 'yellow',
+  CONFIRMED: 'green',
 }
 
 export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): string => {

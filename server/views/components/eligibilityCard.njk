@@ -7,14 +7,6 @@
 	</header>
 
 	<div class="sas-card__footer">
-		{% if details and (details | length > 0) %}
-			<ul class="govuk-list govuk-!-margin-bottom-0 govuk-!-margin-top-4">
-				{% for detail in details %}
-					<li class="govuk-!-margin-bottom-0">{{ detail }}</li>
-				{% endfor %}
-			</ul>
-		{% endif %}
-
 		{% if links and(links | length > 0) %}
 			<div class="sas-card__links">
 				{% for link in links %}

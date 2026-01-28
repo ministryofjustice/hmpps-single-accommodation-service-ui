@@ -92,10 +92,13 @@ describe('formatting utilities', () => {
 
   describe('eligibilityStatusTag', () => {
     it.each([
-      ['red', 'NOT_STARTED' as const],
-      ['yellow', 'UPCOMING' as const],
-      ['green', 'ARRIVED' as const],
       ['grey', 'NOT_ELIGIBLE' as const],
+      ['yellow', 'UPCOMING' as const],
+      ['red', 'NOT_STARTED' as const],
+      ['red', 'REJECTED' as const],
+      ['grey', 'WITHDRAWN' as const],
+      ['yellow', 'SUBMITTED' as const],
+      ['green', 'CONFIRMED' as const],
     ])('renders %s for service status %s', (tagColour, status) => {
       expect(eligibilityStatusTag(status)).toEqual(
         `<strong class="govuk-tag govuk-tag--${tagColour}">${formatEligibilityStatus(status)}</strong>`,

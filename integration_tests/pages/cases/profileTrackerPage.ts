@@ -94,14 +94,10 @@ export default class ProfileTrackerPage extends AbstractPage {
         has: this.page.getByRole('heading', { name: title }),
       })
 
-      await expect(card.locator('.govuk-tag')).toContainText(formatEligibilityStatus(service?.serviceStatus))
+      await expect(card.locator('.govuk-tag')).toContainText(formatEligibilityStatus(service.serviceStatus))
 
-      for (const action of service?.actions ?? []) {
-        expect(card).toContainText(action)
-      }
-
-      for (const link of linksForEligibilityStatus(service?.serviceStatus)) {
-        expect(card.getByRole('link', { name: link.text })).toBeVisible()
+      for await (const link of linksForEligibilityStatus(service.serviceStatus)) {
+        await expect(card.getByRole('link', { name: link.text })).toBeVisible()
       }
     }
   }

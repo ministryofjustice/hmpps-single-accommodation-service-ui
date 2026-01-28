@@ -16,7 +16,7 @@ generic-service:
     ENVIRONMENT_NAME: PRE-PRODUCTION
     AUDIT_ENABLED: "false"
     COMPONENT_API_URL: "https://probation-frontend-components-preprod.hmpps.service.justice.gov.uk"
-    SAS_ALLOWED_ROLES: "ROLE_SAS"
+    SAS_ALLOWED_ROLES: "ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

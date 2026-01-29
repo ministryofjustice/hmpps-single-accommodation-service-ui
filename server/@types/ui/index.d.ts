@@ -29,7 +29,6 @@ export interface StatusTag {
 
 export interface StatusCard {
   heading: string
-  classes?: string
   inactive?: boolean
   details?: SummaryListRow[]
   status?: StatusTag

@@ -1,10 +1,9 @@
 import { AccommodationDetail } from '@sas/api'
-import { accommodationFactory, addressFactory } from '../testutils/factories'
-import { proposedAddressStatusCard } from './proposedAddresses'
 import { Request } from 'express'
 import { ProposedAddressFormData } from '@sas/ui'
 import { mock } from 'jest-mock-extended'
 import {
+  proposedAddressStatusCard,
   summaryListRows,
   updateAddressFromBody,
   validateAddressFromSession,
@@ -13,10 +12,9 @@ import {
   updateStatusFromBody,
   validateStatusFromSession,
 } from './proposedAddresses'
+import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
 import { addErrorToFlash } from './validation'
 import MultiPageFormManager from './multiPageFormManager'
-import { proposedAddressFormFactory } from '../testutils/factories'
-
 
 describe('Proposed addresses utilities', () => {
   describe('proposedAddressStatusCard', () => {

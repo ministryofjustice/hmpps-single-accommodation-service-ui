@@ -1,23 +1,20 @@
-import { ProposedAddressDisplayStatus, StatusCard } from '@sas/ui'
+import { ProposedAddressDisplayStatus, StatusCard, ProposedAddressFormData } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
+import { Request } from 'express'
 import {
   formatAddress,
   formatDateAndDaysAgo,
   formatProposedAddressStatus,
   proposedAddressStatusColours,
-} from './format'
-import { arrangementSubTypes, summaryListRow } from './cases'
-import { Request } from 'express'
-import { ProposedAddressFormData } from '@sas/ui'
-import { textContent, htmlContent } from './utils'
-import uiPaths from '../paths/ui'
-import MultiPageFormManager from './multiPageFormManager'
-import { addErrorToFlash } from './validation'
-import {
   addressLines,
   formatProposedAddressArrangement,
   formatProposedAddressSettledType,
 } from './format'
+import { arrangementSubTypes, summaryListRow } from './cases'
+import { textContent, htmlContent } from './utils'
+import uiPaths from '../paths/ui'
+import MultiPageFormManager from './multiPageFormManager'
+import { addErrorToFlash } from './validation'
 
 // eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {

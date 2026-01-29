@@ -17,9 +17,12 @@ import { proposedAddressStatusCard } from '../../../server/utils/proposedAddress
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
 
+  readonly caseData: Case
+
   private constructor(page: Page, caseData: Case) {
     super(page)
     this.header = page.locator('h1', { hasText: caseData.name })
+    this.caseData = caseData
   }
 
   static async verifyOnPage(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
@@ -133,7 +136,10 @@ export default class ProfileTrackerPage extends AbstractPage {
     })
 
     await expect(proposedAddressesSection).toBeVisible()
-    await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute('href', `#`)
+    await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute(
+      'href',
+      paths.proposedAddresses.start({ crn: this.caseData.crn }),
+    )
 
     if (!proposedAddresses.find(address => address.verificationStatus !== 'FAILED')) {
       await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')

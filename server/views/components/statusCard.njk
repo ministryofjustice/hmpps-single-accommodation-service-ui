@@ -1,11 +1,12 @@
 {%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
+{%- from "components/macros/statusTag.njk" import statusTag %}
 
-{% set cardClass = 'sas-card--not-eligible' if status == 'NOT_ELIGIBLE' else '' %}
-
-<article class="sas-card{{ ' ' + cardClass if cardClass }}">
+<article class="sas-card{{ ' sas-card--inactive' if inactive else '' }}">
 	<header class="sas-card__head">
-		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Duty to Refer (DTR)</h3>
-		{{ statusTag | safe }}
+		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">{{ heading }}</h3>
+    {% if status -%}
+		  {{ statusTag(status) }}
+    {%- endif %}
 	</header>
 
 	<div class="sas-card__footer">

@@ -4,19 +4,22 @@ import {
   AccommodationReferralDto as Referral,
   ServiceResult,
   AccommodationAddressDetails,
+  AccommodationDetail,
 } from '@sas/api'
 import { calculateAge } from './person'
+
+const isValidDate = (date?: string) => date && !Number.isNaN(new Date(date).getTime())
 
 export const formatDate = (
   date?: string,
   format?: 'age' | 'long' | 'days' | 'days for/in' | 'days ago/in' | 'days for/left',
 ): string => {
-  if (!date || Number.isNaN(new Date(date).getTime())) return 'Invalid Date'
+  if (!isValidDate(date)) return 'Invalid Date'
 
   if (format === 'age') return `${calculateAge(date)}`
 
   if (format?.startsWith('days')) {
-    const days = Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 3600 * 24))
+    const days = Math.ceil((new Date(date.substring(0, 10)).getTime() - Date.now()) / (1000 * 3600 * 24))
     const daysLabel = Math.abs(days) === 1 ? 'day' : 'days'
 
     if (days === 0 && format !== 'days') return 'today'
@@ -40,6 +43,12 @@ export const formatDate = (
       year: 'numeric',
     })
     .replace(',', '')
+}
+
+export const formatDateAndDaysAgo = (date?: string): string => {
+  if (!isValidDate(date)) return 'Invalid Date'
+
+  return `${formatDate(date)} (${formatDate(date, 'days ago/in')})`
 }
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
@@ -101,7 +110,7 @@ export const referralStatusTag = (status?: Referral['status']): string => {
   return renderStatusTag(formatStatus(status), referralStatusColours[status] || 'grey')
 }
 
-const eligibilityStatusColours: Record<string, string> = {
+export const eligibilityStatusColours: Record<string, string> = {
   NOT_ELIGIBLE: 'grey',
   UPCOMING: 'yellow',
   NOT_STARTED: 'red',
@@ -115,7 +124,7 @@ export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): s
   return renderStatusTag(formatEligibilityStatus(status), eligibilityStatusColours[status] || 'grey')
 }
 
-const dutyToReferStatusColours: Record<string, string> = {
+export const dutyToReferStatusColours: Record<string, string> = {
   NOT_STARTED: 'red',
   UPCOMING: 'yellow',
   SUBMITTED: 'green',
@@ -136,4 +145,30 @@ export const addressLines = (address: AccommodationAddressDetails = {}): string[
   ]
     .map(part => part.trim())
     .filter(Boolean)
+}
+
+export const formatProposedAddressStatus = (status?: AccommodationDetail['status']): string => {
+  return (
+    {
+      NOT_CHECKED_YET: 'Not checked',
+      CHECKS_FAILED: 'Checks failed',
+      CHECKS_PASSED: 'Checks passed',
+      CONFIRMED: 'Confirmed',
+    }[status] || 'Unknown'
+  )
+}
+
+export const proposedAddressStatusColours: Record<AccommodationDetail['status'], string> = {
+  NOT_CHECKED_YET: 'red',
+  CHECKS_FAILED: 'grey',
+  CHECKS_PASSED: 'yellow',
+  CONFIRMED: 'green',
+}
+
+export const formatAddress = (address: AccommodationAddressDetails): string => {
+  const { subBuildingName, buildingName, buildingNumber, thoroughfareName, postTown, postcode } = address
+  return [subBuildingName, buildingName, `${buildingNumber || ''} ${thoroughfareName || ''}`, postTown, postcode]
+    .filter(Boolean)
+    .map(part => part.trim())
+    .join(', ')
 }

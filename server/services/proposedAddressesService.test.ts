@@ -1,5 +1,5 @@
 import ProposedAddressesClient from '../data/proposedAddressesClient'
-import { proposedAddressFactory } from '../testutils/factories'
+import { accommodationFactory, proposedAddressFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
 
 jest.mock('../data/proposedAddressesClient')
@@ -13,6 +13,30 @@ describe('ProposedAddressesService', () => {
 
   beforeEach(() => {
     proposedAddressesService = new ProposedAddressesService(proposedAddressesClient)
+  })
+
+  describe('getProposedAddresses', () => {
+    it('should call getProposedAddresses on the api client and return sorted addresses', async () => {
+      const confirmedAddress = accommodationFactory.proposed().build({ status: 'CONFIRMED' })
+      const passedChecksAddress = accommodationFactory.proposed().build({ status: 'CHECKS_PASSED' })
+      const notCheckedAddress = accommodationFactory.proposed().build({ status: 'NOT_CHECKED_YET' })
+      const failedChecksAddress = accommodationFactory.proposed().build({ status: 'CHECKS_FAILED' })
+
+      proposedAddressesClient.getProposedAddresses.mockResolvedValue([
+        passedChecksAddress,
+        failedChecksAddress,
+        notCheckedAddress,
+        confirmedAddress,
+      ])
+
+      const result = await proposedAddressesService.getProposedAddresses(token, crn)
+
+      expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn)
+      expect(result).toEqual({
+        proposed: [passedChecksAddress, notCheckedAddress, confirmedAddress],
+        failedChecks: [failedChecksAddress],
+      })
+    })
   })
 
   describe('submit', () => {

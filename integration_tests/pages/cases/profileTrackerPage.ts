@@ -7,18 +7,12 @@ import {
   AccommodationDetail,
 } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import {
-  formatDate,
-  formatDutyToReferStatus,
-  formatRiskLevel,
-  formatStatus,
-  formatEligibilityStatus,
-  addressLines,
-} from '../../../server/utils/format'
-import { linksForStatus as linksForEligibilityStatus } from '../../../server/utils/eligibility'
+import { formatAddress, formatDate, formatRiskLevel, formatStatus, addressLines } from '../../../server/utils/format'
+import { eligibilityStatusCard } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { accommodationType } from '../../../server/utils/cases'
-import { detailsForStatus, linksForStatus as linksForDutyToReferStatus } from '../../../server/utils/dutyToRefer'
+import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
+import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
 
 export default class ProfileTrackerPage extends AbstractPage {
   readonly header: Locator
@@ -57,20 +51,7 @@ export default class ProfileTrackerPage extends AbstractPage {
   }
 
   async shouldShowDutyToRefer(dutyToRefer: DutyToReferDto) {
-    const card = this.page.locator('.sas-card').filter({
-      has: this.page.getByRole('heading', { name: 'Duty to refer (DTR)' }),
-    })
-
-    await expect(card.locator('.govuk-tag')).toContainText(formatDutyToReferStatus(dutyToRefer?.status))
-
-    for (const detail of detailsForStatus(dutyToRefer)) {
-      expect(card).toContainText(detail.key.text)
-      expect(card).toContainText(detail.value.text)
-    }
-
-    for (const link of linksForDutyToReferStatus(dutyToRefer?.status)) {
-      expect(card.getByRole('link', { name: link.text })).toBeVisible()
-    }
+    await this.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(dutyToRefer))
   }
 
   async shouldShowEligibility(eligibility: Eligibility) {
@@ -82,23 +63,11 @@ export default class ProfileTrackerPage extends AbstractPage {
       { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3 },
     ]
 
-    const referralCards = this.page
-      .locator('section', { has: this.page.getByRole('heading', { name: 'Accommodation referrals' }) })
-      .locator('.sas-card')
-
     // TODO remove filter once the API always returns eligibility for all services
     const expectedCards = cardConfigs.filter(card => !!card.service)
 
     for await (const { title, service } of expectedCards) {
-      const card = referralCards.filter({
-        has: this.page.getByRole('heading', { name: title }),
-      })
-
-      await expect(card.locator('.govuk-tag')).toContainText(formatEligibilityStatus(service.serviceStatus))
-
-      for await (const link of linksForEligibilityStatus(service.serviceStatus)) {
-        await expect(card.getByRole('link', { name: link.text })).toBeVisible()
-      }
+      await this.shouldShowCard(title, eligibilityStatusCard(title, service))
     }
   }
 
@@ -155,6 +124,29 @@ export default class ProfileTrackerPage extends AbstractPage {
       await expect(row).toContainText(formatStatus(referral.status))
       await expect(row).toContainText(formatDate(referral.date))
       await expect(row).toContainText('View')
+    }
+  }
+
+  async shouldShowProposedAddresses(proposedAddresses: AccommodationDetail[] = []) {
+    const proposedAddressesSection = this.page.locator('section', {
+      has: this.page.getByRole('heading', { name: 'Private addresses' }),
+    })
+
+    await expect(proposedAddressesSection).toBeVisible()
+    await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute('href', `#`)
+
+    if (!proposedAddresses.find(address => address.status !== 'CHECKS_FAILED')) {
+      await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')
+    }
+
+    if (proposedAddresses.find(address => address.status === 'CHECKS_FAILED')) {
+      await expect(
+        proposedAddressesSection.getByRole('heading', { name: 'Addresses that failed checks' }),
+      ).toBeVisible()
+    }
+
+    for await (const proposedAddress of proposedAddresses) {
+      await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
     }
   }
 }

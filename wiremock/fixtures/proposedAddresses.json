@@ -1,0 +1,318 @@
+{
+  "S511935": [],
+  "P712106": [],
+  "T274481": [
+    {
+      "id": "43ac5836-06d0-48ae-a994-c351a71b6102",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "OWNED",
+      "name": "Family",
+      "settledType": "SETTLED",
+      "startDate": "2025-07-11",
+      "endDate": "2026-11-05",
+      "address": {
+        "postcode": "HM4 7DH",
+        "buildingNumber": "268",
+        "thoroughfareName": "O'Reilly Crescent",
+        "dependentLocality": "Von End",
+        "postTown": "Nether Lubowitzdon",
+        "county": "Surrey",
+        "country": "Slovenia",
+        "uprn": "dr9H0WC6KXU3"
+      },
+      "createdAt": "2026-01-22T11:32:56.023Z",
+      "status": "NOT_CHECKED_YET"
+    }
+  ],
+  "V938951": [
+    {
+      "id": "99ba4d20-c26b-4125-b160-779014dc05fc",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "OWNED",
+      "name": "Relatives",
+      "settledType": "SETTLED",
+      "startDate": "2025-08-06",
+      "endDate": "2026-05-05",
+      "address": {
+        "postcode": "HR55 2TE",
+        "buildingNumber": "68",
+        "thoroughfareName": "Woodlands Avenue",
+        "dependentLocality": "High Walkerworth",
+        "postTown": "Nicolaswell",
+        "county": "Grampian",
+        "country": "Ukraine",
+        "uprn": "1TrztyTwdlpX"
+      },
+      "createdAt": "2026-01-20T18:40:41.536Z",
+      "status": "CHECKS_PASSED"
+    },
+    {
+      "id": "a625ed02-c307-4654-8dc7-1a5c26380431",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "PRIVATE_RENTED_WHOLE_PROPERTY",
+      "name": "Family",
+      "settledType": "TRANSIENT",
+      "startDate": "2025-05-07",
+      "endDate": "2026-08-06",
+      "address": {
+        "postcode": "OI0 2ZJ",
+        "buildingNumber": "44",
+        "thoroughfareName": "Virginia Wood",
+        "dependentLocality": "Yundt-under-Kilback",
+        "postTown": "Ullrich-under-Schuster",
+        "county": "Tyne and Wear",
+        "country": "Costa Rica",
+        "uprn": "XVf7CwajSwc7"
+      },
+      "createdAt": "2026-01-25T21:44:34.940Z",
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "dd4da16d-34d6-4224-9ea4-4fceef8bcbee",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "OTHER",
+      "arrangementSubTypeDescription": "Solid shed",
+      "name": "Family",
+      "settledType": "TRANSIENT",
+      "startDate": "2025-05-26",
+      "endDate": "2027-01-05",
+      "address": {
+        "postcode": "CO6 2OR",
+        "buildingName": "Konopelski Gardens",
+        "thoroughfareName": "Lakin-Kunze Walk",
+        "dependentLocality": "Paucek Bridge",
+        "postTown": "Douglas Park",
+        "county": "Dorset",
+        "country": "Heard Island and McDonald Islands",
+        "uprn": "UScdqSoVSCPo"
+      },
+      "createdAt": "2026-01-20T20:06:21.806Z",
+      "status": "CHECKS_FAILED"
+    }
+  ],
+  "T229440": [
+    {
+      "id": "3dba8b25-f3de-43cd-9e59-dc6f30894e66",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "PRIVATE_RENTED_ROOM",
+      "name": "Friends",
+      "settledType": "SETTLED",
+      "startDate": "2025-12-29",
+      "endDate": "2026-03-05",
+      "address": {
+        "postcode": "TS2 7XZ",
+        "buildingNumber": "7",
+        "thoroughfareName": "Will Drive",
+        "dependentLocality": "Newton Romaguera",
+        "postTown": "Long Jaskolski",
+        "county": "West Sussex",
+        "country": "Chad",
+        "uprn": "zHB168zHJQVH"
+      },
+      "createdAt": "2026-01-24T05:10:56.036Z",
+      "status": "CHECKS_FAILED"
+    },
+    {
+      "id": "5401142e-ce2a-4ba3-bd54-ac792ce212e2",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "SOCIAL_RENTED",
+      "name": "Family",
+      "settledType": "SETTLED",
+      "startDate": "2026-01-27",
+      "endDate": "2027-01-04",
+      "address": {
+        "postcode": "SH29 8MN",
+        "buildingNumber": "29",
+        "thoroughfareName": "Victoria Place",
+        "dependentLocality": "Denesikington",
+        "postTown": "New Pfeffer",
+        "county": "Buckinghamshire",
+        "country": "Latvia",
+        "uprn": "UNyvN1wK4nMS"
+      },
+      "createdAt": "2026-01-22T07:28:36.961Z",
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "34ea9d07-2100-4d8c-8e55-40fd1f9e04a7",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "FRIENDS_OR_FAMILY",
+      "name": "Family",
+      "settledType": "TRANSIENT",
+      "startDate": "2026-01-27",
+      "endDate": "2026-06-24",
+      "address": {
+        "postcode": "GK9 0BN",
+        "buildingName": "Ledner Glade",
+        "thoroughfareName": "Windermere Road",
+        "dependentLocality": "Gislason-le-Heaney",
+        "postTown": "Great Jacobsonington",
+        "county": "Devon",
+        "country": "Botswana",
+        "uprn": "MbOANjSmfmxM"
+      },
+      "createdAt": "2026-01-26T05:04:02.310Z",
+      "status": "CHECKS_PASSED"
+    }
+  ],
+  "H271226": [
+    {
+      "id": "f7829e90-8bed-4e0c-9a4b-2f76dbe02fff",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "FRIENDS_OR_FAMILY",
+      "name": "Family",
+      "settledType": "TRANSIENT",
+      "startDate": "2025-07-28",
+      "endDate": "2026-06-03",
+      "address": {
+        "postcode": "PB8 7WM",
+        "buildingNumber": "6",
+        "thoroughfareName": "Cruickshank Gate",
+        "dependentLocality": "O'Reilly-over-Hessel",
+        "postTown": "Stracke-upon-Mante",
+        "county": "West Yorkshire",
+        "country": "Holy See (Vatican City State)",
+        "uprn": "wIPLMF9cQsQF"
+      },
+      "createdAt": "2026-01-27T06:12:17.187Z",
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "e34b9b98-bcaa-4b40-b3b4-7494cb272b42",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "FRIENDS_OR_FAMILY",
+      "name": "Family",
+      "settledType": "SETTLED",
+      "startDate": "2025-01-30",
+      "endDate": "2026-03-06",
+      "address": {
+        "postcode": "VN8 5IF",
+        "buildingNumber": "612",
+        "thoroughfareName": "Waterloo Road",
+        "dependentLocality": "Schaden-under-Block",
+        "postTown": "Upper Hartmann",
+        "county": "Merseyside",
+        "country": "Montenegro",
+        "uprn": "F2IljOu16knE"
+      },
+      "createdAt": "2026-01-23T16:05:52.231Z",
+      "status": "CONFIRMED"
+    }
+  ],
+  "U934069": [
+    {
+      "id": "f9bccc6a-18c3-4379-a3b0-6982104e15c1",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "FRIENDS_OR_FAMILY",
+      "name": "Friends",
+      "settledType": "SETTLED",
+      "startDate": "2025-10-02",
+      "endDate": "2026-02-25",
+      "address": {
+        "postcode": "BL68 6DU",
+        "subBuildingName": "Suite 115",
+        "buildingName": "Lueilwitz Vale",
+        "thoroughfareName": "Deckow Croft",
+        "dependentLocality": "Lower D'Amore",
+        "postTown": "South Crooks",
+        "county": "Somerset",
+        "country": "Falkland Islands (Malvinas)",
+        "uprn": "JzdoZfCfM1Rr"
+      },
+      "createdAt": "2026-01-23T22:36:07.166Z",
+      "status": "CHECKS_FAILED"
+    }
+  ],
+  "I322559": [
+    {
+      "id": "dbc57151-d91b-4b7a-859b-d71f37dfc25e",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "PRIVATE_RENTED_ROOM",
+      "name": "Family",
+      "settledType": "SETTLED",
+      "startDate": "2025-07-02",
+      "endDate": "2026-11-27",
+      "address": {
+        "postcode": "GO96 4KZ",
+        "buildingNumber": "457",
+        "thoroughfareName": "Stoltenberg Lane",
+        "dependentLocality": "Schneiderworth",
+        "postTown": "Great Hilpert",
+        "county": "Tyne and Wear",
+        "country": "Brazil",
+        "uprn": "HnolWC9pP4Oh"
+      },
+      "createdAt": "2026-01-24T08:55:53.593Z",
+      "status": "CHECKS_PASSED"
+    },
+    {
+      "id": "07bdb59a-9ba9-4c0e-b03b-0efe1ee1f999",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "OTHER",
+      "arrangementSubTypeDescription": "Canal boat",
+      "name": "Family",
+      "settledType": "SETTLED",
+      "startDate": "2025-12-15",
+      "endDate": "2026-03-31",
+      "address": {
+        "postcode": "JS2 4ZQ",
+        "buildingNumber": "1",
+        "thoroughfareName": "Bluebell Close",
+        "dependentLocality": "Upton Ankundingstone",
+        "postTown": "Batz Place",
+        "county": "South Glamorgan",
+        "country": "Gambia",
+        "uprn": "vPgrw8wyVvKp"
+      },
+      "createdAt": "2026-01-24T09:18:58.452Z",
+      "status": "CHECKS_PASSED"
+    },
+    {
+      "id": "f458541b-fb63-414c-8da8-03d2c4677551",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "PRIVATE_RENTED_ROOM",
+      "name": "Relatives",
+      "settledType": "SETTLED",
+      "startDate": "2025-03-28",
+      "endDate": "2026-04-27",
+      "address": {
+        "postcode": "OP2 3MH",
+        "subBuildingName": "Suite 665",
+        "buildingNumber": "989",
+        "thoroughfareName": "Cora Row",
+        "dependentLocality": "Fadel-over-Runolfsson",
+        "postTown": "St. Lebsack",
+        "county": "South Yorkshire",
+        "country": "British Indian Ocean Territory (Chagos Archipelago)",
+        "uprn": "cIpP1wvDkLWV"
+      },
+      "createdAt": "2026-01-24T09:50:40.414Z",
+      "status": "CHECKS_FAILED"
+    }
+  ],
+  "L247269": [],
+  "F608163": [
+    {
+      "id": "60815747-4c78-48df-b64a-9038e3ad9c1a",
+      "arrangementType": "PRIVATE",
+      "arrangementSubType": "PRIVATE_RENTED_WHOLE_PROPERTY",
+      "name": "Friends",
+      "settledType": "SETTLED",
+      "startDate": "2025-07-15",
+      "endDate": "2026-03-06",
+      "address": {
+        "postcode": "YF75 1EF",
+        "subBuildingName": "Apt. 362",
+        "buildingName": "Eloy Avenue",
+        "thoroughfareName": "Park View",
+        "dependentLocality": "MacGyverton",
+        "postTown": "Pouros Common",
+        "county": "County Antrim",
+        "country": "Fiji",
+        "uprn": "BL92398XXNoI"
+      },
+      "createdAt": "2026-01-19T22:30:45.411Z",
+      "status": "CHECKS_PASSED"
+    }
+  ]
+}

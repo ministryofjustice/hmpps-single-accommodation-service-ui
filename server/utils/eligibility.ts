@@ -1,6 +1,6 @@
 import { EligibilityDto, ServiceResult } from '@sas/api'
-import { nunjucksInline } from './nunjucksSetup'
-import { eligibilityStatusTag } from './format'
+import { StatusCard } from '@sas/ui'
+import { eligibilityStatusColours, formatEligibilityStatus } from './format'
 
 export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) => {
   switch (serviceStatus) {
@@ -17,16 +17,17 @@ export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) =
   }
 }
 
-const eligibilityCard = (title: string, service?: ServiceResult): string => {
-  return nunjucksInline().render('components/eligibilityCard.njk', {
-    title,
-    serviceStatus: service?.serviceStatus,
-    serviceStatusTag: eligibilityStatusTag(service?.serviceStatus),
-    links: linksForStatus(service?.serviceStatus),
-  })
-}
+export const eligibilityStatusCard = (title: string, service?: ServiceResult): StatusCard => ({
+  heading: title,
+  inactive: service?.serviceStatus === 'NOT_ELIGIBLE',
+  status: {
+    text: formatEligibilityStatus(service?.serviceStatus),
+    colour: eligibilityStatusColours[service?.serviceStatus] || 'grey',
+  },
+  links: linksForStatus(service?.serviceStatus),
+})
 
-export const eligibilityToEligibilityCards = (eligibility: EligibilityDto): string[] => {
+export const eligibilityToEligibilityCards = (eligibility: EligibilityDto): StatusCard[] => {
   const cardConfigs = [
     { title: 'Approved premises (CAS1)', eligibility: eligibility.cas1 },
     { title: 'CAS2 for HDC', eligibility: eligibility.cas2Hdc },
@@ -38,5 +39,5 @@ export const eligibilityToEligibilityCards = (eligibility: EligibilityDto): stri
   // TODO remove filter once the API always returns eligibility for all services
   return cardConfigs
     .filter(config => config.eligibility)
-    .map(config => eligibilityCard(config.title, config.eligibility))
+    .map(config => eligibilityStatusCard(config.title, config.eligibility))
 }

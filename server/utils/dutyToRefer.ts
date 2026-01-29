@@ -1,16 +1,18 @@
 import { DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
-import { dutyToReferStatusTag, formatDate } from './format'
-import { nunjucksInline } from './nunjucksSetup'
+import { StatusCard } from '@sas/ui'
+import { dutyToReferStatusColours, formatDateAndDaysAgo, formatDutyToReferStatus } from './format'
 
-export const dutyToReferToCard = (dutyToRefer: DutyToReferDto): string => {
-  return nunjucksInline().render('components/dutyToReferCard.njk', {
-    status: dutyToRefer.status,
-    statusTag: dutyToReferStatusTag(dutyToRefer.status),
-    links: linksForStatus(dutyToRefer.status),
-    details: detailsForStatus(dutyToRefer),
-  })
-}
+export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => ({
+  heading: 'Duty to Refer (DTR)',
+  inactive: dutyToRefer.status === 'NOT_ELIGIBLE',
+  status: {
+    text: formatDutyToReferStatus(dutyToRefer.status),
+    colour: dutyToReferStatusColours[dutyToRefer.status] || 'grey',
+  },
+  details: detailsForStatus(dutyToRefer),
+  links: linksForStatus(dutyToRefer.status),
+})
 
 export const linksForStatus = (serviceStatus?: string) => {
   switch (serviceStatus) {
@@ -49,10 +51,7 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
       return [
         summaryListRow('Submitted to', dutyToRefer?.submittedTo),
         summaryListRow('Reference', dutyToRefer?.reference),
-        summaryListRow(
-          'Submitted',
-          `${formatDate(dutyToRefer?.submitted)} (${formatDate(dutyToRefer?.submitted, 'days ago/in')})`,
-        ),
+        summaryListRow('Submitted', formatDateAndDaysAgo(dutyToRefer?.submitted)),
       ]
     default:
       return []

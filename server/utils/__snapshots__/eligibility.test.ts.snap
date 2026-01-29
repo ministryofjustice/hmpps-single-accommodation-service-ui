@@ -1,25 +1,70 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`eligibility utilities eligibilityToEligibilityCards returns a formatted eligibility card 1`] = `
-"
-
-<article class="sas-card">
-	<header class="sas-card__head">
-		<h3 class="govuk-heading-m govuk-!-margin-bottom-0">Approved premises (CAS1)</h3>
-		<strong class="govuk-tag govuk-tag--red">Not started</strong>
-	</header>
-
-	<div class="sas-card__footer">
-		
-			<div class="sas-card__links">
-				
-					<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Start referral</a>
-				
-					<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Notes</a>
-				
-			</div>
-		
-	</div>
-</article>
-"
+exports[`eligibilityToEligibilityCards returns an array of eligibility card objects 1`] = `
+[
+  {
+    "heading": "Approved premises (CAS1)",
+    "inactive": false,
+    "links": [
+      {
+        "href": "#",
+        "text": "Start referral",
+      },
+      {
+        "href": "#",
+        "text": "Notes",
+      },
+    ],
+    "status": {
+      "colour": "red",
+      "text": "Not started",
+    },
+  },
+  {
+    "heading": "CAS2 for HDC",
+    "inactive": false,
+    "links": [
+      {
+        "href": "#",
+        "text": "Notes",
+      },
+    ],
+    "status": {
+      "colour": "yellow",
+      "text": "Upcoming",
+    },
+  },
+  {
+    "heading": "CAS2 for court bail",
+    "inactive": true,
+    "links": [
+      {
+        "href": "#",
+        "text": "Notes",
+      },
+    ],
+    "status": {
+      "colour": "grey",
+      "text": "Not eligible",
+    },
+  },
+  {
+    "heading": "CAS2 for prison bail",
+    "inactive": false,
+    "links": [],
+    "status": {
+      "colour": "yellow",
+      "text": "Submitted",
+    },
+  },
+  {
+    "heading": "CAS3 (transitional accommodation)",
+    "inactive": false,
+    "links": [],
+    "status": {
+      "colour": "green",
+      "text": "Confirmed",
+    },
+  },
+]
 `;

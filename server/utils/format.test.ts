@@ -2,7 +2,9 @@ import { AccommodationAddressDetails } from '@sas/api'
 import {
   addressLines,
   eligibilityStatusTag,
+  formatAddress,
   formatDate,
+  formatDateAndDaysAgo,
   formatEligibilityStatus,
   formatRiskLevel,
   formatStatus,
@@ -12,7 +14,7 @@ import { addressFactory } from '../testutils/factories'
 
 describe('formatting utilities', () => {
   beforeEach(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    jest.useFakeTimers().setSystemTime(new Date('2025-12-10T12:00:00.000Z'))
   })
 
   afterEach(() => {
@@ -24,6 +26,7 @@ describe('formatting utilities', () => {
       ['2025-12-03', '3 December 2025'],
       ['2026-01-24', '24 January 2026'],
       ['not a date', 'Invalid Date'],
+      [undefined, 'Invalid Date'],
     ])('formats %s as the date %s', (date, expected) => {
       expect(formatDate(date)).toEqual(expected)
     })
@@ -49,7 +52,23 @@ describe('formatting utilities', () => {
       ['2025-12-22', 'days ago/in' as const, 'in 12 days'],
       ['2025-12-22', 'days for/in' as const, 'in 12 days'],
       ['2025-12-22', 'days for/left' as const, '12 days left'],
-    ])('formats %s with %s', (date, format, expected) => {
+      ['2025-12-09T23:59:59.000Z', 'days' as const, '-1'],
+      ['2025-12-09T23:59:59.000Z', 'days ago/in' as const, '1 day ago'],
+      ['2025-12-09T23:59:59.000Z', 'days for/in' as const, 'for 1 day'],
+      ['2025-12-09T23:59:59.000Z', 'days for/left' as const, 'for 1 day'],
+      ['2025-12-09T00:00:00.000Z', 'days' as const, '-1'],
+      ['2025-12-09T00:00:00.000Z', 'days ago/in' as const, '1 day ago'],
+      ['2025-12-09T00:00:00.000Z', 'days for/in' as const, 'for 1 day'],
+      ['2025-12-09T00:00:00.000Z', 'days for/left' as const, 'for 1 day'],
+      ['2025-12-11T00:00:00.000Z', 'days' as const, '1'],
+      ['2025-12-11T00:00:00.000Z', 'days ago/in' as const, 'in 1 day'],
+      ['2025-12-11T00:00:00.000Z', 'days for/in' as const, 'in 1 day'],
+      ['2025-12-11T00:00:00.000Z', 'days for/left' as const, '1 day left'],
+      ['2025-12-11T23:59:59.000Z', 'days' as const, '1'],
+      ['2025-12-11T23:59:59.000Z', 'days ago/in' as const, 'in 1 day'],
+      ['2025-12-11T23:59:59.000Z', 'days for/in' as const, 'in 1 day'],
+      ['2025-12-11T23:59:59.000Z', 'days for/left' as const, '1 day left'],
+    ])('formats %s as a %s relative date', (date, format, expected) => {
       expect(formatDate(date, format)).toEqual(expected)
     })
 
@@ -60,6 +79,18 @@ describe('formatting utilities', () => {
       ['not a date', 'Invalid Date'],
     ])('formats %s as the age %s', (date, expected) => {
       expect(formatDate(date, 'age')).toEqual(expected)
+    })
+  })
+
+  describe('formatDateAndDaysAgo', () => {
+    it.each([
+      ['2025-12-03', '3 December 2025 (7 days ago)'],
+      ['2025-12-09', '9 December 2025 (1 day ago)'],
+      ['2025-12-10', '10 December 2025 (today)'],
+      ['not a date', 'Invalid Date'],
+      [undefined, 'Invalid Date'],
+    ])('formats %s as the date and days ago %s', (date, expected) => {
+      expect(formatDateAndDaysAgo(date)).toEqual(expected)
     })
   })
 
@@ -145,6 +176,42 @@ describe('formatting utilities', () => {
 
     it('returns and empty array when no address parts are present', () => {
       expect(addressLines()).toEqual([])
+    })
+  })
+
+  describe('formatAddress', () => {
+    it.each([
+      [
+        'with building number',
+        {
+          buildingNumber: '123',
+          thoroughfareName: 'Fake Street',
+          county: 'Yorkshire',
+          postTown: 'London',
+          postcode: 'FA1 2BA',
+        },
+        '123 Fake Street, London, FA1 2BA',
+      ],
+      [
+        'with building name',
+        { buildingName: 'Fake House', thoroughfareName: 'Fake Street', postTown: 'London', postcode: 'FA1 2BA' },
+        'Fake House, Fake Street, London, FA1 2BA',
+      ],
+      [
+        'with sub-building name',
+        {
+          subBuildingName: 'Flat 4',
+          buildingName: 'Fake House',
+          thoroughfareName: 'Grand Street',
+          postTown: 'Manchester',
+          postcode: 'M21 0BF',
+        },
+        'Flat 4, Fake House, Grand Street, Manchester, M21 0BF',
+      ],
+    ])('returns an address %s in short format', (_, params: Partial<AccommodationAddressDetails>, expected) => {
+      const address = addressFactory.minimal().build(params)
+
+      expect(formatAddress(address)).toEqual(expected)
     })
   })
 })

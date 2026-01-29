@@ -8,6 +8,7 @@ export const controllers = (services: Services) => ({
     services.referralsService,
     services.eligibilityService,
     services.dutyToReferService,
+    services.proposedAddressesService,
   ),
 })
 

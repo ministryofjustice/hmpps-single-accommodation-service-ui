@@ -13,6 +13,18 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
+
+  redis:
+    image: "redis:latest"
+    networks:
+      - hmpps
+    container_name: redis
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+
   hmpps-single-accommodation-service-api:
     image: ghcr.io/ministryofjustice/hmpps-single-accommodation-service-api:latest
     networks:
@@ -25,5 +37,6 @@ services:
     environment:
       - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
       - SAS_API_URL=http://localhost:8080
+
 networks:
   hmpps:

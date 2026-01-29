@@ -144,7 +144,7 @@ export default class ProfileTrackerPage extends AbstractPage {
         await expect(this.page.getByRole('heading', { name: 'Addresses that failed checks' })).toBeVisible()
       }
     } else {
-      await expect(proposedAddressesSection).toContainText('No private addresses have been added.')
+      await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')
     }
   }
 }

@@ -37,7 +37,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
     },
   ],
   "status": {
-    "colour": "red",
+    "colour": "grey",
     "text": "Checks failed",
   },
 }
@@ -174,7 +174,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
     },
   ],
   "status": {
-    "colour": "grey",
+    "colour": "red",
     "text": "Not checked",
   },
 }

@@ -159,8 +159,8 @@ export const formatProposedAddressStatus = (status?: AccommodationDetail['status
 }
 
 export const proposedAddressStatusColours: Record<AccommodationDetail['status'], string> = {
-  NOT_CHECKED_YET: 'grey',
-  CHECKS_FAILED: 'red',
+  NOT_CHECKED_YET: 'red',
+  CHECKS_FAILED: 'grey',
   CHECKS_PASSED: 'yellow',
   CONFIRMED: 'green',
 }

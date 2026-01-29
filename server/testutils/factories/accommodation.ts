@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { AccommodationDetail } from '@sas/api'
 import addressFactory from './accommodationAddressDetails'
 
-export const types: Readonly<AccommodationDetail['arrangementType'][]> = [
+export const arrangementTypes: Readonly<AccommodationDetail['arrangementType'][]> = [
   'CAS1',
   'CAS2',
   'CAS2V2',
@@ -12,7 +12,7 @@ export const types: Readonly<AccommodationDetail['arrangementType'][]> = [
   'PRIVATE',
   'NO_FIXED_ABODE',
 ]
-const subTypes: Readonly<AccommodationDetail['arrangementSubType'][]> = [
+export const arrangementSubTypes: Readonly<AccommodationDetail['arrangementSubType'][]> = [
   'FRIENDS_OR_FAMILY',
   'SOCIAL_RENTED',
   'PRIVATE_RENTED_WHOLE_PROPERTY',
@@ -48,6 +48,7 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
     return this.params({
       arrangementType: 'PRISON',
       arrangementSubType: undefined,
+      arrangementSubTypeDescription: undefined,
       name: `HMP ${faker.location.city()}`,
       settledType: undefined,
       offenderReleaseType: faker.helpers.maybe(() => faker.helpers.arrayElement(offenderReleaseTypes)),
@@ -55,9 +56,13 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
   }
 
   privateAddress() {
+    const arrangementSubType = faker.helpers.arrayElement(arrangementSubTypes)
+    const arrangementSubTypeDescription = arrangementSubType === 'OTHER' ? faker.word.words() : ''
+
     return this.params({
       arrangementType: 'PRIVATE',
-      arrangementSubType: faker.helpers.arrayElement(subTypes),
+      arrangementSubType,
+      arrangementSubTypeDescription,
       name: faker.helpers.arrayElement(['Relatives', 'Family', 'Friends']),
       settledType: faker.helpers.arrayElement(settledTypes),
       offenderReleaseType: undefined,
@@ -68,6 +73,7 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
     return this.params({
       arrangementType: casType || faker.helpers.arrayElement(['CAS1', 'CAS2', 'CAS2V2', 'CAS3']),
       arrangementSubType: undefined,
+      arrangementSubTypeDescription: undefined,
       name: faker.location.city(),
       settledType: undefined,
       offenderReleaseType: undefined,
@@ -78,6 +84,7 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
     return this.params({
       arrangementType: 'NO_FIXED_ABODE',
       arrangementSubType: undefined,
+      arrangementSubTypeDescription: undefined,
       name: undefined,
       settledType: undefined,
       offenderReleaseType: undefined,
@@ -93,12 +100,15 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
 }
 
 export default AccommodationFactory.define(() => {
-  const arrangementType = faker.helpers.arrayElement(types)
+  const arrangementType = faker.helpers.arrayElement(arrangementTypes)
+  const arrangementSubType = arrangementType === 'PRIVATE' ? faker.helpers.arrayElement(arrangementSubTypes) : undefined
+  const arrangementSubTypeDescription = arrangementSubType === 'OTHER' ? faker.word.words() : ''
 
   return {
     id: faker.string.uuid(),
     arrangementType,
-    arrangementSubType: arrangementType === 'PRIVATE' ? faker.helpers.arrayElement(subTypes) : undefined,
+    arrangementSubType,
+    arrangementSubTypeDescription,
     name: arrangementType === 'PRISON' ? `HMP ${faker.location.city()}` : faker.word.words(2),
     offenderReleaseType: arrangementType === 'PRISON' ? faker.helpers.arrayElement(offenderReleaseTypes) : undefined,
     settledType: arrangementType === 'PRIVATE' ? faker.helpers.arrayElement(settledTypes) : undefined,

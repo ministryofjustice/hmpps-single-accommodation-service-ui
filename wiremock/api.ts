@@ -2,6 +2,7 @@
 import casesApi from '../integration_tests/mockApis/cases'
 import eligibilityApi from '../integration_tests/mockApis/eligibility'
 import dutyToReferApi from '../integration_tests/mockApis/dutyToRefer'
+import proposedAddressesApi from '../integration_tests/mockApis/proposedAddresses'
 import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
 import referrals from './fixtures/referrals.json'
@@ -52,6 +53,7 @@ async function stubProposedAddresses() {
       caseDto.crn,
       (proposedAddresses as Record<string, AccommodationDetail[]>)[caseDto.crn],
     )
+    await proposedAddressesApi.stubSubmitProposedAddress(caseDto.crn)
   }
 }
 

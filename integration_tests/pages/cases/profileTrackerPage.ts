@@ -127,7 +127,7 @@ export default class ProfileTrackerPage extends AbstractPage {
     }
   }
 
-  async shouldShowProposedAddresses(proposedAddresses?: AccommodationDetail[]) {
+  async shouldShowProposedAddresses(proposedAddresses: AccommodationDetail[] = []) {
     const proposedAddressesSection = this.page.locator('section', {
       has: this.page.getByRole('heading', { name: 'Private addresses' }),
     })
@@ -135,16 +135,18 @@ export default class ProfileTrackerPage extends AbstractPage {
     await expect(proposedAddressesSection).toBeVisible()
     await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute('href', `#`)
 
-    if (proposedAddresses?.length) {
-      for await (const proposedAddress of proposedAddresses) {
-        await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
-      }
-
-      if (proposedAddresses.find(address => address.status === 'CHECKS_FAILED')) {
-        await expect(this.page.getByRole('heading', { name: 'Addresses that failed checks' })).toBeVisible()
-      }
-    } else {
+    if (!proposedAddresses.find(address => address.status !== 'CHECKS_FAILED')) {
       await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')
+    }
+
+    if (proposedAddresses.find(address => address.status === 'CHECKS_FAILED')) {
+      await expect(
+        proposedAddressesSection.getByRole('heading', { name: 'Addresses that failed checks' }),
+      ).toBeVisible()
+    }
+
+    for await (const proposedAddress of proposedAddresses) {
+      await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
     }
   }
 }

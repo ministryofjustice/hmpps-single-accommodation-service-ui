@@ -78,6 +78,8 @@
           {% for card in proposedAddresses %}
             {{ card | safe }}
           {% endfor %}
+        {% else %}
+          <p>No proposed addresses have been added.</p>
         {% endif %}
 
         {% if failedChecksAddresses | length %}
@@ -85,10 +87,6 @@
           {% for card in failedChecksAddresses %}
             {{ card | safe }}
           {% endfor %}
-        {% endif %}
-
-        {% if not (proposedAddresses | length) and not (failedChecksAddresses | length) %}
-          <p>No proposed addresses have been added.</p>
         {% endif %}
       </section>
     </div>

@@ -104,7 +104,7 @@ test.describe('Profile Tracker Page', () => {
   })
 
   test.describe('proposed addresses', () => {
-    test('should display a message if there are no proposed addresses', async ({ page }) => {
+    test('should display a message if there are no proposed addresses at all', async ({ page }) => {
       const crn = 'X123456'
       const caseData = caseFactory.build({ crn })
       await setupStubs({ crn, caseData })
@@ -113,6 +113,20 @@ test.describe('Profile Tracker Page', () => {
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
       await profileTrackerPage.shouldShowProposedAddresses()
+    })
+
+    test('should display a message if there are no proposed addresses but some rejected addresses', async ({
+      page,
+    }) => {
+      const crn = 'X123456'
+      const caseData = caseFactory.build({ crn })
+      const proposedAddresses = [accommodationFactory.proposed().build({ status: 'CHECKS_FAILED' })]
+      await setupStubs({ crn, caseData, proposedAddresses })
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
     })
   })
 })

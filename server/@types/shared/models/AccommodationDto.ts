@@ -5,7 +5,7 @@
 import type { AccommodationDetail } from './AccommodationDetail';
 export type AccommodationDto = {
     crn: string;
-    current: AccommodationDetail;
-    next: AccommodationDetail;
+    current?: AccommodationDetail;
+    next?: AccommodationDetail;
 };
 

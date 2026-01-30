@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { Factory } from 'fishery'
 import { ProposedAddressFormData } from '@sas/ui'
+import addressFactory from './accommodationAddressDetails'
 
 const housingArrangementTypes: ProposedAddressFormData['housingArrangementType'][] = [
   'FRIENDS_OR_FAMILY',
@@ -41,17 +42,6 @@ export default ProposedAddressFormFactory.define(() => {
     housingArrangementTypeDescription: housingArrangementType === 'OTHER' ? faker.lorem.sentence() : '',
     settledType: faker.helpers.arrayElement(settledTypes),
     status: faker.helpers.arrayElement(statuses),
-    address: {
-      postcode: faker.location.zipCode(),
-      subBuildingName: faker.location.secondaryAddress(),
-      buildingName: faker.location.street(),
-      buildingNumber: faker.location.buildingNumber(),
-      thoroughfareName: faker.location.street(),
-      dependentLocality: faker.location.city(),
-      postTown: faker.location.city(),
-      county: faker.location.state(),
-      country: faker.location.country(),
-      uprn: faker.string.alphanumeric({ length: 12 }),
-    },
+    address: addressFactory.build(),
   }
 })

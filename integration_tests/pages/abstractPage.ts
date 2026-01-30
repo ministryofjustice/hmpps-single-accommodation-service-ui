@@ -43,13 +43,14 @@ export default class AbstractPage {
   }
 
   async shouldShowCard(title: string, cardData: StatusCard) {
-    const card = this.page.locator('.sas-card', { hasText: title })
+    const card = this.page.locator('.sas-card', {
+      hasText: title,
+      has: this.page.getByRole('heading', { name: cardData.heading }),
+    })
 
     if (cardData.inactive) {
       await expect(card).toHaveClass(/sas-card--inactive/)
     }
-
-    await expect(card.getByRole('heading', { name: cardData.heading })).toBeVisible()
 
     if (cardData.status) {
       const tag = card.locator('.govuk-tag', { hasText: cardData.status.text })

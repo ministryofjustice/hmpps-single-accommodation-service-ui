@@ -5,11 +5,11 @@ import { mock } from 'jest-mock-extended'
 import {
   proposedAddressStatusCard,
   summaryListRows,
-  updateAddressFromBody,
+  updateAddressFromRequest,
   validateAddressFromSession,
-  updateTypeFromBody,
+  updateTypeFromRequest,
   validateTypeFromSession,
-  updateStatusFromBody,
+  updateStatusFromRequest,
   validateStatusFromSession,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
@@ -159,7 +159,7 @@ describe('proposedAddresses', () => {
     })
   })
 
-  describe('updateAddressFromBody', () => {
+  describe('updateAddressFromRequest', () => {
     it('updates form data when address exists', async () => {
       req.body = {
         addressLine1: 'Line 1',
@@ -168,7 +168,7 @@ describe('proposedAddresses', () => {
         addressCountry: 'UK',
       }
 
-      await updateAddressFromBody(req, formDataManager)
+      await updateAddressFromRequest(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         address: {
@@ -186,7 +186,7 @@ describe('proposedAddresses', () => {
       req.body = {
         addressLine2: 'Line 2',
       }
-      await updateAddressFromBody(req, formDataManager)
+      await updateAddressFromRequest(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         address: {
@@ -202,14 +202,14 @@ describe('proposedAddresses', () => {
 
     it('does not update when body is empty', async () => {
       req.body = {}
-      await updateAddressFromBody(req, formDataManager)
+      await updateAddressFromRequest(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
 
     it('does not update when body is undefined', async () => {
       req.body = undefined
-      await updateAddressFromBody(req, formDataManager)
+      await updateAddressFromRequest(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
@@ -265,7 +265,7 @@ describe('proposedAddresses', () => {
     })
   })
 
-  describe('updateTypeFromBody', () => {
+  describe('updateTypeFromRequest', () => {
     it('updates form data when type exists', async () => {
       req.body = {
         housingArrangementType: 'OTHER',
@@ -273,7 +273,7 @@ describe('proposedAddresses', () => {
         settledType: 'TRANSIENT',
       }
 
-      await updateTypeFromBody(req, formDataManager)
+      await updateTypeFromRequest(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         housingArrangementType: 'OTHER',
@@ -285,8 +285,9 @@ describe('proposedAddresses', () => {
     it('updates arrangement with empty default values for missing fields', async () => {
       req.body = {
         housingArrangementType: 'FAILED',
+        settledType: '',
       }
-      await updateTypeFromBody(req, formDataManager)
+      await updateTypeFromRequest(req, formDataManager)
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         housingArrangementType: 'FAILED',
         housingArrangementTypeDescription: '',
@@ -296,14 +297,14 @@ describe('proposedAddresses', () => {
 
     it('does not update when no type provided', async () => {
       req.body = {}
-      await updateTypeFromBody(req, formDataManager)
+      await updateTypeFromRequest(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
 
     it('does not update when body is undefined', async () => {
       req.body = undefined
-      await updateTypeFromBody(req, formDataManager)
+      await updateTypeFromRequest(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
@@ -356,11 +357,11 @@ describe('proposedAddresses', () => {
     })
   })
 
-  describe('updateStatusFromBody', () => {
+  describe('updateStatusFromRequest', () => {
     it('updates form data when status provided', async () => {
       req.body = { status: 'CHECKS_FAILED' }
 
-      await updateStatusFromBody(req, formDataManager)
+      await updateStatusFromRequest(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { status: 'CHECKS_FAILED' })
     })
@@ -368,14 +369,14 @@ describe('proposedAddresses', () => {
     it('does not update when status missing', async () => {
       req.body = {}
 
-      await updateStatusFromBody(req, formDataManager)
+      await updateStatusFromRequest(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })
 
     it('does not update when body is undefined', async () => {
       req.body = undefined
-      await updateStatusFromBody(req, formDataManager)
+      await updateStatusFromRequest(req, formDataManager)
 
       expect(formDataManager.update).not.toHaveBeenCalled()
     })

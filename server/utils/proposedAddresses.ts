@@ -121,16 +121,19 @@ const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
   return type
 }
 
-export const updateAddressFromBody = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+export const updateAddressFromRequest = async (
+  req: Request,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
+) => {
   const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.body || {}
   if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
     const addressParams = {
-      buildingName: String(addressLine1 || ''),
-      subBuildingName: String(addressLine2 || ''),
-      postTown: String(addressTown || ''),
-      county: String(addressCounty || ''),
-      postcode: String(addressPostcode || ''),
-      country: String(addressCountry || ''),
+      buildingName: addressLine1 || '',
+      subBuildingName: addressLine2 || '',
+      postTown: addressTown || '',
+      county: addressCounty || '',
+      postcode: addressPostcode || '',
+      country: addressCountry || '',
     }
     await formDataManager.update(req.params.crn, req.session, {
       address: addressParams,
@@ -184,13 +187,13 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
   return true
 }
 
-export const updateTypeFromBody = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+export const updateTypeFromRequest = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
   const { housingArrangementType, housingArrangementTypeDescription, settledType } = req.body || {}
   if (housingArrangementType || settledType || housingArrangementTypeDescription) {
     await formDataManager.update(req.params.crn, req.session, {
-      housingArrangementType: String(housingArrangementType || '') as ProposedAddressFormData['housingArrangementType'],
-      housingArrangementTypeDescription: String(housingArrangementTypeDescription || ''),
-      settledType: String(settledType || '') as ProposedAddressFormData['settledType'],
+      housingArrangementType: housingArrangementType as ProposedAddressFormData['housingArrangementType'],
+      housingArrangementTypeDescription: housingArrangementTypeDescription || '',
+      settledType: settledType as ProposedAddressFormData['settledType'],
     })
   }
 }
@@ -216,11 +219,14 @@ export const validateTypeFromSession = (req: Request, sessionData: ProposedAddre
   return true
 }
 
-export const updateStatusFromBody = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+export const updateStatusFromRequest = async (
+  req: Request,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
+) => {
   const { status } = req.body || {}
   if (status) {
     await formDataManager.update(req.params.crn, req.session, {
-      status: String(status) as ProposedAddressFormData['status'],
+      status,
     })
   }
 }

@@ -8,9 +8,9 @@ import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import {
   summaryListRows,
-  updateAddressFromBody,
-  updateTypeFromBody,
-  updateStatusFromBody,
+  updateAddressFromRequest,
+  updateTypeFromRequest,
+  updateStatusFromRequest,
   validateAddressFromSession,
   validateTypeFromSession,
   validateStatusFromSession,
@@ -21,9 +21,9 @@ import { getCaseData } from '../utils/cases'
 
 jest.mock('../utils/proposedAddresses', () => ({
   summaryListRows: jest.fn(),
-  updateAddressFromBody: jest.fn(),
-  updateTypeFromBody: jest.fn(),
-  updateStatusFromBody: jest.fn(),
+  updateAddressFromRequest: jest.fn(),
+  updateTypeFromRequest: jest.fn(),
+  updateStatusFromRequest: jest.fn(),
   validateAddressFromSession: jest.fn(),
   validateTypeFromSession: jest.fn(),
   validateStatusFromSession: jest.fn(),
@@ -129,7 +129,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveDetails()(request, response, next)
 
-      expect(updateAddressFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateAddressFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
     })
 
@@ -138,7 +138,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveDetails()(request, response, next)
 
-      expect(updateAddressFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateAddressFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
     })
   })
@@ -177,7 +177,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveType()(request, response, next)
 
-      expect(updateTypeFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateTypeFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
 
@@ -186,7 +186,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveType()(request, response, next)
 
-      expect(updateTypeFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateTypeFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
     })
   })
@@ -223,7 +223,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveStatus()(request, response, next)
 
-      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
     })
 
@@ -232,7 +232,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveStatus()(request, response, next)
 
-      expect(updateStatusFromBody).toHaveBeenCalledWith(request, controller.formData)
+      expect(updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
   })

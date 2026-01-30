@@ -4,6 +4,7 @@ import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
+import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import {
   caseFactory,
@@ -35,7 +36,7 @@ test.describe('Profile Tracker Page', () => {
     await dutyToReferApi.stubGetDutyToReferByCrn(crn, dutyToRefer ? [dutyToRefer] : undefined)
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
     await casesApi.stubGetReferralHistory(crn, referrals)
-    await casesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
   }
 
   test('Should display profile tracker for a specific case', async ({ page }) => {

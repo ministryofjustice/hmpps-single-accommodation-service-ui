@@ -45,6 +45,5 @@ describe('multiPageFormManager', () => {
 
     expect(formData.get(crn, mockSession)).toEqual(undefined)
     expect(mockSession.save).toHaveBeenCalled()
-    expect(formData.get(crn, mockSession)).toEqual(mockSession.multiPageFormData.housingArrangementType)
   })
 })

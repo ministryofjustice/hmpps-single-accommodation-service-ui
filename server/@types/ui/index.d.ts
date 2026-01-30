@@ -40,16 +40,6 @@ export interface StatusCard {
   }[]
 }
 
-export type PrivateAddressFormData = {
-  address: AddressDetails & {
-    country: string
-  }
-  settledType: string
-  housingArrangementType: string
-  housingArrangementTypeDescription: string
-  status: string
-}
-
 export type MultiPageFormData = {
   proposedAddress?: Record<string, ProposedAddressFormData>
 }

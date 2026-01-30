@@ -1,11 +1,13 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { ProposedAddressFormData } from '@sas/ui'
+import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import {
   formatProposedAddressArrangement,
   formatProposedAddressSettledType,
   formatProposedAddressStatus,
 } from '../../../server/utils/format'
+import paths from '../../../server/paths/ui'
 
 export default class AddProposedAddressPage extends AbstractPage {
   readonly header: Locator
@@ -19,6 +21,11 @@ export default class AddProposedAddressPage extends AbstractPage {
     const addProposedAddressPage = new AddProposedAddressPage(page)
     await expect(addProposedAddressPage.header).toBeVisible()
     return addProposedAddressPage
+  }
+
+  static async visit(page: Page, caseData: Case): Promise<AddProposedAddressPage> {
+    await page.goto(paths.proposedAddresses.start({ crn: caseData.crn }))
+    return AddProposedAddressPage.verifyOnPage(page)
   }
 
   async completeAddressForm(proposedAddressData: ProposedAddressFormData) {
@@ -66,8 +73,8 @@ export default class AddProposedAddressPage extends AbstractPage {
       address.postcode,
       address.country,
     ].filter(Boolean)
-    for (const line of addressLines) {
-      expect(row('Address')).toContainText(line)
+    for await (const line of addressLines) {
+      await expect(row('Address')).toContainText(line)
     }
 
     const arrangementRow = row(`What will be ${caseName}'s housing arrangement at this address?`)

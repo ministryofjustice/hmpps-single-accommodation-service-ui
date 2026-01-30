@@ -4,9 +4,9 @@ import uiPaths from '../paths/ui'
 import MultiPageFormManager from '../utils/multiPageFormManager'
 import {
   summaryListRows,
-  updateAddressFromBody,
-  updateTypeFromBody,
-  updateStatusFromBody,
+  updateAddressFromRequest,
+  updateTypeFromRequest,
+  updateStatusFromRequest,
   validateAddressFromSession,
   validateTypeFromSession,
   validateStatusFromSession,
@@ -59,7 +59,7 @@ export default class ProposedAddressesController {
 
   saveDetails(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await updateAddressFromBody(req, this.formData)
+      await updateAddressFromRequest(req, this.formData)
 
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!validateAddressFromSession(req, proposedAddressFormSessionData)) {
@@ -93,7 +93,7 @@ export default class ProposedAddressesController {
 
   saveType(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await updateTypeFromBody(req, this.formData)
+      await updateTypeFromRequest(req, this.formData)
 
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!validateTypeFromSession(req, proposedAddressFormSessionData)) {
@@ -124,7 +124,7 @@ export default class ProposedAddressesController {
 
   saveStatus(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await updateStatusFromBody(req, this.formData)
+      await updateStatusFromRequest(req, this.formData)
 
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       if (!validateStatusFromSession(req, proposedAddressFormSessionData)) {

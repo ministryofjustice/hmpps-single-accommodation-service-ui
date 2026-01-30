@@ -49,7 +49,7 @@ async function stubDutyToRefer() {
 
 async function stubProposedAddresses() {
   for await (const caseDto of cases) {
-    await casesApi.stubGetProposedAddressesByCrn(
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(
       caseDto.crn,
       (proposedAddresses as Record<string, AccommodationDetail[]>)[caseDto.crn],
     )

@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test'
+import { AccommodationDetail } from '@sas/api'
 import casesApi from '../../mockApis/cases'
-import eligibilityApi from '../../mockApis/eligibility'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import { login } from '../../testUtils'
-import { caseFactory, proposedAddressFormFactory } from '../../../server/testutils/factories'
+import { accommodationFactory, caseFactory, proposedAddressFormFactory } from '../../../server/testutils/factories'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import AddProposedAddressPage from '../../pages/cases/addProposedAddressPage'
 
@@ -12,15 +12,23 @@ test.describe('add proposed address', () => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
     const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
+    const proposedAddresses = [
+      accommodationFactory.proposed().build({ status: 'NOT_CHECKED_YET' }),
+      accommodationFactory.proposed().build({ status: 'CHECKS_FAILED' }),
+    ]
+    const newProposedAddress = accommodationFactory.proposed().build({
+      ...proposedAddressData,
+    })
+    const updatedProposedAddresses: AccommodationDetail[] = [...proposedAddresses, newProposedAddress]
 
+    await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
-    await eligibilityApi.stubGetEligibilityByCrn(crn)
-    await casesApi.stubGetReferralHistory(crn)
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
     await proposedAddressesApi.stubSubmitProposedAddress(crn)
     await login(page)
 
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
-
+    await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
     await profileTrackerPage.clickAddAddressLink()
 
     const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(page)
@@ -34,25 +42,23 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickContinue()
 
     await addProposedAddressPage.verifyCheckYourAnswersPage(proposedAddressData, caseData.name)
+
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, updatedProposedAddresses)
     await addProposedAddressPage.clickSave()
 
-    await expect(page).toHaveURL(`/cases/${crn}`)
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    await profileTrackerPage.shouldShowProposedAddresses(updatedProposedAddresses)
   })
 
   test('should show error messages when inputs are invalid', async ({ page }) => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
 
+    await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
-    await eligibilityApi.stubGetEligibilityByCrn(crn)
-    await casesApi.stubGetReferralHistory(crn)
     await login(page)
 
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
-
-    await profileTrackerPage.clickAddAddressLink()
-
-    const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(page)
+    const addProposedAddressPage = await AddProposedAddressPage.visit(page, caseData)
     await addProposedAddressPage.clickContinue()
 
     await expect(page.getByText('There is a problem')).toBeVisible()

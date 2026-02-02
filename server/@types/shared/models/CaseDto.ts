@@ -5,7 +5,7 @@
 import type { AccommodationDetail } from './AccommodationDetail';
 import type { AssignedToDto } from './AssignedToDto';
 export type CaseDto = {
-    name: string;
+    name?: string;
     dateOfBirth?: string;
     crn?: string;
     prisonNumber?: string;

@@ -44,12 +44,12 @@ export default class AddProposedAddressPage extends AbstractPage {
 
   async completeTypeForm(proposedAddressData: ProposedAddressFormData) {
     await this.page
-      .locator(`input[name="housingArrangementType"][value="${proposedAddressData.housingArrangementType}"]`)
+      .locator(`input[name="arrangementSubType"][value="${proposedAddressData.arrangementSubType}"]`)
       .check()
-    if (proposedAddressData.housingArrangementType === 'OTHER') {
+    if (proposedAddressData.arrangementSubType === 'OTHER') {
       await this.page.fill(
-        'input[name="housingArrangementTypeDescription"]',
-        proposedAddressData.housingArrangementTypeDescription || '',
+        'input[name="arrangementSubTypeDescription"]',
+        proposedAddressData.arrangementSubTypeDescription || '',
       )
     }
     await this.page.locator(`input[name="settledType"][value="${proposedAddressData.settledType}"]`).check()
@@ -78,11 +78,9 @@ export default class AddProposedAddressPage extends AbstractPage {
     }
 
     const arrangementRow = row(`What will be ${caseName}'s housing arrangement at this address?`)
-    await expect(arrangementRow).toContainText(
-      formatProposedAddressArrangement(proposedAddressData.housingArrangementType),
-    )
-    if (proposedAddressData.housingArrangementTypeDescription) {
-      await expect(arrangementRow).toContainText(proposedAddressData.housingArrangementTypeDescription)
+    await expect(arrangementRow).toContainText(formatProposedAddressArrangement(proposedAddressData.arrangementSubType))
+    if (proposedAddressData.arrangementSubTypeDescription) {
+      await expect(arrangementRow).toContainText(proposedAddressData.arrangementSubTypeDescription)
     }
 
     const settledTypeText = formatProposedAddressSettledType(proposedAddressData.settledType)

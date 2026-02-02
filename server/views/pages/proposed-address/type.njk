@@ -13,17 +13,17 @@
             label: {
                 text: 'What is the other housing arrangement?'
             },
-            name: 'housingArrangementTypeDescription',
-            id: 'housingArrangementTypeDescription',
-            value: proposedAddress.housingArrangementTypeDescription,
-            errorMessage: errors.housingArrangementTypeDescription
+            name: 'arrangementSubTypeDescription',
+            id: 'arrangementSubTypeDescription',
+            value: proposedAddress.arrangementSubTypeDescription,
+            errorMessage: errors.arrangementSubTypeDescription
         }
     ) }}
 {% endset %}
 
 {% block formContent %}
   {{ govukRadios({
-      name: "housingArrangementType",
+      name: "arrangementSubType",
       fieldset: {
           legend: {
               text: "What will be the " + name + "'s housing arrangement at this address?",
@@ -34,38 +34,38 @@
           {
               value: "FRIENDS_OR_FAMILY",
               text: "Friends or family (not tenant or owner)",
-              checked: proposedAddress.housingArrangementType == "FRIENDS_OR_FAMILY"
+              checked: proposedAddress.arrangementSubType == "FRIENDS_OR_FAMILY"
           },
           {
               value: "SOCIAL_RENTED",
               text: "Social rent (tenant)",
-              checked: proposedAddress.housingArrangementType == "SOCIAL_RENTED"
+              checked: proposedAddress.arrangementSubType == "SOCIAL_RENTED"
           },
           {
               value: "PRIVATE_RENTED_WHOLE_PROPERTY",
               text: "Private rent, whole property (tenant)",
-              checked: proposedAddress.housingArrangementType == "PRIVATE_RENTED_WHOLE_PROPERTY"
+              checked: proposedAddress.arrangementSubType == "PRIVATE_RENTED_WHOLE_PROPERTY"
           },
           {
               value: "PRIVATE_RENTED_ROOM",
               text: "Private rent, room/share (tenant)",
-              checked: proposedAddress.housingArrangementType == "PRIVATE_RENTED_ROOM"
+              checked: proposedAddress.arrangementSubType == "PRIVATE_RENTED_ROOM"
           },
           {
               value: "OWNED",
               text: "Owned (named on deeds/mortgage)",
-              checked: proposedAddress.housingArrangementType == "OWNED"
+              checked: proposedAddress.arrangementSubType == "OWNED"
           },
           {
               value: "OTHER",
               text: "Other",
-              checked: proposedAddress.housingArrangementType == "OTHER",
+              checked: proposedAddress.arrangementSubType == "OTHER",
               conditional: {
                 html: conditionalHtml
               }
           }
       ],
-      errorMessage: errors.housingArrangementType
+      errorMessage: errors.arrangementSubType
   }) }}
 {{ govukRadios({
       name: "settledType",

@@ -57,6 +57,6 @@ describeClient('ProposedAddressesClient', provider => {
       },
     })
 
-    await proposedAddressesClient.submit(crn, proposedAddressData)
+    await proposedAddressesClient.submit(token, crn, proposedAddressData)
   })
 })

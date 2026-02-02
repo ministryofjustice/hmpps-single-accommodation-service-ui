@@ -3,7 +3,7 @@ import { Factory } from 'fishery'
 import { ProposedAddressFormData } from '@sas/ui'
 import addressFactory from './accommodationAddressDetails'
 
-const housingArrangementTypes: ProposedAddressFormData['housingArrangementType'][] = [
+const arrangementSubTypes: ProposedAddressFormData['arrangementSubType'][] = [
   'FRIENDS_OR_FAMILY',
   'SOCIAL_RENTED',
   'PRIVATE_RENTED_WHOLE_PROPERTY',
@@ -35,11 +35,11 @@ class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
 }
 
 export default ProposedAddressFormFactory.define(() => {
-  const housingArrangementType = faker.helpers.arrayElement(housingArrangementTypes)
+  const arrangementSubType = faker.helpers.arrayElement(arrangementSubTypes)
 
   return {
-    housingArrangementType,
-    housingArrangementTypeDescription: housingArrangementType === 'OTHER' ? faker.lorem.sentence() : '',
+    arrangementSubType,
+    arrangementSubTypeDescription: arrangementSubType === 'OTHER' ? faker.lorem.sentence() : '',
     settledType: faker.helpers.arrayElement(settledTypes),
     status: faker.helpers.arrayElement(statuses),
     address: addressFactory.build(),

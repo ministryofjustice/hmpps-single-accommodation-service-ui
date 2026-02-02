@@ -15,8 +15,8 @@ export interface ErrorMessages {
 }
 
 export type ProposedAddressFormData = {
-  housingArrangementType: AccommodationDetail['arrangementSubType']
-  housingArrangementTypeDescription: string
+  arrangementSubType: AccommodationDetail['arrangementSubType']
+  arrangementSubTypeDescription: string
   settledType: AccommodationDetail['settledType']
   status: AccommodationDetail['status']
   address: AccommodationDetail['address']

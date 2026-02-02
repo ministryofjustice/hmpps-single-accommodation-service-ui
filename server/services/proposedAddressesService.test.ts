@@ -49,7 +49,7 @@ describe('ProposedAddressesService', () => {
 
       const result = await proposedAddressesService.submit(token, crn, proposedAddressData)
 
-      expect(proposedAddressesClient.submit).toHaveBeenCalledWith(crn, proposedAddressData)
+      expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, proposedAddressData)
       expect(result).toEqual(undefined)
     })
   })

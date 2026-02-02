@@ -127,7 +127,7 @@ describe('proposedAddresses', () => {
           postcode: 'NW1 6XE',
           country: 'UK',
         },
-        housingArrangementType: 'FRIENDS_OR_FAMILY',
+        arrangementSubType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
         status: 'CHECKS_PASSED',
       } as ProposedAddressFormData
@@ -147,8 +147,8 @@ describe('proposedAddresses', () => {
 
     it('formats arrangement when other type selected', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({
-        housingArrangementType: 'OTHER',
-        housingArrangementTypeDescription: 'Hostel',
+        arrangementSubType: 'OTHER',
+        arrangementSubTypeDescription: 'Hostel',
       })
       const rows = summaryListRows(sessionData, 'CRN123', 'James Taylor')
 
@@ -268,29 +268,29 @@ describe('proposedAddresses', () => {
   describe('updateTypeFromRequest', () => {
     it('updates form data when type exists', async () => {
       req.body = {
-        housingArrangementType: 'OTHER',
-        housingArrangementTypeDescription: 'Some description',
+        arrangementSubType: 'OTHER',
+        arrangementSubTypeDescription: 'Some description',
         settledType: 'TRANSIENT',
       }
 
       await updateTypeFromRequest(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
-        housingArrangementType: 'OTHER',
-        housingArrangementTypeDescription: 'Some description',
+        arrangementSubType: 'OTHER',
+        arrangementSubTypeDescription: 'Some description',
         settledType: 'TRANSIENT',
       })
     })
 
     it('updates arrangement with empty default values for missing fields', async () => {
       req.body = {
-        housingArrangementType: 'FAILED',
+        arrangementSubType: 'FAILED',
         settledType: '',
       }
       await updateTypeFromRequest(req, formDataManager)
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
-        housingArrangementType: 'FAILED',
-        housingArrangementTypeDescription: '',
+        arrangementSubType: 'FAILED',
+        arrangementSubTypeDescription: '',
         settledType: '',
       })
     })
@@ -314,29 +314,29 @@ describe('proposedAddresses', () => {
     it('returns false and adds errors when arrangement type missing', () => {
       const sessionData = proposedAddressFormFactory
         .manualAddress()
-        .build({ settledType: 'SETTLED', housingArrangementType: undefined })
+        .build({ settledType: 'SETTLED', arrangementSubType: undefined })
 
       const result = validateTypeFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'housingArrangementType', expect.any(String))
+      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'arrangementSubType', expect.any(String))
     })
 
     it('requires description when type is other', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({
-        housingArrangementType: 'OTHER',
-        housingArrangementTypeDescription: '',
+        arrangementSubType: 'OTHER',
+        arrangementSubTypeDescription: '',
       })
       const result = validateTypeFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'housingArrangementTypeDescription', expect.any(String))
+      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'arrangementSubTypeDescription', expect.any(String))
     })
 
     it('requires settled type', () => {
       const sessionData = proposedAddressFormFactory
         .manualAddress()
-        .build({ housingArrangementType: 'FRIENDS_OR_FAMILY', settledType: undefined })
+        .build({ arrangementSubType: 'FRIENDS_OR_FAMILY', settledType: undefined })
 
       const result = validateTypeFromSession(req, sessionData)
 
@@ -346,7 +346,7 @@ describe('proposedAddresses', () => {
 
     it('returns true for valid data', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({
-        housingArrangementType: 'FRIENDS_OR_FAMILY',
+        arrangementSubType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
       })
 

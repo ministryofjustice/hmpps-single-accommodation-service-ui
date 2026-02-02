@@ -60,8 +60,8 @@ describe('proposedAddressesController', () => {
       postcode: 'AB1 2CD',
       country: 'UK',
     },
-    housingArrangementType: 'FRIENDS_OR_FAMILY',
-    housingArrangementTypeDescription: '',
+    arrangementSubType: 'FRIENDS_OR_FAMILY',
+    arrangementSubTypeDescription: '',
     settledType: 'SETTLED',
     status: 'CHECKS_PASSED',
   }

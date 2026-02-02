@@ -14,7 +14,7 @@ describe('multiPageFormManager', () => {
     mockSession.multiPageFormData = {
       proposedAddress: {
         [crn]: {
-          housingArrangementType: 'FRIENDS_OR_FAMILY',
+          arrangementSubType: 'FRIENDS_OR_FAMILY',
           settledType: 'SETTLED',
         },
       },
@@ -31,13 +31,11 @@ describe('multiPageFormManager', () => {
   })
 
   it('updates the data provided against the correct id and forces a session save', async () => {
-    const updated = await formData.update(crn, mockSession, { housingArrangementType: 'FRIENDS_OR_FAMILY' })
+    const updated = await formData.update(crn, mockSession, { arrangementSubType: 'FRIENDS_OR_FAMILY' })
 
-    expect(updated).toEqual(expect.objectContaining({ housingArrangementType: 'FRIENDS_OR_FAMILY' }))
+    expect(updated).toEqual(expect.objectContaining({ arrangementSubType: 'FRIENDS_OR_FAMILY' }))
     expect(mockSession.save).toHaveBeenCalled()
-    expect(formData.get(crn, mockSession)).toEqual(
-      expect.objectContaining({ housingArrangementType: 'FRIENDS_OR_FAMILY' }),
-    )
+    expect(formData.get(crn, mockSession)).toEqual(expect.objectContaining({ arrangementSubType: 'FRIENDS_OR_FAMILY' }))
   })
 
   it('removes the data for the provided id only and forces a session save', async () => {

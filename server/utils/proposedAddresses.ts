@@ -114,9 +114,9 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
 }
 
 const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
-  const type = formatProposedAddressArrangement(data.housingArrangementType)
+  const type = formatProposedAddressArrangement(data.arrangementSubType)
   if (type === 'Other') {
-    return [type, data.housingArrangementTypeDescription || ''].join('<br />')
+    return [type, data.arrangementSubTypeDescription || ''].join('<br />')
   }
   return type
 }
@@ -188,11 +188,11 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
 }
 
 export const updateTypeFromRequest = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
-  const { housingArrangementType, housingArrangementTypeDescription, settledType } = req.body || {}
-  if (housingArrangementType || settledType || housingArrangementTypeDescription) {
+  const { arrangementSubType, arrangementSubTypeDescription, settledType } = req.body || {}
+  if (arrangementSubType || settledType || arrangementSubTypeDescription) {
     await formDataManager.update(req.params.crn, req.session, {
-      housingArrangementType: housingArrangementType as ProposedAddressFormData['housingArrangementType'],
-      housingArrangementTypeDescription: housingArrangementTypeDescription || '',
+      arrangementSubType: arrangementSubType as ProposedAddressFormData['arrangementSubType'],
+      arrangementSubTypeDescription: arrangementSubTypeDescription || '',
       settledType: settledType as ProposedAddressFormData['settledType'],
     })
   }
@@ -200,10 +200,10 @@ export const updateTypeFromRequest = async (req: Request, formDataManager: Multi
 
 export const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
-  if (!sessionData?.housingArrangementType) {
-    errors.housingArrangementType = 'Select an arrangement type'
-  } else if (sessionData.housingArrangementType === 'OTHER' && !sessionData.housingArrangementTypeDescription) {
-    errors.housingArrangementTypeDescription = 'Enter the other arrangement type'
+  if (!sessionData?.arrangementSubType) {
+    errors.arrangementSubType = 'Select an arrangement type'
+  } else if (sessionData.arrangementSubType === 'OTHER' && !sessionData.arrangementSubTypeDescription) {
+    errors.arrangementSubTypeDescription = 'Enter the other arrangement type'
   }
   if (!sessionData?.settledType) {
     errors.settledType = 'Select a settled type'

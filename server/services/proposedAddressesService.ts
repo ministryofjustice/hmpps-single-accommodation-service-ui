@@ -18,6 +18,6 @@ export default class ProposedAddressesService {
   }
 
   submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    return this.proposedAddressesClient.submit(crn, proposedAddressData)
+    return this.proposedAddressesClient.submit(token, crn, proposedAddressData)
   }
 }

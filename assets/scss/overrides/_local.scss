@@ -5,3 +5,7 @@
 .govuk-tag {
   white-space: nowrap;
 }
+
+.govuk-template .govuk-width-container {
+  max-width: $moj-page-width; 
+}

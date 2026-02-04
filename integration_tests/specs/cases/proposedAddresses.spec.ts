@@ -108,8 +108,33 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(initialProposedAddressData)
     await addProposedAddressPage.clickContinue()
 
+    if (initialProposedAddressData.status === 'CHECKS_PASSED') {
+      // Then I should see the confirmation form
+      await addProposedAddressPage.shouldShowConfirmationForm(caseData.name)
+
+      // When I submit the form empty
+      await addProposedAddressPage.clickContinue()
+
+      // Then I should see errors
+      await addProposedAddressPage.shouldShowErrorMessagesForFields({
+        confirmation: 'Select if this is the next address',
+      })
+
+      // Then I complete the confirmation form
+      await addProposedAddressPage.completeConfirmationForm(initialProposedAddressData)
+      await addProposedAddressPage.clickContinue()
+    }
+
     // Then I should see the check your answers page with my entered data
     await addProposedAddressPage.verifyCheckYourAnswersPage(initialProposedAddressData, caseData.name)
+
+    if (initialProposedAddressData.status === 'CHECKS_PASSED') {
+      // When I click the back link
+      await addProposedAddressPage.clickBack()
+
+      // Then I should see the populated confirmation form
+      await addProposedAddressPage.shouldShowPopulatedConfirmationForm(initialProposedAddressData)
+    }
 
     // When I click the back link
     await addProposedAddressPage.clickBack()
@@ -141,6 +166,12 @@ test.describe('add proposed address', () => {
     // And I complete the status form with new data
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickContinue()
+
+    if (updatedProposedAddressData.status === 'CHECKS_PASSED') {
+      // And I complete the confirmation form with new data
+      await addProposedAddressPage.completeConfirmationForm(updatedProposedAddressData)
+      await addProposedAddressPage.clickContinue()
+    }
 
     // Then I should see the check your answers page with my updated data
     await addProposedAddressPage.verifyCheckYourAnswersPage(updatedProposedAddressData, caseData.name)

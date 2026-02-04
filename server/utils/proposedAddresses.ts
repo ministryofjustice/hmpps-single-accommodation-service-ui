@@ -9,6 +9,7 @@ import {
   addressLines,
   formatProposedAddressArrangement,
   formatProposedAddressSettledType,
+  formatProposedAddressConfirmation,
 } from './format'
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { textContent, htmlContent } from './utils'
@@ -81,7 +82,7 @@ const displayStatus = (
 export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string, name: string) => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
 
-  return [
+  const rows = [
     {
       key: textContent('Address'),
       value: htmlContent(addressParts.join('<br />')),
@@ -111,6 +112,16 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
       },
     },
   ]
+  if (sessionData.status === 'CHECKS_PASSED') {
+    rows.push({
+      key: textContent(`Is this the next address that ${name} will be moving into?`),
+      value: htmlContent(formatProposedAddressConfirmation(sessionData.confirmation)),
+      actions: {
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.confirmation({ crn }) }],
+      },
+    })
+  }
+  return rows
 }
 
 const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
@@ -245,6 +256,35 @@ export const validateStatusFromSession = (req: Request, sessionData: ProposedAdd
 
   if (!sessionData?.status) {
     errors.status = 'Select a status'
+  }
+
+  if (Object.keys(errors).length > 0) {
+    Object.entries(errors).forEach(([key, message]) => {
+      addErrorToFlash(req, key, message)
+    })
+    return false
+  }
+
+  return true
+}
+
+export const updateConfirmationFromRequest = async (
+  req: Request,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
+) => {
+  const { confirmation } = req.body || {}
+  if (confirmation) {
+    await formDataManager.update(req.params.crn, req.session, {
+      confirmation,
+    })
+  }
+}
+
+export const validateConfirmationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+  const errors: Record<string, string> = {}
+
+  if (!sessionData?.confirmation) {
+    errors.confirmation = 'Select if this is the next address'
   }
 
   if (Object.keys(errors).length > 0) {

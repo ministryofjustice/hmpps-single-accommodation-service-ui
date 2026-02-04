@@ -11,9 +11,11 @@ import {
   updateAddressFromRequest,
   updateTypeFromRequest,
   updateStatusFromRequest,
+  updateConfirmationFromRequest,
   validateAddressFromSession,
   validateTypeFromSession,
   validateStatusFromSession,
+  validateConfirmationFromSession,
 } from '../utils/proposedAddresses'
 import { fetchErrors } from '../utils/validation'
 import CasesService from '../services/casesService'
@@ -24,9 +26,11 @@ jest.mock('../utils/proposedAddresses', () => ({
   updateAddressFromRequest: jest.fn(),
   updateTypeFromRequest: jest.fn(),
   updateStatusFromRequest: jest.fn(),
+  updateConfirmationFromRequest: jest.fn(),
   validateAddressFromSession: jest.fn(),
   validateTypeFromSession: jest.fn(),
   validateStatusFromSession: jest.fn(),
+  validateConfirmationFromSession: jest.fn(),
 }))
 
 jest.mock('../utils/validation', () => ({
@@ -227,6 +231,19 @@ describe('proposedAddressesController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
     })
 
+    it('redirects to confirmation when status is CHECKS_PASSED', async () => {
+      jest.spyOn(controller.formData, 'get').mockReturnValue({
+        ...sessionData,
+        status: 'CHECKS_PASSED',
+      })
+      ;(validateStatusFromSession as jest.Mock).mockReturnValue(true)
+
+      await controller.saveStatus()(request, response, next)
+
+      expect(updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.confirmation({ crn: 'CRN123' }))
+    })
+
     it('redirects to status when status invalid', async () => {
       ;(validateStatusFromSession as jest.Mock).mockReturnValue(false)
 
@@ -234,6 +251,53 @@ describe('proposedAddressesController', () => {
 
       expect(updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+    })
+  })
+
+  describe('confirmation', () => {
+    it('renders confirmation page', async () => {
+      await controller.confirmation()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/confirmation', {
+        crn: 'CRN123',
+        proposedAddress: undefined,
+        name: 'James Smith',
+        errors: {},
+        errorSummary: [],
+      })
+    })
+
+    it('renders confirmation page with session data', async () => {
+      jest.spyOn(controller.formData, 'get').mockReturnValue(sessionData)
+
+      await controller.confirmation()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/confirmation', {
+        crn: 'CRN123',
+        proposedAddress: sessionData,
+        name: 'James Smith',
+        errors: {},
+        errorSummary: [],
+      })
+    })
+  })
+
+  describe('saveConfirmation', () => {
+    it('redirects to check your answers when confirmation valid', async () => {
+      ;(validateConfirmationFromSession as jest.Mock).mockReturnValue(true)
+
+      await controller.saveConfirmation()(request, response, next)
+      expect(updateConfirmationFromRequest).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
+    })
+
+    it('redirects to confirmation when confirmation invalid', async () => {
+      ;(validateConfirmationFromSession as jest.Mock).mockReturnValue(false)
+
+      await controller.saveConfirmation()(request, response, next)
+
+      expect(updateConfirmationFromRequest).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.confirmation({ crn: 'CRN123' }))
     })
   })
 
@@ -248,6 +312,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
         tableRows: [{ key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' } }],
+        backLinkHref: uiPaths.proposedAddresses.status({ crn: 'CRN123' }),
       })
     })
   })

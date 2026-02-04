@@ -21,6 +21,9 @@ export default function routes(services: Services): Router {
   router.get(uiPaths.proposedAddresses.status.pattern, proposedAddressesController.status())
   router.post(uiPaths.proposedAddresses.status.pattern, proposedAddressesController.saveStatus())
 
+  router.get(uiPaths.proposedAddresses.confirmation.pattern, proposedAddressesController.confirmation())
+  router.post(uiPaths.proposedAddresses.confirmation.pattern, proposedAddressesController.saveConfirmation())
+
   router.get(uiPaths.proposedAddresses.checkYourAnswers.pattern, proposedAddressesController.checkYourAnswers())
   router.post(uiPaths.proposedAddresses.submit.pattern, proposedAddressesController.submit())
   router.get(uiPaths.proposedAddresses.cancel.pattern, proposedAddressesController.cancel())

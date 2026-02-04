@@ -22,6 +22,8 @@ const proposedAddressesController = mock<ProposedAddressesController>({
   saveType: mockHandler,
   status: mockHandler,
   saveStatus: mockHandler,
+  confirmation: mockHandler,
+  saveConfirmation: mockHandler,
   checkYourAnswers: mockHandler,
   submit: mockHandler,
   cancel: mockHandler,

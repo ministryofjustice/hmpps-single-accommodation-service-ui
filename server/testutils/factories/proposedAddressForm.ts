@@ -13,7 +13,7 @@ const arrangementSubTypes: ProposedAddressFormData['arrangementSubType'][] = [
 ]
 
 const settledTypes: ProposedAddressFormData['settledType'][] = ['SETTLED', 'TRANSIENT']
-const statuses: ProposedAddressFormData['status'][] = ['NOT_CHECKED_YET', 'CHECKS_PASSED', 'CHECKS_FAILED', 'CONFIRMED']
+const statuses: ProposedAddressFormData['status'][] = ['NOT_CHECKED_YET', 'CHECKS_PASSED', 'CHECKS_FAILED']
 
 class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
   manualAddress() {
@@ -39,7 +39,7 @@ export default ProposedAddressFormFactory.define(() => {
 
   return {
     arrangementSubType,
-    arrangementSubTypeDescription: arrangementSubType === 'OTHER' ? faker.lorem.sentence() : '',
+    arrangementSubTypeDescription: arrangementSubType === 'OTHER' ? faker.lorem.sentence() : undefined,
     settledType: faker.helpers.arrayElement(settledTypes),
     status: faker.helpers.arrayElement(statuses),
     address: addressFactory.build(),

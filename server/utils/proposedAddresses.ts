@@ -129,9 +129,9 @@ export const updateAddressFromRequest = async (
   if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
     const addressParams = {
       buildingName: addressLine1 || '',
-      subBuildingName: addressLine2 || '',
+      subBuildingName: addressLine2 || undefined,
       postTown: addressTown || '',
-      county: addressCounty || '',
+      county: addressCounty || undefined,
       postcode: addressPostcode || '',
       country: addressCountry || '',
     }
@@ -192,7 +192,8 @@ export const updateTypeFromRequest = async (req: Request, formDataManager: Multi
   if (arrangementSubType || settledType || arrangementSubTypeDescription) {
     await formDataManager.update(req.params.crn, req.session, {
       arrangementSubType: arrangementSubType as ProposedAddressFormData['arrangementSubType'],
-      arrangementSubTypeDescription: arrangementSubTypeDescription || '',
+      arrangementSubTypeDescription:
+        arrangementSubType === 'OTHER' ? arrangementSubTypeDescription || undefined : undefined,
       settledType: settledType as ProposedAddressFormData['settledType'],
     })
   }

@@ -173,9 +173,9 @@ describe('proposedAddresses', () => {
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         address: {
           buildingName: 'Line 1',
-          subBuildingName: '',
+          subBuildingName: undefined,
           postTown: 'Town',
-          county: '',
+          county: undefined,
           postcode: 'PC1 1PC',
           country: 'UK',
         },
@@ -193,7 +193,7 @@ describe('proposedAddresses', () => {
           buildingName: '',
           subBuildingName: 'Line 2',
           postTown: '',
-          county: '',
+          county: undefined,
           postcode: '',
           country: '',
         },
@@ -290,7 +290,7 @@ describe('proposedAddresses', () => {
       await updateTypeFromRequest(req, formDataManager)
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
         arrangementSubType: 'FAILED',
-        arrangementSubTypeDescription: '',
+        arrangementSubTypeDescription: undefined,
         settledType: '',
       })
     })

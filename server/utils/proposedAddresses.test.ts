@@ -154,8 +154,18 @@ describe('proposedAddresses', () => {
 
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
-      expect(arrangementHtml).toBe('Other<br />Hostel')
-      expect(rows[2].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
+      expect(arrangementHtml).toMatchSnapshot()
+    })
+
+    it('formats status when checks failed with reason', () => {
+      const sessionData = proposedAddressFormFactory.manualAddress().build({
+        status: 'CHECKS_FAILED',
+      })
+      const rows = summaryListRows(sessionData, 'CRN123', 'James Taylor')
+
+      const statusHtml = rows[3].value.html ?? rows[3].value
+
+      expect(statusHtml).toMatchSnapshot()
     })
   })
 

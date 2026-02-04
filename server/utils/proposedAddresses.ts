@@ -105,7 +105,7 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
     },
     {
       key: textContent('What is the status of the address checks?'),
-      value: textContent(formatProposedAddressStatus(sessionData.status)),
+      value: htmlContent(formatStatusWithReason(sessionData)),
       actions: {
         items: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) }],
       },
@@ -116,9 +116,17 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
 const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
   const type = formatProposedAddressArrangement(data.arrangementSubType)
   if (type === 'Other') {
-    return [type, data.arrangementSubTypeDescription || ''].join('<br />')
+    return `<p class="govuk-!-margin-bottom-2">${type}</p>${data.arrangementSubTypeDescription || ''}`
   }
   return type
+}
+
+const formatStatusWithReason = (data: ProposedAddressFormData) => {
+  const status = formatProposedAddressStatus(data.status)
+  if (data.status === 'CHECKS_FAILED') {
+    return `<p class="govuk-!-margin-bottom-2">${status}</p>Not suitable`
+  }
+  return status
 }
 
 export const updateAddressFromRequest = async (

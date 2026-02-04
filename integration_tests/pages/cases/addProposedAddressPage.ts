@@ -4,6 +4,7 @@ import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import {
   formatProposedAddressArrangement,
+  formatProposedAddressConfirmation,
   formatProposedAddressSettledType,
   formatProposedAddressStatus,
 } from '../../../server/utils/format'
@@ -66,6 +67,10 @@ export default class AddProposedAddressPage extends AbstractPage {
     await this.page.locator(`input[name="status"][value="${proposedAddressData.status}"]`).check()
   }
 
+  async completeConfirmationForm(proposedAddressData: ProposedAddressFormData) {
+    await this.page.locator(`input[name="confirmation"][value="${proposedAddressData.confirmation}"]`).check()
+  }
+
   async verifyCheckYourAnswersPage(proposedAddressData: ProposedAddressFormData, caseName: string) {
     await expect(this.page.getByText('Check your answers before adding the address')).toBeVisible()
     const row = (key: string) =>
@@ -94,6 +99,13 @@ export default class AddProposedAddressPage extends AbstractPage {
     await expect(row('Will it be settled or transient?')).toContainText(settledTypeText)
     const statusText = formatProposedAddressStatus(proposedAddressData.status)
     await expect(row('What is the status of the address checks?')).toContainText(statusText)
+
+    if (proposedAddressData.status === 'CHECKS_PASSED') {
+      const confirmationText = formatProposedAddressConfirmation(proposedAddressData.confirmation)
+      await expect(row(`Is this the next address that ${caseName} will be moving into?`)).toContainText(
+        confirmationText,
+      )
+    }
   }
 
   async shouldShowTypeForm(name: string) {
@@ -102,6 +114,10 @@ export default class AddProposedAddressPage extends AbstractPage {
 
   async shouldShowStatusForm() {
     await expect(this.page.getByText('What is the status of the address checks?')).toBeVisible()
+  }
+
+  async shouldShowConfirmationForm(name: string) {
+    await expect(this.page.getByText(`Is this the next address that ${name} will be moving into?`)).toBeVisible()
   }
 
   async shouldShowPopulatedAddressForm(addressData: ProposedAddressFormData) {
@@ -126,6 +142,10 @@ export default class AddProposedAddressPage extends AbstractPage {
     await this.verifyRadioInputByName('status', addressData.status)
   }
 
+  async shouldShowPopulatedConfirmationForm(addressData: ProposedAddressFormData) {
+    await this.verifyRadioInputByName('confirmation', addressData.confirmation)
+  }
+
   async checkApiCalled(crn: string, proposedAddressData: ProposedAddressFormData) {
     const requestBody = await verifyPost(apiPaths.cases.proposedAddresses.submit({ crn }))
 
@@ -134,5 +154,8 @@ export default class AddProposedAddressPage extends AbstractPage {
     expect(requestBody.arrangementSubTypeDescription).toEqual(proposedAddressData.arrangementSubTypeDescription)
     expect(requestBody.settledType).toEqual(proposedAddressData.settledType)
     expect(requestBody.status).toEqual(proposedAddressData.status)
+    if (proposedAddressData.status === 'CHECKS_PASSED') {
+      expect(requestBody.confirmation).toEqual(proposedAddressData.confirmation)
+    }
   }
 }

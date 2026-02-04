@@ -162,6 +162,16 @@ export const formatProposedAddressStatus = (status?: AccommodationDetail['status
   )
 }
 
+export const formatProposedAddressConfirmation = (confirmation: string) => {
+  return (
+    {
+      YES: 'Yes',
+      NO: 'No',
+      UNDECIDED: 'Still to be decided',
+    }[confirmation] || 'Unknown'
+  )
+}
+
 export const proposedAddressStatusColours: Record<AccommodationDetail['status'], string> = {
   NOT_CHECKED_YET: 'red',
   FAILED: 'grey',

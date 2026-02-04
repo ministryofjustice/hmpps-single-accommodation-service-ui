@@ -10,6 +10,8 @@ import {
   validateAddressFromSession,
   validateTypeFromSession,
   validateStatusFromSession,
+  updateConfirmationFromRequest,
+  validateConfirmationFromSession,
 } from '../utils/proposedAddresses'
 import { fetchErrors } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -130,6 +132,41 @@ export default class ProposedAddressesController {
       if (!validateStatusFromSession(req, proposedAddressFormSessionData)) {
         return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
       }
+      if (proposedAddressFormSessionData?.status === 'CHECKS_PASSED') {
+        return res.redirect(uiPaths.proposedAddresses.confirmation({ crn: req.params.crn }))
+      }
+      return res.redirect(uiPaths.proposedAddresses.checkYourAnswers({ crn: req.params.crn }))
+    }
+  }
+
+  confirmation(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+      const { errors, errorSummary } = fetchErrors(req)
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const caseData = await getCaseData(req, res, this.casesService)
+
+      return res.render('pages/proposed-address/confirmation', {
+        crn: req.params.crn,
+        proposedAddress: proposedAddressFormSessionData,
+        name: caseData.name,
+        errors,
+        errorSummary,
+      })
+    }
+  }
+
+  saveConfirmation(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await updateConfirmationFromRequest(req, this.formData)
+
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      if (!validateConfirmationFromSession(req, proposedAddressFormSessionData)) {
+        return res.redirect(uiPaths.proposedAddresses.confirmation({ crn: req.params.crn }))
+      }
 
       return res.redirect(uiPaths.proposedAddresses.checkYourAnswers({ crn: req.params.crn }))
     }
@@ -146,9 +183,15 @@ export default class ProposedAddressesController {
       const caseData = await getCaseData(req, res, this.casesService)
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn, caseData.name)
+      const backLinkHref =
+        proposedAddressFormSessionData?.status === 'CHECKS_PASSED'
+          ? uiPaths.proposedAddresses.confirmation({ crn: req.params.crn })
+          : uiPaths.proposedAddresses.status({ crn: req.params.crn })
+
       return res.render('pages/proposed-address/check-your-answers', {
         crn: req.params.crn,
         tableRows,
+        backLinkHref,
       })
     }
   }

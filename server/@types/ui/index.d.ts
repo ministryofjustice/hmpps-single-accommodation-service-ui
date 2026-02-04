@@ -20,6 +20,7 @@ export type ProposedAddressFormData = {
   settledType: AccommodationDetail['settledType']
   status: AccommodationDetail['status']
   address: AccommodationDetail['address']
+  confirmation?: 'YES' | 'NO' | 'UNDECIDED'
 }
 
 export interface StatusTag {

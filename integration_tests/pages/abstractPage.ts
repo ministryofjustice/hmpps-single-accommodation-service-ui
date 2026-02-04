@@ -23,6 +23,26 @@ export default class AbstractPage {
     await this.signoutLink.first().click()
   }
 
+  async clickButton(buttonText: string) {
+    await this.page.getByRole('button', { name: buttonText }).click()
+  }
+
+  async clickContinue() {
+    await this.clickButton('Continue')
+  }
+
+  async clickSave() {
+    await this.clickButton('Save')
+  }
+
+  async clickLink(text: string | RegExp): Promise<void> {
+    await this.page.getByRole('link', { name: text }).click()
+  }
+
+  async clickBack() {
+    await this.clickLink('Back')
+  }
+
   async shouldShowTableHeaders(headers: string[]) {
     for await (const header of headers) {
       await expect(this.page.getByRole('columnheader', { name: header })).toBeVisible()
@@ -68,5 +88,26 @@ export default class AbstractPage {
     for await (const link of cardData.links || []) {
       await expect(card.getByRole('link', { name: link.text })).toHaveAttribute('href', link.href)
     }
+  }
+
+  async shouldShowErrorMessagesForFields(errorMessages: Record<string, string>) {
+    await expect(this.page.getByText('There is a problem')).toBeVisible()
+
+    const errorSummary = this.page.locator('.govuk-error-summary__body')
+
+    await Promise.all(
+      Object.entries(errorMessages).map(async ([field, errorMessage]) => {
+        await expect(errorSummary.getByRole('link', { name: errorMessage })).toHaveAttribute('href', `#${field}`)
+        await expect(this.page.locator(`#${field}-error`)).toContainText(errorMessage)
+      }),
+    )
+  }
+
+  async verifyTextInputByName(name: string, value: string) {
+    await expect(this.page.locator(`input[name="${name}"]`)).toHaveValue(value)
+  }
+
+  async verifyRadioInputByName(name: string, value: string) {
+    await expect(this.page.locator(`input[name="${name}"][value="${value}"]`)).toBeChecked()
   }
 }

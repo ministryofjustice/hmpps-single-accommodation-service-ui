@@ -8,6 +8,8 @@ import {
   formatProposedAddressStatus,
 } from '../../../server/utils/format'
 import paths from '../../../server/paths/ui'
+import { verifyPost } from '../../mockApis/wiremock'
+import apiPaths from '../../../server/paths/api'
 
 export default class AddProposedAddressPage extends AbstractPage {
   readonly header: Locator
@@ -28,16 +30,21 @@ export default class AddProposedAddressPage extends AbstractPage {
     return AddProposedAddressPage.verifyOnPage(page)
   }
 
+  async clearAddressForm() {
+    await this.page.fill('input[name="addressLine1"]', '')
+    await this.page.fill('input[name="addressLine2"]', '')
+    await this.page.fill('input[name="addressTown"]', '')
+    await this.page.fill('input[name="addressCounty"]', '')
+    await this.page.fill('input[name="addressPostcode"]', '')
+    await this.page.fill('input[name="addressCountry"]', '')
+  }
+
   async completeAddressForm(proposedAddressData: ProposedAddressFormData) {
     const { address } = proposedAddressData
     await this.page.fill('input[name="addressLine1"]', address.buildingName)
-    if (address.subBuildingName) {
-      await this.page.fill('input[name="addressLine2"]', address.subBuildingName)
-    }
+    await this.page.fill('input[name="addressLine2"]', address.subBuildingName || '')
     await this.page.fill('input[name="addressTown"]', address.postTown)
-    if (address.county) {
-      await this.page.fill('input[name="addressCounty"]', address.county)
-    }
+    await this.page.fill('input[name="addressCounty"]', address.county || '')
     await this.page.fill('input[name="addressPostcode"]', address.postcode)
     await this.page.fill('input[name="addressCountry"]', address.country)
   }
@@ -89,11 +96,43 @@ export default class AddProposedAddressPage extends AbstractPage {
     await expect(row('What is the status of the address checks?')).toContainText(statusText)
   }
 
-  async clickContinue() {
-    await this.page.getByText('Continue').first().click()
+  async shouldShowTypeForm(name: string) {
+    await expect(this.page.getByText(`What will be ${name}'s housing arrangement at this address?`)).toBeVisible()
   }
 
-  async clickSave() {
-    await this.page.getByText('Save').first().click()
+  async shouldShowStatusForm() {
+    await expect(this.page.getByText('What is the status of the address checks?')).toBeVisible()
+  }
+
+  async shouldShowPopulatedAddressForm(addressData: ProposedAddressFormData) {
+    const { address } = addressData
+    await this.verifyTextInputByName('addressLine1', address.buildingName)
+    await this.verifyTextInputByName('addressLine2', address.subBuildingName || '')
+    await this.verifyTextInputByName('addressTown', address.postTown)
+    await this.verifyTextInputByName('addressCounty', address.county || '')
+    await this.verifyTextInputByName('addressPostcode', address.postcode)
+    await this.verifyTextInputByName('addressCountry', address.country)
+  }
+
+  async shouldShowPopulatedTypeForm(addressData: ProposedAddressFormData) {
+    await this.verifyRadioInputByName('arrangementSubType', addressData.arrangementSubType)
+    if (addressData.arrangementSubType === 'OTHER' && addressData.arrangementSubTypeDescription) {
+      await this.verifyTextInputByName('arrangementSubTypeDescription', addressData.arrangementSubTypeDescription)
+    }
+    await this.verifyRadioInputByName('settledType', addressData.settledType)
+  }
+
+  async shouldShowPopulatedStatusForm(addressData: ProposedAddressFormData) {
+    await this.verifyRadioInputByName('status', addressData.status)
+  }
+
+  async checkApiCalled(crn: string, proposedAddressData: ProposedAddressFormData) {
+    const requestBody = await verifyPost(apiPaths.cases.proposedAddresses.submit({ crn }))
+
+    expect(requestBody.address).toEqual(proposedAddressData.address)
+    expect(requestBody.arrangementSubType).toEqual(proposedAddressData.arrangementSubType)
+    expect(requestBody.arrangementSubTypeDescription).toEqual(proposedAddressData.arrangementSubTypeDescription)
+    expect(requestBody.settledType).toEqual(proposedAddressData.settledType)
+    expect(requestBody.status).toEqual(proposedAddressData.status)
   }
 }

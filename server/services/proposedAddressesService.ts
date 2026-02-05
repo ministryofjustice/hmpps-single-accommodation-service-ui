@@ -1,5 +1,5 @@
 import { ProposedAddressFormData } from '@sas/ui'
-import { AccommodationDetail } from '@sas/api'
+import { AccommodationDetail, CreateAccommodationDetail } from '@sas/api'
 import { ProposedAddressesClient } from '../data'
 
 export default class ProposedAddressesService {
@@ -18,6 +18,11 @@ export default class ProposedAddressesService {
   }
 
   submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    return this.proposedAddressesClient.submit(token, crn, proposedAddressData)
+    const proposedAddressDetail: CreateAccommodationDetail = {
+      ...proposedAddressData,
+      arrangementType: 'PRIVATE',
+    }
+
+    return this.proposedAddressesClient.submit(token, crn, proposedAddressDetail)
   }
 }

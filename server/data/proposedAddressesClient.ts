@@ -1,5 +1,4 @@
 import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
-import { ProposedAddressFormData } from '@sas/ui'
 import { AccommodationDetail, CreateAccommodationDetail } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
@@ -19,12 +18,7 @@ export default class ProposedAddressesClient extends RestClient {
     )
   }
 
-  async submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    const proposedAddressDetail: CreateAccommodationDetail = {
-      ...proposedAddressData,
-      arrangementType: 'PRIVATE',
-    }
-
+  async submit(token: string, crn: string, proposedAddressDetail: CreateAccommodationDetail) {
     return this.post<void>(
       {
         path: apiPaths.cases.proposedAddresses.submit({ crn }),

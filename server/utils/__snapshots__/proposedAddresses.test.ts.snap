@@ -274,6 +274,6 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
 }
 `;
 
-exports[`proposedAddresses summaryListRows formats arrangement when other type selected 1`] = `"<p class="govuk-!-margin-bottom-2">Other</p>Hostel"`;
+exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p class="govuk-!-margin-bottom-2">Other</p>Hostel"`;
 
-exports[`proposedAddresses summaryListRows formats status when checks failed with reason 1`] = `"<p class="govuk-!-margin-bottom-2">Checks failed</p>Not suitable"`;
+exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p class="govuk-!-margin-bottom-2">Checks failed</p>Not suitable"`;

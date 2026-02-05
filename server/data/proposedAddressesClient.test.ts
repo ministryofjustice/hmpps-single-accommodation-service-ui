@@ -1,4 +1,5 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import { CreateAccommodationDetail } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import ProposedAddressesClient from './proposedAddressesClient'
 import apiPaths from '../paths/api'
@@ -40,6 +41,10 @@ describeClient('ProposedAddressesClient', provider => {
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
     const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
+    const proposedAddressDetail: CreateAccommodationDetail = {
+      ...proposedAddressData,
+      arrangementType: 'PRIVATE',
+    }
 
     await provider.addInteraction({
       state: `Proposed address can be submitted for case with CRN ${crn}`,
@@ -57,6 +62,6 @@ describeClient('ProposedAddressesClient', provider => {
       },
     })
 
-    await proposedAddressesClient.submit(token, crn, proposedAddressData)
+    await proposedAddressesClient.submit(token, crn, proposedAddressDetail)
   })
 })

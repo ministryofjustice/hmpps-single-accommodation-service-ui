@@ -15,7 +15,7 @@ import { arrangementSubTypes, summaryListRow } from './cases'
 import { textContent, htmlContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
-import { addErrorToFlash } from './validation'
+import { validateAndFlashErrors } from './validation'
 
 // eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
@@ -196,14 +196,7 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
     errors.addressCountry = 'Country must be 100 characters or less'
   }
 
-  if (Object.keys(errors).length > 0) {
-    Object.entries(errors).forEach(([key, message]) => {
-      addErrorToFlash(req, key, message)
-    })
-    return false
-  }
-
-  return true
+  return validateAndFlashErrors(req, errors)
 }
 
 export const updateTypeFromRequest = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
@@ -229,14 +222,7 @@ export const validateTypeFromSession = (req: Request, sessionData: ProposedAddre
     errors.settledType = 'Select a settled type'
   }
 
-  if (Object.keys(errors).length > 0) {
-    Object.entries(errors).forEach(([key, message]) => {
-      addErrorToFlash(req, key, message)
-    })
-    return false
-  }
-
-  return true
+  return validateAndFlashErrors(req, errors)
 }
 
 export const updateStatusFromRequest = async (
@@ -258,14 +244,7 @@ export const validateStatusFromSession = (req: Request, sessionData: ProposedAdd
     errors.status = 'Select a status'
   }
 
-  if (Object.keys(errors).length > 0) {
-    Object.entries(errors).forEach(([key, message]) => {
-      addErrorToFlash(req, key, message)
-    })
-    return false
-  }
-
-  return true
+  return validateAndFlashErrors(req, errors)
 }
 
 export const updateConfirmationFromRequest = async (
@@ -287,12 +266,5 @@ export const validateConfirmationFromSession = (req: Request, sessionData: Propo
     errors.confirmation = 'Select if this is the next address'
   }
 
-  if (Object.keys(errors).length > 0) {
-    Object.entries(errors).forEach(([key, message]) => {
-      addErrorToFlash(req, key, message)
-    })
-    return false
-  }
-
-  return true
+  return validateAndFlashErrors(req, errors)
 }

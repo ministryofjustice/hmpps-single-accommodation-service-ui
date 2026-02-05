@@ -13,10 +13,29 @@ import {
   validateStatusFromSession,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
-import { addErrorToFlash } from './validation'
+import { validateAndFlashErrors } from './validation'
 import MultiPageFormManager from './multiPageFormManager'
 
+jest.mock('./validation', () => ({
+  validateAndFlashErrors: jest.fn(),
+}))
+
+const mockedValidateAndFlashErrors = validateAndFlashErrors as jest.MockedFunction<typeof validateAndFlashErrors>
+
+const crn = 'CRN123'
+const formDataManager = mock<MultiPageFormManager<'proposedAddress'>>()
+let req: Request
+
 describe('Proposed addresses utilities', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    req = mock<Request>({
+      params: { crn },
+      body: {},
+      session: {},
+    })
+  })
+
   describe('proposedAddressStatusCard', () => {
     const baseAccommodationDetails = accommodationFactory.build({
       verificationStatus: 'PASSED',
@@ -93,26 +112,6 @@ describe('Proposed addresses utilities', () => {
       })
 
       expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
-    })
-  })
-})
-
-jest.mock('./validation', () => ({
-  addErrorToFlash: jest.fn(),
-}))
-
-const mockedAddErrorToFlash = addErrorToFlash as jest.MockedFunction<typeof addErrorToFlash>
-const crn = 'CRN123'
-const formDataManager = mock<MultiPageFormManager<'proposedAddress'>>()
-let req: Request
-
-describe('proposedAddresses', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-    req = mock<Request>({
-      params: { crn },
-      body: {},
-      session: {},
     })
   })
 
@@ -228,26 +227,29 @@ describe('proposedAddresses', () => {
   describe('validateAddressFromSession', () => {
     it('returns true for valid address', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build()
+      mockedValidateAndFlashErrors.mockReturnValue(true)
 
       const result = validateAddressFromSession(req, sessionData)
 
       expect(result).toBe(true)
-      expect(mockedAddErrorToFlash).not.toHaveBeenCalled()
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {})
     })
 
     it('adds errors for blank fields', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({
         address: null,
       })
+      mockedValidateAndFlashErrors.mockReturnValue(false)
 
       const result = validateAddressFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressLine1', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressPostcode', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressTown', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressCountry', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledTimes(4)
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
+        addressLine1: 'Enter address line 1, typically the building and street',
+        addressPostcode: 'Enter postcode',
+        addressTown: 'Enter town or city',
+        addressCountry: 'Enter country',
+      })
     })
 
     it('adds errors for fields exceeding length limits', () => {
@@ -261,17 +263,19 @@ describe('proposedAddresses', () => {
           country: 'x'.repeat(101),
         },
       })
+      mockedValidateAndFlashErrors.mockReturnValue(false)
 
       const result = validateAddressFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressLine1', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressLine2', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressTown', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressCounty', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressPostcode', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'addressCountry', expect.any(String))
-      expect(mockedAddErrorToFlash).toHaveBeenCalledTimes(6)
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
+        addressLine1: 'Address line 1 must be 200 characters or less',
+        addressLine2: 'Address line 2 must be 200 characters or less',
+        addressTown: 'Town or city must be 100 characters or less',
+        addressCounty: 'County must be 100 characters or less',
+        addressPostcode: 'Postal code or zip code must be 20 characters or less',
+        addressCountry: 'Country must be 100 characters or less',
+      })
     })
   })
 
@@ -325,11 +329,14 @@ describe('proposedAddresses', () => {
       const sessionData = proposedAddressFormFactory
         .manualAddress()
         .build({ settledType: 'SETTLED', arrangementSubType: undefined })
+      mockedValidateAndFlashErrors.mockReturnValue(false)
 
       const result = validateTypeFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'arrangementSubType', expect.any(String))
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
+        arrangementSubType: 'Select an arrangement type',
+      })
     })
 
     it('requires description when type is other', () => {
@@ -337,21 +344,26 @@ describe('proposedAddresses', () => {
         arrangementSubType: 'OTHER',
         arrangementSubTypeDescription: '',
       })
+      mockedValidateAndFlashErrors.mockReturnValue(false)
+
       const result = validateTypeFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'arrangementSubTypeDescription', expect.any(String))
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
+        arrangementSubTypeDescription: 'Enter the other arrangement type',
+      })
     })
 
     it('requires settled type', () => {
       const sessionData = proposedAddressFormFactory
         .manualAddress()
         .build({ arrangementSubType: 'FRIENDS_OR_FAMILY', settledType: undefined })
+      mockedValidateAndFlashErrors.mockReturnValue(false)
 
       const result = validateTypeFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'settledType', expect.any(String))
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, { settledType: 'Select a settled type' })
     })
 
     it('returns true for valid data', () => {
@@ -359,11 +371,12 @@ describe('proposedAddresses', () => {
         arrangementSubType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
       })
+      mockedValidateAndFlashErrors.mockReturnValue(true)
 
       const result = validateTypeFromSession(req, sessionData)
 
       expect(result).toBe(true)
-      expect(mockedAddErrorToFlash).not.toHaveBeenCalled()
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {})
     })
   })
 
@@ -395,20 +408,22 @@ describe('proposedAddresses', () => {
   describe('validateStatusFromSession', () => {
     it('returns false and adds error when status missing', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({ status: undefined })
+      mockedValidateAndFlashErrors.mockReturnValue(false)
 
       const result = validateStatusFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedAddErrorToFlash).toHaveBeenCalledWith(req, 'status', expect.any(String))
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, { status: 'Select a status' })
     })
 
     it('returns true when status present', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({ status: 'CHECKS_PASSED' })
+      mockedValidateAndFlashErrors.mockReturnValue(true)
 
       const result = validateStatusFromSession(req, sessionData)
 
       expect(result).toBe(true)
-      expect(mockedAddErrorToFlash).not.toHaveBeenCalled()
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {})
     })
   })
 })

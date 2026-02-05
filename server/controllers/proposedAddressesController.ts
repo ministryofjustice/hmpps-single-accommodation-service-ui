@@ -31,10 +31,6 @@ export default class ProposedAddressesController {
 
   start(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
-        who: res.locals.user.username,
-        correlationId: req.id,
-      })
       this.formData.remove(req.params.crn, req.session)
 
       return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
@@ -43,7 +39,7 @@ export default class ProposedAddressesController {
 
   details(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_DETAILS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -74,7 +70,7 @@ export default class ProposedAddressesController {
 
   type(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_TYPE, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -108,7 +104,7 @@ export default class ProposedAddressesController {
 
   status(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_STATUS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -141,7 +137,7 @@ export default class ProposedAddressesController {
 
   confirmation(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_CONFIRMATION, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -174,7 +170,7 @@ export default class ProposedAddressesController {
 
   checkYourAnswers(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_CHECK_YOUR_ANSWERS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -198,10 +194,6 @@ export default class ProposedAddressesController {
 
   submit(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
-        who: res.locals.user.username,
-        correlationId: req.id,
-      })
       const token = res.locals?.user?.token
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
 
@@ -214,11 +206,6 @@ export default class ProposedAddressesController {
 
   cancel(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS, {
-        who: res.locals.user.username,
-        correlationId: req.id,
-      })
-
       this.formData.remove(req.params.crn, req.session)
       return res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
     }

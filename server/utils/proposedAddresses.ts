@@ -233,6 +233,7 @@ export const updateStatusFromRequest = async (
   if (status) {
     await formDataManager.update(req.params.crn, req.session, {
       status,
+      confirmation: undefined,
     })
   }
 }
@@ -262,7 +263,7 @@ export const updateConfirmationFromRequest = async (
 export const validateConfirmationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
-  if (!sessionData?.confirmation) {
+  if (sessionData?.status === 'CHECKS_PASSED' && !sessionData?.confirmation) {
     errors.confirmation = 'Select if this is the next address'
   }
 

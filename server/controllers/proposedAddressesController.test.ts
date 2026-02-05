@@ -86,10 +86,7 @@ describe('proposedAddressesController', () => {
     it('redirects to details', async () => {
       await controller.start()(request, response, next)
 
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS, {
-        who: user.username,
-        correlationId: 'request-id',
-      })
+      expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
     })
   })
@@ -98,6 +95,10 @@ describe('proposedAddressesController', () => {
     it('renders details page', async () => {
       await controller.details()(request, response, next)
 
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_DETAILS, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
         address: {},
@@ -151,6 +152,10 @@ describe('proposedAddressesController', () => {
     it('renders arrangement type page', async () => {
       await controller.type()(request, response, next)
 
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_TYPE, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         proposedAddress: undefined,
@@ -199,6 +204,10 @@ describe('proposedAddressesController', () => {
     it('renders status page', async () => {
       await controller.status()(request, response, next)
 
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_STATUS, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
         proposedAddress: undefined,
@@ -258,6 +267,10 @@ describe('proposedAddressesController', () => {
     it('renders confirmation page', async () => {
       await controller.confirmation()(request, response, next)
 
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_CONFIRMATION, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/confirmation', {
         crn: 'CRN123',
         proposedAddress: undefined,
@@ -309,6 +322,10 @@ describe('proposedAddressesController', () => {
 
       await controller.checkYourAnswers()(request, response, next)
 
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_CHECK_YOUR_ANSWERS, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
         tableRows: [{ key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' } }],

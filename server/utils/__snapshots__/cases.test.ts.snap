@@ -1,1100 +1,736 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a CAS1 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Current accommodation</h3>
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Type
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Approved Premises (CAS1)
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      End date
-    </dt>
-    <dd class="govuk-summary-list__value">
-      3 February 2026
-                <br />
-                55 days left
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS1",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Type",
+      },
+      "value": {
+        "html": "Approved Premises (CAS1)",
+      },
+    },
+    {
+      "key": {
+        "text": "End date",
+      },
+      "value": {
+        "html": "
+          3 February 2026
+          <br />
+          55 days left
+        ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a CAS2 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Current accommodation</h3>
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Type
-    </dt>
-    <dd class="govuk-summary-list__value">
-      CAS2 for HDC
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      End date
-    </dt>
-    <dd class="govuk-summary-list__value">
-      12 March 2026
-                <br />
-                92 days left
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS2",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Type",
+      },
+      "value": {
+        "html": "CAS2 for HDC",
+      },
+    },
+    {
+      "key": {
+        "text": "End date",
+      },
+      "value": {
+        "html": "
+          12 March 2026
+          <br />
+          92 days left
+        ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a CAS2v2 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Current accommodation</h3>
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Type
-    </dt>
-    <dd class="govuk-summary-list__value">
-      CAS2 for Bail
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      End date
-    </dt>
-    <dd class="govuk-summary-list__value">
-      23 May 2026
-                <br />
-                164 days left
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS2V2",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Type",
+      },
+      "value": {
+        "html": "CAS2 for Bail",
+      },
+    },
+    {
+      "key": {
+        "text": "End date",
+      },
+      "value": {
+        "html": "
+          23 May 2026
+          <br />
+          164 days left
+        ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a CAS3 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Current accommodation</h3>
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Type
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Temporary Accommodation (CAS3)
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      End date
-    </dt>
-    <dd class="govuk-summary-list__value">
-      31 July 2026
-                <br />
-                233 days left
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS3",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Type",
+      },
+      "value": {
+        "html": "Temporary Accommodation (CAS3)",
+      },
+    },
+    {
+      "key": {
+        "text": "End date",
+      },
+      "value": {
+        "html": "
+          31 July 2026
+          <br />
+          233 days left
+        ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a No fixed abode accommodation 1`] = `
-"
-
-<div
-  role="region"
-  class="moj-alert moj-alert--warning moj-alert--with-heading"
-  aria-label="warning: Currently no fixed abode"
-  data-module="moj-alert">
-  <div>
-    <svg class="moj-alert__icon" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" height="30" width="30"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 2.44922L28.75 26.1992H1.25L15 2.44922ZM13.5107 9.49579H16.4697L16.2431 17.7678H13.7461L13.5107 9.49579ZM13.1299 21.82C13.1299 21.5661 13.1787 21.3285 13.2764 21.1071C13.374 20.8793 13.5075 20.6807 13.6768 20.5114C13.8525 20.3421 14.0544 20.2087 14.2822 20.111C14.5101 20.0134 14.7542 19.9645 15.0146 19.9645C15.2686 19.9645 15.5062 20.0134 15.7275 20.111C15.9554 20.2087 16.154 20.3421 16.3232 20.5114C16.4925 20.6807 16.626 20.8793 16.7236 21.1071C16.8213 21.3285 16.8701 21.5661 16.8701 21.82C16.8701 22.0804 16.8213 22.3246 16.7236 22.5524C16.626 22.7803 16.4925 22.9789 16.3232 23.1481C16.154 23.3174 15.9554 23.4509 15.7275 23.5485C15.5062 23.6462 15.2686 23.695 15.0146 23.695C14.7542 23.695 14.5101 23.6462 14.2822 23.5485C14.0544 23.4509 13.8525 23.3174 13.6768 23.1481C13.5075 22.9789 13.374 22.7803 13.2764 22.5524C13.1787 22.3246 13.1299 22.0804 13.1299 21.82Z" fill="currentColor"/>
-    </svg>
-  </div>
-  <div class="moj-alert__content">
-      <h2 class="moj-alert__heading">Currently no fixed abode
-      </h2>
-    Since Monday 1 December 2025 (for 9 days)
-  </div>
-
-  <div class="moj-alert__action">
-    <button class="moj-alert__dismiss" hidden>Dismiss</button>
-  </div>
-</div>
-"
+{
+  "arrangementType": "NO_FIXED_ABODE",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a Prison (no qualifier) accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Current accommodation</h3>
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Type
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Prison
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Release date
-    </dt>
-    <dd class="govuk-summary-list__value">
-      11 December 2025
-                <br />
-                1 day left
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "PRISON",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Type",
+      },
+      "value": {
+        "html": "Prison",
+      },
+    },
+    {
+      "key": {
+        "text": "Release date",
+      },
+      "value": {
+        "html": "
+          11 December 2025
+          <br />
+          1 day left
+        ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a Prison accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Current accommodation</h3>
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Type
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Prison (licence)
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Release date
-    </dt>
-    <dd class="govuk-summary-list__value">
-      1 January 2026
-                <br />
-                22 days left
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "PRISON",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Type",
+      },
+      "value": {
+        "html": "Prison (licence)",
+      },
+    },
+    {
+      "key": {
+        "text": "Release date",
+      },
+      "value": {
+        "html": "
+          1 January 2026
+          <br />
+          22 days left
+        ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a Private address accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Current accommodation</h3>
-
-  
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Type
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Private address
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      End date
-    </dt>
-    <dd class="govuk-summary-list__value">
-      10 September 2026
-                <br />
-                274 days left
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "PRIVATE",
+  "cardType": "current",
+  "heading": "Current accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Type",
+      },
+      "value": {
+        "html": "Private address",
+      },
+    },
+    {
+      "key": {
+        "text": "End date",
+      },
+      "value": {
+        "html": "
+          10 September 2026
+          <br />
+          274 days left
+        ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "<strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted card for a Undefined accommodation 1`] = `""`;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a CAS1 accommodation 1`] = `
 "
-  Approved Premises (CAS1)
+    Approved Premises (CAS1)
+    
   
-
-    <br />
-    <span class="govuk-hint">until 3 February 2026</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">55 days left</span>
-  "
+      <br />
+      <span class="govuk-hint">until 3 February 2026</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">55 days left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a CAS2 accommodation 1`] = `
 "
-  CAS2 for HDC
+    CAS2 for HDC
+    
   
-
-    <br />
-    <span class="govuk-hint">until 12 March 2026</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">92 days left</span>
-  "
+      <br />
+      <span class="govuk-hint">until 12 March 2026</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">92 days left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a CAS2v2 accommodation 1`] = `
 "
-  CAS2 for Bail
+    CAS2 for Bail
+    
   
-
-    <br />
-    <span class="govuk-hint">until 23 May 2026</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">164 days left</span>
-  "
+      <br />
+      <span class="govuk-hint">until 23 May 2026</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">164 days left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a CAS3 accommodation 1`] = `
 "
-  Temporary Accommodation (CAS3)
+    Temporary Accommodation (CAS3)
+    
   
-
-    <br />
-    <span class="govuk-hint">until 31 July 2026</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">233 days left</span>
-  "
+      <br />
+      <span class="govuk-hint">until 31 July 2026</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">233 days left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a No fixed abode accommodation 1`] = `
 "
-  No fixed abode
+    No fixed abode
+    
   
-
-    <br />
-    <span class="govuk-hint">until 10 September 2026</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">274 days left</span>
-  "
+      <br />
+      <span class="govuk-hint">until 10 September 2026</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">274 days left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a Prison (no qualifier) accommodation 1`] = `
 "
-  HMP Foobar
-
-    <br />
-    <span class="govuk-hint">until 11 December 2025</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">1 day left</span>
-  "
+    HMP Foobar
+  
+      <br />
+      <span class="govuk-hint">until 11 December 2025</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">1 day left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a Prison accommodation 1`] = `
 "
-  HMP Foobar (licence)
-
-    <br />
-    <span class="govuk-hint">until 1 January 2026</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">22 days left</span>
-  "
+    HMP Foobar (licence)
+  
+      <br />
+      <span class="govuk-hint">until 1 January 2026</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">22 days left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a Private address accommodation 1`] = `
 "
-  Private address
-  <br />Friends or family (not tenant or owner)
-
-    <br />
-    <span class="govuk-hint">until 10 September 2026</span>
-    <br />
-    <span class="govuk-!-display-inline-block govuk-!-margin-top-1">274 days left</span>
-  "
+    Private address
+    <br />Friends or family (not tenant or owner)
+  
+      <br />
+      <span class="govuk-hint">until 10 September 2026</span>
+      <br />
+      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">274 days left</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for current accommodation returns a formatted cell for a Undefined accommodation 1`] = `""`;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a CAS1 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Next accommodation</h3>
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Status
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p>
-                <strong>Approved Premises (CAS1)</strong>
-                <br /><span class="govuk-hint">From Tuesday 3 February 2026</span>
-              </p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS1",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Status",
+      },
+      "value": {
+        "html": "
+        <p>
+          <strong>Approved Premises (CAS1)</strong>
+          <br /><span class="govuk-hint">From Tuesday 3 February 2026</span>
+        </p>
+      ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2026-02-03",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a CAS2 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Next accommodation</h3>
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Status
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p>
-                <strong>CAS2 for HDC</strong>
-                <br /><span class="govuk-hint">From Thursday 12 March 2026</span>
-              </p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS2",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Status",
+      },
+      "value": {
+        "html": "
+        <p>
+          <strong>CAS2 for HDC</strong>
+          <br /><span class="govuk-hint">From Thursday 12 March 2026</span>
+        </p>
+      ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2026-03-12",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a CAS2v2 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Next accommodation</h3>
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Status
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p>
-                <strong>CAS2 for Bail</strong>
-                <br /><span class="govuk-hint">From Saturday 23 May 2026</span>
-              </p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS2V2",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Status",
+      },
+      "value": {
+        "html": "
+        <p>
+          <strong>CAS2 for Bail</strong>
+          <br /><span class="govuk-hint">From Saturday 23 May 2026</span>
+        </p>
+      ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2026-05-23",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a CAS3 accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Next accommodation</h3>
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Status
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p>
-                <strong>Temporary Accommodation (CAS3)</strong>
-                <br /><span class="govuk-hint">From Friday 31 July 2026</span>
-              </p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "CAS3",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Status",
+      },
+      "value": {
+        "html": "
+        <p>
+          <strong>Temporary Accommodation (CAS3)</strong>
+          <br /><span class="govuk-hint">From Friday 31 July 2026</span>
+        </p>
+      ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2026-07-31",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a No fixed abode accommodation 1`] = `
-"
-
-<div
-  role="region"
-  class="moj-alert moj-alert--warning moj-alert--with-heading"
-  aria-label="warning: No fixed abode"
-  data-module="moj-alert">
-  <div>
-    <svg class="moj-alert__icon" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" height="30" width="30"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 2.44922L28.75 26.1992H1.25L15 2.44922ZM13.5107 9.49579H16.4697L16.2431 17.7678H13.7461L13.5107 9.49579ZM13.1299 21.82C13.1299 21.5661 13.1787 21.3285 13.2764 21.1071C13.374 20.8793 13.5075 20.6807 13.6768 20.5114C13.8525 20.3421 14.0544 20.2087 14.2822 20.111C14.5101 20.0134 14.7542 19.9645 15.0146 19.9645C15.2686 19.9645 15.5062 20.0134 15.7275 20.111C15.9554 20.2087 16.154 20.3421 16.3232 20.5114C16.4925 20.6807 16.626 20.8793 16.7236 21.1071C16.8213 21.3285 16.8701 21.5661 16.8701 21.82C16.8701 22.0804 16.8213 22.3246 16.7236 22.5524C16.626 22.7803 16.4925 22.9789 16.3232 23.1481C16.154 23.3174 15.9554 23.4509 15.7275 23.5485C15.5062 23.6462 15.2686 23.695 15.0146 23.695C14.7542 23.695 14.5101 23.6462 14.2822 23.5485C14.0544 23.4509 13.8525 23.3174 13.6768 23.1481C13.5075 22.9789 13.374 22.7803 13.2764 22.5524C13.1787 22.3246 13.1299 22.0804 13.1299 21.82Z" fill="currentColor"/>
-    </svg>
-  </div>
-  <div class="moj-alert__content">
-      <h2 class="moj-alert__heading">No fixed abode
-      </h2>
-    From Thursday 10 September 2026 (in 274 days)
-  </div>
-
-  <div class="moj-alert__action">
-    <button class="moj-alert__dismiss" hidden>Dismiss</button>
-  </div>
-</div>
-"
+{
+  "arrangementType": "NO_FIXED_ABODE",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [],
+  "startDate": "2026-09-10",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a Prison (no qualifier) accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Next accommodation</h3>
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Status
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p>
-                <strong>Prison</strong>
-                <br /><span class="govuk-hint">From Thursday 11 December 2025</span>
-              </p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "PRISON",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Status",
+      },
+      "value": {
+        "html": "
+        <p>
+          <strong>Prison</strong>
+          <br /><span class="govuk-hint">From Thursday 11 December 2025</span>
+        </p>
+      ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2025-12-11",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a Prison accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Next accommodation</h3>
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Status
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p>
-                <strong>Prison (licence)</strong>
-                <br /><span class="govuk-hint">From Thursday 1 January 2026</span>
-              </p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "PRISON",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Status",
+      },
+      "value": {
+        "html": "
+        <p>
+          <strong>Prison (licence)</strong>
+          <br /><span class="govuk-hint">From Thursday 1 January 2026</span>
+        </p>
+      ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2026-01-01",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a Private address accommodation 1`] = `
-"<div class="sas-card govuk-!-margin-bottom-4">
-  <h3 class="govuk-heading-m">Next accommodation</h3>
-
-  
-
-  
-
-  
-<dl class="govuk-summary-list govuk-summary-card__content govuk-!-margin-bottom-0">
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Status
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <p>
-                <strong>Private address</strong>
-                <br /><span class="govuk-hint">From Thursday 10 September 2026</span>
-              </p>
-    </dd>
-    
-  </div>
-  
-
-  
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Address
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA
-    </dd>
-    
-  </div>
-  
-
-</dl>
-
-</div>"
+{
+  "arrangementType": "PRIVATE",
+  "cardType": "next",
+  "heading": "Next accommodation",
+  "rows": [
+    {
+      "key": {
+        "text": "Status",
+      },
+      "value": {
+        "html": "
+        <p>
+          <strong>Private address</strong>
+          <br /><span class="govuk-hint">From Thursday 10 September 2026</span>
+        </p>
+      ",
+      },
+    },
+    {
+      "key": {
+        "text": "Address",
+      },
+      "value": {
+        "html": "<strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
+      },
+    },
+  ],
+  "startDate": "2026-09-10",
+}
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted card for a Undefined accommodation 1`] = `""`;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a CAS1 accommodation 1`] = `
 "
-  Approved Premises (CAS1)
+    Approved Premises (CAS1)
+    
   
-
-    <br />
-    <span class="govuk-hint">from 3 February 2026</span>
-  "
+      <br />
+      <span class="govuk-hint">from 3 February 2026</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a CAS2 accommodation 1`] = `
 "
-  CAS2 for HDC
+    CAS2 for HDC
+    
   
-
-    <br />
-    <span class="govuk-hint">from 12 March 2026</span>
-  "
+      <br />
+      <span class="govuk-hint">from 12 March 2026</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a CAS2v2 accommodation 1`] = `
 "
-  CAS2 for Bail
+    CAS2 for Bail
+    
   
-
-    <br />
-    <span class="govuk-hint">from 23 May 2026</span>
-  "
+      <br />
+      <span class="govuk-hint">from 23 May 2026</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a CAS3 accommodation 1`] = `
 "
-  Temporary Accommodation (CAS3)
+    Temporary Accommodation (CAS3)
+    
   
-
-    <br />
-    <span class="govuk-hint">from 31 July 2026</span>
-  "
+      <br />
+      <span class="govuk-hint">from 31 July 2026</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a No fixed abode accommodation 1`] = `
 "
-  No fixed abode
+    No fixed abode
+    
   
-
-    <br />
-    <span class="govuk-hint">from 10 September 2026</span>
-  "
+      <br />
+      <span class="govuk-hint">from 10 September 2026</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a Prison (no qualifier) accommodation 1`] = `
 "
-  HMP Foobar
-
-    <br />
-    <span class="govuk-hint">from 11 December 2025</span>
-  "
+    HMP Foobar
+  
+      <br />
+      <span class="govuk-hint">from 11 December 2025</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a Prison accommodation 1`] = `
 "
-  HMP Foobar (licence)
-
-    <br />
-    <span class="govuk-hint">from 1 January 2026</span>
-  "
+    HMP Foobar (licence)
+  
+      <br />
+      <span class="govuk-hint">from 1 January 2026</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a Private address accommodation 1`] = `
 "
-  Private address
-  <br />Friends or family (not tenant or owner)
-
-    <br />
-    <span class="govuk-hint">from 10 September 2026</span>
-  "
+    Private address
+    <br />Friends or family (not tenant or owner)
+  
+      <br />
+      <span class="govuk-hint">from 10 September 2026</span>
+    "
 `;
 
 exports[`cases utilities accommodation renderers for next accommodation returns a formatted cell for a Undefined accommodation 1`] = `""`;
 
 exports[`cases utilities personCell returns a formatted cell for a given person 1`] = `
-"
+"<div class="sas-person-cell">
+    <div class="govuk-!-margin-bottom-2">
+      <a
+        class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold"
+        href="/cases/C321654"
+        >Dave Foo</a
+      >
+    </div>
 
-<div class="sas-person-cell">
-  <div class="govuk-!-margin-bottom-2">
-    <a class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold" href="/cases/C321654">Dave Foo</a>
-  </div>
-
-  <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
-    
-  
-
-  <div class="sas-risk-tag sas-risk-tag--very-high">
+    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
+      <div class="sas-risk-tag sas-risk-tag--very-high">
     <dt>RoSH</dt>
     <dd>Very high</dd>
   </div>
+      <div class="sas-risk-tag sas-risk-tag--tier">
+        <dt>Tier</dt>
+        <dd>B2</dd>
+      </div>
+    </dl>
 
-    <div class="sas-risk-tag sas-risk-tag--tier">
-      <dt>Tier</dt>
-      <dd>B2</dd>
-    </div>
-  </dl>
-
-  <dl class="sas-person-details govuk-!-margin-0">
-    <div>
-      <dt>Date of birth</dt>
-      <dd>9 October 1980 (45)</dd>
-    </div>
-    <div>
-      <dt>CRN</dt>
-      <dd>C321654</dd>
-    </div>
-    <div>
-      <dt>Prison number</dt>
-      <dd>A1234BC</dd>
-    </div>
-  </dl>
-</div>
-"
-`;
-
-exports[`cases utilities referralHistoryTable returns an empty table when there are no referrals 1`] = `
-"
-
-
-<div class="govuk-summary-card">
-    <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Referral history
-        </h2>
-    </div>
-    <div class="govuk-summary-card__content">
-        
-            <p class="govuk-body">No previous referrals</p>
-        
-    </div>
-</div>"
-`;
-
-exports[`cases utilities referralHistoryTable returns referral history table for a given list of referrals 1`] = `
-"
-
-
-<div class="govuk-summary-card">
-    <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Referral history
-        </h2>
-    </div>
-    <div class="govuk-summary-card__content">
-        
-            <div class="govuk-summary-list">
-                <table class="govuk-table">
-
-
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-    
-      <th scope="col" class="govuk-table__header">Type</th>
-    
-      <th scope="col" class="govuk-table__header">Status</th>
-    
-      <th scope="col" class="govuk-table__header">Date</th>
-    
-      <th scope="col" class="govuk-table__header"></th>
-    
-    </tr>
-  </thead>
-
-  <tbody class="govuk-table__body">
-
-  
-    <tr class="govuk-table__row">
-    
-      
-      
-      <th scope="row" class="govuk-table__header">CAS1</th>
-      
-    
-      
-      
-      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--green">Accepted</strong></td>
-      
-    
-      
-      
-      <td class="govuk-table__cell">15 January 2023</td>
-      
-    
-      
-      
-      <td class="govuk-table__cell">
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-        <span class="govuk-table-span govuk-body">
-            <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-                
-                    <li class="govuk-summary-list__actions-list-item">
-                        <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
-                    </li>
-                
-            </ul>
-        </span>
-    </div>
-</td>
-      
-    
-    </tr>
-  
-
-  
-    <tr class="govuk-table__row">
-    
-      
-      
-      <th scope="row" class="govuk-table__header">CAS2</th>
-      
-    
-      
-      
-      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--yellow">Pending</strong></td>
-      
-    
-      
-      
-      <td class="govuk-table__cell">20 February 2023</td>
-      
-    
-      
-      
-      <td class="govuk-table__cell">
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-        <span class="govuk-table-span govuk-body">
-            <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-                
-                    <li class="govuk-summary-list__actions-list-item">
-                        <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
-                    </li>
-                
-            </ul>
-        </span>
-    </div>
-</td>
-      
-    
-    </tr>
-  
-
-  </tbody>
-</table>
-
-            </div>
-        
-    </div>
-</div>"
+    <dl class="sas-person-details govuk-!-margin-0">
+      <div>
+        <dt>Date of birth</dt>
+        <dd>9 October 1980 (45)</dd>
+      </div>
+      <div>
+        <dt>CRN</dt>
+        <dd>C321654</dd>
+      </div>
+      <div>
+        <dt>Prison number</dt>
+        <dd>A1234BC</dd>
+      </div>
+    </dl>
+  </div>"
 `;

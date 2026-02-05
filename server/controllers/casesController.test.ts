@@ -12,14 +12,14 @@ import {
   eligibilityFactory,
   referralFactory,
 } from '../testutils/factories'
-import { accommodationCard, caseAssignedTo, casesTableCaption, casesToRows, referralHistoryTable } from '../utils/cases'
+import { accommodationCard, caseAssignedTo, casesTableCaption, casesToRows } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
-import { statusCard } from '../utils/components'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
+import { referralHistoryRows } from '../utils/referrals'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -152,11 +152,11 @@ describe('casesController', () => {
         assignedTo: caseAssignedTo(caseData, response.locals.user.userId),
         nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
-        referralHistory: referralHistoryTable(referralHistory),
-        eligibilityCards: eligibilityToEligibilityCards(eligibility).map(statusCard),
-        dutyToReferCard: statusCard(dutyToReferStatusCard(dutyToRefer[0])),
-        proposedAddresses: proposed.map(proposedAddressStatusCard).map(statusCard),
-        failedChecksAddresses: failedChecks.map(proposedAddressStatusCard).map(statusCard),
+        referralHistoryRows: referralHistoryRows(referralHistory),
+        eligibilityCards: eligibilityToEligibilityCards(eligibility),
+        dutyToReferCard: dutyToReferStatusCard(dutyToRefer[0]),
+        proposedAddresses: proposed.map(proposedAddressStatusCard),
+        failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),
       })
     })
   })

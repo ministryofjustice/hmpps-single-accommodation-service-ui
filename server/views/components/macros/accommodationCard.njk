@@ -1,0 +1,32 @@
+{% from "moj/components/alert/macro.njk" import mojAlert %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{%- macro accommodationCard(context) -%}
+  {%- if context.arrangementType === 'NO_FIXED_ABODE' -%}
+    {%- set html %}
+      {{ 'Since' if (context.startDate | date('days') < 0) else 'From' }}
+      {{ context.startDate | date('long') }} ({{ context.startDate | date('days for/in') }})
+    {% endset -%}
+
+    {{
+      mojAlert({
+        variant: "warning",
+        title: "Currently no fixed abode" if context.cardType == 'current' else "No fixed abode",
+        showTitleAsHeading: true,
+        dismissible: false,
+        html: html
+      })
+    }}
+  {%- else -%}
+    <div class="sas-card govuk-!-margin-bottom-4">
+      <h3 class="govuk-heading-m">{{ context.heading }}</h3>
+
+      {{
+        govukSummaryList({
+          classes: 'govuk-summary-card__content govuk-!-margin-bottom-0',
+          rows: context.rows
+        })
+      }}
+    </div>
+  {%- endif -%}
+{%- endmacro -%}

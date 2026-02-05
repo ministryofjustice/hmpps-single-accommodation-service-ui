@@ -37,7 +37,6 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
     },
   ],
   "status": {
-    "colour": "grey",
     "text": "Failed",
   },
 }

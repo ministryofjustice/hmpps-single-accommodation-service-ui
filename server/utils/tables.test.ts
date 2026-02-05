@@ -1,11 +1,10 @@
-import { AccommodationReferralDto as Referral } from '@sas/api'
-import { dateCell, linksCell, statusCell, textCell } from './tables'
+import { dateCell, linksCell, htmlCell, textCell } from './tables'
 
 describe('tables utilities', () => {
   describe('textCell', () => {
-    it('returns a text cell with the given text', () => {
-      const cell = textCell('CAS TYPE')
-      expect(cell).toEqual({ text: 'CAS TYPE' })
+    it('returns a cell with the given text', () => {
+      const cell = textCell('Some text')
+      expect(cell).toEqual({ text: 'Some text' })
     })
 
     it('returns a text cell with empty string when given empty text', () => {
@@ -14,15 +13,10 @@ describe('tables utilities', () => {
     })
   })
 
-  describe('statusCell', () => {
-    it('returns a status cell with the given status', () => {
-      const cell = statusCell('PENDING')
-      expect(cell).toEqual({ html: '<strong class="govuk-tag govuk-tag--yellow">Pending</strong>' })
-    })
-
-    it('returns a default status cell when given an unknown status', () => {
-      const cell = statusCell('UNKNOWN' as Referral['status'])
-      expect(cell).toEqual({ html: '<strong class="govuk-tag govuk-tag--grey">Unknown</strong>' })
+  describe('htmlCell', () => {
+    it('returns a cell with the given html', () => {
+      const cell = htmlCell('<p>Some HTML</p>')
+      expect(cell).toEqual({ html: '<p>Some HTML</p>' })
     })
   })
 

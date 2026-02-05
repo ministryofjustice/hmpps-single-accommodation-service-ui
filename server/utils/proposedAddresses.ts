@@ -1,9 +1,7 @@
-import { ProposedAddressDisplayStatus, StatusCard, ProposedAddressFormData } from '@sas/ui'
+import { StatusTag, ProposedAddressDisplayStatus, StatusCard, ProposedAddressFormData } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
 import { Request } from 'express'
 import {
-  formatAddress,
-  formatDateAndDaysAgo,
   formatProposedAddressStatus,
   proposedAddressStatusColours,
   addressLines,
@@ -11,11 +9,21 @@ import {
   formatProposedAddressSettledType,
   formatProposedAddressNextAccommodation,
 } from './format'
+import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { textContent, htmlContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { validateAndFlashErrors } from './validation'
+import { formatAddress } from './addresses'
+
+const proposedAddressStatusTag = (status: AccommodationDetail['status']): StatusTag =>
+  ({
+    NOT_CHECKED_YET: { text: 'Not checked', colour: 'red' },
+    CHECKS_FAILED: { text: 'Checks failed' },
+    CHECKS_PASSED: { text: 'Checks passed', colour: 'yellow' },
+    CONFIRMED: { text: 'Confirmed', colour: 'green' },
+  })[status]
 
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
   const status = displayStatus(proposedAddress.verificationStatus, proposedAddress.nextAccommodationStatus)
@@ -35,6 +43,18 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
     links: linksForStatus(status),
   }
 }
+// eslint-disable-next-line import/prefer-default-export
+export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => ({
+  heading: formatAddress(proposedAddress.address),
+  inactive: proposedAddress.status === 'CHECKS_FAILED',
+  status: proposedAddressStatusTag(proposedAddress.status),
+  details: [
+    summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
+    summaryListRow('Added by', ''),
+    summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
+  ],
+  links: linksForStatus(proposedAddress.status),
+})
 
 const linksForStatus = (status: ProposedAddressDisplayStatus) => {
   switch (status) {

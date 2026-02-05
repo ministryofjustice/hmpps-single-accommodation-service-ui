@@ -1,6 +1,16 @@
 import { EligibilityDto, ServiceResult } from '@sas/api'
-import { StatusCard } from '@sas/ui'
-import { eligibilityStatusColours, formatEligibilityStatus } from './format'
+import { StatusCard, StatusTag } from '@sas/ui'
+
+const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): StatusTag =>
+  ({
+    NOT_ELIGIBLE: { text: 'Not eligible' },
+    UPCOMING: { text: 'Upcoming', colour: 'yellow' },
+    NOT_STARTED: { text: 'Not started', colour: 'red' },
+    REJECTED: { text: 'Rejected', colour: 'red' },
+    WITHDRAWN: { text: 'Withdrawn' },
+    SUBMITTED: { text: 'Submitted', colour: 'yellow' },
+    CONFIRMED: { text: 'Confirmed', colour: 'green' },
+  })[status] || { text: 'Unknown' }
 
 export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) => {
   switch (serviceStatus) {
@@ -20,10 +30,7 @@ export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) =
 export const eligibilityStatusCard = (title: string, service?: ServiceResult): StatusCard => ({
   heading: title,
   inactive: service?.serviceStatus === 'NOT_ELIGIBLE',
-  status: {
-    text: formatEligibilityStatus(service?.serviceStatus),
-    colour: eligibilityStatusColours[service?.serviceStatus] || 'grey',
-  },
+  status: eligibilityStatusTag(service?.serviceStatus),
   links: linksForStatus(service?.serviceStatus),
 })
 

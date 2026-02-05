@@ -2,7 +2,7 @@ import { path } from 'static-path'
 
 const casesPath = path('/cases')
 const casePath = casesPath.path(':crn')
-const proposedAddressesPath = casePath.path('accommodations')
+const proposedAddressesPath = casePath.path('proposed-accommodations')
 
 export default {
   cases: {

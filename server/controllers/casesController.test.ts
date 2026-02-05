@@ -80,7 +80,7 @@ describe('casesController', () => {
       const eligibility = eligibilityFactory.build()
       const dutyToRefer = dutyToReferFactory.buildList(1)
       const proposed = accommodationFactory.proposed().buildList(2, { status: 'NOT_CHECKED_YET' })
-      const failedChecks = accommodationFactory.proposed().buildList(1, { status: 'CHECKS_FAILED' })
+      const failedChecks = accommodationFactory.proposed().buildList(1, { status: 'FAILED' })
 
       casesService.getCase.mockResolvedValue(caseData)
       referralsService.getReferralHistory.mockResolvedValue(referralHistory)

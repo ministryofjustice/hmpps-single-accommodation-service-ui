@@ -4,7 +4,7 @@ import { proposedAddressStatusCard } from './proposedAddresses'
 describe('Proposed addresses utilities', () => {
   describe('proposedAddressStatusCard', () => {
     const baseAccommodationDetails = accommodationFactory.build({
-      status: 'CHECKS_PASSED',
+      status: 'PASSED',
       createdAt: '2026-01-20T11:00:00.000Z',
       arrangementType: 'PRIVATE',
       arrangementSubType: 'FRIENDS_OR_FAMILY',
@@ -28,20 +28,10 @@ describe('Proposed addresses utilities', () => {
       jest.useRealTimers()
     })
 
-    it('returns a "confirmed" proposed address status card object', () => {
-      const proposedAddress = accommodationFactory.build({
-        ...baseAccommodationDetails,
-        status: 'CONFIRMED',
-        createdAt: '2025-12-20T16:30:00.000Z',
-      })
-
-      expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
-    })
-
     it('returns a "checks failed" proposed address status card object', () => {
       const proposedAddress = accommodationFactory.build({
         ...baseAccommodationDetails,
-        status: 'CHECKS_FAILED',
+        status: 'FAILED',
         arrangementSubType: 'OTHER',
         arrangementSubTypeDescription: "Somebody's attic",
         settledType: 'TRANSIENT',
@@ -65,7 +55,7 @@ describe('Proposed addresses utilities', () => {
     it('returns a "checks made" proposed address status card object', () => {
       const proposedAddress = accommodationFactory.build({
         ...baseAccommodationDetails,
-        status: 'CHECKS_PASSED',
+        status: 'PASSED',
         arrangementSubType: 'PRIVATE_RENTED_ROOM',
         settledType: undefined,
         createdAt: '2026-01-20T09:30:00.000Z',

@@ -9,6 +9,7 @@ export type { AccommodationDto } from './models/AccommodationDto';
 export type { AccommodationReferralDto } from './models/AccommodationReferralDto';
 export type { AssignedToDto } from './models/AssignedToDto';
 export type { CaseDto } from './models/CaseDto';
+export type { CreateAccommodationDetail } from './models/CreateAccommodationDetail';
 export type { DutyToReferDto } from './models/DutyToReferDto';
 export type { EligibilityDto } from './models/EligibilityDto';
 export type { RuleAction } from './models/RuleAction';

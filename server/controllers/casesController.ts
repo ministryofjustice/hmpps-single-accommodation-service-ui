@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, referralHistoryTable } from '../utils/cases'
+import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo } from '../utils/cases'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -9,9 +9,9 @@ import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
 import uiPaths from '../paths/ui'
 import { fetchErrors, addErrorToFlash } from '../utils/validation'
-import { statusCard } from '../utils/components'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
+import { referralHistoryRows } from '../utils/referrals'
 
 export default class CasesController {
   constructor(
@@ -74,11 +74,11 @@ export default class CasesController {
           assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
           nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
           currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
-          referralHistory: referralHistoryTable(referralHistory),
-          eligibilityCards: eligibilityToEligibilityCards(eligibility).map(statusCard),
-          dutyToReferCard: statusCard(dutyToReferStatusCard(dutyToRefer[0])),
-          proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard).map(statusCard),
-          failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard).map(statusCard),
+          referralHistoryRows: referralHistoryRows(referralHistory),
+          eligibilityCards: eligibilityToEligibilityCards(eligibility),
+          dutyToReferCard: dutyToReferStatusCard(dutyToRefer[0]),
+          proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
+          failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),
         })
       } catch (error) {
         if (error.responseStatus === 404) {

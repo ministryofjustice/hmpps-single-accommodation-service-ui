@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Macros Status Card renders a basic status card 1`] = `
+"<article class="sas-card">
+    <header class="sas-card__head">
+      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">Foo</h3>
+      
+    </header>
+
+    <div class="sas-card__footer">
+      
+
+      
+    </div>
+  </article>"
+`;
+
+exports[`Macros Status Card renders a status card with full information 1`] = `
+"<article class="sas-card">
+    <header class="sas-card__head">
+      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">Foo</h3>
+      <strong class="govuk-tag govuk-tag--red">Bar</strong>
+    </header>
+
+    <div class="sas-card__footer">
+      
+        
+
+  
+<dl class="govuk-summary-list sas-card-summary-list govuk-summary-list--no-border">
+
+  
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Baz
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Qux
+    </dd>
+    
+  </div>
+  
+
+</dl>
+
+      
+
+      
+        <div class="sas-card__links">
+          
+            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Quux</a>
+          
+        </div>
+      
+    </div>
+  </article>"
+`;
+
+exports[`Macros Status Card renders an inactive status card 1`] = `
+"<article class="sas-card sas-card--inactive">
+    <header class="sas-card__head">
+      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">Foo</h3>
+      
+    </header>
+
+    <div class="sas-card__footer">
+      
+
+      
+    </div>
+  </article>"
+`;
+
+exports[`Macros Status Tag renders a status tag with given colour 1`] = `"<strong class="govuk-tag govuk-tag--red">Foo</strong>"`;
+
+exports[`Macros Status Tag renders a status tag with the default colour 1`] = `"<strong class="govuk-tag">Baz</strong>"`;
+
+exports[`Macros riskLevelTag renders a risk level tag for risk level HIGH 1`] = `
+"<div class="sas-risk-tag sas-risk-tag--high">
+    <dt>RoSH</dt>
+    <dd>High</dd>
+  </div>"
+`;
+
+exports[`Macros riskLevelTag renders a risk level tag for risk level LOW 1`] = `
+"<div class="sas-risk-tag sas-risk-tag--low">
+    <dt>RoSH</dt>
+    <dd>Low</dd>
+  </div>"
+`;
+
+exports[`Macros riskLevelTag renders a risk level tag for risk level MEDIUM 1`] = `
+"<div class="sas-risk-tag sas-risk-tag--medium">
+    <dt>RoSH</dt>
+    <dd>Medium</dd>
+  </div>"
+`;
+
+exports[`Macros riskLevelTag renders a risk level tag for risk level VERY_HIGH 1`] = `
+"<div class="sas-risk-tag sas-risk-tag--very-high">
+    <dt>RoSH</dt>
+    <dd>Very high</dd>
+  </div>"
+`;

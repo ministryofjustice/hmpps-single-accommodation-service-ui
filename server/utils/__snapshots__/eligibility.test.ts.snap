@@ -44,7 +44,6 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
       },
     ],
     "status": {
-      "colour": "grey",
       "text": "Not eligible",
     },
   },

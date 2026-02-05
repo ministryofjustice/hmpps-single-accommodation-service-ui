@@ -1,0 +1,30 @@
+{%- from "govuk/components/summary-list/macro.njk" import govukSummaryList -%}
+{%- from "components/macros/statusTag.njk" import statusTag %}
+
+{%- macro statusCard(cardData) -%}
+  <article class="sas-card{{ ' sas-card--inactive' if cardData.inactive else '' }}">
+    <header class="sas-card__head">
+      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">{{ cardData.heading }}</h3>
+      {% if cardData.status -%}
+        {{ statusTag(cardData.status) }}
+      {%- endif %}
+    </header>
+
+    <div class="sas-card__footer">
+      {% if cardData.details and (cardData.details | length > 0) %}
+        {{ govukSummaryList({
+          classes: 'sas-card-summary-list govuk-summary-list--no-border',
+          rows: cardData.details
+        }) }}
+      {% endif %}
+
+      {% if cardData.links and(cardData.links | length > 0) %}
+        <div class="sas-card__links">
+          {% for link in cardData.links %}
+            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ link.href }}">{{ link.text }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </article>
+{%- endmacro -%}

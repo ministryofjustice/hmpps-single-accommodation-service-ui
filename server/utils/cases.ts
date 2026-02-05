@@ -1,9 +1,9 @@
-import { CaseDto as Case, AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
+import { AccommodationDetail, CaseDto as Case } from '@sas/api'
 import { SummaryListRow, TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
-import { nunjucksInline } from './nunjucksSetup'
-import { linksCell, dateCell, statusCell, textCell } from './tables'
-import { addressLines, formatDate } from './format'
+import { formatDate } from './dates'
+import { addressLines } from './addresses'
+import { renderMacro } from './macros'
 
 const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
   REMAND: 'remand',
@@ -23,9 +23,7 @@ export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType
 export const casesTableCaption = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'} assigned to you`
 
-export const personCell = (c: Case): string => {
-  return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
-}
+export const personCell = (c: Case): string => renderMacro('personCell', c)
 
 export const accommodationType = (accommodation: AccommodationDetail): string => {
   const { arrangementType, offenderReleaseType } = accommodation
@@ -64,7 +62,7 @@ export const addressTitle = (accommodation: AccommodationDetail): string => {
 
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
   accommodation
-    ? nunjucksInline().render('cases/partials/accommodationCell.njk', {
+    ? renderMacro('accommodationCell', {
         cellType,
         accommodationType: accommodationType(accommodation),
         addressTitle: addressTitle(accommodation),
@@ -80,7 +78,8 @@ export const summaryListRow = (label: string, value: string, renderAs: 'text' | 
 export const accommodationCard = (cardType: 'current' | 'next', accommodation?: AccommodationDetail) => {
   if (!accommodation) return ''
 
-  const { arrangementType } = accommodation
+  const { arrangementType, startDate, endDate } = accommodation
+
   const heading = cardType === 'current' ? 'Current accommodation' : 'Next accommodation'
   const rows = []
 
@@ -99,8 +98,6 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
     }
 
     if (cardType === 'next') {
-      const { startDate, endDate } = accommodation
-
       let datesHtml = ''
 
       if (startDate) {
@@ -128,12 +125,13 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
     if (address.length > 0) rows.push(summaryListRow('Address', address.join('<br />'), 'html'))
   }
 
-  return nunjucksInline().render('components/accommodationCard.njk', {
+  return {
     cardType,
     heading,
+    arrangementType,
+    startDate,
     rows,
-    ...accommodation,
-  })
+  }
 }
 
 export const casesToRows = (cases: Case[]): TableRow[] =>
@@ -146,19 +144,4 @@ export const casesToRows = (cases: Case[]): TableRow[] =>
 
 export const caseAssignedTo = (c: Case, id: string): string => {
   return String(c.assignedTo?.id) === id ? `You (${c.assignedTo.name})` : c.assignedTo?.name
-}
-
-export const referralHistoryTable = (referrals: Referral[]): string => {
-  return nunjucksInline().render('components/tables/referralHistoryTable.njk', {
-    referralHistory: referralHistoryToRows(referrals),
-  })
-}
-
-export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
-  return referrals.map(referral => [
-    textCell(referral.type),
-    statusCell(referral.status),
-    dateCell(referral.date),
-    linksCell([{ text: 'View', href: '#' }]),
-  ])
 }

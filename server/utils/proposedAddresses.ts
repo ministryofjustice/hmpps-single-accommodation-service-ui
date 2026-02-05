@@ -1,21 +1,22 @@
-import { StatusCard } from '@sas/ui'
+import { StatusCard, StatusTag } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
-import {
-  formatAddress,
-  formatDateAndDaysAgo,
-  formatProposedAddressStatus,
-  proposedAddressStatusColours,
-} from './format'
+import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
+import { formatAddress } from './addresses'
+
+const proposedAddressStatusTag = (status: AccommodationDetail['status']): StatusTag =>
+  ({
+    NOT_CHECKED_YET: { text: 'Not checked', colour: 'red' },
+    CHECKS_FAILED: { text: 'Checks failed' },
+    CHECKS_PASSED: { text: 'Checks passed', colour: 'yellow' },
+    CONFIRMED: { text: 'Confirmed', colour: 'green' },
+  })[status]
 
 // eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => ({
   heading: formatAddress(proposedAddress.address),
   inactive: proposedAddress.status === 'CHECKS_FAILED',
-  status: {
-    text: formatProposedAddressStatus(proposedAddress.status),
-    colour: proposedAddressStatusColours[proposedAddress.status],
-  },
+  status: proposedAddressStatusTag(proposedAddress.status),
   details: [
     summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
     summaryListRow('Added by', ''),

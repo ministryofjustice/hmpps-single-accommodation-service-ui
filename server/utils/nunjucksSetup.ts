@@ -8,8 +8,9 @@ import fs from 'fs'
 import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
-import { formatDate, formatRiskLevel } from './format'
+import { formatDate } from './dates'
 import uiPaths from '../paths/ui'
+import { riskLevelStatusTag } from './riskLevel'
 
 const NUNJUCKS_TEMPLATE_PATHS = [
   path.join(__dirname, '../../server/views'),
@@ -21,13 +22,13 @@ const NUNJUCKS_TEMPLATE_PATHS = [
 const addFilters = (env: nunjucks.Environment) => {
   env.addFilter('initialiseName', initialiseName)
   env.addFilter('date', formatDate)
-  env.addFilter('riskLevel', formatRiskLevel)
 }
 
 const addGlobals = (env: nunjucks.Environment) => {
   env.addGlobal('paths', {
     ...uiPaths,
   })
+  env.addGlobal('riskLevel', riskLevelStatusTag)
 }
 
 export default function nunjucksSetup(app: express.Express): void {

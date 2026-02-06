@@ -12,8 +12,8 @@ export default class ProposedAddressesService {
     const allProposedAddresses = await this.proposedAddressesClient.getProposedAddresses(token, crn)
 
     return {
-      proposed: allProposedAddresses.filter(address => address.status !== 'CHECKS_FAILED'),
-      failedChecks: allProposedAddresses.filter(address => address.status === 'CHECKS_FAILED'),
+      proposed: allProposedAddresses.filter(address => address.status !== 'FAILED'),
+      failedChecks: allProposedAddresses.filter(address => address.status === 'FAILED'),
     }
   }
 

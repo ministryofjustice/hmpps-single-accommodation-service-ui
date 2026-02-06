@@ -50,7 +50,7 @@ test.describe('Profile Tracker Page', () => {
     const referrals = referralFactory.buildList(3)
     const proposedAddresses = [
       accommodationFactory.proposed().build({ status: 'NOT_CHECKED_YET' }),
-      accommodationFactory.proposed().build({ status: 'CHECKS_FAILED' }),
+      accommodationFactory.proposed().build({ status: 'FAILED' }),
     ]
 
     await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses })
@@ -120,7 +120,7 @@ test.describe('Profile Tracker Page', () => {
     }) => {
       const crn = 'X123456'
       const caseData = caseFactory.build({ crn })
-      const proposedAddresses = [accommodationFactory.proposed().build({ status: 'CHECKS_FAILED' })]
+      const proposedAddresses = [accommodationFactory.proposed().build({ status: 'FAILED' })]
       await setupStubs({ crn, caseData, proposedAddresses })
       await login(page)
 

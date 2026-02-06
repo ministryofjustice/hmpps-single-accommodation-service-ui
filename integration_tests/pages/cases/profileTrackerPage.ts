@@ -135,11 +135,11 @@ export default class ProfileTrackerPage extends AbstractPage {
     await expect(proposedAddressesSection).toBeVisible()
     await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute('href', `#`)
 
-    if (!proposedAddresses.find(address => address.status !== 'CHECKS_FAILED')) {
+    if (!proposedAddresses.find(address => address.status !== 'FAILED')) {
       await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')
     }
 
-    if (proposedAddresses.find(address => address.status === 'CHECKS_FAILED')) {
+    if (proposedAddresses.find(address => address.status === 'FAILED')) {
       await expect(
         proposedAddressesSection.getByRole('heading', { name: 'Addresses that failed checks' }),
       ).toBeVisible()

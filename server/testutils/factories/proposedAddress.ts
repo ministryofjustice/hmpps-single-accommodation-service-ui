@@ -13,7 +13,7 @@ const housingArrangementTypes: ProposedAddressDto['housingArrangementType'][] = 
 ]
 
 const settledTypes: ProposedAddressDto['settledType'][] = ['SETTLED', 'TRANSIENT']
-const statuses: ProposedAddressDto['status'][] = ['NOT_CHECKED_YET', 'CHECKS_PASSED', 'CHECKS_FAILED', 'CONFIRMED']
+const statuses: ProposedAddressDto['status'][] = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
 
 export default Factory.define<ProposedAddressDto>(() => {
   const housingArrangementType = faker.helpers.arrayElement(housingArrangementTypes)

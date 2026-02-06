@@ -22,12 +22,7 @@ export const arrangementSubTypes: Readonly<AccommodationDetail['arrangementSubTy
 ]
 const offenderReleaseTypes: Readonly<AccommodationDetail['offenderReleaseType'][]> = ['BAIL', 'LICENCE', 'REMAND']
 const settledTypes: Readonly<AccommodationDetail['settledType'][]> = ['SETTLED', 'TRANSIENT']
-const statuses: Readonly<AccommodationDetail['status'][]> = [
-  'NOT_CHECKED_YET',
-  'CHECKS_PASSED',
-  'CHECKS_FAILED',
-  'CONFIRMED',
-]
+const statuses: Readonly<AccommodationDetail['status'][]> = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
 
 class AccommodationFactory extends Factory<AccommodationDetail> {
   current(endDate?: string, startDate?: string) {

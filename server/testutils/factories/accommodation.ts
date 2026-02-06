@@ -22,7 +22,7 @@ export const arrangementSubTypes: Readonly<AccommodationDetail['arrangementSubTy
 ]
 const offenderReleaseTypes: Readonly<AccommodationDetail['offenderReleaseType'][]> = ['BAIL', 'LICENCE', 'REMAND']
 const settledTypes: Readonly<AccommodationDetail['settledType'][]> = ['SETTLED', 'TRANSIENT']
-const statuses: Readonly<AccommodationDetail['status'][]> = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
+const statuses: Readonly<AccommodationDetail['verificationStatus'][]> = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
 
 class AccommodationFactory extends Factory<AccommodationDetail> {
   current(endDate?: string, startDate?: string) {
@@ -89,7 +89,7 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
 
   proposed() {
     return this.privateAddress().params({
-      status: faker.helpers.arrayElement(statuses),
+      verificationStatus: faker.helpers.arrayElement(statuses),
     })
   }
 }

@@ -17,9 +17,9 @@ describe('ProposedAddressesService', () => {
 
   describe('getProposedAddresses', () => {
     it('should call getProposedAddresses on the api client and return sorted addresses', async () => {
-      const passedChecksAddress = accommodationFactory.proposed().build({ status: 'PASSED' })
-      const notCheckedAddress = accommodationFactory.proposed().build({ status: 'NOT_CHECKED_YET' })
-      const failedChecksAddress = accommodationFactory.proposed().build({ status: 'FAILED' })
+      const passedChecksAddress = accommodationFactory.proposed().build({ verificationStatus: 'PASSED' })
+      const notCheckedAddress = accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' })
+      const failedChecksAddress = accommodationFactory.proposed().build({ verificationStatus: 'FAILED' })
 
       proposedAddressesClient.getProposedAddresses.mockResolvedValue([
         passedChecksAddress,

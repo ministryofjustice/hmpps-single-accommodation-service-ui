@@ -14,12 +14,13 @@ export interface ErrorMessages {
   [key: string]: ErrorMessage
 }
 
-export type ProposedAddressDto = {
-  housingArrangementType: AccommodationDetail['arrangementSubType']
-  housingArrangementTypeDescription: string
+export type ProposedAddressFormData = {
+  arrangementSubType: AccommodationDetail['arrangementSubType']
+  arrangementSubTypeDescription: string
   settledType: AccommodationDetail['settledType']
   status: AccommodationDetail['status']
   address: AccommodationDetail['address']
+  confirmation?: 'YES' | 'NO' | 'UNDECIDED'
 }
 
 export interface StatusTag {
@@ -36,4 +37,8 @@ export interface StatusCard {
     text: string
     href: string
   }[]
+}
+
+export type MultiPageFormData = {
+  proposedAddress?: Record<string, ProposedAddressFormData>
 }

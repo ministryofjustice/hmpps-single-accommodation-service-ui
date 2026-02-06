@@ -11,7 +11,7 @@ export const fetchErrors = (request: Request) => {
   return { errors, errorSummary }
 }
 
-export const errorSummary = (field: string, text: string): ErrorSummary => {
+export const errorSummaryItem = (field: string, text: string): ErrorSummary => {
   return {
     text,
     href: `#${field}`,
@@ -28,7 +28,7 @@ export const generateErrorSummary = (errors: Record<string, string>): Array<Erro
   if (!errors) return []
   return Object.entries(errors)
     .filter(([_, text]) => text)
-    .map(([field, text]) => errorSummary(field, text))
+    .map(([field, text]) => errorSummaryItem(field, text))
 }
 
 export const generateErrorMessages = (errors: Record<string, string>): ErrorMessages => {
@@ -44,7 +44,19 @@ export const generateErrorMessages = (errors: Record<string, string>): ErrorMess
 }
 
 export const addErrorToFlash = (request: Request, field: string, error: string): void => {
-  const errors = { [field]: error }
-  request.flash('errors', JSON.stringify(generateErrorMessages(errors)))
-  request.flash('errorSummary', JSON.stringify(generateErrorSummary(errors)))
+  validateAndFlashErrors(request, { [field]: error })
+}
+
+export const validateAndFlashErrors = (request: Request, errors: Record<string, string>): boolean => {
+  if (Object.keys(errors).length === 0) {
+    return true
+  }
+
+  const errorMessages = generateErrorMessages(errors)
+  const errorSummary = generateErrorSummary(errors)
+
+  request.flash('errors', JSON.stringify(errorMessages))
+  request.flash('errorSummary', JSON.stringify(errorSummary))
+
+  return false
 }

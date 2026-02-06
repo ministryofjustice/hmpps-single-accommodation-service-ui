@@ -1,0 +1,37 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% extends "pages/proposed-address/layout.njk" %}
+
+{% set pageTitle = "What is the status of the address checks? " + applicationName %}
+{% set backLinkHref = paths.proposedAddresses.type({ crn: crn }) %}
+{% set formAction = paths.proposedAddresses.status({ crn: crn }) %}
+
+{% block formContent %}
+{{ govukRadios({
+      name: "status",
+      fieldset: {
+          legend: {
+              text: "What is the status of the address checks?",
+              classes: "govuk-fieldset__legend--l"
+          }
+      },
+      items: [
+          {
+              value: "NOT_CHECKED_YET",
+              text: "Not checked yet",
+              checked: proposedAddress.status == "NOT_CHECKED_YET"
+          },
+          {
+              value: "PASSED",
+              text: "Passed",
+              checked: proposedAddress.status == "PASSED"
+          },
+          {
+              value: "FAILED",
+              text: "Failed",
+              checked: proposedAddress.status == "FAILED"
+          }
+      ],
+      errorMessage: errors.status
+  }) }}
+{% endblock %}

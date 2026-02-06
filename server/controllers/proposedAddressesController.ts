@@ -128,7 +128,7 @@ export default class ProposedAddressesController {
       if (!validateStatusFromSession(req, proposedAddressFormSessionData)) {
         return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
       }
-      if (proposedAddressFormSessionData?.status === 'CHECKS_PASSED') {
+      if (proposedAddressFormSessionData?.status === 'PASSED') {
         return res.redirect(uiPaths.proposedAddresses.confirmation({ crn: req.params.crn }))
       }
       return res.redirect(uiPaths.proposedAddresses.checkYourAnswers({ crn: req.params.crn }))
@@ -180,7 +180,7 @@ export default class ProposedAddressesController {
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn, caseData.name)
       const backLinkHref =
-        proposedAddressFormSessionData?.status === 'CHECKS_PASSED'
+        proposedAddressFormSessionData?.status === 'PASSED'
           ? uiPaths.proposedAddresses.confirmation({ crn: req.params.crn })
           : uiPaths.proposedAddresses.status({ crn: req.params.crn })
 

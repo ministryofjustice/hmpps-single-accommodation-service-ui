@@ -111,7 +111,7 @@ describe('Proposed addresses utilities', () => {
         },
         arrangementSubType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
-        status: 'CHECKS_PASSED',
+        status: 'PASSED',
       } as ProposedAddressFormData
 
       const rows = summaryListRows(data, 'CRN123', 'James Taylor')
@@ -141,7 +141,7 @@ describe('Proposed addresses utilities', () => {
 
     it('formats status when checks failed with reason', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({
-        status: 'CHECKS_FAILED',
+        status: 'FAILED',
       })
       const rows = summaryListRows(sessionData, 'CRN123', 'James Taylor')
 
@@ -365,11 +365,11 @@ describe('Proposed addresses utilities', () => {
 
   describe('updateStatusFromRequest', () => {
     it('updates form data when status provided', async () => {
-      req.body = { status: 'CHECKS_FAILED' }
+      req.body = { status: 'FAILED' }
 
       await updateStatusFromRequest(req, formDataManager)
 
-      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { status: 'CHECKS_FAILED' })
+      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { status: 'FAILED' })
     })
 
     it('does not update when status missing', async () => {
@@ -400,7 +400,7 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('returns true when status present', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({ status: 'CHECKS_PASSED' })
+      const sessionData = proposedAddressFormFactory.manualAddress().build({ status: 'PASSED' })
       mockedValidateAndFlashErrors.mockReturnValue(true)
 
       const result = validateStatusFromSession(req, sessionData)

@@ -22,14 +22,14 @@
               checked: proposedAddress.status == "NOT_CHECKED_YET"
           },
           {
-              value: "CHECKS_PASSED",
+              value: "PASSED",
               text: "Passed",
-              checked: proposedAddress.status == "CHECKS_PASSED"
+              checked: proposedAddress.status == "PASSED"
           },
           {
-              value: "CHECKS_FAILED",
+              value: "FAILED",
               text: "Failed",
-              checked: proposedAddress.status == "CHECKS_FAILED"
+              checked: proposedAddress.status == "FAILED"
           }
       ],
       errorMessage: errors.status

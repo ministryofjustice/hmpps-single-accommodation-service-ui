@@ -100,7 +100,7 @@ export default class AddProposedAddressPage extends AbstractPage {
     const statusText = formatProposedAddressStatus(proposedAddressData.status)
     await expect(row('What is the status of the address checks?')).toContainText(statusText)
 
-    if (proposedAddressData.status === 'CHECKS_PASSED') {
+    if (proposedAddressData.status === 'PASSED') {
       const confirmationText = formatProposedAddressConfirmation(proposedAddressData.confirmation)
       await expect(row(`Is this the next address that ${caseName} will be moving into?`)).toContainText(
         confirmationText,
@@ -154,7 +154,7 @@ export default class AddProposedAddressPage extends AbstractPage {
     expect(requestBody.arrangementSubTypeDescription).toEqual(proposedAddressData.arrangementSubTypeDescription)
     expect(requestBody.settledType).toEqual(proposedAddressData.settledType)
     expect(requestBody.status).toEqual(proposedAddressData.status)
-    if (proposedAddressData.status === 'CHECKS_PASSED') {
+    if (proposedAddressData.status === 'PASSED') {
       expect(requestBody.confirmation).toEqual(proposedAddressData.confirmation)
     }
   }

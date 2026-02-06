@@ -67,7 +67,7 @@ describe('proposedAddressesController', () => {
     arrangementSubType: 'FRIENDS_OR_FAMILY',
     arrangementSubTypeDescription: '',
     settledType: 'SETTLED',
-    status: 'CHECKS_PASSED',
+    status: 'PASSED',
   }
 
   let controller: ProposedAddressesController
@@ -240,10 +240,10 @@ describe('proposedAddressesController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
     })
 
-    it('redirects to confirmation when status is CHECKS_PASSED', async () => {
+    it('redirects to confirmation when status is PASSED', async () => {
       jest.spyOn(controller.formData, 'get').mockReturnValue({
         ...sessionData,
-        status: 'CHECKS_PASSED',
+        status: 'PASSED',
       })
       ;(validateStatusFromSession as jest.Mock).mockReturnValue(true)
 

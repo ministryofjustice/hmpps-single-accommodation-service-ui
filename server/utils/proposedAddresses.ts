@@ -112,7 +112,7 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
       },
     },
   ]
-  if (sessionData.status === 'CHECKS_PASSED') {
+  if (sessionData.status === 'PASSED') {
     rows.push({
       key: textContent(`Is this the next address that ${name} will be moving into?`),
       value: htmlContent(formatProposedAddressConfirmation(sessionData.confirmation)),
@@ -134,7 +134,7 @@ const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
 
 const formatStatusWithReason = (data: ProposedAddressFormData) => {
   const status = formatProposedAddressStatus(data.status)
-  if (data.status === 'CHECKS_FAILED') {
+  if (data.status === 'FAILED') {
     return `<p class="govuk-!-margin-bottom-2">${status}</p>Not suitable`
   }
   return status
@@ -263,7 +263,7 @@ export const updateConfirmationFromRequest = async (
 export const validateConfirmationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
-  if (sessionData?.status === 'CHECKS_PASSED' && !sessionData?.confirmation) {
+  if (sessionData?.status === 'PASSED' && !sessionData?.confirmation) {
     errors.confirmation = 'Select if this is the next address'
   }
 

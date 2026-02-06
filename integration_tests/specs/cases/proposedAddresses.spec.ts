@@ -23,7 +23,7 @@ test.describe('add proposed address', () => {
 
     const proposedAddresses = [
       accommodationFactory.proposed().build({ status: 'NOT_CHECKED_YET' }),
-      accommodationFactory.proposed().build({ status: 'CHECKS_FAILED' }),
+      accommodationFactory.proposed().build({ status: 'FAILED' }),
     ]
     const newProposedAddress = accommodationFactory.proposed().build({
       ...updatedProposedAddressData,
@@ -108,7 +108,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(initialProposedAddressData)
     await addProposedAddressPage.clickContinue()
 
-    if (initialProposedAddressData.status === 'CHECKS_PASSED') {
+    if (initialProposedAddressData.status === 'PASSED') {
       // Then I should see the confirmation form
       await addProposedAddressPage.shouldShowConfirmationForm(caseData.name)
 
@@ -128,7 +128,7 @@ test.describe('add proposed address', () => {
     // Then I should see the check your answers page with my entered data
     await addProposedAddressPage.verifyCheckYourAnswersPage(initialProposedAddressData, caseData.name)
 
-    if (initialProposedAddressData.status === 'CHECKS_PASSED') {
+    if (initialProposedAddressData.status === 'PASSED') {
       // When I click the back link
       await addProposedAddressPage.clickBack()
 
@@ -167,7 +167,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickContinue()
 
-    if (updatedProposedAddressData.status === 'CHECKS_PASSED') {
+    if (updatedProposedAddressData.status === 'PASSED') {
       // And I complete the confirmation form with new data
       await addProposedAddressPage.completeConfirmationForm(updatedProposedAddressData)
       await addProposedAddressPage.clickContinue()

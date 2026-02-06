@@ -55,7 +55,7 @@ describeClient('ProposedAddressesClient', provider => {
         headers: {
           authorization: 'Bearer test-user-token',
         },
-        body: proposedAddressData,
+        body: proposedAddressDetail,
       },
       willRespondWith: {
         status: 200,

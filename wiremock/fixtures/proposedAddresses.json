@@ -21,7 +21,7 @@
         "uprn": "dr9H0WC6KXU3"
       },
       "createdAt": "2026-01-22T11:32:56.023Z",
-      "status": "NOT_CHECKED_YET"
+      "verificationStatus": "NOT_CHECKED_YET"
     }
   ],
   "V938951": [
@@ -44,7 +44,7 @@
         "uprn": "1TrztyTwdlpX"
       },
       "createdAt": "2026-01-20T18:40:41.536Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     },
     {
       "id": "a625ed02-c307-4654-8dc7-1a5c26380431",
@@ -65,7 +65,7 @@
         "uprn": "XVf7CwajSwc7"
       },
       "createdAt": "2026-01-25T21:44:34.940Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     },
     {
       "id": "dd4da16d-34d6-4224-9ea4-4fceef8bcbee",
@@ -87,7 +87,7 @@
         "uprn": "UScdqSoVSCPo"
       },
       "createdAt": "2026-01-20T20:06:21.806Z",
-      "status": "FAILED"
+      "verificationStatus": "FAILED"
     }
   ],
   "T229440": [
@@ -110,7 +110,7 @@
         "uprn": "zHB168zHJQVH"
       },
       "createdAt": "2026-01-24T05:10:56.036Z",
-      "status": "FAILED"
+      "verificationStatus": "FAILED"
     },
     {
       "id": "5401142e-ce2a-4ba3-bd54-ac792ce212e2",
@@ -131,7 +131,7 @@
         "uprn": "UNyvN1wK4nMS"
       },
       "createdAt": "2026-01-22T07:28:36.961Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     },
     {
       "id": "34ea9d07-2100-4d8c-8e55-40fd1f9e04a7",
@@ -152,7 +152,7 @@
         "uprn": "MbOANjSmfmxM"
       },
       "createdAt": "2026-01-26T05:04:02.310Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     }
   ],
   "H271226": [
@@ -175,7 +175,7 @@
         "uprn": "wIPLMF9cQsQF"
       },
       "createdAt": "2026-01-27T06:12:17.187Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     },
     {
       "id": "e34b9b98-bcaa-4b40-b3b4-7494cb272b42",
@@ -196,7 +196,7 @@
         "uprn": "F2IljOu16knE"
       },
       "createdAt": "2026-01-23T16:05:52.231Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     }
   ],
   "U934069": [
@@ -220,7 +220,7 @@
         "uprn": "JzdoZfCfM1Rr"
       },
       "createdAt": "2026-01-23T22:36:07.166Z",
-      "status": "FAILED"
+      "verificationStatus": "FAILED"
     }
   ],
   "I322559": [
@@ -243,7 +243,7 @@
         "uprn": "HnolWC9pP4Oh"
       },
       "createdAt": "2026-01-24T08:55:53.593Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     },
     {
       "id": "07bdb59a-9ba9-4c0e-b03b-0efe1ee1f999",
@@ -265,7 +265,7 @@
         "uprn": "vPgrw8wyVvKp"
       },
       "createdAt": "2026-01-24T09:18:58.452Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     },
     {
       "id": "f458541b-fb63-414c-8da8-03d2c4677551",
@@ -287,7 +287,7 @@
         "uprn": "cIpP1wvDkLWV"
       },
       "createdAt": "2026-01-24T09:50:40.414Z",
-      "status": "FAILED"
+      "verificationStatus": "FAILED"
     }
   ],
   "L247269": [],
@@ -312,7 +312,7 @@
         "uprn": "BL92398XXNoI"
       },
       "createdAt": "2026-01-19T22:30:45.411Z",
-      "status": "PASSED"
+      "verificationStatus": "PASSED"
     }
   ]
 }

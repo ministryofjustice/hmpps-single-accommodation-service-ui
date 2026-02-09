@@ -10,7 +10,8 @@ export type CreateAccommodationDetail = {
     arrangementSubTypeDescription?: string;
     settledType: 'SETTLED' | 'TRANSIENT';
     offenderReleaseType?: 'REMAND' | 'LICENCE' | 'BAIL';
-    status: 'NOT_CHECKED_YET' | 'FAILED' | 'PASSED';
+    verificationStatus: 'NOT_CHECKED_YET' | 'FAILED' | 'PASSED';
+    nextAccommodationStatus: 'YES' | 'NO' | 'TO_BE_DECIDED';
     address: AccommodationAddressDetails;
     startDate?: string;
     endDate?: string;

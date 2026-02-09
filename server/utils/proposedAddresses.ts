@@ -11,20 +11,20 @@ import { arrangementSubTypes, summaryListRow } from './cases'
 // eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => ({
   heading: formatAddress(proposedAddress.address),
-  inactive: proposedAddress.status === 'FAILED',
+  inactive: proposedAddress.verificationStatus === 'FAILED',
   status: {
-    text: formatProposedAddressStatus(proposedAddress.status),
-    colour: proposedAddressStatusColours[proposedAddress.status],
+    text: formatProposedAddressStatus(proposedAddress.verificationStatus),
+    colour: proposedAddressStatusColours[proposedAddress.verificationStatus],
   },
   details: [
     summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
     summaryListRow('Added by', ''),
     summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
   ],
-  links: linksForStatus(proposedAddress.status),
+  links: linksForStatus(proposedAddress.verificationStatus),
 })
 
-const linksForStatus = (status: AccommodationDetail['status']) => {
+const linksForStatus = (status: AccommodationDetail['verificationStatus']) => {
   switch (status) {
     case 'PASSED':
       return [

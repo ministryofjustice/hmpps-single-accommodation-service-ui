@@ -147,7 +147,7 @@ export const addressLines = (address: AccommodationAddressDetails = {}): string[
     .filter(Boolean)
 }
 
-export const formatProposedAddressStatus = (status?: AccommodationDetail['status']): string => {
+export const formatProposedAddressStatus = (status?: AccommodationDetail['verificationStatus']): string => {
   return (
     {
       NOT_CHECKED_YET: 'Not checked',
@@ -157,7 +157,7 @@ export const formatProposedAddressStatus = (status?: AccommodationDetail['status
   )
 }
 
-export const proposedAddressStatusColours: Record<AccommodationDetail['status'], string> = {
+export const proposedAddressStatusColours: Record<AccommodationDetail['verificationStatus'], string> = {
   NOT_CHECKED_YET: 'red',
   FAILED: 'grey',
   PASSED: 'yellow',

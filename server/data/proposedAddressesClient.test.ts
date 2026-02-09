@@ -44,6 +44,7 @@ describeClient('ProposedAddressesClient', provider => {
     const proposedAddressDetail: CreateAccommodationDetail = {
       ...proposedAddressData,
       arrangementType: 'PRIVATE',
+      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
     }
 
     await provider.addInteraction({

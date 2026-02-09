@@ -4,7 +4,7 @@ import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import {
   formatProposedAddressArrangement,
-  formatProposedAddressConfirmation,
+  formatProposedAddressNextAccommodation,
   formatProposedAddressSettledType,
   formatProposedAddressStatus,
 } from '../../../server/utils/format'
@@ -64,11 +64,15 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async completeStatusForm(proposedAddressData: ProposedAddressFormData) {
-    await this.page.locator(`input[name="status"][value="${proposedAddressData.status}"]`).check()
+    await this.page
+      .locator(`input[name="verificationStatus"][value="${proposedAddressData.verificationStatus}"]`)
+      .check()
   }
 
-  async completeConfirmationForm(proposedAddressData: ProposedAddressFormData) {
-    await this.page.locator(`input[name="confirmation"][value="${proposedAddressData.confirmation}"]`).check()
+  async completeNextAccommodationForm(proposedAddressData: ProposedAddressFormData) {
+    await this.page
+      .locator(`input[name="nextAccommodationStatus"][value="${proposedAddressData.nextAccommodationStatus}"]`)
+      .check()
   }
 
   async verifyCheckYourAnswersPage(proposedAddressData: ProposedAddressFormData, caseName: string) {
@@ -97,13 +101,13 @@ export default class AddProposedAddressPage extends AbstractPage {
 
     const settledTypeText = formatProposedAddressSettledType(proposedAddressData.settledType)
     await expect(row('Will it be settled or transient?')).toContainText(settledTypeText)
-    const statusText = formatProposedAddressStatus(proposedAddressData.status)
+    const statusText = formatProposedAddressStatus(proposedAddressData.verificationStatus)
     await expect(row('What is the status of the address checks?')).toContainText(statusText)
 
-    if (proposedAddressData.status === 'PASSED') {
-      const confirmationText = formatProposedAddressConfirmation(proposedAddressData.confirmation)
+    if (proposedAddressData.verificationStatus === 'PASSED') {
+      const nextAccommodationText = formatProposedAddressNextAccommodation(proposedAddressData.nextAccommodationStatus)
       await expect(row(`Is this the next address that ${caseName} will be moving into?`)).toContainText(
-        confirmationText,
+        nextAccommodationText,
       )
     }
   }
@@ -116,7 +120,7 @@ export default class AddProposedAddressPage extends AbstractPage {
     await expect(this.page.getByText('What is the status of the address checks?')).toBeVisible()
   }
 
-  async shouldShowConfirmationForm(name: string) {
+  async shouldShowNextAccommodationForm(name: string) {
     await expect(this.page.getByText(`Is this the next address that ${name} will be moving into?`)).toBeVisible()
   }
 
@@ -139,11 +143,11 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async shouldShowPopulatedStatusForm(addressData: ProposedAddressFormData) {
-    await this.verifyRadioInputByName('status', addressData.status)
+    await this.verifyRadioInputByName('verificationStatus', addressData.verificationStatus)
   }
 
-  async shouldShowPopulatedConfirmationForm(addressData: ProposedAddressFormData) {
-    await this.verifyRadioInputByName('confirmation', addressData.confirmation)
+  async shouldShowPopulatedNextAccommodationForm(addressData: ProposedAddressFormData) {
+    await this.verifyRadioInputByName('nextAccommodationStatus', addressData.nextAccommodationStatus)
   }
 
   async checkApiCalled(crn: string, proposedAddressData: ProposedAddressFormData) {
@@ -153,9 +157,9 @@ export default class AddProposedAddressPage extends AbstractPage {
     expect(requestBody.arrangementSubType).toEqual(proposedAddressData.arrangementSubType)
     expect(requestBody.arrangementSubTypeDescription).toEqual(proposedAddressData.arrangementSubTypeDescription)
     expect(requestBody.settledType).toEqual(proposedAddressData.settledType)
-    expect(requestBody.status).toEqual(proposedAddressData.status)
-    if (proposedAddressData.status === 'PASSED') {
-      expect(requestBody.confirmation).toEqual(proposedAddressData.confirmation)
+    expect(requestBody.verificationStatus).toEqual(proposedAddressData.verificationStatus)
+    if (proposedAddressData.verificationStatus === 'PASSED') {
+      expect(requestBody.nextAccommodationStatus).toEqual(proposedAddressData.nextAccommodationStatus)
     }
   }
 }

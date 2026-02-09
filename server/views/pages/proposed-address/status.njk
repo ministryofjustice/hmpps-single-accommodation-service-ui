@@ -8,7 +8,7 @@
 
 {% block formContent %}
 {{ govukRadios({
-      name: "status",
+      name: "verificationStatus",
       fieldset: {
           legend: {
               text: "What is the status of the address checks?",
@@ -19,19 +19,19 @@
           {
               value: "NOT_CHECKED_YET",
               text: "Not checked yet",
-              checked: proposedAddress.status == "NOT_CHECKED_YET"
+              checked: proposedAddress.verificationStatus == "NOT_CHECKED_YET"
           },
           {
               value: "PASSED",
               text: "Passed",
-              checked: proposedAddress.status == "PASSED"
+              checked: proposedAddress.verificationStatus == "PASSED"
           },
           {
               value: "FAILED",
               text: "Failed",
-              checked: proposedAddress.status == "FAILED"
+              checked: proposedAddress.verificationStatus == "FAILED"
           }
       ],
-      errorMessage: errors.status
+      errorMessage: errors.verificationStatus
   }) }}
 {% endblock %}

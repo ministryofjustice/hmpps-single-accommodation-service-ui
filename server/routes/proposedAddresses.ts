@@ -17,8 +17,8 @@ export default function proposedAddressesRoutes(
   router.get(uiPaths.proposedAddresses.status.pattern, proposedAddressesController.status())
   router.post(uiPaths.proposedAddresses.status.pattern, proposedAddressesController.saveStatus())
 
-  router.get(uiPaths.proposedAddresses.confirmation.pattern, proposedAddressesController.confirmation())
-  router.post(uiPaths.proposedAddresses.confirmation.pattern, proposedAddressesController.saveConfirmation())
+  router.get(uiPaths.proposedAddresses.nextAccommodation.pattern, proposedAddressesController.nextAccommodation())
+  router.post(uiPaths.proposedAddresses.nextAccommodation.pattern, proposedAddressesController.saveNextAccommodation())
 
   router.get(uiPaths.proposedAddresses.checkYourAnswers.pattern, proposedAddressesController.checkYourAnswers())
   router.post(uiPaths.proposedAddresses.submit.pattern, proposedAddressesController.submit())

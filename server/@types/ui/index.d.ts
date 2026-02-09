@@ -18,9 +18,9 @@ export type ProposedAddressFormData = {
   arrangementSubType: AccommodationDetail['arrangementSubType']
   arrangementSubTypeDescription: string
   settledType: AccommodationDetail['settledType']
-  status: AccommodationDetail['status']
+  verificationStatus: AccommodationDetail['verificationStatus']
   address: AccommodationDetail['address']
-  confirmation?: 'YES' | 'NO' | 'UNDECIDED'
+  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus']
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']

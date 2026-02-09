@@ -4,11 +4,11 @@
 
 {% set pageTitle = "Is this the next address they will be moving into? " + applicationName %}
 {% set backLinkHref = paths.proposedAddresses.status({ crn: crn }) %}
-{% set formAction = paths.proposedAddresses.confirmation({ crn: crn }) %}
+{% set formAction = paths.proposedAddresses.nextAccommodation({ crn: crn }) %}
 
 {% block formContent %}
 {{ govukRadios({
-      name: "confirmation",
+      name: "nextAccommodationStatus",
       fieldset: {
           legend: {
               text: "Is this the next address that " + name + " will be moving into?",
@@ -19,19 +19,19 @@
           {
               value: "YES",
               text: "Yes",
-              checked: proposedAddress.confirmation == "YES"
+              checked: proposedAddress.nextAccommodationStatus == "YES"
           },
           {
               value: "NO",
               text: "No",
-              checked: proposedAddress.confirmation == "NO"
+              checked: proposedAddress.nextAccommodationStatus == "NO"
           },
           {
-              value: "UNDECIDED",
+              value: "TO_BE_DECIDED",
               text: "Still to be decided",
-              checked: proposedAddress.confirmation == "UNDECIDED"
+              checked: proposedAddress.nextAccommodationStatus == "TO_BE_DECIDED"
           }
       ],
-      errorMessage: errors.confirmation
+      errorMessage: errors.nextAccommodationStatus
   }) }}
 {% endblock %}

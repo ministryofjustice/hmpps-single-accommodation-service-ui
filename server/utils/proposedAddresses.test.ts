@@ -128,7 +128,7 @@ describe('Proposed addresses utilities', () => {
         },
         arrangementSubType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
-        status: 'PASSED',
+        verificationStatus: 'PASSED',
       } as ProposedAddressFormData
 
       const rows = summaryListRows(data, 'CRN123', 'James Taylor')
@@ -158,7 +158,7 @@ describe('Proposed addresses utilities', () => {
 
     it('formats status when checks failed with reason', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({
-        status: 'FAILED',
+        verificationStatus: 'FAILED',
       })
       const rows = summaryListRows(sessionData, 'CRN123', 'James Taylor')
 
@@ -381,15 +381,15 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('updateStatusFromRequest', () => {
-    it('updates form data when status provided', async () => {
-      req.body = { status: 'FAILED' }
+    it('updates form data when verificationStatus provided', async () => {
+      req.body = { verificationStatus: 'FAILED' }
 
       await updateStatusFromRequest(req, formDataManager)
 
-      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { status: 'FAILED' })
+      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { verificationStatus: 'FAILED' })
     })
 
-    it('does not update when status missing', async () => {
+    it('does not update when verificationStatus missing', async () => {
       req.body = {}
 
       await updateStatusFromRequest(req, formDataManager)
@@ -406,18 +406,18 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('validateStatusFromSession', () => {
-    it('returns false and adds error when status missing', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({ status: undefined })
+    it('returns false and adds error when verificationStatus missing', () => {
+      const sessionData = proposedAddressFormFactory.manualAddress().build({ verificationStatus: undefined })
       mockedValidateAndFlashErrors.mockReturnValue(false)
 
       const result = validateStatusFromSession(req, sessionData)
 
       expect(result).toBe(false)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, { status: 'Select a status' })
+      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, { verificationStatus: 'Select a status' })
     })
 
-    it('returns true when status present', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({ status: 'PASSED' })
+    it('returns true when verificationStatus present', () => {
+      const sessionData = proposedAddressFormFactory.manualAddress().build({ verificationStatus: 'PASSED' })
       mockedValidateAndFlashErrors.mockReturnValue(true)
 
       const result = validateStatusFromSession(req, sessionData)

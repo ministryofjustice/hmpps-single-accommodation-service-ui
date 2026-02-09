@@ -21,6 +21,7 @@ export default class ProposedAddressesService {
     const proposedAddressDetail: CreateAccommodationDetail = {
       ...proposedAddressData,
       arrangementType: 'PRIVATE',
+      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
     }
 
     return this.proposedAddressesClient.submit(token, crn, proposedAddressDetail)

@@ -11,11 +11,11 @@ import {
   updateAddressFromRequest,
   updateTypeFromRequest,
   updateStatusFromRequest,
-  updateConfirmationFromRequest,
+  updateNextAccommodationFromRequest,
   validateAddressFromSession,
   validateTypeFromSession,
   validateStatusFromSession,
-  validateConfirmationFromSession,
+  validateNextAccommodationFromSession,
 } from '../utils/proposedAddresses'
 import { fetchErrors } from '../utils/validation'
 import CasesService from '../services/casesService'
@@ -26,11 +26,11 @@ jest.mock('../utils/proposedAddresses', () => ({
   updateAddressFromRequest: jest.fn(),
   updateTypeFromRequest: jest.fn(),
   updateStatusFromRequest: jest.fn(),
-  updateConfirmationFromRequest: jest.fn(),
+  updateNextAccommodationFromRequest: jest.fn(),
   validateAddressFromSession: jest.fn(),
   validateTypeFromSession: jest.fn(),
   validateStatusFromSession: jest.fn(),
-  validateConfirmationFromSession: jest.fn(),
+  validateNextAccommodationFromSession: jest.fn(),
 }))
 
 jest.mock('../utils/validation', () => ({
@@ -67,7 +67,7 @@ describe('proposedAddressesController', () => {
     arrangementSubType: 'FRIENDS_OR_FAMILY',
     arrangementSubTypeDescription: '',
     settledType: 'SETTLED',
-    status: 'PASSED',
+    verificationStatus: 'PASSED',
   }
 
   let controller: ProposedAddressesController
@@ -240,17 +240,17 @@ describe('proposedAddressesController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
     })
 
-    it('redirects to confirmation when status is PASSED', async () => {
+    it('redirects to next accommodation when status is PASSED', async () => {
       jest.spyOn(controller.formData, 'get').mockReturnValue({
         ...sessionData,
-        status: 'PASSED',
+        verificationStatus: 'PASSED',
       })
       ;(validateStatusFromSession as jest.Mock).mockReturnValue(true)
 
       await controller.saveStatus()(request, response, next)
 
       expect(updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.confirmation({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
     })
 
     it('redirects to status when status invalid', async () => {
@@ -263,15 +263,15 @@ describe('proposedAddressesController', () => {
     })
   })
 
-  describe('confirmation', () => {
-    it('renders confirmation page', async () => {
-      await controller.confirmation()(request, response, next)
+  describe('nextAccommodation', () => {
+    it('renders next accommodation page', async () => {
+      await controller.nextAccommodation()(request, response, next)
 
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_CONFIRMATION, {
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_NEXT_ACCOMMODATION, {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/confirmation', {
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
         proposedAddress: undefined,
         name: 'James Smith',
@@ -280,12 +280,12 @@ describe('proposedAddressesController', () => {
       })
     })
 
-    it('renders confirmation page with session data', async () => {
+    it('renders next accommodation page with session data', async () => {
       jest.spyOn(controller.formData, 'get').mockReturnValue(sessionData)
 
-      await controller.confirmation()(request, response, next)
+      await controller.nextAccommodation()(request, response, next)
 
-      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/confirmation', {
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
         proposedAddress: sessionData,
         name: 'James Smith',
@@ -295,22 +295,22 @@ describe('proposedAddressesController', () => {
     })
   })
 
-  describe('saveConfirmation', () => {
-    it('redirects to check your answers when confirmation valid', async () => {
-      ;(validateConfirmationFromSession as jest.Mock).mockReturnValue(true)
+  describe('saveNextAccommodation', () => {
+    it('redirects to check your answers when next accommodation valid', async () => {
+      ;(validateNextAccommodationFromSession as jest.Mock).mockReturnValue(true)
 
-      await controller.saveConfirmation()(request, response, next)
-      expect(updateConfirmationFromRequest).toHaveBeenCalledWith(request, controller.formData)
+      await controller.saveNextAccommodation()(request, response, next)
+      expect(updateNextAccommodationFromRequest).toHaveBeenCalledWith(request, controller.formData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
     })
 
-    it('redirects to confirmation when confirmation invalid', async () => {
-      ;(validateConfirmationFromSession as jest.Mock).mockReturnValue(false)
+    it('redirects to next accommodation when next accommodation invalid', async () => {
+      ;(validateNextAccommodationFromSession as jest.Mock).mockReturnValue(false)
 
-      await controller.saveConfirmation()(request, response, next)
+      await controller.saveNextAccommodation()(request, response, next)
 
-      expect(updateConfirmationFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.confirmation({ crn: 'CRN123' }))
+      expect(updateNextAccommodationFromRequest).toHaveBeenCalledWith(request, controller.formData)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
     })
   })
 

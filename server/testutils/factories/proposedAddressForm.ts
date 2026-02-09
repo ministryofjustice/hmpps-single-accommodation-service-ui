@@ -13,8 +13,8 @@ const arrangementSubTypes: ProposedAddressFormData['arrangementSubType'][] = [
 ]
 
 const settledTypes: ProposedAddressFormData['settledType'][] = ['SETTLED', 'TRANSIENT']
-const statuses: ProposedAddressFormData['status'][] = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
-const confirmations: ProposedAddressFormData['confirmation'][] = ['YES', 'NO', 'UNDECIDED']
+const verificationStatuses: ProposedAddressFormData['verificationStatus'][] = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
+const nextAccommodationStatuses: ProposedAddressFormData['nextAccommodationStatus'][] = ['YES', 'NO', 'TO_BE_DECIDED']
 
 class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
   manualAddress() {
@@ -37,14 +37,15 @@ class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
 
 export default ProposedAddressFormFactory.define(() => {
   const arrangementSubType = faker.helpers.arrayElement(arrangementSubTypes)
-  const status = faker.helpers.arrayElement(statuses)
+  const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
 
   return {
     arrangementSubType,
     arrangementSubTypeDescription: arrangementSubType === 'OTHER' ? faker.lorem.sentence() : undefined,
     settledType: faker.helpers.arrayElement(settledTypes),
-    status,
+    verificationStatus,
     address: addressFactory.build(),
-    confirmation: status === 'PASSED' ? faker.helpers.arrayElement(confirmations) : undefined,
+    nextAccommodationStatus:
+      verificationStatus === 'PASSED' ? faker.helpers.arrayElement(nextAccommodationStatuses) : undefined,
   }
 })

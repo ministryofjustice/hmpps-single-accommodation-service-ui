@@ -14,7 +14,7 @@ export default {
     details: proposedAddressesPath.path('details'),
     type: proposedAddressesPath.path('type'),
     status: proposedAddressesPath.path('status'),
-    confirmation: proposedAddressesPath.path('confirmation'),
+    nextAccommodation: proposedAddressesPath.path('next-accommodation'),
     checkYourAnswers: proposedAddressesPath.path('check-your-answers'),
     submit: proposedAddressesPath.path('submit'),
     cancel: proposedAddressesPath.path('cancel'),

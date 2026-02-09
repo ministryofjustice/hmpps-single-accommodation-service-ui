@@ -14,4 +14,3 @@ export type { DutyToReferDto } from './models/DutyToReferDto';
 export type { EligibilityDto } from './models/EligibilityDto';
 export type { RuleAction } from './models/RuleAction';
 export type { ServiceResult } from './models/ServiceResult';
-export type { CreateAccommodationDetail } from './models/CreateAccommodationDetail';

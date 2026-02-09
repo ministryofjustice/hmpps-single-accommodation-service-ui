@@ -4,6 +4,7 @@ import {
   AccommodationReferralDto as Referral,
   ServiceResult,
   AccommodationAddressDetails,
+  AccommodationDetail,
 } from '@sas/api'
 import { ProposedAddressDisplayStatus } from '@sas/ui'
 import { calculateAge } from './person'
@@ -159,6 +160,16 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatu
       FAILED: 'Checks failed',
       PASSED: 'Checks passed',
       CONFIRMED: 'Confirmed',
+    }[status] || 'Unknown'
+  )
+}
+
+export const formatProposedAddressNextAccommodation = (status: AccommodationDetail['nextAccommodationStatus']) => {
+  return (
+    {
+      YES: 'Yes',
+      NO: 'No',
+      TO_BE_DECIDED: 'Still to be decided',
     }[status] || 'Unknown'
   )
 }

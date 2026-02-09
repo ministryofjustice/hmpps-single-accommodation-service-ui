@@ -53,6 +53,7 @@ describe('ProposedAddressesService', () => {
       const expectedData: CreateAccommodationDetail = {
         ...proposedAddressData,
         arrangementType: 'PRIVATE',
+        nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
       }
 
       expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)

@@ -22,8 +22,8 @@ test.describe('add proposed address', () => {
     const updatedProposedAddressData = proposedAddressFormFactory.manualAddress().build()
 
     const proposedAddresses = [
-      accommodationFactory.proposed().build({ status: 'NOT_CHECKED_YET' }),
-      accommodationFactory.proposed().build({ status: 'FAILED' }),
+      accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' }),
+      accommodationFactory.proposed().build({ verificationStatus: 'FAILED' }),
     ]
     const newProposedAddress = accommodationFactory.proposed().build({
       ...updatedProposedAddressData,
@@ -101,39 +101,39 @@ test.describe('add proposed address', () => {
 
     // Then I should see errors
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      status: 'Select a status',
+      verificationStatus: 'Select a status',
     })
 
     // Then I complete the status form
     await addProposedAddressPage.completeStatusForm(initialProposedAddressData)
     await addProposedAddressPage.clickContinue()
 
-    if (initialProposedAddressData.status === 'PASSED') {
-      // Then I should see the confirmation form
-      await addProposedAddressPage.shouldShowConfirmationForm(caseData.name)
+    if (initialProposedAddressData.verificationStatus === 'PASSED') {
+      // Then I should see the next accommodation form
+      await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
 
       // When I submit the form empty
       await addProposedAddressPage.clickContinue()
 
       // Then I should see errors
       await addProposedAddressPage.shouldShowErrorMessagesForFields({
-        confirmation: 'Select if this is the next address',
+        nextAccommodationStatus: 'Select if this is the next address',
       })
 
-      // Then I complete the confirmation form
-      await addProposedAddressPage.completeConfirmationForm(initialProposedAddressData)
+      // Then I complete the next accommodation form
+      await addProposedAddressPage.completeNextAccommodationForm(initialProposedAddressData)
       await addProposedAddressPage.clickContinue()
     }
 
     // Then I should see the check your answers page with my entered data
     await addProposedAddressPage.verifyCheckYourAnswersPage(initialProposedAddressData, caseData.name)
 
-    if (initialProposedAddressData.status === 'PASSED') {
+    if (initialProposedAddressData.verificationStatus === 'PASSED') {
       // When I click the back link
       await addProposedAddressPage.clickBack()
 
-      // Then I should see the populated confirmation form
-      await addProposedAddressPage.shouldShowPopulatedConfirmationForm(initialProposedAddressData)
+      // Then I should see the populated next accommodation form
+      await addProposedAddressPage.shouldShowPopulatedNextAccommodationForm(initialProposedAddressData)
     }
 
     // When I click the back link
@@ -167,9 +167,9 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickContinue()
 
-    if (updatedProposedAddressData.status === 'PASSED') {
-      // And I complete the confirmation form with new data
-      await addProposedAddressPage.completeConfirmationForm(updatedProposedAddressData)
+    if (updatedProposedAddressData.verificationStatus === 'PASSED') {
+      // And I complete the next accommodation form with new data
+      await addProposedAddressPage.completeNextAccommodationForm(updatedProposedAddressData)
       await addProposedAddressPage.clickContinue()
     }
 

@@ -9,7 +9,7 @@ import {
   addressLines,
   formatProposedAddressArrangement,
   formatProposedAddressSettledType,
-  formatProposedAddressConfirmation,
+  formatProposedAddressNextAccommodation,
 } from './format'
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { textContent, htmlContent } from './utils'
@@ -112,12 +112,12 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
       },
     },
   ]
-  if (sessionData.status === 'PASSED') {
+  if (sessionData.verificationStatus === 'PASSED') {
     rows.push({
       key: textContent(`Is this the next address that ${name} will be moving into?`),
-      value: htmlContent(formatProposedAddressConfirmation(sessionData.confirmation)),
+      value: htmlContent(formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus)),
       actions: {
-        items: [{ text: 'Change', href: uiPaths.proposedAddresses.confirmation({ crn }) }],
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
       },
     })
   }
@@ -133,8 +133,8 @@ const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
 }
 
 const formatStatusWithReason = (data: ProposedAddressFormData) => {
-  const status = formatProposedAddressStatus(data.status)
-  if (data.status === 'FAILED') {
+  const status = formatProposedAddressStatus(data.verificationStatus)
+  if (data.verificationStatus === 'FAILED') {
     return `<p class="govuk-!-margin-bottom-2">${status}</p>Not suitable`
   }
   return status
@@ -229,11 +229,12 @@ export const updateStatusFromRequest = async (
   req: Request,
   formDataManager: MultiPageFormManager<'proposedAddress'>,
 ) => {
-  const { status } = req.body || {}
-  if (status) {
+  const { verificationStatus } = req.body || {}
+
+  if (verificationStatus) {
     await formDataManager.update(req.params.crn, req.session, {
-      status,
-      confirmation: undefined,
+      verificationStatus,
+      nextAccommodationStatus: undefined,
     })
   }
 }
@@ -241,30 +242,30 @@ export const updateStatusFromRequest = async (
 export const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
-  if (!sessionData?.status) {
-    errors.status = 'Select a status'
+  if (!sessionData?.verificationStatus) {
+    errors.verificationStatus = 'Select a status'
   }
 
   return validateAndFlashErrors(req, errors)
 }
 
-export const updateConfirmationFromRequest = async (
+export const updateNextAccommodationFromRequest = async (
   req: Request,
   formDataManager: MultiPageFormManager<'proposedAddress'>,
 ) => {
-  const { confirmation } = req.body || {}
-  if (confirmation) {
+  const { nextAccommodationStatus } = req.body || {}
+  if (nextAccommodationStatus) {
     await formDataManager.update(req.params.crn, req.session, {
-      confirmation,
+      nextAccommodationStatus,
     })
   }
 }
 
-export const validateConfirmationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+export const validateNextAccommodationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
-  if (sessionData?.status === 'PASSED' && !sessionData?.confirmation) {
-    errors.confirmation = 'Select if this is the next address'
+  if (sessionData?.verificationStatus === 'PASSED' && !sessionData?.nextAccommodationStatus) {
+    errors.nextAccommodationStatus = 'Select if this is the next address'
   }
 
   return validateAndFlashErrors(req, errors)

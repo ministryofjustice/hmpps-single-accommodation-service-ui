@@ -49,6 +49,7 @@ test.describe('Profile Tracker Page', () => {
     })
     const referrals = referralFactory.buildList(3)
     const proposedAddresses = [
+      accommodationFactory.proposed().build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' }),
       accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' }),
       accommodationFactory.proposed().build({ verificationStatus: 'FAILED' }),
     ]

@@ -18,6 +18,9 @@ describe('ProposedAddressesService', () => {
   describe('getProposedAddresses', () => {
     it('should call getProposedAddresses on the api client and return sorted addresses', async () => {
       const passedChecksAddress = accommodationFactory.proposed().build({ verificationStatus: 'PASSED' })
+      const confirmedAddress = accommodationFactory
+        .proposed()
+        .build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' })
       const notCheckedAddress = accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecksAddress = accommodationFactory.proposed().build({ verificationStatus: 'FAILED' })
 
@@ -25,13 +28,14 @@ describe('ProposedAddressesService', () => {
         passedChecksAddress,
         failedChecksAddress,
         notCheckedAddress,
+        confirmedAddress,
       ])
 
       const result = await proposedAddressesService.getProposedAddresses(token, crn)
 
       expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn)
       expect(result).toEqual({
-        proposed: [passedChecksAddress, notCheckedAddress],
+        proposed: [passedChecksAddress, notCheckedAddress, confirmedAddress],
         failedChecks: [failedChecksAddress],
       })
     })

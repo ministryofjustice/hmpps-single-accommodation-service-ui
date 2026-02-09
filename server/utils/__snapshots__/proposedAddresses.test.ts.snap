@@ -90,6 +90,49 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
 }
 `;
 
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confirmed" proposed address status card object 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "Private rent, room/share (tenant). ",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 January 2026 (1 day ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "Notes",
+    },
+  ],
+  "status": {
+    "colour": "green",
+    "text": "Confirmed",
+  },
+}
+`;
+
 exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not checked yet" proposed address status card object 1`] = `
 {
   "details": [

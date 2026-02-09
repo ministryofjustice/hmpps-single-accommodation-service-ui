@@ -1,4 +1,4 @@
-import { StatusCard } from '@sas/ui'
+import { ProposedAddressDisplayStatus, StatusCard } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
 import {
   formatAddress,
@@ -9,22 +9,29 @@ import {
 import { arrangementSubTypes, summaryListRow } from './cases'
 
 // eslint-disable-next-line import/prefer-default-export
-export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => ({
-  heading: formatAddress(proposedAddress.address),
-  inactive: proposedAddress.verificationStatus === 'FAILED',
-  status: {
-    text: formatProposedAddressStatus(proposedAddress.verificationStatus),
-    colour: proposedAddressStatusColours[proposedAddress.verificationStatus],
-  },
-  details: [
-    summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
-    summaryListRow('Added by', ''),
-    summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
-  ],
-  links: linksForStatus(proposedAddress.verificationStatus),
-})
+export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
+  const displayStatus = getProposedAddressDisplayStatus(
+    proposedAddress.verificationStatus,
+    proposedAddress.nextAccommodationStatus,
+  )
 
-const linksForStatus = (status: AccommodationDetail['verificationStatus']) => {
+  return {
+    heading: formatAddress(proposedAddress.address),
+    inactive: proposedAddress.verificationStatus === 'FAILED',
+    status: {
+      text: formatProposedAddressStatus(displayStatus),
+      colour: proposedAddressStatusColours[displayStatus],
+    },
+    details: [
+      summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
+      summaryListRow('Added by', ''),
+      summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
+    ],
+    links: linksForStatus(displayStatus),
+  }
+}
+
+const linksForStatus = (status: ProposedAddressDisplayStatus) => {
   switch (status) {
     case 'PASSED':
       return [
@@ -56,4 +63,12 @@ const arrangementLabel = (proposedAddress: AccommodationDetail) => {
     default:
       return `${arrangementSubTypes[arrangementSubType]}. ${settledLabel}`
   }
+}
+
+const getProposedAddressDisplayStatus = (
+  status?: AccommodationDetail['verificationStatus'],
+  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus'],
+): ProposedAddressDisplayStatus => {
+  if (status === 'PASSED' && nextAccommodationStatus === 'YES') return 'CONFIRMED'
+  return status
 }

@@ -22,6 +22,8 @@ export type ProposedAddressDto = {
   address: AccommodationDetail['address']
 }
 
+export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']
+
 export interface StatusTag {
   text: string
   colour?: string

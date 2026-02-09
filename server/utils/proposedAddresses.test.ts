@@ -63,5 +63,18 @@ describe('Proposed addresses utilities', () => {
 
       expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
+
+    it('returns a "confirmed" proposed address status card object', () => {
+      const proposedAddress = accommodationFactory.build({
+        ...baseAccommodationDetails,
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+        arrangementSubType: 'PRIVATE_RENTED_ROOM',
+        settledType: undefined,
+        createdAt: '2026-01-20T09:30:00.000Z',
+      })
+
+      expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
+    })
   })
 })

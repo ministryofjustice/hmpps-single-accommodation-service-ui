@@ -45,6 +45,7 @@ describeClient('CasesClient', provider => {
         method: 'GET',
         path: apiPaths.cases.index({}),
         query: {
+          searchTerm: 'bob',
           riskLevel: 'LOW',
         },
         headers: {
@@ -57,7 +58,7 @@ describeClient('CasesClient', provider => {
       },
     })
 
-    const response = await casesClient.getCases('test-user-token', { riskLevel: 'LOW' })
+    const response = await casesClient.getCases('test-user-token', { searchTerm: 'bob', riskLevel: 'LOW' })
     expect(response).toEqual(cases)
   })
 

@@ -17,6 +17,7 @@
       })
     }}
   {% endif %}
+
   <h1>Cases</h1>
 
   {#  <div class="govuk-template govuk-!-padding-8 govuk-!-padding-bottom-static-3 govuk-!-margin-bottom-8">#}
@@ -47,6 +48,14 @@
   {#  </div>#}
 
   <form method="get">
+    {{
+      govukInput({
+        label: { text: 'Search by name, CRN or prison number' },
+        name: 'searchTerm',
+        value: query.searchTerm
+      })
+    }}
+
     {{
       govukSelect({
         label: {

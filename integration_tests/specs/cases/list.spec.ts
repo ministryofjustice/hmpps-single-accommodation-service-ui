@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import CasesListPage from '../../pages/cases/listPage'
@@ -10,8 +10,9 @@ test.describe('List of cases', () => {
     const cases = [...Array(25)].map(() => caseFactory.confirmed().build())
     await casesApi.stubGetCases(cases)
 
-    const filteredCases = cases.filter(c => c.riskLevel === 'VERY_HIGH')
-    await casesApi.stubGetCases(filteredCases, { riskLevel: 'VERY_HIGH' })
+    const filteredCase = cases.find(c => c.riskLevel === 'VERY_HIGH')
+    const { prisonNumber } = filteredCase
+    await casesApi.stubGetCases([filteredCase], { searchTerm: prisonNumber, riskLevel: 'VERY_HIGH' })
 
     // WHEN I sign in
     await login(page)
@@ -22,11 +23,16 @@ test.describe('List of cases', () => {
     // AND all the cases should be shown
     await casesListPage.shouldShowCases(cases)
 
-    // WHEN I filter the results by Risk of Serious Harm
+    // WHEN I filter the results
+    await page.getByLabel('Search by name, CRN or prison number').fill(prisonNumber)
     await page.getByLabel('RoSH').selectOption('Very high')
     await page.getByRole('button', { name: 'Apply filters' }).click()
 
     // THEN the relevant cases are shown
-    await casesListPage.shouldShowCases(filteredCases)
+    await casesListPage.shouldShowCases([filteredCase])
+
+    // AND the filters are populated with the selected values
+    await expect(page.getByLabel('Search by name, CRN or prison number')).toHaveValue(prisonNumber)
+    await expect(page.getByLabel('RoSH')).toHaveValue('VERY_HIGH')
   })
 })

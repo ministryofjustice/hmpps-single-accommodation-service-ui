@@ -17,7 +17,6 @@ import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { validateAndFlashErrors } from './validation'
 
-// eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
   const status = displayStatus(proposedAddress.verificationStatus, proposedAddress.nextAccommodationStatus)
 

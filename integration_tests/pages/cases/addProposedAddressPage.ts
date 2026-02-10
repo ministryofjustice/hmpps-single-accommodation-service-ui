@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 import { ProposedAddressFormData } from '@sas/ui'
 import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
@@ -13,17 +13,9 @@ import { verifyPost } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 
 export default class AddProposedAddressPage extends AbstractPage {
-  readonly header: Locator
-
-  private constructor(page: Page) {
+  constructor(page: Page) {
     super(page)
     this.header = page.locator('h1', { hasText: 'Enter the address' })
-  }
-
-  static async verifyOnPage(page: Page): Promise<AddProposedAddressPage> {
-    const addProposedAddressPage = new AddProposedAddressPage(page)
-    await expect(addProposedAddressPage.header).toBeVisible()
-    return addProposedAddressPage
   }
 
   static async visit(page: Page, caseData: Case): Promise<AddProposedAddressPage> {
@@ -32,47 +24,45 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async clearAddressForm() {
-    await this.page.fill('input[name="addressLine1"]', '')
-    await this.page.fill('input[name="addressLine2"]', '')
-    await this.page.fill('input[name="addressTown"]', '')
-    await this.page.fill('input[name="addressCounty"]', '')
-    await this.page.fill('input[name="addressPostcode"]', '')
-    await this.page.fill('input[name="addressCountry"]', '')
+    await this.clearInputByLabel('Address line 1')
+    await this.clearInputByLabel('Address line 2')
+    await this.clearInputByLabel('Town or city')
+    await this.clearInputByLabel('County')
+    await this.clearInputByLabel('Postal code')
+    await this.clearInputByLabel('Country')
   }
 
   async completeAddressForm(proposedAddressData: ProposedAddressFormData) {
     const { address } = proposedAddressData
-    await this.page.fill('input[name="addressLine1"]', address.buildingName)
-    await this.page.fill('input[name="addressLine2"]', address.subBuildingName || '')
-    await this.page.fill('input[name="addressTown"]', address.postTown)
-    await this.page.fill('input[name="addressCounty"]', address.county || '')
-    await this.page.fill('input[name="addressPostcode"]', address.postcode)
-    await this.page.fill('input[name="addressCountry"]', address.country)
+    await this.completeInputByLabel('Address line 1', address.buildingName)
+    await this.completeInputByLabel('Address line 2', address.subBuildingName || '')
+    await this.completeInputByLabel('Town or city', address.postTown)
+    await this.completeInputByLabel('County', address.county || '')
+    await this.completeInputByLabel('Postal code', address.postcode)
+    await this.completeInputByLabel('Country', address.country)
   }
 
   async completeTypeForm(proposedAddressData: ProposedAddressFormData) {
-    await this.page
-      .locator(`input[name="arrangementSubType"][value="${proposedAddressData.arrangementSubType}"]`)
-      .check()
+    const arrangementLabel = formatProposedAddressArrangement(proposedAddressData.arrangementSubType)
+    await this.selectRadioByLabel(arrangementLabel)
     if (proposedAddressData.arrangementSubType === 'OTHER') {
-      await this.page.fill(
-        'input[name="arrangementSubTypeDescription"]',
+      await this.completeInputByLabel(
+        'What is the other housing arrangement?',
         proposedAddressData.arrangementSubTypeDescription || '',
       )
     }
-    await this.page.locator(`input[name="settledType"][value="${proposedAddressData.settledType}"]`).check()
+    const settledTypeLabel = formatProposedAddressSettledType(proposedAddressData.settledType)
+    await this.selectRadioByLabel(settledTypeLabel)
   }
 
   async completeStatusForm(proposedAddressData: ProposedAddressFormData) {
-    await this.page
-      .locator(`input[name="verificationStatus"][value="${proposedAddressData.verificationStatus}"]`)
-      .check()
+    const statusLabel = formatProposedAddressStatus(proposedAddressData.verificationStatus)
+    await this.selectRadioByLabel(statusLabel)
   }
 
   async completeNextAccommodationForm(proposedAddressData: ProposedAddressFormData) {
-    await this.page
-      .locator(`input[name="nextAccommodationStatus"][value="${proposedAddressData.nextAccommodationStatus}"]`)
-      .check()
+    const nextAccommodationLabel = formatProposedAddressNextAccommodation(proposedAddressData.nextAccommodationStatus)
+    await this.selectRadioByLabel(nextAccommodationLabel)
   }
 
   async verifyCheckYourAnswersPage(proposedAddressData: ProposedAddressFormData, caseName: string) {
@@ -89,9 +79,8 @@ export default class AddProposedAddressPage extends AbstractPage {
       address.postcode,
       address.country,
     ].filter(Boolean)
-    for await (const line of addressLines) {
-      await expect(row('Address')).toContainText(line)
-    }
+
+    this.shouldShowSummaryItem('Address', addressLines)
 
     const arrangementRow = row(`What will be ${caseName}'s housing arrangement at this address?`)
     await expect(arrangementRow).toContainText(formatProposedAddressArrangement(proposedAddressData.arrangementSubType))
@@ -113,53 +102,63 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async shouldShowTypeForm(name: string) {
-    await expect(this.page.getByText(`What will be ${name}'s housing arrangement at this address?`)).toBeVisible()
+    await expect(
+      this.page.getByRole('group', { name: `What will be ${name}'s housing arrangement at this address?` }),
+    ).toBeVisible()
   }
 
   async shouldShowStatusForm() {
-    await expect(this.page.getByText('What is the status of the address checks?')).toBeVisible()
+    await expect(this.page.getByRole('group', { name: 'What is the status of the address checks?' })).toBeVisible()
   }
 
   async shouldShowNextAccommodationForm(name: string) {
-    await expect(this.page.getByText(`Is this the next address that ${name} will be moving into?`)).toBeVisible()
+    await expect(
+      this.page.getByRole('group', { name: `Is this the next address that ${name} will be moving into?` }),
+    ).toBeVisible()
   }
 
   async shouldShowPopulatedAddressForm(addressData: ProposedAddressFormData) {
     const { address } = addressData
-    await this.verifyTextInputByName('addressLine1', address.buildingName)
-    await this.verifyTextInputByName('addressLine2', address.subBuildingName || '')
-    await this.verifyTextInputByName('addressTown', address.postTown)
-    await this.verifyTextInputByName('addressCounty', address.county || '')
-    await this.verifyTextInputByName('addressPostcode', address.postcode)
-    await this.verifyTextInputByName('addressCountry', address.country)
+    await this.verifyTextInputByName('Address line 1', address.buildingName)
+    await this.verifyTextInputByName('Address line 2', address.subBuildingName || '')
+    await this.verifyTextInputByName('Town or city', address.postTown)
+    await this.verifyTextInputByName('County', address.county || '')
+    await this.verifyTextInputByName('Postal code', address.postcode)
+    await this.verifyTextInputByName('Country', address.country)
   }
 
   async shouldShowPopulatedTypeForm(addressData: ProposedAddressFormData) {
-    await this.verifyRadioInputByName('arrangementSubType', addressData.arrangementSubType)
+    const arrangementLabel = formatProposedAddressArrangement(addressData.arrangementSubType)
+    await this.verifyRadioInputByName(arrangementLabel)
     if (addressData.arrangementSubType === 'OTHER' && addressData.arrangementSubTypeDescription) {
-      await this.verifyTextInputByName('arrangementSubTypeDescription', addressData.arrangementSubTypeDescription)
+      await this.verifyTextInputByName(
+        'What is the other housing arrangement?',
+        addressData.arrangementSubTypeDescription,
+      )
     }
-    await this.verifyRadioInputByName('settledType', addressData.settledType)
+    const settledTypeLabel = formatProposedAddressSettledType(addressData.settledType)
+    await this.verifyRadioInputByName(settledTypeLabel)
   }
 
   async shouldShowPopulatedStatusForm(addressData: ProposedAddressFormData) {
-    await this.verifyRadioInputByName('verificationStatus', addressData.verificationStatus)
+    const statusLabel = formatProposedAddressStatus(addressData.verificationStatus)
+    await this.verifyRadioInputByName(statusLabel)
   }
 
   async shouldShowPopulatedNextAccommodationForm(addressData: ProposedAddressFormData) {
-    await this.verifyRadioInputByName('nextAccommodationStatus', addressData.nextAccommodationStatus)
+    const nextAccommodationLabel = formatProposedAddressNextAccommodation(addressData.nextAccommodationStatus)
+    await this.verifyRadioInputByName(nextAccommodationLabel)
   }
 
   async checkApiCalled(crn: string, proposedAddressData: ProposedAddressFormData) {
     const requestBody = await verifyPost(apiPaths.cases.proposedAddresses.submit({ crn }))
 
-    expect(requestBody.address).toEqual(proposedAddressData.address)
-    expect(requestBody.arrangementSubType).toEqual(proposedAddressData.arrangementSubType)
-    expect(requestBody.arrangementSubTypeDescription).toEqual(proposedAddressData.arrangementSubTypeDescription)
-    expect(requestBody.settledType).toEqual(proposedAddressData.settledType)
-    expect(requestBody.verificationStatus).toEqual(proposedAddressData.verificationStatus)
-    if (proposedAddressData.verificationStatus === 'PASSED') {
-      expect(requestBody.nextAccommodationStatus).toEqual(proposedAddressData.nextAccommodationStatus)
+    const expectedBody = {
+      ...proposedAddressData,
+      arrangementType: 'PRIVATE',
+      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
     }
+
+    expect(requestBody).toEqual(expectedBody)
   }
 }

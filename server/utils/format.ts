@@ -156,9 +156,9 @@ export const addressLines = (
 export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string => {
   return (
     {
-      NOT_CHECKED_YET: 'Not checked',
-      FAILED: 'Checks failed',
-      PASSED: 'Checks passed',
+      NOT_CHECKED_YET: 'Not checked yet',
+      FAILED: 'Failed',
+      PASSED: 'Passed',
       CONFIRMED: 'Confirmed',
     }[status] || 'Unknown'
   )

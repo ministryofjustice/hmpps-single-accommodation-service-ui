@@ -4,6 +4,8 @@ import { StatusCard } from '@sas/ui'
 export default class AbstractPage {
   readonly page: Page
 
+  header: Locator
+
   /** user name that appear in header */
   readonly usersName: Locator
 
@@ -19,6 +21,16 @@ export default class AbstractPage {
     this.signoutLink = page.getByText('Sign out')
   }
 
+  static async verifyOnPage<T extends AbstractPage>(
+    this: new (page: Page, ...args: unknown[]) => T,
+    page: Page,
+    ...args: unknown[]
+  ): Promise<T> {
+    const abstractPage = new this(page, ...args)
+    await expect(abstractPage.header).toBeVisible()
+    return abstractPage
+  }
+
   async signOut() {
     await this.signoutLink.first().click()
   }
@@ -27,20 +39,23 @@ export default class AbstractPage {
     await this.page.getByRole('button', { name: buttonText }).click()
   }
 
-  async clickContinue() {
-    await this.clickButton('Continue')
-  }
-
-  async clickSave() {
-    await this.clickButton('Save')
-  }
-
   async clickLink(text: string | RegExp): Promise<void> {
     await this.page.getByRole('link', { name: text }).click()
   }
 
-  async clickBack() {
-    await this.clickLink('Back')
+  async completeInputByLabel(label: string, value: string) {
+    const input = this.page.getByLabel(label)
+    await input.fill(value)
+  }
+
+  async selectRadioByLabel(label: string) {
+    const radio = this.page.getByLabel(label, { exact: true })
+    await radio.check()
+  }
+
+  async clearInputByLabel(label: string) {
+    const input = this.page.getByLabel(label)
+    await input.fill('')
   }
 
   async shouldShowTableHeaders(headers: string[]) {
@@ -64,8 +79,7 @@ export default class AbstractPage {
 
   async shouldShowCard(title: string, cardData: StatusCard) {
     const card = this.page.locator('.sas-card', {
-      hasText: title,
-      has: this.page.getByRole('heading', { name: cardData.heading }),
+      has: this.page.getByRole('heading', { name: title }),
     })
 
     if (cardData.inactive) {
@@ -95,19 +109,17 @@ export default class AbstractPage {
 
     const errorSummary = this.page.locator('.govuk-error-summary__body')
 
-    await Promise.all(
-      Object.entries(errorMessages).map(async ([field, errorMessage]) => {
-        await expect(errorSummary.getByRole('link', { name: errorMessage })).toHaveAttribute('href', `#${field}`)
-        await expect(this.page.locator(`#${field}-error`)).toContainText(errorMessage)
-      }),
-    )
+    for await (const [field, errorMessage] of Object.entries(errorMessages)) {
+      await expect(errorSummary.getByRole('link', { name: errorMessage })).toHaveAttribute('href', `#${field}`)
+      await expect(this.page.locator(`#${field}-error`)).toContainText(errorMessage)
+    }
   }
 
   async verifyTextInputByName(name: string, value: string) {
-    await expect(this.page.locator(`input[name="${name}"]`)).toHaveValue(value)
+    await expect(this.page.getByLabel(name)).toHaveValue(value)
   }
 
-  async verifyRadioInputByName(name: string, value: string) {
-    await expect(this.page.locator(`input[name="${name}"][value="${value}"]`)).toBeChecked()
+  async verifyRadioInputByName(name: string) {
+    await expect(this.page.getByLabel(name, { exact: true })).toBeChecked()
   }
 }

@@ -15,20 +15,12 @@ import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
 
 export default class ProfileTrackerPage extends AbstractPage {
-  readonly header: Locator
-
-  readonly caseData: Case
-
-  private constructor(page: Page, caseData: Case) {
+  constructor(
+    page: Page,
+    readonly caseData: Case,
+  ) {
     super(page)
     this.header = page.locator('h1', { hasText: caseData.name })
-    this.caseData = caseData
-  }
-
-  static async verifyOnPage(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
-    const profileTrackerPage = new ProfileTrackerPage(page, caseData)
-    await expect(profileTrackerPage.header).toBeVisible()
-    return profileTrackerPage
   }
 
   static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
@@ -154,9 +146,5 @@ export default class ProfileTrackerPage extends AbstractPage {
     for await (const proposedAddress of proposedAddresses) {
       await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
     }
-  }
-
-  clickAddAddressLink() {
-    return this.page.getByRole('link', { name: 'Add an address' }).click()
   }
 }

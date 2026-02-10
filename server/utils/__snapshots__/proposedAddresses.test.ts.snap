@@ -43,7 +43,101 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
 }
 `;
 
-exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks made" proposed address status card object 1`] = `
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks passed" proposed address status card object if the nextAccommodationStatus is NO 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "Private rent, room/share (tenant). ",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 January 2026 (1 day ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "Confirm as next address",
+    },
+    {
+      "href": "#",
+      "text": "Notes",
+    },
+  ],
+  "status": {
+    "colour": "yellow",
+    "text": "Checks passed",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks passed" proposed address status card object if the nextAccommodationStatus is TO_BE_DECIDED 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "Private rent, room/share (tenant). ",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 January 2026 (1 day ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "Confirm as next address",
+    },
+    {
+      "href": "#",
+      "text": "Notes",
+    },
+  ],
+  "status": {
+    "colour": "yellow",
+    "text": "Checks passed",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks passed" proposed address status card object if the nextAccommodationStatus is undefined 1`] = `
 {
   "details": [
     {

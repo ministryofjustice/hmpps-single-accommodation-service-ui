@@ -108,7 +108,7 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
   }
 }
 
-export default AccommodationFactory.define(() => {
+export default AccommodationFactory.define((): AccommodationDetail => {
   const arrangementType = faker.helpers.arrayElement(arrangementTypes)
   const arrangementSubType = arrangementType === 'PRIVATE' ? faker.helpers.arrayElement(arrangementSubTypes) : undefined
   const arrangementSubTypeDescription = arrangementSubType === 'OTHER' ? faker.word.words() : ''
@@ -121,6 +121,8 @@ export default AccommodationFactory.define(() => {
     name: arrangementType === 'PRISON' ? `HMP ${faker.location.city()}` : faker.word.words(2),
     offenderReleaseType: arrangementType === 'PRISON' ? faker.helpers.arrayElement(offenderReleaseTypes) : undefined,
     settledType: arrangementType === 'PRIVATE' ? faker.helpers.arrayElement(settledTypes) : undefined,
+    verificationStatus: undefined,
+    nextAccommodationStatus: undefined,
     startDate: faker.date.past().toISOString().substring(0, 10),
     endDate: faker.date.future().toISOString().substring(0, 10),
     address: addressFactory.build(),

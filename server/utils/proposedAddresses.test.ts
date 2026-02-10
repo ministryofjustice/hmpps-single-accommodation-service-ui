@@ -1,3 +1,4 @@
+import { AccommodationDetail } from '@sas/api'
 import { accommodationFactory, addressFactory } from '../testutils/factories'
 import { proposedAddressStatusCard } from './proposedAddresses'
 
@@ -52,10 +53,26 @@ describe('Proposed addresses utilities', () => {
       expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
 
-    it('returns a "checks made" proposed address status card object', () => {
+    it.each(['NO', 'TO_BE_DECIDED', undefined])(
+      'returns a "checks passed" proposed address status card object if the nextAccommodationStatus is %s',
+      (nextAccommodationStatus: AccommodationDetail['nextAccommodationStatus']) => {
+        const proposedAddress = accommodationFactory.build({
+          ...baseAccommodationDetails,
+          verificationStatus: 'PASSED',
+          nextAccommodationStatus,
+          arrangementSubType: 'PRIVATE_RENTED_ROOM',
+          settledType: undefined,
+          createdAt: '2026-01-20T09:30:00.000Z',
+        })
+        expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
+      },
+    )
+
+    it('returns a "confirmed" proposed address status card object', () => {
       const proposedAddress = accommodationFactory.build({
         ...baseAccommodationDetails,
         verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
         arrangementSubType: 'PRIVATE_RENTED_ROOM',
         settledType: undefined,
         createdAt: '2026-01-20T09:30:00.000Z',

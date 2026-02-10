@@ -22,7 +22,16 @@ export const arrangementSubTypes: Readonly<AccommodationDetail['arrangementSubTy
 ]
 const offenderReleaseTypes: Readonly<AccommodationDetail['offenderReleaseType'][]> = ['BAIL', 'LICENCE', 'REMAND']
 const settledTypes: Readonly<AccommodationDetail['settledType'][]> = ['SETTLED', 'TRANSIENT']
-const statuses: Readonly<AccommodationDetail['verificationStatus'][]> = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
+const verificationStatuses: Readonly<AccommodationDetail['verificationStatus'][]> = [
+  'NOT_CHECKED_YET',
+  'PASSED',
+  'FAILED',
+]
+const nextAccommodationStatuses: Readonly<AccommodationDetail['nextAccommodationStatus'][]> = [
+  'YES',
+  'NO',
+  'TO_BE_DECIDED',
+]
 
 class AccommodationFactory extends Factory<AccommodationDetail> {
   current(endDate?: string, startDate?: string) {
@@ -88,13 +97,18 @@ class AccommodationFactory extends Factory<AccommodationDetail> {
   }
 
   proposed() {
+    const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
+    const nextAccommodationStatus =
+      verificationStatus === 'PASSED' ? faker.helpers.arrayElement(nextAccommodationStatuses) : undefined
+
     return this.privateAddress().params({
-      verificationStatus: faker.helpers.arrayElement(statuses),
+      verificationStatus,
+      nextAccommodationStatus,
     })
   }
 }
 
-export default AccommodationFactory.define(() => {
+export default AccommodationFactory.define((): AccommodationDetail => {
   const arrangementType = faker.helpers.arrayElement(arrangementTypes)
   const arrangementSubType = arrangementType === 'PRIVATE' ? faker.helpers.arrayElement(arrangementSubTypes) : undefined
   const arrangementSubTypeDescription = arrangementSubType === 'OTHER' ? faker.word.words() : ''
@@ -107,6 +121,8 @@ export default AccommodationFactory.define(() => {
     name: arrangementType === 'PRISON' ? `HMP ${faker.location.city()}` : faker.word.words(2),
     offenderReleaseType: arrangementType === 'PRISON' ? faker.helpers.arrayElement(offenderReleaseTypes) : undefined,
     settledType: arrangementType === 'PRIVATE' ? faker.helpers.arrayElement(settledTypes) : undefined,
+    verificationStatus: undefined,
+    nextAccommodationStatus: undefined,
     startDate: faker.date.past().toISOString().substring(0, 10),
     endDate: faker.date.future().toISOString().substring(0, 10),
     address: addressFactory.build(),

@@ -44,7 +44,8 @@
         "uprn": "1TrztyTwdlpX"
       },
       "createdAt": "2026-01-20T18:40:41.536Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "TO_BE_DECIDED"
     },
     {
       "id": "a625ed02-c307-4654-8dc7-1a5c26380431",
@@ -65,7 +66,8 @@
         "uprn": "XVf7CwajSwc7"
       },
       "createdAt": "2026-01-25T21:44:34.940Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES"
     },
     {
       "id": "dd4da16d-34d6-4224-9ea4-4fceef8bcbee",
@@ -131,7 +133,8 @@
         "uprn": "UNyvN1wK4nMS"
       },
       "createdAt": "2026-01-22T07:28:36.961Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES"
     },
     {
       "id": "34ea9d07-2100-4d8c-8e55-40fd1f9e04a7",
@@ -152,7 +155,8 @@
         "uprn": "MbOANjSmfmxM"
       },
       "createdAt": "2026-01-26T05:04:02.310Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "NO"
     }
   ],
   "H271226": [
@@ -175,7 +179,8 @@
         "uprn": "wIPLMF9cQsQF"
       },
       "createdAt": "2026-01-27T06:12:17.187Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES"
     },
     {
       "id": "e34b9b98-bcaa-4b40-b3b4-7494cb272b42",
@@ -196,7 +201,8 @@
         "uprn": "F2IljOu16knE"
       },
       "createdAt": "2026-01-23T16:05:52.231Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES"
     }
   ],
   "U934069": [

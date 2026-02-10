@@ -4,8 +4,8 @@ import {
   AccommodationReferralDto as Referral,
   ServiceResult,
   AccommodationAddressDetails,
-  AccommodationDetail,
 } from '@sas/api'
+import { ProposedAddressDisplayStatus } from '@sas/ui'
 import { calculateAge } from './person'
 
 const isValidDate = (date?: string) => date && !Number.isNaN(new Date(date).getTime())
@@ -147,20 +147,22 @@ export const addressLines = (address: AccommodationAddressDetails = {}): string[
     .filter(Boolean)
 }
 
-export const formatProposedAddressStatus = (status?: AccommodationDetail['verificationStatus']): string => {
+export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string => {
   return (
     {
       NOT_CHECKED_YET: 'Not checked',
       FAILED: 'Checks failed',
       PASSED: 'Checks passed',
+      CONFIRMED: 'Confirmed',
     }[status] || 'Unknown'
   )
 }
 
-export const proposedAddressStatusColours: Record<AccommodationDetail['verificationStatus'], string> = {
+export const proposedAddressStatusColours: Record<ProposedAddressDisplayStatus, string> = {
   NOT_CHECKED_YET: 'red',
   FAILED: 'grey',
   PASSED: 'yellow',
+  CONFIRMED: 'green',
 }
 
 export const formatAddress = (address: AccommodationAddressDetails): string => {

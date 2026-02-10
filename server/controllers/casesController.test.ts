@@ -45,7 +45,8 @@ describe('casesController', () => {
   )
 
   beforeEach(() => {
-    request = mock<Request>({ id: 'request-id' })
+    jest.clearAllMocks()
+    request = mock<Request>({ id: 'request-id', query: undefined })
   })
 
   describe('index', () => {
@@ -59,11 +60,32 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, undefined)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         tableCaption: casesTableCaption(cases),
         casesRows: casesToRows(cases),
-        params: request.query,
+        errors: {},
+        errorSummary: [],
+      })
+    })
+
+    it('renders a filtered case list page', async () => {
+      const cases = caseFactory.buildList(3, { riskLevel: 'HIGH' })
+      casesService.getCases.mockResolvedValue(cases)
+
+      request.query = {
+        riskLevel: 'HIGH',
+      }
+
+      await casesController.index()(request, response, next)
+
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { riskLevel: 'HIGH' })
+      expect(response.render).toHaveBeenCalledWith('pages/index', {
+        tableCaption: casesTableCaption(cases),
+        casesRows: casesToRows(cases),
+        query: {
+          riskLevel: 'HIGH',
+        },
         errors: {},
         errorSummary: [],
       })

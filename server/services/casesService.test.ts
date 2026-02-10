@@ -21,7 +21,18 @@ describe('CasesService', () => {
 
     const result = await casesService.getCases(token)
 
-    expect(casesClient.getCases).toHaveBeenCalledWith(token)
+    expect(casesClient.getCases).toHaveBeenCalledWith(token, undefined)
+    expect(result).toEqual(cases)
+  })
+
+  it('should call getCases on the api client with query parameters and return its result', async () => {
+    const cases = caseFactory.buildList(3)
+
+    casesClient.getCases.mockResolvedValue(cases)
+
+    const result = await casesService.getCases(token, { riskLevel: 'LOW' })
+
+    expect(casesClient.getCases).toHaveBeenCalledWith(token, { riskLevel: 'LOW' })
     expect(result).toEqual(cases)
   })
 })

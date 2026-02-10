@@ -28,13 +28,14 @@ export default class CasesController {
       await this.auditService.logPageView(Page.CASES_LIST, { who: res.locals.user.username, correlationId: req.id })
       const token = res.locals?.user?.token
       const { errors, errorSummary } = fetchErrors(req)
+      const { query } = req
 
-      const cases = await this.casesService.getCases(token)
+      const cases = await this.casesService.getCases(token, query)
 
       return res.render('pages/index', {
         tableCaption: casesTableCaption(cases),
         casesRows: casesToRows(cases),
-        params: req.query,
+        query,
         errors,
         errorSummary,
       })

@@ -1,4 +1,5 @@
-import superagent, { SuperAgentRequest, Response } from 'superagent'
+import superagent, { Response, SuperAgentRequest } from 'superagent'
+import { ParsedUrlQuery } from 'node:querystring'
 
 const url = 'http://localhost:9091/__admin'
 
@@ -32,4 +33,7 @@ const verifyPost = async (path: string): Promise<Record<string, unknown>> => {
   return JSON.parse(mostRecentRequest.body)
 }
 
-export { stubFor, getMatchingRequests, resetStubs, stubApiError, verifyPost }
+const queryParameters = (query?: ParsedUrlQuery) =>
+  query ? Object.fromEntries(Object.entries(query).map(([key, value]) => [key, { equalTo: value }])) : undefined
+
+export { stubFor, getMatchingRequests, resetStubs, stubApiError, verifyPost, queryParameters }

@@ -1,5 +1,6 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% extends "partials/layout.njk" %}
@@ -9,38 +10,65 @@
 
 {% block content %}
   {% if errorSummary and errorSummary.length %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: errorSummary
-    }) }}
+    {{
+      govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorSummary
+      })
+    }}
   {% endif %}
   <h1>Cases</h1>
-    <div class="govuk-template govuk-!-padding-8 govuk-!-padding-bottom-static-3 govuk-!-margin-bottom-8">
-        <form action="{{ paths.cases.search({}) }}" method="get">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-          {{ govukInput(
-              {
-                  label: {
-                      classes: 'govuk-label--m',
-                      text: 'Search by CRN' 
-                  },
-                      hint: {
-                      text: 'For example, XD7364CD'
-                  },
-                  name: 'crn',
-                  id: 'crn',
-                  value: params.crn,
-                  errorMessage: errors.crn
-              }
-          ) }}
 
-          <div class="govuk-button-group">
-              {{ govukButton({ text: "Search", attributes: { id: 'search-button' }, preventDoubleClick: true}) }}
+  {#  <div class="govuk-template govuk-!-padding-8 govuk-!-padding-bottom-static-3 govuk-!-margin-bottom-8">#}
+  {#    <form action="{{ paths.cases.search({}) }}" method="get">#}
+  {#      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />#}
+  {#      {{#}
+  {#        govukInput(#}
+  {#            {#}
+  {#                label: {#}
+  {#                    classes: 'govuk-label--m',#}
+  {#                    text: 'Search by CRN'#}
+  {#                },#}
+  {#                    hint: {#}
+  {#                    text: 'For example, XD7364CD'#}
+  {#                },#}
+  {#                name: 'crn',#}
+  {#                id: 'crn',#}
+  {#                value: params.crn,#}
+  {#                errorMessage: errors.crn#}
+  {#            }#}
+  {#        )#}
+  {#      }}#}
+  {#      <div class="govuk-button-group">#}
+  {#        {{ govukButton({ text: "Search", attributes: { id: 'search-button' }, preventDoubleClick: true}) }}#}
+  {#        <a class="govuk-link" href="/">Clear</a>#}
+  {#      </div>#}
+  {#    </form>#}
+  {#  </div>#}
 
-              <a class="govuk-link" href="/">Clear</a>
-          </div>
-      </form>
-    </div>
+  <form method="get">
+    {{
+      govukSelect({
+        label: {
+          text: 'RoSH'
+        },
+        name: 'riskLevel',
+        value: query.riskLevel,
+        items: [
+          { value: '', text: 'All' },
+          { value: 'VERY_HIGH', text: 'Very high' },
+          { value: 'HIGH', text: 'High' },
+          { value: 'MEDIUM', text: 'Medium' },
+          { value: 'LOW', text: 'Low' }
+        ]
+      })
+    }}
+
+    {{ govukButton({ text: 'Apply filters' }) }}
+
+    <a class="govuk-link" href="/">Clear</a>
+  </form>
+
   {{
     govukTable({
       caption: tableCaption,

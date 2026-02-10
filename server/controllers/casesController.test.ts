@@ -46,13 +46,15 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', query: undefined })
+    request = mock<Request>({ id: 'request-id' })
   })
 
   describe('index', () => {
-    it('renders the case list page', async () => {
+    it('renders the case list page for the current user by default', async () => {
       const cases = caseFactory.buildList(3)
       casesService.getCases.mockResolvedValue(cases)
+
+      request.query = {}
 
       await casesController.index()(request, response, next)
 
@@ -60,12 +62,15 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, undefined)
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         tableCaption: casesTableCaption(cases),
         casesRows: casesToRows(cases),
         errors: {},
         errorSummary: [],
+        query: {
+          assignedTo: 'you',
+        },
       })
     })
 
@@ -74,18 +79,22 @@ describe('casesController', () => {
       casesService.getCases.mockResolvedValue(cases)
 
       request.query = {
+        searchTerm: 'some-crn',
+        assignedTo: 'anyone',
         riskLevel: 'HIGH',
       }
 
       await casesController.index()(request, response, next)
 
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { riskLevel: 'HIGH' })
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {
+        searchTerm: 'some-crn',
+        assignedTo: '',
+        riskLevel: 'HIGH',
+      })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         tableCaption: casesTableCaption(cases),
         casesRows: casesToRows(cases),
-        query: {
-          riskLevel: 'HIGH',
-        },
+        query: request.query,
         errors: {},
         errorSummary: [],
       })

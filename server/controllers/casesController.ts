@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { GetCasesQuery } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, referralHistoryTable } from '../utils/cases'
@@ -13,6 +14,10 @@ import { statusCard } from '../utils/components'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 
+interface IndexRequest extends Request {
+  query: GetCasesQuery
+}
+
 export default class CasesController {
   constructor(
     private readonly auditService: AuditService,
@@ -24,13 +29,15 @@ export default class CasesController {
   ) {}
 
   index(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.CASES_LIST, { who: res.locals.user.username, correlationId: req.id })
-      const token = res.locals?.user?.token
+    return async (req: IndexRequest, res: Response) => {
+      const { token, userId, username } = res.locals.user
+      await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { errors, errorSummary } = fetchErrors(req)
       const { query } = req
 
-      const cases = await this.casesService.getCases(token, query)
+      if (query.assignedTo === undefined) query.assignedTo = 'you'
+
+      const cases = await this.casesService.getCases(token, this.mapGetCasesQuery(query, userId))
 
       return res.render('pages/index', {
         tableCaption: casesTableCaption(cases),
@@ -39,6 +46,18 @@ export default class CasesController {
         errors,
         errorSummary,
       })
+    }
+  }
+
+  private mapGetCasesQuery(query: GetCasesQuery, userId: string): GetCasesQuery {
+    let { assignedTo } = query
+
+    if (query.assignedTo === 'you') assignedTo = userId
+    if (query.assignedTo === 'anyone') assignedTo = ''
+
+    return {
+      ...query,
+      assignedTo,
     }
   }
 

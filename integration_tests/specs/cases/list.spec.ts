@@ -5,7 +5,7 @@ import CasesListPage from '../../pages/cases/listPage'
 import { caseFactory } from '../../../server/testutils/factories'
 
 test.describe('List of cases', () => {
-  test('Should list all cases and allow filtering', async ({ page }) => {
+  test('Should list all cases for the user and allow filtering', async ({ page }) => {
     // GIVEN there are cases to show
     const cases = [...Array(25)].map(() => caseFactory.confirmed().build())
     await casesApi.stubGetCases(cases)
@@ -20,11 +20,17 @@ test.describe('List of cases', () => {
     // THEN I should see the Case List
     const casesListPage = await CasesListPage.verifyOnPage(page)
 
+    // AND the filters should be set to default values
+    await expect(page.getByLabel('Search by name, CRN or prison number')).toHaveValue('')
+    await expect(page.getByLabel('Assigned to')).toHaveValue('you')
+    await expect(page.getByLabel('RoSH')).toHaveValue('')
+
     // AND all the cases should be shown
     await casesListPage.shouldShowCases(cases)
 
     // WHEN I filter the results
     await page.getByLabel('Search by name, CRN or prison number').fill(prisonNumber)
+    await page.getByLabel('Assigned to').selectOption('Anyone')
     await page.getByLabel('RoSH').selectOption('Very high')
     await page.getByRole('button', { name: 'Apply filters' }).click()
 
@@ -33,6 +39,7 @@ test.describe('List of cases', () => {
 
     // AND the filters are populated with the selected values
     await expect(page.getByLabel('Search by name, CRN or prison number')).toHaveValue(prisonNumber)
+    await expect(page.getByLabel('Assigned to')).toHaveValue('anyone')
     await expect(page.getByLabel('RoSH')).toHaveValue('VERY_HIGH')
   })
 })

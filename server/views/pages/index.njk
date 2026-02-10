@@ -59,6 +59,20 @@
     {{
       govukSelect({
         label: {
+          text: 'Assigned to'
+        },
+        name: 'assignedTo',
+        value: query.assignedTo,
+        items: [
+          { value: 'you', text: 'You (' + user.displayName + ')' },
+          { value: 'anyone', text: 'Anyone' }
+        ]
+      })
+    }}
+
+    {{
+      govukSelect({
+        label: {
           text: 'RoSH'
         },
         name: 'riskLevel',

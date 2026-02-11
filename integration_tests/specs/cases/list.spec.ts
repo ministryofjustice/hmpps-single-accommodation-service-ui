@@ -26,7 +26,7 @@ test.describe('List of cases', () => {
     await expect(page.getByLabel('RoSH')).toHaveValue('')
 
     // AND all the cases should be shown
-    await casesListPage.shouldShowCases(cases)
+    await casesListPage.shouldShowCases('25 people assigned to you', cases)
 
     // WHEN I filter the results
     await page.getByLabel('Search by name, CRN or prison number').fill(prisonNumber)
@@ -35,7 +35,10 @@ test.describe('List of cases', () => {
     await page.getByRole('button', { name: 'Apply filters' }).click()
 
     // THEN the relevant cases are shown
-    await casesListPage.shouldShowCases([filteredCase])
+    await casesListPage.shouldShowCases(
+      `1 person matching '${prisonNumber}', assigned to anyone filtered by very high RoSH`,
+      [filteredCase],
+    )
 
     // AND the filters are populated with the selected values
     await expect(page.getByLabel('Search by name, CRN or prison number')).toHaveValue(prisonNumber)

@@ -13,12 +13,8 @@ export default class CasesListPage extends AbstractPage {
     this.casesRows = page.getByRole('table', { name: 'List of cases' }).getByRole('row')
   }
 
-  async shouldShowCases(cases: Case[]) {
-    const people = cases.length === 1 ? 'person' : 'people'
-    await expect(this.page.getByRole('table').getByRole('caption')).toHaveText(
-      `${cases.length} ${people} assigned to you`,
-    )
-
+  async shouldShowCases(caption: string, cases: Case[]) {
+    await this.shouldShowTableCaption(caption)
     await this.shouldShowTableHeaders(['Person', 'Current accommodation'])
 
     for await (const person of cases) {

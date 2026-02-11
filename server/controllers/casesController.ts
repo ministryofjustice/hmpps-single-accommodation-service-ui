@@ -40,7 +40,7 @@ export default class CasesController {
       const cases = await this.casesService.getCases(token, this.mapGetCasesQuery(query, userId))
 
       return res.render('pages/index', {
-        tableCaption: casesTableCaption(cases),
+        tableCaption: casesTableCaption(cases, query),
         casesRows: casesToRows(cases),
         query,
         errors,

@@ -64,7 +64,7 @@ describe('casesController', () => {
       })
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        tableCaption: casesTableCaption(cases),
+        tableCaption: casesTableCaption(cases, { assignedTo: 'you' }),
         casesRows: casesToRows(cases),
         errors: {},
         errorSummary: [],
@@ -92,7 +92,7 @@ describe('casesController', () => {
         riskLevel: 'HIGH',
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        tableCaption: casesTableCaption(cases),
+        tableCaption: casesTableCaption(cases, request.query),
         casesRows: casesToRows(cases),
         query: request.query,
         errors: {},

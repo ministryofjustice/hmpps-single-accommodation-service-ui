@@ -58,6 +58,10 @@ export default class AbstractPage {
     await input.fill('')
   }
 
+  async shouldShowTableCaption(caption: string) {
+    await expect(this.page.getByRole('caption').filter({ hasText: caption })).toBeVisible()
+  }
+
   async shouldShowTableHeaders(headers: string[]) {
     for await (const header of headers) {
       await expect(this.page.getByRole('columnheader', { name: header })).toBeVisible()

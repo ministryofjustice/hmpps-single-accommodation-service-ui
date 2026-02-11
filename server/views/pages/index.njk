@@ -48,6 +48,9 @@
   {#  </div>#}
 
   <form method="get" class="sas-filters">
+    {# FIXME -- Experimental Easter Egg #}
+    <input type="hidden" name="crns" value="{{ query.crns }}">
+
     <div class="sas-filters__filter sas-filters__filter--grow">
       {{
         govukInput({

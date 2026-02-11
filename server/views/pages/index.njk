@@ -47,49 +47,57 @@
   {#    </form>#}
   {#  </div>#}
 
-  <form method="get">
-    {{
-      govukInput({
-        label: { text: 'Search by name, CRN or prison number' },
-        name: 'searchTerm',
-        value: query.searchTerm
-      })
-    }}
+  <form method="get" class="sas-filters">
+    <div class="sas-filters__filter sas-filters__filter--grow">
+      {{
+        govukInput({
+          label: { text: 'Search by name, CRN or prison number' },
+          name: 'searchTerm',
+          value: query.searchTerm
+        })
+      }}
+    </div>
 
-    {{
-      govukSelect({
-        label: {
-          text: 'Assigned to'
-        },
-        name: 'assignedTo',
-        value: query.assignedTo,
-        items: [
-          { value: 'you', text: 'You (' + user.displayName + ')' },
-          { value: 'anyone', text: 'Anyone' }
-        ]
-      })
-    }}
+    <div class="sas-filters__filter">
+      {{
+        govukSelect({
+          label: {
+            text: 'Assigned to'
+          },
+          name: 'assignedTo',
+          value: query.assignedTo,
+          items: [
+            { value: 'you', text: 'You (' + user.displayName + ')' },
+            { value: 'anyone', text: 'Anyone' }
+          ]
+        })
+      }}
+    </div>
 
-    {{
-      govukSelect({
-        label: {
-          text: 'RoSH'
-        },
-        name: 'riskLevel',
-        value: query.riskLevel,
-        items: [
-          { value: '', text: 'All' },
-          { value: 'VERY_HIGH', text: 'Very high' },
-          { value: 'HIGH', text: 'High' },
-          { value: 'MEDIUM', text: 'Medium' },
-          { value: 'LOW', text: 'Low' }
-        ]
-      })
-    }}
+    <div class="sas-filters__filter">
+      {{
+        govukSelect({
+          label: {
+            text: 'RoSH'
+          },
+          name: 'riskLevel',
+          value: query.riskLevel,
+          items: [
+            { value: '', text: 'All' },
+            { value: 'VERY_HIGH', text: 'Very high' },
+            { value: 'HIGH', text: 'High' },
+            { value: 'MEDIUM', text: 'Medium' },
+            { value: 'LOW', text: 'Low' }
+          ]
+        })
+      }}
+    </div>
 
-    {{ govukButton({ text: 'Apply filters' }) }}
+    <div class="sas-filters__actions">
+      {{ govukButton({ text: 'Apply filters' }) }}
 
-    <a class="govuk-link" href="/">Clear</a>
+      <a class="govuk-link govuk-link--no-visited-state" href="/">Clear</a>
+    </div>
   </form>
 
   {{

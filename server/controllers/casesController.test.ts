@@ -66,8 +66,6 @@ describe('casesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         tableCaption: casesTableCaption(cases, { assignedTo: 'you' }),
         casesRows: casesToRows(cases),
-        errors: {},
-        errorSummary: [],
         query: {
           assignedTo: 'you',
         },
@@ -95,8 +93,6 @@ describe('casesController', () => {
         tableCaption: casesTableCaption(cases, request.query),
         casesRows: casesToRows(cases),
         query: request.query,
-        errors: {},
-        errorSummary: [],
       })
     })
   })

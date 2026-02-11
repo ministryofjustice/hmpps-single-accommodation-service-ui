@@ -9,7 +9,7 @@ import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
 import uiPaths from '../paths/ui'
-import { fetchErrors, addErrorToFlash } from '../utils/validation'
+import { addErrorToFlash } from '../utils/validation'
 import { statusCard } from '../utils/components'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
@@ -32,7 +32,6 @@ export default class CasesController {
     return async (req: IndexRequest, res: Response) => {
       const { token, userId, username } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
-      const { errors, errorSummary } = fetchErrors(req)
       const { query } = req
 
       if (query.assignedTo === undefined) query.assignedTo = 'you'
@@ -43,8 +42,6 @@ export default class CasesController {
         tableCaption: casesTableCaption(cases, query),
         casesRows: casesToRows(cases),
         query,
-        errors,
-        errorSummary,
       })
     }
   }

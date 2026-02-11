@@ -1,3 +1,5 @@
+@use "govuk-frontend/dist/govuk" as *;
+
 .sas-profile-page {
     padding-top: 0;
 }
@@ -21,7 +23,7 @@
         float: left;
         margin-right: govuk-spacing(1);
         color: govuk-colour('dark-grey');
-        
+
         &:after {
             content: ":";
         }

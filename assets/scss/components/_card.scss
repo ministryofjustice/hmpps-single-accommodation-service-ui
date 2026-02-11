@@ -1,3 +1,5 @@
+@use "govuk-frontend/dist/govuk" as *;
+
 .sas-card {
   border: 1px solid govuk-colour("mid-grey");
   padding: govuk-spacing(4);

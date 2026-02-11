@@ -1,20 +1,17 @@
-$govuk-global-styles: true;
-$path: "/assets/images/";
+@use "govuk-frontend/dist/govuk/index" with (
+  $govuk-global-styles: true,
+  $govuk-page-width: 1280px
+);
+@use "@ministryofjustice/frontend/moj/all";
+@use '@ministryofjustice/hmpps-probation-frontend-components/dist/assets/footer';
+@use '@ministryofjustice/hmpps-probation-frontend-components/dist/assets/header';
 
-$moj-page-width: 1280px;
-$govuk-page-width: $moj-page-width;
-
-@import "govuk-frontend/dist/govuk/index";
-@import "@ministryofjustice/frontend/moj/all";
-@import '@ministryofjustice/hmpps-probation-frontend-components/dist/assets/footer';
-@import '@ministryofjustice/hmpps-probation-frontend-components/dist/assets/header';
-
-@import './components/header-bar';
-@import './components/card';
-@import './components/grid';
-@import './components/person-details';
-@import './components/profile-header';
-@import './components/risk-tags';
-@import './components/section';
-@import './components/filters';
-@import './overrides/local';
+@use './components/header-bar';
+@use './components/card';
+@use './components/grid';
+@use './components/person-details';
+@use './components/profile-header';
+@use './components/risk-tags';
+@use './components/section';
+@use './components/filters';
+@use './overrides/local';

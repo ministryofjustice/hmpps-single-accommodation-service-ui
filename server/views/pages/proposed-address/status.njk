@@ -15,23 +15,7 @@
               classes: "govuk-fieldset__legend--l"
           }
       },
-      items: [
-          {
-              value: "NOT_CHECKED_YET",
-              text: "Not checked yet",
-              checked: proposedAddress.verificationStatus == "NOT_CHECKED_YET"
-          },
-          {
-              value: "PASSED",
-              text: "Passed",
-              checked: proposedAddress.verificationStatus == "PASSED"
-          },
-          {
-              value: "FAILED",
-              text: "Failed",
-              checked: proposedAddress.verificationStatus == "FAILED"
-          }
-      ],
+      items: verificationStatusItems,
       errorMessage: errors.verificationStatus
   }) }}
 {% endblock %}

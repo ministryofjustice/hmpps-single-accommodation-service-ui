@@ -189,16 +189,16 @@ export const formatAddress = (address: AccommodationAddressDetails): string => {
     .join(', ')
 }
 
-export const formatProposedAddressSettledType = (type?: string): string => {
+export const formatProposedAddressSettledType = (type?: AccommodationDetail['settledType']): string => {
   return (
     {
       SETTLED: 'Settled',
       TRANSIENT: 'Transient',
-    }[type || ''] || 'Unknown'
+    }[type] || 'Unknown'
   )
 }
 
-export const formatProposedAddressArrangement = (type?: string): string => {
+export const formatProposedAddressArrangement = (type?: AccommodationDetail['arrangementSubType']): string => {
   return (
     {
       FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
@@ -207,6 +207,6 @@ export const formatProposedAddressArrangement = (type?: string): string => {
       PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
       OWNED: 'Owned (named on deeds/mortgage)',
       OTHER: 'Other',
-    }[type || ''] || 'Unknown'
+    }[type] || 'Unknown'
   )
 }

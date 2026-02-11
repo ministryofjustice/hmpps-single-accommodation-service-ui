@@ -21,6 +21,22 @@
     ) }}
 {% endset %}
 
+{% set itemsWithConditional = [] %}
+{% for item in arrangementSubTypeItems %}
+    {% if item.value == 'OTHER' %}
+        {% set itemsWithConditional = (itemsWithConditional.push({
+            value: item.value,
+            text: item.text,
+            checked: item.checked,
+            conditional: {
+                html: conditionalHtml
+            }
+        }), itemsWithConditional) %}
+    {% else %}
+        {% set itemsWithConditional = (itemsWithConditional.push(item), itemsWithConditional) %}
+    {% endif %}
+{% endfor %}
+
 {% block formContent %}
   {{ govukRadios({
       name: "arrangementSubType",
@@ -30,41 +46,7 @@
               classes: "govuk-fieldset__legend--l"
           }
       },
-      items: [
-          {
-              value: "FRIENDS_OR_FAMILY",
-              text: "Friends or family (not tenant or owner)",
-              checked: proposedAddress.arrangementSubType == "FRIENDS_OR_FAMILY"
-          },
-          {
-              value: "SOCIAL_RENTED",
-              text: "Social rent (tenant)",
-              checked: proposedAddress.arrangementSubType == "SOCIAL_RENTED"
-          },
-          {
-              value: "PRIVATE_RENTED_WHOLE_PROPERTY",
-              text: "Private rent, whole property (tenant)",
-              checked: proposedAddress.arrangementSubType == "PRIVATE_RENTED_WHOLE_PROPERTY"
-          },
-          {
-              value: "PRIVATE_RENTED_ROOM",
-              text: "Private rent, room/share (tenant)",
-              checked: proposedAddress.arrangementSubType == "PRIVATE_RENTED_ROOM"
-          },
-          {
-              value: "OWNED",
-              text: "Owned (named on deeds/mortgage)",
-              checked: proposedAddress.arrangementSubType == "OWNED"
-          },
-          {
-              value: "OTHER",
-              text: "Other",
-              checked: proposedAddress.arrangementSubType == "OTHER",
-              conditional: {
-                html: conditionalHtml
-              }
-          }
-      ],
+      items: itemsWithConditional,
       errorMessage: errors.arrangementSubType
   }) }}
 {{ govukRadios({

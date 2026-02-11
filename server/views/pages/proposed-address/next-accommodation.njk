@@ -15,23 +15,7 @@
               classes: "govuk-fieldset__legend--l"
           }
       },
-      items: [
-          {
-              value: "YES",
-              text: "Yes",
-              checked: proposedAddress.nextAccommodationStatus == "YES"
-          },
-          {
-              value: "NO",
-              text: "No",
-              checked: proposedAddress.nextAccommodationStatus == "NO"
-          },
-          {
-              value: "TO_BE_DECIDED",
-              text: "Still to be decided",
-              checked: proposedAddress.nextAccommodationStatus == "TO_BE_DECIDED"
-          }
-      ],
+      items: nextAccommodationStatusItems,
       errorMessage: errors.nextAccommodationStatus
   }) }}
 {% endblock %}

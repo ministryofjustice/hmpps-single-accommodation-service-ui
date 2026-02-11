@@ -144,22 +144,21 @@ export const updateAddressFromRequest = async (
   formDataManager: MultiPageFormManager<'proposedAddress'>,
 ) => {
   const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.body || {}
-  if (addressLine1 || addressLine2 || addressTown || addressCounty || addressPostcode || addressCountry) {
-    const addressParams = {
-      buildingName: addressLine1 || '',
-      subBuildingName: addressLine2 || undefined,
-      postTown: addressTown || '',
-      county: addressCounty || undefined,
-      postcode: addressPostcode || '',
-      country: addressCountry || '',
-    }
-    await formDataManager.update(req.params.crn, req.session, {
-      address: addressParams,
-    })
+
+  const addressParams = {
+    buildingName: addressLine1 || '',
+    subBuildingName: addressLine2 || undefined,
+    postTown: addressTown || '',
+    county: addressCounty || undefined,
+    postcode: addressPostcode || '',
+    country: addressCountry || '',
   }
+  return formDataManager.update(req.params.crn, req.session, {
+    address: addressParams,
+  })
 }
 
-export const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const address = sessionData?.address
   const errors: Record<string, string> = {}
 
@@ -173,12 +172,6 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
     errors.addressLine2 = 'Address line 2 must be 200 characters or less'
   }
 
-  if (!address?.postcode) {
-    errors.addressPostcode = 'Enter postcode'
-  } else if (address.postcode.length > 20) {
-    errors.addressPostcode = 'Postal code or zip code must be 20 characters or less'
-  }
-
   if (!address?.postTown) {
     errors.addressTown = 'Enter town or city'
   } else if (address.postTown.length > 100) {
@@ -187,6 +180,12 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
 
   if (address?.county && address?.county.length > 100) {
     errors.addressCounty = 'County must be 100 characters or less'
+  }
+
+  if (!address?.postcode) {
+    errors.addressPostcode = 'Enter postcode'
+  } else if (address.postcode.length > 20) {
+    errors.addressPostcode = 'Postal code or zip code must be 20 characters or less'
   }
 
   if (!address?.country) {
@@ -200,17 +199,16 @@ export const validateAddressFromSession = (req: Request, sessionData: ProposedAd
 
 export const updateTypeFromRequest = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
   const { arrangementSubType, arrangementSubTypeDescription, settledType } = req.body || {}
-  if (arrangementSubType || settledType || arrangementSubTypeDescription) {
-    await formDataManager.update(req.params.crn, req.session, {
-      arrangementSubType: arrangementSubType as ProposedAddressFormData['arrangementSubType'],
-      arrangementSubTypeDescription:
-        arrangementSubType === 'OTHER' ? arrangementSubTypeDescription || undefined : undefined,
-      settledType: settledType as ProposedAddressFormData['settledType'],
-    })
-  }
+
+  return formDataManager.update(req.params.crn, req.session, {
+    arrangementSubType: arrangementSubType as ProposedAddressFormData['arrangementSubType'],
+    arrangementSubTypeDescription:
+      arrangementSubType === 'OTHER' ? arrangementSubTypeDescription || undefined : undefined,
+    settledType: settledType as ProposedAddressFormData['settledType'],
+  })
 }
 
-export const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
   if (!sessionData?.arrangementSubType) {
     errors.arrangementSubType = 'Select an arrangement type'
@@ -230,15 +228,13 @@ export const updateStatusFromRequest = async (
 ) => {
   const { verificationStatus } = req.body || {}
 
-  if (verificationStatus) {
-    await formDataManager.update(req.params.crn, req.session, {
-      verificationStatus,
-      nextAccommodationStatus: undefined,
-    })
-  }
+  return formDataManager.update(req.params.crn, req.session, {
+    verificationStatus,
+    nextAccommodationStatus: undefined,
+  })
 }
 
-export const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
   if (!sessionData?.verificationStatus) {
@@ -253,14 +249,13 @@ export const updateNextAccommodationFromRequest = async (
   formDataManager: MultiPageFormManager<'proposedAddress'>,
 ) => {
   const { nextAccommodationStatus } = req.body || {}
-  if (nextAccommodationStatus) {
-    await formDataManager.update(req.params.crn, req.session, {
-      nextAccommodationStatus,
-    })
-  }
+
+  return formDataManager.update(req.params.crn, req.session, {
+    nextAccommodationStatus,
+  })
 }
 
-export const validateNextAccommodationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+const validateNextAccommodationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
   if (sessionData?.verificationStatus === 'PASSED' && !sessionData?.nextAccommodationStatus) {
@@ -269,3 +264,86 @@ export const validateNextAccommodationFromSession = (req: Request, sessionData: 
 
   return validateAndFlashErrors(req, errors)
 }
+
+export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  if (!validateAddressFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.details({ crn: req.params.crn })
+  }
+  return null
+}
+
+export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  const addressRedirect = validateUpToAddress(req, sessionData)
+  if (addressRedirect) return addressRedirect
+
+  if (!validateTypeFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.type({ crn: req.params.crn })
+  }
+  return null
+}
+
+export const validateUpToStatus = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  const typeRedirect = validateUpToType(req, sessionData)
+  if (typeRedirect) return typeRedirect
+
+  if (!validateStatusFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.status({ crn: req.params.crn })
+  }
+  return null
+}
+
+export const validateUpToNextAccommodation = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  const statusRedirect = validateUpToStatus(req, sessionData)
+  if (statusRedirect) return statusRedirect
+
+  if (!validateNextAccommodationFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn })
+  }
+
+  return null
+}
+
+export const arrangementSubTypeItems = (arrangementSubType?: AccommodationDetail['arrangementSubType']) =>
+  Object.entries(arrangementSubTypes).map(([value, text]) => ({
+    value,
+    text,
+    checked: arrangementSubType === value,
+  }))
+
+export const verificationStatusItems = (verificationStatus?: AccommodationDetail['verificationStatus']) => [
+  {
+    value: 'NOT_CHECKED_YET',
+    text: 'Not checked yet',
+    checked: verificationStatus === 'NOT_CHECKED_YET',
+  },
+  {
+    value: 'PASSED',
+    text: 'Passed',
+    checked: verificationStatus === 'PASSED',
+  },
+  {
+    value: 'FAILED',
+    text: 'Failed',
+    checked: verificationStatus === 'FAILED',
+  },
+]
+
+export const nextAccommodationStatusItems = (
+  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus'],
+) => [
+  {
+    value: 'YES',
+    text: 'Yes',
+    checked: nextAccommodationStatus === 'YES',
+  },
+  {
+    value: 'NO',
+    text: 'No',
+    checked: nextAccommodationStatus === 'NO',
+  },
+  {
+    value: 'TO_BE_DECIDED',
+    text: 'Still to be decided',
+    checked: nextAccommodationStatus === 'TO_BE_DECIDED',
+  },
+]

@@ -45,18 +45,28 @@ describe('ProposedAddressesService', () => {
   })
 
   describe('submit', () => {
-    it('should call submit on the api client', async () => {
-      const proposedAddressData = proposedAddressFormFactory.build()
+    it.each([
+      ['YES', 'YES'],
+      ['NO', 'NO'],
+      ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
+      [undefined, 'TO_BE_DECIDED'],
+    ] as const)(
+      'should call sumbit with nextAccommodationStatus as %s when input is %s',
+      async (formValue, expectedStatus) => {
+        const proposedAddressData = proposedAddressFormFactory.build({
+          nextAccommodationStatus: formValue,
+        })
 
-      await proposedAddressesService.submit(token, crn, proposedAddressData)
+        await proposedAddressesService.submit(token, crn, proposedAddressData)
 
-      const expectedData: CreateAccommodationDetail = {
-        ...proposedAddressData,
-        arrangementType: 'PRIVATE',
-        nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-      }
+        const expectedData: CreateAccommodationDetail = {
+          ...proposedAddressData,
+          arrangementType: 'PRIVATE',
+          nextAccommodationStatus: expectedStatus,
+        }
 
-      expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)
-    })
+        expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)
+      },
+    )
   })
 })

@@ -6,21 +6,21 @@ import {
   proposedAddressStatusCard,
   summaryListRows,
   updateAddressFromRequest,
-  validateAddressFromSession,
   updateTypeFromRequest,
-  validateTypeFromSession,
   updateStatusFromRequest,
-  validateStatusFromSession,
+  arrangementSubTypeItems,
+  nextAccommodationStatusItems,
+  verificationStatusItems,
+  validateUpToNextAccommodation,
+  validateUpToStatus,
+  validateUpToType,
+  validateUpToAddress,
+  updateNextAccommodationFromRequest,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
-import { validateAndFlashErrors } from './validation'
+import * as validationUtils from './validation'
 import MultiPageFormManager from './multiPageFormManager'
-
-jest.mock('./validation', () => ({
-  validateAndFlashErrors: jest.fn(),
-}))
-
-const mockedValidateAndFlashErrors = validateAndFlashErrors as jest.MockedFunction<typeof validateAndFlashErrors>
+import uiPaths from '../paths/ui'
 
 const crn = 'CRN123'
 const formDataManager = mock<MultiPageFormManager<'proposedAddress'>>()
@@ -208,75 +208,6 @@ describe('Proposed addresses utilities', () => {
         },
       })
     })
-
-    it('does not update when body is empty', async () => {
-      req.body = {}
-      await updateAddressFromRequest(req, formDataManager)
-
-      expect(formDataManager.update).not.toHaveBeenCalled()
-    })
-
-    it('does not update when body is undefined', async () => {
-      req.body = undefined
-      await updateAddressFromRequest(req, formDataManager)
-
-      expect(formDataManager.update).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('validateAddressFromSession', () => {
-    it('returns true for valid address', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build()
-      mockedValidateAndFlashErrors.mockReturnValue(true)
-
-      const result = validateAddressFromSession(req, sessionData)
-
-      expect(result).toBe(true)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {})
-    })
-
-    it('adds errors for blank fields', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({
-        address: null,
-      })
-      mockedValidateAndFlashErrors.mockReturnValue(false)
-
-      const result = validateAddressFromSession(req, sessionData)
-
-      expect(result).toBe(false)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
-        addressLine1: 'Enter address line 1, typically the building and street',
-        addressPostcode: 'Enter postcode',
-        addressTown: 'Enter town or city',
-        addressCountry: 'Enter country',
-      })
-    })
-
-    it('adds errors for fields exceeding length limits', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({
-        address: {
-          buildingName: 'x'.repeat(201),
-          subBuildingName: 'x'.repeat(201),
-          postTown: 'x'.repeat(101),
-          county: 'x'.repeat(101),
-          postcode: 'x'.repeat(21),
-          country: 'x'.repeat(101),
-        },
-      })
-      mockedValidateAndFlashErrors.mockReturnValue(false)
-
-      const result = validateAddressFromSession(req, sessionData)
-
-      expect(result).toBe(false)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
-        addressLine1: 'Address line 1 must be 200 characters or less',
-        addressLine2: 'Address line 2 must be 200 characters or less',
-        addressTown: 'Town or city must be 100 characters or less',
-        addressCounty: 'County must be 100 characters or less',
-        addressPostcode: 'Postal code or zip code must be 20 characters or less',
-        addressCountry: 'Country must be 100 characters or less',
-      })
-    })
   })
 
   describe('updateTypeFromRequest', () => {
@@ -308,76 +239,6 @@ describe('Proposed addresses utilities', () => {
         settledType: '',
       })
     })
-
-    it('does not update when no type provided', async () => {
-      req.body = {}
-      await updateTypeFromRequest(req, formDataManager)
-
-      expect(formDataManager.update).not.toHaveBeenCalled()
-    })
-
-    it('does not update when body is undefined', async () => {
-      req.body = undefined
-      await updateTypeFromRequest(req, formDataManager)
-
-      expect(formDataManager.update).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('validateTypeFromSession', () => {
-    it('returns false and adds errors when arrangement type missing', () => {
-      const sessionData = proposedAddressFormFactory
-        .manualAddress()
-        .build({ settledType: 'SETTLED', arrangementSubType: undefined })
-      mockedValidateAndFlashErrors.mockReturnValue(false)
-
-      const result = validateTypeFromSession(req, sessionData)
-
-      expect(result).toBe(false)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
-        arrangementSubType: 'Select an arrangement type',
-      })
-    })
-
-    it('requires description when type is other', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({
-        arrangementSubType: 'OTHER',
-        arrangementSubTypeDescription: '',
-      })
-      mockedValidateAndFlashErrors.mockReturnValue(false)
-
-      const result = validateTypeFromSession(req, sessionData)
-
-      expect(result).toBe(false)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {
-        arrangementSubTypeDescription: 'Enter the other arrangement type',
-      })
-    })
-
-    it('requires settled type', () => {
-      const sessionData = proposedAddressFormFactory
-        .manualAddress()
-        .build({ arrangementSubType: 'FRIENDS_OR_FAMILY', settledType: undefined })
-      mockedValidateAndFlashErrors.mockReturnValue(false)
-
-      const result = validateTypeFromSession(req, sessionData)
-
-      expect(result).toBe(false)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, { settledType: 'Select a settled type' })
-    })
-
-    it('returns true for valid data', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({
-        arrangementSubType: 'FRIENDS_OR_FAMILY',
-        settledType: 'SETTLED',
-      })
-      mockedValidateAndFlashErrors.mockReturnValue(true)
-
-      const result = validateTypeFromSession(req, sessionData)
-
-      expect(result).toBe(true)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {})
-    })
   })
 
   describe('updateStatusFromRequest', () => {
@@ -388,42 +249,302 @@ describe('Proposed addresses utilities', () => {
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { verificationStatus: 'FAILED' })
     })
+  })
 
-    it('does not update when verificationStatus missing', async () => {
-      req.body = {}
+  describe('updateNextAccommodationFromRequest', () => {
+    it('updates form data when nextAccommodationStatus provided', async () => {
+      req.body = { nextAccommodationStatus: 'YES' }
 
-      await updateStatusFromRequest(req, formDataManager)
+      await updateNextAccommodationFromRequest(req, formDataManager)
 
-      expect(formDataManager.update).not.toHaveBeenCalled()
-    })
-
-    it('does not update when body is undefined', async () => {
-      req.body = undefined
-      await updateStatusFromRequest(req, formDataManager)
-
-      expect(formDataManager.update).not.toHaveBeenCalled()
+      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { nextAccommodationStatus: 'YES' })
     })
   })
 
-  describe('validateStatusFromSession', () => {
-    it('returns false and adds error when verificationStatus missing', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({ verificationStatus: undefined })
-      mockedValidateAndFlashErrors.mockReturnValue(false)
+  describe('arrangementSubTypeItems', () => {
+    it('marks the selected arrangement subtype as checked', () => {
+      const items = arrangementSubTypeItems('FRIENDS_OR_FAMILY')
 
-      const result = validateStatusFromSession(req, sessionData)
+      const selected = items.find(item => item.value === 'FRIENDS_OR_FAMILY')
+      const unselected = items.find(item => item.value !== 'FRIENDS_OR_FAMILY')
 
-      expect(result).toBe(false)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, { verificationStatus: 'Select a status' })
+      expect(selected?.checked).toBe(true)
+      expect(unselected?.checked).toBe(false)
     })
 
-    it('returns true when verificationStatus present', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({ verificationStatus: 'PASSED' })
-      mockedValidateAndFlashErrors.mockReturnValue(true)
+    it('marks none as checked when no selection provided', () => {
+      const items = arrangementSubTypeItems()
 
-      const result = validateStatusFromSession(req, sessionData)
+      expect(items.every(item => item.checked === false)).toBe(true)
+    })
+  })
 
-      expect(result).toBe(true)
-      expect(mockedValidateAndFlashErrors).toHaveBeenCalledWith(req, {})
+  describe('verificationStatusItems', () => {
+    it('marks PASSED as checked', () => {
+      const items = verificationStatusItems('PASSED')
+
+      expect(items).toEqual([
+        { value: 'NOT_CHECKED_YET', text: 'Not checked yet', checked: false },
+        { value: 'PASSED', text: 'Passed', checked: true },
+        { value: 'FAILED', text: 'Failed', checked: false },
+      ])
+    })
+
+    it('marks none as checked when no selection provided', () => {
+      const items = verificationStatusItems()
+
+      expect(items.every(item => item.checked === false)).toBe(true)
+    })
+  })
+
+  describe('nextAccommodationStatusItems', () => {
+    it('marks TO_BE_DECIDED as checked', () => {
+      const items = nextAccommodationStatusItems('TO_BE_DECIDED')
+
+      expect(items).toEqual([
+        { value: 'YES', text: 'Yes', checked: false },
+        { value: 'NO', text: 'No', checked: false },
+        { value: 'TO_BE_DECIDED', text: 'Still to be decided', checked: true },
+      ])
+    })
+
+    it('marks none as checked when no selection provided', () => {
+      const items = nextAccommodationStatusItems()
+
+      expect(items.every(item => item.checked === false)).toBe(true)
+    })
+  })
+
+  describe('validateUpTo*', () => {
+    const validAddress = {
+      buildingName: '1 Street',
+      subBuildingName: '3 Lane',
+      postTown: 'Town',
+      county: 'Some County',
+      postcode: 'AB1 2CD',
+      country: 'UK',
+    }
+
+    const validUpToAddress = (): ProposedAddressFormData =>
+      ({
+        address: validAddress,
+      }) as ProposedAddressFormData
+
+    const validUpToType = (): ProposedAddressFormData =>
+      ({
+        ...validUpToAddress(),
+        arrangementSubType: 'FRIENDS_OR_FAMILY',
+        arrangementSubTypeDescription: undefined,
+        settledType: 'SETTLED',
+      }) as ProposedAddressFormData
+
+    const validUpToStatusNotPassed = (): ProposedAddressFormData =>
+      ({
+        ...validUpToType(),
+        verificationStatus: 'NOT_CHECKED_YET',
+      }) as ProposedAddressFormData
+
+    const validUpToStatusPassed = (): ProposedAddressFormData =>
+      ({
+        ...validUpToType(),
+        verificationStatus: 'PASSED',
+      }) as ProposedAddressFormData
+
+    beforeEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    describe('validateUpToAddress', () => {
+      it.each([
+        {
+          name: 'redirects to details when address invalid',
+          data: { address: { ...validAddress, buildingName: '' } },
+          expected: uiPaths.proposedAddresses.details({ crn }),
+        },
+        {
+          name: 'returns null when address valid',
+          data: validUpToAddress(),
+          expected: null,
+        },
+      ])('$name', ({ data, expected }) => {
+        expect(validateUpToAddress(req, data as ProposedAddressFormData)).toBe(expected)
+      })
+
+      it('flashes errors when address invalid', () => {
+        const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
+
+        validateUpToAddress(req, {
+          address: { ...validAddress, buildingName: '', postTown: '', postcode: '', country: '' },
+        } as ProposedAddressFormData)
+
+        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
+          req,
+          expect.objectContaining({
+            addressLine1: 'Enter address line 1, typically the building and street',
+            addressTown: 'Enter town or city',
+            addressPostcode: 'Enter postcode',
+            addressCountry: 'Enter country',
+          }),
+        )
+      })
+    })
+
+    describe('validateUpToType', () => {
+      it.each([
+        {
+          name: 'redirects to details when address invalid',
+          data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
+          expected: uiPaths.proposedAddresses.details({ crn }),
+        },
+        {
+          name: 'redirects to type when type missing',
+          data: validUpToAddress(),
+          expected: uiPaths.proposedAddresses.type({ crn }),
+        },
+        {
+          name: 'redirects to type when settledType missing',
+          data: { ...validUpToAddress(), arrangementSubType: 'FRIENDS_OR_FAMILY' } as ProposedAddressFormData,
+          expected: uiPaths.proposedAddresses.type({ crn }),
+        },
+        {
+          name: 'redirects to type when OTHER selected without description',
+          data: {
+            ...validUpToAddress(),
+            arrangementSubType: 'OTHER',
+            settledType: 'SETTLED',
+            arrangementSubTypeDescription: undefined,
+          } as ProposedAddressFormData,
+          expected: uiPaths.proposedAddresses.type({ crn }),
+        },
+        {
+          name: 'returns null when address + type valid',
+          data: validUpToType(),
+          expected: null,
+        },
+      ])('$name', ({ data, expected }) => {
+        expect(validateUpToType(req, data)).toBe(expected)
+      })
+
+      it('flashes errors when arrangement type and settled type are missing', () => {
+        const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
+
+        validateUpToType(req, { ...validUpToAddress(), arrangementSubType: undefined, settledType: undefined })
+
+        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
+          req,
+          expect.objectContaining({
+            arrangementSubType: 'Select an arrangement type',
+            settledType: 'Select a settled type',
+          }),
+        )
+      })
+
+      it('flashes errors when OTHER arrangement type selected without description', () => {
+        const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
+
+        validateUpToType(req, {
+          ...validUpToAddress(),
+          arrangementSubType: 'OTHER',
+          settledType: 'SETTLED',
+          arrangementSubTypeDescription: undefined,
+        })
+
+        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
+          req,
+          expect.objectContaining({
+            arrangementSubTypeDescription: 'Enter the other arrangement type',
+          }),
+        )
+      })
+    })
+
+    describe('validateUpToStatus', () => {
+      it.each([
+        {
+          name: 'redirects to details when address invalid',
+          data: { address: { ...validAddress, country: '' } } as ProposedAddressFormData,
+          expected: uiPaths.proposedAddresses.details({ crn }),
+        },
+        {
+          name: 'redirects to type when type invalid',
+          data: validUpToAddress(),
+          expected: uiPaths.proposedAddresses.type({ crn }),
+        },
+        {
+          name: 'redirects to status when verification status missing',
+          data: validUpToType(),
+          expected: uiPaths.proposedAddresses.status({ crn }),
+        },
+        {
+          name: 'returns null when address + type + status valid',
+          data: validUpToStatusNotPassed(),
+          expected: null,
+        },
+      ])('$name', ({ data, expected }) => {
+        expect(validateUpToStatus(req, data)).toBe(expected)
+      })
+
+      it('flashes errors when verification status missing', () => {
+        const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
+        validateUpToStatus(req, validUpToType())
+
+        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
+          req,
+          expect.objectContaining({
+            verificationStatus: 'Select a status',
+          }),
+        )
+      })
+    })
+
+    describe('validateUpToNextAccommodation', () => {
+      it.each([
+        {
+          name: 'redirects to details when address invalid',
+          data: { address: { ...validAddress, buildingName: '' } } as ProposedAddressFormData,
+          expected: uiPaths.proposedAddresses.details({ crn }),
+        },
+        {
+          name: 'redirects to type when type invalid',
+          data: validUpToAddress(),
+          expected: uiPaths.proposedAddresses.type({ crn }),
+        },
+        {
+          name: 'redirects to status when status invalid',
+          data: validUpToType(),
+          expected: uiPaths.proposedAddresses.status({ crn }),
+        },
+        {
+          name: 'redirects to next accommodation when status PASSED but next accommodation missing',
+          data: validUpToStatusPassed(),
+          expected: uiPaths.proposedAddresses.nextAccommodation({ crn }),
+        },
+        {
+          name: 'returns null when status NOT_CHECKED_YET',
+          data: validUpToStatusNotPassed(),
+          expected: null,
+        },
+        {
+          name: 'returns null when status PASSED and next accommodation provided',
+          data: { ...validUpToStatusPassed(), nextAccommodationStatus: 'YES' } as ProposedAddressFormData,
+          expected: null,
+        },
+      ])('$name', ({ data, expected }) => {
+        expect(validateUpToNextAccommodation(req, data)).toBe(expected)
+      })
+
+      it('flashes errors when status is PASSED but next accommodation status missing', () => {
+        const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
+
+        validateUpToNextAccommodation(req, { ...validUpToStatusPassed(), nextAccommodationStatus: undefined })
+
+        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
+          req,
+          expect.objectContaining({
+            nextAccommodationStatus: 'Select if this is the next address',
+          }),
+        )
+      })
     })
   })
 })

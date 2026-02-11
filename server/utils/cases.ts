@@ -166,10 +166,7 @@ export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
 }
 
 export const getCaseData = async (req: Request, res: Response, casesService: CasesService) => {
-  if (!res.locals.caseData) {
-    const token = res.locals?.user?.token
-    const { crn } = req.params
-    res.locals.caseData = await casesService.getCase(token, crn)
-  }
-  return res.locals.caseData
+  const token = res.locals?.user?.token
+  const { crn } = req.params
+  return casesService.getCase(token, crn)
 }

@@ -7,11 +7,14 @@ import {
   updateAddressFromRequest,
   updateTypeFromRequest,
   updateStatusFromRequest,
-  validateAddressFromSession,
-  validateTypeFromSession,
-  validateStatusFromSession,
   updateNextAccommodationFromRequest,
-  validateNextAccommodationFromSession,
+  arrangementSubTypeItems,
+  verificationStatusItems,
+  nextAccommodationStatusItems,
+  validateUpToAddress,
+  validateUpToType,
+  validateUpToStatus,
+  validateUpToNextAccommodation,
 } from '../utils/proposedAddresses'
 import { fetchErrors } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -57,12 +60,9 @@ export default class ProposedAddressesController {
 
   saveDetails(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await updateAddressFromRequest(req, this.formData)
-
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-      if (!validateAddressFromSession(req, proposedAddressFormSessionData)) {
-        return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
-      }
+      const proposedAddressFormSessionData = await updateAddressFromRequest(req, this.formData)
+      const redirect = validateUpToAddress(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
 
       return res.redirect(uiPaths.proposedAddresses.type({ crn: req.params.crn }))
     }
@@ -70,12 +70,15 @@ export default class ProposedAddressesController {
 
   type(): RequestHandler {
     return async (req: Request, res: Response) => {
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const redirect = validateUpToAddress(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
+
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_TYPE, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
 
       const caseData = await getCaseData(req, res, this.casesService)
 
@@ -83,6 +86,7 @@ export default class ProposedAddressesController {
         crn: req.params.crn,
         proposedAddress: proposedAddressFormSessionData,
         name: caseData.name,
+        arrangementSubTypeItems: arrangementSubTypeItems(proposedAddressFormSessionData?.arrangementSubType),
         errors,
         errorSummary,
       })
@@ -91,12 +95,9 @@ export default class ProposedAddressesController {
 
   saveType(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await updateTypeFromRequest(req, this.formData)
-
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-      if (!validateTypeFromSession(req, proposedAddressFormSessionData)) {
-        return res.redirect(uiPaths.proposedAddresses.type({ crn: req.params.crn }))
-      }
+      const proposedAddressFormSessionData = await updateTypeFromRequest(req, this.formData)
+      const redirect = validateUpToType(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
 
       return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
     }
@@ -104,16 +105,20 @@ export default class ProposedAddressesController {
 
   status(): RequestHandler {
     return async (req: Request, res: Response) => {
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const redirect = validateUpToType(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
+
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_STATUS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
 
       return res.render('pages/proposed-address/status', {
         crn: req.params.crn,
         proposedAddress: proposedAddressFormSessionData,
+        verificationStatusItems: verificationStatusItems(proposedAddressFormSessionData?.verificationStatus),
         errors,
         errorSummary,
       })
@@ -122,12 +127,10 @@ export default class ProposedAddressesController {
 
   saveStatus(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await updateStatusFromRequest(req, this.formData)
+      const proposedAddressFormSessionData = await updateStatusFromRequest(req, this.formData)
+      const redirect = validateUpToStatus(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
 
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-      if (!validateStatusFromSession(req, proposedAddressFormSessionData)) {
-        return res.redirect(uiPaths.proposedAddresses.status({ crn: req.params.crn }))
-      }
       if (proposedAddressFormSessionData?.verificationStatus === 'PASSED') {
         return res.redirect(uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn }))
       }
@@ -137,17 +140,23 @@ export default class ProposedAddressesController {
 
   nextAccommodation(): RequestHandler {
     return async (req: Request, res: Response) => {
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const redirect = validateUpToStatus(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
+
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_NEXT_ACCOMMODATION, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       const caseData = await getCaseData(req, res, this.casesService)
 
       return res.render('pages/proposed-address/next-accommodation', {
         crn: req.params.crn,
         proposedAddress: proposedAddressFormSessionData,
+        nextAccommodationStatusItems: nextAccommodationStatusItems(
+          proposedAddressFormSessionData?.nextAccommodationStatus,
+        ),
         name: caseData.name,
         errors,
         errorSummary,
@@ -157,12 +166,9 @@ export default class ProposedAddressesController {
 
   saveNextAccommodation(): RequestHandler {
     return async (req: Request, res: Response) => {
-      await updateNextAccommodationFromRequest(req, this.formData)
-
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-      if (!validateNextAccommodationFromSession(req, proposedAddressFormSessionData)) {
-        return res.redirect(uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn }))
-      }
+      const proposedAddressFormSessionData = await updateNextAccommodationFromRequest(req, this.formData)
+      const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
 
       return res.redirect(uiPaths.proposedAddresses.checkYourAnswers({ crn: req.params.crn }))
     }
@@ -170,12 +176,15 @@ export default class ProposedAddressesController {
 
   checkYourAnswers(): RequestHandler {
     return async (req: Request, res: Response) => {
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
+
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_CHECK_YOUR_ANSWERS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
 
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       const caseData = await getCaseData(req, res, this.casesService)
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn, caseData.name)
@@ -196,6 +205,8 @@ export default class ProposedAddressesController {
     return async (req: Request, res: Response) => {
       const token = res.locals?.user?.token
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
+      if (redirect) return res.redirect(redirect)
 
       await this.proposedAddressesService.submit(token, req.params.crn, proposedAddressFormSessionData)
 

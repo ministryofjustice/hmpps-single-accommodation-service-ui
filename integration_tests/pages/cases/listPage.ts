@@ -26,4 +26,11 @@ export default class CasesListPage extends AbstractPage {
       await expect(row).toContainText(person.prisonNumber as string)
     }
   }
+
+  async applyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
+    await this.page.getByLabel('Search by name, CRN or prison number').fill(searchTerm)
+    await this.page.getByLabel('Assigned to').selectOption(assignedTo)
+    await this.page.getByLabel('RoSH').selectOption(riskLevel)
+    await this.page.getByRole('button', { name: 'Apply filters' }).click()
+  }
 }

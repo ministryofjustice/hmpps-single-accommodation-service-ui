@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import CasesListPage from '../../pages/cases/listPage'
@@ -21,18 +21,21 @@ test.describe('List of cases', () => {
     const casesListPage = await CasesListPage.verifyOnPage(page)
 
     // AND the filters should be set to default values
-    await expect(page.getByLabel('Search by name, CRN or prison number')).toHaveValue('')
-    await expect(page.getByLabel('Assigned to')).toHaveValue('you')
-    await expect(page.getByLabel('RoSH')).toHaveValue('')
+    await casesListPage.shouldHaveFormValues({
+      'Search by name, CRN or prison number': '',
+      'Assigned to': 'you',
+      RoSH: '',
+    })
 
     // AND all the cases should be shown
     await casesListPage.shouldShowCases('25 people assigned to you', cases)
 
     // WHEN I filter the results
-    await page.getByLabel('Search by name, CRN or prison number').fill(prisonNumber)
-    await page.getByLabel('Assigned to').selectOption('Anyone')
-    await page.getByLabel('RoSH').selectOption('Very high')
-    await page.getByRole('button', { name: 'Apply filters' }).click()
+    await casesListPage.applyFilters({
+      searchTerm: prisonNumber,
+      assignedTo: 'Anyone',
+      riskLevel: 'Very high',
+    })
 
     // THEN the relevant cases are shown
     await casesListPage.shouldShowCases(
@@ -41,8 +44,10 @@ test.describe('List of cases', () => {
     )
 
     // AND the filters are populated with the selected values
-    await expect(page.getByLabel('Search by name, CRN or prison number')).toHaveValue(prisonNumber)
-    await expect(page.getByLabel('Assigned to')).toHaveValue('anyone')
-    await expect(page.getByLabel('RoSH')).toHaveValue('VERY_HIGH')
+    await casesListPage.shouldHaveFormValues({
+      'Search by name, CRN or prison number': prisonNumber,
+      'Assigned to': 'anyone',
+      RoSH: 'VERY_HIGH',
+    })
   })
 })

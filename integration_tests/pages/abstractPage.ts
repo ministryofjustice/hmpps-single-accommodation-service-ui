@@ -126,4 +126,10 @@ export default class AbstractPage {
   async verifyRadioInputByName(name: string) {
     await expect(this.page.getByLabel(name, { exact: true })).toBeChecked()
   }
+
+  async shouldHaveFormValues(formValues: Record<string, string>) {
+    for await (const [label, value] of Object.entries(formValues)) {
+      await expect(this.page.getByLabel(label)).toHaveValue(value)
+    }
+  }
 }

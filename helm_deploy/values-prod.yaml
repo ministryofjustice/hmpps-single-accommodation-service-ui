@@ -3,11 +3,11 @@
 
 generic-service:
   ingress:
-    host: single-accommodation-service-ui.hmpps.service.justice.gov.uk
+    host: single-accommodation-service.hmpps.service.justice.gov.uk
     tlsSecretName: hmpps-single-accommodation-service-prod-cert
 
   env:
-    INGRESS_URL: "https://single-accommodation-service-ui.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://single-accommodation-service.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     SAS_API_URL: 'https://single-accommodation-service-api.hmpps.service.justice.gov.uk'

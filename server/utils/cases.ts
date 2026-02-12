@@ -1,11 +1,9 @@
-import { Request, Response } from 'express'
 import { CaseDto as Case, AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
 import { SummaryListRow, TableRow } from '@govuk/ui'
 import { htmlContent } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
 import { addressLines, formatDate } from './format'
-import CasesService from '../services/casesService'
 
 const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
   REMAND: 'remand',
@@ -163,10 +161,4 @@ export const referralHistoryToRows = (referrals: Referral[]): TableRow[] => {
     dateCell(referral.date),
     linksCell([{ text: 'View', href: '#' }]),
   ])
-}
-
-export const getCaseData = async (req: Request, res: Response, casesService: CasesService) => {
-  const token = res.locals?.user?.token
-  const { crn } = req.params
-  return casesService.getCase(token, crn)
 }

@@ -8,7 +8,6 @@ import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
-import * as casesUtils from '../utils/cases'
 import CasesService from '../services/casesService'
 
 describe('proposedAddressesController', () => {
@@ -40,6 +39,8 @@ describe('proposedAddressesController', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
+    casesService.getCase.mockResolvedValue({ name: 'James Smith' })
+
     request = mock<Request>({
       id: 'request-id',
       params: { crn: 'CRN123' },
@@ -53,7 +54,6 @@ describe('proposedAddressesController', () => {
 
     controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
     jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
-    jest.spyOn(casesUtils, 'getCaseData').mockResolvedValue({ name: 'James Smith' })
 
     jest.spyOn(proposedAddressesUtils, 'arrangementSubTypeItems').mockReturnValue([])
     jest.spyOn(proposedAddressesUtils, 'verificationStatusItems').mockReturnValue([])

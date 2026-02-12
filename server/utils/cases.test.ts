@@ -1,4 +1,5 @@
 import { AccommodationDetail, AccommodationReferralDto as Referral, AccommodationAddressDetails } from '@sas/api'
+import { GetCasesQuery } from '@sas/ui'
 import {
   accommodationCell,
   caseAssignedTo,
@@ -8,22 +9,41 @@ import {
   referralHistoryTable,
   referralHistoryToRows,
   accommodationCard,
+  mapGetCasesQuery,
 } from './cases'
 import { accommodationFactory, addressFactory, caseFactory, referralFactory } from '../testutils/factories'
 import { dateCell, linksCell, statusCell, textCell } from './tables'
 
 describe('cases utilities', () => {
   describe('casesTableCaption', () => {
-    it('returns the table caption for multiple cases', () => {
-      const cases = caseFactory.buildList(3)
+    it.each([
+      [1, 'with no filter', {}, '1 person'],
+      [0, 'with no filter', {}, '0 people'],
+      [32, 'with no filter', {}, '32 people'],
+      [4, 'with a search term', { searchTerm: 'Foo' }, "4 people matching 'Foo'"],
+      [1, 'with an assigned to you filter', { assignedTo: 'you' }, '1 person assigned to you (J. Doe)'],
+      [3, 'with an assigned to anyone filter', { assignedTo: 'anyone' }, '3 people assigned to anyone'],
+      [2, 'with a RoSH filter', { riskLevel: 'HIGH' }, '2 people filtered by high RoSH'],
+      [
+        3,
+        'with a search term and RoSH filter',
+        { searchTerm: 'Aaron', riskLevel: 'VERY_HIGH' },
+        "3 people matching 'Aaron', filtered by very high RoSH",
+      ],
+      [
+        2,
+        'with a search term, assigned to and risk filter',
+        { searchTerm: 'X234567', assignedTo: 'anyone', riskLevel: 'LOW' },
+        "2 people matching 'X234567', assigned to anyone filtered by low RoSH",
+      ],
+    ])('renders a table caption for %s results %s', (resultsCount, _, query: GetCasesQuery, expected) => {
+      const cases = caseFactory.buildList(resultsCount)
 
-      expect(casesTableCaption(cases)).toEqual('3 people assigned to you')
+      expect(casesTableCaption(cases, query, 'Jane Doe')).toEqual(expected)
     })
 
-    it('returns the table caption for a single case', () => {
-      const cases = caseFactory.buildList(1)
-
-      expect(casesTableCaption(cases)).toEqual('1 person assigned to you')
+    it('should not add the name if it cannot be shown', () => {
+      expect(casesTableCaption([], { assignedTo: 'you' }, '')).toEqual('0 people assigned to you')
     })
   })
 
@@ -166,6 +186,16 @@ describe('cases utilities', () => {
           linksCell([{ text: 'View', href: '#' }]),
         ],
       ])
+    })
+  })
+
+  describe('mapGetCasesQuery', () => {
+    it('maps a UI query for the assigned user to the correct API query', () => {
+      expect(mapGetCasesQuery({ assignedTo: 'you' }, '123')).toEqual({ assignedTo: '123' })
+    })
+
+    it('maps a UI query for anyone to the correct API query', () => {
+      expect(mapGetCasesQuery({ assignedTo: 'anyone' }, '123')).toEqual({ assignedTo: '' })
     })
   })
 })

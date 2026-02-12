@@ -1,3 +1,5 @@
+@use "govuk-frontend/dist/govuk" as *;
+
 .govuk-grid-row--reverse {
   @media #{govuk-from-breakpoint(desktop)} {
     & > [class^=govuk-grid-column-] {

@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import { CaseDto as Case, AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
 import { SummaryListRow, TableRow } from '@govuk/ui'
-import { htmlContent } from './utils'
+import { GetCasesQuery } from '@sas/ui'
+import { htmlContent, initialiseName } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
-import { addressLines, formatDate } from './format'
+import { addressLines, formatDate, formatRiskLevel } from './format'
 import CasesService from '../services/casesService'
 
 const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
@@ -22,8 +23,25 @@ export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType
   OTHER: 'Other',
 }
 
-export const casesTableCaption = (cases: Case[]): string =>
-  `${cases.length} ${cases.length === 1 ? 'person' : 'people'} assigned to you`
+export const casesTableCaption = (cases: Case[], query: GetCasesQuery = {}, userFullName?: string): string => {
+  const filters: string[] = []
+  if (query.riskLevel) filters.push(`${formatRiskLevel(query.riskLevel).toLowerCase()} RoSH`)
+
+  let caption = `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
+
+  if (query.searchTerm) {
+    caption += ` matching '${query.searchTerm}'`
+    if (query.assignedTo || filters.length > 0) caption += `,`
+  }
+
+  if (query.assignedTo) caption += ` assigned to ${query.assignedTo}`
+  const initialisedName = initialiseName(userFullName)
+  if (query.assignedTo === 'you' && initialisedName) caption += ` (${initialisedName})`
+
+  if (filters.length > 0) caption += ` filtered by ${filters.join(', ')}`
+
+  return caption
+}
 
 export const personCell = (c: Case): string => {
   return nunjucksInline().render('cases/partials/personCell.njk', { ...c })
@@ -169,4 +187,31 @@ export const getCaseData = async (req: Request, res: Response, casesService: Cas
   const token = res.locals?.user?.token
   const { crn } = req.params
   return casesService.getCase(token, crn)
+}
+
+export const mapGetCasesQuery = (query: GetCasesQuery, userId: string): GetCasesQuery => {
+  let { assignedTo, searchTerm, crns } = query
+
+  if (query.assignedTo === 'you') assignedTo = userId
+  if (query.assignedTo === 'anyone') assignedTo = ''
+
+  // FIXME -- Experimental Easter Egg: allows loading a list of CRNs directly from the address bar for demo purposes,
+  //  by visiting e.g. `/?crns=X371199,X960658`.
+  if (crns) {
+    crns = String(crns).split(',')
+  }
+  // FIXME -- Experimental Easter Egg: allows searching for one of the 'test' CRNs the API
+  //  is able to provide mock data for.
+  const findCrns = searchTerm?.match(/[A-Za-z]\d{6}/g)
+  if (findCrns?.length > 0) {
+    searchTerm = ''
+    crns = findCrns
+  }
+
+  return {
+    ...query,
+    assignedTo,
+    crns,
+    searchTerm,
+  }
 }

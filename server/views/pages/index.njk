@@ -1,5 +1,6 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% extends "partials/layout.njk" %}
@@ -8,43 +9,66 @@
 {% set mainClasses = "govuk-body" %}
 
 {% block content %}
-  {% if errorSummary and errorSummary.length %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: errorSummary
-    }) }}
-  {% endif %}
   <h1>Cases</h1>
-    <div class="govuk-template govuk-!-padding-8 govuk-!-padding-bottom-static-3 govuk-!-margin-bottom-8">
-        <form action="{{ paths.cases.search({}) }}" method="get">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-          {{ govukInput(
-              {
-                  label: {
-                      classes: 'govuk-label--m',
-                      text: 'Search by CRN' 
-                  },
-                      hint: {
-                      text: 'For example, XD7364CD'
-                  },
-                  name: 'crn',
-                  id: 'crn',
-                  value: params.crn,
-                  errorMessage: errors.crn
-              }
-          ) }}
 
-          <div class="govuk-button-group">
-              {{ govukButton({ text: "Search", attributes: { id: 'search-button' }, preventDoubleClick: true}) }}
+  <form method="get" class="sas-filters">
+    {# FIXME -- Experimental Easter Egg #}
+    <input type="hidden" name="crns" value="{{ query.crns }}">
 
-              <a class="govuk-link" href="/">Clear</a>
-          </div>
-      </form>
+    <div class="sas-filters__filter sas-filters__filter--grow">
+      {{
+        govukInput({
+          label: { text: 'Search by name, CRN or prison number' },
+          name: 'searchTerm',
+          value: query.searchTerm
+        })
+      }}
     </div>
+
+    <div class="sas-filters__filter">
+      {{
+        govukSelect({
+          label: {
+            text: 'Assigned to'
+          },
+          name: 'assignedTo',
+          value: query.assignedTo,
+          items: assignedToOptions
+        })
+      }}
+    </div>
+
+    <div class="sas-filters__filter">
+      {{
+        govukSelect({
+          label: {
+            text: 'RoSH'
+          },
+          name: 'riskLevel',
+          value: query.riskLevel,
+          items: riskLevelOptions
+        })
+      }}
+    </div>
+
+    <div class="sas-filters__actions">
+      {{ govukButton({ text: 'Apply filters' }) }}
+
+      <a class="govuk-link govuk-link--no-visited-state" href="/" role="button">Clear</a>
+    </div>
+  </form>
+
+  <h2 id="case-list-caption" class="govuk-heading-m">{{ tableCaption }}</h2>
+
+  {% if filterIsApplied === true %}
+    <p><a class="govuk-link govuk-link--no-visited-state" href="/" role="button">Clear search</a></p>
+  {% endif %}
+
   {{
     govukTable({
-      caption: tableCaption,
-      captionClasses: 'govuk-table__caption--m',
+      attributes: {
+        'aria-labelledby': 'case-list-caption'
+      },
       head: [
         { text: "Person" },
         { text: "Current accommodation" },

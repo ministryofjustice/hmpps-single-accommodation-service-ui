@@ -13,12 +13,12 @@ export default class CasesListPage extends AbstractPage {
     this.casesRows = page.getByRole('table', { name: 'List of cases' }).getByRole('row')
   }
 
-  async shouldShowCases(cases: Case[]) {
-    const people = cases.length === 1 ? 'person' : 'people'
-    await expect(this.page.getByRole('table').getByRole('caption')).toHaveText(
-      `${cases.length} ${people} assigned to you`,
-    )
+  async shouldShowTableCaption(caption: string, filterApplied = false) {
+    await expect(this.page.getByRole('heading', { name: caption })).toBeVisible()
+    await expect(this.page.getByRole('button', { name: 'Clear search' })).toBeVisible({ visible: filterApplied })
+  }
 
+  async shouldShowCases(cases: Case[]) {
     await this.shouldShowTableHeaders(['Person', 'Current accommodation'])
 
     for await (const person of cases) {
@@ -29,5 +29,18 @@ export default class CasesListPage extends AbstractPage {
       await expect(row).toContainText(person.crn as string)
       await expect(row).toContainText(person.prisonNumber as string)
     }
+  }
+
+  async applyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
+    await this.completeInputByLabel('Search by name, CRN or prison number', searchTerm)
+    await this.selectOptionByLabel('Assigned to', assignedTo)
+    await this.selectOptionByLabel('RoSH', riskLevel)
+    await this.clickButton('Apply filters')
+  }
+
+  async verifyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
+    await this.verifyTextInput('Search by name, CRN or prison number', searchTerm)
+    await this.verifySelectInput('Assigned to', assignedTo)
+    await this.verifySelectInput('RoSH', riskLevel)
   }
 }

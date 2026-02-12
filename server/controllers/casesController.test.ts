@@ -25,7 +25,9 @@ describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
 
   let request: Request
-  const response = mock<Response>({ locals: { user: { token: TEST_TOKEN, username: 'user1', userId: 'user-id-1' } } })
+  const response = mock<Response>({
+    locals: { user: { token: TEST_TOKEN, username: 'user1', userId: 'user-id-1', displayName: 'Jane Doe' } },
+  })
   const next = mock<NextFunction>()
 
   const auditService = mock<AuditService>()
@@ -45,13 +47,30 @@ describe('casesController', () => {
   )
 
   beforeEach(() => {
+    jest.clearAllMocks()
     request = mock<Request>({ id: 'request-id' })
   })
 
   describe('index', () => {
-    it('renders the case list page', async () => {
+    const baseContext = {
+      assignedToOptions: [
+        { value: 'you', text: 'You (J. Doe)' },
+        { value: 'anyone', text: 'Anyone' },
+      ],
+      riskLevelOptions: [
+        { value: '', text: 'All' },
+        { value: 'VERY_HIGH', text: 'Very high' },
+        { value: 'HIGH', text: 'High' },
+        { value: 'MEDIUM', text: 'Medium' },
+        { value: 'LOW', text: 'Low' },
+      ],
+    }
+
+    it('renders the case list page for the current user by default', async () => {
       const cases = caseFactory.buildList(3)
       casesService.getCases.mockResolvedValue(cases)
+
+      request.query = {}
 
       await casesController.index()(request, response, next)
 
@@ -59,13 +78,41 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        tableCaption: casesTableCaption(cases),
+        ...baseContext,
+        tableCaption: casesTableCaption(cases, { assignedTo: 'you' }, 'Jane Doe'),
         casesRows: casesToRows(cases),
-        params: request.query,
-        errors: {},
-        errorSummary: [],
+        filterIsApplied: false,
+        query: {
+          assignedTo: 'you',
+        },
+      })
+    })
+
+    it('renders a filtered case list page', async () => {
+      const cases = caseFactory.buildList(3, { riskLevel: 'HIGH' })
+      casesService.getCases.mockResolvedValue(cases)
+
+      request.query = {
+        searchTerm: 'some-crn',
+        assignedTo: 'anyone',
+        riskLevel: 'HIGH',
+      }
+
+      await casesController.index()(request, response, next)
+
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {
+        searchTerm: 'some-crn',
+        assignedTo: '',
+        riskLevel: 'HIGH',
+      })
+      expect(response.render).toHaveBeenCalledWith('pages/index', {
+        ...baseContext,
+        tableCaption: casesTableCaption(cases, request.query, 'Jane Doe'),
+        casesRows: casesToRows(cases),
+        filterIsApplied: true,
+        query: request.query,
       })
     })
   })

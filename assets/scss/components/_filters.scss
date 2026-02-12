@@ -1,0 +1,49 @@
+@use "govuk-frontend/dist/govuk" as *;
+
+.sas-filters {
+  display: flex;
+  gap: govuk-spacing(6);
+  flex-wrap: wrap;
+  justify-content: stretch;
+  align-items: flex-end;
+  margin-bottom: govuk-spacing(8);
+
+  @media #{govuk-until-breakpoint(tablet)} {
+    flex-direction: column;
+    align-items: stretch;
+    gap: govuk-spacing(2);
+  }
+}
+
+.sas-filters__filter {
+  & .govuk-form-group {
+    margin: 0;
+
+    & select {
+      width: 100%;
+    }
+  }
+}
+
+.sas-filters__filter--grow {
+  flex-grow: 1;
+}
+
+.sas-filters__actions {
+  display: flex;
+  align-items: center;
+  gap: govuk-spacing(6);
+  flex-wrap: nowrap;
+  /* Nudge up to align button shadow to input borders */
+  padding-bottom: 2px;
+
+  & button {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  @media #{govuk-until-breakpoint(tablet)} {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

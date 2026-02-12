@@ -44,3 +44,10 @@ export interface StatusCard {
 export type MultiPageFormData = {
   proposedAddress?: Record<string, ProposedAddressFormData>
 }
+
+export type GetCasesQuery = {
+  searchTerm?: string
+  riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+  assignedTo?: string
+  crns?: string[]
+}

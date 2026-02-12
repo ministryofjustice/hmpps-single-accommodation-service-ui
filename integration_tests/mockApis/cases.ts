@@ -1,15 +1,17 @@
 import type { SuperAgentRequest } from 'superagent'
 import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
-import { stubFor, stubApiError } from './wiremock'
+import { GetCasesQuery } from '@sas/ui'
+import { queryParameters, stubApiError, stubFor } from './wiremock'
 import { caseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
 export default {
-  stubGetCases: (cases?: Case[]): SuperAgentRequest =>
+  stubGetCases: (cases?: Case[], query?: GetCasesQuery): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.index({}),
+        urlPathPattern: apiPaths.cases.index.pattern,
+        queryParameters: queryParameters(query),
       },
       response: {
         status: 200,

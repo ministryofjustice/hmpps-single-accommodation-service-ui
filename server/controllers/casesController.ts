@@ -1,17 +1,30 @@
 import { Request, RequestHandler, Response } from 'express'
+import { GetCasesQuery } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, referralHistoryTable } from '../utils/cases'
+import {
+  accommodationCard,
+  casesTableCaption,
+  casesToRows,
+  caseAssignedTo,
+  referralHistoryTable,
+  mapGetCasesQuery,
+} from '../utils/cases'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
 import uiPaths from '../paths/ui'
-import { fetchErrors, addErrorToFlash } from '../utils/validation'
+import { addErrorToFlash } from '../utils/validation'
 import { statusCard } from '../utils/components'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
+import { initialiseName } from '../utils/utils'
+
+interface IndexRequest extends Request {
+  query: GetCasesQuery
+}
 
 export default class CasesController {
   constructor(
@@ -24,19 +37,33 @@ export default class CasesController {
   ) {}
 
   index(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.CASES_LIST, { who: res.locals.user.username, correlationId: req.id })
-      const token = res.locals?.user?.token
-      const { errors, errorSummary } = fetchErrors(req)
+    return async (req: IndexRequest, res: Response) => {
+      const { token, userId, username, displayName } = res.locals.user
+      await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
+      const { query } = req
 
-      const cases = await this.casesService.getCases(token)
+      const filterIsApplied = query.assignedTo !== undefined
+
+      if (!filterIsApplied) query.assignedTo = 'you'
+
+      const cases = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
 
       return res.render('pages/index', {
-        tableCaption: casesTableCaption(cases),
+        tableCaption: casesTableCaption(cases, query, displayName),
         casesRows: casesToRows(cases),
-        params: req.query,
-        errors,
-        errorSummary,
+        query,
+        filterIsApplied,
+        assignedToOptions: [
+          { value: 'you', text: `You (${initialiseName(displayName)})` },
+          { value: 'anyone', text: 'Anyone' },
+        ],
+        riskLevelOptions: [
+          { value: '', text: 'All' },
+          { value: 'VERY_HIGH', text: 'Very high' },
+          { value: 'HIGH', text: 'High' },
+          { value: 'MEDIUM', text: 'Medium' },
+          { value: 'LOW', text: 'Low' },
+        ],
       })
     }
   }

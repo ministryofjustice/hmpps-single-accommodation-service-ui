@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "lib": ["es5", "dom", "es2015.promise"],
-    "types": ["@playwright/test"],
+    "typeRoots": ["../server/@types", "../node_modules/@types"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": false,

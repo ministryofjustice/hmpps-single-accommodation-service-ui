@@ -1,14 +1,22 @@
-import { ProposedAddressDisplayStatus, StatusCard } from '@sas/ui'
+import { ProposedAddressDisplayStatus, StatusCard, ProposedAddressFormData } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
+import { Request } from 'express'
 import {
   formatAddress,
   formatDateAndDaysAgo,
   formatProposedAddressStatus,
   proposedAddressStatusColours,
+  addressLines,
+  formatProposedAddressArrangement,
+  formatProposedAddressSettledType,
+  formatProposedAddressNextAccommodation,
 } from './format'
 import { arrangementSubTypes, summaryListRow } from './cases'
+import { textContent, htmlContent } from './utils'
+import uiPaths from '../paths/ui'
+import MultiPageFormManager from './multiPageFormManager'
+import { validateAndFlashErrors } from './validation'
 
-// eslint-disable-next-line import/prefer-default-export
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
   const status = displayStatus(proposedAddress.verificationStatus, proposedAddress.nextAccommodationStatus)
 
@@ -69,3 +77,273 @@ const displayStatus = (
   if (status === 'PASSED' && nextAccommodationStatus === 'YES') return 'CONFIRMED'
   return status
 }
+
+export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string, name: string) => {
+  const addressParts = addressLines(sessionData.address || {}, 'full')
+
+  const rows = [
+    {
+      key: textContent('Address'),
+      value: htmlContent(addressParts.join('<br />')),
+      actions: {
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.details({ crn }) }],
+      },
+    },
+    {
+      key: textContent(`What will be ${name}'s housing arrangement at this address?`),
+      value: htmlContent(formatArrangementWithDescription(sessionData)),
+      actions: {
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
+      },
+    },
+    {
+      key: textContent('Will it be settled or transient?'),
+      value: textContent(formatProposedAddressSettledType(sessionData.settledType)),
+      actions: {
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
+      },
+    },
+    {
+      key: textContent('What is the status of the address checks?'),
+      value: htmlContent(formatStatusWithReason(sessionData)),
+      actions: {
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) }],
+      },
+    },
+  ]
+  if (sessionData.verificationStatus === 'PASSED') {
+    rows.push({
+      key: textContent(`Is this the next address that ${name} will be moving into?`),
+      value: htmlContent(formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus)),
+      actions: {
+        items: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
+      },
+    })
+  }
+  return rows
+}
+
+const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
+  const type = formatProposedAddressArrangement(data.arrangementSubType)
+  if (type === 'Other') {
+    return `<p class="govuk-!-margin-bottom-2">${type}</p>${data.arrangementSubTypeDescription || ''}`
+  }
+  return type
+}
+
+const formatStatusWithReason = (data: ProposedAddressFormData) => {
+  const status = formatProposedAddressStatus(data.verificationStatus)
+  if (data.verificationStatus === 'FAILED') {
+    return `<p class="govuk-!-margin-bottom-2">${status}</p>Not suitable`
+  }
+  return status
+}
+
+export const updateAddressFromRequest = async (
+  req: Request,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
+) => {
+  const { addressLine1, addressLine2, addressTown, addressCounty, addressPostcode, addressCountry } = req.body || {}
+
+  const addressParams = {
+    buildingName: addressLine1 || '',
+    subBuildingName: addressLine2 || undefined,
+    postTown: addressTown || '',
+    county: addressCounty || undefined,
+    postcode: addressPostcode || '',
+    country: addressCountry || '',
+  }
+  return formDataManager.update(req.params.crn, req.session, {
+    address: addressParams,
+  })
+}
+
+const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+  const address = sessionData?.address
+  const errors: Record<string, string> = {}
+
+  if (!address?.buildingName) {
+    errors.addressLine1 = 'Enter address line 1, typically the building and street'
+  } else if (address.buildingName.length > 200) {
+    errors.addressLine1 = 'Address line 1 must be 200 characters or less'
+  }
+
+  if (address?.subBuildingName && address?.subBuildingName.length > 200) {
+    errors.addressLine2 = 'Address line 2 must be 200 characters or less'
+  }
+
+  if (!address?.postTown) {
+    errors.addressTown = 'Enter town or city'
+  } else if (address.postTown.length > 100) {
+    errors.addressTown = 'Town or city must be 100 characters or less'
+  }
+
+  if (address?.county && address?.county.length > 100) {
+    errors.addressCounty = 'County must be 100 characters or less'
+  }
+
+  if (!address?.postcode) {
+    errors.addressPostcode = 'Enter postcode'
+  } else if (address.postcode.length > 20) {
+    errors.addressPostcode = 'Postal code or zip code must be 20 characters or less'
+  }
+
+  if (!address?.country) {
+    errors.addressCountry = 'Enter country'
+  } else if (address.country.length > 100) {
+    errors.addressCountry = 'Country must be 100 characters or less'
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
+export const updateTypeFromRequest = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
+  const { arrangementSubType, arrangementSubTypeDescription, settledType } = req.body || {}
+
+  return formDataManager.update(req.params.crn, req.session, {
+    arrangementSubType: arrangementSubType as ProposedAddressFormData['arrangementSubType'],
+    arrangementSubTypeDescription:
+      arrangementSubType === 'OTHER' ? arrangementSubTypeDescription || undefined : undefined,
+    settledType: settledType as ProposedAddressFormData['settledType'],
+  })
+}
+
+const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+  const errors: Record<string, string> = {}
+  if (!sessionData?.arrangementSubType) {
+    errors.arrangementSubType = 'Select an arrangement type'
+  } else if (sessionData.arrangementSubType === 'OTHER' && !sessionData.arrangementSubTypeDescription) {
+    errors.arrangementSubTypeDescription = 'Enter the other arrangement type'
+  }
+  if (!sessionData?.settledType) {
+    errors.settledType = 'Select a settled type'
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
+export const updateStatusFromRequest = async (
+  req: Request,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
+) => {
+  const { verificationStatus } = req.body || {}
+
+  return formDataManager.update(req.params.crn, req.session, {
+    verificationStatus,
+    nextAccommodationStatus: undefined,
+  })
+}
+
+const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+  const errors: Record<string, string> = {}
+
+  if (!sessionData?.verificationStatus) {
+    errors.verificationStatus = 'Select a status'
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
+export const updateNextAccommodationFromRequest = async (
+  req: Request,
+  formDataManager: MultiPageFormManager<'proposedAddress'>,
+) => {
+  const { nextAccommodationStatus } = req.body || {}
+
+  return formDataManager.update(req.params.crn, req.session, {
+    nextAccommodationStatus,
+  })
+}
+
+const validateNextAccommodationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+  const errors: Record<string, string> = {}
+
+  if (sessionData?.verificationStatus === 'PASSED' && !sessionData?.nextAccommodationStatus) {
+    errors.nextAccommodationStatus = 'Select if this is the next address'
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
+export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  if (!validateAddressFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.details({ crn: req.params.crn })
+  }
+  return null
+}
+
+export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  const addressRedirect = validateUpToAddress(req, sessionData)
+  if (addressRedirect) return addressRedirect
+
+  if (!validateTypeFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.type({ crn: req.params.crn })
+  }
+  return null
+}
+
+export const validateUpToStatus = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  const typeRedirect = validateUpToType(req, sessionData)
+  if (typeRedirect) return typeRedirect
+
+  if (!validateStatusFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.status({ crn: req.params.crn })
+  }
+  return null
+}
+
+export const validateUpToNextAccommodation = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+  const statusRedirect = validateUpToStatus(req, sessionData)
+  if (statusRedirect) return statusRedirect
+
+  if (!validateNextAccommodationFromSession(req, sessionData)) {
+    return uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn })
+  }
+
+  return null
+}
+
+export const arrangementSubTypeItems = (arrangementSubType?: AccommodationDetail['arrangementSubType']) =>
+  Object.entries(arrangementSubTypes).map(([value, text]) => ({
+    value,
+    text,
+    checked: arrangementSubType === value,
+  }))
+
+export const verificationStatusItems = (verificationStatus?: AccommodationDetail['verificationStatus']) => [
+  {
+    value: 'NOT_CHECKED_YET',
+    text: 'Not checked yet',
+    checked: verificationStatus === 'NOT_CHECKED_YET',
+  },
+  {
+    value: 'PASSED',
+    text: 'Passed',
+    checked: verificationStatus === 'PASSED',
+  },
+  {
+    value: 'FAILED',
+    text: 'Failed',
+    checked: verificationStatus === 'FAILED',
+  },
+]
+
+export const nextAccommodationStatusItems = (
+  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus'],
+) => [
+  {
+    value: 'YES',
+    text: 'Yes',
+    checked: nextAccommodationStatus === 'YES',
+  },
+  {
+    value: 'NO',
+    text: 'No',
+    checked: nextAccommodationStatus === 'NO',
+  },
+  {
+    value: 'TO_BE_DECIDED',
+    text: 'Still to be decided',
+    checked: nextAccommodationStatus === 'TO_BE_DECIDED',
+  },
+]

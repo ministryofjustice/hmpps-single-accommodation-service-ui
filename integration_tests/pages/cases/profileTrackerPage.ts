@@ -15,17 +15,12 @@ import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
 
 export default class ProfileTrackerPage extends AbstractPage {
-  readonly header: Locator
-
-  private constructor(page: Page, caseData: Case) {
+  constructor(
+    page: Page,
+    readonly caseData: Case,
+  ) {
     super(page)
     this.header = page.locator('h1', { hasText: caseData.name })
-  }
-
-  static async verifyOnPage(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
-    const profileTrackerPage = new ProfileTrackerPage(page, caseData)
-    await expect(profileTrackerPage.header).toBeVisible()
-    return profileTrackerPage
   }
 
   static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
@@ -133,7 +128,10 @@ export default class ProfileTrackerPage extends AbstractPage {
     })
 
     await expect(proposedAddressesSection).toBeVisible()
-    await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute('href', `#`)
+    await expect(proposedAddressesSection.getByRole('link', { name: 'Add an address' })).toHaveAttribute(
+      'href',
+      paths.proposedAddresses.start({ crn: this.caseData.crn }),
+    )
 
     if (!proposedAddresses.find(address => address.verificationStatus !== 'FAILED')) {
       await expect(proposedAddressesSection).toContainText('No proposed addresses have been added.')

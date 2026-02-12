@@ -38,7 +38,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "grey",
-    "text": "Checks failed",
+    "text": "Failed",
   },
 }
 `;
@@ -85,7 +85,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Checks passed",
+    "text": "Passed",
   },
 }
 `;
@@ -132,7 +132,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Checks passed",
+    "text": "Passed",
   },
 }
 `;
@@ -179,7 +179,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Checks passed",
+    "text": "Passed",
   },
 }
 `;
@@ -269,7 +269,11 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
   ],
   "status": {
     "colour": "red",
-    "text": "Not checked",
+    "text": "Not checked yet",
   },
 }
 `;
+
+exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p class="govuk-!-margin-bottom-2">Other</p>Hostel"`;
+
+exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p class="govuk-!-margin-bottom-2">Failed</p>Not suitable"`;

@@ -71,7 +71,7 @@
       <section class="govuk-!-margin-top-8">
         <header class="sas-section__header">
           <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Private addresses</h2>
-          <a href="#" class="govuk-link govuk-link--no-visited-state govuk-body">Add an address</a>
+          <a href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}" class="govuk-link govuk-link--no-visited-state govuk-body">Add an address</a>
         </header>
 
         {% if proposedAddresses | length %}

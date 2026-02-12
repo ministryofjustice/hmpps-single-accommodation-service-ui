@@ -21,4 +21,15 @@ const stubApiError = (urlPattern: string, method: 'GET' | 'POST' = 'GET', status
     },
   })
 
-export { stubFor, getMatchingRequests, resetStubs, stubApiError }
+const verifyPost = async (path: string): Promise<Record<string, unknown>> => {
+  const response: Response = await getMatchingRequests({
+    method: 'POST',
+    urlPath: path,
+  })
+
+  const { requests } = response.body
+  const mostRecentRequest = requests[requests.length - 1]
+  return JSON.parse(mostRecentRequest.body)
+}
+
+export { stubFor, getMatchingRequests, resetStubs, stubApiError, verifyPost }

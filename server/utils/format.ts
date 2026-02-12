@@ -4,6 +4,7 @@ import {
   AccommodationReferralDto as Referral,
   ServiceResult,
   AccommodationAddressDetails,
+  AccommodationDetail,
 } from '@sas/api'
 import { ProposedAddressDisplayStatus } from '@sas/ui'
 import { calculateAge } from './person'
@@ -135,13 +136,18 @@ export const dutyToReferStatusTag = (status?: string): string => {
   return renderStatusTag(formatDutyToReferStatus(status), dutyToReferStatusColours[status] || 'grey')
 }
 
-export const addressLines = (address: AccommodationAddressDetails = {}): string[] => {
+export const addressLines = (
+  address: AccommodationAddressDetails = {},
+  type: 'simple' | 'full' = 'simple',
+): string[] => {
   const { subBuildingName, buildingName, buildingNumber, thoroughfareName, postTown, postcode } = address
   return [
     `${subBuildingName || ''} ${buildingName || ''}`,
     `${buildingNumber || ''} ${thoroughfareName || ''}`,
     `${postTown || ''}`,
+    type === 'full' ? `${address.county || ''}` : '',
     `${postcode || ''}`,
+    type === 'full' ? `${address.country || ''}` : '',
   ]
     .map(part => part.trim())
     .filter(Boolean)
@@ -150,10 +156,20 @@ export const addressLines = (address: AccommodationAddressDetails = {}): string[
 export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string => {
   return (
     {
-      NOT_CHECKED_YET: 'Not checked',
-      FAILED: 'Checks failed',
-      PASSED: 'Checks passed',
+      NOT_CHECKED_YET: 'Not checked yet',
+      FAILED: 'Failed',
+      PASSED: 'Passed',
       CONFIRMED: 'Confirmed',
+    }[status] || 'Unknown'
+  )
+}
+
+export const formatProposedAddressNextAccommodation = (status: AccommodationDetail['nextAccommodationStatus']) => {
+  return (
+    {
+      YES: 'Yes',
+      NO: 'No',
+      TO_BE_DECIDED: 'Still to be decided',
     }[status] || 'Unknown'
   )
 }
@@ -171,4 +187,26 @@ export const formatAddress = (address: AccommodationAddressDetails): string => {
     .filter(Boolean)
     .map(part => part.trim())
     .join(', ')
+}
+
+export const formatProposedAddressSettledType = (type?: AccommodationDetail['settledType']): string => {
+  return (
+    {
+      SETTLED: 'Settled',
+      TRANSIENT: 'Transient',
+    }[type] || 'Unknown'
+  )
+}
+
+export const formatProposedAddressArrangement = (type?: AccommodationDetail['arrangementSubType']): string => {
+  return (
+    {
+      FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
+      SOCIAL_RENTED: 'Social rent (tenant)',
+      PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
+      PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
+      OWNED: 'Owned (named on deeds/mortgage)',
+      OTHER: 'Other',
+    }[type] || 'Unknown'
+  )
 }

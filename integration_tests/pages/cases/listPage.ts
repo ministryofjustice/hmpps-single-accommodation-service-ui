@@ -4,21 +4,13 @@ import AbstractPage from '../abstractPage'
 import { formatDate, formatRiskLevel } from '../../../server/utils/format'
 
 export default class CasesListPage extends AbstractPage {
-  readonly header: Locator
-
   readonly casesRows: Locator
 
-  private constructor(page: Page) {
+  constructor(page: Page) {
     super(page)
     this.header = page.locator('h1', { hasText: 'Cases' })
 
     this.casesRows = page.getByRole('table', { name: 'List of cases' }).getByRole('row')
-  }
-
-  static async verifyOnPage(page: Page): Promise<CasesListPage> {
-    const casesListPage = new CasesListPage(page)
-    await expect(casesListPage.header).toBeVisible()
-    return casesListPage
   }
 
   async shouldShowCases(cases: Case[]) {

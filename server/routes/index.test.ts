@@ -4,6 +4,7 @@ import { mock } from 'jest-mock-extended'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import logger from '../../logger'
 import CasesController from '../controllers/casesController'
+import ProposedAddressesController from '../controllers/proposedAddressesController'
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -13,9 +14,25 @@ const casesController = mock<CasesController>({
   show: mockHandler,
 })
 
+const proposedAddressesController = mock<ProposedAddressesController>({
+  start: mockHandler,
+  details: mockHandler,
+  saveDetails: mockHandler,
+  type: mockHandler,
+  saveType: mockHandler,
+  status: mockHandler,
+  saveStatus: mockHandler,
+  nextAccommodation: mockHandler,
+  saveNextAccommodation: mockHandler,
+  checkYourAnswers: mockHandler,
+  submit: mockHandler,
+  cancel: mockHandler,
+})
+
 jest.mock('../controllers', () => ({
   controllers: () => ({
     casesController,
+    proposedAddressesController,
   }),
 }))
 

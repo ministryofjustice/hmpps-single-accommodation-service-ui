@@ -1,7 +1,13 @@
 import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
 import { ErrorMessages, ErrorSummary } from '@sas/ui'
-import { addErrorToFlash, fetchErrors, generateErrorMessages, generateErrorSummary } from './validation'
+import {
+  addErrorToFlash,
+  fetchErrors,
+  generateErrorMessages,
+  generateErrorSummary,
+  validateAndFlashErrors,
+} from './validation'
 
 describe('fetchErrors', () => {
   const request = mock<Request>({})
@@ -112,5 +118,42 @@ describe('generateErrorMessages', () => {
       field1: { text: 'error 1' },
       field2: { text: 'error 2' },
     })
+  })
+})
+
+describe('validateAndFlashErrors', () => {
+  const request = mock<Request>({})
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('returns true if there are no errors', () => {
+    const result = validateAndFlashErrors(request, {})
+    expect(result).toBe(true)
+    expect(request.flash).not.toHaveBeenCalled()
+  })
+
+  it('returns false and flashes errors if there are errors', () => {
+    const errors = {
+      field1: 'error 1',
+      field2: 'error 2',
+    }
+    const result = validateAndFlashErrors(request, errors)
+    expect(result).toBe(false)
+    expect(request.flash).toHaveBeenCalledWith(
+      'errors',
+      JSON.stringify({
+        field1: { text: 'error 1' },
+        field2: { text: 'error 2' },
+      }),
+    )
+    expect(request.flash).toHaveBeenCalledWith(
+      'errorSummary',
+      JSON.stringify([
+        { text: 'error 1', href: '#field1' },
+        { text: 'error 2', href: '#field2' },
+      ]),
+    )
   })
 })

@@ -1,0 +1,21 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% extends "pages/proposed-address/layout.njk" %}
+
+{% set pageTitle = "Is this the next address they will be moving into? " + applicationName %}
+{% set backLinkHref = paths.proposedAddresses.status({ crn: crn }) %}
+{% set formAction = paths.proposedAddresses.nextAccommodation({ crn: crn }) %}
+
+{% block formContent %}
+{{ govukRadios({
+      name: "nextAccommodationStatus",
+      fieldset: {
+          legend: {
+              text: "Is this the next address that " + name + " will be moving into?",
+              classes: "govuk-fieldset__legend--l"
+          }
+      },
+      items: nextAccommodationStatusItems,
+      errorMessage: errors.nextAccommodationStatus
+  }) }}
+{% endblock %}

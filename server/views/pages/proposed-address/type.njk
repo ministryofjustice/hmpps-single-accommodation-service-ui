@@ -1,0 +1,74 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% extends "pages/proposed-address/layout.njk" %}
+
+{% set pageTitle = "What will be the person's housing arrangement at this address? " + applicationName %}
+{% set backLinkHref = paths.proposedAddresses.details({crn: crn}) %}
+{% set formAction = paths.proposedAddresses.type({crn: crn}) %}
+
+{% set conditionalHtml %}
+    {{ govukInput(
+        {
+            label: {
+                text: 'What is the other housing arrangement?'
+            },
+            name: 'arrangementSubTypeDescription',
+            id: 'arrangementSubTypeDescription',
+            value: proposedAddress.arrangementSubTypeDescription,
+            errorMessage: errors.arrangementSubTypeDescription
+        }
+    ) }}
+{% endset %}
+
+{% set itemsWithConditional = [] %}
+{% for item in arrangementSubTypeItems %}
+    {% if item.value == 'OTHER' %}
+        {% set itemsWithConditional = (itemsWithConditional.push({
+            value: item.value,
+            text: item.text,
+            checked: item.checked,
+            conditional: {
+                html: conditionalHtml
+            }
+        }), itemsWithConditional) %}
+    {% else %}
+        {% set itemsWithConditional = (itemsWithConditional.push(item), itemsWithConditional) %}
+    {% endif %}
+{% endfor %}
+
+{% block formContent %}
+  {{ govukRadios({
+      name: "arrangementSubType",
+      fieldset: {
+          legend: {
+              text: "What will be " + name + "'s housing arrangement at this address?",
+              classes: "govuk-fieldset__legend--l"
+          }
+      },
+      items: itemsWithConditional,
+      errorMessage: errors.arrangementSubType
+  }) }}
+{{ govukRadios({
+      name: "settledType",
+      fieldset: {
+          legend: {
+              text: "Will it be settled or transient?",
+              classes: "govuk-fieldset__legend--m"
+          }
+      },
+      items: [
+          {
+              value: "SETTLED",
+              text: "Settled",
+              checked: proposedAddress.settledType == "SETTLED"
+          },
+          {
+              value: "TRANSIENT",
+              text: "Transient",
+              checked: proposedAddress.settledType == "TRANSIENT"
+          }
+      ],
+      errorMessage: errors.settledType
+  }) }}
+{% endblock %}

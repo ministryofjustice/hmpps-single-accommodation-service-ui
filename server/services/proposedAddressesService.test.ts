@@ -1,5 +1,6 @@
+import { CreateAccommodationDetail } from '@sas/api'
 import ProposedAddressesClient from '../data/proposedAddressesClient'
-import { accommodationFactory, proposedAddressFactory } from '../testutils/factories'
+import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
 
 jest.mock('../data/proposedAddressesClient')
@@ -44,13 +45,28 @@ describe('ProposedAddressesService', () => {
   })
 
   describe('submit', () => {
-    it('should call submit on the api client', async () => {
-      const proposedAddressData = proposedAddressFactory.build()
+    it.each([
+      ['YES', 'YES'],
+      ['NO', 'NO'],
+      ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
+      [undefined, 'TO_BE_DECIDED'],
+    ] as const)(
+      'should call sumbit with nextAccommodationStatus as %s when input is %s',
+      async (formValue, expectedStatus) => {
+        const proposedAddressData = proposedAddressFormFactory.build({
+          nextAccommodationStatus: formValue,
+        })
 
-      const result = await proposedAddressesService.submit(token, crn, proposedAddressData)
+        await proposedAddressesService.submit(token, crn, proposedAddressData)
 
-      expect(proposedAddressesClient.submit).toHaveBeenCalledWith(crn, proposedAddressData)
-      expect(result).toEqual(undefined)
-    })
+        const expectedData: CreateAccommodationDetail = {
+          ...proposedAddressData,
+          arrangementType: 'PRIVATE',
+          nextAccommodationStatus: expectedStatus,
+        }
+
+        expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)
+      },
+    )
   })
 })

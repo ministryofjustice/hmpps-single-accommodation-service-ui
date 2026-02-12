@@ -1,29 +1,21 @@
-import { StatusTag, ProposedAddressDisplayStatus, StatusCard, ProposedAddressFormData } from '@sas/ui'
+import { ProposedAddressDisplayStatus, ProposedAddressFormData, StatusCard, StatusTag } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
 import { Request } from 'express'
-import {
-  formatProposedAddressStatus,
-  proposedAddressStatusColours,
-  addressLines,
-  formatProposedAddressArrangement,
-  formatProposedAddressSettledType,
-  formatProposedAddressNextAccommodation,
-} from './format'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
-import { textContent, htmlContent } from './utils'
+import { htmlContent, textContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { validateAndFlashErrors } from './validation'
-import { formatAddress } from './addresses'
+import { addressLines, formatAddress } from './addresses'
 
-const proposedAddressStatusTag = (status: AccommodationDetail['status']): StatusTag =>
+const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
-    NOT_CHECKED_YET: { text: 'Not checked', colour: 'red' },
-    CHECKS_FAILED: { text: 'Checks failed' },
-    CHECKS_PASSED: { text: 'Checks passed', colour: 'yellow' },
+    PASSED: { text: 'Passed', colour: 'yellow' },
+    NOT_CHECKED_YET: { text: 'Not checked yet', colour: 'red' },
+    FAILED: { text: 'Failed' },
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
-  })[status]
+  })[status] || { text: 'Unknown' }
 
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
   const status = displayStatus(proposedAddress.verificationStatus, proposedAddress.nextAccommodationStatus)
@@ -31,10 +23,7 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
   return {
     heading: formatAddress(proposedAddress.address),
     inactive: proposedAddress.verificationStatus === 'FAILED',
-    status: {
-      text: formatProposedAddressStatus(status),
-      colour: proposedAddressStatusColours[status],
-    },
+    status: proposedAddressStatusTag(status),
     details: [
       summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
       summaryListRow('Added by', ''),
@@ -43,18 +32,6 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
     links: linksForStatus(status),
   }
 }
-// eslint-disable-next-line import/prefer-default-export
-export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => ({
-  heading: formatAddress(proposedAddress.address),
-  inactive: proposedAddress.status === 'CHECKS_FAILED',
-  status: proposedAddressStatusTag(proposedAddress.status),
-  details: [
-    summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
-    summaryListRow('Added by', ''),
-    summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
-  ],
-  links: linksForStatus(proposedAddress.status),
-})
 
 const linksForStatus = (status: ProposedAddressDisplayStatus) => {
   switch (status) {
@@ -96,6 +73,48 @@ const displayStatus = (
 ): ProposedAddressDisplayStatus => {
   if (status === 'PASSED' && nextAccommodationStatus === 'YES') return 'CONFIRMED'
   return status
+}
+
+export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string => {
+  return (
+    {
+      NOT_CHECKED_YET: 'Not checked yet',
+      FAILED: 'Failed',
+      PASSED: 'Passed',
+      CONFIRMED: 'Confirmed',
+    }[status] || 'Unknown'
+  )
+}
+export const formatProposedAddressNextAccommodation = (status: AccommodationDetail['nextAccommodationStatus']) => {
+  return (
+    {
+      YES: 'Yes',
+      NO: 'No',
+      TO_BE_DECIDED: 'Still to be decided',
+    }[status] || 'Unknown'
+  )
+}
+
+export const formatProposedAddressSettledType = (type?: AccommodationDetail['settledType']): string => {
+  return (
+    {
+      SETTLED: 'Settled',
+      TRANSIENT: 'Transient',
+    }[type] || 'Unknown'
+  )
+}
+
+export const formatProposedAddressArrangement = (type?: AccommodationDetail['arrangementSubType']): string => {
+  return (
+    {
+      FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
+      SOCIAL_RENTED: 'Social rent (tenant)',
+      PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
+      PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
+      OWNED: 'Owned (named on deeds/mortgage)',
+      OTHER: 'Other',
+    }[type] || 'Unknown'
+  )
 }
 
 export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string, name: string) => {

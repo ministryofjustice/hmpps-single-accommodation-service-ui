@@ -3,7 +3,6 @@ import { AccommodationDetail, CaseDto as Case } from '@sas/api'
 import { SummaryListRow, TableRow } from '@govuk/ui'
 import { GetCasesQuery } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
-import { formatRiskLevel } from './format'
 import CasesService from '../services/casesService'
 import { formatDate } from './dates'
 import { addressLines } from './addresses'
@@ -22,6 +21,17 @@ export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType
   PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
   OWNED: 'Owned (named on deeds/mortgage)',
   OTHER: 'Other',
+}
+
+export const formatRiskLevel = (level?: Case['riskLevel']) => {
+  return (
+    {
+      LOW: 'Low',
+      MEDIUM: 'Medium',
+      HIGH: 'High',
+      VERY_HIGH: 'Very high',
+    }[level] || 'Unknown'
+  )
 }
 
 export const casesTableCaption = (cases: Case[], query: GetCasesQuery = {}, userFullName?: string): string => {

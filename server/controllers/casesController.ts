@@ -2,7 +2,14 @@ import { Request, RequestHandler, Response } from 'express'
 import { GetCasesQuery } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, referralHistoryTable } from '../utils/cases'
+import {
+  accommodationCard,
+  casesTableCaption,
+  casesToRows,
+  caseAssignedTo,
+  referralHistoryTable,
+  mapGetCasesQuery,
+} from '../utils/cases'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -37,7 +44,7 @@ export default class CasesController {
 
       if (query.assignedTo === undefined) query.assignedTo = 'you'
 
-      const cases = await this.casesService.getCases(token, this.mapGetCasesQuery(query, userId))
+      const cases = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
 
       return res.render('pages/index', {
         tableCaption: casesTableCaption(cases, query, displayName),
@@ -55,33 +62,6 @@ export default class CasesController {
           { value: 'LOW', text: 'Low' },
         ],
       })
-    }
-  }
-
-  private mapGetCasesQuery(query: GetCasesQuery, userId: string): GetCasesQuery {
-    let { assignedTo, searchTerm, crns } = query
-
-    if (query.assignedTo === 'you') assignedTo = userId
-    if (query.assignedTo === 'anyone') assignedTo = ''
-
-    // FIXME -- Experimental Easter Egg: allows loading a list of CRNs directly from the address bar for demo purposes,
-    //  by visiting e.g. `/?crns=X371199,X960658`.
-    if (crns) {
-      crns = String(crns).split(',')
-    }
-    // FIXME -- Experimental Easter Egg: allows searching for one of the 'test' CRNs the API
-    //  is able to provide mock data for.
-    const findCrns = searchTerm?.match(/[A-Za-z]\d{6}/g)
-    if (findCrns?.length > 0) {
-      searchTerm = ''
-      crns = findCrns
-    }
-
-    return {
-      ...query,
-      assignedTo,
-      crns,
-      searchTerm,
     }
   }
 

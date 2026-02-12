@@ -9,6 +9,7 @@ import {
   referralHistoryTable,
   referralHistoryToRows,
   accommodationCard,
+  mapGetCasesQuery,
 } from './cases'
 import { accommodationFactory, addressFactory, caseFactory, referralFactory } from '../testutils/factories'
 import { dateCell, linksCell, statusCell, textCell } from './tables'
@@ -185,6 +186,16 @@ describe('cases utilities', () => {
           linksCell([{ text: 'View', href: '#' }]),
         ],
       ])
+    })
+  })
+
+  describe('mapGetCasesQuery', () => {
+    it('maps a UI query for the assigned user to the correct API query', () => {
+      expect(mapGetCasesQuery({ assignedTo: 'you' }, '123')).toEqual({ assignedTo: '123' })
+    })
+
+    it('maps a UI query for anyone to the correct API query', () => {
+      expect(mapGetCasesQuery({ assignedTo: 'anyone' }, '123')).toEqual({ assignedTo: '' })
     })
   })
 })

@@ -25,7 +25,9 @@ describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
 
   let request: Request
-  const response = mock<Response>({ locals: { user: { token: TEST_TOKEN, username: 'user1', userId: 'user-id-1' } } })
+  const response = mock<Response>({
+    locals: { user: { token: TEST_TOKEN, username: 'user1', userId: 'user-id-1', displayName: 'Jane Doe' } },
+  })
   const next = mock<NextFunction>()
 
   const auditService = mock<AuditService>()
@@ -64,7 +66,7 @@ describe('casesController', () => {
       })
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        tableCaption: casesTableCaption(cases, { assignedTo: 'you' }),
+        tableCaption: casesTableCaption(cases, { assignedTo: 'you' }, 'Jane Doe'),
         casesRows: casesToRows(cases),
         query: {
           assignedTo: 'you',
@@ -90,7 +92,7 @@ describe('casesController', () => {
         riskLevel: 'HIGH',
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        tableCaption: casesTableCaption(cases, request.query),
+        tableCaption: casesTableCaption(cases, request.query, 'Jane Doe'),
         casesRows: casesToRows(cases),
         query: request.query,
       })

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { CaseDto as Case, AccommodationDetail, AccommodationReferralDto as Referral } from '@sas/api'
 import { SummaryListRow, TableRow } from '@govuk/ui'
 import { GetCasesQuery } from '@sas/ui'
-import { htmlContent } from './utils'
+import { htmlContent, initialiseName } from './utils'
 import { nunjucksInline } from './nunjucksSetup'
 import { linksCell, dateCell, statusCell, textCell } from './tables'
 import { addressLines, formatDate, formatRiskLevel } from './format'
@@ -23,7 +23,7 @@ export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType
   OTHER: 'Other',
 }
 
-export const casesTableCaption = (cases: Case[], query: GetCasesQuery = {}): string => {
+export const casesTableCaption = (cases: Case[], query: GetCasesQuery = {}, userFullName?: string): string => {
   const filters: string[] = []
   if (query.riskLevel) filters.push(`${formatRiskLevel(query.riskLevel).toLowerCase()} RoSH`)
 
@@ -35,6 +35,8 @@ export const casesTableCaption = (cases: Case[], query: GetCasesQuery = {}): str
   }
 
   if (query.assignedTo) caption += ` assigned to ${query.assignedTo}`
+  const initialisedName = initialiseName(userFullName)
+  if (query.assignedTo === 'you' && initialisedName) caption += ` (${initialisedName})`
 
   if (filters.length > 0) caption += ` filtered by ${filters.join(', ')}`
 

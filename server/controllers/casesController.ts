@@ -30,7 +30,7 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      const { token, userId, username } = res.locals.user
+      const { token, userId, username, displayName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
 
@@ -39,7 +39,7 @@ export default class CasesController {
       const cases = await this.casesService.getCases(token, this.mapGetCasesQuery(query, userId))
 
       return res.render('pages/index', {
-        tableCaption: casesTableCaption(cases, query),
+        tableCaption: casesTableCaption(cases, query, displayName),
         casesRows: casesToRows(cases),
         query,
       })

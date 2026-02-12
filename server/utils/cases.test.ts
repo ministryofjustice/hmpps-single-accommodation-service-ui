@@ -20,7 +20,7 @@ describe('cases utilities', () => {
       [0, 'with no filter', {}, '0 people'],
       [32, 'with no filter', {}, '32 people'],
       [4, 'with a search term', { searchTerm: 'Foo' }, "4 people matching 'Foo'"],
-      [1, 'with an assigned to you filter', { assignedTo: 'you' }, '1 person assigned to you'],
+      [1, 'with an assigned to you filter', { assignedTo: 'you' }, '1 person assigned to you (J. Doe)'],
       [3, 'with an assigned to anyone filter', { assignedTo: 'anyone' }, '3 people assigned to anyone'],
       [2, 'with a RoSH filter', { riskLevel: 'HIGH' }, '2 people filtered by high RoSH'],
       [
@@ -38,7 +38,11 @@ describe('cases utilities', () => {
     ])('renders a table caption for %s results %s', (resultsCount, _, query: GetCasesQuery, expected) => {
       const cases = caseFactory.buildList(resultsCount)
 
-      expect(casesTableCaption(cases, query)).toEqual(expected)
+      expect(casesTableCaption(cases, query, 'Jane Doe')).toEqual(expected)
+    })
+
+    it('should not add the name if it cannot be shown', () => {
+      expect(casesTableCaption([], { assignedTo: 'you' }, '')).toEqual('0 people assigned to you')
     })
   })
 

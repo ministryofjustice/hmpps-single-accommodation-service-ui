@@ -2,15 +2,15 @@ import { expect, Page } from '@playwright/test'
 import { ProposedAddressFormData } from '@sas/ui'
 import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
+import paths from '../../../server/paths/ui'
+import { verifyPost } from '../../mockApis/wiremock'
+import apiPaths from '../../../server/paths/api'
 import {
   formatProposedAddressArrangement,
   formatProposedAddressNextAccommodation,
   formatProposedAddressSettledType,
   formatProposedAddressStatus,
-} from '../../../server/utils/format'
-import paths from '../../../server/paths/ui'
-import { verifyPost } from '../../mockApis/wiremock'
-import apiPaths from '../../../server/paths/api'
+} from '../../../server/utils/proposedAddresses'
 
 export default class AddProposedAddressPage extends AbstractPage {
   constructor(page: Page) {

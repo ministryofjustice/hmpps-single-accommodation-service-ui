@@ -7,12 +7,15 @@ import {
   AccommodationDetail,
 } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { formatAddress, formatDate, formatRiskLevel, formatStatus, addressLines } from '../../../server/utils/format'
+import { formatDate } from '../../../server/utils/dates'
 import { eligibilityStatusCard } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { accommodationType } from '../../../server/utils/cases'
 import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
+import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
+import { referralStatusTag, referralStatusType } from '../../../server/utils/referrals'
+import { addressLines, formatAddress } from '../../../server/utils/addresses'
 
 export default class ProfileTrackerPage extends AbstractPage {
   constructor(
@@ -30,7 +33,7 @@ export default class ProfileTrackerPage extends AbstractPage {
 
   async shouldShowCaseDetails(caseData: Case) {
     const details = [
-      { label: 'RoSH', value: formatRiskLevel(caseData.riskLevel as Case['riskLevel']) },
+      { label: 'RoSH', value: riskLevelStatusTag(caseData.riskLevel).text },
       { label: 'Tier', value: caseData.tier },
       { label: 'CRN', value: caseData.crn },
       { label: 'Prison number', value: caseData.prisonNumber },
@@ -115,8 +118,8 @@ export default class ProfileTrackerPage extends AbstractPage {
       const i = referrals.indexOf(referral)
       const row = table.locator('tbody tr').nth(i)
 
-      await expect(row).toContainText(referral.type)
-      await expect(row).toContainText(formatStatus(referral.status))
+      await expect(row).toContainText(referralStatusType(referral.type))
+      await expect(row).toContainText(referralStatusTag(referral.status).text)
       await expect(row).toContainText(formatDate(referral.date))
       await expect(row).toContainText('View')
     }

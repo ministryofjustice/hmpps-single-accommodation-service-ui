@@ -1,4 +1,4 @@
-import { AccommodationDetail, AccommodationReferralDto as Referral, AccommodationAddressDetails } from '@sas/api'
+import { AccommodationDetail, AccommodationAddressDetails } from '@sas/api'
 import { GetCasesQuery } from '@sas/ui'
 import {
   accommodationCell,
@@ -6,13 +6,10 @@ import {
   casesTableCaption,
   casesToRows,
   personCell,
-  referralHistoryTable,
-  referralHistoryToRows,
   accommodationCard,
   mapGetCasesQuery,
 } from './cases'
-import { accommodationFactory, addressFactory, caseFactory, referralFactory } from '../testutils/factories'
-import { dateCell, linksCell, statusCell, textCell } from './tables'
+import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
 
 describe('cases utilities', () => {
   describe('casesTableCaption', () => {
@@ -148,44 +145,6 @@ describe('cases utilities', () => {
         assignedTo: { id: 456, name: 'Bob Johnson' },
       })
       expect(caseAssignedTo(person, '123')).toEqual('Bob Johnson')
-    })
-  })
-
-  describe('referralHistoryTable', () => {
-    it('returns referral history table for a given list of referrals', () => {
-      const referral1 = referralFactory.build({
-        id: '123456',
-        type: 'CAS1',
-        status: 'ACCEPTED',
-        date: '2023-01-15',
-      })
-      const referral2 = referralFactory.build({
-        id: '789012',
-        type: 'CAS2',
-        status: 'PENDING',
-        date: '2023-02-20',
-      })
-      const referrals = [referral1, referral2]
-      expect(referralHistoryTable(referrals)).toMatchSnapshot()
-    })
-
-    it('returns an empty table when there are no referrals', () => {
-      expect(referralHistoryTable([])).toMatchSnapshot()
-    })
-  })
-
-  describe('referralHistoryToRows', () => {
-    it('returns formatted rows for a given list of referrals', () => {
-      const referrals: Referral[] = referralFactory.buildList(1)
-
-      expect(referralHistoryToRows(referrals)).toEqual([
-        [
-          textCell(referrals[0].type),
-          statusCell(referrals[0].status),
-          dateCell(referrals[0].date),
-          linksCell([{ text: 'View', href: '#' }]),
-        ],
-      ])
     })
   })
 

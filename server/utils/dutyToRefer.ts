@@ -1,15 +1,20 @@
 import { DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
-import { StatusCard } from '@sas/ui'
-import { dutyToReferStatusColours, formatDateAndDaysAgo, formatDutyToReferStatus } from './format'
+import { StatusCard, StatusTag } from '@sas/ui'
+import { formatDateAndDaysAgo } from './dates'
+
+const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
+  ({
+    NOT_ELIGIBLE: { text: 'Not eligible' },
+    UPCOMING: { text: 'Upcoming', colour: 'yellow' },
+    NOT_STARTED: { text: 'Not started', colour: 'red' },
+    SUBMITTED: { text: 'Submitted', colour: 'green' },
+  })[status] || { text: 'Unknown' }
 
 export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => ({
   heading: 'Duty to Refer (DTR)',
   inactive: dutyToRefer.status === 'NOT_ELIGIBLE',
-  status: {
-    text: formatDutyToReferStatus(dutyToRefer.status),
-    colour: dutyToReferStatusColours[dutyToRefer.status] || 'grey',
-  },
+  status: dutyToReferStatusTag(dutyToRefer.status),
   details: detailsForStatus(dutyToRefer),
   links: linksForStatus(dutyToRefer.status),
 })

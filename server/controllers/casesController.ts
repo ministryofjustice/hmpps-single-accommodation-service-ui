@@ -13,6 +13,7 @@ import { addErrorToFlash } from '../utils/validation'
 import { statusCard } from '../utils/components'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
+import { initialiseName } from '../utils/utils'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -42,6 +43,17 @@ export default class CasesController {
         tableCaption: casesTableCaption(cases, query, displayName),
         casesRows: casesToRows(cases),
         query,
+        assignedToOptions: [
+          { value: 'you', text: `You (${initialiseName(displayName)})` },
+          { value: 'anyone', text: 'Anyone' },
+        ],
+        riskLevelOptions: [
+          { value: '', text: 'All' },
+          { value: 'VERY_HIGH', text: 'Very high' },
+          { value: 'HIGH', text: 'High' },
+          { value: 'MEDIUM', text: 'Medium' },
+          { value: 'LOW', text: 'Low' },
+        ],
       })
     }
   }

@@ -52,6 +52,20 @@ describe('casesController', () => {
   })
 
   describe('index', () => {
+    const baseContext = {
+      assignedToOptions: [
+        { value: 'you', text: 'You (J. Doe)' },
+        { value: 'anyone', text: 'Anyone' },
+      ],
+      riskLevelOptions: [
+        { value: '', text: 'All' },
+        { value: 'VERY_HIGH', text: 'Very high' },
+        { value: 'HIGH', text: 'High' },
+        { value: 'MEDIUM', text: 'Medium' },
+        { value: 'LOW', text: 'Low' },
+      ],
+    }
+
     it('renders the case list page for the current user by default', async () => {
       const cases = caseFactory.buildList(3)
       casesService.getCases.mockResolvedValue(cases)
@@ -66,6 +80,7 @@ describe('casesController', () => {
       })
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
+        ...baseContext,
         tableCaption: casesTableCaption(cases, { assignedTo: 'you' }, 'Jane Doe'),
         casesRows: casesToRows(cases),
         query: {
@@ -92,6 +107,7 @@ describe('casesController', () => {
         riskLevel: 'HIGH',
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
+        ...baseContext,
         tableCaption: casesTableCaption(cases, request.query, 'Jane Doe'),
         casesRows: casesToRows(cases),
         query: request.query,

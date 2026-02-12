@@ -33,10 +33,7 @@
           },
           name: 'assignedTo',
           value: query.assignedTo,
-          items: [
-            { value: 'you', text: 'You (' + user.displayName + ')' },
-            { value: 'anyone', text: 'Anyone' }
-          ]
+          items: assignedToOptions
         })
       }}
     </div>
@@ -49,13 +46,7 @@
           },
           name: 'riskLevel',
           value: query.riskLevel,
-          items: [
-            { value: '', text: 'All' },
-            { value: 'VERY_HIGH', text: 'Very high' },
-            { value: 'HIGH', text: 'High' },
-            { value: 'MEDIUM', text: 'Medium' },
-            { value: 'LOW', text: 'Low' }
-          ]
+          items: riskLevelOptions
         })
       }}
     </div>

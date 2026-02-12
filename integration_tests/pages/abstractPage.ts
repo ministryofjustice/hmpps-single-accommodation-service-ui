@@ -44,22 +44,19 @@ export default class AbstractPage {
   }
 
   async completeInputByLabel(label: string, value: string) {
-    const input = this.page.getByLabel(label)
-    await input.fill(value)
+    await this.page.getByRole('textbox', { name: label }).fill(value)
   }
 
   async selectRadioByLabel(label: string) {
-    const radio = this.page.getByLabel(label, { exact: true })
-    await radio.check()
+    await this.page.getByRole('radio', { name: label }).check()
+  }
+
+  async selectOptionByLabel(label: string, value: string) {
+    await this.page.getByRole('combobox', { name: label }).selectOption(value)
   }
 
   async clearInputByLabel(label: string) {
-    const input = this.page.getByLabel(label)
-    await input.fill('')
-  }
-
-  async shouldShowTableCaption(caption: string) {
-    await expect(this.page.getByRole('caption').filter({ hasText: caption })).toBeVisible()
+    await this.completeInputByLabel(label, '')
   }
 
   async shouldShowTableHeaders(headers: string[]) {
@@ -119,17 +116,15 @@ export default class AbstractPage {
     }
   }
 
-  async verifyTextInputByName(name: string, value: string) {
-    await expect(this.page.getByLabel(name)).toHaveValue(value)
+  async verifyTextInput(label: string, value: string) {
+    await expect(this.page.getByRole('textbox', { name: label })).toHaveValue(value)
   }
 
-  async verifyRadioInputByName(name: string) {
-    await expect(this.page.getByLabel(name, { exact: true })).toBeChecked()
+  async verifyRadioInput(label: string) {
+    await expect(this.page.getByRole('radio', { name: label })).toBeChecked()
   }
 
-  async shouldHaveFormValues(formValues: Record<string, string>) {
-    for await (const [label, value] of Object.entries(formValues)) {
-      await expect(this.page.getByLabel(label)).toHaveValue(value)
-    }
+  async verifySelectInput(label: string, value: string) {
+    await expect(this.page.getByRole('combobox', { name: label })).toHaveValue(value)
   }
 }

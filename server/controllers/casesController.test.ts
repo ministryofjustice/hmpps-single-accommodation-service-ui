@@ -83,6 +83,7 @@ describe('casesController', () => {
         ...baseContext,
         tableCaption: casesTableCaption(cases, { assignedTo: 'you' }, 'Jane Doe'),
         casesRows: casesToRows(cases),
+        filterIsApplied: false,
         query: {
           assignedTo: 'you',
         },
@@ -110,6 +111,7 @@ describe('casesController', () => {
         ...baseContext,
         tableCaption: casesTableCaption(cases, request.query, 'Jane Doe'),
         casesRows: casesToRows(cases),
+        filterIsApplied: true,
         query: request.query,
       })
     })

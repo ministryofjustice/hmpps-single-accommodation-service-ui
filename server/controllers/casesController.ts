@@ -42,7 +42,9 @@ export default class CasesController {
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
 
-      if (query.assignedTo === undefined) query.assignedTo = 'you'
+      const filterIsApplied = query.assignedTo !== undefined
+
+      if (!filterIsApplied) query.assignedTo = 'you'
 
       const cases = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
 
@@ -50,6 +52,7 @@ export default class CasesController {
         tableCaption: casesTableCaption(cases, query, displayName),
         casesRows: casesToRows(cases),
         query,
+        filterIsApplied,
         assignedToOptions: [
           { value: 'you', text: `You (${initialiseName(displayName)})` },
           { value: 'anyone', text: 'Anyone' },

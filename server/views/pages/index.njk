@@ -54,14 +54,21 @@
     <div class="sas-filters__actions">
       {{ govukButton({ text: 'Apply filters' }) }}
 
-      <a class="govuk-link govuk-link--no-visited-state" href="/">Clear</a>
+      <a class="govuk-link govuk-link--no-visited-state" href="/" role="button">Clear</a>
     </div>
   </form>
 
+  <h2 id="case-list-caption" class="govuk-heading-m">{{ tableCaption }}</h2>
+
+  {% if filterIsApplied === true %}
+    <p><a class="govuk-link govuk-link--no-visited-state" href="/" role="button">Clear search</a></p>
+  {% endif %}
+
   {{
     govukTable({
-      caption: tableCaption,
-      captionClasses: 'govuk-table__caption--m',
+      attributes: {
+        'aria-labelledby': 'case-list-caption'
+      },
       head: [
         { text: "Person" },
         { text: "Current accommodation" },

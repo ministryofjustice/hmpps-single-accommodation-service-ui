@@ -21,14 +21,15 @@ test.describe('List of cases', () => {
     const casesListPage = await CasesListPage.verifyOnPage(page)
 
     // AND the filters should be set to default values
-    await casesListPage.shouldHaveFormValues({
-      'Search by name, CRN or prison number': '',
-      'Assigned to': 'you',
-      RoSH: '',
+    await casesListPage.verifyFilters({
+      searchTerm: '',
+      assignedTo: 'you',
+      riskLevel: '',
     })
 
     // AND all the cases should be shown
-    await casesListPage.shouldShowCases('25 people assigned to you', cases)
+    await casesListPage.shouldShowTableCaption('25 people assigned to you')
+    await casesListPage.shouldShowCases(cases)
 
     // WHEN I filter the results
     await casesListPage.applyFilters({
@@ -38,16 +39,17 @@ test.describe('List of cases', () => {
     })
 
     // THEN the relevant cases are shown
-    await casesListPage.shouldShowCases(
+    await casesListPage.shouldShowTableCaption(
       `1 person matching '${prisonNumber}', assigned to anyone filtered by very high RoSH`,
-      [filteredCase],
+      true,
     )
+    await casesListPage.shouldShowCases([filteredCase])
 
     // AND the filters are populated with the selected values
-    await casesListPage.shouldHaveFormValues({
-      'Search by name, CRN or prison number': prisonNumber,
-      'Assigned to': 'anyone',
-      RoSH: 'VERY_HIGH',
+    await casesListPage.verifyFilters({
+      searchTerm: prisonNumber,
+      assignedTo: 'anyone',
+      riskLevel: 'VERY_HIGH',
     })
   })
 })

@@ -119,35 +119,32 @@ export default class AddProposedAddressPage extends AbstractPage {
 
   async shouldShowPopulatedAddressForm(addressData: ProposedAddressFormData) {
     const { address } = addressData
-    await this.verifyTextInputByName('Address line 1', address.buildingName)
-    await this.verifyTextInputByName('Address line 2', address.subBuildingName || '')
-    await this.verifyTextInputByName('Town or city', address.postTown)
-    await this.verifyTextInputByName('County', address.county || '')
-    await this.verifyTextInputByName('Postal code', address.postcode)
-    await this.verifyTextInputByName('Country', address.country)
+    await this.verifyTextInput('Address line 1', address.buildingName)
+    await this.verifyTextInput('Address line 2', address.subBuildingName || '')
+    await this.verifyTextInput('Town or city', address.postTown)
+    await this.verifyTextInput('County', address.county || '')
+    await this.verifyTextInput('Postal code', address.postcode)
+    await this.verifyTextInput('Country', address.country)
   }
 
   async shouldShowPopulatedTypeForm(addressData: ProposedAddressFormData) {
     const arrangementLabel = formatProposedAddressArrangement(addressData.arrangementSubType)
-    await this.verifyRadioInputByName(arrangementLabel)
+    await this.verifyRadioInput(arrangementLabel)
     if (addressData.arrangementSubType === 'OTHER' && addressData.arrangementSubTypeDescription) {
-      await this.verifyTextInputByName(
-        'What is the other housing arrangement?',
-        addressData.arrangementSubTypeDescription,
-      )
+      await this.verifyTextInput('What is the other housing arrangement?', addressData.arrangementSubTypeDescription)
     }
     const settledTypeLabel = formatProposedAddressSettledType(addressData.settledType)
-    await this.verifyRadioInputByName(settledTypeLabel)
+    await this.verifyRadioInput(settledTypeLabel)
   }
 
   async shouldShowPopulatedStatusForm(addressData: ProposedAddressFormData) {
     const statusLabel = formatProposedAddressStatus(addressData.verificationStatus)
-    await this.verifyRadioInputByName(statusLabel)
+    await this.verifyRadioInput(statusLabel)
   }
 
   async shouldShowPopulatedNextAccommodationForm(addressData: ProposedAddressFormData) {
     const nextAccommodationLabel = formatProposedAddressNextAccommodation(addressData.nextAccommodationStatus)
-    await this.verifyRadioInputByName(nextAccommodationLabel)
+    await this.verifyRadioInput(nextAccommodationLabel)
   }
 
   async checkApiCalled(crn: string, proposedAddressData: ProposedAddressFormData) {

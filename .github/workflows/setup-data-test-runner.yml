@@ -21,6 +21,9 @@ on:
         type: number
         default: 16
 
+permissions:
+  contents: read
+  
 jobs:
   test:
     runs-on: [ self-hosted, hmpps-github-actions-runner ]

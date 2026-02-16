@@ -11,6 +11,7 @@ import logger from '../../logger'
 import { formatDate } from './dates'
 import uiPaths from '../paths/ui'
 import { riskLevelStatusTag } from './riskLevel'
+import { injectConditionals } from './form'
 
 const NUNJUCKS_TEMPLATE_PATHS = [
   path.join(__dirname, '../../server/views'),
@@ -29,6 +30,7 @@ const addGlobals = (env: nunjucks.Environment) => {
     ...uiPaths,
   })
   env.addGlobal('riskLevel', riskLevelStatusTag)
+  env.addGlobal('injectConditionals', injectConditionals)
 }
 
 export default function nunjucksSetup(app: express.Express): void {

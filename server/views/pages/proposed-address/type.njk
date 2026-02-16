@@ -21,22 +21,6 @@
     ) }}
 {% endset %}
 
-{% set itemsWithConditional = [] %}
-{% for item in arrangementSubTypeItems %}
-    {% if item.value == 'OTHER' %}
-        {% set itemsWithConditional = (itemsWithConditional.push({
-            value: item.value,
-            text: item.text,
-            checked: item.checked,
-            conditional: {
-                html: conditionalHtml
-            }
-        }), itemsWithConditional) %}
-    {% else %}
-        {% set itemsWithConditional = (itemsWithConditional.push(item), itemsWithConditional) %}
-    {% endif %}
-{% endfor %}
-
 {% block formContent %}
   {{ govukRadios({
       name: "arrangementSubType",
@@ -46,7 +30,7 @@
               classes: "govuk-fieldset__legend--l"
           }
       },
-      items: itemsWithConditional,
+      items: injectConditionals(arrangementSubTypeItems, { OTHER: conditionalHtml }),
       errorMessage: errors.arrangementSubType
   }) }}
 {{ govukRadios({

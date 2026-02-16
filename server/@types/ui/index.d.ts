@@ -51,3 +51,24 @@ export type GetCasesQuery = {
   assignedTo?: string
   crns?: string[]
 }
+
+export type RadioItem =
+  | {
+      text: string
+      value: string
+      checked?: boolean
+      conditional?: {
+        html: string
+      }
+    }
+  | {
+      divider: string
+    }
+
+export type CheckboxItem =
+  | {
+      text: string
+      value: string
+      checked?: boolean
+    }
+  | CheckBoxDivider

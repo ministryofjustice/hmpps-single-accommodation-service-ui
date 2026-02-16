@@ -34,12 +34,12 @@ describe('referrals utilities', () => {
     })
   })
 
-  describe('referralHistoryTable', () => {
-    it('returns referral history table for a given list of referrals', () => {
+  describe('referralHistoryTable macro', () => {
+    it('renders the referral history table for a given list of referrals', () => {
       expect(referralHistoryTable(referrals)).toMatchSnapshot()
     })
 
-    it('returns an empty table when there are no referrals', () => {
+    it('renders a message and no table when there are no referrals', () => {
       expect(referralHistoryTable([])).toMatchSnapshot()
     })
   })

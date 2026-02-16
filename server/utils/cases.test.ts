@@ -44,8 +44,8 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('personCell', () => {
-    it('returns a formatted cell for a given person', () => {
+  describe('personCell macro', () => {
+    it('renders a formatted cell for a given person', () => {
       const person = caseFactory.build({
         name: 'Dave Foo',
         crn: 'C321654',
@@ -59,7 +59,7 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('accommodation renderers', () => {
+  describe('accommodationCell and accommodationCard macros', () => {
     beforeEach(() => {
       jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
     })
@@ -106,11 +106,11 @@ describe('cases utilities', () => {
         ['Undefined', undefined],
       ]
 
-      it.each(testCases)('returns a formatted cell for a %s accommodation', (_, accommodation) => {
+      it.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
         expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
       })
 
-      it.each(testCases)('returns a formatted card for a %s accommodation', (_, accommodation) => {
+      it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {
         expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
       })
     })

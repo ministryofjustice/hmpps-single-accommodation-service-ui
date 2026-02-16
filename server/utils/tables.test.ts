@@ -13,8 +13,8 @@ describe('tables utilities', () => {
     })
   })
 
-  describe('linksCell', () => {
-    it('returns a formatted links cell', () => {
+  describe('linksCell macro', () => {
+    it('renders a formatted links cell', () => {
       const links = [
         { text: 'View', href: '/view' },
         { text: 'Notes', href: '/notes' },
@@ -22,7 +22,7 @@ describe('tables utilities', () => {
       expect(linksCell(links)).toMatchSnapshot()
     })
 
-    it('returns nothing when there are no links', () => {
+    it('renders nothing when there are no links', () => {
       expect(linksCell([])).toMatchSnapshot()
     })
   })

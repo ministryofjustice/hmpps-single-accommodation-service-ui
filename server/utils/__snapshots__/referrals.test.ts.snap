@@ -109,7 +109,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
 ]
 `;
 
-exports[`referrals utilities referralHistoryTable returns an empty table when there are no referrals 1`] = `
+exports[`referrals utilities referralHistoryTable macro renders a message and no table when there are no referrals 1`] = `
 "<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
         <h2 class="govuk-summary-card__title">
@@ -124,7 +124,7 @@ exports[`referrals utilities referralHistoryTable returns an empty table when th
 </div>"
 `;
 
-exports[`referrals utilities referralHistoryTable returns referral history table for a given list of referrals 1`] = `
+exports[`referrals utilities referralHistoryTable macro renders the referral history table for a given list of referrals 1`] = `
 "<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
         <h2 class="govuk-summary-card__title">

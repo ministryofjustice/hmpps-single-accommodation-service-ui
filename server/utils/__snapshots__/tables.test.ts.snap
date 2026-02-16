@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tables utilities linksCell returns a formatted links cell 1`] = `
+exports[`tables utilities linksCell macro renders a formatted links cell 1`] = `
 "
     <div class="govuk-summary-list__actions govuk-!-padding-0">
       <span class="govuk-table-span govuk-body">
@@ -20,4 +20,4 @@ exports[`tables utilities linksCell returns a formatted links cell 1`] = `
   "
 `;
 
-exports[`tables utilities linksCell returns nothing when there are no links 1`] = `""`;
+exports[`tables utilities linksCell macro renders nothing when there are no links 1`] = `""`;

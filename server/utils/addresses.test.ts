@@ -73,8 +73,9 @@ describe('addresses utilities', () => {
           postTown: 'Manchester',
           postcode: 'M21 0BF',
         },
-        'Flat 4, Fake House, Grand Street, Manchester, M21 0BF',
+        'Flat 4 Fake House, Grand Street, Manchester, M21 0BF',
       ],
+      ['with only town and postcode', { postTown: 'London', postcode: 'FA1 2BA' }, 'London, FA1 2BA'],
     ])('returns an address %s in short format', (_, params: Partial<AccommodationAddressDetails>, expected) => {
       const address = addressFactory.minimal().build(params)
 

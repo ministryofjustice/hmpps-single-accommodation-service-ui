@@ -29,6 +29,4 @@ export const referralHistoryRows = (referrals: Referral[]): TableRow[] => {
 }
 
 export const referralHistoryTable = (referrals: Referral[]): string =>
-  renderMacro('referralHistoryTable', {
-    referralHistory: referralHistoryRows(referrals),
-  })
+  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals) })

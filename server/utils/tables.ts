@@ -8,4 +8,4 @@ export const htmlCell = (html: string): TableCell => ({ html })
 
 export const dateCell = (date: string): TableCell => ({ text: formatDate(date) })
 
-export const linksCell = (links: Array<{ text: string; href: string }>) => renderMacro('linksCell', links)
+export const linksCell = (links: Array<{ text: string; href: string }>) => renderMacro('linksCell', { links })

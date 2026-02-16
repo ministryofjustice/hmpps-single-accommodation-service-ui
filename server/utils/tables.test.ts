@@ -40,5 +40,9 @@ describe('tables utilities', () => {
       ]
       expect(linksCell(links)).toMatchSnapshot()
     })
+
+    it('returns nothing when there are no links', () => {
+      expect(linksCell([])).toMatchSnapshot()
+    })
   })
 })

@@ -19,3 +19,5 @@ exports[`tables utilities linksCell returns a formatted links cell 1`] = `
     </div>
   "
 `;
+
+exports[`tables utilities linksCell returns nothing when there are no links 1`] = `""`;

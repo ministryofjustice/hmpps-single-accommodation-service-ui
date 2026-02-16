@@ -1,9 +1,9 @@
-{%- macro linksCell(links) -%}
-  {% if links and links.length %}
+{%- macro linksCell(cellData) -%}
+  {% if cellData.links and cellData.links.length %}
     <div class="govuk-summary-list__actions govuk-!-padding-0">
       <span class="govuk-table-span govuk-body">
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-          {% for link in links %}
+          {% for link in cellData.links %}
             <li class="govuk-summary-list__actions-list-item">
               <a class="govuk-link govuk-link--no-visited-state" href="{{ link.href }}">{{ link.text }}</a>
             </li>

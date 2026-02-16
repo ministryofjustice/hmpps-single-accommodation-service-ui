@@ -19,7 +19,6 @@ import {
 import { fetchErrors } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
-import { getCaseData } from '../utils/cases'
 
 export default class ProposedAddressesController {
   formData: MultiPageFormManager<'proposedAddress'>
@@ -70,7 +69,9 @@ export default class ProposedAddressesController {
 
   type(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const token = res.locals?.user?.token
+      const { crn } = req.params
+      const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       const redirect = validateUpToAddress(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
@@ -80,10 +81,10 @@ export default class ProposedAddressesController {
       })
       const { errors, errorSummary } = fetchErrors(req)
 
-      const caseData = await getCaseData(req, res, this.casesService)
+      const caseData = await this.casesService.getCase(token, crn)
 
       return res.render('pages/proposed-address/type', {
-        crn: req.params.crn,
+        crn,
         proposedAddress: proposedAddressFormSessionData,
         name: caseData.name,
         arrangementSubTypeItems: arrangementSubTypeItems(proposedAddressFormSessionData?.arrangementSubType),
@@ -140,7 +141,9 @@ export default class ProposedAddressesController {
 
   nextAccommodation(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const token = res.locals?.user?.token
+      const { crn } = req.params
+      const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       const redirect = validateUpToStatus(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
@@ -149,10 +152,10 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
       const { errors, errorSummary } = fetchErrors(req)
-      const caseData = await getCaseData(req, res, this.casesService)
+      const caseData = await this.casesService.getCase(token, crn)
 
       return res.render('pages/proposed-address/next-accommodation', {
-        crn: req.params.crn,
+        crn,
         proposedAddress: proposedAddressFormSessionData,
         nextAccommodationStatusItems: nextAccommodationStatusItems(
           proposedAddressFormSessionData?.nextAccommodationStatus,
@@ -176,6 +179,8 @@ export default class ProposedAddressesController {
 
   checkYourAnswers(): RequestHandler {
     return async (req: Request, res: Response) => {
+      const token = res.locals?.user?.token
+      const { crn } = req.params
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
@@ -185,16 +190,16 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
 
-      const caseData = await getCaseData(req, res, this.casesService)
+      const caseData = await this.casesService.getCase(token, crn)
 
-      const tableRows = summaryListRows(proposedAddressFormSessionData, req.params.crn, caseData.name)
+      const tableRows = summaryListRows(proposedAddressFormSessionData, crn, caseData.name)
       const backLinkHref =
         proposedAddressFormSessionData?.verificationStatus === 'PASSED'
-          ? uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn })
-          : uiPaths.proposedAddresses.status({ crn: req.params.crn })
+          ? uiPaths.proposedAddresses.nextAccommodation({ crn })
+          : uiPaths.proposedAddresses.status({ crn })
 
       return res.render('pages/proposed-address/check-your-answers', {
-        crn: req.params.crn,
+        crn,
         tableRows,
         backLinkHref,
       })

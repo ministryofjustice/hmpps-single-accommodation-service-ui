@@ -305,41 +305,36 @@ const validateNextAccommodationFromSession = (req: Request, sessionData: Propose
 }
 
 export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFormData): string | null => {
-  if (!validateAddressFromSession(req, sessionData)) {
-    return uiPaths.proposedAddresses.details({ crn: req.params.crn })
-  }
-  return null
+  return !validateAddressFromSession(req, sessionData)
+    ? uiPaths.proposedAddresses.details({ crn: req.params.crn })
+    : undefined
 }
 
 export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const addressRedirect = validateUpToAddress(req, sessionData)
   if (addressRedirect) return addressRedirect
 
-  if (!validateTypeFromSession(req, sessionData)) {
-    return uiPaths.proposedAddresses.type({ crn: req.params.crn })
-  }
-  return null
+  return !validateTypeFromSession(req, sessionData)
+    ? uiPaths.proposedAddresses.type({ crn: req.params.crn })
+    : undefined
 }
 
 export const validateUpToStatus = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const typeRedirect = validateUpToType(req, sessionData)
   if (typeRedirect) return typeRedirect
 
-  if (!validateStatusFromSession(req, sessionData)) {
-    return uiPaths.proposedAddresses.status({ crn: req.params.crn })
-  }
-  return null
+  return !validateStatusFromSession(req, sessionData)
+    ? uiPaths.proposedAddresses.status({ crn: req.params.crn })
+    : undefined
 }
 
 export const validateUpToNextAccommodation = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const statusRedirect = validateUpToStatus(req, sessionData)
   if (statusRedirect) return statusRedirect
 
-  if (!validateNextAccommodationFromSession(req, sessionData)) {
-    return uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn })
-  }
-
-  return null
+  return !validateNextAccommodationFromSession(req, sessionData)
+    ? uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn })
+    : undefined
 }
 
 export const arrangementSubTypeItems = (arrangementSubType?: AccommodationDetail['arrangementSubType']) =>

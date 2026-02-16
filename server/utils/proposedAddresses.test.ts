@@ -362,9 +362,9 @@ describe('Proposed addresses utilities', () => {
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
-          name: 'returns null when address valid',
+          name: 'returns undefined when address valid',
           data: validUpToAddress(),
-          expected: null,
+          expected: undefined,
         },
       ])('$name', ({ data, expected }) => {
         expect(validateUpToAddress(req, data as ProposedAddressFormData)).toBe(expected)
@@ -417,9 +417,9 @@ describe('Proposed addresses utilities', () => {
           expected: uiPaths.proposedAddresses.type({ crn }),
         },
         {
-          name: 'returns null when address + type valid',
+          name: 'returns undefined when address + type valid',
           data: validUpToType(),
-          expected: null,
+          expected: undefined,
         },
       ])('$name', ({ data, expected }) => {
         expect(validateUpToType(req, data)).toBe(expected)
@@ -476,9 +476,9 @@ describe('Proposed addresses utilities', () => {
           expected: uiPaths.proposedAddresses.status({ crn }),
         },
         {
-          name: 'returns null when address + type + status valid',
+          name: 'returns undefined when address + type + status valid',
           data: validUpToStatusNotPassed(),
-          expected: null,
+          expected: undefined,
         },
       ])('$name', ({ data, expected }) => {
         expect(validateUpToStatus(req, data)).toBe(expected)
@@ -520,14 +520,14 @@ describe('Proposed addresses utilities', () => {
           expected: uiPaths.proposedAddresses.nextAccommodation({ crn }),
         },
         {
-          name: 'returns null when status NOT_CHECKED_YET',
+          name: 'returns undefined when status NOT_CHECKED_YET',
           data: validUpToStatusNotPassed(),
-          expected: null,
+          expected: undefined,
         },
         {
-          name: 'returns null when status PASSED and next accommodation provided',
+          name: 'returns undefined when status PASSED and next accommodation provided',
           data: { ...validUpToStatusPassed(), nextAccommodationStatus: 'YES' } as ProposedAddressFormData,
-          expected: null,
+          expected: undefined,
         },
       ])('$name', ({ data, expected }) => {
         expect(validateUpToNextAccommodation(req, data)).toBe(expected)

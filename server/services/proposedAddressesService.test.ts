@@ -51,7 +51,7 @@ describe('ProposedAddressesService', () => {
       ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
       [undefined, 'TO_BE_DECIDED'],
     ] as const)(
-      'should call sumbit with nextAccommodationStatus as %s when input is %s',
+      'should call submit when input is %s with nextAccommodationStatus as %s',
       async (formValue, expectedStatus) => {
         const proposedAddressData = proposedAddressFormFactory.build({
           nextAccommodationStatus: formValue,

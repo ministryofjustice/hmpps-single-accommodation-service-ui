@@ -18,8 +18,8 @@ export const renderMacro = <T>(macroName: Macro, context: T): string =>
     { context },
   )
 
-export const statusTag = (context: StatusTag) => renderMacro('statusTag', context)
+export const statusTag = (status: StatusTag) => renderMacro('statusTag', status)
 
-export const riskLevelTag = (context: CaseDto['riskLevel']) => renderMacro('riskLevelTag', context)
+export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('riskLevelTag', riskLevel)
 
-export const statusCard = (context: StatusCard) => renderMacro('statusCard', context)
+export const statusCard = (cardData: StatusCard) => renderMacro('statusCard', cardData)

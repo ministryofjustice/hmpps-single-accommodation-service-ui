@@ -102,3 +102,10 @@ exports[`Macros riskLevelTag renders a risk level tag for risk level VERY_HIGH 1
     <dd>Very high</dd>
   </div>"
 `;
+
+exports[`Macros riskLevelTag renders an unknown risk level tag 1`] = `
+"<div class="sas-risk-tag sas-risk-tag--">
+    <dt>RoSH</dt>
+    <dd>Unknown</dd>
+  </div>"
+`;

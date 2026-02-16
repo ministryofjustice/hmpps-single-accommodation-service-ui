@@ -8,4 +8,4 @@ export const riskLevelStatusTag = (riskLevel: Case['riskLevel']): StatusTag =>
     MEDIUM: { text: 'Medium', colour: 'medium' },
     HIGH: { text: 'High', colour: 'high' },
     VERY_HIGH: { text: 'Very high', colour: 'very-high' },
-  })[riskLevel]
+  })[riskLevel] || { text: 'Unknown' }

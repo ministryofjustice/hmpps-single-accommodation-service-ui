@@ -29,6 +29,10 @@ describe('Macros', () => {
         expect(riskLevelTag(level)).toMatchSnapshot()
       },
     )
+
+    it('renders an unknown risk level tag', () => {
+      expect(riskLevelTag(undefined)).toMatchSnapshot()
+    })
   })
 
   describe('Status Card', () => {

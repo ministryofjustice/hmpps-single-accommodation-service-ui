@@ -5,6 +5,7 @@
 import type { AccommodationAddressDetails } from './AccommodationAddressDetails';
 export type AccommodationDetail = {
     id: string;
+    crn: string;
     name?: string;
     arrangementType: 'PRISON' | 'CAS1' | 'CAS2' | 'CAS2V2' | 'CAS3' | 'PRIVATE' | 'NO_FIXED_ABODE';
     arrangementSubType?: 'FRIENDS_OR_FAMILY' | 'SOCIAL_RENTED' | 'PRIVATE_RENTED_WHOLE_PROPERTY' | 'PRIVATE_RENTED_ROOM' | 'OWNED' | 'OTHER';

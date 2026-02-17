@@ -16,7 +16,7 @@ import {
   validateUpToStatus,
   validateUpToNextAccommodation,
 } from '../utils/proposedAddresses'
-import { fetchErrors } from '../utils/validation'
+import { fetchErrors, addErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 
@@ -189,7 +189,7 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-
+      const { errors, errorSummary } = fetchErrors(req)
       const caseData = await this.casesService.getCase(token, crn)
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, crn, caseData.name)
@@ -202,6 +202,8 @@ export default class ProposedAddressesController {
         crn,
         tableRows,
         backLinkHref,
+        errors,
+        errorSummary,
       })
     }
   }
@@ -213,11 +215,16 @@ export default class ProposedAddressesController {
       const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
-      await this.proposedAddressesService.submit(token, req.params.crn, proposedAddressFormSessionData)
+      try {
+        await this.proposedAddressesService.submit(token, req.params.crn, proposedAddressFormSessionData)
 
-      this.formData.remove(req.params.crn, req.session)
-      req.flash('success', 'Private address added')
-      return res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
+        this.formData.remove(req.params.crn, req.session)
+        req.flash('success', 'Private address added')
+        return res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
+      } catch {
+        addErrorToFlash(req, 'checkYourAnswers', 'There was an error saving the address')
+        return res.redirect(uiPaths.proposedAddresses.checkYourAnswers({ crn: req.params.crn }))
+      }
     }
   }
 

@@ -1,5 +1,9 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
-{% from "components/riskLevelTag.njk" import riskLevelTag %}
+{% from "components/macros/riskLevelTag.njk" import riskLevelTag %}
+{% from "components/macros/statusCard.njk" import statusCard %}
+{% from "components/macros/accommodationCard.njk" import accommodationCard %}
+{% from "components/macros/referralHistoryTable.njk" import referralHistoryTable %}
+
 {% extends "partials/layout.njk" %}
 
 {% set pageTitle = applicationName + " - Profile" %}
@@ -52,19 +56,19 @@
   <div class="govuk-grid-row govuk-grid-row--reverse">
     <section class="govuk-grid-column-one-third-from-desktop">
       <h2 class="govuk-visually-hidden">Current situation</h2>
-      {{ nextAccommodationCard | safe }}
+      {{ accommodationCard(nextAccommodationCard) }}
 
-      {{ currentAccommodationCard | safe }}
+      {{ accommodationCard(currentAccommodationCard) }}
     </section>
 
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <section>
         <h2 class="govuk-visually-hidden">Accommodation referrals</h2>
         {% if dutyToReferCard %}
-          {{ dutyToReferCard | safe }}
+          {{ statusCard(dutyToReferCard) }}
         {% endif %}
         {% for card in eligibilityCards %}
-          {{ card | safe }}
+          {{ statusCard(card) }}
         {% endfor %}
       </section>
 
@@ -76,7 +80,7 @@
 
         {% if proposedAddresses | length %}
           {% for card in proposedAddresses %}
-            {{ card | safe }}
+            {{ statusCard(card) }}
           {% endfor %}
         {% else %}
           <p>No proposed addresses have been added.</p>
@@ -85,7 +89,7 @@
         {% if failedChecksAddresses | length %}
           <h3 class="govuk-heading-m govuk-!-margin-top-5">Addresses that failed checks</h3>
           {% for card in failedChecksAddresses %}
-            {{ card | safe }}
+            {{ statusCard(card) }}
           {% endfor %}
         {% endif %}
       </section>
@@ -93,5 +97,5 @@
   </div>
 
   <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
-  {{ referralHistory | safe }}
+  {{ referralHistoryTable({ rows: referralHistoryRows }) }}
 {% endblock %}

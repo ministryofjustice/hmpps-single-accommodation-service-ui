@@ -1,0 +1,315 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`referrals utilities referralHistoryRows returns formatted rows for a given list of referrals 1`] = `
+[
+  [
+    {
+      "text": "Approved premises",
+    },
+    {
+      "html": "<strong class="govuk-tag govuk-tag--green">Accepted</strong>",
+    },
+    {
+      "text": "15 January 2023",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "text": "CAS2 for HDC",
+    },
+    {
+      "html": "<strong class="govuk-tag govuk-tag--yellow">Pending</strong>",
+    },
+    {
+      "text": "20 February 2023",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "text": "CAS3",
+    },
+    {
+      "html": "<strong class="govuk-tag govuk-tag--red">Rejected</strong>",
+    },
+    {
+      "text": "25 March 2023",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "text": "CAS2 for Bail",
+    },
+    {
+      "html": "<strong class="govuk-tag govuk-tag--green">Accepted</strong>",
+    },
+    {
+      "text": "30 April 2023",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+]
+`;
+
+exports[`referrals utilities referralHistoryTable macro renders a message and no table when there are no referrals 1`] = `
+"<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+            Referral history
+        </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        
+            <p class="govuk-body">No previous referrals</p>
+        
+    </div>
+</div>"
+`;
+
+exports[`referrals utilities referralHistoryTable macro renders the referral history table for a given list of referrals 1`] = `
+"<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+            Referral history
+        </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        
+            <div class="govuk-summary-list">
+                <table class="govuk-table">
+
+
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+    
+      <th scope="col" class="govuk-table__header">Type</th>
+    
+      <th scope="col" class="govuk-table__header">Status</th>
+    
+      <th scope="col" class="govuk-table__header">Date</th>
+    
+      <th scope="col" class="govuk-table__header"></th>
+    
+    </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <th scope="row" class="govuk-table__header">Approved premises</th>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--green">Accepted</strong></td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">15 January 2023</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  </td>
+      
+    
+    </tr>
+  
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <th scope="row" class="govuk-table__header">CAS2 for HDC</th>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--yellow">Pending</strong></td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">20 February 2023</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  </td>
+      
+    
+    </tr>
+  
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <th scope="row" class="govuk-table__header">CAS3</th>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--red">Rejected</strong></td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">25 March 2023</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  </td>
+      
+    
+    </tr>
+  
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <th scope="row" class="govuk-table__header">CAS2 for Bail</th>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--green">Accepted</strong></td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">30 April 2023</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  </td>
+      
+    
+    </tr>
+  
+
+  </tbody>
+</table>
+
+            </div>
+        
+    </div>
+</div>"
+`;

@@ -1,6 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
+{%- macro referralHistoryTable(context) -%}
 <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
         <h2 class="govuk-summary-card__title">
@@ -8,25 +9,17 @@
         </h2>
     </div>
     <div class="govuk-summary-card__content">
-        {% if (referralHistory | length > 0) %}
+        {% if (context.rows | length > 0) %}
             <div class="govuk-summary-list">
                 {{ govukTable({
                     firstCellIsHeader: true,
                     head: [
-                        {
-                        text: "Type"
-                        },
-                        {
-                        text: "Status"
-                        },
-                        {
-                        text: "Date"
-                        },
-                        {
-                        text: ""
-                        }
+                        { text: "Type" },
+                        { text: "Status" },
+                        { text: "Date" },
+                        { text: "" }
                     ],
-                    rows: referralHistory
+                    rows: context.rows
                 }) }}
             </div>
         {% else %}
@@ -34,3 +27,4 @@
         {% endif %}
     </div>
 </div>
+{%- endmacro -%}

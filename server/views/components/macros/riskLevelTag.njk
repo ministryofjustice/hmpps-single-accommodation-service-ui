@@ -1,0 +1,8 @@
+{%- macro riskLevelTag(level) -%}
+  {%- set riskLevelTag = riskLevel(level) -%}
+
+  <div class="sas-risk-tag sas-risk-tag--{{ riskLevelTag.colour }}">
+    <dt>RoSH</dt>
+    <dd>{{ riskLevelTag.text }}</dd>
+  </div>
+{%- endmacro -%}

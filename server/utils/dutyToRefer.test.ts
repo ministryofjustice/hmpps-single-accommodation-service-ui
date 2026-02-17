@@ -1,6 +1,6 @@
 import { detailsForStatus, dutyToReferStatusCard, linksForStatus } from './dutyToRefer'
 import { dutyToReferFactory } from '../testutils/factories'
-import { formatDateAndDaysAgo } from './format'
+import { formatDateAndDaysAgo } from './dates'
 
 describe('duty to refer utils', () => {
   describe('dutyToReferStatusCard', () => {

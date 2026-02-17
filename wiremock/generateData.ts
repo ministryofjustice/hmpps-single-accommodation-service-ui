@@ -87,7 +87,9 @@ if (generate.proposedAddresses) {
   const proposedAddresses = cases.reduce(
     (responses, c) => ({
       ...responses,
-      [c.crn]: [...Array(faker.number.int({ min: 0, max: 3 }))].map(() => accommodationFactory.proposed().build()),
+      [c.crn]: [...Array(faker.number.int({ min: 0, max: 3 }))].map(() =>
+        accommodationFactory.proposed().build({ crn: c.crn }),
+      ),
     }),
     {},
   )

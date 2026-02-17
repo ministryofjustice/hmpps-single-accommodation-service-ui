@@ -4,6 +4,7 @@
   "T274481": [
     {
       "id": "43ac5836-06d0-48ae-a994-c351a71b6102",
+      "crn": "T274481",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OWNED",
       "name": "Family",
@@ -27,6 +28,7 @@
   "V938951": [
     {
       "id": "99ba4d20-c26b-4125-b160-779014dc05fc",
+      "crn": "V938951",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OWNED",
       "name": "Relatives",
@@ -49,6 +51,7 @@
     },
     {
       "id": "a625ed02-c307-4654-8dc7-1a5c26380431",
+      "crn": "V938951",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "PRIVATE_RENTED_WHOLE_PROPERTY",
       "name": "Family",
@@ -71,6 +74,7 @@
     },
     {
       "id": "dd4da16d-34d6-4224-9ea4-4fceef8bcbee",
+      "crn": "V938951",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OTHER",
       "arrangementSubTypeDescription": "Solid shed",
@@ -95,6 +99,7 @@
   "T229440": [
     {
       "id": "3dba8b25-f3de-43cd-9e59-dc6f30894e66",
+      "crn": "T229440",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "PRIVATE_RENTED_ROOM",
       "name": "Friends",
@@ -116,6 +121,7 @@
     },
     {
       "id": "5401142e-ce2a-4ba3-bd54-ac792ce212e2",
+      "crn": "T229440",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "SOCIAL_RENTED",
       "name": "Family",
@@ -138,6 +144,7 @@
     },
     {
       "id": "34ea9d07-2100-4d8c-8e55-40fd1f9e04a7",
+      "crn": "T229440",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "FRIENDS_OR_FAMILY",
       "name": "Family",
@@ -162,6 +169,7 @@
   "H271226": [
     {
       "id": "f7829e90-8bed-4e0c-9a4b-2f76dbe02fff",
+      "crn": "H271226",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "FRIENDS_OR_FAMILY",
       "name": "Family",
@@ -184,6 +192,7 @@
     },
     {
       "id": "e34b9b98-bcaa-4b40-b3b4-7494cb272b42",
+      "crn": "H271226",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "FRIENDS_OR_FAMILY",
       "name": "Family",
@@ -208,6 +217,7 @@
   "U934069": [
     {
       "id": "f9bccc6a-18c3-4379-a3b0-6982104e15c1",
+      "crn": "U934069",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "FRIENDS_OR_FAMILY",
       "name": "Friends",
@@ -232,6 +242,7 @@
   "I322559": [
     {
       "id": "dbc57151-d91b-4b7a-859b-d71f37dfc25e",
+      "crn": "I322559",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "PRIVATE_RENTED_ROOM",
       "name": "Family",
@@ -253,6 +264,7 @@
     },
     {
       "id": "07bdb59a-9ba9-4c0e-b03b-0efe1ee1f999",
+      "crn": "I322559",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OTHER",
       "arrangementSubTypeDescription": "Canal boat",
@@ -275,6 +287,7 @@
     },
     {
       "id": "f458541b-fb63-414c-8da8-03d2c4677551",
+      "crn": "I322559",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "PRIVATE_RENTED_ROOM",
       "name": "Relatives",
@@ -300,6 +313,7 @@
   "F608163": [
     {
       "id": "60815747-4c78-48df-b64a-9038e3ad9c1a",
+      "crn": "F608163",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "PRIVATE_RENTED_WHOLE_PROPERTY",
       "name": "Friends",

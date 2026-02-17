@@ -2,6 +2,7 @@ import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import { AccommodationDetail } from '@sas/api'
 import addressFactory from './accommodationAddressDetails'
+import crn from '../crn'
 
 export const arrangementTypes: Readonly<AccommodationDetail['arrangementType'][]> = [
   'CAS1',
@@ -115,6 +116,7 @@ export default AccommodationFactory.define((): AccommodationDetail => {
 
   return {
     id: faker.string.uuid(),
+    crn: crn(),
     arrangementType,
     arrangementSubType,
     arrangementSubTypeDescription,

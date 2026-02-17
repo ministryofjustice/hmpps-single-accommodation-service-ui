@@ -211,6 +211,7 @@ export default class ProposedAddressesController {
       await this.proposedAddressesService.submit(token, req.params.crn, proposedAddressFormSessionData)
 
       this.formData.remove(req.params.crn, req.session)
+      req.flash('success', 'Private address added')
       return res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
     }
   }

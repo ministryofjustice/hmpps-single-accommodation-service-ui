@@ -117,7 +117,7 @@ export default class AbstractPage {
   }
 
   async shouldShowBanner(text: string) {
-    return expect(this.page.locator('.govuk-notification-banner__content')).toContainText(text)
+    return expect(this.page.getByRole('alert')).toContainText(text)
   }
 
   async verifyTextInput(label: string, value: string) {

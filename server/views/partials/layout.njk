@@ -27,6 +27,10 @@
 
 {% block bodyStart %}{% endblock %}
 
+{% block beforeContent %}
+  {% include "components/_messages.njk" %}
+{% endblock %}
+
 {% block footer %}
   {{ feComponents.footer | safe }}
 {% endblock %}

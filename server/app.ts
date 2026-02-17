@@ -40,7 +40,6 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
   app.use((req, res, next) => {
-    res.locals.infoMessages = req.flash('info')
     res.locals.successMessages = req.flash('success')
     next()
   })

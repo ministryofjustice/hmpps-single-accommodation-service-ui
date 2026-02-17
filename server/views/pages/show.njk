@@ -14,10 +14,10 @@
           }
       ]
   }) }}
+  {{ super() }}
 {% endblock %}
 
 {% block content %}
-  {% include "../components/_messages.njk" %}
   <div class="sas-profile-header">
     {# <img class="sas-profile-image" alt="Photo of {{ caseData.name }}" src=""> #}
     <div>

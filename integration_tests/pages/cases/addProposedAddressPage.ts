@@ -67,8 +67,6 @@ export default class AddProposedAddressPage extends AbstractPage {
 
   async verifyCheckYourAnswersPage(proposedAddressData: ProposedAddressFormData, caseName: string) {
     await expect(this.page.getByText('Check your answers before adding the address')).toBeVisible()
-    const row = (key: string) =>
-      this.page.locator('.govuk-summary-list__row', { has: this.page.getByText(key, { exact: true }) })
 
     const { address } = proposedAddressData
     const addressLines = [
@@ -82,21 +80,25 @@ export default class AddProposedAddressPage extends AbstractPage {
 
     this.shouldShowSummaryItem('Address', addressLines)
 
-    const arrangementRow = row(`What will be ${caseName}'s housing arrangement at this address?`)
-    await expect(arrangementRow).toContainText(formatProposedAddressArrangement(proposedAddressData.arrangementSubType))
-    if (proposedAddressData.arrangementSubTypeDescription) {
-      await expect(arrangementRow).toContainText(proposedAddressData.arrangementSubTypeDescription)
-    }
+    const arrangementValue = [
+      formatProposedAddressArrangement(proposedAddressData.arrangementSubType),
+      proposedAddressData.arrangementSubTypeDescription,
+    ].filter(Boolean)
 
-    const settledTypeText = formatProposedAddressSettledType(proposedAddressData.settledType)
-    await expect(row('Will it be settled or transient?')).toContainText(settledTypeText)
-    const statusText = formatProposedAddressStatus(proposedAddressData.verificationStatus)
-    await expect(row('What is the status of the address checks?')).toContainText(statusText)
+    this.shouldShowSummaryItem(`What will be ${caseName}'s housing arrangement at this address?`, arrangementValue)
+    this.shouldShowSummaryItem(
+      'Will it be settled or transient?',
+      formatProposedAddressSettledType(proposedAddressData.settledType),
+    )
+    this.shouldShowSummaryItem(
+      'What is the status of the address checks?',
+      formatProposedAddressStatus(proposedAddressData.verificationStatus),
+    )
 
     if (proposedAddressData.verificationStatus === 'PASSED') {
-      const nextAccommodationText = formatProposedAddressNextAccommodation(proposedAddressData.nextAccommodationStatus)
-      await expect(row(`Is this the next address that ${caseName} will be moving into?`)).toContainText(
-        nextAccommodationText,
+      this.shouldShowSummaryItem(
+        `Is this the next address that ${caseName} will be moving into?`,
+        formatProposedAddressNextAccommodation(proposedAddressData.nextAccommodationStatus),
       )
     }
   }

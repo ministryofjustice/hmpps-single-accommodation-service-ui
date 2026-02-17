@@ -439,6 +439,7 @@ describe('proposedAddressesController', () => {
       expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', sessionData)
       expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      expect(request.flash).toHaveBeenCalledWith('success', 'Private address added')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 

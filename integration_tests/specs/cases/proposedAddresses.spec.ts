@@ -187,8 +187,13 @@ test.describe('add proposed address', () => {
     // Then the API should have been called with the correct data
     await addProposedAddressPage.checkApiCalled(crn, updatedProposedAddressData)
 
-    // And I should see the proposed addresses on the profile tracker page
+    // And I see the profile tracker page
     await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // And I should see a success banner confirming the proposed address was added
+    await profileTrackerPage.shouldShowBanner('Private address added')
+
+    // And the new proposed address should be shown in the proposed addresses section
     await profileTrackerPage.shouldShowProposedAddresses(updatedProposedAddresses)
   })
 })

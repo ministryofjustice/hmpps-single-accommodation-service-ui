@@ -116,6 +116,10 @@ export default class AbstractPage {
     }
   }
 
+  async shouldShowBanner(text: string) {
+    return expect(this.page.locator('.govuk-notification-banner__content')).toContainText(text)
+  }
+
   async verifyTextInput(label: string, value: string) {
     await expect(this.page.getByRole('textbox', { name: label })).toHaveValue(value)
   }

@@ -39,6 +39,11 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpAuthentication())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use((req, res, next) => {
+    res.locals.infoMessages = req.flash('info')
+    res.locals.successMessages = req.flash('success')
+    next()
+  })
   app.use(setUpFrontendComponents())
   app.use(setUpAuthenticationErrorRoute())
   app.use(authorisationMiddleware(config.allowedRoles))

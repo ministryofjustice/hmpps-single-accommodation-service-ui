@@ -112,33 +112,8 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(initialProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
-    if (initialProposedAddressData.verificationStatus === 'PASSED') {
-      // Then I should see the next accommodation form
-      await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
-
-      // When I submit the form empty
-      await addProposedAddressPage.clickButton('Continue')
-
-      // Then I should see errors
-      await addProposedAddressPage.shouldShowErrorMessagesForFields({
-        nextAccommodationStatus: 'Select if this is the next address',
-      })
-
-      // Then I complete the next accommodation form
-      await addProposedAddressPage.completeNextAccommodationForm(initialProposedAddressData)
-      await addProposedAddressPage.clickButton('Continue')
-    }
-
     // Then I should see the check your answers page with my entered data
     await addProposedAddressPage.verifyCheckYourAnswersPage(initialProposedAddressData, caseData.name)
-
-    if (initialProposedAddressData.verificationStatus === 'PASSED') {
-      // When I click the back link
-      await addProposedAddressPage.clickLink('Back')
-
-      // Then I should see the populated next accommodation form
-      await addProposedAddressPage.shouldShowPopulatedNextAccommodationForm(initialProposedAddressData)
-    }
 
     // When I click the back link
     await addProposedAddressPage.clickLink('Back')
@@ -171,11 +146,9 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
-    if (updatedProposedAddressData.verificationStatus === 'PASSED') {
-      // And I complete the next accommodation form with new data
-      await addProposedAddressPage.completeNextAccommodationForm(updatedProposedAddressData)
-      await addProposedAddressPage.clickButton('Continue')
-    }
+    // And I complete the next accommodation form with new data
+    await addProposedAddressPage.completeNextAccommodationForm(updatedProposedAddressData)
+    await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the check your answers page with my updated data
     await addProposedAddressPage.verifyCheckYourAnswersPage(updatedProposedAddressData, caseData.name)

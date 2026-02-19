@@ -8,7 +8,6 @@ import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
-import * as casesUtils from '../utils/cases'
 import CasesService from '../services/casesService'
 
 describe('proposedAddressesController', () => {
@@ -40,6 +39,8 @@ describe('proposedAddressesController', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
+    casesService.getCase.mockResolvedValue({ name: 'James Smith' })
+
     request = mock<Request>({
       id: 'request-id',
       params: { crn: 'CRN123' },
@@ -53,8 +54,6 @@ describe('proposedAddressesController', () => {
 
     controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
     jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
-    jest.spyOn(casesUtils, 'getCaseData').mockResolvedValue({ name: 'James Smith' })
-
     jest.spyOn(proposedAddressesUtils, 'arrangementSubTypeItems').mockReturnValue([])
     jest.spyOn(proposedAddressesUtils, 'verificationStatusItems').mockReturnValue([])
     jest.spyOn(proposedAddressesUtils, 'nextAccommodationStatusItems').mockReturnValue([])
@@ -411,6 +410,8 @@ describe('proposedAddressesController', () => {
         crn: 'CRN123',
         tableRows: [{ key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' }, actions: { items: [] } }],
         backLinkHref: uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }),
+        errors: {},
+        errorSummary: [],
       })
     })
 
@@ -456,6 +457,21 @@ describe('proposedAddressesController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
       expect(proposedAddressesService.submit).not.toHaveBeenCalled()
       expect(controller.formData.remove).not.toHaveBeenCalled()
+      expect(auditService.logPageView).not.toHaveBeenCalled()
+    })
+
+    it('redirects when api call fails', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
+      jest.spyOn(proposedAddressesService, 'submit').mockRejectedValue(new Error('API error'))
+      jest.spyOn(controller.formData, 'remove')
+
+      await controller.submit()(request, response, next)
+
+      expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', sessionData)
+      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
+      expect(controller.formData.remove).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
       expect(auditService.logPageView).not.toHaveBeenCalled()
     })
   })

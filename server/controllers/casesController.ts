@@ -79,7 +79,7 @@ export default class CasesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const token = res.locals?.user?.token
+      const { token } = res.locals.user
       try {
         const [caseData, referralHistory, eligibility, dutyToRefer, proposedAddresses] = await Promise.all([
           this.casesService.getCase(token, crn),

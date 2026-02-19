@@ -38,6 +38,29 @@ describeClient('ProposedAddressesClient', provider => {
     await proposedAddressesClient.getProposedAddresses(token, crn)
   })
 
+  it('should make a GET request to /cases/:crn/proposed-accommodations/:id', async () => {
+    const crn = crnFactory()
+    const proposedAddress = accommodationFactory.proposed().build()
+
+    await provider.addInteraction({
+      state: `A proposed address exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to get a proposed address for a case by CRN and address ID',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.proposedAddresses.show({ crn, id: proposedAddress.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: proposedAddress,
+      },
+    })
+
+    await proposedAddressesClient.getProposedAddress(token, crn, proposedAddress.id)
+  })
+
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
     const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
@@ -64,5 +87,34 @@ describeClient('ProposedAddressesClient', provider => {
     })
 
     await proposedAddressesClient.submit(token, crn, proposedAddressDetail)
+  })
+
+  it('should make a PUT request to /cases/:crn/proposed-accommodations/:id', async () => {
+    const crn = crnFactory()
+    const id = 'some-id'
+    const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
+
+    const proposedAddressDetail: AccommodationDetailCommand = {
+      ...proposedAddressData,
+      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
+    }
+
+    await provider.addInteraction({
+      state: `Proposed address can be updated for case with CRN ${crn}`,
+      uponReceiving: 'a request to update a proposed address for a case by CRN and address ID',
+      withRequest: {
+        method: 'PUT',
+        path: apiPaths.cases.proposedAddresses.update({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: proposedAddressDetail,
+      },
+      willRespondWith: {
+        status: 200,
+      },
+    })
+
+    await proposedAddressesClient.update(token, crn, id, proposedAddressDetail)
   })
 })

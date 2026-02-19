@@ -11,6 +11,7 @@ describe('ProposedAddressesService', () => {
 
   const token = 'test-user-token'
   const crn = 'X123456'
+  const id = 'some-id'
 
   beforeEach(() => {
     proposedAddressesService = new ProposedAddressesService(proposedAddressesClient)
@@ -44,6 +45,19 @@ describe('ProposedAddressesService', () => {
     })
   })
 
+  describe('getProposedAddress', () => {
+    it('should call getProposedAddress on the api client and return the proposed address', async () => {
+      const proposedAddress = accommodationFactory.proposed().build({ id })
+
+      proposedAddressesClient.getProposedAddress.mockResolvedValue(proposedAddress)
+
+      const result = await proposedAddressesService.getProposedAddress(token, crn, id)
+
+      expect(proposedAddressesClient.getProposedAddress).toHaveBeenCalledWith(token, crn, id)
+      expect(result).toEqual(proposedAddress)
+    })
+  })
+
   describe('submit', () => {
     it.each([
       ['YES', 'YES'],
@@ -68,5 +82,20 @@ describe('ProposedAddressesService', () => {
         expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)
       },
     )
+  })
+
+  describe('update', () => {
+    it('should call update on the api client with the proposed address data', async () => {
+      const proposedAddressData = proposedAddressFormFactory.manualAddress().build({ id })
+
+      await proposedAddressesService.update(token, crn, proposedAddressData)
+
+      const expectedData: CreateAccommodationDetail = {
+        ...proposedAddressData,
+        nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
+      }
+
+      expect(proposedAddressesClient.update).toHaveBeenCalledWith(token, crn, id, expectedData)
+    })
   })
 })

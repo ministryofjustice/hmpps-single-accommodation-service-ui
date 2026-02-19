@@ -17,6 +17,10 @@ export default class ProposedAddressesService {
     }
   }
 
+  async getProposedAddress(token: string, crn: string, id: string): Promise<AccommodationDetail> {
+    return this.proposedAddressesClient.getProposedAddress(token, crn, id)
+  }
+
   submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
     const proposedAddressDetail: AccommodationDetailCommand = {
       ...proposedAddressData,
@@ -25,5 +29,13 @@ export default class ProposedAddressesService {
     }
 
     return this.proposedAddressesClient.submit(token, crn, proposedAddressDetail)
+  }
+
+  update(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
+    const proposedAddressDetail: AccommodationDetailCommand = {
+      ...proposedAddressData,
+      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
+    }
+    return this.proposedAddressesClient.update(token, crn, proposedAddressData.id, proposedAddressDetail)
   }
 }

@@ -1,9 +1,7 @@
-import { Request, Response } from 'express'
 import { AccommodationDetail, CaseDto as Case } from '@sas/api'
 import { SummaryListRow, TableRow } from '@govuk/ui'
 import { GetCasesQuery } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
-import CasesService from '../services/casesService'
 import { formatDate } from './dates'
 import { addressLines } from './addresses'
 import { renderMacro } from './macros'
@@ -175,12 +173,6 @@ export const casesToRows = (cases: Case[]): TableRow[] =>
 
 export const caseAssignedTo = (c: Case, id: string): string => {
   return String(c.assignedTo?.id) === id ? `You (${c.assignedTo.name})` : c.assignedTo?.name
-}
-
-export const getCaseData = async (req: Request, res: Response, casesService: CasesService) => {
-  const token = res.locals?.user?.token
-  const { crn } = req.params
-  return casesService.getCase(token, crn)
 }
 
 export const mapGetCasesQuery = (query: GetCasesQuery, userId: string): GetCasesQuery => {

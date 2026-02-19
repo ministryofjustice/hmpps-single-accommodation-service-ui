@@ -69,7 +69,7 @@ export default class ProposedAddressesController {
 
   type(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const token = res.locals?.user?.token
+      const { token } = res.locals.user
       const { crn } = req.params
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       const redirect = validateUpToAddress(req, proposedAddressFormSessionData)
@@ -141,7 +141,7 @@ export default class ProposedAddressesController {
 
   nextAccommodation(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const token = res.locals?.user?.token
+      const { token } = res.locals.user
       const { crn } = req.params
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       const redirect = validateUpToStatus(req, proposedAddressFormSessionData)
@@ -179,7 +179,7 @@ export default class ProposedAddressesController {
 
   checkYourAnswers(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const token = res.locals?.user?.token
+      const { token } = res.locals.user
       const { crn } = req.params
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
@@ -210,7 +210,7 @@ export default class ProposedAddressesController {
 
   submit(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const token = res.locals?.user?.token
+      const { token } = res.locals.user
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
       const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)

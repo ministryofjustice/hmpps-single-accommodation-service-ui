@@ -49,10 +49,13 @@ async function stubDutyToRefer() {
 
 async function stubProposedAddresses() {
   for await (const caseDto of cases) {
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(
-      caseDto.crn,
-      (proposedAddresses as Record<string, AccommodationDetail[]>)[caseDto.crn],
-    )
+    const proposedAddress = (proposedAddresses as Record<string, AccommodationDetail[]>)[caseDto.crn]
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(caseDto.crn, proposedAddress)
+
+    if (proposedAddress[0]?.id) {
+      await proposedAddressesApi.stubGetProposedAddressByCrn(caseDto.crn, proposedAddress[0].id, proposedAddress[0])
+      await proposedAddressesApi.stubUpdateProposedAddress(caseDto.crn, proposedAddress[0].id)
+    }
     await proposedAddressesApi.stubSubmitProposedAddress(caseDto.crn)
   }
 }

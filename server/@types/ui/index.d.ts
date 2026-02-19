@@ -52,6 +52,10 @@ export type GetCasesQuery = {
   crns?: string[]
 }
 
+export type DividerItem = {
+  divider: string
+}
+
 export type RadioItem =
   | {
       text: string
@@ -61,9 +65,7 @@ export type RadioItem =
         html: string
       }
     }
-  | {
-      divider: string
-    }
+  | DividerItem
 
 export type CheckboxItem =
   | {
@@ -71,4 +73,4 @@ export type CheckboxItem =
       value: string
       checked?: boolean
     }
-  | CheckBoxDivider
+  | DividerItem

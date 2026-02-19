@@ -1,4 +1,4 @@
-import { RadioItem, CheckboxItem } from '@sas/ui'
+import { RadioItem, CheckboxItem, DividerItem } from '@sas/ui'
 
 type Item = RadioItem | CheckboxItem
 
@@ -9,5 +9,7 @@ export const injectConditionals = (
 ): (Item & { conditional?: { html: string } })[] =>
   items.map(item => ({
     ...item,
-    conditional: conditionals[item.value] ? { html: conditionals[item.value] } : undefined,
+    conditional: !isDivider(item) && conditionals[item.value] ? { html: conditionals[item.value] } : undefined,
   }))
+
+const isDivider = (item: Item): item is DividerItem => 'divider' in item

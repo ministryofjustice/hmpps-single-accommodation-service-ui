@@ -91,7 +91,7 @@ describeClient('ProposedAddressesClient', provider => {
 
   it('should make a PUT request to /cases/:crn/proposed-accommodations/:id', async () => {
     const crn = crnFactory()
-    const id = 'some-id'
+    const id = 'c1b1d9f8-6f3a-4b52-9c5c-6a0c5a9d8f1f'
     const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
 
     const proposedAddressDetail: AccommodationDetailCommand = {

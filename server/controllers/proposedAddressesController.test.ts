@@ -9,6 +9,7 @@ import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import CasesService from '../services/casesService'
+import { accommodationFactory } from '../testutils/factories'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -19,6 +20,7 @@ describe('proposedAddressesController', () => {
   const proposedAddressesService = mock<ProposedAddressesService>()
   const casesService = mock<CasesService>()
   const sessionData: ProposedAddressFormData = {
+    flow: 'full',
     address: {
       buildingName: 'Line 1',
       subBuildingName: 'Line 2',
@@ -27,6 +29,7 @@ describe('proposedAddressesController', () => {
       postcode: 'AB1 2CD',
       country: 'UK',
     },
+    arrangementType: 'PRIVATE',
     arrangementSubType: 'FRIENDS_OR_FAMILY',
     arrangementSubTypeDescription: '',
     settledType: 'SETTLED',
@@ -57,11 +60,12 @@ describe('proposedAddressesController', () => {
     jest.spyOn(proposedAddressesUtils, 'arrangementSubTypeItems').mockReturnValue([])
     jest.spyOn(proposedAddressesUtils, 'verificationStatusItems').mockReturnValue([])
     jest.spyOn(proposedAddressesUtils, 'nextAccommodationStatusItems').mockReturnValue([])
+
+    jest.spyOn(controller.formData, 'remove')
   })
 
   describe('start', () => {
     it('redirects to details', async () => {
-      jest.spyOn(controller.formData, 'remove')
       await controller.start()(request, response, next)
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
@@ -223,6 +227,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
         proposedAddress: undefined,
+        backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
         verificationStatusItems: [],
@@ -238,6 +243,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
         proposedAddress: sessionData,
+        backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
         verificationStatusItems: [],
@@ -303,6 +309,31 @@ describe('proposedAddressesController', () => {
       expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
+
+    it('updates and redirects to profile tracker when flow is not "full" and status is not PASSED', async () => {
+      jest.spyOn(proposedAddressesUtils, 'updateStatusFromRequest').mockResolvedValue({
+        ...sessionData,
+        flow: 'status',
+        verificationStatus: 'NOT_CHECKED_YET',
+      })
+      jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
+
+      await controller.saveStatus()(request, response, next)
+
+      expect(proposedAddressesUtils.updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
+      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, {
+        ...sessionData,
+        flow: 'status',
+        verificationStatus: 'NOT_CHECKED_YET',
+      })
+      expect(proposedAddressesService.update).toHaveBeenCalledWith(
+        'token-1',
+        'CRN123',
+        expect.objectContaining({ verificationStatus: 'NOT_CHECKED_YET' }),
+      )
+      expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
   })
 
   describe('nextAccommodation', () => {
@@ -322,6 +353,7 @@ describe('proposedAddressesController', () => {
         proposedAddress: undefined,
         nextAccommodationStatusItems: [],
         name: 'James Smith',
+        backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
         errorSummary: [],
       })
@@ -339,6 +371,7 @@ describe('proposedAddressesController', () => {
         proposedAddress: sessionData,
         name: 'James Smith',
         nextAccommodationStatusItems: [],
+        backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
         errorSummary: [],
       })
@@ -387,6 +420,32 @@ describe('proposedAddressesController', () => {
       expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
     })
+
+    it('updates and redirects to profile tracker when flow is not "full"', async () => {
+      jest.spyOn(proposedAddressesUtils, 'updateNextAccommodationFromRequest').mockResolvedValue({
+        ...sessionData,
+        flow: 'nextAccommodation',
+      })
+      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
+
+      await controller.saveNextAccommodation()(request, response, next)
+
+      expect(proposedAddressesUtils.updateNextAccommodationFromRequest).toHaveBeenCalledWith(
+        request,
+        controller.formData,
+      )
+      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, {
+        ...sessionData,
+        flow: 'nextAccommodation',
+      })
+      expect(proposedAddressesService.update).toHaveBeenCalledWith(
+        'token-1',
+        'CRN123',
+        expect.objectContaining({ nextAccommodationStatus: 'YES' }),
+      )
+      expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
   })
 
   describe('checkYourAnswers', () => {
@@ -433,7 +492,6 @@ describe('proposedAddressesController', () => {
     it('submits, clears session data and redirects', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
       jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
-      jest.spyOn(controller.formData, 'remove')
 
       await controller.submit()(request, response, next)
 
@@ -446,7 +504,6 @@ describe('proposedAddressesController', () => {
 
     it('redirects when validation fails', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest.spyOn(controller.formData, 'remove')
       jest
         .spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation')
         .mockReturnValue(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
@@ -476,9 +533,51 @@ describe('proposedAddressesController', () => {
     })
   })
 
+  describe('edit', () => {
+    it.each([
+      { flow: 'details', redirect: uiPaths.proposedAddresses.details },
+      { flow: 'type', redirect: uiPaths.proposedAddresses.type },
+      { flow: 'status', redirect: uiPaths.proposedAddresses.status },
+      { flow: 'nextAccommodation', redirect: uiPaths.proposedAddresses.nextAccommodation },
+    ])('redirects to the $flow page when flow is "$flow"', async ({ flow, redirect }) => {
+      request.query.flow = flow
+      request.params.id = 'address-id'
+      const proposedAddress = accommodationFactory.build({ crn: 'CRN123', id: 'address-id' })
+      proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
+
+      jest.spyOn(controller.formData, 'update')
+
+      await controller.edit()(request, response, next)
+
+      expect(controller.formData.remove).toHaveBeenCalled()
+      expect(proposedAddressesService.getProposedAddress).toHaveBeenCalledWith('token-1', 'CRN123', 'address-id')
+      expect(controller.formData.update).toHaveBeenCalledWith(
+        'CRN123',
+        request.session,
+        expect.objectContaining({
+          flow,
+        }),
+      )
+      expect(response.redirect).toHaveBeenCalledWith(redirect({ crn: 'CRN123' }))
+    })
+
+    it('redirects to profile tracker when flow is missing', async () => {
+      request.params.id = 'address-id'
+      request.query.flow = null
+
+      jest.spyOn(controller.formData, 'update')
+
+      await controller.edit()(request, response, next)
+
+      expect(controller.formData.remove).not.toHaveBeenCalled()
+      expect(proposedAddressesService.getProposedAddress).not.toHaveBeenCalled()
+      expect(controller.formData.update).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
+  })
+
   describe('cancel', () => {
     it('clears session data and redirects', async () => {
-      jest.spyOn(controller.formData, 'remove')
       await controller.cancel()(request, response, next)
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)

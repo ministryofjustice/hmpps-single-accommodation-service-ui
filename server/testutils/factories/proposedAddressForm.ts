@@ -40,6 +40,8 @@ export default ProposedAddressFormFactory.define(() => {
   const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
 
   return {
+    flow: 'full' as const,
+    arrangementType: 'PRIVATE' as const,
     arrangementSubType,
     arrangementSubTypeDescription: arrangementSubType === 'OTHER' ? faker.lorem.sentence() : undefined,
     settledType: faker.helpers.arrayElement(settledTypes),

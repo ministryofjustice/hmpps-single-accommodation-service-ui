@@ -13,7 +13,7 @@ const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusT
   ({
     PASSED: { text: 'Passed', colour: 'yellow' },
     NOT_CHECKED_YET: { text: 'Not checked yet', colour: 'red' },
-    FAILED: { text: 'Failed' },
+    FAILED: { text: 'Failed', colour: 'grey' },
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
   })[status] || { text: 'Unknown' }
 
@@ -29,20 +29,23 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
       summaryListRow('Added by', ''),
       summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
     ],
-    links: linksForStatus(status),
+    links: linksForStatus(status, proposedAddress.crn, proposedAddress.id),
   }
 }
 
-const linksForStatus = (status: ProposedAddressDisplayStatus) => {
+const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: string) => {
   switch (status) {
     case 'PASSED':
       return [
-        { text: 'Confirm as next address', href: '#' },
+        {
+          text: 'Confirm as next address',
+          href: `${uiPaths.proposedAddresses.edit({ crn, id })}?flow=nextAccommodation`,
+        },
         { text: 'Notes', href: '#' },
       ]
     case 'NOT_CHECKED_YET':
       return [
-        { text: 'Add checks', href: '#' },
+        { text: 'Add checks', href: `${uiPaths.proposedAddresses.edit({ crn, id })}?flow=status` },
         { text: 'Notes', href: '#' },
       ]
     default:
@@ -53,6 +56,13 @@ const linksForStatus = (status: ProposedAddressDisplayStatus) => {
 const settledTypes: Record<AccommodationDetail['settledType'], string> = {
   SETTLED: 'Settled',
   TRANSIENT: 'Transient',
+}
+
+export const flowRedirects: Record<string, (params: { crn: string }) => string> = {
+  status: uiPaths.proposedAddresses.status,
+  nextAccommodation: uiPaths.proposedAddresses.nextAccommodation,
+  type: uiPaths.proposedAddresses.type,
+  details: uiPaths.proposedAddresses.details,
 }
 
 const arrangementLabel = (proposedAddress: AccommodationDetail) => {
@@ -85,6 +95,7 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatu
     }[status] || 'Unknown'
   )
 }
+
 export const formatProposedAddressNextAccommodation = (status: AccommodationDetail['nextAccommodationStatus']) => {
   return (
     {
@@ -201,9 +212,9 @@ const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFo
   const address = sessionData?.address
   const errors: Record<string, string> = {}
 
-  if (!address?.buildingName) {
+  if (!address?.buildingName && !address?.thoroughfareName) {
     errors.addressLine1 = 'Enter address line 1, typically the building and street'
-  } else if (address.buildingName.length > 200) {
+  } else if (!address?.thoroughfareName && address.buildingName.length > 200) {
     errors.addressLine1 = 'Address line 1 must be 200 characters or less'
   }
 

@@ -37,6 +37,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
     },
   ],
   "status": {
+    "colour": "grey",
     "text": "Failed",
   },
 }
@@ -74,7 +75,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/edit?flow=nextAccommodation",
       "text": "Confirm as next address",
     },
     {
@@ -121,7 +122,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/edit?flow=nextAccommodation",
       "text": "Confirm as next address",
     },
     {
@@ -168,7 +169,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/edit?flow=nextAccommodation",
       "text": "Confirm as next address",
     },
     {
@@ -258,7 +259,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
   "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/edit?flow=status",
       "text": "Add checks",
     },
     {

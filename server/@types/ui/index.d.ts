@@ -23,6 +23,7 @@ export type ProposedAddressFormData = {
   verificationStatus: AccommodationDetail['verificationStatus']
   address: AccommodationDetail['address']
   nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus']
+  flow: 'full' | 'details' | 'type' | 'status' | 'nextAccommodation'
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']

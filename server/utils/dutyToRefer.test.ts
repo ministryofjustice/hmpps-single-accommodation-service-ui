@@ -56,6 +56,12 @@ describe('duty to refer utils', () => {
 
       expect(card).toMatchSnapshot()
     })
+
+    it('returns an empty duty to refer card for undefined duty to refer', () => {
+      const card = dutyToReferStatusCard(undefined)
+
+      expect(card).toMatchSnapshot()
+    })
   })
 
   describe('detailsForStatus', () => {
@@ -78,6 +84,7 @@ describe('duty to refer utils', () => {
         ],
       ],
       ['UNKNOWN' as const, []],
+      [undefined, []],
     ])('returns details for status %s', (status, expectedDetails) => {
       const dutyToRefer = dutyToReferFactory.build({
         status,

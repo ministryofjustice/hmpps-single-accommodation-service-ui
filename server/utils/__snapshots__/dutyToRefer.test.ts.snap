@@ -95,6 +95,18 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
 }
 `;
 
+exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refer card for undefined duty to refer 1`] = `
+{
+  "details": [],
+  "heading": "Duty to Refer (DTR)",
+  "inactive": false,
+  "links": [],
+  "status": {
+    "text": "Unknown",
+  },
+}
+`;
+
 exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refer card for unknown status 1`] = `
 {
   "details": [],

@@ -11,13 +11,16 @@ const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
     SUBMITTED: { text: 'Submitted', colour: 'green' },
   })[status] || { text: 'Unknown' }
 
-export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => ({
-  heading: 'Duty to Refer (DTR)',
-  inactive: dutyToRefer.status === 'NOT_ELIGIBLE',
-  status: dutyToReferStatusTag(dutyToRefer.status),
-  details: detailsForStatus(dutyToRefer),
-  links: linksForStatus(dutyToRefer.status),
-})
+export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => {
+  const status = dutyToRefer?.status
+  return {
+    heading: 'Duty to Refer (DTR)',
+    inactive: status === 'NOT_ELIGIBLE',
+    status: dutyToReferStatusTag(status),
+    details: detailsForStatus(dutyToRefer),
+    links: linksForStatus(status),
+  }
+}
 
 export const linksForStatus = (serviceStatus?: string) => {
   switch (serviceStatus) {
@@ -45,7 +48,7 @@ const summaryListRow = (label: string, value: string): SummaryListRow => ({
 })
 
 export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
-  const { status } = dutyToRefer
+  const { status } = dutyToRefer ?? {}
   switch (status) {
     case 'NOT_ELIGIBLE':
     case 'UPCOMING':

@@ -1,5 +1,5 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { CreateAccommodationDetail } from '@sas/api'
+import { AccommodationDetailCommand } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import ProposedAddressesClient from './proposedAddressesClient'
 import apiPaths from '../paths/api'
@@ -41,7 +41,7 @@ describeClient('ProposedAddressesClient', provider => {
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
     const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
-    const proposedAddressDetail: CreateAccommodationDetail = {
+    const proposedAddressDetail: AccommodationDetailCommand = {
       ...proposedAddressData,
       arrangementType: 'PRIVATE',
       nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',

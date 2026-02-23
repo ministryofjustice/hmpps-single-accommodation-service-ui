@@ -1,4 +1,4 @@
-import { CreateAccommodationDetail } from '@sas/api'
+import { AccommodationDetailCommand } from '@sas/api'
 import ProposedAddressesClient from '../data/proposedAddressesClient'
 import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
@@ -59,7 +59,7 @@ describe('ProposedAddressesService', () => {
 
         await proposedAddressesService.submit(token, crn, proposedAddressData)
 
-        const expectedData: CreateAccommodationDetail = {
+        const expectedData: AccommodationDetailCommand = {
           ...proposedAddressData,
           arrangementType: 'PRIVATE',
           nextAccommodationStatus: expectedStatus,

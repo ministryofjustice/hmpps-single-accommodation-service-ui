@@ -17,6 +17,7 @@ export type AccommodationDetail = {
     address: AccommodationAddressDetails;
     startDate?: string;
     endDate?: string;
+    createdBy: string;
     createdAt: string;
 };
 

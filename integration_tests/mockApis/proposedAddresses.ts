@@ -16,7 +16,7 @@ export default {
         jsonBody: proposedAddresses || [],
       },
     }),
-  stubGetProposedAddressByCrn: (crn: string, id: string, proposedAddress: AccommodationDetail): SuperAgentRequest =>
+  stubGetProposedAddress: (crn: string, id: string, proposedAddress: AccommodationDetail): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',

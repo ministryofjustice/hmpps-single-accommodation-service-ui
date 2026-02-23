@@ -53,7 +53,7 @@ async function stubProposedAddresses() {
     await proposedAddressesApi.stubGetProposedAddressesByCrn(caseDto.crn, proposedAddress)
 
     if (proposedAddress[0]?.id) {
-      await proposedAddressesApi.stubGetProposedAddressByCrn(caseDto.crn, proposedAddress[0].id, proposedAddress[0])
+      await proposedAddressesApi.stubGetProposedAddress(caseDto.crn, proposedAddress[0].id, proposedAddress[0])
       await proposedAddressesApi.stubUpdateProposedAddress(caseDto.crn, proposedAddress[0].id)
     }
     await proposedAddressesApi.stubSubmitProposedAddress(caseDto.crn)

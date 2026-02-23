@@ -13,9 +13,9 @@ import {
 } from '../../../server/utils/proposedAddresses'
 
 export default class AddProposedAddressPage extends AbstractPage {
-  constructor(page: Page) {
+  constructor(page: Page, expectedHeader = 'Enter the address') {
     super(page)
-    this.header = page.locator('h1', { hasText: 'Enter the address' })
+    this.header = page.getByRole('group', { name: expectedHeader })
   }
 
   static async visit(page: Page, caseData: Case): Promise<AddProposedAddressPage> {

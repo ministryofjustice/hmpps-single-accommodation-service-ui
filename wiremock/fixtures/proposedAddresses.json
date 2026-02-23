@@ -22,7 +22,8 @@
         "uprn": "dr9H0WC6KXU3"
       },
       "createdAt": "2026-01-22T11:32:56.023Z",
-      "verificationStatus": "NOT_CHECKED_YET"
+      "verificationStatus": "NOT_CHECKED_YET",
+      "createdBy": "Sheri Bauch"
     }
   ],
   "V938951": [
@@ -47,7 +48,8 @@
       },
       "createdAt": "2026-01-20T18:40:41.536Z",
       "verificationStatus": "PASSED",
-      "nextAccommodationStatus": "TO_BE_DECIDED"
+      "nextAccommodationStatus": "TO_BE_DECIDED",
+      "createdBy": "Inez Grady"
     },
     {
       "id": "a625ed02-c307-4654-8dc7-1a5c26380431",
@@ -70,7 +72,8 @@
       },
       "createdAt": "2026-01-25T21:44:34.940Z",
       "verificationStatus": "PASSED",
-      "nextAccommodationStatus": "YES"
+      "nextAccommodationStatus": "YES",
+      "createdBy": "Alfonso Denesik"
     },
     {
       "id": "dd4da16d-34d6-4224-9ea4-4fceef8bcbee",
@@ -93,7 +96,8 @@
         "uprn": "UScdqSoVSCPo"
       },
       "createdAt": "2026-01-20T20:06:21.806Z",
-      "verificationStatus": "FAILED"
+      "verificationStatus": "FAILED",
+      "createdBy": "Brenda Wiegand III"
     }
   ],
   "T229440": [
@@ -117,7 +121,8 @@
         "uprn": "zHB168zHJQVH"
       },
       "createdAt": "2026-01-24T05:10:56.036Z",
-      "verificationStatus": "FAILED"
+      "verificationStatus": "FAILED",
+      "createdBy": "Tyrone Ward"
     },
     {
       "id": "5401142e-ce2a-4ba3-bd54-ac792ce212e2",
@@ -140,7 +145,8 @@
       },
       "createdAt": "2026-01-22T07:28:36.961Z",
       "verificationStatus": "PASSED",
-      "nextAccommodationStatus": "YES"
+      "nextAccommodationStatus": "YES",
+      "createdBy": "Blake Goldner"
     },
     {
       "id": "34ea9d07-2100-4d8c-8e55-40fd1f9e04a7",
@@ -163,7 +169,8 @@
       },
       "createdAt": "2026-01-26T05:04:02.310Z",
       "verificationStatus": "PASSED",
-      "nextAccommodationStatus": "NO"
+      "nextAccommodationStatus": "NO",
+      "createdBy": "Jeanette Gusikowski MD"
     }
   ],
   "H271226": [
@@ -188,7 +195,8 @@
       },
       "createdAt": "2026-01-27T06:12:17.187Z",
       "verificationStatus": "PASSED",
-      "nextAccommodationStatus": "YES"
+      "nextAccommodationStatus": "YES",
+      "createdBy": "Marcos Cassin-Hansen"
     },
     {
       "id": "e34b9b98-bcaa-4b40-b3b4-7494cb272b42",
@@ -211,7 +219,8 @@
       },
       "createdAt": "2026-01-23T16:05:52.231Z",
       "verificationStatus": "PASSED",
-      "nextAccommodationStatus": "YES"
+      "nextAccommodationStatus": "YES",
+      "createdBy": "Leslie Goldner"
     }
   ],
   "U934069": [
@@ -236,7 +245,8 @@
         "uprn": "JzdoZfCfM1Rr"
       },
       "createdAt": "2026-01-23T22:36:07.166Z",
-      "verificationStatus": "FAILED"
+      "verificationStatus": "FAILED",
+      "createdBy": "Dustin Johnson"
     }
   ],
   "I322559": [
@@ -260,7 +270,8 @@
         "uprn": "HnolWC9pP4Oh"
       },
       "createdAt": "2026-01-24T08:55:53.593Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "createdBy": "Jeffery Auer"
     },
     {
       "id": "07bdb59a-9ba9-4c0e-b03b-0efe1ee1f999",
@@ -283,7 +294,8 @@
         "uprn": "vPgrw8wyVvKp"
       },
       "createdAt": "2026-01-24T09:18:58.452Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "createdBy": "Stanley Towne"
     },
     {
       "id": "f458541b-fb63-414c-8da8-03d2c4677551",
@@ -306,7 +318,8 @@
         "uprn": "cIpP1wvDkLWV"
       },
       "createdAt": "2026-01-24T09:50:40.414Z",
-      "verificationStatus": "FAILED"
+      "verificationStatus": "FAILED",
+      "createdBy": "Clifford Parker"
     }
   ],
   "L247269": [],
@@ -332,7 +345,8 @@
         "uprn": "BL92398XXNoI"
       },
       "createdAt": "2026-01-19T22:30:45.411Z",
-      "verificationStatus": "PASSED"
+      "verificationStatus": "PASSED",
+      "createdBy": "Corey Grady"
     }
   ]
 }

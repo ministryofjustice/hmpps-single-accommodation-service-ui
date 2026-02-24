@@ -36,17 +36,20 @@ class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
 }
 
 export default ProposedAddressFormFactory.define(() => {
+  const address = addressFactory.build()
   const arrangementSubType = faker.helpers.arrayElement(arrangementSubTypes)
   const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
 
   return {
     flow: 'full' as const,
+    nameOrNumber: address.buildingName || address.buildingNumber,
+    postcode: address.postcode,
     arrangementType: 'PRIVATE' as const,
     arrangementSubType,
     arrangementSubTypeDescription: arrangementSubType === 'OTHER' ? faker.lorem.sentence() : undefined,
     settledType: faker.helpers.arrayElement(settledTypes),
     verificationStatus,
-    address: addressFactory.build(),
+    address,
     nextAccommodationStatus:
       verificationStatus === 'PASSED' ? faker.helpers.arrayElement(nextAccommodationStatuses) : undefined,
   }

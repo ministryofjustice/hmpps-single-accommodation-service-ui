@@ -12,6 +12,7 @@ export default {
   proposedAddresses: {
     start: proposedAddressesPath.path('start'),
     edit: proposedAddressesPath.path(':id/edit'),
+    lookup: proposedAddressesPath.path('lookup'),
     details: proposedAddressesPath.path('details'),
     type: proposedAddressesPath.path('type'),
     status: proposedAddressesPath.path('status'),

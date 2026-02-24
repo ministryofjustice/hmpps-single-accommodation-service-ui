@@ -54,8 +54,56 @@ test.describe('add proposed address', () => {
     // And I click the add an address link
     await profileTrackerPage.clickLink('Add an address')
 
+    // Then I should see the address lookup form
+    const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(page, crn)
+    await addProposedAddressPage.shouldShowAddressLookupForm()
+
+    // When I submit the form empty
+    await addProposedAddressPage.clickButton('Find address')
+
+    // Then I should see errors
+    // await addProposedAddressPage.shouldShowErrorMessagesForFields({
+    //   nameOrNumber: 'Enter a name or number',
+    //   postcode: 'Enter a UK postcode',
+    // })
+
+    // When I complete the form
+    // await addProposedAddressPage.completeLookupForm('Building name', 'SW1A 1AA')
+    // await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the address lookup results
+    // await addProposedAddressPage.shouldShowAddressLookupResultsForm('Building name', 'SW1A 1AA')
+
+    // When I submit without selecting a result
+    // await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see an error
+    // await addProposedAddressPage.shouldShowErrorMessagesForFields({
+    //   addressId: 'Select an address',
+    // })
+
+    // When I select a result
+    // await addProposedAddressPage.completeAddressLookupResultsForm()
+    // await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the type form
+    // await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+
+    // When I click back
+    // await addProposedAddressPage.clickLink('Back')
+
+    // And I click to change the building name
+    // await addProposedAddressPage.clickLink('Change')
+
+    // Then I should see the address lookup form with the building name prepopulated
+    // await addProposedAddressPage.shouldShowAddressLookupForm('Building name', 'SW1A 1AA')
+
+    // When I change the postcode to one with no results
+    // await addProposedAddressPage.completeLookupForm('Building name', 'N0 0PE')
+    // await addProposedAddressPage.clickButton('Continue')
+
     // Then I should see the add address form
-    const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(page)
+    await addProposedAddressPage.shouldShowDetailsForm()
 
     // When I submit the form empty
     await addProposedAddressPage.clickButton('Continue')
@@ -213,6 +261,7 @@ test.describe('edit proposed address', () => {
     // Then I should see the status form page
     const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
       page,
+      crn,
       'What is the status of the address checks?',
     )
 
@@ -272,6 +321,7 @@ test.describe('edit proposed address', () => {
     // Then I should see the status form page
     const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
       page,
+      crn,
       'What is the status of the address checks?',
     )
 

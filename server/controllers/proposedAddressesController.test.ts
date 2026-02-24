@@ -22,8 +22,10 @@ describe('proposedAddressesController', () => {
   const casesService = mock<CasesService>()
   const sessionData: ProposedAddressFormData = {
     flow: 'full',
+    nameOrNumber: 'BUILDING NAME',
+    postcode: 'AB12CD',
     address: {
-      buildingName: 'Line 1',
+      buildingName: 'Building name',
       subBuildingName: 'Line 2',
       postTown: 'Town',
       county: 'Region',
@@ -66,10 +68,51 @@ describe('proposedAddressesController', () => {
   })
 
   describe('start', () => {
-    it('redirects to details', async () => {
+    it('redirects to address lookup', async () => {
       await controller.start()(request, response, next)
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+    })
+  })
+
+  describe('lookup', () => {
+    it('renders lookup page', async () => {
+      await controller.lookup()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
+        crn: 'CRN123',
+        errors: {},
+        errorSummary: [],
+      })
+    })
+
+    it('renders lookup page with session data', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      await controller.lookup()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
+        crn: 'CRN123',
+        nameOrNumber: 'BUILDING NAME',
+        postcode: 'AB12CD',
+        errors: {},
+        errorSummary: [],
+      })
+    })
+  })
+
+  describe('saveLookup', () => {
+    it('redirects to address details if there are no results', async () => {
+      await controller.saveLookup()(request, response, next)
+
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
     })
   })
@@ -97,7 +140,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
         address: {
-          buildingName: 'Line 1',
+          buildingName: 'Building name',
           subBuildingName: 'Line 2',
           postTown: 'Town',
           county: 'Region',

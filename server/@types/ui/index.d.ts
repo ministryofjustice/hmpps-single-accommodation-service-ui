@@ -16,6 +16,8 @@ export interface ErrorMessages {
 
 export type ProposedAddressFormData = {
   id?: string
+  nameOrNumber: string
+  postcode: string
   arrangementType: AccommodationDetail['arrangementType']
   arrangementSubType: AccommodationDetail['arrangementSubType']
   arrangementSubTypeDescription: string

@@ -36,8 +36,33 @@ export default class ProposedAddressesController {
 
   start(): RequestHandler {
     return async (req: Request, res: Response) => {
-      this.formData.remove(req.params.crn, req.session)
+      await this.formData.remove(req.params.crn, req.session)
       await this.formData.update(req.params.crn, req.session, { flow: 'full' })
+      return res.redirect(uiPaths.proposedAddresses.lookup({ crn: req.params.crn }))
+    }
+  }
+
+  lookup(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+      const { errors, errorSummary } = fetchErrors(req)
+      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+
+      return res.render('pages/proposed-address/lookup', {
+        crn: req.params.crn,
+        nameOrNumber: proposedAddressFormSessionData?.nameOrNumber,
+        postcode: proposedAddressFormSessionData?.postcode,
+        errors,
+        errorSummary,
+      })
+    }
+  }
+
+  saveLookup(): RequestHandler {
+    return async (req: Request, res: Response) => {
       return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
     }
   }

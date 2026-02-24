@@ -134,7 +134,7 @@ describe('validateAndFlashErrors', () => {
     expect(request.flash).not.toHaveBeenCalled()
   })
 
-  it('returns false and flashes errors if there are errors', () => {
+  it('returns false and flashes errors and user input if there are errors', () => {
     const errors = {
       field1: 'error 1',
       field2: 'error 2',

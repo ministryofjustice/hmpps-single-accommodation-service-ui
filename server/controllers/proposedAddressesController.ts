@@ -17,6 +17,7 @@ import {
   validateUpToStatus,
   validateUpToNextAccommodation,
   flowRedirects,
+  validateLookup,
 } from '../utils/proposedAddresses'
 import { fetchErrors, addErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -42,31 +43,6 @@ export default class ProposedAddressesController {
     }
   }
 
-  lookup(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
-        who: res.locals.user.username,
-        correlationId: req.id,
-      })
-      const { errors, errorSummary } = fetchErrors(req)
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-
-      return res.render('pages/proposed-address/lookup', {
-        crn: req.params.crn,
-        nameOrNumber: proposedAddressFormSessionData?.nameOrNumber,
-        postcode: proposedAddressFormSessionData?.postcode,
-        errors,
-        errorSummary,
-      })
-    }
-  }
-
-  saveLookup(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
-    }
-  }
-
   edit(): RequestHandler {
     return async (req: Request, res: Response) => {
       const flow = req.query.flow as ProposedAddressFormData['flow']
@@ -82,6 +58,39 @@ export default class ProposedAddressesController {
       await this.formData.update(crn, req.session, { ...proposedAddress, flow })
 
       return res.redirect(redirect({ crn }))
+    }
+  }
+
+  lookup(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+      const { nameOrNumber, postcode } = this.formData.get(req.params.crn, req.session)
+      const { errors, errorSummary } = fetchErrors(req)
+
+      return res.render('pages/proposed-address/lookup', {
+        crn: req.params.crn,
+        nameOrNumber,
+        postcode,
+        errors,
+        errorSummary,
+      })
+    }
+  }
+
+  saveLookup(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const proposedAddressFormSessionData = await this.formData.update(req.params.crn, req.session, {
+        nameOrNumber: req.body?.nameOrNumber,
+        postcode: req.body?.postcode,
+      })
+
+      return res.redirect(
+        validateLookup(req, proposedAddressFormSessionData) ||
+          uiPaths.proposedAddresses.details({ crn: req.params.crn }),
+      )
     }
   }
 

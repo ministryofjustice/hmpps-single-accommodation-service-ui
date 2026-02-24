@@ -64,11 +64,11 @@ describeClient('ProposedAddressesClient', provider => {
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
     const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
-    const proposedAddressDetail: AccommodationDetailCommand = {
+    const proposedAddressDetail = {
       ...proposedAddressData,
       arrangementType: 'PRIVATE',
       nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
+    } as AccommodationDetailCommand
 
     await provider.addInteraction({
       state: `Proposed address can be submitted for case with CRN ${crn}`,
@@ -94,10 +94,10 @@ describeClient('ProposedAddressesClient', provider => {
     const id = 'c1b1d9f8-6f3a-4b52-9c5c-6a0c5a9d8f1f'
     const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
 
-    const proposedAddressDetail: AccommodationDetailCommand = {
+    const proposedAddressDetail = {
       ...proposedAddressData,
       nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
+    } as AccommodationDetailCommand
 
     await provider.addInteraction({
       state: `Proposed address can be updated for case with CRN ${crn}`,

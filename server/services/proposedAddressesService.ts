@@ -22,20 +22,20 @@ export default class ProposedAddressesService {
   }
 
   submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    const proposedAddressDetail: AccommodationDetailCommand = {
+    const proposedAddressDetail = {
       ...proposedAddressData,
       arrangementType: 'PRIVATE',
       nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
+    } as AccommodationDetailCommand
 
     return this.proposedAddressesClient.submit(token, crn, proposedAddressDetail)
   }
 
   update(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    const proposedAddressDetail: AccommodationDetailCommand = {
+    const proposedAddressDetail = {
       ...proposedAddressData,
       nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
+    } as AccommodationDetailCommand
     return this.proposedAddressesClient.update(token, crn, proposedAddressData.id, proposedAddressDetail)
   }
 }

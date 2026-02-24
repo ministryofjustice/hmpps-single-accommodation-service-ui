@@ -189,6 +189,15 @@ const formatStatusWithReason = (data: ProposedAddressFormData) => {
   return status
 }
 
+export const validateLookup = (req: Request, sessionData: ProposedAddressFormData) => {
+  const errors: Record<string, string> = {}
+
+  if (!sessionData.nameOrNumber) errors.nameOrNumber = 'Enter a property name or number'
+  if (!sessionData.postcode) errors.postcode = 'Enter a UK postcode'
+
+  return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
+}
+
 export const updateAddressFromRequest = async (
   req: Request,
   formDataManager: MultiPageFormManager<'proposedAddress'>,

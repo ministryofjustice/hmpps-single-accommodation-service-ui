@@ -62,14 +62,14 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Find address')
 
     // Then I should see errors
-    // await addProposedAddressPage.shouldShowErrorMessagesForFields({
-    //   nameOrNumber: 'Enter a name or number',
-    //   postcode: 'Enter a UK postcode',
-    // })
+    await addProposedAddressPage.shouldShowErrorMessagesForFields({
+      nameOrNumber: 'Enter a property name or number',
+      postcode: 'Enter a UK postcode',
+    })
 
     // When I complete the form
-    // await addProposedAddressPage.completeLookupForm('Building name', 'SW1A 1AA')
-    // await addProposedAddressPage.clickButton('Continue')
+    await addProposedAddressPage.completeLookupForm('Building name', 'SW1A 1AA')
+    await addProposedAddressPage.clickButton('Find address')
 
     // Then I should see the address lookup results
     // await addProposedAddressPage.shouldShowAddressLookupResultsForm('Building name', 'SW1A 1AA')

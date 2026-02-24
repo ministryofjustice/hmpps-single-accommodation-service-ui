@@ -1,4 +1,3 @@
-import { AccommodationDetailCommand } from '@sas/api'
 import ProposedAddressesClient from '../data/proposedAddressesClient'
 import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
@@ -73,7 +72,7 @@ describe('ProposedAddressesService', () => {
 
         await proposedAddressesService.submit(token, crn, proposedAddressData)
 
-        const expectedData: AccommodationDetailCommand = {
+        const expectedData = {
           ...proposedAddressData,
           arrangementType: 'PRIVATE',
           nextAccommodationStatus: expectedStatus,
@@ -90,7 +89,7 @@ describe('ProposedAddressesService', () => {
 
       await proposedAddressesService.update(token, crn, proposedAddressData)
 
-      const expectedData: AccommodationDetailCommand = {
+      const expectedData = {
         ...proposedAddressData,
         nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
       }

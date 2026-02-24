@@ -1,4 +1,4 @@
-import { AccommodationDetail } from '@sas/api'
+import { AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 
 export interface ErrorSummary {
@@ -14,18 +14,11 @@ export interface ErrorMessages {
   [key: string]: ErrorMessage
 }
 
-export type ProposedAddressFormData = {
-  id?: string
-  nameOrNumber: string
-  postcode: string
-  arrangementType: AccommodationDetail['arrangementType']
-  arrangementSubType: AccommodationDetail['arrangementSubType']
-  arrangementSubTypeDescription: string
-  settledType: AccommodationDetail['settledType']
-  verificationStatus: AccommodationDetail['verificationStatus']
-  address: AccommodationDetail['address']
-  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus']
+export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
   flow: 'full' | 'details' | 'type' | 'status' | 'nextAccommodation'
+  id?: string
+  nameOrNumber?: string
+  postcode?: string
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']

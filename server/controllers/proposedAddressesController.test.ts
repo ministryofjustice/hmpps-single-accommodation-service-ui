@@ -61,6 +61,7 @@ describe('proposedAddressesController', () => {
 
     controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
     jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
+    jest.spyOn(validationUtils, 'validateAndFlashErrors')
 
     jest.spyOn(controller.formData, 'remove')
 
@@ -77,7 +78,7 @@ describe('proposedAddressesController', () => {
   })
 
   describe('lookup', () => {
-    it('renders lookup page', async () => {
+    it('renders the address lookup page', async () => {
       await controller.lookup()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
@@ -91,26 +92,44 @@ describe('proposedAddressesController', () => {
       })
     })
 
-    it('renders lookup page with session data', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+    it('renders the address lookup page with errors and session data', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        flow: 'full',
+        nameOrNumber: '',
+        postcode: 'H23 8TY',
+      }
+      const errors = { nameOrNumber: 'Enter a property name or number' }
+      const errorSummary = [{ href: '#nameOrNumber', text: 'Enter a property name or number' }]
+
+      jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors, errorSummary })
+
       await controller.lookup()(request, response, next)
 
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
-        who: user.username,
-        correlationId: 'request-id',
-      })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
         crn: 'CRN123',
-        nameOrNumber: 'BUILDING NAME',
-        postcode: 'AB12CD',
-        errors: {},
-        errorSummary: [],
+        nameOrNumber: '',
+        postcode: 'H23 8TY',
+        errors,
+        errorSummary,
       })
     })
   })
 
   describe('saveLookup', () => {
+    it('redirects with errors if the submitted data is invalid', async () => {
+      request.body = { nameOrNumber: '', postcode: '' }
+      await controller.saveLookup()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        nameOrNumber: 'Enter a property name or number',
+        postcode: 'Enter a UK postcode',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+    })
+
     it('redirects to address details if there are no results', async () => {
+      request.body = { nameOrNumber: '123', postcode: 'F45 6RT' }
+
       await controller.saveLookup()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))

@@ -16,6 +16,7 @@ import {
   validateUpToType,
   validateUpToAddress,
   updateNextAccommodationFromRequest,
+  validateLookup,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
 import * as validationUtils from './validation'
@@ -169,6 +170,8 @@ describe('Proposed addresses utilities', () => {
       expect(statusHtml).toMatchSnapshot()
     })
   })
+
+  describe('updateLookupFromRequest', () => {})
 
   describe('updateAddressFromRequest', () => {
     it('updates form data when address exists', async () => {
@@ -327,33 +330,57 @@ describe('Proposed addresses utilities', () => {
       country: 'UK',
     }
 
-    const validUpToAddress = (): ProposedAddressFormData =>
-      ({
-        address: validAddress,
-      }) as ProposedAddressFormData
+    const validUpToAddress = (): ProposedAddressFormData => ({
+      flow: 'full',
+      address: validAddress,
+    })
 
-    const validUpToType = (): ProposedAddressFormData =>
-      ({
-        ...validUpToAddress(),
-        arrangementSubType: 'FRIENDS_OR_FAMILY',
-        arrangementSubTypeDescription: undefined,
-        settledType: 'SETTLED',
-      }) as ProposedAddressFormData
+    const validUpToType = (): ProposedAddressFormData => ({
+      ...validUpToAddress(),
+      arrangementSubType: 'FRIENDS_OR_FAMILY',
+      arrangementSubTypeDescription: undefined,
+      settledType: 'SETTLED',
+    })
 
-    const validUpToStatusNotPassed = (): ProposedAddressFormData =>
-      ({
-        ...validUpToType(),
-        verificationStatus: 'NOT_CHECKED_YET',
-      }) as ProposedAddressFormData
+    const validUpToStatusNotPassed = (): ProposedAddressFormData => ({
+      ...validUpToType(),
+      verificationStatus: 'NOT_CHECKED_YET',
+    })
 
-    const validUpToStatusPassed = (): ProposedAddressFormData =>
-      ({
-        ...validUpToType(),
-        verificationStatus: 'PASSED',
-      }) as ProposedAddressFormData
+    const validUpToStatusPassed = (): ProposedAddressFormData => ({
+      ...validUpToType(),
+      verificationStatus: 'PASSED',
+    })
 
     beforeEach(() => {
       jest.restoreAllMocks()
+      jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    })
+
+    describe('validateLookup', () => {
+      it('sets errors and returns a redirect link to lookup when data is invalid', () => {
+        const invalidLookup: ProposedAddressFormData = {
+          flow: 'full',
+          nameOrNumber: '',
+          postcode: '',
+        }
+
+        expect(validateLookup(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
+        expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+          nameOrNumber: 'Enter a property name or number',
+          postcode: 'Enter a UK postcode',
+        })
+      })
+
+      it('returns undefined when data is valid', () => {
+        const validLookup: ProposedAddressFormData = {
+          flow: 'full',
+          nameOrNumber: '123',
+          postcode: 'AB1 2CD',
+        }
+
+        expect(validateLookup(req, validLookup)).toBeUndefined()
+      })
     })
 
     describe('validateUpToAddress', () => {

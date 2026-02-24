@@ -1,5 +1,6 @@
 import { test } from '@playwright/test'
-import { AccommodationDetail } from '@sas/api'
+import { AccommodationDetail, CaseDto } from '@sas/api'
+import { ProposedAddressFormData } from '@sas/ui'
 import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
@@ -168,5 +169,157 @@ test.describe('add proposed address', () => {
 
     // And the new proposed address should be shown in the proposed addresses section
     await profileTrackerPage.shouldShowProposedAddresses(updatedProposedAddresses)
+  })
+})
+
+test.describe('edit proposed address', () => {
+  const crn = 'X123456'
+  const id = 'some-id'
+
+  let caseData: CaseDto
+  let proposedAddress: AccommodationDetail
+  let initialProposedAddressData: ProposedAddressFormData
+
+  test.beforeEach(async () => {
+    caseData = caseFactory.build({ crn })
+    initialProposedAddressData = proposedAddressFormFactory
+      .manualAddress()
+      .build({ id, verificationStatus: 'NOT_CHECKED_YET', nextAccommodationStatus: 'TO_BE_DECIDED' })
+    proposedAddress = accommodationFactory.proposed().build({ id, crn, ...initialProposedAddressData })
+
+    await casesApi.stubGetCases([caseData])
+    await casesApi.stubGetCaseByCrn(crn, caseData)
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
+    await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
+    await casesApi.stubGetReferralHistory(crn, [])
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [proposedAddress])
+    await proposedAddressesApi.stubGetProposedAddress(crn, id, proposedAddress)
+    await proposedAddressesApi.stubUpdateProposedAddress(crn, id)
+  })
+
+  test('should allow user to update address with failed checks', async ({ page }) => {
+    const failedStatusFormData = { ...initialProposedAddressData, verificationStatus: 'FAILED' as const }
+    const failedStatusUpdate = { ...proposedAddress, verificationStatus: 'FAILED' as const }
+
+    // And I am logged in
+    await login(page)
+
+    // When I visit profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // And I click the Add checks link for a proposed address
+    await profileTrackerPage.clickLink('Add checks')
+
+    // Then I should see the status form page
+    const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
+      page,
+      'What is the status of the address checks?',
+    )
+
+    // Then I should see the populated status form
+    await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
+
+    // When I click the back link
+    await addProposedAddressPage.clickLink('Back')
+
+    // Then I should see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // When I click the Add checks link again
+    await profileTrackerPage.clickLink('Add checks')
+
+    // Then I should see the populated status form again
+    await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
+
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [failedStatusUpdate])
+
+    // When I complete the status form with failed status
+    await addProposedAddressPage.completeStatusForm(failedStatusFormData)
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // And I should see a banner confirming the proposed address was updated
+    await profileTrackerPage.shouldShowBanner('Address updated')
+
+    // And the proposed address should show the updated status
+    await profileTrackerPage.shouldShowProposedAddresses([failedStatusUpdate])
+  })
+
+  test('should allow user to update address with passed checks and confirm next accommodation', async ({ page }) => {
+    const confirmedFormData = proposedAddressFormFactory
+      .manualAddress()
+      .build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' })
+    const updatedProposedAddress = accommodationFactory.proposed().build({
+      ...confirmedFormData,
+      id,
+      crn,
+      address: addressFactory.minimal().build(confirmedFormData.address),
+    })
+    const notNextAccommodationUpdate = { ...updatedProposedAddress, nextAccommodationStatus: 'NO' as const }
+    const notNextAccommodationFormData = { ...confirmedFormData, nextAccommodationStatus: 'NO' as const }
+
+    // And I am logged in
+    await login(page)
+
+    // When I visit profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // And I click the Add checks link for a proposed address
+    await profileTrackerPage.clickLink('Add checks')
+
+    // Then I should see the status form page
+    const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
+      page,
+      'What is the status of the address checks?',
+    )
+
+    // Then I should see the populated status form
+    await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
+
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [notNextAccommodationUpdate])
+
+    // When I complete the status form with passed status
+    await addProposedAddressPage.completeStatusForm(confirmedFormData)
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the next accommodation form
+    await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
+
+    // When I complete the next accommodation form with 'No'
+    await addProposedAddressPage.completeNextAccommodationForm(notNextAccommodationFormData)
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // And I should see a banner confirming the proposed address was updated
+    await profileTrackerPage.shouldShowBanner('Address updated')
+
+    // And the proposed address should show passed status
+    await profileTrackerPage.shouldShowProposedAddresses([notNextAccommodationUpdate])
+
+    await proposedAddressesApi.stubGetProposedAddress(crn, id, notNextAccommodationUpdate)
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [updatedProposedAddress])
+
+    // When I click the Confirm as next address link
+    await profileTrackerPage.clickLink('Confirm as next address')
+
+    // Then I should see the populated next accommodation form
+    await addProposedAddressPage.shouldShowPopulatedNextAccommodationForm(notNextAccommodationFormData)
+
+    // When I complete the next accommodation form with 'Yes'
+    await addProposedAddressPage.completeNextAccommodationForm(confirmedFormData)
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // And I should see a banner confirming the proposed address was updated
+    await profileTrackerPage.shouldShowBanner('Address updated')
+
+    // And the proposed address should show the confirmed status
+    await profileTrackerPage.shouldShowProposedAddresses([updatedProposedAddress])
   })
 })

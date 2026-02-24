@@ -18,10 +18,29 @@ export default class ProposedAddressesClient extends RestClient {
     )
   }
 
+  async getProposedAddress(token: string, crn: string, id: string) {
+    return this.get<AccommodationDetail>(
+      {
+        path: apiPaths.cases.proposedAddresses.show({ crn, id }),
+      },
+      asUser(token),
+    )
+  }
+
   async submit(token: string, crn: string, proposedAddressDetail: AccommodationDetailCommand) {
     return this.post<void>(
       {
         path: apiPaths.cases.proposedAddresses.submit({ crn }),
+        data: proposedAddressDetail,
+      },
+      asUser(token),
+    )
+  }
+
+  async update(token: string, crn: string, id: string, proposedAddressDetail: AccommodationDetailCommand) {
+    return this.put<void>(
+      {
+        path: apiPaths.cases.proposedAddresses.update({ crn, id }),
         data: proposedAddressDetail,
       },
       asUser(token),

@@ -11,12 +11,14 @@ export default {
   },
   proposedAddresses: {
     start: proposedAddressesPath.path('start'),
+    edit: proposedAddressesPath.path(':id/edit'),
     details: proposedAddressesPath.path('details'),
     type: proposedAddressesPath.path('type'),
     status: proposedAddressesPath.path('status'),
     nextAccommodation: proposedAddressesPath.path('next-accommodation'),
     checkYourAnswers: proposedAddressesPath.path('check-your-answers'),
     submit: proposedAddressesPath.path('submit'),
+    update: proposedAddressesPath.path('update'),
     cancel: proposedAddressesPath.path('cancel'),
   },
 }

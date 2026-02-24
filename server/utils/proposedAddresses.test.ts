@@ -38,6 +38,8 @@ describe('Proposed addresses utilities', () => {
 
   describe('proposedAddressStatusCard', () => {
     const baseAccommodationDetails = accommodationFactory.build({
+      id: 'some-id',
+      crn: 'CRN123',
       verificationStatus: 'PASSED',
       createdAt: '2026-01-20T11:00:00.000Z',
       arrangementType: 'PRIVATE',

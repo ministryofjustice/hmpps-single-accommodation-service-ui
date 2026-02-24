@@ -13,7 +13,9 @@ export default {
     referrals: casePath.path('applications'),
     proposedAddresses: {
       index: proposedAddressesPath,
+      show: proposedAddressesPath.path(':id'),
       submit: proposedAddressesPath,
+      update: proposedAddressesPath.path(':id'),
     },
   },
 }

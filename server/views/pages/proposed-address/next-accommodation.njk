@@ -3,7 +3,6 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Is this the next address they will be moving into? " + applicationName %}
-{% set backLinkHref = paths.proposedAddresses.status({ crn: crn }) %}
 {% set formAction = paths.proposedAddresses.nextAccommodation({ crn: crn }) %}
 
 {% block formContent %}

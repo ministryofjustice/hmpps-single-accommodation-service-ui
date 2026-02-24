@@ -8,6 +8,7 @@ import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
+import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
 import { accommodationFactory } from '../testutils/factories'
 
@@ -62,6 +63,8 @@ describe('proposedAddressesController', () => {
     jest.spyOn(proposedAddressesUtils, 'nextAccommodationStatusItems').mockReturnValue([])
 
     jest.spyOn(controller.formData, 'remove')
+
+    jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
   })
 
   describe('start', () => {
@@ -216,6 +219,7 @@ describe('proposedAddressesController', () => {
     it('renders status page', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = undefined
       jest.spyOn(proposedAddressesUtils, 'validateUpToType').mockReturnValue(null)
+      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
 
       await controller.status()(request, response, next)
 
@@ -237,6 +241,7 @@ describe('proposedAddressesController', () => {
     it('renders status page with session data', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
       jest.spyOn(proposedAddressesUtils, 'validateUpToType').mockReturnValue(null)
+      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
       await controller.status()(request, response, next)
 
       expect(proposedAddressesUtils.validateUpToType).toHaveBeenCalledWith(request, sessionData)
@@ -339,6 +344,7 @@ describe('proposedAddressesController', () => {
   describe('nextAccommodation', () => {
     it('renders next accommodation page', async () => {
       jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
+      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
       request.session.multiPageFormData.proposedAddress.CRN123 = undefined
 
       await controller.nextAccommodation()(request, response, next)
@@ -361,6 +367,7 @@ describe('proposedAddressesController', () => {
 
     it('renders next accommodation page with session data', async () => {
       jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
+      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.nextAccommodation()(request, response, next)
@@ -456,6 +463,9 @@ describe('proposedAddressesController', () => {
           { key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' }, actions: { items: [] } },
         ])
       jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
+      jest
+        .spyOn(backlinks, 'getPageBackLink')
+        .mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.checkYourAnswers()(request, response, next)

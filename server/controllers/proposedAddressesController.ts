@@ -21,6 +21,7 @@ import {
 import { fetchErrors, addErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
+import { getPageBackLink } from '../utils/backlinks'
 
 export default class ProposedAddressesController {
   formData: MultiPageFormManager<'proposedAddress'>
@@ -136,10 +137,10 @@ export default class ProposedAddressesController {
       })
       const { errors, errorSummary } = fetchErrors(req)
 
-      const backLinkHref =
-        !proposedAddressFormSessionData?.flow || proposedAddressFormSessionData?.flow === 'full'
-          ? uiPaths.proposedAddresses.type({ crn: req.params.crn })
-          : uiPaths.cases.show({ crn: req.params.crn })
+      const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.status.pattern, req, [
+        uiPaths.proposedAddresses.type.pattern,
+        uiPaths.cases.show.pattern,
+      ])
 
       return res.render('pages/proposed-address/status', {
         crn: req.params.crn,
@@ -184,10 +185,10 @@ export default class ProposedAddressesController {
       const { errors, errorSummary } = fetchErrors(req)
       const caseData = await this.casesService.getCase(token, crn)
 
-      const backLinkHref =
-        proposedAddressFormSessionData?.flow === 'nextAccommodation'
-          ? uiPaths.cases.show({ crn: req.params.crn })
-          : uiPaths.proposedAddresses.status({ crn: req.params.crn })
+      const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.nextAccommodation.pattern, req, [
+        uiPaths.cases.show.pattern,
+        uiPaths.proposedAddresses.status.pattern,
+      ])
 
       return res.render('pages/proposed-address/next-accommodation', {
         crn,
@@ -232,10 +233,10 @@ export default class ProposedAddressesController {
       const caseData = await this.casesService.getCase(token, crn)
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, crn, caseData.name)
-      const backLinkHref =
-        proposedAddressFormSessionData?.verificationStatus === 'PASSED'
-          ? uiPaths.proposedAddresses.nextAccommodation({ crn })
-          : uiPaths.proposedAddresses.status({ crn })
+      const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.checkYourAnswers.pattern, req, [
+        uiPaths.proposedAddresses.status.pattern,
+        uiPaths.proposedAddresses.nextAccommodation.pattern,
+      ])
 
       return res.render('pages/proposed-address/check-your-answers', {
         crn,

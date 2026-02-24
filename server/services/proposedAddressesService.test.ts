@@ -90,7 +90,7 @@ describe('ProposedAddressesService', () => {
 
       await proposedAddressesService.update(token, crn, proposedAddressData)
 
-      const expectedData: CreateAccommodationDetail = {
+      const expectedData: AccommodationDetailCommand = {
         ...proposedAddressData,
         nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
       }

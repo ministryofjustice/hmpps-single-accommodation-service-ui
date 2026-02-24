@@ -41,6 +41,7 @@ describe('proposedAddressesController', () => {
   let controller: ProposedAddressesController
 
   beforeEach(() => {
+    jest.restoreAllMocks()
     jest.clearAllMocks()
 
     casesService.getCase.mockResolvedValue({ name: 'James Smith' })
@@ -58,9 +59,6 @@ describe('proposedAddressesController', () => {
 
     controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
     jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
-    jest.spyOn(proposedAddressesUtils, 'arrangementSubTypeItems').mockReturnValue([])
-    jest.spyOn(proposedAddressesUtils, 'verificationStatusItems').mockReturnValue([])
-    jest.spyOn(proposedAddressesUtils, 'nextAccommodationStatusItems').mockReturnValue([])
 
     jest.spyOn(controller.formData, 'remove')
 
@@ -114,76 +112,71 @@ describe('proposedAddressesController', () => {
 
   describe('saveDetails', () => {
     it('redirects to type when address valid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateAddressFromRequest').mockResolvedValue(sessionData)
-      jest.spyOn(proposedAddressesUtils, 'validateUpToAddress').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      request.body = {
+        addressLine1: 'Line 1',
+        addressLine2: 'Line 2',
+        addressTown: 'Town',
+        addressCounty: 'Region',
+        addressPostcode: 'AB1 2CD',
+        addressCountry: 'UK',
+      }
 
       await controller.saveDetails()(request, response, next)
 
-      expect(proposedAddressesUtils.updateAddressFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToAddress).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
     })
 
     it('redirects to details when address invalid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateAddressFromRequest').mockResolvedValue(sessionData)
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToAddress')
-        .mockReturnValue(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
-
       await controller.saveDetails()(request, response, next)
 
-      expect(proposedAddressesUtils.updateAddressFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToAddress).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
     })
   })
 
   describe('type', () => {
     it('renders arrangement type page', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = undefined
-      jest.spyOn(proposedAddressesUtils, 'validateUpToAddress').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        arrangementSubType: undefined,
+        settledType: undefined,
+      }
+
       await controller.type()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToAddress).toHaveBeenCalledWith(request, undefined)
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_TYPE, {
         who: user.username,
         correlationId: 'request-id',
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
-        proposedAddress: undefined,
+        proposedAddress: { ...sessionData, arrangementSubType: undefined, settledType: undefined },
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: [],
+        arrangementSubTypeItems: expect.any(Array),
       })
     })
 
     it('renders arrangement type page with session data', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest.spyOn(proposedAddressesUtils, 'validateUpToAddress').mockReturnValue(null)
       await controller.type()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToAddress).toHaveBeenCalledWith(request, sessionData)
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         proposedAddress: sessionData,
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: [],
+        arrangementSubTypeItems: expect.any(Array),
       })
     })
 
     it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToAddress')
-        .mockReturnValue(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = undefined
 
       await controller.type()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToAddress).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
       expect(auditService.logPageView).not.toHaveBeenCalled()
     })
@@ -191,79 +184,67 @@ describe('proposedAddressesController', () => {
 
   describe('saveType', () => {
     it('redirects to status when arrangement type valid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateTypeFromRequest').mockResolvedValue(sessionData)
-      jest.spyOn(proposedAddressesUtils, 'validateUpToType').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      request.body = {
+        arrangementSubType: 'FRIENDS_OR_FAMILY',
+        settledType: 'SETTLED',
+      }
 
       await controller.saveType()(request, response, next)
 
-      expect(proposedAddressesUtils.updateTypeFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToType).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
 
     it('redirects to arrangement type when arrangement type invalid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateTypeFromRequest').mockResolvedValue(sessionData)
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToType')
-        .mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.saveType()(request, response, next)
 
-      expect(proposedAddressesUtils.updateTypeFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToType).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
     })
   })
 
   describe('status', () => {
     it('renders status page', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = undefined
-      jest.spyOn(proposedAddressesUtils, 'validateUpToType').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, verificationStatus: undefined }
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
 
       await controller.status()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToType).toHaveBeenCalledWith(request, undefined)
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_STATUS, {
         who: user.username,
         correlationId: 'request-id',
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
-        proposedAddress: undefined,
+        proposedAddress: { ...sessionData, verificationStatus: undefined },
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
-        verificationStatusItems: [],
+        verificationStatusItems: expect.any(Array),
       })
     })
 
     it('renders status page with session data', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest.spyOn(proposedAddressesUtils, 'validateUpToType').mockReturnValue(null)
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
       await controller.status()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToType).toHaveBeenCalledWith(request, sessionData)
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
         proposedAddress: sessionData,
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
-        verificationStatusItems: [],
+        verificationStatusItems: expect.any(Array),
       })
     })
 
     it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToType')
-        .mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, arrangementSubType: undefined }
 
       await controller.status()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToType).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
       expect(auditService.logPageView).not.toHaveBeenCalled()
     })
@@ -271,66 +252,37 @@ describe('proposedAddressesController', () => {
 
   describe('saveStatus', () => {
     it('redirects to check your answers when status valid and status is not PASSED', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateStatusFromRequest').mockResolvedValue({
-        ...sessionData,
-        verificationStatus: 'NOT_CHECKED_YET',
-      })
-      jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      request.body = { verificationStatus: 'NOT_CHECKED_YET' }
 
       await controller.saveStatus()(request, response, next)
 
-      expect(proposedAddressesUtils.updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, {
-        ...sessionData,
-        verificationStatus: 'NOT_CHECKED_YET',
-      })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
     })
 
     it('redirects to next accommodation when status is PASSED', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
-        verificationStatus: 'PASSED',
-      }
-      jest.spyOn(proposedAddressesUtils, 'updateStatusFromRequest').mockResolvedValue(sessionData)
-      jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      request.body = { verificationStatus: 'PASSED' }
 
       await controller.saveStatus()(request, response, next)
 
-      expect(proposedAddressesUtils.updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
     })
 
     it('redirects to status when status invalid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateStatusFromRequest').mockResolvedValue(sessionData)
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToStatus')
-        .mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.saveStatus()(request, response, next)
 
-      expect(proposedAddressesUtils.updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
 
     it('updates and redirects to profile tracker when flow is not "full" and status is not PASSED', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateStatusFromRequest').mockResolvedValue({
-        ...sessionData,
-        flow: 'status',
-        verificationStatus: 'NOT_CHECKED_YET',
-      })
-      jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, flow: 'status' }
+      request.body = { verificationStatus: 'NOT_CHECKED_YET' }
 
       await controller.saveStatus()(request, response, next)
 
-      expect(proposedAddressesUtils.updateStatusFromRequest).toHaveBeenCalledWith(request, controller.formData)
-      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, {
-        ...sessionData,
-        flow: 'status',
-        verificationStatus: 'NOT_CHECKED_YET',
-      })
       expect(proposedAddressesService.update).toHaveBeenCalledWith(
         'token-1',
         'CRN123',
@@ -343,9 +295,8 @@ describe('proposedAddressesController', () => {
 
   describe('nextAccommodation', () => {
     it('renders next accommodation page', async () => {
-      jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
-      request.session.multiPageFormData.proposedAddress.CRN123 = undefined
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, nextAccommodationStatus: undefined }
 
       await controller.nextAccommodation()(request, response, next)
 
@@ -353,11 +304,10 @@ describe('proposedAddressesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, undefined)
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
-        proposedAddress: undefined,
-        nextAccommodationStatusItems: [],
+        proposedAddress: { ...sessionData, nextAccommodationStatus: undefined },
+        nextAccommodationStatusItems: expect.any(Array),
         name: 'James Smith',
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
@@ -366,18 +316,16 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders next accommodation page with session data', async () => {
-      jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue(null)
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.nextAccommodation()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, sessionData)
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
         proposedAddress: sessionData,
         name: 'James Smith',
-        nextAccommodationStatusItems: [],
+        nextAccommodationStatusItems: expect.any(Array),
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
         errorSummary: [],
@@ -385,14 +333,10 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToStatus')
-        .mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, verificationStatus: undefined }
 
       await controller.nextAccommodation()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToStatus).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
       expect(auditService.logPageView).not.toHaveBeenCalled()
     })
@@ -400,51 +344,31 @@ describe('proposedAddressesController', () => {
 
   describe('saveNextAccommodation', () => {
     it('redirects to check your answers when next accommodation valid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateNextAccommodationFromRequest').mockResolvedValue(sessionData)
-      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      request.body = { nextAccommodationStatus: 'YES' }
 
       await controller.saveNextAccommodation()(request, response, next)
-      expect(proposedAddressesUtils.updateNextAccommodationFromRequest).toHaveBeenCalledWith(
-        request,
-        controller.formData,
-      )
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
     })
 
     it('redirects to next accommodation when next accommodation invalid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateNextAccommodationFromRequest').mockResolvedValue(sessionData)
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation')
-        .mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: undefined,
+      }
 
       await controller.saveNextAccommodation()(request, response, next)
 
-      expect(proposedAddressesUtils.updateNextAccommodationFromRequest).toHaveBeenCalledWith(
-        request,
-        controller.formData,
-      )
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
     })
 
     it('updates and redirects to profile tracker when flow is not "full"', async () => {
-      jest.spyOn(proposedAddressesUtils, 'updateNextAccommodationFromRequest').mockResolvedValue({
-        ...sessionData,
-        flow: 'nextAccommodation',
-      })
-      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, flow: 'nextAccommodation' }
+      request.body = { nextAccommodationStatus: 'YES' }
 
       await controller.saveNextAccommodation()(request, response, next)
 
-      expect(proposedAddressesUtils.updateNextAccommodationFromRequest).toHaveBeenCalledWith(
-        request,
-        controller.formData,
-      )
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, {
-        ...sessionData,
-        flow: 'nextAccommodation',
-      })
       expect(proposedAddressesService.update).toHaveBeenCalledWith(
         'token-1',
         'CRN123',
@@ -462,7 +386,6 @@ describe('proposedAddressesController', () => {
         .mockImplementation(() => [
           { key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' }, actions: { items: [] } },
         ])
-      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
       jest
         .spyOn(backlinks, 'getPageBackLink')
         .mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
@@ -474,7 +397,6 @@ describe('proposedAddressesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
         tableRows: [{ key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' }, actions: { items: [] } }],
@@ -485,14 +407,10 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation')
-        .mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, nextAccommodationStatus: undefined }
 
       await controller.checkYourAnswers()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
       expect(auditService.logPageView).not.toHaveBeenCalled()
     })
@@ -501,27 +419,21 @@ describe('proposedAddressesController', () => {
   describe('submit', () => {
     it('submits, clears session data and redirects', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
 
       await controller.submit()(request, response, next)
 
       expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', sessionData)
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
       expect(request.flash).toHaveBeenCalledWith('success', 'Private address added')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 
     it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest
-        .spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation')
-        .mockReturnValue(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, nextAccommodationStatus: undefined }
 
       await controller.submit()(request, response, next)
 
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
       expect(proposedAddressesService.submit).not.toHaveBeenCalled()
       expect(controller.formData.remove).not.toHaveBeenCalled()
       expect(auditService.logPageView).not.toHaveBeenCalled()
@@ -529,14 +441,11 @@ describe('proposedAddressesController', () => {
 
     it('redirects when api call fails', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
-      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue(null)
       jest.spyOn(proposedAddressesService, 'submit').mockRejectedValue(new Error('API error'))
-      jest.spyOn(controller.formData, 'remove')
 
       await controller.submit()(request, response, next)
 
       expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', sessionData)
-      expect(proposedAddressesUtils.validateUpToNextAccommodation).toHaveBeenCalledWith(request, sessionData)
       expect(controller.formData.remove).not.toHaveBeenCalled()
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
       expect(auditService.logPageView).not.toHaveBeenCalled()

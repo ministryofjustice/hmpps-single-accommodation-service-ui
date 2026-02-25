@@ -1,0 +1,49 @@
+{% extends "pages/proposed-address/layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = "Select an address " + applicationName %}
+{% set backLinkHref = paths.proposedAddresses.lookup({crn: crn}) %}
+{% set formAction = paths.proposedAddresses.selectAddress({crn: crn}) %}
+
+{% block extraAction %}
+  <p>
+    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.details({ crn: crn }) }}">
+      Enter address manually
+    </a>
+  </p>
+{% endblock %}
+
+{% block formContent %}
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <h1 class="govuk-fieldset__heading">{{ addresses | length }} addresses found</h1>
+  </legend>
+
+  <div class="govuk-inset-text">
+    <dl>
+      <dt>Property name or number</dt>
+      <dd>{{ nameOrNumber }}</dd>
+      <dt>UK postcode</dt>
+      <dd>{{ postcode }}</dd>
+    </dl>
+
+    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.lookup({crn: crn}) }}">Change</a>
+  </div>
+
+  {{
+    govukRadios({
+      name: "selectedAddress",
+      fieldset: {
+        legend: {
+          text: "Select an address",
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      hint: {
+        text: "If your address is not listed, select 'Enter address manually'."
+      },
+      items: addresses,
+      errorMessage: errors.selectedAddress
+    })
+  }}
+{% endblock %}

@@ -1,4 +1,4 @@
-import { AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
+import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 
 export interface ErrorSummary {
@@ -19,6 +19,7 @@ export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
   id?: string
   nameOrNumber?: string
   postcode?: string
+  lookupResults?: AccommodationAddressDetails[]
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']
@@ -54,21 +55,44 @@ export type DividerItem = {
   divider: string
 }
 
-export type RadioItem =
-  | {
-      text: string
-      value: string
-      checked?: boolean
-      conditional?: {
-        html: string
-      }
-    }
-  | DividerItem
+export type RadioItem = {
+  text: string
+  value: string
+  checked?: boolean
+  conditional?: {
+    html: string
+  }
+}
 
-export type CheckboxItem =
-  | {
-      text: string
-      value: string
-      checked?: boolean
-    }
-  | DividerItem
+export type CheckboxItem = {
+  text: string
+  value: string
+  checked?: boolean
+}
+
+// See: https://docs.os.uk/os-apis/accessing-os-apis/os-places-api/technical-specification/postcode
+export type OsDataHubResult = {
+  DPA: {
+    ORGANISATION_NAME?: string
+    DEPARTMENT_NAME?: string
+    BUILDING_NUMBER?: string
+    BUILDING_NAME?: string
+    SUB_BUILDING_NAME?: string
+    DEPENDENT_THOROUGHFARE_NAME?: string
+    THOROUGHFARE_NAME?: string
+    DOUBLE_DEPENDENT_LOCALITY?: string
+    DEPENDENT_LOCALITY?: string
+    POST_TOWN: string
+    POSTCODE: string
+    COUNTRY_CODE: string
+    COUNTRY_CODE_DESCRIPTION: string
+    ADDRESS: string
+    UPRN: string
+    UDPRN: string
+  }
+}
+
+export type OsDataHubResponse = {
+  header: unknown
+  results: OsDataHubResult[]
+}

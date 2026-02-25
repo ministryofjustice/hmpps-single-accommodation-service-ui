@@ -19,6 +19,7 @@ const proposedAddressesController = mock<ProposedAddressesController>({
   edit: mockHandler,
   lookup: mockHandler,
   saveLookup: mockHandler,
+  selectAddress: mockHandler,
   details: mockHandler,
   saveDetails: mockHandler,
   type: mockHandler,

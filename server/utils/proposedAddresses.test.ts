@@ -1,6 +1,6 @@
 import { AccommodationDetail } from '@sas/api'
 import { Request } from 'express'
-import { ProposedAddressFormData } from '@sas/ui'
+import { OsDataHubResult, ProposedAddressFormData } from '@sas/ui'
 import { mock } from 'jest-mock-extended'
 import {
   proposedAddressStatusCard,
@@ -16,13 +16,17 @@ import {
   validateUpToType,
   validateUpToAddress,
   updateNextAccommodationFromRequest,
-  validateLookup,
+  validateLookupFromSession,
   proposedAddressFormDataToRequestBody,
+  osDataHubResultToAddressDetails,
+  filterOsDataHubResultsByNameOrNumber,
+  lookupResultsItems,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
 import * as validationUtils from './validation'
 import MultiPageFormManager from './multiPageFormManager'
 import uiPaths from '../paths/ui'
+import { formatAddress } from './addresses'
 
 const crn = 'CRN123'
 const formDataManager = mock<MultiPageFormManager<'proposedAddress'>>()
@@ -358,7 +362,7 @@ describe('Proposed addresses utilities', () => {
       jest.spyOn(validationUtils, 'validateAndFlashErrors')
     })
 
-    describe('validateLookup', () => {
+    describe('validateLookupFromSession', () => {
       it('sets errors and returns a redirect link to lookup when data is invalid', () => {
         const invalidLookup: ProposedAddressFormData = {
           flow: 'full',
@@ -366,7 +370,7 @@ describe('Proposed addresses utilities', () => {
           postcode: '',
         }
 
-        expect(validateLookup(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
           nameOrNumber: 'Enter a property name or number',
           postcode: 'Enter a UK postcode',
@@ -380,7 +384,7 @@ describe('Proposed addresses utilities', () => {
           postcode: 'AB1 2CD',
         }
 
-        expect(validateLookup(req, validLookup)).toBeUndefined()
+        expect(validateLookupFromSession(req, validLookup)).toBeUndefined()
       })
     })
 
@@ -604,5 +608,100 @@ describe('Proposed addresses utilities', () => {
         })
       },
     )
+  })
+
+  describe('filterDataHubResultsByNameOrNumber', () => {
+    const results = [
+      { DPA: { BUILDING_NAME: '19A' } },
+      { DPA: { BUILDING_NAME: '219A' } },
+      { DPA: { SUB_BUILDING_NAME: 'FLAT 19' } },
+      { DPA: { SUB_BUILDING_NAME: 'FLAT 219' } },
+      { DPA: { BUILDING_NUMBER: '19' } },
+      { DPA: { BUILDING_NUMBER: '219' } },
+      { DPA: { BUILDING_NUMBER: '3' } },
+      { DPA: { BUILDING_NAME: '3 LITTLE PIGS' } },
+      { DPA: { SUB_BUILDING_NAME: 'SOMETHING 333' } },
+    ] as OsDataHubResult[]
+
+    it.each([
+      ['19', [results[0], results[1], results[2], results[3], results[4], results[5]]],
+      ['219', [results[1], results[3], results[5]]],
+      ['3', [results[6], results[7], results[8]]],
+      ['Little pigs', [results[7]]],
+      [undefined, results],
+    ])(`returns results for name or number "%s"`, (nameOrNumber, expected) => {
+      expect(filterOsDataHubResultsByNameOrNumber(results, nameOrNumber)).toEqual(expected)
+    })
+  })
+
+  describe('osDataHubResultToAddressDetails', () => {
+    it('returns an address details object with the correct fields', () => {
+      const osDataHubResult: OsDataHubResult = {
+        DPA: {
+          UPRN: '77077677',
+          UDPRN: '14497516',
+          ADDRESS: 'FLAT 2, THE MILL, 21, KEPPEL ROAD, MANCHESTER, M21 0BP',
+          SUB_BUILDING_NAME: 'FLAT 2',
+          BUILDING_NAME: 'THE MILL',
+          BUILDING_NUMBER: '21',
+          THOROUGHFARE_NAME: 'KEPPEL ROAD',
+          DEPENDENT_LOCALITY: 'CHORLTON',
+          POST_TOWN: 'MANCHESTER',
+          POSTCODE: 'M21 0BP',
+          COUNTRY_CODE: 'E',
+          COUNTRY_CODE_DESCRIPTION: 'This record is within England',
+        },
+      }
+
+      expect(osDataHubResultToAddressDetails(osDataHubResult)).toEqual({
+        buildingName: 'The Mill',
+        subBuildingName: 'Flat 2',
+        buildingNumber: '21',
+        thoroughfareName: 'Keppel Road',
+        dependentLocality: 'Chorlton',
+        postTown: 'Manchester',
+        postcode: 'M21 0BP',
+        uprn: '77077677',
+        county: undefined,
+        country: undefined,
+      })
+    })
+  })
+
+  describe('lookupResultsItems', () => {
+    it('returns radio buttons for the lookup results', () => {
+      const lookupResults = addressFactory.buildList(2)
+
+      expect(lookupResultsItems(lookupResults)).toEqual([
+        {
+          value: lookupResults[0].uprn,
+          text: formatAddress(lookupResults[0]),
+          checked: false,
+        },
+        {
+          value: lookupResults[1].uprn,
+          text: formatAddress(lookupResults[1]),
+          checked: false,
+        },
+      ])
+    })
+
+    it('marks the selected UPRN as checked', () => {
+      const lookupResults = addressFactory.buildList(2)
+      const selectedUprn = lookupResults[1].uprn
+
+      expect(lookupResultsItems(lookupResults, selectedUprn)).toEqual([
+        {
+          value: lookupResults[0].uprn,
+          text: formatAddress(lookupResults[0]),
+          checked: false,
+        },
+        {
+          value: lookupResults[1].uprn,
+          text: formatAddress(lookupResults[1]),
+          checked: true,
+        },
+      ])
+    })
   })
 })

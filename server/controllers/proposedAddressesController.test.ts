@@ -10,7 +10,9 @@ import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
-import { accommodationFactory } from '../testutils/factories'
+import { accommodationFactory, addressFactory } from '../testutils/factories'
+import OsDataHubService from '../services/osDataHubService'
+import { lookupResultsItems } from '../utils/proposedAddresses'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -20,6 +22,7 @@ describe('proposedAddressesController', () => {
   const auditService = mock<AuditService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
   const casesService = mock<CasesService>()
+  const osDataHubService = mock<OsDataHubService>()
   const sessionData: ProposedAddressFormData = {
     flow: 'full',
     nameOrNumber: 'BUILDING NAME',
@@ -59,11 +62,12 @@ describe('proposedAddressesController', () => {
       },
     })
 
-    controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
+    controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService, osDataHubService)
     jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
 
     jest.spyOn(controller.formData, 'remove')
+    jest.spyOn(controller.formData, 'update')
 
     jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
   })
@@ -125,14 +129,43 @@ describe('proposedAddressesController', () => {
         postcode: 'Enter a UK postcode',
       })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(1)
     })
 
-    it('redirects to address details if there are no results', async () => {
+    it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
+      const lookupResults = addressFactory.buildList(3)
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue(lookupResults)
+
       request.body = { nameOrNumber: '123', postcode: 'F45 6RT' }
 
       await controller.saveLookup()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(2)
+      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+        lookupResults,
+      })
+    })
+  })
+
+  describe('selectAddress', () => {
+    it('renders the select address page with results from the session', async () => {
+      const lookupResults = addressFactory.buildList(3)
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        lookupResults,
+      }
+
+      await controller.selectAddress()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/select-address', {
+        crn: 'CRN123',
+        nameOrNumber: 'BUILDING NAME',
+        postcode: 'AB12CD',
+        addresses: lookupResultsItems(lookupResults),
+        errors: {},
+        errorSummary: [],
+      })
     })
   })
 

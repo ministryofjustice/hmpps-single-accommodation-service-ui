@@ -1,9 +1,16 @@
-import { ProposedAddressDisplayStatus, ProposedAddressFormData, StatusCard, StatusTag } from '@sas/ui'
-import { AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
+import {
+  OsDataHubResult,
+  ProposedAddressDisplayStatus,
+  ProposedAddressFormData,
+  RadioItem,
+  StatusCard,
+  StatusTag,
+} from '@sas/ui'
+import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { Request } from 'express'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
-import { htmlContent, textContent } from './utils'
+import { convertToTitleCase, htmlContent, textContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { validateAndFlashErrors } from './validation'
@@ -189,7 +196,7 @@ const formatStatusWithReason = (data: ProposedAddressFormData) => {
   return status
 }
 
-export const validateLookup = (req: Request, sessionData: ProposedAddressFormData) => {
+export const validateLookupFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
   if (!sessionData.nameOrNumber) errors.nameOrNumber = 'Enter a property name or number'
@@ -418,3 +425,35 @@ export const proposedAddressFormDataToRequestBody = ({
   verificationStatus,
   nextAccommodationStatus: nextAccommodationStatus ?? 'TO_BE_DECIDED',
 })
+
+export const filterOsDataHubResultsByNameOrNumber = (results: OsDataHubResult[], nameOrNumber?: string) => {
+  if (!nameOrNumber) return results
+
+  const sanitisedNameOrNumber = nameOrNumber.toUpperCase()
+
+  return results.filter(result =>
+    ['BUILDING_NUMBER', 'BUILDING_NAME', 'SUB_BUILDING_NAME'].some(key =>
+      result.DPA[key as keyof OsDataHubResult['DPA']]?.includes(sanitisedNameOrNumber),
+    ),
+  )
+}
+
+export const osDataHubResultToAddressDetails = (result: OsDataHubResult): AccommodationAddressDetails => ({
+  postcode: result.DPA.POSTCODE,
+  subBuildingName: convertToTitleCase(result.DPA.SUB_BUILDING_NAME),
+  buildingName: convertToTitleCase(result.DPA.BUILDING_NAME),
+  buildingNumber: result.DPA.BUILDING_NUMBER,
+  thoroughfareName: convertToTitleCase(result.DPA.THOROUGHFARE_NAME),
+  dependentLocality: convertToTitleCase(result.DPA.DEPENDENT_LOCALITY),
+  postTown: convertToTitleCase(result.DPA.POST_TOWN),
+  county: undefined,
+  country: undefined,
+  uprn: result.DPA.UPRN,
+})
+
+export const lookupResultsItems = (results: AccommodationAddressDetails[], selectedUprn?: string): RadioItem[] =>
+  results.map(result => ({
+    value: result.uprn,
+    text: formatAddress(result),
+    checked: selectedUprn === result.uprn,
+  }))

@@ -12,6 +12,8 @@ export default function proposedAddressesRoutes(
   router.get(uiPaths.proposedAddresses.lookup.pattern, proposedAddressesController.lookup())
   router.post(uiPaths.proposedAddresses.lookup.pattern, proposedAddressesController.saveLookup())
 
+  router.get(uiPaths.proposedAddresses.selectAddress.pattern, proposedAddressesController.selectAddress())
+
   router.get(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.details())
   router.post(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.saveDetails())
 

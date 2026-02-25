@@ -95,6 +95,16 @@ export default {
       },
       agent: new AgentConfig(Number(get('PROBATION_API_TIMEOUT_RESPONSE', 5000))),
     },
+    osDataHubApi: {
+      url: get('OS_DATAHUB_API_URL', 'https://api.os.uk', requiredInProduction),
+      healthPath: '/ping',
+      timeout: {
+        response: Number(get('OS_DATAHUB_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('OS_DATAHUB_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(Number(get('OS_DATAHUB_API_TIMEOUT_RESPONSE', 5000))),
+      apiKey: get('OS_DATAHUB_API_KEY', 'os-datahub-api-key', requiredInProduction),
+    },
   },
   sqs: {
     audit: auditConfig(),

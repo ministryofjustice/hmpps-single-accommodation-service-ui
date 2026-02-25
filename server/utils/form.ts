@@ -1,6 +1,6 @@
 import { RadioItem, CheckboxItem, DividerItem } from '@sas/ui'
 
-type Item = RadioItem | CheckboxItem
+type Item = RadioItem | CheckboxItem | DividerItem
 
 // eslint-disable-next-line import/prefer-default-export
 export const injectConditionals = (

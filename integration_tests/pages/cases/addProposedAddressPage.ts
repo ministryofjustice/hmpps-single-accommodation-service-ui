@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test'
-import { ProposedAddressFormData } from '@sas/ui'
+import { ProposedAddressFormData, RadioItem } from '@sas/ui'
 import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import paths from '../../../server/paths/ui'
@@ -43,13 +43,19 @@ export default class AddProposedAddressPage extends AbstractPage {
     await this.completeInputByLabel('UK postcode', postcode)
   }
 
-  async shouldShowAddressLookupResultsForm(nameOrNumber: string, postcode: string) {
-    await expect(this.page.getByRole('definition', { name: 'Property name or number' })).toHaveText(nameOrNumber)
-    await expect(this.page.getByRole('definition', { name: 'UK postcode' })).toHaveText(postcode)
+  async shouldShowSelectAddressForm(nameOrNumber: string, postcode: string, expectedResults: RadioItem[]) {
+    await expect(this.page.locator('dt:text("Property name or number") + dd')).toHaveText(nameOrNumber)
+    await expect(this.page.locator('dt:text("UK postcode") + dd')).toHaveText(postcode)
 
-    await expect(this.page.getByRole('link', { name: 'Change' })).toHaveAttribute('href', '#')
+    await expect(this.page.getByRole('link', { name: 'Change' })).toHaveAttribute(
+      'href',
+      paths.proposedAddresses.lookup({ crn: this.crn }),
+    )
 
     await expect(this.page.getByRole('group', { name: 'Select an address' })).toBeVisible()
+    for await (const { text, value } of expectedResults) {
+      await expect(this.page.getByRole('radio', { name: text })).toHaveValue(value)
+    }
   }
 
   async completeAddressLookupResultsForm() {

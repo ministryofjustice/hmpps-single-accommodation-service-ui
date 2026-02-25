@@ -17,11 +17,13 @@ import {
   validateUpToStatus,
   validateUpToNextAccommodation,
   flowRedirects,
-  validateLookup,
+  validateLookupFromSession,
+  lookupResultsItems,
 } from '../utils/proposedAddresses'
 import { fetchErrors, addErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
+import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
 
 export default class ProposedAddressesController {
@@ -31,6 +33,7 @@ export default class ProposedAddressesController {
     private readonly auditService: AuditService,
     private readonly proposedAddressesService: ProposedAddressesService,
     private readonly casesService: CasesService,
+    private readonly osDataHubService: OsDataHubService,
   ) {
     this.formData = new MultiPageFormManager('proposedAddress')
   }
@@ -82,15 +85,49 @@ export default class ProposedAddressesController {
 
   saveLookup(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const proposedAddressFormSessionData = await this.formData.update(req.params.crn, req.session, {
+      const { crn } = req.params
+      const { session } = req
+      const { nameOrNumber, postcode } = req.body
+
+      const proposedAddressFormSessionData = await this.formData.update(crn, session, {
         nameOrNumber: req.body?.nameOrNumber,
         postcode: req.body?.postcode,
       })
 
-      return res.redirect(
-        validateLookup(req, proposedAddressFormSessionData) ||
-          uiPaths.proposedAddresses.details({ crn: req.params.crn }),
-      )
+      const errorRedirect = validateLookupFromSession(req, proposedAddressFormSessionData)
+      if (errorRedirect) return res.redirect(errorRedirect)
+
+      const lookupResults = await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
+
+      await this.formData.update(crn, session, { lookupResults })
+
+      // TODO: Handle cases with no results or 1 result
+
+      return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn: req.params.crn }))
+    }
+  }
+
+  selectAddress(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_SELECT_ADDRESS, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const { crn } = req.params
+      const { errors, errorSummary } = fetchErrors(req)
+      const { nameOrNumber, postcode, lookupResults } = this.formData.get(crn, req.session)
+
+      // TODO: validate lookup query and results
+
+      return res.render('pages/proposed-address/select-address', {
+        crn,
+        nameOrNumber,
+        postcode,
+        addresses: lookupResultsItems(lookupResults),
+        errors,
+        errorSummary,
+      })
     }
   }
 

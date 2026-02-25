@@ -1,5 +1,5 @@
 import { ProposedAddressDisplayStatus, ProposedAddressFormData, StatusCard, StatusTag } from '@sas/ui'
-import { AccommodationDetail } from '@sas/api'
+import { AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { Request } from 'express'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
@@ -401,3 +401,20 @@ export const nextAccommodationStatusItems = (
     checked: nextAccommodationStatus === 'TO_BE_DECIDED',
   },
 ]
+
+export const proposedAddressFormDataToRequestBody = ({
+  arrangementSubType,
+  arrangementSubTypeDescription,
+  settledType,
+  address,
+  verificationStatus,
+  nextAccommodationStatus,
+}: ProposedAddressFormData): AccommodationDetailCommand => ({
+  arrangementType: 'PRIVATE',
+  arrangementSubType,
+  arrangementSubTypeDescription,
+  settledType,
+  address,
+  verificationStatus,
+  nextAccommodationStatus: nextAccommodationStatus ?? 'TO_BE_DECIDED',
+})

@@ -1,20 +1,7 @@
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { Factory } from 'fishery'
 import { ProposedAddressFormData } from '@sas/ui'
-import addressFactory from './accommodationAddressDetails'
-
-const arrangementSubTypes: ProposedAddressFormData['arrangementSubType'][] = [
-  'FRIENDS_OR_FAMILY',
-  'SOCIAL_RENTED',
-  'PRIVATE_RENTED_WHOLE_PROPERTY',
-  'PRIVATE_RENTED_ROOM',
-  'OWNED',
-  'OTHER',
-]
-
-const settledTypes: ProposedAddressFormData['settledType'][] = ['SETTLED', 'TRANSIENT']
-const verificationStatuses: ProposedAddressFormData['verificationStatus'][] = ['NOT_CHECKED_YET', 'PASSED', 'FAILED']
-const nextAccommodationStatuses: ProposedAddressFormData['nextAccommodationStatus'][] = ['YES', 'NO', 'TO_BE_DECIDED']
+import accommodationDetailCommandFactory from './accommodationDetailCommand'
 
 class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
   manualAddress() {
@@ -35,22 +22,17 @@ class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
   }
 }
 
-export default ProposedAddressFormFactory.define(() => {
-  const address = addressFactory.build()
-  const arrangementSubType = faker.helpers.arrayElement(arrangementSubTypes)
-  const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
+export default ProposedAddressFormFactory.define(({ params }) => {
+  const accommodationDetailCommand = accommodationDetailCommandFactory.build(params)
 
   return {
     flow: 'full' as const,
-    nameOrNumber: address.buildingName || address.buildingNumber,
-    postcode: address.postcode,
-    arrangementType: 'PRIVATE' as const,
-    arrangementSubType,
-    arrangementSubTypeDescription: arrangementSubType === 'OTHER' ? faker.lorem.sentence() : undefined,
-    settledType: faker.helpers.arrayElement(settledTypes),
-    verificationStatus,
-    address,
+    nameOrNumber: accommodationDetailCommand.address.buildingName || accommodationDetailCommand.address.buildingNumber,
+    postcode: accommodationDetailCommand.address.postcode,
+    ...accommodationDetailCommand,
     nextAccommodationStatus:
-      verificationStatus === 'PASSED' ? faker.helpers.arrayElement(nextAccommodationStatuses) : undefined,
+      accommodationDetailCommand.verificationStatus === 'PASSED'
+        ? accommodationDetailCommand.nextAccommodationStatus
+        : undefined,
   }
 })

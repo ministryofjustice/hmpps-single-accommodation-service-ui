@@ -17,6 +17,7 @@ import {
   validateUpToAddress,
   updateNextAccommodationFromRequest,
   validateLookup,
+  proposedAddressFormDataToRequestBody,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
 import * as validationUtils from './validation'
@@ -575,5 +576,33 @@ describe('Proposed addresses utilities', () => {
         )
       })
     })
+  })
+
+  describe('proposedAddressFormDataToRequestBody', () => {
+    it.each([
+      ['YES', 'YES'],
+      ['NO', 'NO'],
+      ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
+      ['TO_BE_DECIDED', undefined],
+    ] as const)(
+      'returns a request body with nextAccommodationStatus set to %s when form value is %s',
+      (expected, formValue) => {
+        const proposedAddressFormData = proposedAddressFormFactory.build({
+          nextAccommodationStatus: formValue,
+        })
+
+        const requestBody = proposedAddressFormDataToRequestBody(proposedAddressFormData)
+
+        expect(requestBody).toEqual({
+          address: proposedAddressFormData.address,
+          arrangementType: proposedAddressFormData.arrangementType,
+          arrangementSubType: proposedAddressFormData.arrangementSubType,
+          arrangementSubTypeDescription: proposedAddressFormData.arrangementSubTypeDescription,
+          settledType: proposedAddressFormData.settledType,
+          verificationStatus: proposedAddressFormData.verificationStatus,
+          nextAccommodationStatus: expected,
+        })
+      },
+    )
   })
 })

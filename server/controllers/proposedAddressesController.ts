@@ -100,12 +100,17 @@ export default class ProposedAddressesController {
 
       const lookupResults = await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
 
-      await this.formData.update(crn, session, { lookupResults })
-
       if (!lookupResults.length) {
+        await this.formData.update(crn, session, { lookupResults })
         return res.redirect(uiPaths.proposedAddresses.details({ crn }))
       }
 
+      if (lookupResults.length === 1) {
+        await this.formData.update(crn, session, { lookupResults, address: lookupResults[0] })
+        return res.redirect(uiPaths.proposedAddresses.type({ crn }))
+      }
+
+      await this.formData.update(crn, session, { lookupResults })
       return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn: req.params.crn }))
     }
   }
@@ -171,11 +176,13 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
+      const { crn } = req.params
       const { errors, errorSummary } = fetchErrors(req)
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const proposedAddressFormSessionData = this.formData.get(crn, req.session)
 
       return res.render('pages/proposed-address/details', {
-        crn: req.params.crn,
+        crn,
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn }),
         address: proposedAddressFormSessionData?.address || {},
         errors,
         errorSummary,

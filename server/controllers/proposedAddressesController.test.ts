@@ -168,6 +168,21 @@ describe('proposedAddressesController', () => {
         lookupResults: [],
       })
     })
+
+    it('saves the address and redirects to the type page if there is exactly one result', async () => {
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([lookupResults[1]])
+
+      request.body = { nameOrNumber: '23A', postcode: 'M21 0BP' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(2)
+      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+        lookupResults: [lookupResults[1]],
+        address: lookupResults[1],
+      })
+    })
   })
 
   describe('selectAddress', () => {
@@ -258,6 +273,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }),
         address: {},
         errors: {},
         errorSummary: [],
@@ -270,6 +286,7 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }),
         address: {
           uprn: '1234567890',
           buildingName: 'Building name',

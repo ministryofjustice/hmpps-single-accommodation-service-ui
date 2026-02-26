@@ -3,7 +3,6 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Enter the address " + applicationName %}
-{% set backLinkHref = paths.cases.show({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.details({crn: crn}) %}
 
 {% block formContent %}
@@ -15,7 +14,7 @@
     {{ govukInput(
             {
                 label: {
-                    text: 'Address line 1' 
+                    text: 'Address line 1'
                 },
                 hint: {
                     text: 'Include flat and floor numbers, where appropriate'
@@ -29,7 +28,7 @@
     {{ govukInput(
               {
                   label: {
-                      text: 'Address line 2 (optional)' 
+                      text: 'Address line 2 (optional)'
                   },
                   name: 'addressLine2',
                   id: 'addressLine2',
@@ -40,7 +39,7 @@
     {{ govukInput(
               {
                   label: {
-                      text: 'Town or city' 
+                      text: 'Town or city'
                   },
                   classes: "govuk-input--width-20",
                   name: 'addressTown',
@@ -52,7 +51,7 @@
     {{ govukInput(
               {
                   label: {
-                      text: 'County (optional)' 
+                      text: 'County (optional)'
                   },
                   classes: "govuk-input--width-20",
                   name: 'addressCounty',
@@ -64,7 +63,7 @@
     {{ govukInput(
               {
                   label: {
-                      text: 'Postal code or zip code (if you have one)' 
+                      text: 'Postal code or zip code (if you have one)'
                   },
                   classes: "govuk-input--width-10",
                   name: 'addressPostcode',
@@ -76,7 +75,7 @@
     {{ govukInput(
               {
                   label: {
-                      text: 'Country' 
+                      text: 'Country'
                   },
                   name: 'addressCountry',
                   id: 'addressCountry',

@@ -250,6 +250,19 @@ test.describe('add proposed address', () => {
 
     // Then I should see the enter address page
     await addProposedAddressPage.shouldShowDetailsForm()
+
+    // When I click back
+    await addProposedAddressPage.clickLink('Back')
+
+    // Then I should see the lookup form with the building name prepopulated
+    await addProposedAddressPage.shouldShowAddressLookupForm('19', 'N0 0PE')
+
+    // When I change the postcode to one with one result
+    await addProposedAddressPage.completeLookupForm('19a', 'M21 0BP')
+    await addProposedAddressPage.clickButton('Find address')
+
+    // Then I should see the type form
+    await addProposedAddressPage.shouldShowTypeForm(caseData.name)
   })
 })
 

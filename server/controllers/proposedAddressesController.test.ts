@@ -23,11 +23,15 @@ describe('proposedAddressesController', () => {
   const proposedAddressesService = mock<ProposedAddressesService>()
   const casesService = mock<CasesService>()
   const osDataHubService = mock<OsDataHubService>()
+
+  const lookupResults = addressFactory.buildList(3)
   const sessionData: ProposedAddressFormData = {
     flow: 'full',
     nameOrNumber: 'BUILDING NAME',
     postcode: 'AB12CD',
+    lookupResults,
     address: {
+      uprn: '1234567890',
       buildingName: 'Building name',
       subBuildingName: 'Line 2',
       postTown: 'Town',
@@ -138,7 +142,6 @@ describe('proposedAddressesController', () => {
     })
 
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
-      const lookupResults = addressFactory.buildList(3)
       osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue(lookupResults)
 
       request.body = { nameOrNumber: '123', postcode: 'F45 6RT' }
@@ -151,15 +154,25 @@ describe('proposedAddressesController', () => {
         lookupResults,
       })
     })
+
+    it('redirects to the enter details page if there are no results', async () => {
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([])
+
+      request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(2)
+      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+        lookupResults: [],
+      })
+    })
   })
 
   describe('selectAddress', () => {
     it('renders the select address page with results from the session', async () => {
-      const lookupResults = addressFactory.buildList(3)
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
-        lookupResults,
-      }
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.selectAddress()(request, response, next)
 
@@ -167,7 +180,7 @@ describe('proposedAddressesController', () => {
         crn: 'CRN123',
         nameOrNumber: 'BUILDING NAME',
         postcode: 'AB12CD',
-        addresses: lookupResultsItems(lookupResults),
+        addresses: lookupResultsItems(lookupResults, sessionData.address.uprn),
         errors: {},
         errorSummary: [],
       })
@@ -186,21 +199,13 @@ describe('proposedAddressesController', () => {
   })
 
   describe('saveSelectAddress', () => {
-    const lookupResults = addressFactory.buildList(3)
-    const lookupSessionData: ProposedAddressFormData = {
-      flow: 'full',
-      nameOrNumber: 'BUILDING NAME',
-      postcode: 'AB12CD',
-      lookupResults,
-    }
-
     beforeEach(() => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = lookupSessionData
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
     })
 
     it('redirects to the lookup page if there are no lookup results in the session', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...lookupSessionData,
+        ...sessionData,
         lookupResults: null,
       }
 
@@ -266,6 +271,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
         address: {
+          uprn: '1234567890',
           buildingName: 'Building name',
           subBuildingName: 'Line 2',
           postTown: 'Town',
@@ -319,6 +325,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         proposedAddress: { ...sessionData, arrangementSubType: undefined, settledType: undefined },
         name: 'James Smith',
         errors: {},
@@ -333,12 +340,26 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         proposedAddress: sessionData,
         name: 'James Smith',
         errors: {},
         errorSummary: [],
         arrangementSubTypeItems: expect.any(Array),
       })
+    })
+
+    it('renders a back link to address details if there are no lookup results in the session', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, lookupResults: null }
+
+      await controller.type()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/proposed-address/type',
+        expect.objectContaining({
+          backLinkHref: uiPaths.proposedAddresses.details({ crn: 'CRN123' }),
+        }),
+      )
     })
 
     it('redirects when validation fails', async () => {

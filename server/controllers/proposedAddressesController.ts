@@ -102,7 +102,9 @@ export default class ProposedAddressesController {
 
       await this.formData.update(crn, session, { lookupResults })
 
-      // TODO: Handle cases with no results or 1 result
+      if (!lookupResults.length) {
+        return res.redirect(uiPaths.proposedAddresses.details({ crn }))
+      }
 
       return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn: req.params.crn }))
     }
@@ -117,7 +119,7 @@ export default class ProposedAddressesController {
 
       const { crn } = req.params
       const { errors, errorSummary } = fetchErrors(req)
-      const { nameOrNumber, postcode, lookupResults } = this.formData.get(crn, req.session)
+      const { nameOrNumber, postcode, lookupResults, address } = this.formData.get(crn, req.session)
 
       if (!lookupResults) {
         return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
@@ -127,7 +129,7 @@ export default class ProposedAddressesController {
         crn,
         nameOrNumber,
         postcode,
-        addresses: lookupResultsItems(lookupResults),
+        addresses: lookupResultsItems(lookupResults, address?.uprn),
         errors,
         errorSummary,
       })
@@ -209,6 +211,9 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/type', {
         crn,
+        backLinkHref: proposedAddressFormSessionData.lookupResults?.length
+          ? uiPaths.proposedAddresses.selectAddress({ crn })
+          : uiPaths.proposedAddresses.details({ crn }),
         proposedAddress: proposedAddressFormSessionData,
         name: caseData.name,
         arrangementSubTypeItems: arrangementSubTypeItems(proposedAddressFormSessionData?.arrangementSubType),

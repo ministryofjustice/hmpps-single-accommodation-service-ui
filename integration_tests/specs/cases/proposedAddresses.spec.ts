@@ -185,6 +185,7 @@ test.describe('add proposed address', () => {
 
   test('should allow the user to lookup an address and add it', async ({ page }) => {
     await osDataHubApi.stubOsDataHubGetPostcode('M21 0BP', osDataHubApiResponse)
+    await osDataHubApi.stubOsDataHubGetPostcode('N0 0PE', { ...osDataHubApiResponse, results: [] })
     const expectedOsResults = [
       { text: '19 Keppel Road, Manchester, M21 0BP', value: '10094949108' },
       { text: '19a, Keppel Road, Manchester, M21 0BP', value: '10094949109' },
@@ -235,17 +236,20 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.shouldShowTypeForm(caseData.name)
 
     // When I click back
-    // await addProposedAddressPage.clickLink('Back')
+    await addProposedAddressPage.clickLink('Back')
 
     // And I click to change the building name
-    // await addProposedAddressPage.clickLink('Change')
+    await addProposedAddressPage.clickLink('Change')
 
     // Then I should see the address lookup form with the building name prepopulated
-    // await addProposedAddressPage.shouldShowAddressLookupForm('Building name', 'SW1A 1AA')
+    await addProposedAddressPage.shouldShowAddressLookupForm('19', 'M21 0BP')
 
     // When I change the postcode to one with no results
-    // await addProposedAddressPage.completeLookupForm('Building name', 'N0 0PE')
-    // await addProposedAddressPage.clickButton('Continue')
+    await addProposedAddressPage.completeLookupForm('19', 'N0 0PE')
+    await addProposedAddressPage.clickButton('Find address')
+
+    // Then I should see the enter address page
+    await addProposedAddressPage.shouldShowDetailsForm()
   })
 })
 

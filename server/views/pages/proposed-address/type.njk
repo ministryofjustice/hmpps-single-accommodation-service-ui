@@ -4,7 +4,6 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "What will be the person's housing arrangement at this address? " + applicationName %}
-{% set backLinkHref = paths.proposedAddresses.details({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.type({crn: crn}) %}
 
 {% set conditionalHtml %}

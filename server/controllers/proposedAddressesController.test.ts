@@ -187,17 +187,20 @@ describe('proposedAddressesController', () => {
 
   describe('saveSelectAddress', () => {
     const lookupResults = addressFactory.buildList(3)
+    const lookupSessionData: ProposedAddressFormData = {
+      flow: 'full',
+      nameOrNumber: 'BUILDING NAME',
+      postcode: 'AB12CD',
+      lookupResults,
+    }
 
     beforeEach(() => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
-        lookupResults,
-      }
+      request.session.multiPageFormData.proposedAddress.CRN123 = lookupSessionData
     })
 
     it('redirects to the lookup page if there are no lookup results in the session', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
+        ...lookupSessionData,
         lookupResults: null,
       }
 
@@ -226,6 +229,17 @@ describe('proposedAddressesController', () => {
         addressUprn: 'Select an address',
       })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }))
+    })
+
+    it('saves the selected address to the session and redirects to the details page', async () => {
+      request.body = { addressUprn: lookupResults[0].uprn }
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, {
+        address: lookupResults[0],
+      })
     })
   })
 

@@ -228,11 +228,11 @@ test.describe('add proposed address', () => {
     })
 
     // When I select a result
-    // await addProposedAddressPage.completeAddressLookupResultsForm()
-    // await addProposedAddressPage.clickButton('Continue')
+    await addProposedAddressPage.completeAddressLookupResultsForm('19 Keppel Road, Manchester, M21 0BP')
+    await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the type form
-    // await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+    await addProposedAddressPage.shouldShowTypeForm(caseData.name)
 
     // When I click back
     // await addProposedAddressPage.clickLink('Back')

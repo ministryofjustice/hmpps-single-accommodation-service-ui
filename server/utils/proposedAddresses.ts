@@ -447,7 +447,9 @@ export const osDataHubResultToAddressDetails = (result: OsDataHubResult): Accomm
   dependentLocality: convertToTitleCase(result.DPA.DEPENDENT_LOCALITY),
   postTown: convertToTitleCase(result.DPA.POST_TOWN),
   county: undefined,
-  country: undefined,
+  // FIXME: Handle country code correctly -- should this be set to 'United Kingdom'? Or handle the
+  //  'England'/'Wales'/'Scotland'/'Northern Ireland' code returned by the OS API?
+  country: result.DPA.COUNTRY_CODE,
   uprn: result.DPA.UPRN,
 })
 

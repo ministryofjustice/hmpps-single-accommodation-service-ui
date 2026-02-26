@@ -146,14 +146,20 @@ export default class ProposedAddressesController {
         return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
       }
 
-      if (!addressUprn || !lookupResults.find(address => address.uprn === addressUprn)) {
+      const address = lookupResults.find(result => result.uprn === addressUprn)
+
+      if (!addressUprn || !address) {
         validateAndFlashErrors(req, {
           addressUprn: 'Select an address',
         })
         return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn }))
       }
 
-      return res.redirect(uiPaths.proposedAddresses.status({ crn }))
+      await this.formData.update(crn, session, {
+        address,
+      })
+
+      return res.redirect(uiPaths.proposedAddresses.type({ crn }))
     }
   }
 

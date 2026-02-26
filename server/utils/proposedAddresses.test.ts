@@ -663,7 +663,7 @@ describe('Proposed addresses utilities', () => {
         postcode: 'M21 0BP',
         uprn: '77077677',
         county: undefined,
-        country: undefined,
+        country: 'E',
       })
     })
   })

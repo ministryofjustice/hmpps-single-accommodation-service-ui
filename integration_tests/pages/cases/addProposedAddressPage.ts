@@ -58,8 +58,8 @@ export default class AddProposedAddressPage extends AbstractPage {
     }
   }
 
-  async completeAddressLookupResultsForm() {
-    await this.selectRadioByLabel('Address 1')
+  async completeAddressLookupResultsForm(address: string) {
+    await this.selectRadioByLabel(address)
   }
 
   async shouldShowDetailsForm() {

@@ -1,7 +1,11 @@
-import { OsDataHubResponse, OsDataHubResult } from '@sas/ui'
 import OsDataHubService from './osDataHubService'
 import OsDataHubClient from '../data/osDataHubClient'
-import { filterOsDataHubResultsByNameOrNumber, osDataHubResultToAddressDetails } from '../utils/proposedAddresses'
+import {
+  filterResultsByNameOrNumber,
+  OsDataHubResponse,
+  OsDataHubResult,
+  resultToAddressDetails,
+} from '../utils/osDataHub'
 
 jest.mock('../data/osDataHubClient')
 
@@ -24,9 +28,7 @@ describe('osDataHubService', () => {
           { DPA: { ADDRESS: '19, M21 0BP', BUILDING_NUMBER: '19', UPRN: '004' } },
         ] as OsDataHubResult[],
       }
-      const expectedResult = filterOsDataHubResultsByNameOrNumber(apiResponse.results, '19').map(
-        osDataHubResultToAddressDetails,
-      )
+      const expectedResult = filterResultsByNameOrNumber(apiResponse.results, '19').map(resultToAddressDetails)
 
       osDataHubClient.getByPostcode.mockResolvedValue(apiResponse)
 

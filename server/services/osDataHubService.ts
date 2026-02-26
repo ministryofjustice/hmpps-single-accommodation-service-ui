@@ -1,6 +1,6 @@
 import { AccommodationAddressDetails } from '@sas/api'
 import OsDataHubClient from '../data/osDataHubClient'
-import { filterOsDataHubResultsByNameOrNumber, osDataHubResultToAddressDetails } from '../utils/proposedAddresses'
+import { filterResultsByNameOrNumber, resultToAddressDetails } from '../utils/osDataHub'
 
 export default class OsDataHubService {
   constructor(private readonly osDataHubClient: OsDataHubClient) {}
@@ -8,6 +8,6 @@ export default class OsDataHubService {
   async getByNameOrNumberAndPostcode(nameOrNumber: string, postcode: string): Promise<AccommodationAddressDetails[]> {
     const { results } = await this.osDataHubClient.getByPostcode(postcode)
 
-    return filterOsDataHubResultsByNameOrNumber(results, nameOrNumber).map(osDataHubResultToAddressDetails)
+    return filterResultsByNameOrNumber(results, nameOrNumber).map(resultToAddressDetails)
   }
 }

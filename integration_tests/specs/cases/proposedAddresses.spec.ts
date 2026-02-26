@@ -16,7 +16,8 @@ import {
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import AddProposedAddressPage from '../../pages/cases/addProposedAddressPage'
 import osDataHubApiResponse from '../../../server/testutils/fixtures/osDataHubApi/getPostcode.json'
-import { osDataHubResultToAddressDetails } from '../../../server/utils/proposedAddresses'
+
+import { resultToAddressDetails } from '../../../server/utils/osDataHub'
 
 test.describe('add proposed address', () => {
   const crn = 'X123456'
@@ -189,7 +190,7 @@ test.describe('add proposed address', () => {
       verificationStatus: 'NOT_CHECKED_YET',
     })
     const selectedAddress = addressFactory.build(
-      osDataHubResultToAddressDetails(
+      resultToAddressDetails(
         osDataHubApiResponse.results.find(result => result.DPA.ADDRESS === '19A, KEPPEL ROAD, MANCHESTER, M21 0BP'),
       ),
     )

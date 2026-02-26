@@ -1,6 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
-import { OsDataHubResponse } from '@sas/ui'
 import { stubFor } from './wiremock'
+import { OsDataHubResponse } from '../../server/utils/osDataHub'
 
 export default {
   stubOsDataHubGetPostcode: (postcode: string, response: OsDataHubResponse): SuperAgentRequest =>

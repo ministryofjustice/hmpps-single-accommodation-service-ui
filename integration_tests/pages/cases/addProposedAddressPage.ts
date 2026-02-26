@@ -10,7 +10,7 @@ import {
   formatProposedAddressNextAccommodation,
   formatProposedAddressSettledType,
   formatProposedAddressStatus,
-  proposedAddressFormDataToRequestBody,
+  formDataToRequestBody,
 } from '../../../server/utils/proposedAddresses'
 
 export default class AddProposedAddressPage extends AbstractPage {
@@ -204,7 +204,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   async checkApiCalled(crn: string, proposedAddressData: ProposedAddressFormData) {
     const requestBody = await verifyPost(apiPaths.cases.proposedAddresses.submit({ crn }))
 
-    const expectedBody = proposedAddressFormDataToRequestBody(proposedAddressData)
+    const expectedBody = formDataToRequestBody(proposedAddressData)
 
     expect(requestBody).toEqual(expectedBody)
   }

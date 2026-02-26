@@ -1,7 +1,7 @@
 import { RestClient } from '@ministryofjustice/hmpps-rest-client'
-import { OsDataHubResponse } from '@sas/ui'
 import config from '../config'
 import logger from '../../logger'
+import { OsDataHubResponse } from '../utils/osDataHub'
 
 export default class OsDataHubClient extends RestClient {
   constructor() {

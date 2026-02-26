@@ -1,7 +1,7 @@
 import ProposedAddressesClient from '../data/proposedAddressesClient'
 import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
-import { proposedAddressFormDataToRequestBody } from '../utils/proposedAddresses'
+import { formDataToRequestBody } from '../utils/proposedAddresses'
 
 jest.mock('../data/proposedAddressesClient')
 
@@ -64,7 +64,7 @@ describe('ProposedAddressesService', () => {
 
       await proposedAddressesService.submit(token, crn, proposedAddressData)
 
-      const expectedData = proposedAddressFormDataToRequestBody(proposedAddressData)
+      const expectedData = formDataToRequestBody(proposedAddressData)
 
       expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)
     })
@@ -76,7 +76,7 @@ describe('ProposedAddressesService', () => {
 
       await proposedAddressesService.update(token, crn, proposedAddressData)
 
-      const expectedData = proposedAddressFormDataToRequestBody(proposedAddressData)
+      const expectedData = formDataToRequestBody(proposedAddressData)
 
       expect(proposedAddressesClient.update).toHaveBeenCalledWith(token, crn, id, expectedData)
     })

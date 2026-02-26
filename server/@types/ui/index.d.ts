@@ -69,30 +69,3 @@ export type CheckboxItem = {
   value: string
   checked?: boolean
 }
-
-// See: https://docs.os.uk/os-apis/accessing-os-apis/os-places-api/technical-specification/postcode
-export type OsDataHubResult = {
-  DPA: {
-    ORGANISATION_NAME?: string
-    DEPARTMENT_NAME?: string
-    BUILDING_NUMBER?: string
-    BUILDING_NAME?: string
-    SUB_BUILDING_NAME?: string
-    DEPENDENT_THOROUGHFARE_NAME?: string
-    THOROUGHFARE_NAME?: string
-    DOUBLE_DEPENDENT_LOCALITY?: string
-    DEPENDENT_LOCALITY?: string
-    POST_TOWN: string
-    POSTCODE: string
-    COUNTRY_CODE: string
-    COUNTRY_CODE_DESCRIPTION: string
-    ADDRESS: string
-    UPRN: string
-    UDPRN: string
-  }
-}
-
-export type OsDataHubResponse = {
-  header: unknown
-  results: OsDataHubResult[]
-}

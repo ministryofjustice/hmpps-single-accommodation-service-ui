@@ -1,16 +1,9 @@
-import {
-  OsDataHubResult,
-  ProposedAddressDisplayStatus,
-  ProposedAddressFormData,
-  RadioItem,
-  StatusCard,
-  StatusTag,
-} from '@sas/ui'
+import { ProposedAddressDisplayStatus, ProposedAddressFormData, RadioItem, StatusCard, StatusTag } from '@sas/ui'
 import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { Request } from 'express'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
-import { convertToTitleCase, htmlContent, textContent } from './utils'
+import { htmlContent, textContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { validateAndFlashErrors } from './validation'
@@ -409,7 +402,7 @@ export const nextAccommodationStatusItems = (
   },
 ]
 
-export const proposedAddressFormDataToRequestBody = ({
+export const formDataToRequestBody = ({
   arrangementSubType,
   arrangementSubTypeDescription,
   settledType,
@@ -424,33 +417,6 @@ export const proposedAddressFormDataToRequestBody = ({
   address,
   verificationStatus,
   nextAccommodationStatus: nextAccommodationStatus ?? 'TO_BE_DECIDED',
-})
-
-export const filterOsDataHubResultsByNameOrNumber = (results: OsDataHubResult[], nameOrNumber?: string) => {
-  if (!nameOrNumber) return results
-
-  const sanitisedNameOrNumber = nameOrNumber.toUpperCase()
-
-  return results.filter(result =>
-    ['BUILDING_NUMBER', 'BUILDING_NAME', 'SUB_BUILDING_NAME'].some(key =>
-      result.DPA[key as keyof OsDataHubResult['DPA']]?.includes(sanitisedNameOrNumber),
-    ),
-  )
-}
-
-export const osDataHubResultToAddressDetails = (result: OsDataHubResult): AccommodationAddressDetails => ({
-  postcode: result.DPA.POSTCODE,
-  subBuildingName: convertToTitleCase(result.DPA.SUB_BUILDING_NAME),
-  buildingName: convertToTitleCase(result.DPA.BUILDING_NAME),
-  buildingNumber: result.DPA.BUILDING_NUMBER,
-  thoroughfareName: convertToTitleCase(result.DPA.THOROUGHFARE_NAME),
-  dependentLocality: convertToTitleCase(result.DPA.DEPENDENT_LOCALITY),
-  postTown: convertToTitleCase(result.DPA.POST_TOWN),
-  county: undefined,
-  // FIXME: Handle country code correctly -- should this be set to 'United Kingdom'? Or handle the
-  //  'England'/'Wales'/'Scotland'/'Northern Ireland' code returned by the OS API?
-  country: result.DPA.COUNTRY_CODE,
-  uprn: result.DPA.UPRN,
 })
 
 export const lookupResultsItems = (results: AccommodationAddressDetails[], selectedUprn?: string): RadioItem[] =>

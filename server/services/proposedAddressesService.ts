@@ -1,7 +1,7 @@
 import { ProposedAddressFormData } from '@sas/ui'
 import { AccommodationDetail } from '@sas/api'
 import { ProposedAddressesClient } from '../data'
-import { proposedAddressFormDataToRequestBody } from '../utils/proposedAddresses'
+import { formDataToRequestBody } from '../utils/proposedAddresses'
 
 export default class ProposedAddressesService {
   constructor(private readonly proposedAddressesClient: ProposedAddressesClient) {}
@@ -23,7 +23,7 @@ export default class ProposedAddressesService {
   }
 
   submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    return this.proposedAddressesClient.submit(token, crn, proposedAddressFormDataToRequestBody(proposedAddressData))
+    return this.proposedAddressesClient.submit(token, crn, formDataToRequestBody(proposedAddressData))
   }
 
   update(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
@@ -31,7 +31,7 @@ export default class ProposedAddressesService {
       token,
       crn,
       proposedAddressData.id,
-      proposedAddressFormDataToRequestBody(proposedAddressData),
+      formDataToRequestBody(proposedAddressData),
     )
   }
 }

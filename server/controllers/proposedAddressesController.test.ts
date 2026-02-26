@@ -185,6 +185,50 @@ describe('proposedAddressesController', () => {
     })
   })
 
+  describe('saveSelectAddress', () => {
+    const lookupResults = addressFactory.buildList(3)
+
+    beforeEach(() => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        lookupResults,
+      }
+    })
+
+    it('redirects to the lookup page if there are no lookup results in the session', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        lookupResults: null,
+      }
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+    })
+
+    it('redirects to the select address page with an error if no address was selected', async () => {
+      request.body = {}
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        addressUprn: 'Select an address',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }))
+    })
+
+    it('redirects to the select address page with an error if an address not in the list was selected', async () => {
+      request.body = { addressUprn: '1234567890' }
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        addressUprn: 'Select an address',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }))
+    })
+  })
+
   describe('details', () => {
     it('renders details page', async () => {
       await controller.details()(request, response, next)

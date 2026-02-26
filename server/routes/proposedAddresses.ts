@@ -13,6 +13,7 @@ export default function proposedAddressesRoutes(
   router.post(uiPaths.proposedAddresses.lookup.pattern, proposedAddressesController.saveLookup())
 
   router.get(uiPaths.proposedAddresses.selectAddress.pattern, proposedAddressesController.selectAddress())
+  router.post(uiPaths.proposedAddresses.selectAddress.pattern, proposedAddressesController.saveSelectAddress())
 
   router.get(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.details())
   router.post(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.saveDetails())

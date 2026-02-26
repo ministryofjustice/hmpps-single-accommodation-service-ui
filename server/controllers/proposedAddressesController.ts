@@ -20,7 +20,7 @@ import {
   validateLookupFromSession,
   lookupResultsItems,
 } from '../utils/proposedAddresses'
-import { fetchErrors, addErrorToFlash } from '../utils/validation'
+import { fetchErrors, addErrorToFlash, validateAndFlashErrors } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 import OsDataHubService from '../services/osDataHubService'
@@ -131,6 +131,29 @@ export default class ProposedAddressesController {
         errors,
         errorSummary,
       })
+    }
+  }
+
+  saveSelectAddress(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.params
+      const { session } = req
+      const { addressUprn } = req.body
+
+      const { lookupResults } = this.formData.get(crn, session)
+
+      if (!lookupResults) {
+        return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
+      }
+
+      if (!addressUprn || !lookupResults.find(address => address.uprn === addressUprn)) {
+        validateAndFlashErrors(req, {
+          addressUprn: 'Select an address',
+        })
+        return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn }))
+      }
+
+      return res.redirect(uiPaths.proposedAddresses.status({ crn }))
     }
   }
 

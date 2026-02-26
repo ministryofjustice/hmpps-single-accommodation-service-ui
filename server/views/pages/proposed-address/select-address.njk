@@ -32,7 +32,7 @@
 
   {{
     govukRadios({
-      name: "selectedAddress",
+      name: "addressUprn",
       fieldset: {
         legend: {
           text: "Select an address",
@@ -43,7 +43,7 @@
         text: "If your address is not listed, select 'Enter address manually'."
       },
       items: addresses,
-      errorMessage: errors.selectedAddress
+      errorMessage: errors.addressUprn
     })
   }}
 {% endblock %}

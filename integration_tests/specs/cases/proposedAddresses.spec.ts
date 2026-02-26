@@ -220,12 +220,12 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.shouldShowSelectAddressForm('19', 'M21 0BP', expectedOsResults)
 
     // When I submit without selecting a result
-    // await addProposedAddressPage.clickButton('Continue')
+    await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see an error
-    // await addProposedAddressPage.shouldShowErrorMessagesForFields({
-    //   addressId: 'Select an address',
-    // })
+    await addProposedAddressPage.shouldShowErrorMessagesForFields({
+      addressUprn: 'Select an address',
+    })
 
     // When I select a result
     // await addProposedAddressPage.completeAddressLookupResultsForm()

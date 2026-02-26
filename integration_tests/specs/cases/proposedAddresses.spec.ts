@@ -16,6 +16,7 @@ import {
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import AddProposedAddressPage from '../../pages/cases/addProposedAddressPage'
 import osDataHubApiResponse from '../../../server/testutils/fixtures/osDataHubApi/getPostcode.json'
+import { osDataHubResultToAddressDetails } from '../../../server/utils/proposedAddresses'
 
 test.describe('add proposed address', () => {
   const crn = 'X123456'
@@ -184,6 +185,15 @@ test.describe('add proposed address', () => {
   })
 
   test('should allow the user to lookup an address and add it', async ({ page }) => {
+    const proposedAddressData = proposedAddressFormFactory.build({
+      verificationStatus: 'NOT_CHECKED_YET',
+    })
+    const selectedAddress = addressFactory.build(
+      osDataHubResultToAddressDetails(
+        osDataHubApiResponse.results.find(result => result.DPA.ADDRESS === '19A, KEPPEL ROAD, MANCHESTER, M21 0BP'),
+      ),
+    )
+
     await osDataHubApi.stubOsDataHubGetPostcode('M21 0BP', osDataHubApiResponse)
     await osDataHubApi.stubOsDataHubGetPostcode('N0 0PE', { ...osDataHubApiResponse, results: [] })
     const expectedOsResults = [
@@ -263,6 +273,36 @@ test.describe('add proposed address', () => {
 
     // Then I should see the type form
     await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+
+    // When I complete the type form
+    await addProposedAddressPage.completeTypeForm(proposedAddressData)
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the status form
+    await addProposedAddressPage.shouldShowStatusForm()
+
+    // When I complete the status form
+    await addProposedAddressPage.completeStatusForm(proposedAddressData)
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the check your answers page with my entered data
+    const submittedAddress = { ...proposedAddressData, address: selectedAddress }
+    await addProposedAddressPage.verifyCheckYourAnswersPage(submittedAddress, caseData.name)
+
+    // When I submit the proposed address
+    const newProposedAddress = accommodationFactory.proposed().build(submittedAddress)
+    const updatedProposedAddresses: AccommodationDetail[] = [...proposedAddresses, newProposedAddress]
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, updatedProposedAddresses)
+    await addProposedAddressPage.clickButton('Save')
+
+    // Then the API should have been called with the correct data
+    await addProposedAddressPage.checkApiCalled(crn, submittedAddress)
+
+    // And I see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // And I should see a success banner confirming the proposed address was added
+    await profileTrackerPage.shouldShowBanner('Private address added')
   })
 })
 

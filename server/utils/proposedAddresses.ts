@@ -130,13 +130,16 @@ export const formatProposedAddressArrangement = (type?: AccommodationDetail['arr
 
 export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string, name: string) => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
+  const changeAddressLink = sessionData.lookupResults
+    ? uiPaths.proposedAddresses.lookup({ crn })
+    : uiPaths.proposedAddresses.details({ crn })
 
   const rows = [
     {
       key: textContent('Address'),
       value: htmlContent(addressParts.join('<br />')),
       actions: {
-        items: [{ text: 'Change', href: uiPaths.proposedAddresses.details({ crn }) }],
+        items: [{ text: 'Change', href: changeAddressLink }],
       },
     },
     {

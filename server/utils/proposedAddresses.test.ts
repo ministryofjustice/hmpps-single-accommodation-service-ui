@@ -122,29 +122,32 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('summaryListRows', () => {
-    it('formats address, arrangement and status', () => {
-      const data = {
-        address: {
-          buildingName: '10 Moonlight Road',
-          subBuildingName: '',
-          postTown: 'London',
-          county: 'Greater London',
-          postcode: 'NW1 6XE',
-          country: 'UK',
-        },
-        arrangementSubType: 'FRIENDS_OR_FAMILY',
-        settledType: 'SETTLED',
-        verificationStatus: 'PASSED',
-      } as ProposedAddressFormData
+    const fullSessionData = {
+      nameOrNumber: '123',
+      postcode: 'AB1 2CD',
+      lookupResults: addressFactory.buildList(2),
+      address: {
+        buildingName: '10 Moonlight Road',
+        subBuildingName: '',
+        postTown: 'London',
+        county: 'Greater London',
+        postcode: 'NW1 6XE',
+        country: 'UK',
+      },
+      arrangementSubType: 'FRIENDS_OR_FAMILY',
+      settledType: 'SETTLED',
+      verificationStatus: 'PASSED',
+    } as ProposedAddressFormData
 
-      const rows = summaryListRows(data, 'CRN123', 'James Taylor')
+    it('formats address, arrangement and status', () => {
+      const rows = summaryListRows(fullSessionData, 'CRN123', 'James Taylor')
 
       const addressHtml = rows[0].value.html ?? rows[0].value
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
       expect(addressHtml).toBe('10 Moonlight Road<br />London<br />Greater London<br />NW1 6XE<br />UK')
       expect(arrangementHtml).toBe('Friends or family (not tenant or owner)')
-      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
+      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/lookup')
       expect(rows[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
       expect(rows[2].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
       expect(rows[3].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
@@ -171,6 +174,19 @@ describe('Proposed addresses utilities', () => {
       const statusHtml = rows[3].value.html ?? rows[3].value
 
       expect(statusHtml).toMatchSnapshot()
+    })
+
+    it('links the address change link to the details if the address was entered manually', () => {
+      const fullSessionDataManualAddressEntry = {
+        ...fullSessionData,
+        nameOrNumber: undefined,
+        postcode: undefined,
+        lookupResults: null,
+      } as ProposedAddressFormData
+
+      const rows = summaryListRows(fullSessionDataManualAddressEntry, 'CRN123', 'James Taylor')
+
+      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
     })
   })
 

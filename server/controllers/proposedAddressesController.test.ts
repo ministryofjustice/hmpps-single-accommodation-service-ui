@@ -7,14 +7,19 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
-import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
 import { accommodationFactory } from '../testutils/factories'
 
 describe('proposedAddressesController', () => {
   let request: Request
-  const response = mock<Response>({ locals: { user: { username: 'user1', token: 'token-1' } } })
+  const response = mock<Response>({
+    locals: {
+      user: { username: 'user1', token: 'token-1' },
+      errors: {},
+      errorSummary: [],
+    },
+  })
   const next = mock<NextFunction>()
 
   const auditService = mock<AuditService>()
@@ -57,8 +62,10 @@ describe('proposedAddressesController', () => {
       },
     })
 
+    response.locals.errors = {}
+    response.locals.errorSummary = []
+
     controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
-    jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
 
     jest.spyOn(controller.formData, 'remove')
 

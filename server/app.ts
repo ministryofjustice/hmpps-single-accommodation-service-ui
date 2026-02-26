@@ -17,6 +17,7 @@ import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
+import errorsMiddleware from './middleware/errorsMiddleware'
 
 import routes from './routes'
 import type { Services } from './services'
@@ -43,6 +44,7 @@ export default function createApp(services: Services): express.Application {
     res.locals.successMessages = req.flash('success')
     next()
   })
+  app.use(errorsMiddleware)
   app.use(setUpFrontendComponents())
   app.use(setUpAuthenticationErrorRoute())
   app.use(authorisationMiddleware(config.allowedRoles))

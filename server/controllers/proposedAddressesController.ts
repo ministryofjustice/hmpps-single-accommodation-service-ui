@@ -18,7 +18,7 @@ import {
   validateUpToNextAccommodation,
   flowRedirects,
 } from '../utils/proposedAddresses'
-import { fetchErrors, addErrorToFlash } from '../utils/validation'
+import { addErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 import { getPageBackLink } from '../utils/backlinks'
@@ -62,11 +62,11 @@ export default class ProposedAddressesController {
 
   details(): RequestHandler {
     return async (req: Request, res: Response) => {
+      const { errors, errorSummary } = res.locals
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_DETAILS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
       const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
 
       return res.render('pages/proposed-address/details', {
@@ -96,11 +96,11 @@ export default class ProposedAddressesController {
       const redirect = validateUpToAddress(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
+      const { errors, errorSummary } = res.locals
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_TYPE, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
 
       const caseData = await this.casesService.getCase(token, crn)
 
@@ -131,11 +131,11 @@ export default class ProposedAddressesController {
       const redirect = validateUpToType(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
+      const { errors, errorSummary } = res.locals
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_STATUS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
 
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.status.pattern, req, [
         uiPaths.proposedAddresses.type.pattern,
@@ -178,11 +178,11 @@ export default class ProposedAddressesController {
       const redirect = validateUpToStatus(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
+      const { errors, errorSummary } = res.locals
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_NEXT_ACCOMMODATION, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
       const caseData = await this.casesService.getCase(token, crn)
 
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.nextAccommodation.pattern, req, [
@@ -225,11 +225,11 @@ export default class ProposedAddressesController {
       const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
+      const { errors, errorSummary } = res.locals
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_CHECK_YOUR_ANSWERS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
       const caseData = await this.casesService.getCase(token, crn)
 
       const tableRows = summaryListRows(proposedAddressFormSessionData, crn, caseData.name)

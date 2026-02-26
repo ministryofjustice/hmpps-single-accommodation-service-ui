@@ -19,7 +19,7 @@ export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
   id?: string
   nameOrNumber?: string
   postcode?: string
-  lookupResults?: AccommodationAddressDetails[]
+  lookupResults?: AccommodationAddressDetails[] | null
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']

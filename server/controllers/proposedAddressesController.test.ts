@@ -130,6 +130,11 @@ describe('proposedAddressesController', () => {
       })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
+      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+        nameOrNumber: '',
+        postcode: '',
+        lookupResults: null,
+      })
     })
 
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
@@ -166,6 +171,17 @@ describe('proposedAddressesController', () => {
         errors: {},
         errorSummary: [],
       })
+    })
+
+    it('redirects to the lookup page if there are no lookup results in the session', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        lookupResults: null,
+      }
+
+      await controller.selectAddress()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
     })
   })
 

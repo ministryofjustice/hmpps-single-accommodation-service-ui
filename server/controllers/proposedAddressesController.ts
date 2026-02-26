@@ -92,6 +92,7 @@ export default class ProposedAddressesController {
       const proposedAddressFormSessionData = await this.formData.update(crn, session, {
         nameOrNumber: req.body?.nameOrNumber,
         postcode: req.body?.postcode,
+        lookupResults: null,
       })
 
       const errorRedirect = validateLookupFromSession(req, proposedAddressFormSessionData)
@@ -118,7 +119,9 @@ export default class ProposedAddressesController {
       const { errors, errorSummary } = fetchErrors(req)
       const { nameOrNumber, postcode, lookupResults } = this.formData.get(crn, req.session)
 
-      // TODO: validate lookup query and results
+      if (!lookupResults) {
+        return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
+      }
 
       return res.render('pages/proposed-address/select-address', {
         crn,

@@ -20,7 +20,7 @@ import {
   validateLookupFromSession,
   lookupResultsItems,
 } from '../utils/proposedAddresses'
-import { fetchErrors, addErrorToFlash, validateAndFlashErrors } from '../utils/validation'
+import { fetchErrors, addErrorToFlash, validateAndFlashErrors, addGenericErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 import OsDataHubService from '../services/osDataHubService'
@@ -101,8 +101,8 @@ export default class ProposedAddressesController {
       const lookupResults = await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
 
       if (!lookupResults.length) {
-        await this.formData.update(crn, session, { lookupResults })
-        return res.redirect(uiPaths.proposedAddresses.details({ crn }))
+        addGenericErrorToFlash(req, 'No addresses found for this property name or number and UK postcode')
+        return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
       }
 
       if (lookupResults.length === 1) {

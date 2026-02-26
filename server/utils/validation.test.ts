@@ -3,6 +3,7 @@ import { mock } from 'jest-mock-extended'
 import { ErrorMessages, ErrorSummary } from '@sas/ui'
 import {
   addErrorToFlash,
+  addGenericErrorToFlash,
   fetchErrors,
   generateErrorMessages,
   generateErrorSummary,
@@ -68,6 +69,23 @@ describe('addErrorToFlash', () => {
         {
           text: 'there was an error',
           href: `#errorField`,
+        },
+      ]),
+    )
+  })
+})
+
+describe('addGenericErrorToFlash', () => {
+  it('adds a generic, non-field error to flash', () => {
+    const request = mock<Request>({})
+
+    addGenericErrorToFlash(request, 'there was an error')
+
+    expect(request.flash).toHaveBeenCalledWith(
+      'errorSummary',
+      JSON.stringify([
+        {
+          text: 'there was an error',
         },
       ]),
     )

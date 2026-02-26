@@ -69,6 +69,7 @@ describe('proposedAddressesController', () => {
     controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService, osDataHubService)
     jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    jest.spyOn(validationUtils, 'addGenericErrorToFlash')
 
     jest.spyOn(controller.formData, 'remove')
     jest.spyOn(controller.formData, 'update')
@@ -141,6 +142,21 @@ describe('proposedAddressesController', () => {
       })
     })
 
+    it('redirects with a generic error if there are no results', async () => {
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([])
+
+      request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
+        request,
+        'No addresses found for this property name or number and UK postcode',
+      )
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(1)
+    })
+
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
       osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue(lookupResults)
 
@@ -152,20 +168,6 @@ describe('proposedAddressesController', () => {
       expect(controller.formData.update).toHaveBeenCalledTimes(2)
       expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
         lookupResults,
-      })
-    })
-
-    it('redirects to the enter details page if there are no results', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([])
-
-      request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
-
-      await controller.saveLookup()(request, response, next)
-
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
-      expect(controller.formData.update).toHaveBeenCalledTimes(2)
-      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
-        lookupResults: [],
       })
     })
 

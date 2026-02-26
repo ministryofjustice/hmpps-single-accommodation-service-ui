@@ -61,3 +61,5 @@ export const validateAndFlashErrors = (request: Request, errors: Record<string, 
 
   return false
 }
+
+export const isValidUKPostcode = (postcode: string): boolean => /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i.test(postcode)

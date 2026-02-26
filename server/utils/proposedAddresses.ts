@@ -6,7 +6,7 @@ import { arrangementSubTypes, summaryListRow } from './cases'
 import { htmlContent, textContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
-import { validateAndFlashErrors } from './validation'
+import { isValidUKPostcode, validateAndFlashErrors } from './validation'
 import { addressLines, formatAddress } from './addresses'
 
 const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
@@ -196,7 +196,11 @@ export const validateLookupFromSession = (req: Request, sessionData: ProposedAdd
   const errors: Record<string, string> = {}
 
   if (!sessionData.nameOrNumber) errors.nameOrNumber = 'Enter a property name or number'
-  if (!sessionData.postcode) errors.postcode = 'Enter a UK postcode'
+  if (!sessionData.postcode) {
+    errors.postcode = 'Enter a UK postcode'
+  } else if (!isValidUKPostcode(sessionData.postcode)) {
+    errors.postcode = 'Enter a full UK postcode, like AA3 1AB'
+  }
 
   return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
 }

@@ -391,6 +391,19 @@ describe('Proposed addresses utilities', () => {
         })
       })
 
+      it.each(['N', 'NOPE', 'TH457UYTY', '   '])('sets error for invalid format postcode "%s"', postcode => {
+        const invalidLookup: ProposedAddressFormData = {
+          flow: 'full',
+          nameOrNumber: '123',
+          postcode,
+        }
+
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
+        expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+          postcode: 'Enter a full UK postcode, like AA3 1AB',
+        })
+      })
+
       it('returns undefined when data is valid', () => {
         const validLookup: ProposedAddressFormData = {
           flow: 'full',

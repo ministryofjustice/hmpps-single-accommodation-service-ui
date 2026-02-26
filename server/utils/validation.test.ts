@@ -6,6 +6,7 @@ import {
   fetchErrors,
   generateErrorMessages,
   generateErrorSummary,
+  isValidUKPostcode,
   validateAndFlashErrors,
 } from './validation'
 
@@ -155,5 +156,22 @@ describe('validateAndFlashErrors', () => {
         { text: 'error 2', href: '#field2' },
       ]),
     )
+  })
+})
+
+describe('validators', () => {
+  describe('isValidUKPostcode', () => {
+    it.each([
+      [false, ''],
+      [false, '1234567890'],
+      [false, 'NOOO'],
+      [false, 'M145BNNNN'],
+      [false, 'M14 5BNNNN'],
+      [false, 'M23'],
+      [true, 'AA1 1AA'],
+      [true, 'M1 1AA'],
+    ])('returns %s for %s', (expected, input) => {
+      expect(isValidUKPostcode(input)).toBe(expected)
+    })
   })
 })

@@ -40,6 +40,16 @@ export const filterResultsByNameOrNumber = (results: OsDataHubResult[], nameOrNu
   )
 }
 
+// See: https://docs.os.uk/os-apis/accessing-os-apis/os-places-api/code-lists#country-code
+const countryCodesMap: Record<string, string> = {
+  E: 'England',
+  W: 'Wales',
+  S: 'Scotland',
+  N: 'Northern Ireland',
+  L: 'Channel Islands',
+  M: 'Isle of Man',
+}
+
 export const resultToAddressDetails = (result: OsDataHubResult): AccommodationAddressDetails => ({
   postcode: result.DPA.POSTCODE,
   subBuildingName: convertToTitleCase(result.DPA.SUB_BUILDING_NAME),
@@ -49,8 +59,6 @@ export const resultToAddressDetails = (result: OsDataHubResult): AccommodationAd
   dependentLocality: convertToTitleCase(result.DPA.DEPENDENT_LOCALITY),
   postTown: convertToTitleCase(result.DPA.POST_TOWN),
   county: undefined,
-  // FIXME: Handle country code correctly -- should this be set to 'United Kingdom'? Or handle the
-  //  'England'/'Wales'/'Scotland'/'Northern Ireland' code returned by the OS API?
-  country: result.DPA.COUNTRY_CODE,
+  country: countryCodesMap[result.DPA.COUNTRY_CODE],
   uprn: result.DPA.UPRN,
 })

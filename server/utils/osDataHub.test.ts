@@ -54,7 +54,7 @@ describe('OS DataHub utils', () => {
         postcode: 'M21 0BP',
         uprn: '77077677',
         county: undefined,
-        country: 'E',
+        country: 'England',
       })
     })
   })

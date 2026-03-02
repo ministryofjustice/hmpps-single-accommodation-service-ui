@@ -33,7 +33,7 @@ test.describe('Profile Tracker Page', () => {
   }) => {
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, dutyToRefer || undefined)
+    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, dutyToRefer ? [dutyToRefer] : undefined)
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
     await casesApi.stubGetReferralHistory(crn, referrals)
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)

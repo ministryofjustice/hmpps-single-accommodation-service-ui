@@ -47,6 +47,14 @@ export default class AbstractPage {
     await this.page.getByRole('textbox', { name: label }).fill(value)
   }
 
+  async completeDateInputByLabel(label: string, value: string) {
+    const [year, month, day] = value.split('-')
+    const fieldset = this.page.getByRole('group', { name: label })
+    await fieldset.getByLabel('Day').fill(day)
+    await fieldset.getByLabel('Month').fill(month)
+    await fieldset.getByLabel('Year').fill(year)
+  }
+
   async selectRadioByLabel(label: string) {
     await this.page.getByRole('radio', { name: label }).check()
   }

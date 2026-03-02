@@ -31,7 +31,7 @@ test.describe('add proposed address', () => {
     // Given there is data for the given case
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
+    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, undefined)
     await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
     await casesApi.stubGetReferralHistory(crn, [])
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
@@ -320,7 +320,7 @@ test.describe('edit proposed address', () => {
 
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
+    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, undefined)
     await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
     await casesApi.stubGetReferralHistory(crn, [])
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [proposedAddress])

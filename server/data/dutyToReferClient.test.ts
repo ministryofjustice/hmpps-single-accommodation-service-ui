@@ -22,7 +22,7 @@ describeClient('DutyToReferClient', provider => {
       uponReceiving: 'a request to get dutyToRefer for a user case by CRN',
       withRequest: {
         method: 'GET',
-        path: apiPaths.cases.dutyToRefer({ crn }),
+        path: apiPaths.cases.dutyToRefer.index({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },
@@ -33,7 +33,7 @@ describeClient('DutyToReferClient', provider => {
       },
     })
 
-    const response = await dutyToReferClient.getDutyToRefer('test-user-token', crn)
+    const response = await dutyToReferClient.getAllDutyToRefer('test-user-token', crn)
     expect(response).toEqual(dutyToRefer)
   })
 })

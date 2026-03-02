@@ -3,9 +3,11 @@ import { mock } from 'jest-mock-extended'
 import { ErrorMessages, ErrorSummary } from '@sas/ui'
 import {
   addErrorToFlash,
+  addGenericErrorToFlash,
   fetchErrors,
   generateErrorMessages,
   generateErrorSummary,
+  isValidUKPostcode,
   validateAndFlashErrors,
 } from './validation'
 
@@ -73,6 +75,23 @@ describe('addErrorToFlash', () => {
   })
 })
 
+describe('addGenericErrorToFlash', () => {
+  it('adds a generic, non-field error to flash', () => {
+    const request = mock<Request>({})
+
+    addGenericErrorToFlash(request, 'there was an error')
+
+    expect(request.flash).toHaveBeenCalledWith(
+      'errorSummary',
+      JSON.stringify([
+        {
+          text: 'there was an error',
+        },
+      ]),
+    )
+  })
+})
+
 describe('generateErrorSummary', () => {
   it('returns an empty array if there are no errors', () => {
     const result = generateErrorSummary({})
@@ -134,7 +153,7 @@ describe('validateAndFlashErrors', () => {
     expect(request.flash).not.toHaveBeenCalled()
   })
 
-  it('returns false and flashes errors if there are errors', () => {
+  it('returns false and flashes errors and user input if there are errors', () => {
     const errors = {
       field1: 'error 1',
       field2: 'error 2',
@@ -155,5 +174,22 @@ describe('validateAndFlashErrors', () => {
         { text: 'error 2', href: '#field2' },
       ]),
     )
+  })
+})
+
+describe('validators', () => {
+  describe('isValidUKPostcode', () => {
+    it.each([
+      [false, ''],
+      [false, '1234567890'],
+      [false, 'NOOO'],
+      [false, 'M145BNNNN'],
+      [false, 'M14 5BNNNN'],
+      [false, 'M23'],
+      [true, 'AA1 1AA'],
+      [true, 'M1 1AA'],
+    ])('returns %s for %s', (expected, input) => {
+      expect(isValidUKPostcode(input)).toBe(expected)
+    })
   })
 })

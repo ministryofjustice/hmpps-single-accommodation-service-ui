@@ -47,6 +47,10 @@ export const addErrorToFlash = (request: Request, field: string, error: string):
   validateAndFlashErrors(request, { [field]: error })
 }
 
+export const addGenericErrorToFlash = (request: Request, error: string): void => {
+  request.flash('errorSummary', JSON.stringify([{ text: error }]))
+}
+
 export const validateAndFlashErrors = (request: Request, errors: Record<string, string>): boolean => {
   if (Object.keys(errors).length === 0) {
     return true
@@ -60,3 +64,5 @@ export const validateAndFlashErrors = (request: Request, errors: Record<string, 
 
   return false
 }
+
+export const isValidUKPostcode = (postcode: string): boolean => /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i.test(postcode)

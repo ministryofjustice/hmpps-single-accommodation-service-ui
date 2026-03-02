@@ -16,11 +16,15 @@ import {
   validateUpToType,
   validateUpToAddress,
   updateNextAccommodationFromRequest,
+  validateLookupFromSession,
+  formDataToRequestBody,
+  lookupResultsItems,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
 import * as validationUtils from './validation'
 import MultiPageFormManager from './multiPageFormManager'
 import uiPaths from '../paths/ui'
+import { formatAddress } from './addresses'
 
 const crn = 'CRN123'
 const formDataManager = mock<MultiPageFormManager<'proposedAddress'>>()
@@ -118,29 +122,32 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('summaryListRows', () => {
-    it('formats address, arrangement and status', () => {
-      const data = {
-        address: {
-          buildingName: '10 Moonlight Road',
-          subBuildingName: '',
-          postTown: 'London',
-          county: 'Greater London',
-          postcode: 'NW1 6XE',
-          country: 'UK',
-        },
-        arrangementSubType: 'FRIENDS_OR_FAMILY',
-        settledType: 'SETTLED',
-        verificationStatus: 'PASSED',
-      } as ProposedAddressFormData
+    const fullSessionData = {
+      nameOrNumber: '123',
+      postcode: 'AB1 2CD',
+      lookupResults: addressFactory.buildList(2),
+      address: {
+        buildingName: '10 Moonlight Road',
+        subBuildingName: '',
+        postTown: 'London',
+        county: 'Greater London',
+        postcode: 'NW1 6XE',
+        country: 'UK',
+      },
+      arrangementSubType: 'FRIENDS_OR_FAMILY',
+      settledType: 'SETTLED',
+      verificationStatus: 'PASSED',
+    } as ProposedAddressFormData
 
-      const rows = summaryListRows(data, 'CRN123', 'James Taylor')
+    it('formats address, arrangement and status', () => {
+      const rows = summaryListRows(fullSessionData, 'CRN123', 'James Taylor')
 
       const addressHtml = rows[0].value.html ?? rows[0].value
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
       expect(addressHtml).toBe('10 Moonlight Road<br />London<br />Greater London<br />NW1 6XE<br />UK')
       expect(arrangementHtml).toBe('Friends or family (not tenant or owner)')
-      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
+      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/lookup')
       expect(rows[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
       expect(rows[2].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
       expect(rows[3].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
@@ -167,6 +174,19 @@ describe('Proposed addresses utilities', () => {
       const statusHtml = rows[3].value.html ?? rows[3].value
 
       expect(statusHtml).toMatchSnapshot()
+    })
+
+    it('links the address change link to the details if the address was entered manually', () => {
+      const fullSessionDataManualAddressEntry = {
+        ...fullSessionData,
+        nameOrNumber: undefined,
+        postcode: undefined,
+        lookupResults: null,
+      } as ProposedAddressFormData
+
+      const rows = summaryListRows(fullSessionDataManualAddressEntry, 'CRN123', 'James Taylor')
+
+      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
     })
   })
 
@@ -327,33 +347,70 @@ describe('Proposed addresses utilities', () => {
       country: 'UK',
     }
 
-    const validUpToAddress = (): ProposedAddressFormData =>
-      ({
-        address: validAddress,
-      }) as ProposedAddressFormData
+    const validUpToAddress = (): ProposedAddressFormData => ({
+      flow: 'full',
+      address: validAddress,
+    })
 
-    const validUpToType = (): ProposedAddressFormData =>
-      ({
-        ...validUpToAddress(),
-        arrangementSubType: 'FRIENDS_OR_FAMILY',
-        arrangementSubTypeDescription: undefined,
-        settledType: 'SETTLED',
-      }) as ProposedAddressFormData
+    const validUpToType = (): ProposedAddressFormData => ({
+      ...validUpToAddress(),
+      arrangementSubType: 'FRIENDS_OR_FAMILY',
+      arrangementSubTypeDescription: undefined,
+      settledType: 'SETTLED',
+    })
 
-    const validUpToStatusNotPassed = (): ProposedAddressFormData =>
-      ({
-        ...validUpToType(),
-        verificationStatus: 'NOT_CHECKED_YET',
-      }) as ProposedAddressFormData
+    const validUpToStatusNotPassed = (): ProposedAddressFormData => ({
+      ...validUpToType(),
+      verificationStatus: 'NOT_CHECKED_YET',
+    })
 
-    const validUpToStatusPassed = (): ProposedAddressFormData =>
-      ({
-        ...validUpToType(),
-        verificationStatus: 'PASSED',
-      }) as ProposedAddressFormData
+    const validUpToStatusPassed = (): ProposedAddressFormData => ({
+      ...validUpToType(),
+      verificationStatus: 'PASSED',
+    })
 
     beforeEach(() => {
       jest.restoreAllMocks()
+      jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    })
+
+    describe('validateLookupFromSession', () => {
+      it('sets errors and returns a redirect link to lookup when data is invalid', () => {
+        const invalidLookup: ProposedAddressFormData = {
+          flow: 'full',
+          nameOrNumber: '',
+          postcode: '',
+        }
+
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
+        expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+          nameOrNumber: 'Enter a property name or number',
+          postcode: 'Enter a UK postcode',
+        })
+      })
+
+      it.each(['N', 'NOPE', 'TH457UYTY', '   '])('sets error for invalid format postcode "%s"', postcode => {
+        const invalidLookup: ProposedAddressFormData = {
+          flow: 'full',
+          nameOrNumber: '123',
+          postcode,
+        }
+
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
+        expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+          postcode: 'Enter a full UK postcode, like AA3 1AB',
+        })
+      })
+
+      it('returns undefined when data is valid', () => {
+        const validLookup: ProposedAddressFormData = {
+          flow: 'full',
+          nameOrNumber: '123',
+          postcode: 'AB1 2CD',
+        }
+
+        expect(validateLookupFromSession(req, validLookup)).toBeUndefined()
+      })
     })
 
     describe('validateUpToAddress', () => {
@@ -547,6 +604,71 @@ describe('Proposed addresses utilities', () => {
           }),
         )
       })
+    })
+  })
+
+  describe('proposedAddressFormDataToRequestBody', () => {
+    it.each([
+      ['YES', 'YES'],
+      ['NO', 'NO'],
+      ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
+      ['TO_BE_DECIDED', undefined],
+    ] as const)(
+      'returns a request body with nextAccommodationStatus set to %s when form value is %s',
+      (expected, formValue) => {
+        const proposedAddressFormData = proposedAddressFormFactory.build({
+          nextAccommodationStatus: formValue,
+        })
+
+        const requestBody = formDataToRequestBody(proposedAddressFormData)
+
+        expect(requestBody).toEqual({
+          address: proposedAddressFormData.address,
+          arrangementType: proposedAddressFormData.arrangementType,
+          arrangementSubType: proposedAddressFormData.arrangementSubType,
+          arrangementSubTypeDescription: proposedAddressFormData.arrangementSubTypeDescription,
+          settledType: proposedAddressFormData.settledType,
+          verificationStatus: proposedAddressFormData.verificationStatus,
+          nextAccommodationStatus: expected,
+        })
+      },
+    )
+  })
+
+  describe('lookupResultsItems', () => {
+    it('returns radio buttons for the lookup results', () => {
+      const lookupResults = addressFactory.buildList(2)
+
+      expect(lookupResultsItems(lookupResults)).toEqual([
+        {
+          value: lookupResults[0].uprn,
+          text: formatAddress(lookupResults[0]),
+          checked: false,
+        },
+        {
+          value: lookupResults[1].uprn,
+          text: formatAddress(lookupResults[1]),
+          checked: false,
+        },
+      ])
+    })
+
+    it('marks the selected UPRN as checked', () => {
+      const lookupResults = addressFactory.buildList(2)
+      const selectedUprn = lookupResults[1].uprn
+
+      expect(lookupResultsItems(lookupResults, selectedUprn)).toEqual([
+        {
+          value: lookupResults[0].uprn,
+          text: formatAddress(lookupResults[0]),
+          checked: false,
+        },
+        {
+          value: lookupResults[1].uprn,
+          text: formatAddress(lookupResults[1]),
+          checked: true,
+        },
+      ])
     })
   })
 })

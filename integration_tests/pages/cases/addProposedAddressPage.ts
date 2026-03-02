@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test'
-import { ProposedAddressFormData } from '@sas/ui'
+import { ProposedAddressFormData, RadioItem } from '@sas/ui'
 import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import paths from '../../../server/paths/ui'
@@ -10,17 +10,66 @@ import {
   formatProposedAddressNextAccommodation,
   formatProposedAddressSettledType,
   formatProposedAddressStatus,
+  formDataToRequestBody,
 } from '../../../server/utils/proposedAddresses'
 
 export default class AddProposedAddressPage extends AbstractPage {
-  constructor(page: Page, expectedHeader = 'Enter the address') {
+  constructor(
+    page: Page,
+    private readonly crn: string,
+    expectedHeader = 'What is the address?',
+  ) {
     super(page)
     this.header = page.getByRole('group', { name: expectedHeader })
   }
 
   static async visit(page: Page, caseData: Case): Promise<AddProposedAddressPage> {
     await page.goto(paths.proposedAddresses.start({ crn: caseData.crn }))
-    return AddProposedAddressPage.verifyOnPage(page)
+    return AddProposedAddressPage.verifyOnPage(page, caseData.crn)
+  }
+
+  async shouldShowAddressLookupForm(nameOrNumber: string = '', postcode: string = '') {
+    await expect(this.page.getByRole('textbox', { name: 'Property name or number' })).toHaveValue(nameOrNumber)
+    await expect(this.page.getByRole('textbox', { name: 'UK postcode' })).toHaveValue(postcode)
+
+    await expect(this.page.getByRole('link', { name: 'Enter address manually' })).toHaveAttribute(
+      'href',
+      `/cases/${this.crn}/proposed-addresses/details`,
+    )
+  }
+
+  async completeLookupForm(nameOrNumber: string, postcode: string) {
+    await this.completeInputByLabel('Property name or number', nameOrNumber)
+    await this.completeInputByLabel('UK postcode', postcode)
+  }
+
+  async shouldShowSelectAddressForm(nameOrNumber: string, postcode: string, expectedResults: RadioItem[]) {
+    await expect(this.page.locator('dt:text("Property name or number") + dd')).toHaveText(nameOrNumber)
+    await expect(this.page.locator('dt:text("UK postcode") + dd')).toHaveText(postcode)
+
+    await expect(this.page.getByRole('link', { name: 'Change' })).toHaveAttribute(
+      'href',
+      paths.proposedAddresses.lookup({ crn: this.crn }),
+    )
+
+    await expect(this.page.getByRole('group', { name: 'Select an address' })).toBeVisible()
+    for await (const { text, value } of expectedResults) {
+      await expect(this.page.getByRole('radio', { name: text })).toHaveValue(value)
+    }
+  }
+
+  async completeAddressLookupResultsForm(address: string) {
+    await this.selectRadioByLabel(address)
+  }
+
+  async shouldShowDetailsForm() {
+    await expect(this.page.getByRole('heading', { name: `Enter the address` })).toBeVisible()
+    await expect(this.page.getByRole('textbox', { name: 'Address line 1' })).toBeVisible()
+    await expect(this.page.getByRole('textbox', { name: 'Address line 2 (optional)' })).toBeVisible()
+    await expect(this.page.getByRole('textbox', { name: 'Town or city' })).toBeVisible()
+    await expect(this.page.getByRole('textbox', { name: 'County (optional)' })).toBeVisible()
+    await expect(this.page.getByRole('textbox', { name: 'Postal code or zip code (if you have one)' })).toBeVisible()
+    await expect(this.page.getByRole('textbox', { name: 'Country' })).toBeVisible()
   }
 
   async clearAddressForm() {
@@ -78,25 +127,28 @@ export default class AddProposedAddressPage extends AbstractPage {
       address.country,
     ].filter(Boolean)
 
-    this.shouldShowSummaryItem('Address', addressLines)
+    await this.shouldShowSummaryItem('Address', addressLines)
 
     const arrangementValue = [
       formatProposedAddressArrangement(proposedAddressData.arrangementSubType),
       proposedAddressData.arrangementSubTypeDescription,
     ].filter(Boolean)
 
-    this.shouldShowSummaryItem(`What will be ${caseName}'s housing arrangement at this address?`, arrangementValue)
-    this.shouldShowSummaryItem(
+    await this.shouldShowSummaryItem(
+      `What will be ${caseName}'s housing arrangement at this address?`,
+      arrangementValue,
+    )
+    await this.shouldShowSummaryItem(
       'Will it be settled or transient?',
       formatProposedAddressSettledType(proposedAddressData.settledType),
     )
-    this.shouldShowSummaryItem(
+    await this.shouldShowSummaryItem(
       'What is the status of the address checks?',
       formatProposedAddressStatus(proposedAddressData.verificationStatus),
     )
 
     if (proposedAddressData.verificationStatus === 'PASSED') {
-      this.shouldShowSummaryItem(
+      await this.shouldShowSummaryItem(
         `Is this the next address that ${caseName} will be moving into?`,
         formatProposedAddressNextAccommodation(proposedAddressData.nextAccommodationStatus),
       )
@@ -152,11 +204,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   async checkApiCalled(crn: string, proposedAddressData: ProposedAddressFormData) {
     const requestBody = await verifyPost(apiPaths.cases.proposedAddresses.submit({ crn }))
 
-    const expectedBody = {
-      ...proposedAddressData,
-      arrangementType: 'PRIVATE',
-      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
+    const expectedBody = formDataToRequestBody(proposedAddressData)
 
     expect(requestBody).toEqual(expectedBody)
   }

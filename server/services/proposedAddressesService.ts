@@ -1,6 +1,7 @@
 import { ProposedAddressFormData } from '@sas/ui'
-import { AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
+import { AccommodationDetail } from '@sas/api'
 import { ProposedAddressesClient } from '../data'
+import { formDataToRequestBody } from '../utils/proposedAddresses'
 
 export default class ProposedAddressesService {
   constructor(private readonly proposedAddressesClient: ProposedAddressesClient) {}
@@ -22,20 +23,15 @@ export default class ProposedAddressesService {
   }
 
   submit(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    const proposedAddressDetail: AccommodationDetailCommand = {
-      ...proposedAddressData,
-      arrangementType: 'PRIVATE',
-      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
-
-    return this.proposedAddressesClient.submit(token, crn, proposedAddressDetail)
+    return this.proposedAddressesClient.submit(token, crn, formDataToRequestBody(proposedAddressData))
   }
 
   update(token: string, crn: string, proposedAddressData: ProposedAddressFormData) {
-    const proposedAddressDetail: AccommodationDetailCommand = {
-      ...proposedAddressData,
-      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
-    return this.proposedAddressesClient.update(token, crn, proposedAddressData.id, proposedAddressDetail)
+    return this.proposedAddressesClient.update(
+      token,
+      crn,
+      proposedAddressData.id,
+      formDataToRequestBody(proposedAddressData),
+    )
   }
 }

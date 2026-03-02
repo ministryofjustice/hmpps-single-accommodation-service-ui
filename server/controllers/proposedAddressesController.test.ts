@@ -10,7 +10,9 @@ import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
-import { accommodationFactory } from '../testutils/factories'
+import { accommodationFactory, addressFactory } from '../testutils/factories'
+import OsDataHubService from '../services/osDataHubService'
+import { lookupResultsItems } from '../utils/proposedAddresses'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -20,10 +22,17 @@ describe('proposedAddressesController', () => {
   const auditService = mock<AuditService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
   const casesService = mock<CasesService>()
+  const osDataHubService = mock<OsDataHubService>()
+
+  const lookupResults = addressFactory.buildList(3)
   const sessionData: ProposedAddressFormData = {
     flow: 'full',
+    nameOrNumber: 'BUILDING NAME',
+    postcode: 'AB12CD',
+    lookupResults,
     address: {
-      buildingName: 'Line 1',
+      uprn: '1234567890',
+      buildingName: 'Building name',
       subBuildingName: 'Line 2',
       postTown: 'Town',
       county: 'Region',
@@ -57,20 +66,202 @@ describe('proposedAddressesController', () => {
       },
     })
 
-    controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService)
+    controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService, osDataHubService)
     jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
+    jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    jest.spyOn(validationUtils, 'addGenericErrorToFlash')
 
     jest.spyOn(controller.formData, 'remove')
+    jest.spyOn(controller.formData, 'update')
 
     jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
   })
 
   describe('start', () => {
-    it('redirects to details', async () => {
+    it('redirects to address lookup', async () => {
       await controller.start()(request, response, next)
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+    })
+  })
+
+  describe('lookup', () => {
+    it('renders the address lookup page', async () => {
+      await controller.lookup()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
+        crn: 'CRN123',
+        errors: {},
+        errorSummary: [],
+      })
+    })
+
+    it('renders the address lookup page with errors and session data', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        flow: 'full',
+        nameOrNumber: '',
+        postcode: 'H23 8TY',
+      }
+      const errors = { nameOrNumber: 'Enter a property name or number' }
+      const errorSummary = [{ href: '#nameOrNumber', text: 'Enter a property name or number' }]
+
+      jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors, errorSummary })
+
+      await controller.lookup()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
+        crn: 'CRN123',
+        nameOrNumber: '',
+        postcode: 'H23 8TY',
+        errors,
+        errorSummary,
+      })
+    })
+  })
+
+  describe('saveLookup', () => {
+    it('redirects with errors if the submitted data is invalid', async () => {
+      request.body = { nameOrNumber: '', postcode: '' }
+      await controller.saveLookup()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        nameOrNumber: 'Enter a property name or number',
+        postcode: 'Enter a UK postcode',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(1)
+      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+        nameOrNumber: '',
+        postcode: '',
+        lookupResults: null,
+      })
+    })
+
+    it('redirects with a generic error if there are no results', async () => {
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([])
+
+      request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
+        request,
+        'No addresses found for this property name or number and UK postcode',
+      )
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(1)
+    })
+
+    it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue(lookupResults)
+
+      request.body = { nameOrNumber: '123', postcode: 'F45 6RT' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(2)
+      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+        lookupResults,
+      })
+    })
+
+    it('saves the address and redirects to the type page if there is exactly one result', async () => {
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([lookupResults[1]])
+
+      request.body = { nameOrNumber: '23A', postcode: 'M21 0BP' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledTimes(2)
+      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+        lookupResults: [lookupResults[1]],
+        address: lookupResults[1],
+      })
+    })
+  })
+
+  describe('selectAddress', () => {
+    it('renders the select address page with results from the session', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+
+      await controller.selectAddress()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/select-address', {
+        crn: 'CRN123',
+        nameOrNumber: 'BUILDING NAME',
+        postcode: 'AB12CD',
+        addresses: lookupResultsItems(lookupResults, sessionData.address.uprn),
+        errors: {},
+        errorSummary: [],
+      })
+    })
+
+    it('redirects to the lookup page if there are no lookup results in the session', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        lookupResults: null,
+      }
+
+      await controller.selectAddress()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+    })
+  })
+
+  describe('saveSelectAddress', () => {
+    beforeEach(() => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+    })
+
+    it('redirects to the lookup page if there are no lookup results in the session', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        lookupResults: null,
+      }
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+    })
+
+    it('redirects to the select address page with an error if no address was selected', async () => {
+      request.body = {}
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        addressUprn: 'Select an address',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }))
+    })
+
+    it('redirects to the select address page with an error if an address not in the list was selected', async () => {
+      request.body = { addressUprn: '1234567890' }
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        addressUprn: 'Select an address',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }))
+    })
+
+    it('saves the selected address to the session and redirects to the details page', async () => {
+      request.body = { addressUprn: lookupResults[0].uprn }
+
+      await controller.saveSelectAddress()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, {
+        address: lookupResults[0],
+      })
     })
   })
 
@@ -84,6 +275,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }),
         address: {},
         errors: {},
         errorSummary: [],
@@ -96,8 +288,10 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }),
         address: {
-          buildingName: 'Line 1',
+          uprn: '1234567890',
+          buildingName: 'Building name',
           subBuildingName: 'Line 2',
           postTown: 'Town',
           county: 'Region',
@@ -150,6 +344,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         proposedAddress: { ...sessionData, arrangementSubType: undefined, settledType: undefined },
         name: 'James Smith',
         errors: {},
@@ -164,12 +359,26 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         proposedAddress: sessionData,
         name: 'James Smith',
         errors: {},
         errorSummary: [],
         arrangementSubTypeItems: expect.any(Array),
       })
+    })
+
+    it('renders a back link to address details if there are no lookup results in the session', async () => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, lookupResults: null }
+
+      await controller.type()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/proposed-address/type',
+        expect.objectContaining({
+          backLinkHref: uiPaths.proposedAddresses.details({ crn: 'CRN123' }),
+        }),
+      )
     })
 
     it('redirects when validation fails', async () => {

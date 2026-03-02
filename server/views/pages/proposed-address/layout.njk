@@ -33,6 +33,7 @@
                         preventDoubleClick: true
                     }) }}
                 </div>
+                {% block extraAction %}{% endblock %}
                 <p>
                     <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.cancel({ crn: crn }) }}">Cancel</a>
                 </p>

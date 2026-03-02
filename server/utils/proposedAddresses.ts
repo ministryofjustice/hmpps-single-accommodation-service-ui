@@ -1,12 +1,12 @@
-import { ProposedAddressDisplayStatus, ProposedAddressFormData, StatusCard, StatusTag } from '@sas/ui'
-import { AccommodationDetail } from '@sas/api'
+import { ProposedAddressDisplayStatus, ProposedAddressFormData, RadioItem, StatusCard, StatusTag } from '@sas/ui'
+import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { Request } from 'express'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { htmlContent, textContent } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
-import { validateAndFlashErrors } from './validation'
+import { isValidUKPostcode, validateAndFlashErrors } from './validation'
 import { addressLines, formatAddress } from './addresses'
 
 const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
@@ -130,13 +130,16 @@ export const formatProposedAddressArrangement = (type?: AccommodationDetail['arr
 
 export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string, name: string) => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
+  const changeAddressLink = sessionData.lookupResults
+    ? uiPaths.proposedAddresses.lookup({ crn })
+    : uiPaths.proposedAddresses.details({ crn })
 
   const rows = [
     {
       key: textContent('Address'),
       value: htmlContent(addressParts.join('<br />')),
       actions: {
-        items: [{ text: 'Change', href: uiPaths.proposedAddresses.details({ crn }) }],
+        items: [{ text: 'Change', href: changeAddressLink }],
       },
     },
     {
@@ -187,6 +190,19 @@ const formatStatusWithReason = (data: ProposedAddressFormData) => {
     return `<p class="govuk-!-margin-bottom-2">${status}</p>Not suitable`
   }
   return status
+}
+
+export const validateLookupFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+  const errors: Record<string, string> = {}
+
+  if (!sessionData.nameOrNumber) errors.nameOrNumber = 'Enter a property name or number'
+  if (!sessionData.postcode) {
+    errors.postcode = 'Enter a UK postcode'
+  } else if (!isValidUKPostcode(sessionData.postcode)) {
+    errors.postcode = 'Enter a full UK postcode, like AA3 1AB'
+  }
+
+  return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
 }
 
 export const updateAddressFromRequest = async (
@@ -392,3 +408,27 @@ export const nextAccommodationStatusItems = (
     checked: nextAccommodationStatus === 'TO_BE_DECIDED',
   },
 ]
+
+export const formDataToRequestBody = ({
+  arrangementSubType,
+  arrangementSubTypeDescription,
+  settledType,
+  address,
+  verificationStatus,
+  nextAccommodationStatus,
+}: ProposedAddressFormData): AccommodationDetailCommand => ({
+  arrangementType: 'PRIVATE',
+  arrangementSubType,
+  arrangementSubTypeDescription,
+  settledType,
+  address,
+  verificationStatus,
+  nextAccommodationStatus: nextAccommodationStatus ?? 'TO_BE_DECIDED',
+})
+
+export const lookupResultsItems = (results: AccommodationAddressDetails[], selectedUprn?: string): RadioItem[] =>
+  results.map(result => ({
+    value: result.uprn,
+    text: formatAddress(result),
+    checked: selectedUprn === result.uprn,
+  }))

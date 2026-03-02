@@ -1,4 +1,4 @@
-import { AccommodationDetail } from '@sas/api'
+import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 
 export interface ErrorSummary {
@@ -14,16 +14,12 @@ export interface ErrorMessages {
   [key: string]: ErrorMessage
 }
 
-export type ProposedAddressFormData = {
-  id?: string
-  arrangementType: AccommodationDetail['arrangementType']
-  arrangementSubType: AccommodationDetail['arrangementSubType']
-  arrangementSubTypeDescription: string
-  settledType: AccommodationDetail['settledType']
-  verificationStatus: AccommodationDetail['verificationStatus']
-  address: AccommodationDetail['address']
-  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus']
+export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
   flow: 'full' | 'details' | 'type' | 'status' | 'nextAccommodation'
+  id?: string
+  nameOrNumber?: string
+  postcode?: string
+  lookupResults?: AccommodationAddressDetails[] | null
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']
@@ -59,21 +55,17 @@ export type DividerItem = {
   divider: string
 }
 
-export type RadioItem =
-  | {
-      text: string
-      value: string
-      checked?: boolean
-      conditional?: {
-        html: string
-      }
-    }
-  | DividerItem
+export type RadioItem = {
+  text: string
+  value: string
+  checked?: boolean
+  conditional?: {
+    html: string
+  }
+}
 
-export type CheckboxItem =
-  | {
-      text: string
-      value: string
-      checked?: boolean
-    }
-  | DividerItem
+export type CheckboxItem = {
+  text: string
+  value: string
+  checked?: boolean
+}

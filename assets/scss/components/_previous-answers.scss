@@ -1,0 +1,13 @@
+@use "govuk-frontend/dist/govuk" as *;
+
+.govuk-inset-text--previous-answers {
+  & dl {
+    margin-bottom: 0;
+  }
+
+  & dd {
+    @include govuk-typography-weight-bold();
+    margin-left: 0;
+    margin-bottom: govuk-spacing(2);
+  }
+}

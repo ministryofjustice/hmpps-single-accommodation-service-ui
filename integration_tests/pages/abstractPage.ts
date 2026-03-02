@@ -116,6 +116,12 @@ export default class AbstractPage {
     }
   }
 
+  async shouldShowGenericErrorMessage(message: string) {
+    await expect(this.page.getByText('There is a problem')).toBeVisible()
+
+    await expect(this.page.locator('.govuk-error-summary__body')).toContainText(message)
+  }
+
   async shouldShowBanner(text: string) {
     return expect(this.page.getByRole('alert')).toContainText(text)
   }

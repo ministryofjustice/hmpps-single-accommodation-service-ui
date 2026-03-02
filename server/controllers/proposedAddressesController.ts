@@ -17,10 +17,13 @@ import {
   validateUpToStatus,
   validateUpToNextAccommodation,
   flowRedirects,
+  validateLookupFromSession,
+  lookupResultsItems,
 } from '../utils/proposedAddresses'
-import { fetchErrors, addErrorToFlash } from '../utils/validation'
+import { fetchErrors, addErrorToFlash, validateAndFlashErrors, addGenericErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
+import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
 
 export default class ProposedAddressesController {
@@ -30,15 +33,16 @@ export default class ProposedAddressesController {
     private readonly auditService: AuditService,
     private readonly proposedAddressesService: ProposedAddressesService,
     private readonly casesService: CasesService,
+    private readonly osDataHubService: OsDataHubService,
   ) {
     this.formData = new MultiPageFormManager('proposedAddress')
   }
 
   start(): RequestHandler {
     return async (req: Request, res: Response) => {
-      this.formData.remove(req.params.crn, req.session)
+      await this.formData.remove(req.params.crn, req.session)
       await this.formData.update(req.params.crn, req.session, { flow: 'full' })
-      return res.redirect(uiPaths.proposedAddresses.details({ crn: req.params.crn }))
+      return res.redirect(uiPaths.proposedAddresses.lookup({ crn: req.params.crn }))
     }
   }
 
@@ -60,17 +64,125 @@ export default class ProposedAddressesController {
     }
   }
 
+  lookup(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+      const { nameOrNumber, postcode } = this.formData.get(req.params.crn, req.session)
+      const { errors, errorSummary } = fetchErrors(req)
+
+      return res.render('pages/proposed-address/lookup', {
+        crn: req.params.crn,
+        nameOrNumber,
+        postcode,
+        errors,
+        errorSummary,
+      })
+    }
+  }
+
+  saveLookup(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.params
+      const { session } = req
+      const { nameOrNumber, postcode } = req.body
+
+      const proposedAddressFormSessionData = await this.formData.update(crn, session, {
+        nameOrNumber: req.body?.nameOrNumber,
+        postcode: req.body?.postcode,
+        lookupResults: null,
+      })
+
+      const errorRedirect = validateLookupFromSession(req, proposedAddressFormSessionData)
+      if (errorRedirect) return res.redirect(errorRedirect)
+
+      const lookupResults = await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
+
+      if (!lookupResults.length) {
+        addGenericErrorToFlash(req, 'No addresses found for this property name or number and UK postcode')
+        return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
+      }
+
+      if (lookupResults.length === 1) {
+        await this.formData.update(crn, session, { lookupResults, address: lookupResults[0] })
+        return res.redirect(uiPaths.proposedAddresses.type({ crn }))
+      }
+
+      await this.formData.update(crn, session, { lookupResults })
+      return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn: req.params.crn }))
+    }
+  }
+
+  selectAddress(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_SELECT_ADDRESS, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const { crn } = req.params
+      const { errors, errorSummary } = fetchErrors(req)
+      const { nameOrNumber, postcode, lookupResults, address } = this.formData.get(crn, req.session)
+
+      if (!lookupResults) {
+        return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
+      }
+
+      return res.render('pages/proposed-address/select-address', {
+        crn,
+        nameOrNumber,
+        postcode,
+        addresses: lookupResultsItems(lookupResults, address?.uprn),
+        errors,
+        errorSummary,
+      })
+    }
+  }
+
+  saveSelectAddress(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.params
+      const { session } = req
+      const { addressUprn } = req.body
+
+      const { lookupResults } = this.formData.get(crn, session)
+
+      if (!lookupResults) {
+        return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
+      }
+
+      const address = lookupResults.find(result => result.uprn === addressUprn)
+
+      if (!addressUprn || !address) {
+        validateAndFlashErrors(req, {
+          addressUprn: 'Select an address',
+        })
+        return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn }))
+      }
+
+      await this.formData.update(crn, session, {
+        address,
+      })
+
+      return res.redirect(uiPaths.proposedAddresses.type({ crn }))
+    }
+  }
+
   details(): RequestHandler {
     return async (req: Request, res: Response) => {
       await this.auditService.logPageView(Page.ADD_PROPOSED_ADDRESS_DETAILS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
+      const { crn } = req.params
       const { errors, errorSummary } = fetchErrors(req)
-      const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
+      const proposedAddressFormSessionData = this.formData.get(crn, req.session)
 
       return res.render('pages/proposed-address/details', {
-        crn: req.params.crn,
+        crn,
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn }),
         address: proposedAddressFormSessionData?.address || {},
         errors,
         errorSummary,
@@ -106,6 +218,9 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/type', {
         crn,
+        backLinkHref: proposedAddressFormSessionData.lookupResults?.length
+          ? uiPaths.proposedAddresses.selectAddress({ crn })
+          : uiPaths.proposedAddresses.details({ crn }),
         proposedAddress: proposedAddressFormSessionData,
         name: caseData.name,
         arrangementSubTypeItems: arrangementSubTypeItems(proposedAddressFormSessionData?.arrangementSubType),

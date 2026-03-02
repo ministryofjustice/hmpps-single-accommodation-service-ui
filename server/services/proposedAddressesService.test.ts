@@ -1,7 +1,7 @@
-import { AccommodationDetailCommand } from '@sas/api'
 import ProposedAddressesClient from '../data/proposedAddressesClient'
 import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
+import { formDataToRequestBody } from '../utils/proposedAddresses'
 
 jest.mock('../data/proposedAddressesClient')
 
@@ -59,29 +59,15 @@ describe('ProposedAddressesService', () => {
   })
 
   describe('submit', () => {
-    it.each([
-      ['YES', 'YES'],
-      ['NO', 'NO'],
-      ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
-      [undefined, 'TO_BE_DECIDED'],
-    ] as const)(
-      'should call submit when input is %s with nextAccommodationStatus as %s',
-      async (formValue, expectedStatus) => {
-        const proposedAddressData = proposedAddressFormFactory.build({
-          nextAccommodationStatus: formValue,
-        })
+    it('should call submit on the API client with the proposed address data', async () => {
+      const proposedAddressData = proposedAddressFormFactory.build()
 
-        await proposedAddressesService.submit(token, crn, proposedAddressData)
+      await proposedAddressesService.submit(token, crn, proposedAddressData)
 
-        const expectedData: AccommodationDetailCommand = {
-          ...proposedAddressData,
-          arrangementType: 'PRIVATE',
-          nextAccommodationStatus: expectedStatus,
-        }
+      const expectedData = formDataToRequestBody(proposedAddressData)
 
-        expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)
-      },
-    )
+      expect(proposedAddressesClient.submit).toHaveBeenCalledWith(token, crn, expectedData)
+    })
   })
 
   describe('update', () => {
@@ -90,10 +76,7 @@ describe('ProposedAddressesService', () => {
 
       await proposedAddressesService.update(token, crn, proposedAddressData)
 
-      const expectedData: AccommodationDetailCommand = {
-        ...proposedAddressData,
-        nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-      }
+      const expectedData = formDataToRequestBody(proposedAddressData)
 
       expect(proposedAddressesClient.update).toHaveBeenCalledWith(token, crn, id, expectedData)
     })

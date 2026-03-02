@@ -23,6 +23,7 @@ import ReferralsClient from './referralsClient'
 import EligibilityClient from './eligibilityClient'
 import DutyToReferClient from './dutyToReferClient'
 import ProposedAddressesClient from './proposedAddressesClient'
+import OsDataHubClient from './osDataHubClient'
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -41,6 +42,7 @@ export const dataAccess = () => {
     eligibilityClient: new EligibilityClient(hmppsAuthClient),
     dutyToReferClient: new DutyToReferClient(hmppsAuthClient),
     proposedAddressesClient: new ProposedAddressesClient(hmppsAuthClient),
+    osDataHubClient: new OsDataHubClient(),
   }
 }
 
@@ -55,4 +57,5 @@ export {
   EligibilityClient,
   DutyToReferClient,
   ProposedAddressesClient,
+  OsDataHubClient,
 }

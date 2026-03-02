@@ -1,10 +1,9 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { AccommodationDetailCommand } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import ProposedAddressesClient from './proposedAddressesClient'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
-import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
+import { accommodationDetailCommandFactory, accommodationFactory } from '../testutils/factories'
 
 describeClient('ProposedAddressesClient', provider => {
   let proposedAddressesClient: ProposedAddressesClient
@@ -63,12 +62,7 @@ describeClient('ProposedAddressesClient', provider => {
 
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
-    const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
-    const proposedAddressDetail: AccommodationDetailCommand = {
-      ...proposedAddressData,
-      arrangementType: 'PRIVATE',
-      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
+    const proposedAddressData = accommodationDetailCommandFactory.build()
 
     await provider.addInteraction({
       state: `Proposed address can be submitted for case with CRN ${crn}`,
@@ -79,25 +73,20 @@ describeClient('ProposedAddressesClient', provider => {
         headers: {
           authorization: 'Bearer test-user-token',
         },
-        body: proposedAddressDetail,
+        body: proposedAddressData,
       },
       willRespondWith: {
         status: 200,
       },
     })
 
-    await proposedAddressesClient.submit(token, crn, proposedAddressDetail)
+    await proposedAddressesClient.submit(token, crn, proposedAddressData)
   })
 
   it('should make a PUT request to /cases/:crn/proposed-accommodations/:id', async () => {
     const crn = crnFactory()
     const id = 'c1b1d9f8-6f3a-4b52-9c5c-6a0c5a9d8f1f'
-    const proposedAddressData = proposedAddressFormFactory.manualAddress().build()
-
-    const proposedAddressDetail: AccommodationDetailCommand = {
-      ...proposedAddressData,
-      nextAccommodationStatus: proposedAddressData.nextAccommodationStatus ?? 'TO_BE_DECIDED',
-    }
+    const proposedAddressData = accommodationDetailCommandFactory.build()
 
     await provider.addInteraction({
       state: `Proposed address can be updated for case with CRN ${crn}`,
@@ -108,13 +97,13 @@ describeClient('ProposedAddressesClient', provider => {
         headers: {
           authorization: 'Bearer test-user-token',
         },
-        body: proposedAddressDetail,
+        body: proposedAddressData,
       },
       willRespondWith: {
         status: 200,
       },
     })
 
-    await proposedAddressesClient.update(token, crn, id, proposedAddressDetail)
+    await proposedAddressesClient.update(token, crn, id, proposedAddressData)
   })
 })

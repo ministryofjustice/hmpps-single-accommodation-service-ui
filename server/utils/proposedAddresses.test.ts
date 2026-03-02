@@ -190,8 +190,6 @@ describe('Proposed addresses utilities', () => {
     })
   })
 
-  describe('updateLookupFromRequest', () => {})
-
   describe('updateAddressFromRequest', () => {
     it('updates form data when address exists', async () => {
       req.body = {

@@ -27,3 +27,9 @@ export const initialiseName = (fullName?: string): string | null => {
 export const textContent = (text?: string): TextContent => ({ text: text || '' })
 
 export const htmlContent = (html?: string): HtmlContent => ({ html: html || '' })
+
+export const toParagraphs = (lines: string[], classes?: string): string =>
+  lines
+    .filter(Boolean)
+    .map(line => `<p${classes ? ` class="${classes}"` : ''}>${line}</p>`)
+    .join('')

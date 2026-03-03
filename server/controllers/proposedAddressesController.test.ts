@@ -10,13 +10,15 @@ import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
-import { accommodationFactory, addressFactory } from '../testutils/factories'
+import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
-import { lookupResultsItems } from '../utils/proposedAddresses'
+import { addressDetailRows, lookupResultsItems } from '../utils/proposedAddresses'
+import { formatAddress } from '../utils/addresses'
+import { caseAssignedTo } from '../utils/cases'
 
 describe('proposedAddressesController', () => {
   let request: Request
-  const response = mock<Response>({ locals: { user: { username: 'user1', token: 'token-1' } } })
+  const response = mock<Response>({ locals: { user: { userId: 'user-id', username: 'user1', token: 'token-1' } } })
   const next = mock<NextFunction>()
 
   const auditService = mock<AuditService>()
@@ -75,6 +77,28 @@ describe('proposedAddressesController', () => {
     jest.spyOn(controller.formData, 'update')
 
     jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
+  })
+
+  describe('show', () => {
+    it('renders the address details page', async () => {
+      const caseData = caseFactory.build()
+      const proposedAddress = accommodationFactory.build()
+      casesService.getCase.mockResolvedValue(caseData)
+      proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
+
+      await controller.show()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.PROPOSED_ADDRESS_DETAILS, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/show', {
+        caseData,
+        assignedTo: caseAssignedTo(caseData, 'user-id'),
+        address: formatAddress(proposedAddress.address),
+        addressDetailRows: addressDetailRows(proposedAddress),
+      })
+    })
   })
 
   describe('start', () => {
@@ -591,7 +615,7 @@ describe('proposedAddressesController', () => {
   describe('checkYourAnswers', () => {
     it('renders check your answers', async () => {
       jest
-        .spyOn(proposedAddressesUtils, 'summaryListRows')
+        .spyOn(proposedAddressesUtils, 'checkYourAnswersRows')
         .mockImplementation(() => [
           { key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' }, actions: { items: [] } },
         ])

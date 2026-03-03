@@ -4,7 +4,7 @@ import { ProposedAddressFormData } from '@sas/ui'
 import { mock } from 'jest-mock-extended'
 import {
   proposedAddressStatusCard,
-  summaryListRows,
+  checkYourAnswersRows,
   updateAddressFromRequest,
   updateTypeFromRequest,
   updateStatusFromRequest,
@@ -19,6 +19,7 @@ import {
   validateLookupFromSession,
   formDataToRequestBody,
   lookupResultsItems,
+  addressDetailRows,
 } from './proposedAddresses'
 import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
 import * as validationUtils from './validation'
@@ -140,7 +141,7 @@ describe('Proposed addresses utilities', () => {
     } as ProposedAddressFormData
 
     it('formats address, arrangement and status', () => {
-      const rows = summaryListRows(fullSessionData, 'CRN123', 'James Taylor')
+      const rows = checkYourAnswersRows(fullSessionData, 'CRN123', 'James Taylor')
 
       const addressHtml = rows[0].value.html ?? rows[0].value
       const arrangementHtml = rows[1].value.html ?? rows[1].value
@@ -158,7 +159,7 @@ describe('Proposed addresses utilities', () => {
         arrangementSubType: 'OTHER',
         arrangementSubTypeDescription: 'Hostel',
       })
-      const rows = summaryListRows(sessionData, 'CRN123', 'James Taylor')
+      const rows = checkYourAnswersRows(sessionData, 'CRN123', 'James Taylor')
 
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
@@ -169,7 +170,7 @@ describe('Proposed addresses utilities', () => {
       const sessionData = proposedAddressFormFactory.manualAddress().build({
         verificationStatus: 'FAILED',
       })
-      const rows = summaryListRows(sessionData, 'CRN123', 'James Taylor')
+      const rows = checkYourAnswersRows(sessionData, 'CRN123', 'James Taylor')
 
       const statusHtml = rows[3].value.html ?? rows[3].value
 
@@ -184,7 +185,7 @@ describe('Proposed addresses utilities', () => {
         lookupResults: null,
       } as ProposedAddressFormData
 
-      const rows = summaryListRows(fullSessionDataManualAddressEntry, 'CRN123', 'James Taylor')
+      const rows = checkYourAnswersRows(fullSessionDataManualAddressEntry, 'CRN123', 'James Taylor')
 
       expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
     })
@@ -669,6 +670,42 @@ describe('Proposed addresses utilities', () => {
           checked: true,
         },
       ])
+    })
+  })
+
+  describe('addressDetailRows', () => {
+    const baseProposedAddress = accommodationFactory.proposed().build({
+      arrangementSubType: 'FRIENDS_OR_FAMILY',
+      settledType: 'SETTLED',
+      verificationStatus: 'NOT_CHECKED_YET',
+      nextAccommodationStatus: undefined,
+      address: addressFactory.minimal().build({
+        buildingNumber: '1',
+        thoroughfareName: 'Street',
+        postTown: 'Town',
+        postcode: 'P0 5TC',
+      }),
+    })
+
+    it.each([
+      { title: 'that failed checks', params: { verificationStatus: 'FAILED' as const } },
+      { title: 'that has not been checked', params: { verificationStatus: 'NOT_CHECKED_YET' as const } },
+      { title: 'that passed checks', params: { verificationStatus: 'PASSED' as const } },
+      {
+        title: 'that is confirmed',
+        params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const },
+      },
+      {
+        title: 'with an arrangement type of "Other"',
+        params: { arrangementSubType: 'OTHER' as const, arrangementSubTypeDescription: 'Some description' },
+      },
+    ])('returns the correct rows for an address $title', ({ params }: { params: Partial<AccommodationDetail> }) => {
+      const proposedAddress = accommodationFactory.build({
+        ...baseProposedAddress,
+        ...params,
+      })
+
+      expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
     })
   })
 })

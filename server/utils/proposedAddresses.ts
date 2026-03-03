@@ -1,15 +1,17 @@
 import { ProposedAddressDisplayStatus, ProposedAddressFormData, RadioItem, StatusCard, StatusTag } from '@sas/ui'
 import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
 import { Request } from 'express'
+import { SummaryListRow } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
-import { htmlContent, textContent } from './utils'
+import { htmlContent, textContent, toParagraphs } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { isValidUKPostcode, validateAndFlashErrors } from './validation'
 import { addressLines, formatAddress } from './addresses'
+import { statusTag } from './macros'
 
-const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
+export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
     PASSED: { text: 'Passed', colour: 'yellow' },
     NOT_CHECKED_YET: { text: 'Not checked yet', colour: 'red' },
@@ -18,7 +20,7 @@ const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusT
   })[status] || { text: 'Unknown' }
 
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
-  const status = displayStatus(proposedAddress.verificationStatus, proposedAddress.nextAccommodationStatus)
+  const status = displayStatus(proposedAddress)
 
   return {
     heading: formatAddress(proposedAddress.address),
@@ -34,6 +36,8 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
 }
 
 const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: string) => {
+  const detailsLink = uiPaths.proposedAddresses.show({ crn, id })
+
   switch (status) {
     case 'PASSED':
       return [
@@ -41,15 +45,15 @@ const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: s
           text: 'Confirm as next address',
           href: `${uiPaths.proposedAddresses.edit({ crn, id })}?flow=nextAccommodation`,
         },
-        { text: 'Notes', href: '#' },
+        { text: 'Notes', href: detailsLink },
       ]
     case 'NOT_CHECKED_YET':
       return [
         { text: 'Add checks', href: `${uiPaths.proposedAddresses.edit({ crn, id })}?flow=status` },
-        { text: 'Notes', href: '#' },
+        { text: 'Notes', href: detailsLink },
       ]
     default:
-      return [{ text: 'Notes', href: '#' }]
+      return [{ text: 'Notes', href: detailsLink }]
   }
 }
 
@@ -77,12 +81,10 @@ const arrangementLabel = (proposedAddress: AccommodationDetail) => {
   }
 }
 
-const displayStatus = (
-  status?: AccommodationDetail['verificationStatus'],
-  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus'],
-): ProposedAddressDisplayStatus => {
-  if (status === 'PASSED' && nextAccommodationStatus === 'YES') return 'CONFIRMED'
-  return status
+export const displayStatus = (proposedAddress: AccommodationDetail): ProposedAddressDisplayStatus => {
+  if (proposedAddress.verificationStatus === 'PASSED' && proposedAddress.nextAccommodationStatus === 'YES')
+    return 'CONFIRMED'
+  return proposedAddress.verificationStatus
 }
 
 export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string => {
@@ -128,7 +130,11 @@ export const formatProposedAddressArrangement = (type?: AccommodationDetail['arr
   )
 }
 
-export const summaryListRows = (sessionData: ProposedAddressFormData, crn: string, name: string) => {
+export const checkYourAnswersRows = (
+  sessionData: ProposedAddressFormData,
+  crn: string,
+  name: string,
+): SummaryListRow[] => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
   const changeAddressLink = sessionData.lookupResults
     ? uiPaths.proposedAddresses.lookup({ crn })
@@ -176,10 +182,10 @@ export const summaryListRows = (sessionData: ProposedAddressFormData, crn: strin
   return rows
 }
 
-const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
+const formatArrangementWithDescription = (data: ProposedAddressFormData | AccommodationDetail) => {
   const type = formatProposedAddressArrangement(data.arrangementSubType)
   if (type === 'Other') {
-    return `<p class="govuk-!-margin-bottom-2">${type}</p>${data.arrangementSubTypeDescription || ''}`
+    return toParagraphs([type, data.arrangementSubTypeDescription], 'govuk-!-margin-bottom-2')
   }
   return type
 }
@@ -187,7 +193,7 @@ const formatArrangementWithDescription = (data: ProposedAddressFormData) => {
 const formatStatusWithReason = (data: ProposedAddressFormData) => {
   const status = formatProposedAddressStatus(data.verificationStatus)
   if (data.verificationStatus === 'FAILED') {
-    return `<p class="govuk-!-margin-bottom-2">${status}</p>Not suitable`
+    return toParagraphs([status, 'Not suitable'], 'govuk-!-margin-bottom-2')
   }
   return status
 }
@@ -432,3 +438,19 @@ export const lookupResultsItems = (results: AccommodationAddressDetails[], selec
     text: formatAddress(result),
     checked: selectedUprn === result.uprn,
   }))
+
+export const formatHousingArrangement = (proposedAddress: AccommodationDetail): string =>
+  `
+    ${formatArrangementWithDescription(proposedAddress)}
+    <p class="govuk-!-margin-bottom-2">${formatProposedAddressSettledType(proposedAddress.settledType)}</p>
+  `
+
+export const addressDetailRows = (proposedAddress: AccommodationDetail): SummaryListRow[] =>
+  [
+    summaryListRow('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress))), 'html'),
+    summaryListRow('Address', formatAddress(proposedAddress.address, '<br />'), 'html'),
+    summaryListRow('Housing arrangement', formatHousingArrangement(proposedAddress), 'html'),
+    summaryListRow('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus)),
+    proposedAddress.verificationStatus === 'PASSED' &&
+      summaryListRow('Next address', formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)),
+  ].filter(Boolean)

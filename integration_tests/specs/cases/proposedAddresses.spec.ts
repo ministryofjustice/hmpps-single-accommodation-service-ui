@@ -18,13 +18,49 @@ import AddProposedAddressPage from '../../pages/cases/addProposedAddressPage'
 import osDataHubApiResponse from '../../../server/testutils/fixtures/osDataHubApi/getPostcode.json'
 
 import { resultToAddressDetails } from '../../../server/utils/osDataHub'
+import { formatAddress } from '../../../server/utils/addresses'
+import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
+
+test.describe('view proposed address details', () => {
+  test('should allow user to view the details of a proposed address', async ({ page }) => {
+    const caseData = caseFactory.build()
+    const { crn } = caseData
+    const proposedAddress = accommodationFactory.proposed().build({ crn })
+
+    await casesApi.stubGetCases([caseData])
+    await casesApi.stubGetCaseByCrn(crn, caseData)
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
+    await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
+    await casesApi.stubGetReferralHistory(crn, [])
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [proposedAddress])
+    await proposedAddressesApi.stubGetProposedAddress(crn, proposedAddress.id, proposedAddress)
+
+    // Given I am logged in
+    await login(page)
+
+    // When I visit profile tracker page with a proposed address
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // When I click the link to view address details in the proposed address card
+    await profileTrackerPage.clickLink('Notes', profileTrackerPage.getCard(formatAddress(proposedAddress.address)))
+
+    // Then I should see the address details page
+    const addressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(page, proposedAddress)
+
+    // And the person's profile should be shown
+    await addressDetailsPage.shouldShowCaseDetails(caseData)
+
+    // And the address details should be listed
+    await addressDetailsPage.shouldShowProposedAddressSummary()
+  })
+})
 
 test.describe('add proposed address', () => {
   const crn = 'X123456'
   const caseData = caseFactory.build({ crn })
   const proposedAddresses = [
-    accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' }),
-    accommodationFactory.proposed().build({ verificationStatus: 'FAILED' }),
+    accommodationFactory.proposed().build({ crn, verificationStatus: 'NOT_CHECKED_YET' }),
+    accommodationFactory.proposed().build({ crn, verificationStatus: 'FAILED' }),
   ]
 
   test.beforeEach(async () => {
@@ -48,6 +84,7 @@ test.describe('add proposed address', () => {
 
     const newProposedAddress = accommodationFactory.proposed().build({
       ...updatedProposedAddressData,
+      crn,
       address: addressFactory.minimal().build(updatedProposedAddressData.address),
     })
     const updatedProposedAddresses: AccommodationDetail[] = [...proposedAddresses, newProposedAddress]

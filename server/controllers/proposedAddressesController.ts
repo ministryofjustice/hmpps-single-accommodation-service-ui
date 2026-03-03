@@ -4,7 +4,7 @@ import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from '../utils/multiPageFormManager'
 import {
-  summaryListRows,
+  checkYourAnswersRows,
   updateAddressFromRequest,
   updateTypeFromRequest,
   updateStatusFromRequest,
@@ -19,12 +19,15 @@ import {
   flowRedirects,
   validateLookupFromSession,
   lookupResultsItems,
+  addressDetailRows,
 } from '../utils/proposedAddresses'
 import { fetchErrors, addErrorToFlash, validateAndFlashErrors, addGenericErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
+import { formatAddress } from '../utils/addresses'
+import { caseAssignedTo } from '../utils/cases'
 
 export default class ProposedAddressesController {
   formData: MultiPageFormManager<'proposedAddress'>
@@ -36,6 +39,28 @@ export default class ProposedAddressesController {
     private readonly osDataHubService: OsDataHubService,
   ) {
     this.formData = new MultiPageFormManager('proposedAddress')
+  }
+
+  show(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+
+      await this.auditService.logPageView(Page.PROPOSED_ADDRESS_DETAILS, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const caseData = await this.casesService.getCase(token, crn)
+      const proposedAddress = await this.proposedAddressesService.getProposedAddress(token, crn, id)
+
+      return res.render('pages/proposed-address/show', {
+        caseData,
+        assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+        address: formatAddress(proposedAddress.address),
+        addressDetailRows: addressDetailRows(proposedAddress),
+      })
+    }
   }
 
   start(): RequestHandler {
@@ -347,7 +372,7 @@ export default class ProposedAddressesController {
       const { errors, errorSummary } = fetchErrors(req)
       const caseData = await this.casesService.getCase(token, crn)
 
-      const tableRows = summaryListRows(proposedAddressFormSessionData, crn, caseData.name)
+      const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, caseData.name)
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.checkYourAnswers.pattern, req, [
         uiPaths.proposedAddresses.status.pattern,
         uiPaths.proposedAddresses.nextAccommodation.pattern,

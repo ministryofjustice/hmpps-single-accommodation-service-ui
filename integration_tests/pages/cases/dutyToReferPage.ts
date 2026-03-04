@@ -1,6 +1,5 @@
 import { expect, Page } from '@playwright/test'
-import { DutyToReferDto, SubmitDutyToRefer } from '@sas/ui'
-import { CaseDto as Case } from '@sas/api'
+import { DutyToReferDto, DtrCommand, CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import paths from '../../../server/paths/ui'
 import { verifyPost } from '../../mockApis/wiremock'
@@ -23,7 +22,7 @@ export default class DutyToReferPage extends AbstractPage {
 
   async shouldShowSubmissionForm(caseData: Case) {
     await expect(this.page.getByRole('heading', { name: 'Add Duty to Refer (DTR) submission details' })).toBeVisible()
-    
+
     this.shouldShowSummaryItem('Name', caseData.name)
     this.shouldShowSummaryItem('Date of birth', caseData.dateOfBirth)
     this.shouldShowSummaryItem('CRN', caseData.crn)
@@ -34,7 +33,7 @@ export default class DutyToReferPage extends AbstractPage {
     await this.completeDateInputByLabel('When was the DTR submitted?', dutyToRefer.submission.submissionDate)
     if (differentLocalAuthority) {
       await this.selectRadioByLabel('No, a different local authority')
-      await this.selectOptionByLabel('Enter a local authority', dutyToRefer.submission.localAuthorityName)
+      await this.selectOptionByLabel('Enter a local authority', dutyToRefer.submission.localAuthorityAreaName)
     } else {
       await this.selectRadioByLabel('Yes')
     }
@@ -48,14 +47,12 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async completeOutcomeForm(dutyToRefer: DutyToReferDto) {
-    await this.selectRadioByLabel(dutyToRefer.submission.outcomeStatus)
+    await this.selectRadioByLabel(dutyToRefer.status)
   }
 
-  async checkApiCalled(crn: string, dutyToRefer: DutyToReferDto) {
-    const requestBody = await verifyPost(apiPaths.cases.proposedAddresses.submit({ crn }))
+  async checkApiCalled(crn: string, dutyToRefer: DtrCommand) {
+    const requestBody = await verifyPost(apiPaths.cases.dutyToRefer.submit({ crn }))
 
-    const expectedBody = dutyToRefer.submission
-
-    expect(requestBody).toEqual(expectedBody)
+    expect(requestBody).toEqual(dutyToRefer)
   }
 }

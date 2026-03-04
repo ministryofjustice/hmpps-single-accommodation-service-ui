@@ -91,6 +91,7 @@
     "@pact-foundation/pact": "^16.0.2",
     "@pactflow/openapi-pact-comparator": "^1.10.0",
     "@playwright/test": "^1.56.1",
+    "accessible-autocomplete": "3.0.1",
     "applicationinsights": "^2.9.8",
     "body-parser": "^2.2.0",
     "bunyan": "^1.8.15",

@@ -22,38 +22,6 @@ export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
   lookupResults?: AccommodationAddressDetails[] | null
 }
 
-export type DutyToReferDto = {
-    crn: string;
-    serviceStatus: 'NOT_STARTED' | 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED';
-    action?: string;
-    submission?: {
-        id: string;
-        localAuthorityId: string;
-        localAuthorityName: string;
-        referenceNumber: string;
-        submissionDate: string;
-        outcomeStatus?: string;
-        outcomeDate?: string;
-        createdBy: string;
-        createdAt: string;
-        updatedAt: string;
-    }
-};
-
-export type SubmitDutyToRefer = {
-  localAuthorityId: string
-  submissionDate: string
-  referenceNumber?: string
-}
-
-export type UpdateDutyToRefer = {
-  localAuthorityId: string
-  submissionDate: string
-  referenceNumber?: string
-  outcomeStatus: 'NOT_STARTED' | 'ACCEPTED' | 'NOT_ACCEPTED' | 'SUBMITTED'
-  outcomeDate?: string | null
-}
-
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']
 
 export interface StatusTag {
@@ -100,4 +68,16 @@ export type CheckboxItem = {
   text: string
   value: string
   checked?: boolean
+}
+
+export interface SelectOption {
+  text: string
+  value: string
+  selected?: boolean
+}
+
+export type ObjectWithDateParts<K extends string | number> = { [P in `${K}-${'year' | 'month' | 'day'}`]?: string } & {
+  [P in `${K}-time`]?: string
+} & {
+  [P in K]?: string
 }

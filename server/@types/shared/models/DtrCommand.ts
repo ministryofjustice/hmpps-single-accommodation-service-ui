@@ -8,4 +8,3 @@ export type DtrCommand = {
     submissionDate: string;
     status: 'NOT_STARTED' | 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED';
 };
-

@@ -14,6 +14,8 @@ export type { DlqMessage } from './models/DlqMessage';
 export type { DtrCommand } from './models/DtrCommand';
 export type { DtrSubmissionDto } from './models/DtrSubmissionDto';
 export type { DutyToReferDto } from './models/DutyToReferDto';
+export type { DtrCommand } from './models/DtrCommand';
+export type { DtrSubmissionDto } from './models/DtrSubmissionDto';
 export type { EligibilityDto } from './models/EligibilityDto';
 export type { GetDlqResult } from './models/GetDlqResult';
 export type { LocalAuthorityDto } from './models/LocalAuthorityDto';

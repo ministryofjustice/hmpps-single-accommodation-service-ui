@@ -1,0 +1,117 @@
+{% extends "partials/layout.njk" %}
+
+{# {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %} #}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set conditionalHtml %}
+    {{ govukSelect({
+        label: {
+            text: 'Enter a local authority',
+            classes: "govuk-!-font-weight-bold govuk-label--s"
+        },
+        attributes: {
+            'data-autocomplete': { value: true, optional: true },
+            'data-autocomplete-input-classes': { value: 'govuk-!-width-two-thirds', optional: true }
+        },
+        items: convertObjectsToSelectOptions(localAuthorities, '', 'name', 'id', 'localAuthorityAreaId'),
+        name: 'localAuthorityAreaId',
+        id: 'localAuthorityAreaId'
+    })
+    }} 
+{% endset %}
+
+{% block beforeContent %}
+    {{ govukBackLink({
+        text: "Back",
+        href: paths.dutyToRefer.guidance({ crn: crn })
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <h1 class="govuk-heading-l">Add Duty to Refer (DTR) submission details</h1>
+            {{
+                govukSummaryList({
+                    rows: tableRows
+                })
+            }}
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="{{ paths.dutyToRefer.submit({ crn: crn }) }}" method="post" novalidate="">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+                {{ govukDateInput({
+                    id: "submissionDate",
+                    namePrefix: "submissionDate",
+                    fieldset: {
+                        legend: {
+                            text: "When was the DTR submitted?",
+                            classes: "govuk-fieldset__legend--s"
+                        }
+                    },
+                    hint: {
+                        text: "For example, 27 3 2025"
+                    },
+                    errorMessage: errors.submissionDate
+                }) }}
+
+                {{ govukRadios({
+                    id: "localAuthorityStatus",
+                    name: "localAuthorityStatus",
+                    fieldset: {
+                        legend: {
+                            text: "Was the DTR submitted to Cherwell District Council?",
+                            classes: "govuk-fieldset__legend--s"
+                        }
+                    },
+                    hint: {
+                        text: "We matched Cherwell District Council. Tell us if it went elsewhere."
+                    },
+                    items: injectConditionals([
+                        {
+                            value: "YES",
+                            text: "Yes",
+                            checked: dutyToRefer.localAuthorityStatus == "YES"
+                        },
+                        {
+                            value: "NO",
+                            text: "No, a different local authority",
+                            checked: dutyToRefer.localAuthorityStatus == "NO"
+                        }
+                    ], { NO: conditionalHtml }),
+                    errorMessage: errors.localAuthorityStatus
+                }) }}
+
+                {{ govukInput(
+                    {
+                        label: {
+                            text: 'Reference number (optional)',
+                            classes: 'govuk-!-font-weight-bold govuk-label--s'
+                        },
+                        name: 'referenceNumber',
+                        id: 'referenceNumber',
+                        value: proposedAddress.referenceNumber
+                    }
+                ) }}
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "Save and continue",
+                        preventDoubleClick: true
+                    }) }}
+                </div>
+                <p>
+                    <a class="govuk-link govuk-link--no-visited-state" href="profile-tracker?person=ce4ec66e-d49c-4495-a744-6c2123a41305">Skip this for now</a>
+                </p>
+            </form>
+        </div>
+    </div>
+{% endblock %}

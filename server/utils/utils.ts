@@ -1,4 +1,5 @@
 import { HtmlContent, TextContent } from '@govuk/ui'
+import { SelectOption } from '@sas/ui'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -33,3 +34,30 @@ export const toParagraphs = (lines: string[], classes?: string): string =>
     .filter(Boolean)
     .map(line => `<p${classes ? ` class="${classes}"` : ''}>${line}</p>`)
     .join('')
+
+export const convertObjectsToSelectOptions = (
+  items: Array<Record<string, string>>,
+  prompt: string,
+  textKey: string,
+  valueKey: string,
+  fieldName: string,
+  context: Record<string, unknown>,
+): Array<SelectOption> => {
+  const options = [
+    {
+      value: '',
+      text: prompt,
+      selected: !context[fieldName] || context[fieldName] === '',
+    },
+  ]
+
+  items.forEach(item => {
+    options.push({
+      text: item[textKey],
+      value: item[valueKey],
+      selected: context[fieldName] === item[valueKey],
+    })
+  })
+
+  return options
+}

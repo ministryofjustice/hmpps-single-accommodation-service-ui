@@ -48,7 +48,7 @@ export default class AbstractPage {
   }
 
   async completeDateInputByLabel(label: string, value: string) {
-    const [year, month, day] = value.split('-')
+    const [year, month, day] = value.split('T')[0].split('-')
     const fieldset = this.page.getByRole('group', { name: label })
     await fieldset.getByLabel('Day').fill(day)
     await fieldset.getByLabel('Month').fill(month)

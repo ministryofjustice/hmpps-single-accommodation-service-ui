@@ -1,4 +1,4 @@
-import { SubmitDutyToRefer, UpdateDutyToRefer } from '@sas/ui'
+import { DtrCommand } from '@sas/api'
 import { DutyToReferClient } from '../data'
 
 export default class DutyToReferService {
@@ -12,11 +12,11 @@ export default class DutyToReferService {
     return this.dutyToReferClient.getDutyToRefer(token, crn)
   }
 
-  update(token: string, crn: string, id: string, dutyToReferData: UpdateDutyToRefer) {
+  update(token: string, crn: string, id: string, dutyToReferData: DtrCommand) {
     return this.dutyToReferClient.update(token, crn, id, dutyToReferData)
   }
 
-  submit(token: string, crn: string, id: string, dutyToReferData: SubmitDutyToRefer) {
-    return this.dutyToReferClient.submit(token, crn, id, dutyToReferData)
+  submit(token: string, crn: string, dutyToReferData: DtrCommand) {
+    return this.dutyToReferClient.submit(token, crn, dutyToReferData)
   }
 }

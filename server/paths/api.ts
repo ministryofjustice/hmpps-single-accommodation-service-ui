@@ -5,7 +5,6 @@ const casePath = casesPath.path(':crn')
 const proposedAddressesPath = casePath.path('proposed-accommodations')
 const dutyToReferPath = casePath.path('dtr')
 
-
 export default {
   cases: {
     index: casesPath,
@@ -14,7 +13,7 @@ export default {
       index: casePath.path('dtrs'),
       show: dutyToReferPath,
       update: dutyToReferPath.path(':id'),
-      submit: dutyToReferPath.path(':id'),
+      submit: dutyToReferPath,
     },
     eligibility: casePath.path('eligibility'),
     referrals: casePath.path('applications'),

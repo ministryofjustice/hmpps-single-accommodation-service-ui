@@ -1,0 +1,40 @@
+{% extends "partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block beforeContent %}
+    {{ govukBackLink({
+        text: "Back",
+        href: paths.cases.show({ crn: crn })
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <h1 class="govuk-heading-l">Submit a duty to refer (DTR) to {{ localAuthority.name }}</h1>
+            <p class="govuk-body">Based on the case details, {{ localAuthority.name }} is the most likely local authority for this referral.</p>
+            <p class="govuk-body">Submit DTRs using the Jigsaw ALERT portal. For instructions and local contact details, read the council’s guidance.</p>
+            <p>You must have the person’s consent.</p>
+            <p class="govuk-body">
+                <a class="govuk-link" href="{{ localAuthority.link }}" target="_blank" rel="noopener noreferrer">
+                    {{ localAuthority.name }}: duty to refer guidance (opens in new tab)
+                </a>
+            </p>
+            <h2 class="govuk-heading-m">If you have already submitted the DTR</h2>
+            <p>Record that you submitted the DTR. You’ll be asked for:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>the date it was submitted</li>
+                <li>where it was sent (preselected as {{ localAuthority.name }})</li>
+                <li>the ALERT reference number (from your confirmation email)</li>
+                <li>any notes or contact details you have from the council (optional)</li>
+            </ul>
+            {{ govukButton({
+                text: "Add submission details",
+                href: paths.dutyToRefer.submission({ crn: crn }),
+                preventDoubleClick: true
+            }) }}
+        </div>
+    </div>
+{% endblock %}

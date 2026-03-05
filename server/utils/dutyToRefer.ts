@@ -5,17 +5,16 @@ import { formatDateAndDaysAgo } from './dates'
 
 const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
   ({
-    NOT_ELIGIBLE: { text: 'Not eligible' },
-    UPCOMING: { text: 'Upcoming', colour: 'yellow' },
+    NOT_ACCEPTED: { text: 'Not accepted', colour: 'grey' },
+    ACCEPTED: { text: 'Accepted', colour: 'yellow' },
     NOT_STARTED: { text: 'Not started', colour: 'red' },
-    SUBMITTED: { text: 'Submitted', colour: 'green' },
+    SUBMITTED: { text: 'Submitted', colour: 'yellow' },
   })[status] || { text: 'Unknown' }
 
 export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => {
   const status = dutyToRefer?.status
   return {
     heading: 'Duty to Refer (DTR)',
-    inactive: status === 'NOT_ELIGIBLE',
     status: dutyToReferStatusTag(status),
     details: detailsForStatus(dutyToRefer),
     links: linksForStatus(status),
@@ -24,8 +23,8 @@ export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard =
 
 export const linksForStatus = (serviceStatus?: string) => {
   switch (serviceStatus) {
-    case 'NOT_ELIGIBLE':
-    case 'UPCOMING':
+    case 'NOT_ACCEPTED':
+    case 'ACCEPTED':
       return [{ text: 'Notes', href: '#' }]
     case 'NOT_STARTED':
       return [
@@ -50,16 +49,15 @@ const summaryListRow = (label: string, value: string): SummaryListRow => ({
 export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
   const { status } = dutyToRefer ?? {}
   switch (status) {
-    case 'NOT_ELIGIBLE':
-    case 'UPCOMING':
+    case 'NOT_ACCEPTED':
+    case 'ACCEPTED':
       return []
     case 'NOT_STARTED':
-      return [summaryListRow('Local authority (likely)', dutyToRefer?.submittedTo)]
+      return []
     case 'SUBMITTED':
       return [
-        summaryListRow('Submitted to', dutyToRefer?.submittedTo),
-        summaryListRow('Reference', dutyToRefer?.reference),
-        summaryListRow('Submitted', formatDateAndDaysAgo(dutyToRefer?.submitted)),
+        summaryListRow('Reference', dutyToRefer?.submission?.referenceNumber),
+        summaryListRow('Submitted', formatDateAndDaysAgo(dutyToRefer?.submission?.submissionDate)),
       ]
     default:
       return []

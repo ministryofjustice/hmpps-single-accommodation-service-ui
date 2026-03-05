@@ -21,15 +21,7 @@ describe('duty to refer utils', () => {
     })
 
     it('returns a NOT_STARTED duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory.build({ status: 'NOT_STARTED', submittedTo: 'Local Authority One' })
-
-      const card = dutyToReferStatusCard(dutyToRefer)
-
-      expect(card).toMatchSnapshot()
-    })
-
-    it('returns a NOT_ELIGIBLE duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory.build({ status: 'NOT_ELIGIBLE' })
+      const dutyToRefer = dutyToReferFactory.notStarted().build()
 
       const card = dutyToReferStatusCard(dutyToRefer)
 
@@ -37,20 +29,9 @@ describe('duty to refer utils', () => {
     })
 
     it('returns a SUBMITTED duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory.build({
-        status: 'SUBMITTED',
-        submittedTo: 'Local Authority One',
-        reference: 'Jane Doe',
-        submitted: '2025-12-01',
-      })
-
-      const card = dutyToReferStatusCard(dutyToRefer)
-
-      expect(card).toMatchSnapshot()
-    })
-
-    it('returns an empty duty to refer card for unknown status', () => {
-      const dutyToRefer = dutyToReferFactory.build({ status: 'UNKNOWN' })
+      const dutyToRefer = dutyToReferFactory
+        .submitted()
+        .build({ submission: { submissionDate: '2025-12-01', referenceNumber: 'REF123' } })
 
       const card = dutyToReferStatusCard(dutyToRefer)
 
@@ -65,31 +46,28 @@ describe('duty to refer utils', () => {
   })
 
   describe('detailsForStatus', () => {
-    const baseDutyToRefer = {
-      submittedTo: 'Local Authority One',
-      reference: 'Jane Doe',
-      submitted: '2024-09-23',
+    const submission = {
+      id: 'submission-id',
+      localAuthorityAreaId: 'la-id',
+      referenceNumber: 'REF123',
+      submissionDate: '2024-09-23',
+      createdBy: 'user1',
+      createdAt: '2024-09-23T00:00:00.000Z',
     }
 
     it.each([
-      ['NOT_ELIGIBLE' as const, []],
-      ['UPCOMING' as const, []],
-      ['NOT_STARTED' as const, [{ term: 'Local authority (likely)', description: baseDutyToRefer.submittedTo }]],
+      ['NOT_STARTED' as const, []],
       [
         'SUBMITTED' as const,
         [
-          { term: 'Submitted to', description: baseDutyToRefer.submittedTo },
-          { term: 'Reference', description: baseDutyToRefer.reference },
-          { term: 'Submitted', description: formatDateAndDaysAgo(baseDutyToRefer.submitted) },
+          { term: 'Reference', description: submission.referenceNumber },
+          { term: 'Submitted', description: formatDateAndDaysAgo(submission.submissionDate) },
         ],
       ],
-      ['UNKNOWN' as const, []],
-      [undefined, []],
+      ['NOT_ACCEPTED' as const, []],
+      ['ACCEPTED' as const, []],
     ])('returns details for status %s', (status, expectedDetails) => {
-      const dutyToRefer = dutyToReferFactory.build({
-        status,
-        ...baseDutyToRefer,
-      })
+      const dutyToRefer = dutyToReferFactory.build({ status, submission })
 
       const details = detailsForStatus(dutyToRefer)
 
@@ -104,29 +82,29 @@ describe('duty to refer utils', () => {
       expect(details).toHaveLength(expectedDetails.length)
     })
 
-    it('returns empty detail when field is missing', () => {
+    it('returns details with invalid date when submissionDate is missing', () => {
       const dutyToRefer = dutyToReferFactory.build({
-        status: 'NOT_STARTED',
-        submittedTo: undefined,
+        status: 'SUBMITTED',
+        submission: { submissionDate: undefined, referenceNumber: undefined },
       })
 
       const details = detailsForStatus(dutyToRefer)
 
-      expect(details).toEqual([expect.objectContaining({ value: expect.objectContaining({ text: '' }) })])
+      expect(details).toHaveLength(2)
+      expect(details[0].value.text).toBe('')
+      expect(details[1].value.text).toBe('Invalid Date')
     })
   })
 
   describe('linksForStatus', () => {
     it.each([
       [['Add submission details', 'Notes'], 'NOT_STARTED' as const],
-      [['Notes'], 'NOT_ELIGIBLE' as const],
-      [['Notes'], 'UPCOMING' as const],
       [['Add outcome', 'Notes'], 'SUBMITTED' as const],
-      [[], 'UNKNOWN' as const],
+      [['Notes'], 'NOT_ACCEPTED' as const],
+      [['Notes'], 'ACCEPTED' as const],
+      [[], undefined],
     ])('returns links %s for status %s', (expectedLinks, status) => {
-      const dutyToRefer = dutyToReferFactory.build({ status })
-
-      const links = linksForStatus(dutyToRefer.status).map(link => link.text)
+      const links = linksForStatus(status).map(link => link.text)
 
       expect(links).toEqual(expect.arrayContaining(expectedLinks))
       expect(links).toHaveLength(expectedLinks.length)

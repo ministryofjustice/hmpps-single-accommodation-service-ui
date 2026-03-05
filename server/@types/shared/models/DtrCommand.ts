@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { DtrSubmissionDto } from './DtrSubmissionDto';
-export type DutyToReferDto = {
-    crn: string;
+export type DtrCommand = {
+    localAuthorityAreaId: string;
+    referenceNumber?: string;
+    submissionDate: string;
     status: 'NOT_STARTED' | 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED';
-    submission?: DtrSubmissionDto;
 };
 

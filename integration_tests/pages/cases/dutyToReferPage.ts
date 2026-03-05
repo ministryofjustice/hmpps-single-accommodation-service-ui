@@ -23,14 +23,9 @@ export default class DutyToReferPage extends AbstractPage {
     this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
   }
 
-  async completeSubmissionForm(dutyToRefer: DutyToReferDto, differentLocalAuthority: boolean = false) {
+  async completeSubmissionForm(dutyToRefer: DutyToReferDto) {
     await this.completeDateInputByLabel('When was the DTR submitted?', dutyToRefer.submission.submissionDate)
-    if (differentLocalAuthority) {
-      await this.selectRadioByLabel('No, a different local authority')
-      await this.selectOptionByLabel('Enter a local authority', dutyToRefer.submission.localAuthorityAreaName)
-    } else {
-      await this.selectRadioByLabel('Yes')
-    }
+    await this.selectAutocompleteByLabel('What local authority was the DTR submitted to?', dutyToRefer.submission.localAuthorityAreaName)
     if (dutyToRefer.submission.referenceNumber) {
       await this.completeInputByLabel('Reference number', dutyToRefer.submission.referenceNumber)
     }

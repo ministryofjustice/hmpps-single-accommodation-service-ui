@@ -51,16 +51,10 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
       const { token } = res.locals.user
-      const { localAuthorityStatus, referenceNumber } = req.body
+      const { localAuthorityAreaId, referenceNumber } = req.body
       const submissionDate = `${req.body['submissionDate-year']}-${req.body['submissionDate-month']}-${req.body['submissionDate-day']}`
 
-      let { localAuthorityAreaId } = req.body
-      const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
-      if (localAuthorityStatus === 'YES') {
-        localAuthorityAreaId = dtr?.submission?.localAuthorityAreaId
-      }
-
-      const redirect = validateSubmission(req, localAuthorityAreaId, localAuthorityStatus)
+      const redirect = validateSubmission(req, localAuthorityAreaId)
       if (redirect) return res.redirect(redirect)
 
       try {

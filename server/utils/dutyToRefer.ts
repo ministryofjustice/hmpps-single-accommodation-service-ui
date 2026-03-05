@@ -87,16 +87,13 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
 export const validateSubmission = (
   req: Request,
   localAuthorityAreaId: string,
-  localAuthorityStatus: string,
 ) => {
   const errors: Record<string, string> = {}
 
   if (dateIsEmpty(req.body, 'submissionDate')) {
     errors.submissionDate = 'Enter a submission date'
   }
-  if (!localAuthorityStatus) {
-    errors.localAuthorityStatus = 'Select whether the DTR was submitted to the likely local authority'
-  } else if (localAuthorityStatus === 'YES' && !localAuthorityAreaId) {
+  if (!localAuthorityAreaId) {
     errors.localAuthorityAreaId = 'Select a local authority'
   }
 

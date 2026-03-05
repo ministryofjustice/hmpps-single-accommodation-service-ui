@@ -45,13 +45,19 @@ export const linksForStatus = (serviceStatus?: string, crn?: string) => {
   }
 }
 
-export const summaryListRows = (caseData: CaseDto) => {
+export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
   const rows = [
     summaryListRow('Name', caseData.name),
     summaryListRow('Date of birth', caseData.dateOfBirth),
     summaryListRow('CRN', caseData.crn),
     summaryListRow('Prison number', caseData.prisonNumber),
   ]
+
+  if (dutyToRefer) {
+    rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthorityAreaName))
+    rows.push(summaryListRow('Submission date', dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : ''))
+  }
+
   return rows
 }
 
@@ -95,4 +101,17 @@ export const validateSubmission = (
   }
 
   return !validateAndFlashErrors(req, errors) ? uiPaths.dutyToRefer.submission({ crn: req.params.crn }) : undefined
+}
+
+export const validateOutcome = (
+  req: Request,
+  outcomeStatus: string,
+) => {
+  const errors: Record<string, string> = {}
+
+  if (!outcomeStatus) {
+    errors.outcomeStatus = 'Select duty to refer outcome'
+  }
+
+  return !validateAndFlashErrors(req, errors) ? uiPaths.dutyToRefer.outcome({ crn: req.params.crn }) : undefined
 }

@@ -1,19 +1,13 @@
 import { expect, Page } from '@playwright/test'
 import { DutyToReferDto, DtrCommand, CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import paths from '../../../server/paths/ui'
-import { verifyPost } from '../../mockApis/wiremock'
+import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 
 export default class DutyToReferPage extends AbstractPage {
-  constructor(page: Page, submittedTo: string) {
+  constructor(page: Page, expectedHeader: string) {
     super(page)
-    this.header = page.locator('h1', { hasText: `Submit a duty to refer (DTR) to ${submittedTo}` })
-  }
-
-  static async visit(page: Page, caseData: Case): Promise<DutyToReferPage> {
-    await page.goto(paths.dutyToRefer.guidance({ crn: caseData.crn }))
-    return DutyToReferPage.verifyOnPage(page)
+    this.header = page.locator('h1', { hasText: expectedHeader })
   }
 
   async shouldShowGuidancePage() {
@@ -47,11 +41,18 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async completeOutcomeForm(dutyToRefer: DutyToReferDto) {
-    await this.selectRadioByLabel(dutyToRefer.status)
+    const outcome = dutyToRefer.status === 'ACCEPTED' ? 'Yes' : 'No'
+    await this.selectRadioByLabel(outcome)
   }
 
-  async checkApiCalled(crn: string, dutyToRefer: DtrCommand) {
-    const requestBody = await verifyPost(apiPaths.cases.dutyToRefer.submit({ crn }))
+  async checkApiCalled(crn: string, dutyToRefer: DtrCommand, method: 'submit' | 'update' = 'submit', id: string = '') {
+    const path = method === 'submit' 
+      ? apiPaths.cases.dutyToRefer.submit({ crn })
+      : apiPaths.cases.dutyToRefer.update({ crn, id })
+    
+    const requestBody = method === 'submit'
+      ? await verifyPost(path)
+      : await verifyPut(path)
 
     expect(requestBody).toEqual(dutyToRefer)
   }

@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import { faker } from '@faker-js/faker/locale/en_GB'
 import uiPaths from '../paths/ui'
-import { summaryListRows, validateSubmission } from '../utils/dutyToRefer'
+import { summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService from '../services/auditService'
@@ -17,11 +17,9 @@ export default class DutyToReferController {
   guidance(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
-      const dtr = await this.dutyToReferService.getDutyToRefer(res.locals.user.token, crn)
 
       return res.render('pages/duty-to-refer/guidance', {
         crn,
-        localAuthority: { name: dtr?.submission?.localAuthorityAreaName, link: '/' },
       })
     }
   }
@@ -86,9 +84,19 @@ export default class DutyToReferController {
   outcome(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
+      const { token } = res.locals.user
+
+      const caseData = await this.casesService.getCase(token, crn)
+      const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
+      const tableRows = summaryListRows(caseData, dtr)
+
+      const { errors, errorSummary } = fetchErrors(req)
 
       return res.render('pages/duty-to-refer/outcome', {
         crn,
+        tableRows,
+        errors,
+        errorSummary,
       })
     }
   }
@@ -96,9 +104,31 @@ export default class DutyToReferController {
   update(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
+      const { token } = res.locals.user
+      const { outcomeStatus } = req.body
 
-      req.flash('success', 'Submission details updated')
-      return res.redirect(uiPaths.cases.show({ crn }))
+      const redirect = validateOutcome(req, outcomeStatus)
+      if (redirect) return res.redirect(redirect)
+
+      try {
+        const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
+        const submissionDate = dtr?.submission?.submissionDate
+        const localAuthorityAreaId = dtr?.submission?.localAuthorityAreaId
+        const referenceNumber = dtr?.submission?.referenceNumber
+        await this.dutyToReferService.update(token, crn, dtr.submission.id, {
+          status: outcomeStatus,
+          submissionDate,
+          localAuthorityAreaId,
+          referenceNumber,
+        })
+
+        req.flash('success', 'Submission details updated')
+        return res.redirect(uiPaths.cases.show({ crn }))
+      } catch (error) {
+        // TODO replace this with generic error
+        addErrorToFlash(req, 'submission', 'There was a problem updating duty to refer. Please try again.')
+        return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))
+      }
     }
   }
 }

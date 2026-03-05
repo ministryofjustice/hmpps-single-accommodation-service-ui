@@ -22,9 +22,9 @@ const stubApiError = (urlPattern: string, method: 'GET' | 'POST' = 'GET', status
     },
   })
 
-const verifyPost = async (path: string): Promise<Record<string, unknown>> => {
+const verifyRequest = async (method: 'POST' | 'PUT', path: string): Promise<Record<string, unknown>> => {
   const response: Response = await getMatchingRequests({
-    method: 'POST',
+    method,
     urlPath: path,
   })
 
@@ -33,7 +33,10 @@ const verifyPost = async (path: string): Promise<Record<string, unknown>> => {
   return JSON.parse(mostRecentRequest.body)
 }
 
+const verifyPost = (path: string) => verifyRequest('POST', path)
+const verifyPut = (path: string) => verifyRequest('PUT', path)
+
 const queryParameters = (query?: ParsedUrlQuery) =>
   query ? Object.fromEntries(Object.entries(query).map(([key, value]) => [key, { equalTo: value }])) : undefined
 
-export { stubFor, getMatchingRequests, resetStubs, stubApiError, verifyPost, queryParameters }
+export { stubFor, getMatchingRequests, resetStubs, stubApiError, verifyPost, verifyPut, queryParameters }

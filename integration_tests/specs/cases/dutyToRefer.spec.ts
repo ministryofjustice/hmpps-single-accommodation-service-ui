@@ -48,10 +48,7 @@ test.describe('duty to refer', () => {
     await profileTrackerPage.clickLink('Add submission details')
 
     // Then I should see the duty to refer guidance page
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(
-      page,
-      notStartedDutyToRefer.submission.localAuthorityAreaName,
-    )
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Submit a duty to refer (DTR)')
 
     // Then I click the add submission details button
     await dutyToReferPage.clickButton('Add submission details')
@@ -73,6 +70,7 @@ test.describe('duty to refer', () => {
     await profileTrackerPage.shouldShowDutyToRefer(submissionDutyToRefer)
 
     // When I click the add outcome link
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, acceptedDutyToRefer)
     await profileTrackerPage.clickLink('Add outcome')
 
     // Then I should see the duty to refer outcome form
@@ -80,13 +78,64 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferPage.completeOutcomeForm(acceptedDutyToRefer)
+    await dutyToReferApi.stubUpdateDutyToRefer(crn, acceptedDutyToRefer.submission.id)
+    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [acceptedDutyToRefer])
     await dutyToReferPage.clickButton('Save and continue')
 
     // And the API should have been called to update the duty to refer
-    await dutyToReferPage.checkApiCalled(crn, acceptedCommand)
+    await dutyToReferPage.checkApiCalled(crn, acceptedCommand, 'update', acceptedDutyToRefer.submission.id)
 
     // Then I should see the profile tracker page with the updated duty to refer details
     await ProfileTrackerPage.verifyOnPage(page, caseData)
     await profileTrackerPage.shouldShowDutyToRefer(acceptedDutyToRefer)
+  })
+
+  test('should allow user to add not accepted outcome to an existing duty to refer', async ({ page }) => {
+    const crn = 'X123456'
+    const id = 'dtr-id-123'
+    const caseData = caseFactory.build({ crn })
+    const submissionCommand = dtrCommandFactory.build({ status: 'SUBMITTED' })
+    const submittedDutyToRefer = dutyToReferFactory.submitted().build({ crn, submission: { ...submissionCommand, id } })
+
+    const notAcceptedCommand = dtrCommandFactory.build({ ...submissionCommand, status: 'NOT_ACCEPTED'  })
+    const notAcceptedDutyToRefer = dutyToReferFactory.notAccepted().build({
+      crn,
+      submission: { ...notAcceptedCommand, id },
+    })
+
+    // Given I have stubbed the API responses
+    await casesApi.stubGetCases([caseData])
+    await casesApi.stubGetCaseByCrn(crn, caseData)
+    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [submittedDutyToRefer])
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, submittedDutyToRefer)
+    await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
+    await casesApi.stubGetReferralHistory(crn, [])
+    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
+
+    // And I am logged in
+    await login(page)
+
+    // When I visit profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // And I click the add outcome link
+    await profileTrackerPage.clickLink('Add outcome')
+
+    // Then I should see the duty to refer outcome form
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome details')
+    await dutyToReferPage.shouldShowOutcomePage()
+
+    // When I complete the form and submit
+    await dutyToReferPage.completeOutcomeForm(notAcceptedDutyToRefer)
+    await dutyToReferApi.stubUpdateDutyToRefer(crn, id)
+    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [notAcceptedDutyToRefer])
+    await dutyToReferPage.clickButton('Save and continue')
+
+    // And the API should have been called to update the duty to refer
+    await dutyToReferPage.checkApiCalled(crn, notAcceptedCommand, 'update', id)
+
+    // Then I should see the profile tracker page with the updated duty to refer details
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    await profileTrackerPage.shouldShowDutyToRefer(notAcceptedDutyToRefer)
   })
 })

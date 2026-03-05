@@ -55,6 +55,12 @@ export default class AbstractPage {
     await fieldset.getByLabel('Year').fill(year)
   }
 
+  async selectAutocompleteByLabel(label: string, value: string) {
+    const input = this.page.getByRole('combobox', { name: label })
+    await input.fill(value)
+    await this.page.getByRole('option', { name: value }).click()
+  }
+
   async selectRadioByLabel(label: string) {
     await this.page.getByRole('radio', { name: label }).check()
   }

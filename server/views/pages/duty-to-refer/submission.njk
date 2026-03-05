@@ -7,23 +7,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
-{% set conditionalHtml %}
-    {{ govukSelect({
-        label: {
-            text: 'Enter a local authority',
-            classes: "govuk-!-font-weight-bold govuk-label--s"
-        },
-        attributes: {
-            'data-autocomplete': { value: true, optional: true },
-            'data-autocomplete-input-classes': { value: 'govuk-!-width-two-thirds', optional: true }
-        },
-        items: convertObjectsToSelectOptions(localAuthorities, '', 'name', 'id', 'localAuthorityAreaId'),
-        name: 'localAuthorityAreaId',
-        id: 'localAuthorityAreaId'
-    })
-    }} 
-{% endset %}
-
 {% block beforeContent %}
     {{ govukBackLink({
         text: "Back",
@@ -62,31 +45,20 @@
                     errorMessage: errors.submissionDate
                 }) }}
 
-                {{ govukRadios({
-                    id: "localAuthorityStatus",
-                    name: "localAuthorityStatus",
-                    fieldset: {
-                        legend: {
-                            text: "Was the DTR submitted to Cherwell District Council?",
-                            classes: "govuk-fieldset__legend--s"
-                        }
+                {{ govukSelect({
+                    label: {
+                        text: 'What local authority was the DTR submitted to?',
+                        classes: "govuk-!-font-weight-bold govuk-label--s"
                     },
-                    hint: {
-                        text: "We matched Cherwell District Council. Tell us if it went elsewhere."
+                    attributes: {
+                        'data-autocomplete': { value: true, optional: true },
+                        'data-autocomplete-hint': { value: true, optional: true },
+                        'data-autocomplete-input-classes': { value: 'govuk-!-width-two-thirds', optional: true }
                     },
-                    items: injectConditionals([
-                        {
-                            value: "YES",
-                            text: "Yes",
-                            checked: dutyToRefer.localAuthorityStatus == "YES"
-                        },
-                        {
-                            value: "NO",
-                            text: "No, a different local authority",
-                            checked: dutyToRefer.localAuthorityStatus == "NO"
-                        }
-                    ], { NO: conditionalHtml }),
-                    errorMessage: errors.localAuthorityStatus
+                    items: convertObjectsToSelectOptions(localAuthorities, '', 'name', 'id', 'localAuthorityAreaId'),
+                    name: 'localAuthorityAreaId',
+                    id: 'localAuthorityAreaId',
+                    errorMessage: errors.localAuthorityAreaId
                 }) }}
 
                 {{ govukInput(
@@ -95,6 +67,7 @@
                             text: 'Reference number (optional)',
                             classes: 'govuk-!-font-weight-bold govuk-label--s'
                         },
+                        classes: 'govuk-!-width-one-half',
                         name: 'referenceNumber',
                         id: 'referenceNumber',
                         value: proposedAddress.referenceNumber

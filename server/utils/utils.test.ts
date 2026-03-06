@@ -1,4 +1,4 @@
-import { convertToTitleCase, htmlContent, initialiseName, textContent } from './utils'
+import { convertToTitleCase, htmlContent, initialiseName, textContent, toParagraphs } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -48,5 +48,19 @@ describe('htmlContent', () => {
     ['Some content', '<p>Some content</p>', '<p>Some content</p>'],
   ])('%s htmlContent(%s)', (_: string, a: string, expected: string) => {
     expect(htmlContent(a)).toEqual({ html: expected })
+  })
+})
+
+describe('toParagraphs', () => {
+  it('returns paragraphs from an array of strings', () => {
+    expect(toParagraphs(['one', 'two'])).toEqual(`<p>one</p><p>two</p>`)
+  })
+
+  it('filters out empty strings and falsy items', () => {
+    expect(toParagraphs(['one', '', 'two', null, undefined])).toEqual(`<p>one</p><p>two</p>`)
+  })
+
+  it('adds the given class to the paragraphs', () => {
+    expect(toParagraphs(['one', 'two'], 'my-class')).toEqual(`<p class="my-class">one</p><p class="my-class">two</p>`)
   })
 })

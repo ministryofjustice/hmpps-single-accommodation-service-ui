@@ -17,4 +17,5 @@ export const addressLines = (
     .filter(Boolean)
 }
 
-export const formatAddress = (address: AccommodationAddressDetails): string => addressLines(address).join(', ')
+export const formatAddress = (address: AccommodationAddressDetails, separator = ', '): string =>
+  addressLines(address).join(separator)

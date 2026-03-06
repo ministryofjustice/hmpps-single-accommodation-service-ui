@@ -15,6 +15,7 @@ const casesController = mock<CasesController>({
 })
 
 const proposedAddressesController = mock<ProposedAddressesController>({
+  show: mockHandler,
   start: mockHandler,
   edit: mockHandler,
   lookup: mockHandler,

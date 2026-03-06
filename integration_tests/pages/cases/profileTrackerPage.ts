@@ -6,18 +6,17 @@ import {
   AccommodationReferralDto as Referral,
   AccommodationDetail,
 } from '@sas/api'
-import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { eligibilityStatusCard } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { accommodationType } from '../../../server/utils/cases'
 import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
-import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
 import { referralStatusTag, referralStatusType } from '../../../server/utils/referrals'
 import { addressLines, formatAddress } from '../../../server/utils/addresses'
+import PageWithCaseDetails from './pageWithCaseDetails'
 
-export default class ProfileTrackerPage extends AbstractPage {
+export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
     page: Page,
     readonly caseData: Case,
@@ -29,23 +28,6 @@ export default class ProfileTrackerPage extends AbstractPage {
   static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
     await page.goto(paths.cases.show({ crn: caseData.crn as string }))
     return ProfileTrackerPage.verifyOnPage(page, caseData)
-  }
-
-  async shouldShowCaseDetails(caseData: Case) {
-    const details = [
-      { label: 'RoSH', value: riskLevelStatusTag(caseData.riskLevel).text },
-      { label: 'Tier', value: caseData.tier },
-      { label: 'CRN', value: caseData.crn },
-      { label: 'Prison number', value: caseData.prisonNumber },
-      { label: 'PNC reference', value: caseData.pncReference },
-      { label: 'Date of birth', value: formatDate(caseData.dateOfBirth) },
-      { label: 'Assigned to', value: caseData.assignedTo?.name },
-    ]
-
-    for await (const detail of details) {
-      const dd = this.page.locator(`dt:has-text("${detail.label}") + dd`)
-      await expect(dd).toContainText(detail.value ?? '')
-    }
   }
 
   async shouldShowDutyToRefer(dutyToRefer: DutyToReferDto) {

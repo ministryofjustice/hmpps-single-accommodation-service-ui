@@ -39,8 +39,8 @@ export default class AbstractPage {
     await this.page.getByRole('button', { name: buttonText }).click()
   }
 
-  async clickLink(text: string | RegExp): Promise<void> {
-    await this.page.getByRole('link', { name: text }).click()
+  async clickLink(text: string | RegExp, container?: Locator): Promise<void> {
+    await (container || this.page).getByRole('link', { name: text }).click()
   }
 
   async completeInputByLabel(label: string, value: string) {
@@ -72,16 +72,20 @@ export default class AbstractPage {
       })
       .locator('.govuk-summary-list__value')
 
-    const values = Array.isArray(value) ? value : [value]
+    const values = Array.isArray(value) ? value.filter(Boolean) : [value]
     for await (const item of values) {
       await expect(summaryItem).toContainText(item)
     }
   }
 
-  async shouldShowCard(title: string, cardData: StatusCard) {
-    const card = this.page.locator('.sas-card', {
+  getCard(title: string) {
+    return this.page.locator('.sas-card', {
       has: this.page.getByRole('heading', { name: title }),
     })
+  }
+
+  async shouldShowCard(title: string, cardData: StatusCard) {
+    const card = this.getCard(title)
 
     if (cardData.inactive) {
       await expect(card).toHaveClass(/sas-card--inactive/)

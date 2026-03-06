@@ -1,0 +1,45 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "components/macros/caseDetails.njk" import caseDetails %}
+
+{% set pageTitle = applicationName + " - Proposed address" %}
+{% set mainClasses = "sas-profile-page" %}
+
+{% block beforeContent %}
+  {{
+    govukBreadcrumbs({
+      items: [
+        {
+          text: "Case List",
+          href: "/"
+        },
+        {
+          text: caseData.name + "'s profile",
+          href: paths.cases.show({ crn: caseData.crn })
+        }
+      ]
+    })
+  }}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+  {{ caseDetails(caseData, assignedTo) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l govuk-!-margin-top-4">{{ address }}</h1>
+
+      <section>
+        <h2 class="govuk-heading-m">Address details</h2>
+
+        {{
+        govukSummaryList({
+          rows: addressDetailRows
+        })
+        }}
+      </section>
+    </div>
+  </div>
+{% endblock %}

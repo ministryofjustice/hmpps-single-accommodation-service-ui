@@ -1,5 +1,221 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Proposed addresses utilities addressDetailRows returns the correct rows for an address that failed checks 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--grey">Failed</strong>",
+    },
+  },
+  {
+    "key": {
+      "text": "Address",
+    },
+    "value": {
+      "html": "1 Street<br />Town<br />P0 5TC",
+    },
+  },
+  {
+    "key": {
+      "text": "Housing arrangement",
+    },
+    "value": {
+      "html": "
+    Friends or family (not tenant or owner)
+    <p class="govuk-!-margin-bottom-2">Settled</p>
+  ",
+    },
+  },
+  {
+    "key": {
+      "text": "Address checks",
+    },
+    "value": {
+      "text": "Failed",
+    },
+  },
+]
+`;
+
+exports[`Proposed addresses utilities addressDetailRows returns the correct rows for an address that has not been checked 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--red">Not checked yet</strong>",
+    },
+  },
+  {
+    "key": {
+      "text": "Address",
+    },
+    "value": {
+      "html": "1 Street<br />Town<br />P0 5TC",
+    },
+  },
+  {
+    "key": {
+      "text": "Housing arrangement",
+    },
+    "value": {
+      "html": "
+    Friends or family (not tenant or owner)
+    <p class="govuk-!-margin-bottom-2">Settled</p>
+  ",
+    },
+  },
+  {
+    "key": {
+      "text": "Address checks",
+    },
+    "value": {
+      "text": "Not checked yet",
+    },
+  },
+]
+`;
+
+exports[`Proposed addresses utilities addressDetailRows returns the correct rows for an address that is confirmed 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--green">Confirmed</strong>",
+    },
+  },
+  {
+    "key": {
+      "text": "Address",
+    },
+    "value": {
+      "html": "1 Street<br />Town<br />P0 5TC",
+    },
+  },
+  {
+    "key": {
+      "text": "Housing arrangement",
+    },
+    "value": {
+      "html": "
+    Friends or family (not tenant or owner)
+    <p class="govuk-!-margin-bottom-2">Settled</p>
+  ",
+    },
+  },
+  {
+    "key": {
+      "text": "Address checks",
+    },
+    "value": {
+      "text": "Passed",
+    },
+  },
+  {
+    "key": {
+      "text": "Next address",
+    },
+    "value": {
+      "text": "Yes",
+    },
+  },
+]
+`;
+
+exports[`Proposed addresses utilities addressDetailRows returns the correct rows for an address that passed checks 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--yellow">Passed</strong>",
+    },
+  },
+  {
+    "key": {
+      "text": "Address",
+    },
+    "value": {
+      "html": "1 Street<br />Town<br />P0 5TC",
+    },
+  },
+  {
+    "key": {
+      "text": "Housing arrangement",
+    },
+    "value": {
+      "html": "
+    Friends or family (not tenant or owner)
+    <p class="govuk-!-margin-bottom-2">Settled</p>
+  ",
+    },
+  },
+  {
+    "key": {
+      "text": "Address checks",
+    },
+    "value": {
+      "text": "Passed",
+    },
+  },
+  {
+    "key": {
+      "text": "Next address",
+    },
+    "value": {
+      "text": "Unknown",
+    },
+  },
+]
+`;
+
+exports[`Proposed addresses utilities addressDetailRows returns the correct rows for an address with an arrangement type of "Other" 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--red">Not checked yet</strong>",
+    },
+  },
+  {
+    "key": {
+      "text": "Address",
+    },
+    "value": {
+      "html": "1 Street<br />Town<br />P0 5TC",
+    },
+  },
+  {
+    "key": {
+      "text": "Housing arrangement",
+    },
+    "value": {
+      "html": "
+    <p class="govuk-!-margin-bottom-2">Other</p><p class="govuk-!-margin-bottom-2">Some description</p>
+    <p class="govuk-!-margin-bottom-2">Settled</p>
+  ",
+    },
+  },
+  {
+    "key": {
+      "text": "Address checks",
+    },
+    "value": {
+      "text": "Not checked yet",
+    },
+  },
+]
+`;
+
 exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks failed" proposed address status card object 1`] = `
 {
   "details": [
@@ -32,7 +248,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "inactive": true,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
       "text": "Notes",
     },
   ],
@@ -79,7 +295,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
       "text": "Confirm as next address",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
       "text": "Notes",
     },
   ],
@@ -126,7 +342,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
       "text": "Confirm as next address",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
       "text": "Notes",
     },
   ],
@@ -173,7 +389,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
       "text": "Confirm as next address",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
       "text": "Notes",
     },
   ],
@@ -216,7 +432,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confi
   "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
       "text": "Notes",
     },
   ],
@@ -263,7 +479,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
       "text": "Add checks",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
       "text": "Notes",
     },
   ],
@@ -274,6 +490,6 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
 }
 `;
 
-exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p class="govuk-!-margin-bottom-2">Other</p>Hostel"`;
+exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p class="govuk-!-margin-bottom-2">Other</p><p class="govuk-!-margin-bottom-2">Hostel</p>"`;
 
-exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p class="govuk-!-margin-bottom-2">Failed</p>Not suitable"`;
+exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p class="govuk-!-margin-bottom-2">Failed</p><p class="govuk-!-margin-bottom-2">Not suitable</p>"`;

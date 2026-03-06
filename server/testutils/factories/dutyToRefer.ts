@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker/locale/en_GB'
 import { DtrSubmissionDto, DutyToReferDto } from '@sas/api'
 import { Factory } from 'fishery'
 import crn from '../crn'
+import { referenceDataFactory } from '.'
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {
   private submission(overrides: Partial<DtrSubmissionDto> = {}): DtrSubmissionDto {
@@ -20,6 +21,8 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
   }
 
   notStarted() {
+    const localAuthority = referenceDataFactory.localAuthority().build()
+
     return this.params({
       status: 'NOT_STARTED',
     })

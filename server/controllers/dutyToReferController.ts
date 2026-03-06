@@ -1,17 +1,18 @@
 import { Request, RequestHandler, Response } from 'express'
-import { faker } from '@faker-js/faker/locale/en_GB'
 import uiPaths from '../paths/ui'
 import { summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService from '../services/auditService'
 import { addErrorToFlash, fetchErrors } from '../utils/validation'
+import ReferenceDataService from '../services/referenceDataService'
 
 export default class DutyToReferController {
   constructor(
     private readonly auditService: AuditService,
     private readonly dutyToReferService: DutyToReferService,
     private readonly casesService: CasesService,
+    private readonly referenceDataService: ReferenceDataService
   ) {}
 
   guidance(): RequestHandler {
@@ -32,11 +33,8 @@ export default class DutyToReferController {
       const tableRows = summaryListRows(caseData)
 
       const { errors, errorSummary } = fetchErrors(req)
-      const localAuthorities = [
-        { id: faker.string.uuid(), identifier: 'croydon_council', name: 'Croydon Council' },
-        { id: faker.string.uuid(), identifier: 'hounslow_council', name: 'Hounslow Council' },
-        { id: faker.string.uuid(), identifier: 'lambeth_council', name: 'Lambeth Council' },
-      ]
+      const localAuthorities = await this.referenceDataService.getLocalAuthorities(token)
+
       return res.render('pages/duty-to-refer/submission', {
         crn,
         tableRows,

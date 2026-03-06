@@ -1,36 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`duty to refer utils dutyToReferStatusCard returns a NOT_ELIGIBLE duty to refer status card object 1`] = `
+exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to refer status card object 1`] = `
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",
-  "inactive": true,
-  "links": [
-    {
-      "href": "#",
-      "text": "Notes",
-    },
-  ],
-  "status": {
-    "text": "Not eligible",
-  },
-}
-`;
-
-exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to refer status card object 1`] = `
-{
-  "details": [
-    {
-      "key": {
-        "text": "Local authority (likely)",
-      },
-      "value": {
-        "text": "Local Authority One",
-      },
-    },
-  ],
-  "heading": "Duty to Refer (DTR)",
-  "inactive": false,
   "links": [
     {
       "href": "#",
@@ -53,18 +26,10 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
   "details": [
     {
       "key": {
-        "text": "Submitted to",
-      },
-      "value": {
-        "text": "Local Authority One",
-      },
-    },
-    {
-      "key": {
         "text": "Reference",
       },
       "value": {
-        "text": "Jane Doe",
+        "text": "REF123",
       },
     },
     {
@@ -77,7 +42,6 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
     },
   ],
   "heading": "Duty to Refer (DTR)",
-  "inactive": false,
   "links": [
     {
       "href": "#",
@@ -89,7 +53,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
     },
   ],
   "status": {
-    "colour": "green",
+    "colour": "yellow",
     "text": "Submitted",
   },
 }
@@ -99,19 +63,6 @@ exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refe
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",
-  "inactive": false,
-  "links": [],
-  "status": {
-    "text": "Unknown",
-  },
-}
-`;
-
-exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refer card for unknown status 1`] = `
-{
-  "details": [],
-  "heading": "Duty to Refer (DTR)",
-  "inactive": false,
   "links": [],
   "status": {
     "text": "Unknown",

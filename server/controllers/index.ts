@@ -22,6 +22,7 @@ export const controllers = (services: Services) => ({
     services.auditService,
     services.dutyToReferService,
     services.casesService,
+    services.referenceDataService,
   ),
 })
 

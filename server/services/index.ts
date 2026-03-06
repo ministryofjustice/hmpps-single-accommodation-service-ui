@@ -2,6 +2,7 @@
 import { dataAccess } from '../data'
 import AuditService from './auditService'
 import CasesService from './casesService'
+import ReferenceDataService from './referenceDataService'
 import ReferralsService from './referralsService'
 import EligibilityService from './eligibilityService'
 import DutyToReferService from './dutyToReferService'
@@ -13,6 +14,7 @@ export const services = () => {
     applicationInfo,
     hmppsAuditClient,
     casesClient,
+    referenceDataClient,
     referralsClient,
     eligibilityClient,
     dutyToReferClient,
@@ -24,6 +26,7 @@ export const services = () => {
     applicationInfo,
     auditService: new AuditService(hmppsAuditClient),
     casesService: new CasesService(casesClient),
+    referenceDataService: new ReferenceDataService(referenceDataClient),
     referralsService: new ReferralsService(referralsClient),
     eligibilityService: new EligibilityService(eligibilityClient),
     dutyToReferService: new DutyToReferService(dutyToReferClient),

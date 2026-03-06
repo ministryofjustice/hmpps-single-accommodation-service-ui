@@ -24,4 +24,5 @@ export default {
       update: proposedAddressesPath.path(':id'),
     },
   },
+  referenceData: path('/reference-data'),
 }

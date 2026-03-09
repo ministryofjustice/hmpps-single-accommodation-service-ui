@@ -23,9 +23,9 @@ export default class DutyToReferPage extends AbstractPage {
     this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
   }
 
-  async completeSubmissionForm(dutyToRefer: DutyToReferDto) {
+  async completeSubmissionForm(dutyToRefer: DutyToReferDto, localAuthorityAreaName: string) {
     await this.completeDateInputByLabel('When was the DTR submitted?', dutyToRefer.submission.submissionDate)
-    await this.selectAutocompleteByLabel('What local authority was the DTR submitted to?', dutyToRefer.submission.localAuthorityAreaName)
+    await this.selectAutocompleteByLabel('What local authority was the DTR submitted to?', localAuthorityAreaName)
     if (dutyToRefer.submission.referenceNumber) {
       await this.completeInputByLabel('Reference number', dutyToRefer.submission.referenceNumber)
     }
@@ -41,13 +41,10 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async checkApiCalled(crn: string, dutyToRefer: DtrCommand, method: 'submit' | 'update' = 'submit', id: string = '') {
-    const path = method === 'submit' 
-      ? apiPaths.cases.dutyToRefer.submit({ crn })
-      : apiPaths.cases.dutyToRefer.update({ crn, id })
-    
-    const requestBody = method === 'submit'
-      ? await verifyPost(path)
-      : await verifyPut(path)
+    const path =
+      method === 'submit' ? apiPaths.cases.dutyToRefer.submit({ crn }) : apiPaths.cases.dutyToRefer.update({ crn, id })
+
+    const requestBody = method === 'submit' ? await verifyPost(path) : await verifyPut(path)
 
     expect(requestBody).toEqual(dutyToRefer)
   }

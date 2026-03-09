@@ -15,7 +15,7 @@ describeClient('ReferenceDataClient', provider => {
   it('should make a GET request to /reference-data?type=LOCAL_AUTHORITY_AREAS and return the response body', async () => {
     const referenceData = referenceDataFactory.buildList(3)
     const objectType = 'LOCAL_AUTHORITY_AREAS'
-    
+
     await provider.addInteraction({
       state: `Reference data exists for type ${objectType}`,
       uponReceiving: 'a request to get reference data for a specific type',

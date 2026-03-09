@@ -3,8 +3,9 @@ import uiPaths from '../paths/ui'
 import { summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
-import AuditService from '../services/auditService'
+import AuditService, { Page } from '../services/auditService'
 import { addErrorToFlash, fetchErrors } from '../utils/validation'
+import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 
 export default class DutyToReferController {
@@ -12,12 +13,17 @@ export default class DutyToReferController {
     private readonly auditService: AuditService,
     private readonly dutyToReferService: DutyToReferService,
     private readonly casesService: CasesService,
-    private readonly referenceDataService: ReferenceDataService
+    private readonly referenceDataService: ReferenceDataService,
   ) {}
 
   guidance(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
+
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_GUIDANCE, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
 
       return res.render('pages/duty-to-refer/guidance', {
         crn,
@@ -29,6 +35,12 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { token } = res.locals.user
       const { crn } = req.params
+
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
       const caseData = await this.casesService.getCase(token, crn)
       const tableRows = summaryListRows(caseData)
 
@@ -50,10 +62,11 @@ export default class DutyToReferController {
       const { crn } = req.params
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
-      const submissionDate = `${req.body['submissionDate-year']}-${req.body['submissionDate-month']}-${req.body['submissionDate-day']}`
 
       const redirect = validateSubmission(req, localAuthorityAreaId)
       if (redirect) return res.redirect(redirect)
+
+      const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
 
       try {
         await this.dutyToReferService.submit(token, crn, {
@@ -77,6 +90,11 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
       const { token } = res.locals.user
+
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_OUTCOME, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
 
       const caseData = await this.casesService.getCase(token, crn)
       const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)

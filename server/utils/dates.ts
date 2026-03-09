@@ -59,6 +59,13 @@ export const formatDateAndDaysAgo = (date?: string): string => {
   return `${formatDate(date)} (${formatDate(date, 'days ago/in')})`
 }
 
+export const dateInputToIsoDate = <K extends string | number>(dateInputObj: ObjectWithDateParts<K>, key: K): string => {
+  const year = String(dateInputObj[`${key}-year`])
+  const month = String(dateInputObj[`${key}-month`]).slice(-2)
+  const day = String(dateInputObj[`${key}-day`]).slice(-2)
+  return `${year}-${month}-${day}`
+}
+
 export const dateIsEmpty = <K extends string | number>(
   dateInputObj: Partial<ObjectWithDateParts<K>>,
   key: K,

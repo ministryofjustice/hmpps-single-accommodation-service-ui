@@ -21,7 +21,7 @@ describe('duty to refer utils', () => {
     })
 
     it('returns a NOT_STARTED duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory.notStarted().build()
+      const dutyToRefer = dutyToReferFactory.notStarted().build({ crn: 'CRN123' })
 
       const card = dutyToReferStatusCard(dutyToRefer)
 
@@ -31,7 +31,7 @@ describe('duty to refer utils', () => {
     it('returns a SUBMITTED duty to refer status card object', () => {
       const dutyToRefer = dutyToReferFactory
         .submitted()
-        .build({ submission: { submissionDate: '2025-12-01', referenceNumber: 'REF123' } })
+        .build({ crn: 'CRN123', submission: { submissionDate: '2025-12-01', referenceNumber: 'REF123' } })
 
       const card = dutyToReferStatusCard(dutyToRefer)
 
@@ -104,7 +104,7 @@ describe('duty to refer utils', () => {
       [['Notes'], 'ACCEPTED' as const],
       [[], undefined],
     ])('returns links %s for status %s', (expectedLinks, status) => {
-      const links = linksForStatus(status).map(link => link.text)
+      const links = linksForStatus(status, 'CRN123').map(link => link.text)
 
       expect(links).toEqual(expect.arrayContaining(expectedLinks))
       expect(links).toHaveLength(expectedLinks.length)

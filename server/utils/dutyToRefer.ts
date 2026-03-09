@@ -21,7 +21,7 @@ export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard =
     inactive: status === 'NOT_ACCEPTED',
     status: dutyToReferStatusTag(status),
     details: detailsForStatus(dutyToRefer),
-    links: linksForStatus(status, dutyToRefer.crn),
+    links: linksForStatus(status, dutyToRefer?.crn),
   }
 }
 
@@ -54,8 +54,12 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
   ]
 
   if (dutyToRefer) {
-    rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthorityAreaName))
-    rows.push(summaryListRow('Submission date', dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : ''))
+    rows.push(
+      summaryListRow(
+        'Submission date',
+        dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
+      ),
+    )
   }
 
   return rows
@@ -84,10 +88,7 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
   }
 }
 
-export const validateSubmission = (
-  req: Request,
-  localAuthorityAreaId: string,
-) => {
+export const validateSubmission = (req: Request, localAuthorityAreaId: string) => {
   const errors: Record<string, string> = {}
 
   if (dateIsEmpty(req.body, 'submissionDate')) {
@@ -100,10 +101,7 @@ export const validateSubmission = (
   return !validateAndFlashErrors(req, errors) ? uiPaths.dutyToRefer.submission({ crn: req.params.crn }) : undefined
 }
 
-export const validateOutcome = (
-  req: Request,
-  outcomeStatus: string,
-) => {
+export const validateOutcome = (req: Request, outcomeStatus: string) => {
   const errors: Record<string, string> = {}
 
   if (!outcomeStatus) {

@@ -1,10 +1,10 @@
 import { SuperAgentRequest } from 'superagent'
-import { LocalAuthority } from '../../server/data/referenceDataClient'
+import { ReferenceDataDto } from '@sas/api'
 import { stubFor } from './wiremock'
 import localAuthoritiesJson from '../../wiremock/fixtures/referenceData/localAuthorities.json'
 
 export default {
-  stubGetLocalAuthorities: (localAuthorities?: LocalAuthority[]): SuperAgentRequest =>
+  stubGetLocalAuthorities: (localAuthorities?: ReferenceDataDto[]): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',

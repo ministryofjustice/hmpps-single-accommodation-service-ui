@@ -5,7 +5,12 @@ import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import referenceDataApi from '../../mockApis/referenceData'
-import { caseFactory, dtrCommandFactory, dutyToReferFactory } from '../../../server/testutils/factories'
+import {
+  caseFactory,
+  dtrCommandFactory,
+  dutyToReferFactory,
+  referenceDataFactory,
+} from '../../../server/testutils/factories'
 import { login } from '../../testUtils'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import DutyToReferPage from '../../pages/cases/dutyToReferPage'
@@ -26,14 +31,15 @@ test.describe('duty to refer', () => {
   }
 
   test('should allow user to submit a duty to refer and add outcome', async ({ page }) => {
+    const localAuthority = referenceDataFactory.localAuthority().build()
     const notStartedDutyToRefer = dutyToReferFactory.notStarted().build({ crn })
     const submissionCommand = dtrCommandFactory.build({
-      localAuthorityAreaId: notStartedDutyToRefer.submission.localAuthorityAreaId,
+      localAuthorityAreaId: localAuthority.id,
     })
     const submissionDutyToRefer = dutyToReferFactory.submitted().build({
       crn,
       status: submissionCommand.status,
-      submission: { ...submissionCommand, localAuthorityAreaName: notStartedDutyToRefer.submission.localAuthorityAreaName },
+      submission: submissionCommand,
     })
 
     const acceptedCommand = dtrCommandFactory.build({ ...submissionCommand, status: 'ACCEPTED' })
@@ -75,7 +81,7 @@ test.describe('duty to refer', () => {
     })
 
     // When I complete the form and submit
-    await dutyToReferPage.completeSubmissionForm(submissionDutyToRefer)
+    await dutyToReferPage.completeSubmissionForm(submissionDutyToRefer, localAuthority.name)
     await dutyToReferApi.stubSubmitDutyToRefer(crn)
     await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [submissionDutyToRefer])
     await dutyToReferPage.clickButton('Save and continue')

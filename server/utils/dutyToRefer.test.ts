@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { mock } from 'jest-mock-extended'
 import {
   detailsForStatus,
   dutyToReferStatusCard,
@@ -10,7 +11,6 @@ import {
 import * as validationUtils from './validation'
 import { dutyToReferFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
-import { mock } from 'jest-mock-extended'
 import uiPaths from '../paths/ui'
 
 let req: Request

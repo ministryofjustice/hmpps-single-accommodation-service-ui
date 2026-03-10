@@ -1,8 +1,8 @@
+import { faker } from '@faker-js/faker'
 import DutyToReferService from './dutyToReferService'
 import DutyToReferClient from '../data/dutyToReferClient'
 import { dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import crnFactory from '../testutils/crn'
-import { faker } from '@faker-js/faker'
 
 jest.mock('../data/dutyToReferClient')
 

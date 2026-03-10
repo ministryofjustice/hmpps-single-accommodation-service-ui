@@ -1,10 +1,10 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import { faker } from '@faker-js/faker/locale/en'
 import describeClient from '../testutils/describeClient'
 import DutyToReferClient from './dutyToReferClient'
 import { dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
-import { faker } from '@faker-js/faker/locale/en'
 
 describeClient('DutyToReferClient', provider => {
   let dutyToReferClient: DutyToReferClient

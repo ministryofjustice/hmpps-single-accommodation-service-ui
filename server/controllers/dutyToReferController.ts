@@ -63,7 +63,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
 
-      const redirect = validateSubmission(req, localAuthorityAreaId)
+      const redirect = validateSubmission(req)
       if (redirect) return res.redirect(redirect)
 
       const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
@@ -117,7 +117,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { outcomeStatus } = req.body
 
-      const redirect = validateOutcome(req, outcomeStatus)
+      const redirect = validateOutcome(req)
       if (redirect) return res.redirect(redirect)
 
       try {

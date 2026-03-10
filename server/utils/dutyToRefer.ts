@@ -88,8 +88,9 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
   }
 }
 
-export const validateSubmission = (req: Request, localAuthorityAreaId: string) => {
+export const validateSubmission = (req: Request) => {
   const errors: Record<string, string> = {}
+  const { localAuthorityAreaId } = req.body
 
   if (dateIsEmpty(req.body, 'submissionDate')) {
     errors.submissionDate = 'Enter a submission date'
@@ -101,8 +102,9 @@ export const validateSubmission = (req: Request, localAuthorityAreaId: string) =
   return !validateAndFlashErrors(req, errors) ? uiPaths.dutyToRefer.submission({ crn: req.params.crn }) : undefined
 }
 
-export const validateOutcome = (req: Request, outcomeStatus: string) => {
+export const validateOutcome = (req: Request) => {
   const errors: Record<string, string> = {}
+  const { outcomeStatus } = req.body
 
   if (!outcomeStatus) {
     errors.outcomeStatus = 'Select duty to refer outcome'

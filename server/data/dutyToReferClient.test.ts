@@ -1,9 +1,10 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import describeClient from '../testutils/describeClient'
 import DutyToReferClient from './dutyToReferClient'
-import { dutyToReferFactory } from '../testutils/factories'
+import { dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
+import { faker } from '@faker-js/faker/locale/en'
 
 describeClient('DutyToReferClient', provider => {
   let dutyToReferClient: DutyToReferClient
@@ -13,8 +14,8 @@ describeClient('DutyToReferClient', provider => {
     dutyToReferClient = new DutyToReferClient(mockAuthenticationClient)
   })
 
-  it('should make a GET request to /cases/:crn/dutyToRefer using user token and return the response body', async () => {
-    const dutyToRefer = dutyToReferFactory.build()
+  it('should make a GET request to /cases/:crn/dtrs using user token and return the response body', async () => {
+    const dutyToRefer = [dutyToReferFactory.build()]
     const crn = crnFactory()
 
     await provider.addInteraction({
@@ -35,5 +36,76 @@ describeClient('DutyToReferClient', provider => {
 
     const response = await dutyToReferClient.getAllDutyToRefer('test-user-token', crn)
     expect(response).toEqual(dutyToRefer)
+  })
+
+  it('should make a GET request to /cases/:crn/dtr using user token and return the response body', async () => {
+    const dutyToRefer = dutyToReferFactory.build()
+    const crn = crnFactory()
+
+    await provider.addInteraction({
+      state: `DutyToRefer exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to get a dutyToRefer for a user case by CRN',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.dutyToRefer.show({ crn }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: dutyToRefer,
+      },
+    })
+
+    const response = await dutyToReferClient.getDutyToRefer('test-user-token', crn)
+    expect(response).toEqual(dutyToRefer)
+  })
+
+  it('should make a POST request to /cases/:crn/dtr with data and return 200', async () => {
+    const crn = crnFactory()
+    const command = dtrCommandFactory.build()
+
+    await provider.addInteraction({
+      state: `DutyToRefer can be submitted for case with CRN ${crn}`,
+      uponReceiving: 'a request to submit dutyToRefer for a user case by CRN',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.dutyToRefer.submit({ crn }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: command,
+      },
+      willRespondWith: {
+        status: 200,
+      },
+    })
+
+    await dutyToReferClient.submit('test-user-token', crn, command)
+  })
+
+  it('should make a PUT request to /cases/:crn/dtr/:id with data and return 200', async () => {
+    const crn = crnFactory()
+    const id = faker.string.uuid()
+    const command = dtrCommandFactory.build()
+
+    await provider.addInteraction({
+      state: `DutyToRefer can be updated for case with CRN ${crn}`,
+      uponReceiving: 'a request to update dutyToRefer for a user case by CRN and id',
+      withRequest: {
+        method: 'PUT',
+        path: apiPaths.cases.dutyToRefer.update({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: command,
+      },
+      willRespondWith: {
+        status: 200,
+      },
+    })
+
+    await dutyToReferClient.update('test-user-token', crn, id, command)
   })
 })

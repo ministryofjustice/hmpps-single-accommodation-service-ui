@@ -1,6 +1,19 @@
-import { detailsForStatus, dutyToReferStatusCard, linksForStatus } from './dutyToRefer'
+import { Request } from 'express'
+import {
+  detailsForStatus,
+  dutyToReferStatusCard,
+  linksForStatus,
+  summaryListRows,
+  validateOutcome,
+  validateSubmission,
+} from './dutyToRefer'
+import * as validationUtils from './validation'
 import { dutyToReferFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
+import { mock } from 'jest-mock-extended'
+import uiPaths from '../paths/ui'
+
+let req: Request
 
 describe('duty to refer utils', () => {
   describe('dutyToReferStatusCard', () => {
@@ -108,6 +121,109 @@ describe('duty to refer utils', () => {
 
       expect(links).toEqual(expect.arrayContaining(expectedLinks))
       expect(links).toHaveLength(expectedLinks.length)
+    })
+  })
+
+  describe('summaryListRows', () => {
+    const caseData = {
+      crn: 'CRN123',
+      name: 'John Smith',
+      dateOfBirth: '1990-01-15',
+      prisonNumber: 'A1234BC',
+    }
+
+    it('formats case data without duty to refer', () => {
+      const rows = summaryListRows(caseData)
+
+      expect(rows).toHaveLength(4)
+      expect(rows[0].key.text).toBe('Name')
+      expect(rows[0].value.text).toBe('John Smith')
+      expect(rows[1].key.text).toBe('Date of birth')
+      expect(rows[1].value.text).toBe('1990-01-15')
+      expect(rows[2].key.text).toBe('CRN')
+      expect(rows[2].value.text).toBe('CRN123')
+      expect(rows[3].key.text).toBe('Prison number')
+      expect(rows[3].value.text).toBe('A1234BC')
+    })
+
+    it('formats case data with submission date', () => {
+      const dutyToRefer = dutyToReferFactory.submitted().build({
+        submission: { submissionDate: '2025-01-10' },
+      })
+
+      const rows = summaryListRows(caseData, dutyToRefer)
+
+      expect(rows).toHaveLength(5)
+      expect(rows[4].key.text).toBe('Submission date')
+      expect(rows[4].value.text).toBe(formatDateAndDaysAgo('2025-01-10'))
+    })
+  })
+
+  describe('validateSubmission', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+      req = mock<Request>({
+        params: { crn: 'CRN123' },
+        body: {},
+        session: {},
+      })
+      jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    })
+
+    it('sets errors and returns a redirect link when submission date and local authority are missing', () => {
+      req.body = {}
+      const result = validateSubmission(req)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+        submissionDate: 'Enter a submission date',
+        localAuthorityAreaId: 'Select a local authority',
+      })
+      expect(result).toBe(uiPaths.dutyToRefer.submission({ crn: 'CRN123' }))
+    })
+
+    it('returns undefined when submission date and local authority are valid', () => {
+      req.body = {
+        localAuthorityAreaId: 'la-id',
+        'submissionDate-day': '1',
+        'submissionDate-month': '2',
+        'submissionDate-year': '2025',
+      }
+
+      const result = validateSubmission(req)
+
+      expect(result).toBeUndefined()
+    })
+  })
+
+  describe('validateOutcome', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+      req = mock<Request>({
+        params: { crn: 'CRN123' },
+        body: {},
+        session: {},
+      })
+      jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    })
+
+    it('sets errors and returns a redirect link when outcome status is missing', () => {
+      req.body = {}
+      const result = validateOutcome(req)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+        outcomeStatus: 'Select duty to refer outcome',
+      })
+      expect(result).toBe(uiPaths.dutyToRefer.outcome({ crn: 'CRN123' }))
+    })
+
+    it('returns undefined when outcome status is valid', () => {
+      req.body = {
+        outcomeStatus: 'ACCEPTED',
+      }
+
+      const result = validateOutcome(req)
+
+      expect(result).toBeUndefined()
     })
   })
 })

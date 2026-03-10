@@ -26,20 +26,15 @@ export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard =
 }
 
 export const linksForStatus = (serviceStatus?: string, crn?: string) => {
+  const notes = { text: 'Notes', href: '#' }
   switch (serviceStatus) {
     case 'NOT_ACCEPTED':
     case 'ACCEPTED':
-      return [{ text: 'Notes', href: '#' }]
+      return [notes]
     case 'NOT_STARTED':
-      return [
-        { text: 'Add submission details', href: uiPaths.dutyToRefer.guidance({ crn }) },
-        { text: 'Notes', href: '#' },
-      ]
+      return crn ? [{ text: 'Add submission details', href: uiPaths.dutyToRefer.guidance({ crn }) }, notes] : [notes]
     case 'SUBMITTED':
-      return [
-        { text: 'Add outcome', href: uiPaths.dutyToRefer.outcome({ crn }) },
-        { text: 'Notes', href: '#' },
-      ]
+      return crn ? [{ text: 'View submission details', href: uiPaths.dutyToRefer.submission({ crn }) }, notes] : [notes]
     default:
       return []
   }

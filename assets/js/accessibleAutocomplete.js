@@ -6,7 +6,9 @@ function makeAutocomplete(selectElement) {
     const hint = document.createElement('p')
     hint.className = 'govuk-hint'
     hint.textContent = 'Start typing and then select an option'
-    document.querySelector(`label[for="${elementId}"]`).insertAdjacentElement('afterend', hint)
+
+    const label = document.querySelector(`label[for="${elementId}"]`)
+    if (label) label.insertAdjacentElement('afterend', hint)
   }
 
   const inputClasses = selectElement.getAttribute('data-autocomplete-input-classes') || ''

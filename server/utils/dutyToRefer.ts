@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { CaseDto, DutyToReferDto } from '@sas/api'
+import { CaseDto, DutyToReferDto, ReferenceDataDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 import { StatusCard, StatusTag } from '@sas/ui'
 import { dateIsEmpty, formatDateAndDaysAgo } from './dates'
@@ -14,13 +14,13 @@ const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
     SUBMITTED: { text: 'Submitted', colour: 'yellow' },
   })[status] || { text: 'Unknown' }
 
-export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => {
+export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto, localAuthorityAreaName?: string): StatusCard => {
   const status = dutyToRefer?.status
   return {
     heading: 'Duty to Refer (DTR)',
     inactive: status === 'NOT_ACCEPTED',
     status: dutyToReferStatusTag(status),
-    details: detailsForStatus(dutyToRefer),
+    details: detailsForStatus(dutyToRefer, localAuthorityAreaName),
     links: linksForStatus(status, dutyToRefer?.crn),
   }
 }
@@ -34,13 +34,13 @@ export const linksForStatus = (serviceStatus?: string, crn?: string) => {
     case 'NOT_STARTED':
       return crn ? [{ text: 'Add submission details', href: uiPaths.dutyToRefer.guidance({ crn }) }, notes] : [notes]
     case 'SUBMITTED':
-      return crn ? [{ text: 'View submission details', href: uiPaths.dutyToRefer.submission({ crn }) }, notes] : [notes]
+      return crn ? [{ text: 'Add outcome', href: uiPaths.dutyToRefer.outcome({ crn }) }, notes] : [notes]
     default:
       return []
   }
 }
 
-export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
+export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined, localAuthorityAreaName?: string) => {
   const rows = [
     summaryListRow('Name', caseData.name),
     summaryListRow('Date of birth', caseData.dateOfBirth),
@@ -49,6 +49,7 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
   ]
 
   if (dutyToRefer) {
+    rows.push(summaryListRow('Local authority', localAuthorityAreaName))
     rows.push(
       summaryListRow(
         'Submission date',
@@ -65,7 +66,7 @@ const summaryListRow = (label: string, value: string): SummaryListRow => ({
   value: { text: value ?? '' },
 })
 
-export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
+export const detailsForStatus = (dutyToRefer: DutyToReferDto, localAuthorityAreaName?: string): SummaryListRow[] => {
   const { status } = dutyToRefer ?? {}
   switch (status) {
     case 'NOT_ACCEPTED':
@@ -76,6 +77,7 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
     case 'SUBMITTED':
       return [
         summaryListRow('Reference', dutyToRefer?.submission?.referenceNumber),
+        summaryListRow('Submitted to', localAuthorityAreaName),
         summaryListRow('Submitted', formatDateAndDaysAgo(dutyToRefer?.submission?.submissionDate)),
       ]
     default:
@@ -106,4 +108,11 @@ export const validateOutcome = (req: Request) => {
   }
 
   return !validateAndFlashErrors(req, errors) ? uiPaths.dutyToRefer.outcome({ crn: req.params.crn }) : undefined
+}
+
+export const getLocalAuthorityAreaName = async (
+  id: string,
+  localAuthorities: ReferenceDataDto[],
+) => {
+  return localAuthorities.find(la => la.id === id)?.name
 }

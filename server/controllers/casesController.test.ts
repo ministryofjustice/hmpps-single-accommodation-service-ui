@@ -10,6 +10,7 @@ import {
   caseFactory,
   dutyToReferFactory,
   eligibilityFactory,
+  referenceDataFactory,
   referralFactory,
 } from '../testutils/factories'
 import { accommodationCard, caseAssignedTo, casesTableCaption, casesToRows } from '../utils/cases'
@@ -20,6 +21,7 @@ import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
+import ReferenceDataService from '../services/referenceDataService'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -36,6 +38,7 @@ describe('casesController', () => {
   const eligibilityService = mock<EligibilityService>()
   const dutyToReferService = mock<DutyToReferService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
+  const referenceDataService = mock<ReferenceDataService>()
 
   const casesController = new CasesController(
     auditService,
@@ -44,6 +47,7 @@ describe('casesController', () => {
     eligibilityService,
     dutyToReferService,
     proposedAddressesService,
+    referenceDataService,
   )
 
   beforeEach(() => {
@@ -125,7 +129,8 @@ describe('casesController', () => {
       const caseData = caseFactory.build({ crn })
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
-      const dutyToRefer = dutyToReferFactory.build({ crn })
+      const dutyToRefer = dutyToReferFactory.buildList(1)
+      const localAuthorities = referenceDataFactory.localAuthority().buildList(2)
       const proposed = accommodationFactory.proposed().buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
 
@@ -134,6 +139,7 @@ describe('casesController', () => {
       eligibilityService.getEligibility.mockResolvedValue(eligibility)
       dutyToReferService.getAllDutyToRefer.mockResolvedValue(dutyToRefer)
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ proposed, failedChecks })
+      referenceDataService.getLocalAuthorities.mockResolvedValue(localAuthorities)
 
       await casesController.show()(request, response, next)
 

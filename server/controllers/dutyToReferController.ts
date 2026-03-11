@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import uiPaths from '../paths/ui'
-import { summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
+import { getLocalAuthorityAreaName, summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
@@ -98,7 +98,9 @@ export default class DutyToReferController {
 
       const caseData = await this.casesService.getCase(token, crn)
       const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
-      const tableRows = summaryListRows(caseData, dtr)
+      const localAuthorities = await this.referenceDataService.getLocalAuthorities(token)
+      const localAuthorityAreaName = await getLocalAuthorityAreaName(dtr.submission.localAuthorityAreaId, localAuthorities)
+      const tableRows = summaryListRows(caseData, dtr, localAuthorityAreaName)
 
       const { errors, errorSummary } = fetchErrors(req)
 

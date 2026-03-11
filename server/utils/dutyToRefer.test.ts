@@ -46,7 +46,7 @@ describe('duty to refer utils', () => {
         .submitted()
         .build({ crn: 'CRN123', submission: { submissionDate: '2025-12-01', referenceNumber: 'REF123' } })
 
-      const card = dutyToReferStatusCard(dutyToRefer)
+      const card = dutyToReferStatusCard(dutyToRefer, 'Some Council')
 
       expect(card).toMatchSnapshot()
     })
@@ -74,6 +74,7 @@ describe('duty to refer utils', () => {
         'SUBMITTED' as const,
         [
           { term: 'Reference', description: submission.referenceNumber },
+          { term: 'Submitted to', description: 'Some Council' },
           { term: 'Submitted', description: formatDateAndDaysAgo(submission.submissionDate) },
         ],
       ],
@@ -82,7 +83,7 @@ describe('duty to refer utils', () => {
     ])('returns details for status %s', (status, expectedDetails) => {
       const dutyToRefer = dutyToReferFactory.build({ status, submission })
 
-      const details = detailsForStatus(dutyToRefer)
+      const details = detailsForStatus(dutyToRefer, 'Some Council')
 
       const expectedRows = expectedDetails.map(detail =>
         expect.objectContaining({
@@ -101,11 +102,12 @@ describe('duty to refer utils', () => {
         submission: { submissionDate: undefined, referenceNumber: undefined },
       })
 
-      const details = detailsForStatus(dutyToRefer)
+      const details = detailsForStatus(dutyToRefer, 'Some Council')
 
-      expect(details).toHaveLength(2)
+      expect(details).toHaveLength(3)
       expect(details[0].value.text).toBe('')
-      expect(details[1].value.text).toBe('Invalid Date')
+      expect(details[1].value.text).toBe('Some Council')
+      expect(details[2].value.text).toBe('Invalid Date')
     })
   })
 
@@ -146,16 +148,18 @@ describe('duty to refer utils', () => {
       expect(rows[3].value.text).toBe('A1234BC')
     })
 
-    it('formats case data with submission date', () => {
+    it('formats case data with submission date and local authority', () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({
         submission: { submissionDate: '2025-01-10' },
       })
 
-      const rows = summaryListRows(caseData, dutyToRefer)
+      const rows = summaryListRows(caseData, dutyToRefer, 'Some Council')
 
-      expect(rows).toHaveLength(5)
-      expect(rows[4].key.text).toBe('Submission date')
-      expect(rows[4].value.text).toBe(formatDateAndDaysAgo('2025-01-10'))
+      expect(rows).toHaveLength(6)
+      expect(rows[4].key.text).toBe('Local authority')
+      expect(rows[4].value.text).toBe('Some Council')
+      expect(rows[5].key.text).toBe('Submission date')
+      expect(rows[5].value.text).toBe(formatDateAndDaysAgo('2025-01-10'))
     })
   })
 

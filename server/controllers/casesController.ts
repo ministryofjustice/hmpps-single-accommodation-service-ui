@@ -3,7 +3,7 @@ import { GetCasesQuery } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, mapGetCasesQuery } from '../utils/cases'
-import { dutyToReferStatusCard } from '../utils/dutyToRefer'
+import { dutyToReferStatusCard, getLocalAuthorityAreaName } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
@@ -14,6 +14,8 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
+import ReferenceDataService from '../services/referenceDataService'
+import { DutyToReferDto } from '@sas/api'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -27,6 +29,7 @@ export default class CasesController {
     private readonly eligibilityService: EligibilityService,
     private readonly dutyToReferService: DutyToReferService,
     private readonly proposedAddressesService: ProposedAddressesService,
+    private readonly referenceDataService: ReferenceDataService,
   ) {}
 
   index(): RequestHandler {
@@ -96,7 +99,7 @@ export default class CasesController {
           currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
           referralHistoryRows: referralHistoryRows(referralHistory),
           eligibilityCards: eligibilityToEligibilityCards(eligibility),
-          dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
+          dutyToReferCard: await this.buildDutyToReferCard(token, dutyToRefer[0]),
           proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
           failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),
         })
@@ -109,5 +112,22 @@ export default class CasesController {
         throw error
       }
     }
+  }
+
+  private async buildDutyToReferCard(
+    token: string,
+    dtr: DutyToReferDto | undefined,
+  ) {
+    if (!dtr?.submission?.localAuthorityAreaId) {
+      return dutyToReferStatusCard(dtr)
+    }
+
+    const localAuthorities = await this.referenceDataService.getLocalAuthorities(token)
+    const localAuthorityAreaName = await getLocalAuthorityAreaName(
+      dtr.submission.localAuthorityAreaId,
+      localAuthorities,
+    )
+
+    return dutyToReferStatusCard(dtr, localAuthorityAreaName)
   }
 }

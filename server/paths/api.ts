@@ -8,7 +8,7 @@ export default {
   cases: {
     index: casesPath,
     show: casePath,
-    dutyToRefer: casePath.path('dtrs'),
+    dutyToRefer: casePath.path('dtr'),
     eligibility: casePath.path('eligibility'),
     referrals: casePath.path('applications'),
     proposedAddresses: {

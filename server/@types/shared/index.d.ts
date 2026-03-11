@@ -16,6 +16,7 @@ export type { DtrSubmissionDto } from './models/DtrSubmissionDto';
 export type { DutyToReferDto } from './models/DutyToReferDto';
 export type { EligibilityDto } from './models/EligibilityDto';
 export type { GetDlqResult } from './models/GetDlqResult';
+export type { LocalAuthorityDto } from './models/LocalAuthorityDto';
 export type { PurgeQueueResult } from './models/PurgeQueueResult';
 export type { ReferenceDataDto } from './models/ReferenceDataDto';
 export type { RetryDlqResult } from './models/RetryDlqResult';

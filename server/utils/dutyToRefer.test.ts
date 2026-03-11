@@ -48,7 +48,7 @@ describe('duty to refer utils', () => {
   describe('detailsForStatus', () => {
     const submission = {
       id: 'submission-id',
-      localAuthorityAreaId: 'la-id',
+      localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'la-name' },
       referenceNumber: 'REF123',
       submissionDate: '2024-09-23',
       createdBy: 'user1',

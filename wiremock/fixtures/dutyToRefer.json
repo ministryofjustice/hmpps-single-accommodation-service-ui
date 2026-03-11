@@ -2,12 +2,14 @@
   "S511935": {
     "crn": "S511935",
     "status": "SUBMITTED",
-    "action": "",
     "submission": {
       "id": "31f9c786-c73b-4948-9e7e-7c0750d0a89d",
-      "localAuthorityAreaId": "cb974b11-fad8-4b1e-a921-07a570fbe04e",
+      "localAuthority": {
+        "localAuthorityAreaId": "cb974b11-fad8-4b1e-a921-07a570fbe04e",
+        "localAuthorityAreaName": "Kunzehill"
+      },
       "referenceNumber": "E0AGRHGNXG",
-      "submissionDate": "2025-09-03T07:43:01.768Z",
+      "submissionDate": "2025-07-29",
       "createdBy": "Jacob O'Connell-Gusikowski",
       "createdAt": "2025-12-19T14:12:25.172Z"
     }
@@ -15,118 +17,136 @@
   "P712106": {
     "crn": "P712106",
     "status": "NOT_ACCEPTED",
-    "action": "",
     "submission": {
-      "id": "68448e33-e376-400c-bb59-c7b592aeab44",
-      "localAuthorityAreaId": "db3e367a-f0b2-48f3-81be-f1774b9e1ede",
-      "referenceNumber": "LDFVKDU6YH",
-      "submissionDate": "2025-07-20T23:51:59.778Z",
-      "createdBy": "Joyce Corwin",
-      "createdAt": "2026-02-24T04:33:09.609Z"
+      "id": "cbd05aed-cef2-40f8-ad70-370d9e119306",
+      "localAuthority": {
+        "localAuthorityAreaId": "e73b0457-d5bd-4e66-be56-2426dd403b2b",
+        "localAuthorityAreaName": "Pacocha-upon-Hermiston"
+      },
+      "referenceNumber": "BIHHYJ0CFZ",
+      "submissionDate": "2025-12-12",
+      "createdBy": "Sidney Willms",
+      "createdAt": "2025-08-27T03:10:59.485Z"
     }
   },
   "T274481": {
     "crn": "T274481",
     "status": "NOT_STARTED",
-    "action": "",
     "submission": {
-      "id": "5f74668e-94df-4285-b7af-7bf3de5dd08c",
-      "localAuthorityAreaId": "932792a5-f780-4937-b42c-99fcad0824b4",
-      "referenceNumber": "LDZAN03NIO",
-      "submissionDate": "2025-12-02T09:34:06.915Z",
-      "createdBy": "Brett Pagac",
-      "createdAt": "2025-06-18T08:00:44.810Z"
+      "id": "4cf6014c-7cf3-4a56-8414-90a8cdff3451",
+      "localAuthority": {
+        "localAuthorityAreaId": "b690ff36-b375-4812-9445-aadcd8e2e00f",
+        "localAuthorityAreaName": "Upton McClureridge"
+      },
+      "referenceNumber": "P2BZYGOCSE",
+      "submissionDate": "2025-03-22",
+      "createdBy": "Audrey Wisoky",
+      "createdAt": "2025-11-17T12:34:04.095Z"
     }
   },
   "V938951": {
     "crn": "V938951",
     "status": "SUBMITTED",
-    "action": "",
     "submission": {
-      "id": "68c720eb-6049-4535-a262-b5184a0ddcf7",
-      "localAuthorityAreaId": "751813b2-879d-43c5-b4bb-cc138ce04018",
-      "referenceNumber": "PIR5IERQYG",
-      "submissionDate": "2026-02-12T01:33:28.375Z",
-      "createdBy": "Mr. Melvin Marks-Wuckert",
-      "createdAt": "2025-05-29T08:06:51.496Z"
+      "id": "72a76e05-5dc0-4523-a2bd-b5db80b22834",
+      "localAuthority": {
+        "localAuthorityAreaId": "6c57b79d-9185-49c2-8e44-4f0ccadc804b",
+        "localAuthorityAreaName": "Upton Rice"
+      },
+      "referenceNumber": "8DOJHCECHT",
+      "submissionDate": "2025-07-18",
+      "createdBy": "Carrie Homenick",
+      "createdAt": "2025-11-16T20:24:28.171Z"
     }
   },
   "T229440": {
     "crn": "T229440",
     "status": "NOT_ACCEPTED",
-    "action": "",
     "submission": {
-      "id": "ad90b7f0-62c2-47b4-9d68-e667f5d9e416",
-      "localAuthorityAreaId": "10b601f0-e93e-4a18-9000-00a65c49ea08",
-      "referenceNumber": "OU5G35VQCJ",
-      "submissionDate": "2025-10-13T06:56:56.143Z",
-      "createdBy": "Leonard Rolfson",
-      "createdAt": "2025-05-30T22:22:42.670Z"
+      "id": "f43d5a9f-b5aa-4d6c-88fb-1ebce0f3756a",
+      "localAuthority": {
+        "localAuthorityAreaId": "1a7c9cb6-5c61-4393-aaaf-4d1118f95a67",
+        "localAuthorityAreaName": "Bartolettiham"
+      },
+      "referenceNumber": "WSM5KRC7C2",
+      "submissionDate": "2025-07-24",
+      "createdBy": "Ollie Friesen",
+      "createdAt": "2025-12-14T02:01:03.957Z"
     }
   },
   "H271226": {
     "crn": "H271226",
     "status": "SUBMITTED",
-    "action": "",
     "submission": {
-      "id": "fc9737a7-cb63-4470-99ff-f6f366c688b3",
-      "localAuthorityAreaId": "f697d2fa-0ef6-45de-b668-5c16e425e224",
-      "referenceNumber": "DZOTDILZ5A",
-      "submissionDate": "2025-11-16T17:19:56.913Z",
-      "createdBy": "Carole Bashirian",
-      "createdAt": "2025-12-28T13:05:25.665Z"
+      "id": "ce392295-9d84-4784-8e28-4574d8846678",
+      "localAuthority": {
+        "localAuthorityAreaId": "f2952157-259b-4e56-b737-02a3bacb2373",
+        "localAuthorityAreaName": "Little Ortiz"
+      },
+      "referenceNumber": "1T2XQNEQPC",
+      "submissionDate": "2025-07-27",
+      "createdBy": "Robyn Graham",
+      "createdAt": "2025-11-11T22:31:39.871Z"
     }
   },
   "U934069": {
     "crn": "U934069",
     "status": "ACCEPTED",
-    "action": "",
     "submission": {
-      "id": "b512a0da-bbca-4835-8e77-e5b9d325c200",
-      "localAuthorityAreaId": "d04a4ff8-6488-4c0e-aff0-e187959fd086",
-      "referenceNumber": "D0WNP0Z1FS",
-      "submissionDate": "2025-11-18T23:42:53.426Z",
-      "createdBy": "Robyn Beer",
-      "createdAt": "2026-02-22T21:04:34.977Z"
+      "id": "c3b210ed-795f-4504-b198-6bf03bdea664",
+      "localAuthority": {
+        "localAuthorityAreaId": "7d20be18-860e-4f72-a9e9-e98ca109aa06",
+        "localAuthorityAreaName": "South Willmsworth"
+      },
+      "referenceNumber": "USQAA1MTF7",
+      "submissionDate": "2025-04-19",
+      "createdBy": "Bobby Kunze-Sauer",
+      "createdAt": "2025-10-17T07:44:58.264Z"
     }
   },
   "I322559": {
     "crn": "I322559",
     "status": "SUBMITTED",
-    "action": "",
     "submission": {
-      "id": "f17776b6-fc60-43d2-bbe8-b30f16ab6a38",
-      "localAuthorityAreaId": "fbf1f821-c5d2-4b0f-8f26-aca80a613068",
-      "referenceNumber": "HPS07BA1VD",
-      "submissionDate": "2025-08-09T00:50:07.430Z",
-      "createdBy": "Ms. Ebony Emmerich-Champlin",
-      "createdAt": "2025-06-25T10:03:02.299Z"
+      "id": "2432f329-988e-4d8e-ab4d-e89ec1abaad2",
+      "localAuthority": {
+        "localAuthorityAreaId": "58e0c264-0df9-44a4-851a-b233d44fda15",
+        "localAuthorityAreaName": "East Cremin"
+      },
+      "referenceNumber": "X8EO6RTBJE",
+      "submissionDate": "2025-09-15",
+      "createdBy": "Claudia Ferry",
+      "createdAt": "2025-09-01T12:55:35.666Z"
     }
   },
   "L247269": {
     "crn": "L247269",
     "status": "SUBMITTED",
-    "action": "",
     "submission": {
-      "id": "9e83ee0a-56da-420b-8ee7-ea42472c3f56",
-      "localAuthorityAreaId": "6032b4dc-9e1e-4f65-aa9a-b741d42d3db1",
-      "referenceNumber": "SCJ85HCUDY",
-      "submissionDate": "2025-09-23T09:13:28.709Z",
-      "createdBy": "Ron Carroll-Wyman",
-      "createdAt": "2026-01-01T17:54:44.436Z"
+      "id": "bc5d86b5-ec5e-427b-b83b-11ed2535a1c5",
+      "localAuthority": {
+        "localAuthorityAreaId": "6b33caa1-4263-4a5f-bc78-161d2fe0bc25",
+        "localAuthorityAreaName": "Lower Stroman Court"
+      },
+      "referenceNumber": "GAHQKKSBQF",
+      "submissionDate": "2026-02-06",
+      "createdBy": "Randolph Doyle",
+      "createdAt": "2025-11-24T11:12:39.093Z"
     }
   },
   "F608163": {
     "crn": "F608163",
     "status": "NOT_STARTED",
-    "action": "",
     "submission": {
-      "id": "b5ccc59a-1a61-4149-80d8-7b7b5652096f",
-      "localAuthorityAreaId": "95ba169a-6bb9-4d28-8d29-91f2e2865e12",
-      "referenceNumber": "5AVJOIEP1V",
-      "submissionDate": "2025-07-02T22:17:29.279Z",
-      "createdBy": "Rudy Hudson",
-      "createdAt": "2025-06-28T09:39:36.224Z"
+      "id": "8b006e2a-a1fb-4f5c-9ef7-31f0ecadc1fb",
+      "localAuthority": {
+        "localAuthorityAreaId": "2d25bc79-31ec-4f2c-aba4-a9b22faf31f8",
+        "localAuthorityAreaName": "Little Schimmel"
+      },
+      "referenceNumber": "X3QKCKITPW",
+      "submissionDate": "2025-12-15",
+      "createdBy": "Jeffrey Zemlak",
+      "createdAt": "2025-08-29T02:38:44.667Z"
     }
   }
 }

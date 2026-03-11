@@ -6,6 +6,8 @@ export default function proposedAddressesRoutes(
   router: Router,
   proposedAddressesController: ProposedAddressesController,
 ): void {
+  router.get(uiPaths.proposedAddresses.show.pattern, proposedAddressesController.show())
+
   router.get(uiPaths.proposedAddresses.start.pattern, proposedAddressesController.start())
   router.get(uiPaths.proposedAddresses.edit.pattern, proposedAddressesController.edit())
 

@@ -10,6 +10,7 @@ export default {
     search: casesPath.path('search'),
   },
   proposedAddresses: {
+    show: proposedAddressesPath.path(':id/details'),
     start: proposedAddressesPath.path('start'),
     edit: proposedAddressesPath.path(':id/edit'),
     lookup: proposedAddressesPath.path('lookup'),

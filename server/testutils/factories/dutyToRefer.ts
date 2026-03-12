@@ -9,10 +9,10 @@ const submission = (overrides: Partial<DtrSubmissionDto> = {}): DtrSubmissionDto
 
   return {
     id: faker.string.uuid(),
-      localAuthority: {
+    localAuthority: {
       localAuthorityAreaId: localAuthority.id,
-        localAuthorityAreaName: faker.address.city(),
-      },
+      localAuthorityAreaName: localAuthority.name,
+    },
     referenceNumber: faker.string.alphanumeric({ length: 10 }).toUpperCase(),
     submissionDate: faker.date.past().toISOString().split('T')[0],
     createdBy: faker.person.fullName(),

@@ -5,7 +5,7 @@ import { dutyToReferFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
 export default {
-  stubGetAllDutyToReferByCrn: (crn: string, dutyToReferData?: DutyToReferDto[]): SuperAgentRequest =>
+  stubGetDutyToReferByCrn: (crn: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
@@ -17,22 +17,8 @@ export default {
         jsonBody: dutyToReferData || dutyToReferFactory.build(),
       },
     }),
-  stubGetAllDutyToReferByCrn500: (crn: string): SuperAgentRequest =>
-    stubApiError(apiPaths.cases.dutyToRefer.index({ crn })),
-  stubGetDutyToReferByCrn: (crn: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: apiPaths.cases.dutyToRefer.show({ crn }),
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: dutyToReferData || dutyToReferFactory.build(),
-      },
-    }),
   stubGetDutyToReferByCrn500: (crn: string): SuperAgentRequest =>
-    stubApiError(apiPaths.cases.dutyToRefer.show({ crn })),
+    stubApiError(apiPaths.cases.dutyToRefer.index({ crn })),
   stubSubmitDutyToRefer: (crn: string): SuperAgentRequest =>
     stubFor({
       request: {

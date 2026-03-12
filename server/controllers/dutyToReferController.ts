@@ -1,10 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
 import uiPaths from '../paths/ui'
-import { getLocalAuthorityAreaName, summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
+import { summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
-import { addErrorToFlash, fetchErrors } from '../utils/validation'
+import { addGenericErrorToFlash, fetchErrors } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 
@@ -78,9 +78,8 @@ export default class DutyToReferController {
 
         req.flash('success', 'Submission details added')
         return res.redirect(uiPaths.cases.show({ crn }))
-      } catch (error) {
-        // TODO replace this with generic error
-        addErrorToFlash(req, 'submission', 'There was a problem submitting the duty to refer. Please try again.')
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem submitting the duty to refer. Please try again.')
         return res.redirect(uiPaths.dutyToRefer.submission({ crn }))
       }
     }
@@ -98,9 +97,7 @@ export default class DutyToReferController {
 
       const caseData = await this.casesService.getCase(token, crn)
       const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
-      const localAuthorities = await this.referenceDataService.getLocalAuthorities(token)
-      const localAuthorityAreaName = await getLocalAuthorityAreaName(dtr.submission.localAuthorityAreaId, localAuthorities)
-      const tableRows = summaryListRows(caseData, dtr, localAuthorityAreaName)
+      const tableRows = summaryListRows(caseData, dtr)
 
       const { errors, errorSummary } = fetchErrors(req)
 
@@ -125,7 +122,7 @@ export default class DutyToReferController {
       try {
         const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
         const submissionDate = dtr?.submission?.submissionDate
-        const localAuthorityAreaId = dtr?.submission?.localAuthorityAreaId
+        const localAuthorityAreaId = dtr?.submission?.localAuthority.localAuthorityAreaId
         const referenceNumber = dtr?.submission?.referenceNumber
         await this.dutyToReferService.update(token, crn, dtr.submission.id, {
           status: outcomeStatus,
@@ -136,9 +133,8 @@ export default class DutyToReferController {
 
         req.flash('success', 'Submission details updated')
         return res.redirect(uiPaths.cases.show({ crn }))
-      } catch (error) {
-        // TODO replace this with generic error
-        addErrorToFlash(req, 'submission', 'There was a problem updating duty to refer. Please try again.')
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem updating the duty to refer. Please try again.')
         return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))
       }
     }

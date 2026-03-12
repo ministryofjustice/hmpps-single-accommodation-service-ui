@@ -59,11 +59,14 @@ export const formatDateAndDaysAgo = (date?: string): string => {
   return `${formatDate(date)} (${formatDate(date, 'days ago/in')})`
 }
 
-export const dateInputToIsoDate = <K extends string | number>(dateInputObj: ObjectWithDateParts<K>, key: K): string => {
-  const year = String(dateInputObj[`${key}-year`])
-  const month = String(dateInputObj[`${key}-month`]).slice(-2)
-  const day = String(dateInputObj[`${key}-day`]).slice(-2)
-  return `${year}-${month}-${day}`
+export const dateInputToIsoDate = (body: Record<string, string>, fieldName: string): string | undefined => {
+  const year = body[`${fieldName}-year`]?.trim()
+  const month = body[`${fieldName}-month`]?.trim()
+  const day = body[`${fieldName}-day`]?.trim()
+
+  if (!year || !month || !day) return undefined
+
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 }
 
 export const dateIsEmpty = <K extends string | number>(

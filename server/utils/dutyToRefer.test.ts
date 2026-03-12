@@ -42,11 +42,16 @@ describe('duty to refer utils', () => {
     })
 
     it('returns a SUBMITTED duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory
-        .submitted()
-        .build({ crn: 'CRN123', submission: { submissionDate: '2025-12-01', referenceNumber: 'REF123' } })
+      const dutyToRefer = dutyToReferFactory.submitted().build({
+        crn: 'CRN123',
+        submission: {
+          submissionDate: '2025-12-01',
+          referenceNumber: 'REF123',
+          localAuthority: { localAuthorityAreaName: 'Some Council' },
+        },
+      })
 
-      const card = dutyToReferStatusCard(dutyToRefer, 'Some Council')
+      const card = dutyToReferStatusCard(dutyToRefer)
 
       expect(card).toMatchSnapshot()
     })
@@ -61,7 +66,7 @@ describe('duty to refer utils', () => {
   describe('detailsForStatus', () => {
     const submission = {
       id: 'submission-id',
-      localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'la-name' },
+      localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
       referenceNumber: 'REF123',
       submissionDate: '2024-09-23',
       createdBy: 'user1',
@@ -83,7 +88,7 @@ describe('duty to refer utils', () => {
     ])('returns details for status %s', (status, expectedDetails) => {
       const dutyToRefer = dutyToReferFactory.build({ status, submission })
 
-      const details = detailsForStatus(dutyToRefer, 'Some Council')
+      const details = detailsForStatus(dutyToRefer)
 
       const expectedRows = expectedDetails.map(detail =>
         expect.objectContaining({
@@ -99,10 +104,14 @@ describe('duty to refer utils', () => {
     it('returns details with invalid date when submissionDate is missing', () => {
       const dutyToRefer = dutyToReferFactory.build({
         status: 'SUBMITTED',
-        submission: { submissionDate: undefined, referenceNumber: undefined },
+        submission: {
+          submissionDate: undefined,
+          referenceNumber: undefined,
+          localAuthority: { localAuthorityAreaName: 'Some Council' },
+        },
       })
 
-      const details = detailsForStatus(dutyToRefer, 'Some Council')
+      const details = detailsForStatus(dutyToRefer)
 
       expect(details).toHaveLength(3)
       expect(details[0].value.text).toBe('')
@@ -150,10 +159,10 @@ describe('duty to refer utils', () => {
 
     it('formats case data with submission date and local authority', () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({
-        submission: { submissionDate: '2025-01-10' },
+        submission: { submissionDate: '2025-01-10', localAuthority: { localAuthorityAreaName: 'Some Council' } },
       })
 
-      const rows = summaryListRows(caseData, dutyToRefer, 'Some Council')
+      const rows = summaryListRows(caseData, dutyToRefer)
 
       expect(rows).toHaveLength(6)
       expect(rows[4].key.text).toBe('Local authority')

@@ -158,7 +158,7 @@ describe('dutyToReferController', () => {
       crn: 'CRN123',
       submission: {
         id: 'submission-id',
-        localAuthorityAreaId: 'la-id',
+        localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
         referenceNumber: 'REF123',
         submissionDate: '2025-06-15',
         createdBy: 'user1',

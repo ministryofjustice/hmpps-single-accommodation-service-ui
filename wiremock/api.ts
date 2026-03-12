@@ -42,13 +42,14 @@ async function stubReferrals() {
 
 async function stubDutyToRefer() {
   for await (const caseDto of cases) {
-    await dutyToReferApi.stubGetAllDutyToReferByCrn(caseDto.crn, [
-      (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn],
-    ])
-    await dutyToReferApi.stubGetDutyToReferByCrn(caseDto.crn,
+    await dutyToReferApi.stubGetDutyToReferByCrn(
+      caseDto.crn,
       (dutyToRefer as unknown as Record<string, DutyToReferDto>)[caseDto.crn],
     )
-    await dutyToReferApi.stubUpdateDutyToRefer(caseDto.crn, (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn].submission.id)
+    await dutyToReferApi.stubUpdateDutyToRefer(
+      caseDto.crn,
+      (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn].submission.id,
+    )
     await dutyToReferApi.stubSubmitDutyToRefer(caseDto.crn)
   }
 }

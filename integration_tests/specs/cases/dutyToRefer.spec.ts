@@ -22,7 +22,6 @@ test.describe('duty to refer', () => {
     const caseData = caseFactory.build({ crn })
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [initialDutyToRefer])
     await dutyToReferApi.stubGetDutyToReferByCrn(crn, initialDutyToRefer)
     await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
     await casesApi.stubGetReferralHistory(crn, [])
@@ -39,14 +38,20 @@ test.describe('duty to refer', () => {
     const submissionDutyToRefer = dutyToReferFactory.submitted().build({
       crn,
       status: submissionCommand.status,
-      submission: submissionCommand,
+      submission: {
+        ...submissionCommand,
+        localAuthority: { localAuthorityAreaId: localAuthority.id, localAuthorityAreaName: localAuthority.name },
+      },
     })
 
     const acceptedCommand = dtrCommandFactory.build({ ...submissionCommand, status: 'ACCEPTED' })
     const acceptedDutyToRefer = dutyToReferFactory.accepted().build({
       crn,
       status: acceptedCommand.status,
-      submission: acceptedCommand,
+      submission: {
+        ...acceptedCommand,
+        localAuthority: { localAuthorityAreaId: localAuthority.id, localAuthorityAreaName: localAuthority.name },
+      },
     })
 
     // Given I have stubbed the API responses
@@ -83,7 +88,7 @@ test.describe('duty to refer', () => {
     // When I complete the form and submit
     await dutyToReferPage.completeSubmissionForm(submissionDutyToRefer, localAuthority.name)
     await dutyToReferApi.stubSubmitDutyToRefer(crn)
-    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [submissionDutyToRefer])
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, submissionDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')
 
     // And the API should have been called to submit the duty to refer
@@ -112,7 +117,7 @@ test.describe('duty to refer', () => {
     // When I complete the form and submit
     await outcomePage.completeOutcomeForm(acceptedDutyToRefer)
     await dutyToReferApi.stubUpdateDutyToRefer(crn, acceptedDutyToRefer.submission.id)
-    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [acceptedDutyToRefer])
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, acceptedDutyToRefer)
     await outcomePage.clickButton('Save and continue')
 
     // And the API should have been called to update the duty to refer
@@ -125,13 +130,25 @@ test.describe('duty to refer', () => {
 
   test('should allow user to add not accepted outcome to an existing duty to refer', async ({ page }) => {
     const id = 'dtr-id-123'
-    const submissionCommand = dtrCommandFactory.build({ status: 'SUBMITTED' })
-    const submittedDutyToRefer = dutyToReferFactory.submitted().build({ crn, submission: { ...submissionCommand, id } })
+    const localAuthority = referenceDataFactory.localAuthority().build()
+    const submissionCommand = dtrCommandFactory.build({ status: 'SUBMITTED', localAuthorityAreaId: localAuthority.id })
+    const submittedDutyToRefer = dutyToReferFactory.submitted().build({
+      crn,
+      submission: {
+        ...submissionCommand,
+        id,
+        localAuthority: { localAuthorityAreaId: localAuthority.id, localAuthorityAreaName: localAuthority.name },
+      },
+    })
 
     const notAcceptedCommand = dtrCommandFactory.build({ ...submissionCommand, status: 'NOT_ACCEPTED' })
     const notAcceptedDutyToRefer = dutyToReferFactory.notAccepted().build({
       crn,
-      submission: { ...notAcceptedCommand, id },
+      submission: {
+        ...notAcceptedCommand,
+        id,
+        localAuthority: { localAuthorityAreaId: localAuthority.id, localAuthorityAreaName: localAuthority.name },
+      },
     })
 
     // Given I have stubbed the API responses
@@ -153,7 +170,7 @@ test.describe('duty to refer', () => {
     // When I complete the form and submit
     await dutyToReferPage.completeOutcomeForm(notAcceptedDutyToRefer)
     await dutyToReferApi.stubUpdateDutyToRefer(crn, id)
-    await dutyToReferApi.stubGetAllDutyToReferByCrn(crn, [notAcceptedDutyToRefer])
+    await dutyToReferApi.stubGetDutyToReferByCrn(crn, notAcceptedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')
 
     // And the API should have been called to update the duty to refer

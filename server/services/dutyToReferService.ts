@@ -4,10 +4,6 @@ import { DutyToReferClient } from '../data'
 export default class DutyToReferService {
   constructor(private readonly dutyToReferClient: DutyToReferClient) {}
 
-  getAllDutyToRefer(token: string, crn: string) {
-    return this.dutyToReferClient.getAllDutyToRefer(token, crn)
-  }
-
   getDutyToRefer(token: string, crn: string) {
     return this.dutyToReferClient.getDutyToRefer(token, crn)
   }

@@ -16,17 +16,6 @@ describe('DutyToReferService', () => {
     dutyToReferService = new DutyToReferService(dutyToReferClient)
   })
 
-  it('should call getAllDutyToRefer on the api client and return its result', async () => {
-    const dutyToRefer = [dutyToReferFactory.build()]
-    const crn = crnFactory()
-    dutyToReferClient.getAllDutyToRefer.mockResolvedValue(dutyToRefer)
-
-    const result = await dutyToReferService.getAllDutyToRefer(token, crn)
-
-    expect(dutyToReferClient.getAllDutyToRefer).toHaveBeenCalledWith(token, crn)
-    expect(result).toEqual(dutyToRefer)
-  })
-
   it('should call getDutyToRefer on the api client and return its result', async () => {
     const crn = crnFactory()
     const dutyToRefer = dutyToReferFactory.build({ crn })

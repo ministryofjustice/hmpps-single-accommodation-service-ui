@@ -11,7 +11,6 @@ export const controllers = (services: Services) => ({
     services.eligibilityService,
     services.dutyToReferService,
     services.proposedAddressesService,
-    services.referenceDataService,
   ),
   proposedAddressesController: new ProposedAddressesController(
     services.auditService,

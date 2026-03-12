@@ -14,7 +14,7 @@ describeClient('DutyToReferClient', provider => {
   })
 
   it('should make a GET request to /cases/:crn/dutyToRefer using user token and return the response body', async () => {
-    const dutyToRefer = [dutyToReferFactory.build()]
+    const dutyToRefer = dutyToReferFactory.build()
     const crn = crnFactory()
 
     await provider.addInteraction({

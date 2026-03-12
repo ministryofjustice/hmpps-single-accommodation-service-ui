@@ -96,7 +96,7 @@ export default class CasesController {
           currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
           referralHistoryRows: referralHistoryRows(referralHistory),
           eligibilityCards: eligibilityToEligibilityCards(eligibility),
-          dutyToReferCard: dutyToReferStatusCard(dutyToRefer[0]),
+          dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
           proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
           failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),
         })

@@ -5,7 +5,7 @@ import { dutyToReferFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
 export default {
-  stubGetDutyToReferByCrn: (crn: string, dutyToReferData?: DutyToReferDto[]): SuperAgentRequest =>
+  stubGetDutyToReferByCrn: (crn: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
@@ -14,7 +14,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: dutyToReferData || dutyToReferFactory.buildList(1),
+        jsonBody: dutyToReferData || dutyToReferFactory.build(),
       },
     }),
   stubGetDutyToReferByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.dutyToRefer({ crn })),

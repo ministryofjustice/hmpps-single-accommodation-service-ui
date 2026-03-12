@@ -7,7 +7,10 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
   private submission(overrides: Partial<DtrSubmissionDto> = {}): DtrSubmissionDto {
     return {
       id: faker.string.uuid(),
-      localAuthorityAreaId: faker.string.uuid(),
+      localAuthority: {
+        localAuthorityAreaId: faker.string.uuid(),
+        localAuthorityAreaName: faker.address.city(),
+      },
       referenceNumber: faker.string.alphanumeric({ length: 10 }).toUpperCase(),
       submissionDate: faker.date.past().toISOString().split('T')[0],
       createdBy: faker.person.fullName(),
@@ -40,7 +43,10 @@ export default DutyToReferFactory.define(() => ({
   status: faker.helpers.arrayElement(['SUBMITTED', 'NOT_STARTED', 'ACCEPTED', 'NOT_ACCEPTED']),
   submission: {
     id: faker.string.uuid(),
-    localAuthorityAreaId: faker.string.uuid(),
+    localAuthority: {
+      localAuthorityAreaId: faker.string.uuid(),
+      localAuthorityAreaName: faker.address.city(),
+    },
     referenceNumber: faker.string.alphanumeric({ length: 10 }).toUpperCase(),
     submissionDate: faker.date.past().toISOString().split('T')[0],
     createdBy: faker.person.fullName(),

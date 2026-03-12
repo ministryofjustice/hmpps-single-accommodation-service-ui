@@ -125,7 +125,7 @@ describe('casesController', () => {
       const caseData = caseFactory.build({ crn })
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
-      const dutyToRefer = dutyToReferFactory.buildList(1)
+      const dutyToRefer = dutyToReferFactory.build({ crn })
       const proposed = accommodationFactory.proposed().buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
 
@@ -154,7 +154,7 @@ describe('casesController', () => {
         currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility),
-        dutyToReferCard: dutyToReferStatusCard(dutyToRefer[0]),
+        dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
         proposedAddresses: proposed.map(proposedAddressStatusCard),
         failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),
       })

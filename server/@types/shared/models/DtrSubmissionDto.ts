@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { LocalAuthorityDto } from './LocalAuthorityDto';
 export type DtrSubmissionDto = {
     id: string;
-    localAuthorityAreaId: string;
+    localAuthority: LocalAuthorityDto;
     referenceNumber?: string;
     submissionDate: string;
     createdBy: string;

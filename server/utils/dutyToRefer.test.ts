@@ -11,11 +11,10 @@ import {
 import * as validationUtils from './validation'
 import { dutyToReferFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
-import uiPaths from '../paths/ui'
-
-let req: Request
 
 describe('duty to refer utils', () => {
+  let req: Request
+
   describe('dutyToReferStatusCard', () => {
     beforeEach(() => {
       jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
@@ -183,7 +182,7 @@ describe('duty to refer utils', () => {
       jest.spyOn(validationUtils, 'validateAndFlashErrors')
     })
 
-    it('sets errors and returns a redirect link when submission date and local authority are missing', () => {
+    it('sets errors and returns true when submission date and local authority are missing', () => {
       req.body = {}
       const result = validateSubmission(req)
 
@@ -191,10 +190,10 @@ describe('duty to refer utils', () => {
         submissionDate: 'Enter a submission date',
         localAuthorityAreaId: 'Select a local authority',
       })
-      expect(result).toBe(uiPaths.dutyToRefer.submission({ crn: 'CRN123' }))
+      expect(result).toEqual(true)
     })
 
-    it('returns undefined when submission date and local authority are valid', () => {
+    it('returns false when submission date and local authority are valid', () => {
       req.body = {
         localAuthorityAreaId: 'la-id',
         'submissionDate-day': '1',
@@ -204,7 +203,7 @@ describe('duty to refer utils', () => {
 
       const result = validateSubmission(req)
 
-      expect(result).toBeUndefined()
+      expect(result).toBe(false)
     })
   })
 
@@ -219,24 +218,24 @@ describe('duty to refer utils', () => {
       jest.spyOn(validationUtils, 'validateAndFlashErrors')
     })
 
-    it('sets errors and returns a redirect link when outcome status is missing', () => {
+    it('sets errors and returns true when outcome status is missing', () => {
       req.body = {}
       const result = validateOutcome(req)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
         outcomeStatus: 'Select duty to refer outcome',
       })
-      expect(result).toBe(uiPaths.dutyToRefer.outcome({ crn: 'CRN123' }))
+      expect(result).toBe(true)
     })
 
-    it('returns undefined when outcome status is valid', () => {
+    it('returns false when outcome status is valid', () => {
       req.body = {
         outcomeStatus: 'ACCEPTED',
       }
 
       const result = validateOutcome(req)
 
-      expect(result).toBeUndefined()
+      expect(result).toBe(false)
     })
   })
 })

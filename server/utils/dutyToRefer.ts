@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { CaseDto, DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 import { StatusCard, StatusTag } from '@sas/ui'
-import { dateIsEmpty, formatDateAndDaysAgo } from './dates'
+import { dateIsBlank, formatDateAndDaysAgo } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
 
@@ -89,14 +89,14 @@ export const validateSubmission = (req: Request) => {
   const errors: Record<string, string> = {}
   const { localAuthorityAreaId } = req.body
 
-  if (dateIsEmpty(req.body, 'submissionDate')) {
+  if (dateIsBlank(req.body, 'submissionDate')) {
     errors.submissionDate = 'Enter a submission date'
   }
   if (!localAuthorityAreaId) {
     errors.localAuthorityAreaId = 'Select a local authority'
   }
 
-  return !validateAndFlashErrors(req, errors) ? uiPaths.dutyToRefer.submission({ crn: req.params.crn }) : undefined
+  return !validateAndFlashErrors(req, errors)
 }
 
 export const validateOutcome = (req: Request) => {
@@ -107,5 +107,5 @@ export const validateOutcome = (req: Request) => {
     errors.outcomeStatus = 'Select duty to refer outcome'
   }
 
-  return !validateAndFlashErrors(req, errors) ? uiPaths.dutyToRefer.outcome({ crn: req.params.crn }) : undefined
+  return !validateAndFlashErrors(req, errors)
 }

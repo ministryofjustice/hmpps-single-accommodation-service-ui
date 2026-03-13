@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import uiPaths from '../paths/ui'
-import { summaryListRows, validateOutcome, validateSubmission } from '../utils/dutyToRefer'
+import { validateSubmission, summaryListRows, validateOutcome } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
@@ -41,11 +41,8 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const caseData = await this.casesService.getCase(token, crn)
-      const tableRows = summaryListRows(caseData)
-
+      const { tableRows, localAuthorities } = await this.getSubmissionPageData(token, crn)
       const { errors, errorSummary } = fetchErrors(req)
-      const localAuthorities = await this.referenceDataService.getLocalAuthorities(token)
 
       return res.render('pages/duty-to-refer/submission', {
         crn,
@@ -63,8 +60,21 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
 
-      const redirect = validateSubmission(req)
-      if (redirect) return res.redirect(redirect)
+      const hasErrors = validateSubmission(req)
+      if (hasErrors) {
+        const { tableRows, localAuthorities } = await this.getSubmissionPageData(token, crn)
+        const { errors, errorSummary } = fetchErrors(req)
+
+        return res.render('pages/duty-to-refer/submission', {
+          crn,
+          tableRows,
+          localAuthorities,
+          errors,
+          errorSummary,
+          formValues: req.body,
+          ...req.body,
+        })
+      }
 
       const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
 
@@ -116,19 +126,17 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { outcomeStatus } = req.body
 
-      const redirect = validateOutcome(req)
-      if (redirect) return res.redirect(redirect)
+      const hasErrors = validateOutcome(req)
+      if (hasErrors) return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))
 
       try {
         const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
-        const submissionDate = dtr?.submission?.submissionDate
-        const localAuthorityAreaId = dtr?.submission?.localAuthority.localAuthorityAreaId
-        const referenceNumber = dtr?.submission?.referenceNumber
-        await this.dutyToReferService.update(token, crn, dtr.submission.id, {
+        const submission = dtr?.submission
+        await this.dutyToReferService.update(token, crn, submission.id, {
           status: outcomeStatus,
-          submissionDate,
-          localAuthorityAreaId,
-          referenceNumber,
+          submissionDate: submission.submissionDate,
+          localAuthorityAreaId: submission.localAuthority?.localAuthorityAreaId,
+          referenceNumber: submission.referenceNumber,
         })
 
         req.flash('success', 'Submission details updated')
@@ -138,5 +146,13 @@ export default class DutyToReferController {
         return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))
       }
     }
+  }
+
+  private async getSubmissionPageData(token: string, crn: string) {
+    const caseData = await this.casesService.getCase(token, crn)
+    const tableRows = summaryListRows(caseData)
+    const localAuthorities = await this.referenceDataService.getLocalAuthorities(token)
+
+    return { tableRows, localAuthorities }
   }
 }

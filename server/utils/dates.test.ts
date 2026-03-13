@@ -1,6 +1,7 @@
-import { calculateAge, formatDate, formatDateAndDaysAgo } from './dates'
+import { ObjectWithDateParts } from '@sas/ui'
+import { calculateAge, dateIsBlank, formatDate, formatDateAndDaysAgo } from './dates'
 
-describe('formatting utilities', () => {
+describe('date utilities', () => {
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date('2025-12-10T12:00:00.000Z'))
   })
@@ -100,6 +101,41 @@ describe('formatting utilities', () => {
       [undefined, 'Invalid Date'],
     ])('formats %s as the date and days ago %s', (date, expected) => {
       expect(formatDateAndDaysAgo(date)).toEqual(expected)
+    })
+  })
+
+  describe('dateIsBlank', () => {
+    it('returns false if the date is not blank', () => {
+      const date: ObjectWithDateParts<'field'> = {
+        'field-day': '12',
+        'field-month': '1',
+        'field-year': '2022',
+      }
+
+      expect(dateIsBlank(date, 'field')).toEqual(false)
+    })
+
+    it('returns true if the date is blank', () => {
+      const date: ObjectWithDateParts<'field'> = {
+        'field-day': '',
+        'field-month': '',
+        'field-year': '',
+      }
+
+      expect(dateIsBlank(date, 'field')).toEqual(true)
+    })
+
+    it('ignores irrelevant fields', () => {
+      const date: ObjectWithDateParts<'field'> & ObjectWithDateParts<'otherField'> = {
+        'field-day': '12',
+        'field-month': '1',
+        'field-year': '2022',
+        'otherField-day': undefined,
+        'otherField-month': undefined,
+        'otherField-year': undefined,
+      }
+
+      expect(dateIsBlank(date, 'field')).toEqual(false)
     })
   })
 })

@@ -25,9 +25,25 @@
         hint: {
             text: "For example, 27 3 2025"
         },
-        errorMessage: errors.submissionDate
-    }) }}
-
+        errorMessage: errors.submissionDate,
+        items: [
+            {
+                name: "day",
+                classes: "govuk-input--width-2",
+                value: formValues["submissionDate-day"]
+            },
+            {
+                name: "month",
+                classes: "govuk-input--width-2",
+                value: formValues["submissionDate-month"]
+            },
+            {
+                name: "year",
+                classes: "govuk-input--width-4",
+                value: formValues["submissionDate-year"]
+            }
+        ]
+    })}}
     {{ govukSelect({
         label: {
             text: 'What local authority was the DTR submitted to?',
@@ -51,6 +67,7 @@
         },
         classes: 'govuk-!-width-one-half',
         name: 'referenceNumber',
-        id: 'referenceNumber'
+        id: 'referenceNumber',
+        value: referenceNumber
     }) }}
 {% endblock %}

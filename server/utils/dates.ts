@@ -69,9 +69,9 @@ export const dateInputToIsoDate = (body: Record<string, string>, fieldName: stri
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 }
 
-export const dateIsEmpty = <K extends string | number>(
+export const dateIsBlank = <K extends string | number>(
   dateInputObj: Partial<ObjectWithDateParts<K>>,
   key: K,
 ): boolean => {
-  return !['year' as const, 'month' as const, 'day' as const].some(part => !!dateInputObj[`${key}-${part}`])
+  return !['year' as const, 'month' as const, 'day' as const].every(part => !!dateInputObj[`${key}-${part}`])
 }

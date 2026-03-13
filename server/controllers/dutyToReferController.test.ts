@@ -95,7 +95,7 @@ describe('dutyToReferController', () => {
     })
 
     it('submits and redirects to the case page', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(undefined)
+      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
 
       await controller.submit()(request, response, next)
 
@@ -109,19 +109,27 @@ describe('dutyToReferController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 
-    it('redirects back when validation fails', async () => {
-      jest
-        .spyOn(dutyToReferUtils, 'validateSubmission')
-        .mockReturnValue(uiPaths.dutyToRefer.submission({ crn: 'CRN123' }))
-
+    it('renders submission page when validation fails', async () => {
+      jest.spyOn(dutyToReferUtils, 'summaryListRows').mockReturnValue([])
+      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
       await controller.submit()(request, response, next)
 
       expect(dutyToReferService.submit).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.submission({ crn: 'CRN123' }))
+      expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
+      expect(referenceDataService.getLocalAuthorities).toHaveBeenCalledWith('token-1')
+      expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
+        crn: 'CRN123',
+        tableRows: [],
+        localAuthorities,
+        errors: {},
+        errorSummary: [],
+        formValues: request.body,
+        ...request.body,
+      })
     })
 
     it('redirects back when the API call fails', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(undefined)
+      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
       dutyToReferService.submit.mockRejectedValue(new Error('API error'))
 
       await controller.submit()(request, response, next)
@@ -191,7 +199,7 @@ describe('dutyToReferController', () => {
     })
 
     it('redirects back when validation fails', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(uiPaths.dutyToRefer.outcome({ crn: 'CRN123' }))
+      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(true)
 
       await controller.update()(request, response, next)
 

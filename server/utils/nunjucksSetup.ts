@@ -65,9 +65,9 @@ export default function nunjucksSetup(app: express.Express): void {
       prompt: string,
       textKey: string,
       valueKey: string,
-      fieldName: string,
+      selectedValue?: string,
     ) {
-      return convertObjectsToSelectOptions(items, prompt, textKey, valueKey, fieldName, this.ctx)
+      return convertObjectsToSelectOptions(items, prompt, textKey, valueKey, selectedValue)
     },
   )
 

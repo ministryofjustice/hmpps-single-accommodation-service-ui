@@ -72,7 +72,6 @@ export default class DutyToReferController {
           errors,
           errorSummary,
           formValues: req.body,
-          ...req.body,
         })
       }
 

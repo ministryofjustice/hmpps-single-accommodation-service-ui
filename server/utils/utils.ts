@@ -40,14 +40,13 @@ export const convertObjectsToSelectOptions = (
   prompt: string,
   textKey: string,
   valueKey: string,
-  fieldName: string,
-  context: Record<string, unknown>,
+  selectedValue?: string,
 ): Array<SelectOption> => {
   const options = [
     {
       value: '',
       text: prompt,
-      selected: !context[fieldName] || context[fieldName] === '',
+      selected: !selectedValue,
     },
   ]
 
@@ -55,7 +54,7 @@ export const convertObjectsToSelectOptions = (
     options.push({
       text: item[textKey],
       value: item[valueKey],
-      selected: context[fieldName] === item[valueKey],
+      selected: selectedValue === item[valueKey],
     })
   })
 

@@ -11,7 +11,7 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async shouldShowGuidancePage() {
-    await expect(this.page.getByRole('heading', { name: 'Duty to refer guidance' })).toBeVisible()
+    await expect(this.page.getByRole('heading', { name: 'Submit a duty to refer (DTR)' })).toBeVisible()
   }
 
   async shouldShowSubmissionForm(caseData: Case) {

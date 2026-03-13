@@ -54,7 +54,7 @@
             'data-autocomplete-hint': { value: true, optional: true },
             'data-autocomplete-input-classes': { value: 'govuk-!-width-two-thirds', optional: true }
         },
-        items: convertObjectsToSelectOptions(localAuthorities, '', 'name', 'id', 'localAuthorityAreaId'),
+        items: convertObjectsToSelectOptions(localAuthorities, '', 'name', 'id', formValues.localAuthorityAreaId),
         name: 'localAuthorityAreaId',
         id: 'localAuthorityAreaId',
         errorMessage: errors.localAuthorityAreaId
@@ -68,6 +68,6 @@
         classes: 'govuk-!-width-one-half',
         name: 'referenceNumber',
         id: 'referenceNumber',
-        value: referenceNumber
+        value: formValues.referenceNumber
     }) }}
 {% endblock %}

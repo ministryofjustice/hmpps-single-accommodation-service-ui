@@ -124,7 +124,6 @@ describe('dutyToReferController', () => {
         errors: {},
         errorSummary: [],
         formValues: request.body,
-        ...request.body,
       })
     })
 
@@ -184,7 +183,7 @@ describe('dutyToReferController', () => {
     })
 
     it('updates and redirects to the case page', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(undefined)
+      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(false)
 
       await controller.update()(request, response, next)
 
@@ -208,7 +207,7 @@ describe('dutyToReferController', () => {
     })
 
     it('redirects back when the API call fails', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(undefined)
+      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(false)
       dutyToReferService.update.mockRejectedValue(new Error('API error'))
 
       await controller.update()(request, response, next)

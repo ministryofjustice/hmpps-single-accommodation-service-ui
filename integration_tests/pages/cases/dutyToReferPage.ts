@@ -3,6 +3,7 @@ import { DutyToReferDto, DtrCommand, CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
+import { formatDateAndDaysAgo } from '../../../server/utils/dates'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -23,19 +24,27 @@ export default class DutyToReferPage extends AbstractPage {
     this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
   }
 
-  async completeSubmissionForm(dutyToRefer: DutyToReferDto, localAuthorityAreaName: string) {
-    await this.completeDateInputByLabel('When was the DTR submitted?', dutyToRefer.submission.submissionDate)
+  async completeSubmissionForm(dutyToRefer: DtrCommand, localAuthorityAreaName: string) {
+    await this.completeDateInputByLabel('When was the DTR submitted?', dutyToRefer.submissionDate)
     await this.selectAutocompleteByLabel('What local authority was the DTR submitted to?', localAuthorityAreaName)
-    if (dutyToRefer.submission.referenceNumber) {
-      await this.completeInputByLabel('Reference number', dutyToRefer.submission.referenceNumber)
+    if (dutyToRefer.referenceNumber) {
+      await this.completeInputByLabel('Reference number', dutyToRefer.referenceNumber)
     }
   }
 
-  async shouldShowOutcomePage() {
+  async shouldShowOutcomePage(caseData: Case, dtr: DutyToReferDto) {
     await expect(this.page.getByRole('heading', { name: 'Add Duty to Refer (DTR) outcome details' })).toBeVisible()
+
+    this.shouldShowSummaryItem('Name', caseData.name)
+    this.shouldShowSummaryItem('Date of birth', caseData.dateOfBirth)
+    this.shouldShowSummaryItem('CRN', caseData.crn)
+    this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
+
+    this.shouldShowSummaryItem('Local authority', dtr.submission.localAuthority.localAuthorityAreaName)
+    this.shouldShowSummaryItem('Submission date', formatDateAndDaysAgo(dtr.submission.submissionDate))
   }
 
-  async completeOutcomeForm(dutyToRefer: DutyToReferDto) {
+  async completeOutcomeForm(dutyToRefer: DtrCommand) {
     const outcome = dutyToRefer.status === 'ACCEPTED' ? 'Yes' : 'No'
     await this.selectRadioByLabel(outcome)
   }

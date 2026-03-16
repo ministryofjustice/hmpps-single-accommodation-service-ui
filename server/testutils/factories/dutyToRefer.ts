@@ -1,25 +1,8 @@
 import { faker } from '@faker-js/faker/locale/en_GB'
-import { DtrSubmissionDto, DutyToReferDto } from '@sas/api'
+import { DtrCommand, DutyToReferDto } from '@sas/api'
 import { Factory } from 'fishery'
 import crn from '../crn'
-import referenceDataFactory from './referenceData'
-
-const submission = (overrides: Partial<DtrSubmissionDto> = {}): DtrSubmissionDto => {
-  const localAuthority = referenceDataFactory.localAuthority().build()
-
-  return {
-    id: faker.string.uuid(),
-    localAuthority: {
-      localAuthorityAreaId: localAuthority.id,
-      localAuthorityAreaName: localAuthority.name,
-    },
-    referenceNumber: faker.string.alphanumeric({ length: 10 }).toUpperCase(),
-    submissionDate: faker.date.past().toISOString().split('T')[0],
-    createdBy: faker.person.fullName(),
-    createdAt: faker.date.past().toISOString(),
-    ...overrides,
-  }
-}
+import dtrSubmissionFactory from './dutyToReferSubmission'
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {
   notStarted() {
@@ -30,15 +13,29 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
   }
 
   submitted() {
-    return this.params({ status: 'SUBMITTED', submission: submission() })
+    return this.params({ status: 'SUBMITTED', submission: dtrSubmissionFactory.build() })
   }
 
   accepted() {
-    return this.params({ status: 'ACCEPTED', submission: submission() })
+    return this.params({ status: 'ACCEPTED', submission: dtrSubmissionFactory.build() })
   }
 
   notAccepted() {
-    return this.params({ status: 'NOT_ACCEPTED', submission: submission() })
+    return this.params({ status: 'NOT_ACCEPTED', submission: dtrSubmissionFactory.build() })
+  }
+
+  fromSubmission(command: DtrCommand, localAuthorityAreaName: string) {
+    return this.params({
+      status: command.status,
+      submission: dtrSubmissionFactory.build({
+        submissionDate: command.submissionDate,
+        referenceNumber: command.referenceNumber,
+        localAuthority: {
+          localAuthorityAreaId: command.localAuthorityAreaId,
+          localAuthorityAreaName,
+        },
+      }),
+    })
   }
 }
 
@@ -46,6 +43,6 @@ export default DutyToReferFactory.define(() => {
   return {
     crn: crn(),
     status: faker.helpers.arrayElement(['SUBMITTED', 'NOT_STARTED', 'ACCEPTED', 'NOT_ACCEPTED']),
-    submission: submission(),
+    submission: dtrSubmissionFactory.build(),
   }
 })

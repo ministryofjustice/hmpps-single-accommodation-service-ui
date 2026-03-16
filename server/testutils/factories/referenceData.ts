@@ -6,14 +6,11 @@ import localAuthoritiesJson from '../../../wiremock/fixtures/referenceData/local
 type ReferenceData = {
   id: string
   name: string
-  identifier?: string
 }
 
-type LocalAuthorityArea = ReferenceData
-
 class ReferenceDataFactory extends Factory<ReferenceData> {
-  localAuthority(): Factory<LocalAuthorityArea> {
-    return Factory.define<LocalAuthorityArea>(() => faker.helpers.arrayElement(localAuthoritiesJson))
+  localAuthority(): Factory<ReferenceData> {
+    return Factory.define<ReferenceData>(() => faker.helpers.arrayElement(localAuthoritiesJson))
   }
 }
 

@@ -33,6 +33,7 @@ import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
+import { timelineEntry } from '../utils/timeline'
 
 export default class ProposedAddressesController {
   formData: MultiPageFormManager<'proposedAddress'>
@@ -58,12 +59,14 @@ export default class ProposedAddressesController {
 
       const caseData = await this.casesService.getCase(token, crn)
       const proposedAddress = await this.proposedAddressesService.getProposedAddress(token, crn, id)
+      const auditRecords = await this.proposedAddressesService.getTimeline(token, crn, id)
 
       return res.render('pages/proposed-address/show', {
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
+        timeline: auditRecords.map(timelineEntry),
       })
     }
   }

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`timelineEntry returns an Address created timeline entry from an audit record 1`] = `
+{
+  "byline": {
+    "text": "Dr. Kay Towne",
+  },
+  "datetime": {
+    "timestamp": "2026-03-06T21:37:21.666Z",
+    "type": "datetime",
+  },
+  "label": {
+    "text": "Address added",
+  },
+  "text": "Some content",
+}
+`;

@@ -65,3 +65,14 @@ export type SummaryList = {
   attributes?: HtmlAttributes
   rows: SummaryListRow[]
 }
+
+export type TimelineEntry = TextOrHtmlContent & {
+  label: TextOrHtmlContent
+  datetime?: {
+    timestamp: string
+    type: 'datetime'
+  }
+  byline?: TextOrHtmlContent
+  classes?: string
+  attributes?: HtmlAttributes
+}

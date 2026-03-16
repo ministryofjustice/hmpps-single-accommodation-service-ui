@@ -10,6 +10,7 @@ import { login } from '../../testUtils'
 import {
   accommodationFactory,
   addressFactory,
+  auditRecordFactory,
   caseFactory,
   proposedAddressFormFactory,
 } from '../../../server/testutils/factories'
@@ -20,6 +21,8 @@ import osDataHubApiResponse from '../../../server/testutils/fixtures/osDataHubAp
 import { resultToAddressDetails } from '../../../server/utils/osDataHub'
 import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
+
+import { timelineEntry } from '../../../server/utils/timeline'
 
 test.describe('view proposed address details', () => {
   test('should allow user to view the details of a proposed address', async ({ page }) => {
@@ -34,6 +37,9 @@ test.describe('view proposed address details', () => {
     await casesApi.stubGetReferralHistory(crn, [])
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [proposedAddress])
     await proposedAddressesApi.stubGetProposedAddress(crn, proposedAddress.id, proposedAddress)
+
+    const createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
+    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [createdAddressRecord])
 
     // Given I am logged in
     await login(page)
@@ -52,6 +58,9 @@ test.describe('view proposed address details', () => {
 
     // And the address details should be listed
     await addressDetailsPage.shouldShowProposedAddressSummary()
+
+    // And I should see a timeline showing when the address was created
+    await addressDetailsPage.shouldShowTimelineEntry(timelineEntry(createdAddressRecord))
   })
 })
 

@@ -10,11 +10,12 @@ import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
-import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
+import { accommodationFactory, addressFactory, auditRecordFactory, caseFactory } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
 import { addressDetailRows, lookupResultsItems } from '../utils/proposedAddresses'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
+import { timelineEntry } from '../utils/timeline'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -85,8 +86,10 @@ describe('proposedAddressesController', () => {
     it('renders the address details page', async () => {
       const caseData = caseFactory.build()
       const proposedAddress = accommodationFactory.build()
+      const auditRecords = auditRecordFactory.buildList(2)
       casesService.getCase.mockResolvedValue(caseData)
       proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
+      proposedAddressesService.getTimeline.mockResolvedValue(auditRecords)
 
       await controller.show()(request, response, next)
 
@@ -99,6 +102,7 @@ describe('proposedAddressesController', () => {
         assignedTo: caseAssignedTo(caseData, 'user-id'),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
+        timeline: auditRecords.map(timelineEntry),
       })
     })
   })

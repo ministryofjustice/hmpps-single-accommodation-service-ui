@@ -34,4 +34,8 @@ export default class ProposedAddressesService {
       formDataToRequestBody(proposedAddressData),
     )
   }
+
+  async getTimeline(token: string, crn: string, id: string) {
+    return this.proposedAddressesClient.getTimeline(token, crn, id)
+  }
 }

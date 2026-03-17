@@ -23,9 +23,6 @@ describeClient('ReferenceDataClient', provider => {
         method: 'GET',
         path: apiPaths.referenceData({}),
         query: { type: objectType },
-        headers: {
-          authorization: 'Bearer test-user-token',
-        },
       },
       willRespondWith: {
         status: 200,
@@ -33,7 +30,7 @@ describeClient('ReferenceDataClient', provider => {
       },
     })
 
-    const response = await referenceDataClient.getReferenceData('test-user-token', objectType)
+    const response = await referenceDataClient.getReferenceData(objectType)
     expect(response).toEqual(referenceData)
   })
 })

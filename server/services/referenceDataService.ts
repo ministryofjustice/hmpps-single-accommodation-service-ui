@@ -3,7 +3,7 @@ import { ReferenceDataClient } from '../data'
 export default class ReferenceDataService {
   constructor(private readonly referenceDataClient: ReferenceDataClient) {}
 
-  getLocalAuthorities(token: string) {
-    return this.referenceDataClient.getReferenceData(token, 'LOCAL_AUTHORITY_AREAS')
+  getLocalAuthorities() {
+    return this.referenceDataClient.getReferenceData('LOCAL_AUTHORITY_AREAS')
   }
 }

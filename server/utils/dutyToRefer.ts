@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { CaseDto, DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 import { StatusCard, StatusTag } from '@sas/ui'
-import { dateIsBlank, formatDateAndDaysAgo } from './dates'
+import { formatDateAndDaysAgo, dateInputToIsoDate } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
 
@@ -89,7 +89,7 @@ export const validateSubmission = (req: Request) => {
   const errors: Record<string, string> = {}
   const { localAuthorityAreaId } = req.body
 
-  if (dateIsBlank(req.body, 'submissionDate')) {
+  if (!dateInputToIsoDate(req.body, 'submissionDate')) {
     errors.submissionDate = 'Enter a submission date'
   }
   if (!localAuthorityAreaId) {

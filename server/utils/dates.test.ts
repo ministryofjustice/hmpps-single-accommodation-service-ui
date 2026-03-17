@@ -1,5 +1,5 @@
-import { ObjectWithDateParts } from '@sas/ui'
-import { calculateAge, dateIsBlank, formatDate, formatDateAndDaysAgo } from './dates'
+import { DateFieldValues } from '@sas/ui'
+import { calculateAge, dateInputToIsoDate, formatDate, formatDateAndDaysAgo } from './dates'
 
 describe('date utilities', () => {
   beforeEach(() => {
@@ -104,38 +104,25 @@ describe('date utilities', () => {
     })
   })
 
-  describe('dateIsBlank', () => {
-    it('returns false if the date is not blank', () => {
-      const date: ObjectWithDateParts<'field'> = {
+  describe('dateInputToIsoDate', () => {
+    it('returns a formatted date string when the date fields are valid', () => {
+      const date: DateFieldValues<'field'> = {
         'field-day': '12',
         'field-month': '1',
         'field-year': '2022',
       }
 
-      expect(dateIsBlank(date, 'field')).toEqual(false)
+      expect(dateInputToIsoDate(date, 'field')).toEqual('2022-01-12')
     })
 
-    it('returns true if the date is blank', () => {
-      const date: ObjectWithDateParts<'field'> = {
+    it('returns undefined if the date is blank', () => {
+      const date: DateFieldValues<'field'> = {
         'field-day': '',
         'field-month': '',
         'field-year': '',
       }
 
-      expect(dateIsBlank(date, 'field')).toEqual(true)
-    })
-
-    it('ignores irrelevant fields', () => {
-      const date: ObjectWithDateParts<'field'> & ObjectWithDateParts<'otherField'> = {
-        'field-day': '12',
-        'field-month': '1',
-        'field-year': '2022',
-        'otherField-day': undefined,
-        'otherField-month': undefined,
-        'otherField-year': undefined,
-      }
-
-      expect(dateIsBlank(date, 'field')).toEqual(false)
+      expect(dateInputToIsoDate(date, 'field')).toEqual(undefined)
     })
   })
 })

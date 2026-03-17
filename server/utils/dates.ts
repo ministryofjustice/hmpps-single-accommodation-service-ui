@@ -1,5 +1,3 @@
-import { ObjectWithDateParts } from '@sas/ui'
-
 const isValidDate = (date?: string) => date && !Number.isNaN(new Date(date).getTime())
 
 export const calculateAge = (dateOfBirth: string) => {
@@ -67,11 +65,4 @@ export const dateInputToIsoDate = (body: Record<string, string>, fieldName: stri
   if (!year || !month || !day) return undefined
 
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-}
-
-export const dateIsBlank = <K extends string | number>(
-  dateInputObj: Partial<ObjectWithDateParts<K>>,
-  key: K,
-): boolean => {
-  return !['year' as const, 'month' as const, 'day' as const].every(part => !!dateInputObj[`${key}-${part}`])
 }

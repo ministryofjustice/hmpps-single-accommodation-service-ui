@@ -76,8 +76,4 @@ export interface SelectOption {
   selected?: boolean
 }
 
-export type ObjectWithDateParts<K extends string | number> = { [P in `${K}-${'year' | 'month' | 'day'}`]?: string } & {
-  [P in `${K}-time`]?: string
-} & {
-  [P in K]?: string
-}
+export type DateFieldValues<K extends string> = { [P in `${K}-${'year' | 'month' | 'day'}`]?: string }

@@ -16,12 +16,14 @@ describe('fetchErrors', () => {
 
   let errors: ErrorMessages
   let errorSummary: ErrorSummary[]
+  let userInput: Record<string, unknown>
 
   beforeEach(() => {
     ;(request.flash as jest.Mock).mockImplementation((message: string) => {
       return {
         errors: errors ? [JSON.stringify(errors)] : [],
         errorSummary: errorSummary ? [JSON.stringify(errorSummary)] : [],
+        userInput: userInput ? [JSON.stringify(userInput)] : [],
       }[message]
     })
   })
@@ -29,7 +31,7 @@ describe('fetchErrors', () => {
   it('returns default values if there is nothing present', () => {
     const result = fetchErrors(request)
 
-    expect(result).toEqual({ errors: {}, errorSummary: [] })
+    expect(result).toEqual({ errors: {}, errorSummary: [], userInput: {} })
   })
 
   it('fetches the values from the flash', () => {
@@ -41,9 +43,13 @@ describe('fetchErrors', () => {
       { text: "there's an error 1", href: '#errorField1' },
       { text: "there's an error 2", href: '#errorField2' },
     ]
+    userInput = {
+      field1: 'user input 1',
+      field2: 'user input 2',
+    }
 
     const result = fetchErrors(request)
-    expect(result).toEqual({ errors, errorSummary })
+    expect(result).toEqual({ errors, errorSummary, userInput })
   })
 })
 

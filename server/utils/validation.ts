@@ -4,11 +4,13 @@ import type { ErrorMessage, ErrorMessages, ErrorSummary } from '@sas/ui'
 export const fetchErrors = (request: Request) => {
   const errorsFlash = request.flash('errors')
   const errorSummaryFlash = request.flash('errorSummary')
+  const userInputFlash = request.flash('userInput')
 
   const errors = (errorsFlash || []).map(err => JSON.parse(err)).reduce((obj, error) => ({ ...obj, ...error }), {})
   const errorSummary = (errorSummaryFlash || []).map(err => JSON.parse(err)).flat()
+  const userInput = (userInputFlash || []).map(input => JSON.parse(input)).reduce((obj, input) => ({ ...obj, ...input }), {})
 
-  return { errors, errorSummary }
+  return { errors, errorSummary, userInput }
 }
 
 export const errorSummaryItem = (field: string, text: string): ErrorSummary => {
@@ -49,6 +51,10 @@ export const addErrorToFlash = (request: Request, field: string, error: string):
 
 export const addGenericErrorToFlash = (request: Request, error: string): void => {
   request.flash('errorSummary', JSON.stringify([{ text: error }]))
+}
+
+export const flashUserInput = (request: Request, userInput: Record<string, unknown> = {}): void => {
+  request.flash('userInput', JSON.stringify(userInput))
 }
 
 export const validateAndFlashErrors = (request: Request, errors: Record<string, string>): boolean => {

@@ -40,7 +40,7 @@ describe('dutyToReferController', () => {
     })
 
     controller = new DutyToReferController(auditService, dutyToReferService, casesService, referenceDataService)
-    jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [] })
+    jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
   })
 
   describe('guidance', () => {
@@ -68,13 +68,40 @@ describe('dutyToReferController', () => {
         correlationId: 'request-id',
       })
       expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
-      expect(referenceDataService.getLocalAuthorities).toHaveBeenCalledWith('token-1')
+      expect(referenceDataService.getLocalAuthorities).toHaveBeenCalled()
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
         crn: 'CRN123',
         tableRows: [],
         localAuthorities,
         errors: {},
         errorSummary: [],
+        formValues: {},
+      })
+    })
+
+    it('renders the submission page with errors and user input', async () => {
+      jest.spyOn(dutyToReferUtils, 'summaryListRows').mockReturnValue([])
+      const userInput = {
+        referenceNumber: 'REF123',
+        'submissionDate-year': '2025',
+        'submissionDate-month': '06',
+        'submissionDate-day': '15',
+      }
+      jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({
+        errors: { localAuthorityAreaId: { text: 'Select a local authority' } },
+        errorSummary: [{ text: 'Select a local authority', href: '#localAuthorityAreaId' }],
+        userInput,
+      })
+
+      await controller.submission()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
+        crn: 'CRN123',
+        tableRows: [],
+        localAuthorities,
+        errors: { localAuthorityAreaId: { text: 'Select a local authority' } },
+        errorSummary: [{ text: 'Select a local authority', href: '#localAuthorityAreaId' }],
+        formValues: userInput,
       })
     })
   })
@@ -109,22 +136,13 @@ describe('dutyToReferController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 
-    it('renders submission page when validation fails', async () => {
+    it('redirects to submission page when validation fails', async () => {
       jest.spyOn(dutyToReferUtils, 'summaryListRows').mockReturnValue([])
       jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
       await controller.submit()(request, response, next)
 
       expect(dutyToReferService.submit).not.toHaveBeenCalled()
-      expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
-      expect(referenceDataService.getLocalAuthorities).toHaveBeenCalledWith('token-1')
-      expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
-        crn: 'CRN123',
-        tableRows: [],
-        localAuthorities,
-        errors: {},
-        errorSummary: [],
-        formValues: request.body,
-      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.submission({ crn: 'CRN123' }))
     })
 
     it('redirects back when the API call fails', async () => {

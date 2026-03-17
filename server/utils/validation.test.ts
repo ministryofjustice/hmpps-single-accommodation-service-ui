@@ -4,14 +4,14 @@ import { ErrorMessages, ErrorSummary } from '@sas/ui'
 import {
   addErrorToFlash,
   addGenericErrorToFlash,
-  fetchErrors,
+  fetchErrorsAndUserInput,
   generateErrorMessages,
   generateErrorSummary,
   isValidUKPostcode,
   validateAndFlashErrors,
 } from './validation'
 
-describe('fetchErrors', () => {
+describe('fetchErrorsAndUserInput', () => {
   const request = mock<Request>({})
 
   let errors: ErrorMessages
@@ -29,7 +29,7 @@ describe('fetchErrors', () => {
   })
 
   it('returns default values if there is nothing present', () => {
-    const result = fetchErrors(request)
+    const result = fetchErrorsAndUserInput(request)
 
     expect(result).toEqual({ errors: {}, errorSummary: [], userInput: {} })
   })
@@ -48,7 +48,7 @@ describe('fetchErrors', () => {
       field2: 'user input 2',
     }
 
-    const result = fetchErrors(request)
+    const result = fetchErrorsAndUserInput(request)
     expect(result).toEqual({ errors, errorSummary, userInput })
   })
 })

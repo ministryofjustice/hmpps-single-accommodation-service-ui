@@ -40,7 +40,9 @@ describe('dutyToReferController', () => {
     })
 
     controller = new DutyToReferController(auditService, dutyToReferService, casesService, referenceDataService)
-    jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
+    jest
+      .spyOn(validationUtils, 'fetchErrorsAndUserInput')
+      .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
   })
 
   describe('guidance', () => {
@@ -87,7 +89,7 @@ describe('dutyToReferController', () => {
         'submissionDate-month': '06',
         'submissionDate-day': '15',
       }
-      jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({
         errors: { localAuthorityAreaId: { text: 'Select a local authority' } },
         errorSummary: [{ text: 'Select a local authority', href: '#localAuthorityAreaId' }],
         userInput,

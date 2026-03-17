@@ -1,14 +1,16 @@
 import { Request } from 'express'
 import type { ErrorMessage, ErrorMessages, ErrorSummary } from '@sas/ui'
 
-export const fetchErrors = (request: Request) => {
+export const fetchErrorsAndUserInput = (request: Request) => {
   const errorsFlash = request.flash('errors')
   const errorSummaryFlash = request.flash('errorSummary')
   const userInputFlash = request.flash('userInput')
 
   const errors = (errorsFlash || []).map(err => JSON.parse(err)).reduce((obj, error) => ({ ...obj, ...error }), {})
   const errorSummary = (errorSummaryFlash || []).map(err => JSON.parse(err)).flat()
-  const userInput = (userInputFlash || []).map(input => JSON.parse(input)).reduce((obj, input) => ({ ...obj, ...input }), {})
+  const userInput = (userInputFlash || [])
+    .map(input => JSON.parse(input))
+    .reduce((obj, input) => ({ ...obj, ...input }), {})
 
   return { errors, errorSummary, userInput }
 }

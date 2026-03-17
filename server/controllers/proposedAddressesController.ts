@@ -21,7 +21,12 @@ import {
   lookupResultsItems,
   addressDetailRows,
 } from '../utils/proposedAddresses'
-import { fetchErrors, addErrorToFlash, validateAndFlashErrors, addGenericErrorToFlash } from '../utils/validation'
+import {
+  fetchErrorsAndUserInput,
+  addErrorToFlash,
+  validateAndFlashErrors,
+  addGenericErrorToFlash,
+} from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 import OsDataHubService from '../services/osDataHubService'
@@ -96,7 +101,7 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
       const { nameOrNumber, postcode } = this.formData.get(req.params.crn, req.session)
-      const { errors, errorSummary } = fetchErrors(req)
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/proposed-address/lookup', {
         crn: req.params.crn,
@@ -148,7 +153,7 @@ export default class ProposedAddressesController {
       })
 
       const { crn } = req.params
-      const { errors, errorSummary } = fetchErrors(req)
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       const { nameOrNumber, postcode, lookupResults, address } = this.formData.get(crn, req.session)
 
       if (!lookupResults) {
@@ -202,7 +207,7 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
       const { crn } = req.params
-      const { errors, errorSummary } = fetchErrors(req)
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
 
       return res.render('pages/proposed-address/details', {
@@ -237,7 +242,7 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
       const caseData = await this.casesService.getCase(token, crn)
 
@@ -275,7 +280,7 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.status.pattern, req, [
         uiPaths.proposedAddresses.type.pattern,
@@ -322,7 +327,7 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       const caseData = await this.casesService.getCase(token, crn)
 
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.nextAccommodation.pattern, req, [
@@ -369,7 +374,7 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary } = fetchErrors(req)
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       const caseData = await this.casesService.getCase(token, crn)
 
       const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, caseData.name)

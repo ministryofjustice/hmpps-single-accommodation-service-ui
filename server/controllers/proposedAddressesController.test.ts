@@ -69,7 +69,9 @@ describe('proposedAddressesController', () => {
     })
 
     controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService, osDataHubService)
-    jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
+    jest
+      .spyOn(validationUtils, 'fetchErrorsAndUserInput')
+      .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
 
@@ -134,7 +136,7 @@ describe('proposedAddressesController', () => {
       const errors = { nameOrNumber: 'Enter a property name or number' }
       const errorSummary = [{ href: '#nameOrNumber', text: 'Enter a property name or number' }]
 
-      jest.spyOn(validationUtils, 'fetchErrors').mockReturnValue({ errors, errorSummary, userInput: {} })
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput: {} })
 
       await controller.lookup()(request, response, next)
 

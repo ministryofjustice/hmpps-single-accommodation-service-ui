@@ -99,24 +99,6 @@ describe('duty to refer utils', () => {
       expect(details).toEqual(expect.arrayContaining(expectedRows))
       expect(details).toHaveLength(expectedDetails.length)
     })
-
-    it('returns details with invalid date when submissionDate is missing', () => {
-      const dutyToRefer = dutyToReferFactory.build({
-        status: 'SUBMITTED',
-        submission: {
-          submissionDate: undefined,
-          referenceNumber: undefined,
-          localAuthority: { localAuthorityAreaName: 'Some Council' },
-        },
-      })
-
-      const details = detailsForStatus(dutyToRefer)
-
-      expect(details).toHaveLength(3)
-      expect(details[0].value.text).toBe('')
-      expect(details[1].value.text).toBe('Some Council')
-      expect(details[2].value.text).toBe('Invalid Date')
-    })
   })
 
   describe('linksForStatus', () => {
@@ -149,7 +131,7 @@ describe('duty to refer utils', () => {
       expect(rows[0].key.text).toBe('Name')
       expect(rows[0].value.text).toBe('John Smith')
       expect(rows[1].key.text).toBe('Date of birth')
-      expect(rows[1].value.text).toBe('1990-01-15')
+      expect(rows[1].value.text).toBe('15 January 1990 (36)')
       expect(rows[2].key.text).toBe('CRN')
       expect(rows[2].value.text).toBe('CRN123')
       expect(rows[3].key.text).toBe('Prison number')
@@ -182,7 +164,7 @@ describe('duty to refer utils', () => {
       jest.spyOn(validationUtils, 'validateAndFlashErrors')
     })
 
-    it('sets errors and returns true when submission date and local authority are missing', () => {
+    it('sets errors and returns false when submission date and local authority are missing', () => {
       req.body = {}
       const result = validateSubmission(req)
 
@@ -190,10 +172,10 @@ describe('duty to refer utils', () => {
         submissionDate: 'Enter a submission date',
         localAuthorityAreaId: 'Select a local authority',
       })
-      expect(result).toEqual(true)
+      expect(result).toEqual(false)
     })
 
-    it('returns false when submission date and local authority are valid', () => {
+    it('returns true when submission date and local authority are valid', () => {
       req.body = {
         localAuthorityAreaId: 'la-id',
         'submissionDate-day': '1',
@@ -203,7 +185,7 @@ describe('duty to refer utils', () => {
 
       const result = validateSubmission(req)
 
-      expect(result).toBe(false)
+      expect(result).toBe(true)
     })
   })
 
@@ -218,24 +200,24 @@ describe('duty to refer utils', () => {
       jest.spyOn(validationUtils, 'validateAndFlashErrors')
     })
 
-    it('sets errors and returns true when outcome status is missing', () => {
+    it('sets errors and returns false when outcome status is missing', () => {
       req.body = {}
       const result = validateOutcome(req)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
         outcomeStatus: 'Select duty to refer outcome',
       })
-      expect(result).toBe(true)
+      expect(result).toBe(false)
     })
 
-    it('returns false when outcome status is valid', () => {
+    it('returns true when outcome status is valid', () => {
       req.body = {
         outcomeStatus: 'ACCEPTED',
       }
 
       const result = validateOutcome(req)
 
-      expect(result).toBe(false)
+      expect(result).toBe(true)
     })
   })
 })

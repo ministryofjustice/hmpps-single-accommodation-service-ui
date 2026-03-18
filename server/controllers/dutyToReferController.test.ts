@@ -124,7 +124,7 @@ describe('dutyToReferController', () => {
     })
 
     it('submits and redirects to the case page', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
+      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
 
       await controller.submit()(request, response, next)
 
@@ -140,7 +140,7 @@ describe('dutyToReferController', () => {
 
     it('redirects to submission page when validation fails', async () => {
       jest.spyOn(dutyToReferUtils, 'summaryListRows').mockReturnValue([])
-      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
+      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
       await controller.submit()(request, response, next)
 
       expect(dutyToReferService.submit).not.toHaveBeenCalled()
@@ -148,7 +148,7 @@ describe('dutyToReferController', () => {
     })
 
     it('redirects back when the API call fails', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
+      jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
       dutyToReferService.submit.mockRejectedValue(new Error('API error'))
 
       await controller.submit()(request, response, next)
@@ -203,7 +203,7 @@ describe('dutyToReferController', () => {
     })
 
     it('updates and redirects to the case page', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(false)
+      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(true)
 
       await controller.update()(request, response, next)
 
@@ -218,7 +218,7 @@ describe('dutyToReferController', () => {
     })
 
     it('redirects back when validation fails', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(true)
+      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(false)
 
       await controller.update()(request, response, next)
 
@@ -227,7 +227,7 @@ describe('dutyToReferController', () => {
     })
 
     it('redirects back when the API call fails', async () => {
-      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(false)
+      jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(true)
       dutyToReferService.update.mockRejectedValue(new Error('API error'))
 
       await controller.update()(request, response, next)

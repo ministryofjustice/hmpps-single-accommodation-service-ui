@@ -3,7 +3,7 @@ import { DutyToReferDto, DtrCommand, CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
-import { formatDateAndDaysAgo } from '../../../server/utils/dates'
+import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -19,7 +19,7 @@ export default class DutyToReferPage extends AbstractPage {
     await expect(this.page.getByRole('heading', { name: 'Add Duty to Refer (DTR) submission details' })).toBeVisible()
 
     this.shouldShowSummaryItem('Name', caseData.name)
-    this.shouldShowSummaryItem('Date of birth', caseData.dateOfBirth)
+    this.shouldShowSummaryItem('Date of birth', formatDateAndAge(caseData.dateOfBirth))
     this.shouldShowSummaryItem('CRN', caseData.crn)
     this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
   }
@@ -36,7 +36,7 @@ export default class DutyToReferPage extends AbstractPage {
     await expect(this.page.getByRole('heading', { name: 'Add Duty to Refer (DTR) outcome details' })).toBeVisible()
 
     this.shouldShowSummaryItem('Name', caseData.name)
-    this.shouldShowSummaryItem('Date of birth', caseData.dateOfBirth)
+    this.shouldShowSummaryItem('Date of birth', formatDateAndAge(caseData.dateOfBirth))
     this.shouldShowSummaryItem('CRN', caseData.crn)
     this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
 

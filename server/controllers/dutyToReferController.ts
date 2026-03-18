@@ -62,7 +62,7 @@ export default class DutyToReferController {
       const { localAuthorityAreaId, referenceNumber } = req.body
       flashUserInput(req, req.body)
 
-      if (validateSubmission(req)) {
+      if (!validateSubmission(req)) {
         return res.redirect(uiPaths.dutyToRefer.submission({ crn }))
       }
 
@@ -95,8 +95,11 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const caseData = await this.casesService.getCase(token, crn)
-      const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
+      const [caseData, dtr] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.dutyToReferService.getDutyToRefer(token, crn),
+      ])
+
       const tableRows = summaryListRows(caseData, dtr)
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
@@ -116,7 +119,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { outcomeStatus } = req.body
 
-      if (validateOutcome(req)) return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))
+      if (!validateOutcome(req)) return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))
 
       try {
         const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
@@ -138,9 +141,12 @@ export default class DutyToReferController {
   }
 
   private async getSubmissionPageData(token: string, crn: string) {
-    const caseData = await this.casesService.getCase(token, crn)
+    const [caseData, localAuthorities] = await Promise.all([
+      this.casesService.getCase(token, crn),
+      this.referenceDataService.getLocalAuthorities(),
+    ])
+
     const tableRows = summaryListRows(caseData)
-    const localAuthorities = await this.referenceDataService.getLocalAuthorities()
 
     return { tableRows, localAuthorities }
   }

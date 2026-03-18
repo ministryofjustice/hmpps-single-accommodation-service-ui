@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { CaseDto, DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 import { StatusCard, StatusTag } from '@sas/ui'
-import { formatDateAndDaysAgo, dateInputToIsoDate } from './dates'
+import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
 
@@ -43,7 +43,7 @@ export const linksForStatus = (serviceStatus?: string, crn?: string) => {
 export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
   const rows = [
     summaryListRow('Name', caseData.name),
-    summaryListRow('Date of birth', caseData.dateOfBirth),
+    summaryListRow('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
     summaryListRow('CRN', caseData.crn),
     summaryListRow('Prison number', caseData.prisonNumber),
   ]
@@ -96,7 +96,7 @@ export const validateSubmission = (req: Request) => {
     errors.localAuthorityAreaId = 'Select a local authority'
   }
 
-  return !validateAndFlashErrors(req, errors)
+  return validateAndFlashErrors(req, errors)
 }
 
 export const validateOutcome = (req: Request) => {
@@ -107,5 +107,5 @@ export const validateOutcome = (req: Request) => {
     errors.outcomeStatus = 'Select duty to refer outcome'
   }
 
-  return !validateAndFlashErrors(req, errors)
+  return validateAndFlashErrors(req, errors)
 }

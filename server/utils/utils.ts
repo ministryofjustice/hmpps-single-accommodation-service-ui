@@ -1,4 +1,4 @@
-import { HtmlContent, TextContent } from '@govuk/ui'
+import { HtmlContent, SummaryListActionItem, SummaryListRow, TextContent } from '@govuk/ui'
 import { SelectOption } from '@sas/ui'
 
 const properCase = (word: string): string =>
@@ -60,3 +60,25 @@ export const convertObjectsToSelectOptions = (
 
   return options
 }
+
+export const summaryListRowText = (label: string, value: string, actions?: SummaryListActionItem[]): SummaryListRow => {
+  const row: SummaryListRow = {
+    key: textContent(label),
+    value: textContent(value),
+  }
+
+  if (actions) {
+    row.actions = { items: actions }
+  }
+
+  return row
+}
+
+export const summaryListRowHtml = (
+  label: string,
+  value: string,
+  actions?: SummaryListActionItem[],
+): SummaryListRow => ({
+  ...summaryListRowText(label, value, actions),
+  value: htmlContent(value),
+})

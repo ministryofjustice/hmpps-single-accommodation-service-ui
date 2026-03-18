@@ -158,7 +158,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Next address",
     },
     "value": {
-      "text": undefined,
+      "text": "Still to be decided",
     },
   },
 ]

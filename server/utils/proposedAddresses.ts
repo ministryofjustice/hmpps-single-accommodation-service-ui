@@ -9,8 +9,8 @@ import {
 import { Request } from 'express'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
-import { arrangementSubTypes, summaryListRow } from './cases'
-import { htmlContent, textContent, toParagraphs } from './utils'
+import { arrangementSubTypes } from './cases'
+import { summaryListRowText, summaryListRowHtml, toParagraphs } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { isValidUKPostcode, validateAndFlashErrors } from './validation'
@@ -34,9 +34,9 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
     inactive: proposedAddress.verificationStatus === 'FAILED',
     status: proposedAddressStatusTag(status),
     details: [
-      summaryListRow('Housing arrangement', arrangementLabel(proposedAddress)),
-      summaryListRow('Added by', ''),
-      summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
+      summaryListRowText('Housing arrangement', arrangementLabel(proposedAddress)),
+      summaryListRowText('Added by', ''),
+      summaryListRowText('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
     ],
     links: linksForStatus(status, proposedAddress.crn, proposedAddress.id),
   }
@@ -133,43 +133,27 @@ export const checkYourAnswersRows = (
     : uiPaths.proposedAddresses.details({ crn })
 
   const rows = [
-    {
-      key: textContent('Address'),
-      value: htmlContent(addressParts.join('<br />')),
-      actions: {
-        items: [{ text: 'Change', href: changeAddressLink }],
-      },
-    },
-    {
-      key: textContent(`What will be ${name}'s housing arrangement at this address?`),
-      value: htmlContent(formatArrangementWithDescription(sessionData)),
-      actions: {
-        items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
-      },
-    },
-    {
-      key: textContent('Will it be settled or transient?'),
-      value: textContent(formatProposedAddressSettledType(sessionData.settledType)),
-      actions: {
-        items: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
-      },
-    },
-    {
-      key: textContent('What is the status of the address checks?'),
-      value: htmlContent(formatStatusWithReason(sessionData)),
-      actions: {
-        items: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) }],
-      },
-    },
+    summaryListRowHtml('Address', addressParts.join('<br />'), [{ text: 'Change', href: changeAddressLink }]),
+    summaryListRowHtml(
+      `What will be ${name}'s housing arrangement at this address?`,
+      formatArrangementWithDescription(sessionData),
+      [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
+    ),
+    summaryListRowText('Will it be settled or transient?', formatProposedAddressSettledType(sessionData.settledType), [
+      { text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) },
+    ]),
+    summaryListRowHtml('What is the status of the address checks?', formatStatusWithReason(sessionData), [
+      { text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) },
+    ]),
   ]
   if (sessionData.verificationStatus === 'PASSED') {
-    rows.push({
-      key: textContent(`Is this the next address that ${name} will be moving into?`),
-      value: htmlContent(formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus)),
-      actions: {
-        items: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
-      },
-    })
+    rows.push(
+      summaryListRowHtml(
+        `Is this the next address that ${name} will be moving into?`,
+        formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus),
+        [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
+      ),
+    )
   }
   return rows
 }
@@ -439,19 +423,21 @@ export const housingArrangementParts = (proposedAddress: AccommodationDetail): s
 
 export const addressDetailRows = (proposedAddress: AccommodationDetail): SummaryListRow[] =>
   [
-    summaryListRow('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress))), 'html'),
-    summaryListRow('Address', formatAddress(proposedAddress.address, '<br />'), 'html'),
-    summaryListRow(
+    summaryListRowHtml('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress)))),
+    summaryListRowHtml('Address', formatAddress(proposedAddress.address, '<br />')),
+    summaryListRowHtml(
       'Housing arrangement',
       toParagraphs([
         housingArrangementParts(proposedAddress).join(', '),
         formatProposedAddressSettledType(proposedAddress.settledType),
       ]),
-      'html',
     ),
-    summaryListRow('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus)),
+    summaryListRowText('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus)),
     proposedAddress.verificationStatus === 'PASSED' &&
-      summaryListRow('Next address', formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)),
+      summaryListRowText(
+        'Next address',
+        formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus),
+      ),
   ].filter(Boolean)
 
 const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): AccommodationDetail => {

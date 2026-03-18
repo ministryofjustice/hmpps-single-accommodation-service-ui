@@ -696,7 +696,10 @@ describe('Proposed addresses utilities', () => {
     it.each([
       { title: 'that failed checks', params: { verificationStatus: 'FAILED' as const } },
       { title: 'that has not been checked', params: { verificationStatus: 'NOT_CHECKED_YET' as const } },
-      { title: 'that passed checks', params: { verificationStatus: 'PASSED' as const } },
+      {
+        title: 'that passed checks',
+        params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'TO_BE_DECIDED' as const },
+      },
       {
         title: 'that is confirmed',
         params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const },

@@ -5,6 +5,7 @@ import { StatusCard, StatusTag } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
+import { summaryListRowText } from './utils'
 
 const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
   ({
@@ -42,16 +43,16 @@ export const linksForStatus = (serviceStatus?: string, crn?: string) => {
 
 export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
   const rows = [
-    summaryListRow('Name', caseData.name),
-    summaryListRow('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
-    summaryListRow('CRN', caseData.crn),
-    summaryListRow('Prison number', caseData.prisonNumber),
+    summaryListRowText('Name', caseData.name),
+    summaryListRowText('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
+    summaryListRowText('CRN', caseData.crn),
+    summaryListRowText('Prison number', caseData.prisonNumber),
   ]
 
   if (dutyToRefer) {
-    rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+    rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
     rows.push(
-      summaryListRow(
+      summaryListRowText(
         'Submission date',
         dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
       ),
@@ -60,11 +61,6 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
 
   return rows
 }
-
-const summaryListRow = (label: string, value: string): SummaryListRow => ({
-  key: { text: label },
-  value: { text: value ?? '' },
-})
 
 export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
   const { status } = dutyToRefer ?? {}
@@ -76,9 +72,9 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
       return []
     case 'SUBMITTED':
       return [
-        summaryListRow('Submitted to', dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
-        summaryListRow('Reference', dutyToRefer?.submission?.referenceNumber),
-        summaryListRow('Submitted', formatDateAndDaysAgo(dutyToRefer?.submission?.submissionDate)),
+        summaryListRowText('Submitted to', dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
+        summaryListRowText('Reference', dutyToRefer?.submission?.referenceNumber),
+        summaryListRowText('Submitted', formatDateAndDaysAgo(dutyToRefer?.submission?.submissionDate)),
       ]
     default:
       return []

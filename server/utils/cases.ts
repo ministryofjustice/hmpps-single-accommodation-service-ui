@@ -1,7 +1,7 @@
 import { AccommodationDetail, CaseDto as Case } from '@sas/api'
-import { SummaryListRow, TableRow } from '@govuk/ui'
+import { TableRow } from '@govuk/ui'
 import { GetCasesQuery } from '@sas/ui'
-import { htmlContent, initialiseName } from './utils'
+import { htmlContent, initialiseName, summaryListRowHtml } from './utils'
 import { formatDate } from './dates'
 import { addressLines } from './addresses'
 import { renderMacro } from './macros'
@@ -99,11 +99,6 @@ export const accommodationCell = (cellType: 'current' | 'next', accommodation?: 
       })
     : ''
 
-export const summaryListRow = (label: string, value: string, renderAs: 'text' | 'html' = 'text'): SummaryListRow => ({
-  key: { text: label },
-  value: renderAs === 'html' ? { html: value } : { text: value },
-})
-
 export const accommodationCard = (cardType: 'current' | 'next', accommodation?: AccommodationDetail) => {
   if (!accommodation) return ''
 
@@ -114,7 +109,7 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
 
   if (arrangementType !== 'NO_FIXED_ABODE') {
     if (cardType === 'current') {
-      rows.push(summaryListRow('Type', accommodationType(accommodation), 'html'))
+      rows.push(summaryListRowHtml('Type', accommodationType(accommodation)))
 
       if (accommodation.endDate) {
         const endDateHtml = `
@@ -122,7 +117,7 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
           <br />
           ${formatDate(accommodation.endDate, 'days for/left')}
         `
-        rows.push(summaryListRow(arrangementType === 'PRISON' ? 'Release date' : 'End date', endDateHtml, 'html'))
+        rows.push(summaryListRowHtml(arrangementType === 'PRISON' ? 'Release date' : 'End date', endDateHtml))
       }
     }
 
@@ -143,7 +138,7 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
         </p>
       `
 
-      rows.push(summaryListRow('Status', statusHtml, 'html'))
+      rows.push(summaryListRowHtml('Status', statusHtml))
     }
 
     const address = [
@@ -151,7 +146,7 @@ export const accommodationCard = (cardType: 'current' | 'next', accommodation?: 
       ...addressLines(accommodation.address),
     ].filter(Boolean)
 
-    if (address.length > 0) rows.push(summaryListRow('Address', address.join('<br />'), 'html'))
+    if (address.length > 0) rows.push(summaryListRowHtml('Address', address.join('<br />')))
   }
 
   return {

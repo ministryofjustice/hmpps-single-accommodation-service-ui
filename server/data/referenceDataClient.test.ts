@@ -7,6 +7,7 @@ import { referenceDataFactory } from '../testutils/factories'
 describeClient('ReferenceDataClient', provider => {
   let referenceDataClient: ReferenceDataClient
   let mockAuthenticationClient: jest.Mocked<AuthenticationClient>
+  const token = 'some token'
 
   beforeEach(() => {
     referenceDataClient = new ReferenceDataClient(mockAuthenticationClient)
@@ -30,7 +31,7 @@ describeClient('ReferenceDataClient', provider => {
       },
     })
 
-    const response = await referenceDataClient.getReferenceData(objectType)
+    const response = await referenceDataClient.getReferenceData(token, objectType)
     expect(response).toEqual(referenceData)
   })
 })

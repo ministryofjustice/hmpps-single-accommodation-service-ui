@@ -70,7 +70,7 @@ describe('dutyToReferController', () => {
         correlationId: 'request-id',
       })
       expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
-      expect(referenceDataService.getLocalAuthorities).toHaveBeenCalled()
+      expect(referenceDataService.getLocalAuthorities).toHaveBeenCalledWith('token-1')
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
         crn: 'CRN123',
         tableRows: [],

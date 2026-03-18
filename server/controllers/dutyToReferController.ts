@@ -143,7 +143,7 @@ export default class DutyToReferController {
   private async getSubmissionPageData(token: string, crn: string) {
     const [caseData, localAuthorities] = await Promise.all([
       this.casesService.getCase(token, crn),
-      this.referenceDataService.getLocalAuthorities(),
+      this.referenceDataService.getLocalAuthorities(token),
     ])
 
     const tableRows = summaryListRows(caseData)

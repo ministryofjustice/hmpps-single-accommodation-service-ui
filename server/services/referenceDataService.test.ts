@@ -6,6 +6,7 @@ jest.mock('../data/referenceDataClient')
 
 describe('ReferenceDataService', () => {
   const referenceDataClient = new ReferenceDataClient(null) as jest.Mocked<ReferenceDataClient>
+  const token = 'some token'
   let referenceDataService: ReferenceDataService
 
   beforeEach(() => {
@@ -16,9 +17,9 @@ describe('ReferenceDataService', () => {
     const referenceData = referenceDataFactory.buildList(3)
     referenceDataClient.getReferenceData.mockResolvedValue(referenceData)
 
-    const result = await referenceDataService.getLocalAuthorities()
+    const result = await referenceDataService.getLocalAuthorities(token)
 
-    expect(referenceDataClient.getReferenceData).toHaveBeenCalledWith('LOCAL_AUTHORITY_AREAS')
+    expect(referenceDataClient.getReferenceData).toHaveBeenCalledWith(token, 'LOCAL_AUTHORITY_AREAS')
     expect(result).toEqual(referenceData)
   })
 })

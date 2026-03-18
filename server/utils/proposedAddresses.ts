@@ -1,5 +1,11 @@
 import { ProposedAddressDisplayStatus, ProposedAddressFormData, RadioItem, StatusCard, StatusTag } from '@sas/ui'
-import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand, AuditRecordDto } from '@sas/api'
+import {
+  AccommodationAddressDetails,
+  AccommodationDetail,
+  AccommodationDetailCommand,
+  AuditRecordDto,
+  FieldChange,
+} from '@sas/api'
 import { Request } from 'express'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
@@ -453,12 +459,32 @@ export const addressDetailRows = (proposedAddress: AccommodationDetail): Summary
       summaryListRow('Next address', formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)),
   ].filter(Boolean)
 
+const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): AccommodationDetail => {
+  const addressFields = [
+    'buildingNumber',
+    'buildingName',
+    'subBuildingName',
+    'thoroughfareName',
+    'dependentLocality',
+    'postTown',
+    'postcode',
+    'county',
+    'country',
+    'uprn',
+  ]
+
+  const filterChanges = (predicate: (change: FieldChange) => boolean) =>
+    Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
+
+  return {
+    ...filterChanges(change => !addressFields.includes(change.field)),
+    address: filterChanges(change => addressFields.includes(change.field)),
+  } as AccommodationDetail
+}
+
 export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
   const { type } = auditRecord
-  const proposedAddress = Object.fromEntries(
-    auditRecord.changes.map(change => [change.field, change.value]),
-  ) as AccommodationDetail
-  const status = displayStatus(proposedAddress)
+  const proposedAddress = auditRecordChangesToProposedAddress(auditRecord)
 
   let arrangementSubType = formatProposedAddressArrangement(proposedAddress.arrangementSubType)
   if (proposedAddress.arrangementSubType === 'OTHER') {
@@ -480,9 +506,9 @@ export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry
   const label = type === 'CREATE' ? 'Address created' : 'Address updated'
   const html = renderMacro('timelineProposedAddress', {
     type,
-    status: proposedAddressStatusTag(status),
+    status: proposedAddressStatusTag(displayStatus(proposedAddress)),
     values: {
-      Address: formatAddress(proposedAddress as AccommodationAddressDetails),
+      Address: formatAddress(proposedAddress.address),
       'Housing arrangement': housingArrangement,
       'Address checks': addressChecks,
       'Next address': nextAddress,

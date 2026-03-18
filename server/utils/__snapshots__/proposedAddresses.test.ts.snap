@@ -23,10 +23,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -63,10 +60,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -103,10 +97,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -151,10 +142,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -199,10 +187,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    <p class="govuk-!-margin-bottom-2">Other</p><p class="govuk-!-margin-bottom-2">Some description</p>
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Other, Some description</p><p>Settled</p>",
     },
   },
   {
@@ -237,7 +222,7 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
     
   
     
-      <p class="govuk-!-margin-bottom-1">Housing arrangement: Other (Some reason). Settled. </p>
+      <p class="govuk-!-margin-bottom-1">Housing arrangement: Other, Some reason. Settled. </p>
     
   
     
@@ -560,6 +545,6 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
 }
 `;
 
-exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p class="govuk-!-margin-bottom-2">Other</p><p class="govuk-!-margin-bottom-2">Hostel</p>"`;
+exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p>Other</p><p>Hostel</p>"`;
 
-exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p class="govuk-!-margin-bottom-2">Failed</p><p class="govuk-!-margin-bottom-2">Not suitable</p>"`;
+exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p>Failed</p><p>Not suitable</p>"`;

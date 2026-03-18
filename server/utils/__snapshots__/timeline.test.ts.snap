@@ -1,20 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`timelineEntry returns an Address created timeline entry from an audit record 1`] = `
+exports[`timelineEntry returns a timeline entry with the given details 1`] = `
 {
   "byline": {
-    "text": "Dr. Kay Towne",
+    "text": "Bob Smith",
   },
   "datetime": {
-    "timestamp": "2026-03-06T21:37:21.666Z",
+    "timestamp": "2025-09-13T13:45:00.000Z",
     "type": "datetime",
   },
-  "html": "<p><strong class="govuk-tag govuk-tag--red">Not checked yet</strong></p>
-  <p class="govuk-!-margin-bottom-1">Address: 1 Street, Town, P0 5TC</p>
-  <p class="govuk-!-margin-bottom-1">Housing arrangement: Other (Some reason). Settled.</p>
-  <p class="govuk-!-margin-bottom-1">Address checks: Not checked yet</p>",
+  "html": "<p>Some content</p>",
   "label": {
-    "text": "Address added",
+    "text": "Entry label",
   },
 }
 `;

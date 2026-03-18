@@ -20,6 +20,7 @@ import {
   validateLookupFromSession,
   lookupResultsItems,
   addressDetailRows,
+  addressTimelineEntry,
 } from '../utils/proposedAddresses'
 import {
   fetchErrorsAndUserInput,
@@ -33,7 +34,6 @@ import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
-import { timelineEntry } from '../utils/timeline'
 
 export default class ProposedAddressesController {
   formData: MultiPageFormManager<'proposedAddress'>
@@ -66,7 +66,7 @@ export default class ProposedAddressesController {
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
-        timeline: auditRecords.map(timelineEntry),
+        timeline: auditRecords.map(addressTimelineEntry),
       })
     }
   }

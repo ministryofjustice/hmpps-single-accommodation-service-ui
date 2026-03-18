@@ -216,6 +216,76 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
 ]
 `;
 
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address created record 1`] = `
+{
+  "byline": {
+    "text": "Dr. Kay Towne",
+  },
+  "datetime": {
+    "timestamp": "2026-03-06T21:37:21.666Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    <p><strong class="govuk-tag govuk-tag--green">Confirmed</strong></p>
+  
+
+  
+    
+      <p class="govuk-!-margin-bottom-1">Address: 1 Street, Town, P0 5TC</p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Housing arrangement: Other (Some reason). Settled. </p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Address checks: Passed</p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Next address: Yes</p>
+    
+  ",
+  "label": {
+    "text": "Address created",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address updated record 1`] = `
+{
+  "byline": {
+    "text": "Florence Collins",
+  },
+  "datetime": {
+    "timestamp": "2025-06-15T07:15:13.764Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    <p><strong class="govuk-tag govuk-tag--yellow">Checks passed</strong></p>
+  
+
+  
+    
+  
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Address checks changed to Passed</p>
+    
+  
+    
+  ",
+  "label": {
+    "text": "Address updated",
+  },
+}
+`;
+
 exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks failed" proposed address status card object 1`] = `
 {
   "details": [

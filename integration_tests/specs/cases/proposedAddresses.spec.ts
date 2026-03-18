@@ -22,7 +22,7 @@ import { resultToAddressDetails } from '../../../server/utils/osDataHub'
 import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
 
-import { timelineEntry } from '../../../server/utils/timeline'
+import { addressTimelineEntry } from '../../../server/utils/proposedAddresses'
 
 test.describe('view proposed address details', () => {
   test('should allow user to view the details of a proposed address', async ({ page }) => {
@@ -60,7 +60,7 @@ test.describe('view proposed address details', () => {
     await addressDetailsPage.shouldShowProposedAddressSummary()
 
     // And I should see a timeline showing when the address was created
-    await addressDetailsPage.shouldShowTimelineEntry(timelineEntry(createdAddressRecord))
+    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord))
   })
 })
 

@@ -20,8 +20,14 @@ import {
   formDataToRequestBody,
   lookupResultsItems,
   addressDetailRows,
+  addressTimelineEntry,
 } from './proposedAddresses'
-import { accommodationFactory, addressFactory, proposedAddressFormFactory } from '../testutils/factories'
+import {
+  accommodationFactory,
+  addressFactory,
+  auditRecordFactory,
+  proposedAddressFormFactory,
+} from '../testutils/factories'
 import * as validationUtils from './validation'
 import MultiPageFormManager from './multiPageFormManager'
 import uiPaths from '../paths/ui'
@@ -706,6 +712,45 @@ describe('Proposed addresses utilities', () => {
       })
 
       expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
+    })
+  })
+
+  describe('addressTimelineEntry', () => {
+    it('returns a timeline entry for an address created record', () => {
+      const proposedAddress = accommodationFactory.proposed().build({
+        address: addressFactory.minimal().build({
+          buildingNumber: '1',
+          thoroughfareName: 'Street',
+          postTown: 'Town',
+          postcode: 'P0 5TC',
+        }),
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+        arrangementSubType: 'OTHER',
+        arrangementSubTypeDescription: 'Some reason',
+        settledType: 'SETTLED',
+        createdBy: 'Dr. Kay Towne',
+        createdAt: '2026-03-06T21:37:21.666Z',
+      })
+      const auditRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for an address updated record', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([
+          {
+            field: 'verificationStatus',
+            value: 'PASSED',
+          },
+        ])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
     })
   })
 })

@@ -11,7 +11,7 @@ type Macro =
   | 'accommodationCard'
   | 'linksCell'
   | 'accommodationCell'
-  | 'timelineProposedAddressCreated'
+  | 'timelineProposedAddress'
 
 export const renderMacro = <T>(macroName: Macro, context: T): string =>
   nunjucksInline().renderString(

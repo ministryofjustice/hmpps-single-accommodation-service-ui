@@ -1,7 +1,7 @@
 import { ProposedAddressDisplayStatus, ProposedAddressFormData, RadioItem, StatusCard, StatusTag } from '@sas/ui'
-import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
+import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand, AuditRecordDto } from '@sas/api'
 import { Request } from 'express'
-import { SummaryListRow } from '@govuk/ui'
+import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { htmlContent, textContent, toParagraphs } from './utils'
@@ -9,7 +9,8 @@ import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { isValidUKPostcode, validateAndFlashErrors } from './validation'
 import { addressLines, formatAddress } from './addresses'
-import { statusTag } from './macros'
+import { renderMacro, statusTag } from './macros'
+import { timelineEntry } from './timeline'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
@@ -81,11 +82,8 @@ const arrangementLabel = (proposedAddress: AccommodationDetail) => {
   }
 }
 
-export const displayStatus = (proposedAddress: AccommodationDetail): ProposedAddressDisplayStatus => {
-  if (proposedAddress.verificationStatus === 'PASSED' && proposedAddress.nextAccommodationStatus === 'YES')
-    return 'CONFIRMED'
-  return proposedAddress.verificationStatus
-}
+export const displayStatus = (proposedAddress: AccommodationDetail): ProposedAddressDisplayStatus =>
+  proposedAddress.nextAccommodationStatus === 'YES' ? 'CONFIRMED' : proposedAddress.verificationStatus
 
 export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string => {
   return (
@@ -454,3 +452,42 @@ export const addressDetailRows = (proposedAddress: AccommodationDetail): Summary
     proposedAddress.verificationStatus === 'PASSED' &&
       summaryListRow('Next address', formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)),
   ].filter(Boolean)
+
+export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
+  const { type } = auditRecord
+  const proposedAddress = Object.fromEntries(
+    auditRecord.changes.map(change => [change.field, change.value]),
+  ) as AccommodationDetail
+  const status = displayStatus(proposedAddress)
+
+  let arrangementSubType = formatProposedAddressArrangement(proposedAddress.arrangementSubType)
+  if (proposedAddress.arrangementSubType === 'OTHER') {
+    arrangementSubType += ` (${proposedAddress.arrangementSubTypeDescription})`
+  }
+
+  const housingArrangement = [arrangementSubType, formatProposedAddressSettledType(proposedAddress.settledType)]
+    .filter(text => text !== 'Unknown')
+    .map(text => `${text}. `)
+    .join('')
+  const addressChecks = proposedAddress.verificationStatus
+    ? formatProposedAddressStatus(proposedAddress.verificationStatus)
+    : undefined
+  const nextAddress =
+    proposedAddress.nextAccommodationStatus && (type === 'UPDATE' || proposedAddress.verificationStatus === 'PASSED')
+      ? formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)
+      : undefined
+
+  const label = type === 'CREATE' ? 'Address created' : 'Address updated'
+  const html = renderMacro('timelineProposedAddress', {
+    type,
+    status: proposedAddressStatusTag(status),
+    values: {
+      Address: formatAddress(proposedAddress as AccommodationAddressDetails),
+      'Housing arrangement': housingArrangement,
+      'Address checks': addressChecks,
+      'Next address': nextAddress,
+    },
+  })
+
+  return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+}

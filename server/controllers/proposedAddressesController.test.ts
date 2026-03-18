@@ -12,10 +12,9 @@ import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
 import { accommodationFactory, addressFactory, auditRecordFactory, caseFactory } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
-import { addressDetailRows, lookupResultsItems } from '../utils/proposedAddresses'
+import { addressDetailRows, addressTimelineEntry, lookupResultsItems } from '../utils/proposedAddresses'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
-import { timelineEntry } from '../utils/timeline'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -102,7 +101,7 @@ describe('proposedAddressesController', () => {
         assignedTo: caseAssignedTo(caseData, 'user-id'),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
-        timeline: auditRecords.map(timelineEntry),
+        timeline: auditRecords.map(addressTimelineEntry),
       })
     })
   })

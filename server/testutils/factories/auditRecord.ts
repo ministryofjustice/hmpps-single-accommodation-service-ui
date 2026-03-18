@@ -24,6 +24,13 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
       changes,
     })
   }
+
+  proposedAddressUpdated(changes: FieldChange[]) {
+    return this.params({
+      type: 'UPDATE',
+      changes,
+    })
+  }
 }
 
 export default AuditRecordFactory.define(() => ({

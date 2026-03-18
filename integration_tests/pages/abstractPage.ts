@@ -159,7 +159,7 @@ export default class AbstractPage {
   }
 
   async shouldShowTimelineEntry(entry: TimelineEntry) {
-    const { label, byline, datetime } = entry
+    const { label, byline, datetime, html } = entry
 
     const timelineEntry = this.page.locator('.moj-timeline__item', {
       has: this.page.getByRole('heading', { name: label.text }),
@@ -173,6 +173,6 @@ export default class AbstractPage {
       await expect(timelineEntry.getByRole('time')).toContainText(formatDate(datetime.timestamp))
     }
 
-    await expect(timelineEntry.locator('.moj-timeline__description')).toContainText(entry.text)
+    expect(await timelineEntry.locator('.moj-timeline__description').innerHTML()).toEqual(html)
   }
 }

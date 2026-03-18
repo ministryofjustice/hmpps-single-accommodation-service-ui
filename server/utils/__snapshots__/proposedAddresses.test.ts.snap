@@ -7,7 +7,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--grey">Failed</strong>",
+      "html": "<strong class="govuk-tag govuk-tag--grey">Checks failed</strong>",
     },
   },
   {
@@ -135,7 +135,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--yellow">Passed</strong>",
+      "html": "<strong class="govuk-tag govuk-tag--yellow">Checks passed</strong>",
     },
   },
   {
@@ -254,7 +254,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "grey",
-    "text": "Failed",
+    "text": "Checks failed",
   },
 }
 `;
@@ -301,7 +301,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Passed",
+    "text": "Checks passed",
   },
 }
 `;
@@ -348,7 +348,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Passed",
+    "text": "Checks passed",
   },
 }
 `;
@@ -395,7 +395,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Passed",
+    "text": "Checks passed",
   },
 }
 `;

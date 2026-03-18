@@ -10,6 +10,9 @@ describe('timelineEntry', () => {
         postTown: 'Town',
         postcode: 'P0 5TC',
       }),
+      verificationStatus: 'NOT_CHECKED_YET',
+      arrangementSubType: 'OTHER',
+      arrangementSubTypeDescription: 'Some reason',
       createdBy: 'Dr. Kay Towne',
       createdAt: '2026-03-06T21:37:21.666Z',
     })

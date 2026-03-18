@@ -9,9 +9,12 @@ exports[`timelineEntry returns an Address created timeline entry from an audit r
     "timestamp": "2026-03-06T21:37:21.666Z",
     "type": "datetime",
   },
+  "html": "<p><strong class="govuk-tag govuk-tag--red">Not checked yet</strong></p>
+  <p class="govuk-!-margin-bottom-1">Address: 1 Street, Town, P0 5TC</p>
+  <p class="govuk-!-margin-bottom-1">Housing arrangement: Other (Some reason). Settled.</p>
+  <p class="govuk-!-margin-bottom-1">Address checks: Not checked yet</p>",
   "label": {
     "text": "Address added",
   },
-  "text": "Some content",
 }
 `;

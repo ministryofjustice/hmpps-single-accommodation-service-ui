@@ -13,9 +13,9 @@ import { statusTag } from './macros'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
-    PASSED: { text: 'Passed', colour: 'yellow' },
+    PASSED: { text: 'Checks passed', colour: 'yellow' },
     NOT_CHECKED_YET: { text: 'Not checked yet', colour: 'red' },
-    FAILED: { text: 'Failed', colour: 'grey' },
+    FAILED: { text: 'Checks failed', colour: 'grey' },
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
   })[status] || { text: 'Unknown' }
 

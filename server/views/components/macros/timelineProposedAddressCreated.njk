@@ -1,0 +1,8 @@
+{%- from "components/macros/statusTag.njk" import statusTag %}
+
+{%- macro timelineProposedAddressCreated(context) -%}
+  <p>{{ statusTag(context.status) }}</p>
+  <p class="govuk-!-margin-bottom-1">Address: {{ context.address }}</p>
+  <p class="govuk-!-margin-bottom-1">Housing arrangement: {{ context.housingArrangement }}</p>
+  <p class="govuk-!-margin-bottom-1">Address checks: {{ context.checksStatus }}</p>
+{%- endmacro -%}

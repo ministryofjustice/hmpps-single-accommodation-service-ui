@@ -28,7 +28,7 @@ test.describe('view proposed address details', () => {
   test('should allow user to view the details of a proposed address', async ({ page }) => {
     const caseData = caseFactory.build()
     const { crn } = caseData
-    const proposedAddress = accommodationFactory.proposed().build({ crn })
+    const proposedAddress = accommodationFactory.proposed().build({ crn, verificationStatus: 'NOT_CHECKED_YET' })
 
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
@@ -39,7 +39,13 @@ test.describe('view proposed address details', () => {
     await proposedAddressesApi.stubGetProposedAddress(crn, proposedAddress.id, proposedAddress)
 
     const createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
-    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [createdAddressRecord])
+    const updatedAddressRecord = auditRecordFactory
+      .proposedAddressUpdated([{ field: 'verificationStatus', value: 'PASSED' }])
+      .build()
+    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [
+      updatedAddressRecord,
+      createdAddressRecord,
+    ])
 
     // Given I am logged in
     await login(page)
@@ -58,6 +64,9 @@ test.describe('view proposed address details', () => {
 
     // And the address details should be listed
     await addressDetailsPage.shouldShowProposedAddressSummary()
+
+    // And I should see a timeline showing when the address was last updated
+    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(updatedAddressRecord))
 
     // And I should see a timeline showing when the address was created
     await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord))

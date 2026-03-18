@@ -5,7 +5,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% set formAction = paths.dutyToRefer.update({crn: crn}) %}
+{% set formAction = paths.dutyToRefer.outcome({crn: crn}) %}
 {% set backLinkHref = paths.cases.show({crn: crn}) %}
 {% set pageTitle = "Add Duty to Refer (DTR) outcome details" %}
 

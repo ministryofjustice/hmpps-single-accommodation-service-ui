@@ -1,0 +1,73 @@
+{% extends "pages/duty-to-refer/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set formAction = paths.dutyToRefer.submission({crn: crn}) %}
+{% set backLinkHref = paths.dutyToRefer.guidance({crn: crn}) %}
+{% set pageTitle = "Add Duty to Refer (DTR) submission details" %}
+
+{% block formContent %}
+    {{ govukDateInput({
+        id: "submissionDate",
+        namePrefix: "submissionDate",
+        fieldset: {
+            legend: {
+                text: "When was the DTR submitted?",
+                classes: "govuk-fieldset__legend--s"
+            }
+        },
+        hint: {
+            text: "For example, 27 3 2025"
+        },
+        errorMessage: errors.submissionDate,
+        items: [
+            {
+                name: "day",
+                classes: "govuk-input--width-2",
+                value: formValues["submissionDate-day"]
+            },
+            {
+                name: "month",
+                classes: "govuk-input--width-2",
+                value: formValues["submissionDate-month"]
+            },
+            {
+                name: "year",
+                classes: "govuk-input--width-4",
+                value: formValues["submissionDate-year"]
+            }
+        ]
+    })}}
+    {{ govukSelect({
+        label: {
+            text: 'What local authority was the DTR submitted to?',
+            classes: "govuk-!-font-weight-bold govuk-label--s"
+        },
+        attributes: {
+            'data-autocomplete': { value: true, optional: true },
+            'data-autocomplete-hint': { value: true, optional: true },
+            'data-autocomplete-input-classes': { value: 'govuk-!-width-two-thirds', optional: true }
+        },
+        items: convertObjectsToSelectOptions(localAuthorities, '', 'name', 'id', formValues.localAuthorityAreaId),
+        name: 'localAuthorityAreaId',
+        id: 'localAuthorityAreaId',
+        errorMessage: errors.localAuthorityAreaId
+    }) }}
+
+    {{ govukInput({
+        label: {
+            text: 'Reference number (optional)',
+            classes: 'govuk-!-font-weight-bold govuk-label--s'
+        },
+        classes: 'govuk-!-width-one-half',
+        name: 'referenceNumber',
+        id: 'referenceNumber',
+        value: formValues.referenceNumber
+    }) }}
+{% endblock %}

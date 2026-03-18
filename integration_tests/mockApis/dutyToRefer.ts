@@ -9,7 +9,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.dutyToRefer({ crn }),
+        urlPattern: apiPaths.cases.dutyToRefer.index({ crn }),
       },
       response: {
         status: 200,
@@ -17,5 +17,26 @@ export default {
         jsonBody: dutyToReferData || dutyToReferFactory.build(),
       },
     }),
-  stubGetDutyToReferByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.dutyToRefer({ crn })),
+  stubGetDutyToReferByCrn500: (crn: string): SuperAgentRequest =>
+    stubApiError(apiPaths.cases.dutyToRefer.index({ crn })),
+  stubSubmitDutyToRefer: (crn: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.cases.dutyToRefer.submit({ crn }),
+      },
+      response: {
+        status: 200,
+      },
+    }),
+  stubUpdateDutyToRefer: (crn: string, id: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: apiPaths.cases.dutyToRefer.update({ crn, id }),
+      },
+      response: {
+        status: 200,
+      },
+    }),
 }

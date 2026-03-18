@@ -5,7 +5,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { convertObjectsToSelectOptions, initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { formatDate } from './dates'
@@ -57,6 +57,19 @@ export default function nunjucksSetup(app: express.Express): void {
   })
 
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+
+  njkEnv.addGlobal(
+    'convertObjectsToSelectOptions',
+    function sendContextConvertObjectsToSelectOptions(
+      items: Array<Record<string, string>>,
+      prompt: string,
+      textKey: string,
+      valueKey: string,
+      selectedValue?: string,
+    ) {
+      return convertObjectsToSelectOptions(items, prompt, textKey, valueKey, selectedValue)
+    },
+  )
 
   addGlobals(njkEnv)
 

@@ -69,3 +69,11 @@ export type CheckboxItem = {
   value: string
   checked?: boolean
 }
+
+export interface SelectOption {
+  text: string
+  value: string
+  selected?: boolean
+}
+
+export type DateFieldValues<K extends string> = { [P in `${K}-${'year' | 'month' | 'day'}`]?: string }

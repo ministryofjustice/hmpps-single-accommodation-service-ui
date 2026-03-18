@@ -2,6 +2,7 @@
 import casesApi from '../integration_tests/mockApis/cases'
 import eligibilityApi from '../integration_tests/mockApis/eligibility'
 import dutyToReferApi from '../integration_tests/mockApis/dutyToRefer'
+import referenceDataApi from '../integration_tests/mockApis/referenceData'
 import proposedAddressesApi from '../integration_tests/mockApis/proposedAddresses'
 import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
@@ -45,6 +46,11 @@ async function stubDutyToRefer() {
       caseDto.crn,
       (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn],
     )
+    await dutyToReferApi.stubUpdateDutyToRefer(
+      caseDto.crn,
+      (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn].submission.id,
+    )
+    await dutyToReferApi.stubSubmitDutyToRefer(caseDto.crn)
   }
 }
 
@@ -61,6 +67,10 @@ async function stubProposedAddresses() {
   }
 }
 
+async function stubReferenceData() {
+  await referenceDataApi.stubGetLocalAuthorities()
+}
+
 ;(async function () {
   console.log('Resetting wiremock stubs...')
   await resetStubs()
@@ -69,6 +79,7 @@ async function stubProposedAddresses() {
     stubCaseList(),
     stubCases(),
     stubEligibility(),
+    stubReferenceData(),
     stubReferrals(),
     stubDutyToRefer(),
     stubProposedAddresses(),

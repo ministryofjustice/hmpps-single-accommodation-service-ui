@@ -1,0 +1,34 @@
+{% extends "pages/duty-to-refer/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set formAction = paths.dutyToRefer.outcome({crn: crn}) %}
+{% set backLinkHref = paths.cases.show({crn: crn}) %}
+{% set pageTitle = "Add Duty to Refer (DTR) outcome details" %}
+
+{% block formContent %}
+    {{ govukRadios({
+        id: "outcomeStatus",
+        name: "outcomeStatus",
+        fieldset: {
+            legend: {
+                text: "Has the local authority agreed to support this person with housing?",
+                classes: "govuk-fieldset__legend--s"
+            }
+        },
+        items: [
+            {
+                value: "ACCEPTED",
+                text: "Yes"
+            },
+            {
+                value: "NOT_ACCEPTED",
+                text: "No"
+            }
+        ],
+        errorMessage: errors.outcomeStatus
+    }) }}
+{% endblock %}

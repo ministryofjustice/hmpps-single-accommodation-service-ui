@@ -1,4 +1,11 @@
-import { convertToTitleCase, htmlContent, initialiseName, textContent, toParagraphs } from './utils'
+import {
+  convertObjectsToSelectOptions,
+  convertToTitleCase,
+  htmlContent,
+  initialiseName,
+  textContent,
+  toParagraphs,
+} from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -62,5 +69,62 @@ describe('toParagraphs', () => {
 
   it('adds the given class to the paragraphs', () => {
     expect(toParagraphs(['one', 'two'], 'my-class')).toEqual(`<p class="my-class">one</p><p class="my-class">two</p>`)
+  })
+})
+
+describe('convertObjectsToSelectOptions', () => {
+  const objects = [
+    {
+      id: '123',
+      name: 'abc',
+    },
+    {
+      id: '345',
+      name: 'def',
+    },
+  ]
+
+  it('converts objects to an array of select options', () => {
+    const result = convertObjectsToSelectOptions(objects, 'Select a keyworker', 'name', 'id')
+
+    expect(result).toEqual([
+      {
+        value: '',
+        text: 'Select a keyworker',
+        selected: true,
+      },
+      {
+        text: 'abc',
+        value: '123',
+        selected: false,
+      },
+      {
+        text: 'def',
+        value: '345',
+        selected: false,
+      },
+    ])
+  })
+
+  it('marks the object that is the selected value', () => {
+    const result = convertObjectsToSelectOptions(objects, 'Select a keyworker', 'name', 'id', '123')
+
+    expect(result).toEqual([
+      {
+        value: '',
+        text: 'Select a keyworker',
+        selected: false,
+      },
+      {
+        text: 'abc',
+        value: '123',
+        selected: true,
+      },
+      {
+        text: 'def',
+        value: '345',
+        selected: false,
+      },
+    ])
   })
 })

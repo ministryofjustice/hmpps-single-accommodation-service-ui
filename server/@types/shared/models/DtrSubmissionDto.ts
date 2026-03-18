@@ -11,4 +11,3 @@ export type DtrSubmissionDto = {
     createdBy: string;
     createdAt: string;
 };
-

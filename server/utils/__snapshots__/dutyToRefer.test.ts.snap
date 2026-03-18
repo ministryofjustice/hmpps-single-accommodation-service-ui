@@ -4,9 +4,10 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",
+  "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/dtr/guidance",
       "text": "Add submission details",
     },
     {
@@ -34,6 +35,14 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
     },
     {
       "key": {
+        "text": "Submitted to",
+      },
+      "value": {
+        "text": "Some Council",
+      },
+    },
+    {
+      "key": {
         "text": "Submitted",
       },
       "value": {
@@ -42,9 +51,10 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
     },
   ],
   "heading": "Duty to Refer (DTR)",
+  "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "/cases/CRN123/dtr/outcome",
       "text": "Add outcome",
     },
     {
@@ -63,6 +73,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refe
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",
+  "inactive": false,
   "links": [],
   "status": {
     "text": "Unknown",

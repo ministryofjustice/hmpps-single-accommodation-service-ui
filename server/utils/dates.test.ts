@@ -1,6 +1,7 @@
-import { calculateAge, formatDate, formatDateAndDaysAgo } from './dates'
+import { DateFieldValues } from '@sas/ui'
+import { calculateAge, dateInputToIsoDate, formatDate, formatDateAndAge, formatDateAndDaysAgo } from './dates'
 
-describe('formatting utilities', () => {
+describe('date utilities', () => {
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date('2025-12-10T12:00:00.000Z'))
   })
@@ -100,6 +101,39 @@ describe('formatting utilities', () => {
       [undefined, 'Invalid Date'],
     ])('formats %s as the date and days ago %s', (date, expected) => {
       expect(formatDateAndDaysAgo(date)).toEqual(expected)
+    })
+  })
+
+  describe('formatDateAndAge', () => {
+    it.each([
+      ['1990-01-15', '15 January 1990 (35)'],
+      ['2000-12-10', '10 December 2000 (25)'],
+      ['not a date', 'Invalid Date'],
+      [undefined, 'Invalid Date'],
+    ])('formats %s as the date and age %s', (date, expected) => {
+      expect(formatDateAndAge(date)).toEqual(expected)
+    })
+  })
+
+  describe('dateInputToIsoDate', () => {
+    it('returns a formatted date string when the date fields are valid', () => {
+      const date: DateFieldValues<'field'> = {
+        'field-day': '12',
+        'field-month': '1',
+        'field-year': '2022',
+      }
+
+      expect(dateInputToIsoDate(date, 'field')).toEqual('2022-01-12')
+    })
+
+    it('returns undefined if the date is blank', () => {
+      const date: DateFieldValues<'field'> = {
+        'field-day': '',
+        'field-month': '',
+        'field-year': '',
+      }
+
+      expect(dateInputToIsoDate(date, 'field')).toEqual(undefined)
     })
   })
 })

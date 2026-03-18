@@ -5,6 +5,7 @@ import { appWithAllRoutes, user } from './testutils/appSetup'
 import logger from '../../logger'
 import CasesController from '../controllers/casesController'
 import ProposedAddressesController from '../controllers/proposedAddressesController'
+import DutyToReferController from '../controllers/dutyToReferController'
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -35,10 +36,19 @@ const proposedAddressesController = mock<ProposedAddressesController>({
   cancel: mockHandler,
 })
 
+const dutyToReferController = mock<DutyToReferController>({
+  guidance: mockHandler,
+  submission: mockHandler,
+  outcome: mockHandler,
+  submit: mockHandler,
+  update: mockHandler,
+})
+
 jest.mock('../controllers', () => ({
   controllers: () => ({
     casesController,
     proposedAddressesController,
+    dutyToReferController,
   }),
 }))
 

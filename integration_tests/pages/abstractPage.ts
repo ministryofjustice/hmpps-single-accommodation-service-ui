@@ -47,6 +47,20 @@ export default class AbstractPage {
     await this.page.getByRole('textbox', { name: label }).fill(value)
   }
 
+  async completeDateInputByLabel(label: string, value: string) {
+    const [year, month, day] = value.split('T')[0].split('-')
+    const fieldset = this.page.getByRole('group', { name: label })
+    await fieldset.getByLabel('Day').fill(day)
+    await fieldset.getByLabel('Month').fill(month)
+    await fieldset.getByLabel('Year').fill(year)
+  }
+
+  async selectAutocompleteByLabel(label: string, value: string) {
+    const input = this.page.getByRole('combobox', { name: label })
+    await input.fill(value)
+    await this.page.getByRole('option', { name: value, exact: true }).click()
+  }
+
   async selectRadioByLabel(label: string) {
     await this.page.getByRole('radio', { name: label }).check()
   }

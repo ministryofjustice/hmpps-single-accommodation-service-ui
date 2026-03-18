@@ -19,6 +19,7 @@ import HmppsAuditClient from './hmppsAuditClient'
 import logger from '../../logger'
 import SasClient from './sasClient'
 import CasesClient from './casesClient'
+import ReferenceDataClient from './referenceDataClient'
 import ReferralsClient from './referralsClient'
 import EligibilityClient from './eligibilityClient'
 import DutyToReferClient from './dutyToReferClient'
@@ -38,6 +39,7 @@ export const dataAccess = () => {
     sasClient: new SasClient(hmppsAuthClient),
     hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
     casesClient: new CasesClient(hmppsAuthClient),
+    referenceDataClient: new ReferenceDataClient(hmppsAuthClient),
     referralsClient: new ReferralsClient(hmppsAuthClient),
     eligibilityClient: new EligibilityClient(hmppsAuthClient),
     dutyToReferClient: new DutyToReferClient(hmppsAuthClient),
@@ -53,6 +55,7 @@ export {
   HmppsAuditClient,
   SasClient,
   CasesClient,
+  ReferenceDataClient,
   ReferralsClient,
   EligibilityClient,
   DutyToReferClient,

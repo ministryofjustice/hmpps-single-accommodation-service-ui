@@ -56,3 +56,19 @@ export const formatDateAndDaysAgo = (date?: string): string => {
 
   return `${formatDate(date)} (${formatDate(date, 'days ago/in')})`
 }
+
+export const formatDateAndAge = (date?: string): string => {
+  if (!isValidDate(date)) return 'Invalid Date'
+
+  return `${formatDate(date)} (${formatDate(date, 'age')})`
+}
+
+export const dateInputToIsoDate = (body: Record<string, string>, fieldName: string): string | undefined => {
+  const year = body[`${fieldName}-year`]?.trim()
+  const month = body[`${fieldName}-month`]?.trim()
+  const day = body[`${fieldName}-day`]?.trim()
+
+  if (!year || !month || !day) return undefined
+
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+}

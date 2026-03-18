@@ -57,9 +57,11 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
 
-      const caseData = await this.casesService.getCase(token, crn)
-      const proposedAddress = await this.proposedAddressesService.getProposedAddress(token, crn, id)
-      const auditRecords = await this.proposedAddressesService.getTimeline(token, crn, id)
+      const [caseData, proposedAddress, auditRecords] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.proposedAddressesService.getProposedAddress(token, crn, id),
+        this.proposedAddressesService.getTimeline(token, crn, id),
+      ])
 
       return res.render('pages/proposed-address/show', {
         caseData,

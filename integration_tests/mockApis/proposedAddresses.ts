@@ -62,7 +62,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: records || auditRecordFactory.buildList(3),
+        jsonBody: records || auditRecordFactory.proposedAddressCreated().buildList(1),
       },
     }),
 }

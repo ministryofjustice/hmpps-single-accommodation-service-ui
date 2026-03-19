@@ -4,7 +4,7 @@ import { validateSubmission, summaryListRows, validateOutcome } from '../utils/d
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
-import { addGenericErrorToFlash, fetchErrorsAndUserInput, flashUserInput } from '../utils/validation'
+import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 
@@ -60,7 +60,6 @@ export default class DutyToReferController {
       const { crn } = req.params
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
-      flashUserInput(req, req.body)
 
       if (!validateSubmission(req)) {
         return res.redirect(uiPaths.dutyToRefer.submission({ crn }))

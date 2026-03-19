@@ -64,6 +64,8 @@ export const validateAndFlashErrors = (request: Request, errors: Record<string, 
     return true
   }
 
+  flashUserInput(request, request.body)
+
   const errorMessages = generateErrorMessages(errors)
   const errorSummary = generateErrorSummary(errors)
 

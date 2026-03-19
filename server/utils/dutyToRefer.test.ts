@@ -77,8 +77,8 @@ describe('duty to refer utils', () => {
       [
         'SUBMITTED' as const,
         [
-          { term: 'Reference', description: submission.referenceNumber },
           { term: 'Submitted to', description: 'Some Council' },
+          { term: 'Reference', description: submission.referenceNumber },
           { term: 'Submitted', description: formatDateAndDaysAgo(submission.submissionDate) },
         ],
       ],

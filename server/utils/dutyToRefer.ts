@@ -76,8 +76,8 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
       return []
     case 'SUBMITTED':
       return [
-        summaryListRow('Reference', dutyToRefer?.submission?.referenceNumber),
         summaryListRow('Submitted to', dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
+        summaryListRow('Reference', dutyToRefer?.submission?.referenceNumber),
         summaryListRow('Submitted', formatDateAndDaysAgo(dutyToRefer?.submission?.submissionDate)),
       ]
     default:

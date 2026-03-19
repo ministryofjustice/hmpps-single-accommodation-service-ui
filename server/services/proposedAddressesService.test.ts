@@ -1,5 +1,5 @@
 import ProposedAddressesClient from '../data/proposedAddressesClient'
-import { accommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
+import { accommodationFactory, auditRecordFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
 import { formDataToRequestBody } from '../utils/proposedAddresses'
 
@@ -79,6 +79,19 @@ describe('ProposedAddressesService', () => {
       const expectedData = formDataToRequestBody(proposedAddressData)
 
       expect(proposedAddressesClient.update).toHaveBeenCalledWith(token, crn, id, expectedData)
+    })
+  })
+
+  describe('getTimeline', () => {
+    it('should call getTimeline on the api client and return the proposed address timeline', async () => {
+      const auditRecords = auditRecordFactory.buildList(3)
+
+      proposedAddressesClient.getTimeline.mockResolvedValue(auditRecords)
+
+      const result = await proposedAddressesService.getTimeline(token, crn, id)
+
+      expect(proposedAddressesClient.getTimeline).toHaveBeenCalledWith(token, crn, id)
+      expect(result).toEqual(auditRecords)
     })
   })
 })

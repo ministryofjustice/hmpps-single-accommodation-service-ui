@@ -9,7 +9,15 @@ import eligibility from './fixtures/eligibility.json'
 import referrals from './fixtures/referrals.json'
 import dutyToRefer from './fixtures/dutyToRefer.json'
 import proposedAddresses from './fixtures/proposedAddresses.json'
-import { AccommodationDetail, AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto } from '@sas/api'
+import proposedAddressesAuditRecords from './fixtures/proposedAddressesAuditRecords.json'
+import {
+  AccommodationDetail,
+  AccommodationReferralDto,
+  AuditRecordDto,
+  CaseDto,
+  DutyToReferDto,
+  EligibilityDto,
+} from '@sas/api'
 import { resetStubs } from '../integration_tests/mockApis/wiremock'
 
 async function stubCaseList() {
@@ -59,9 +67,12 @@ async function stubProposedAddresses() {
     const proposedAddress = (proposedAddresses as Record<string, AccommodationDetail[]>)[caseDto.crn]
     await proposedAddressesApi.stubGetProposedAddressesByCrn(caseDto.crn, proposedAddress)
 
-    if (proposedAddress[0]?.id) {
-      await proposedAddressesApi.stubGetProposedAddress(caseDto.crn, proposedAddress[0].id, proposedAddress[0])
-      await proposedAddressesApi.stubUpdateProposedAddress(caseDto.crn, proposedAddress[0].id)
+    for await (const address of proposedAddress.filter(a => a.id)) {
+      await proposedAddressesApi.stubGetProposedAddress(caseDto.crn, address.id, address)
+      await proposedAddressesApi.stubUpdateProposedAddress(caseDto.crn, address.id)
+      await proposedAddressesApi.stubGetProposedAddressTimeline(caseDto.crn, address.id, [
+        (proposedAddressesAuditRecords as Record<string, AuditRecordDto>)[address.id],
+      ])
     }
     await proposedAddressesApi.stubSubmitProposedAddress(caseDto.crn)
   }

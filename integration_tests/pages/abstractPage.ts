@@ -1,5 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 import { StatusCard } from '@sas/ui'
+import { TimelineEntry } from '@govuk/ui'
+import { formatDate } from '../../server/utils/dates'
 
 export default class AbstractPage {
   readonly page: Page
@@ -154,5 +156,23 @@ export default class AbstractPage {
 
   async verifySelectInput(label: string, value: string) {
     await expect(this.page.getByRole('combobox', { name: label })).toHaveValue(value)
+  }
+
+  async shouldShowTimelineEntry(entry: TimelineEntry) {
+    const { label, byline, datetime, html } = entry
+
+    const timelineEntry = this.page.locator('.moj-timeline__item', {
+      has: this.page.getByRole('heading', { name: label.text }),
+    })
+
+    if (byline) {
+      await expect(timelineEntry.getByText(`by ${byline.text}`)).toBeVisible()
+    }
+    if (datetime) {
+      // TODO: This only matches the date portion -- check time also
+      await expect(timelineEntry.getByRole('time')).toContainText(formatDate(datetime.timestamp))
+    }
+
+    expect(await timelineEntry.locator('.moj-timeline__description').innerHTML()).toEqual(html)
   }
 }

@@ -3,7 +3,7 @@ import describeClient from '../testutils/describeClient'
 import ProposedAddressesClient from './proposedAddressesClient'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
-import { accommodationDetailCommandFactory, accommodationFactory } from '../testutils/factories'
+import { accommodationDetailCommandFactory, accommodationFactory, auditRecordFactory } from '../testutils/factories'
 
 describeClient('ProposedAddressesClient', provider => {
   let proposedAddressesClient: ProposedAddressesClient
@@ -105,5 +105,29 @@ describeClient('ProposedAddressesClient', provider => {
     })
 
     await proposedAddressesClient.update(token, crn, id, proposedAddressData)
+  })
+
+  it('should make a GET request to /cases/:crn/proposed-accommodations/:id/timeline', async () => {
+    const crn = crnFactory()
+    const proposedAddress = accommodationFactory.proposed().build()
+    const auditRecords = auditRecordFactory.buildList(3)
+
+    await provider.addInteraction({
+      state: `A proposed address timeline exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to get a proposed address timeline for a case by CRN and address ID',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.proposedAddresses.timeline({ crn, id: proposedAddress.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: auditRecords,
+      },
+    })
+
+    await proposedAddressesClient.getTimeline(token, crn, proposedAddress.id)
   })
 })

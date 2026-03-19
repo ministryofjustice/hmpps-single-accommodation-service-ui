@@ -1,7 +1,13 @@
 import { ProposedAddressDisplayStatus, ProposedAddressFormData, RadioItem, StatusCard, StatusTag } from '@sas/ui'
-import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
+import {
+  AccommodationAddressDetails,
+  AccommodationDetail,
+  AccommodationDetailCommand,
+  AuditRecordDto,
+  FieldChange,
+} from '@sas/api'
 import { Request } from 'express'
-import { SummaryListRow } from '@govuk/ui'
+import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes, summaryListRow } from './cases'
 import { htmlContent, textContent, toParagraphs } from './utils'
@@ -9,15 +15,16 @@ import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import { isValidUKPostcode, validateAndFlashErrors } from './validation'
 import { addressLines, formatAddress } from './addresses'
-import { statusTag } from './macros'
+import { renderMacro, statusTag } from './macros'
+import { timelineEntry } from './timeline'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
-    PASSED: { text: 'Passed', colour: 'yellow' },
+    PASSED: { text: 'Checks passed', colour: 'yellow' },
     NOT_CHECKED_YET: { text: 'Not checked yet', colour: 'red' },
-    FAILED: { text: 'Failed', colour: 'grey' },
+    FAILED: { text: 'Checks failed', colour: 'grey' },
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
-  })[status] || { text: 'Unknown' }
+  })[status]
 
 export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
   const status = displayStatus(proposedAddress)
@@ -81,54 +88,39 @@ const arrangementLabel = (proposedAddress: AccommodationDetail) => {
   }
 }
 
-export const displayStatus = (proposedAddress: AccommodationDetail): ProposedAddressDisplayStatus => {
-  if (proposedAddress.verificationStatus === 'PASSED' && proposedAddress.nextAccommodationStatus === 'YES')
-    return 'CONFIRMED'
-  return proposedAddress.verificationStatus
-}
+export const displayStatus = (proposedAddress: AccommodationDetail): ProposedAddressDisplayStatus =>
+  proposedAddress.nextAccommodationStatus === 'YES' ? 'CONFIRMED' : proposedAddress.verificationStatus
 
-export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string => {
-  return (
-    {
-      NOT_CHECKED_YET: 'Not checked yet',
-      FAILED: 'Failed',
-      PASSED: 'Passed',
-      CONFIRMED: 'Confirmed',
-    }[status] || 'Unknown'
-  )
-}
+export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string =>
+  ({
+    NOT_CHECKED_YET: 'Not checked yet',
+    FAILED: 'Failed',
+    PASSED: 'Passed',
+    CONFIRMED: 'Confirmed',
+  })[status]
 
-export const formatProposedAddressNextAccommodation = (status: AccommodationDetail['nextAccommodationStatus']) => {
-  return (
-    {
-      YES: 'Yes',
-      NO: 'No',
-      TO_BE_DECIDED: 'Still to be decided',
-    }[status] || 'Unknown'
-  )
-}
+export const formatProposedAddressNextAccommodation = (status: AccommodationDetail['nextAccommodationStatus']) =>
+  ({
+    YES: 'Yes',
+    NO: 'No',
+    TO_BE_DECIDED: 'Still to be decided',
+  })[status]
 
-export const formatProposedAddressSettledType = (type?: AccommodationDetail['settledType']): string => {
-  return (
-    {
-      SETTLED: 'Settled',
-      TRANSIENT: 'Transient',
-    }[type] || 'Unknown'
-  )
-}
+export const formatProposedAddressSettledType = (type?: AccommodationDetail['settledType']): string =>
+  ({
+    SETTLED: 'Settled',
+    TRANSIENT: 'Transient',
+  })[type]
 
-export const formatProposedAddressArrangement = (type?: AccommodationDetail['arrangementSubType']): string => {
-  return (
-    {
-      FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
-      SOCIAL_RENTED: 'Social rent (tenant)',
-      PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
-      PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
-      OWNED: 'Owned (named on deeds/mortgage)',
-      OTHER: 'Other',
-    }[type] || 'Unknown'
-  )
-}
+export const formatProposedAddressArrangement = (type?: AccommodationDetail['arrangementSubType']): string =>
+  ({
+    FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
+    SOCIAL_RENTED: 'Social rent (tenant)',
+    PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
+    PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
+    OWNED: 'Owned (named on deeds/mortgage)',
+    OTHER: 'Other',
+  })[type]
 
 export const checkYourAnswersRows = (
   sessionData: ProposedAddressFormData,
@@ -185,7 +177,7 @@ export const checkYourAnswersRows = (
 const formatArrangementWithDescription = (data: ProposedAddressFormData | AccommodationDetail) => {
   const type = formatProposedAddressArrangement(data.arrangementSubType)
   if (type === 'Other') {
-    return toParagraphs([type, data.arrangementSubTypeDescription], 'govuk-!-margin-bottom-2')
+    return toParagraphs([type, data.arrangementSubTypeDescription])
   }
   return type
 }
@@ -193,7 +185,7 @@ const formatArrangementWithDescription = (data: ProposedAddressFormData | Accomm
 const formatStatusWithReason = (data: ProposedAddressFormData) => {
   const status = formatProposedAddressStatus(data.verificationStatus)
   if (data.verificationStatus === 'FAILED') {
-    return toParagraphs([status, 'Not suitable'], 'govuk-!-margin-bottom-2')
+    return toParagraphs([status, 'Not suitable'])
   }
   return status
 }
@@ -439,18 +431,82 @@ export const lookupResultsItems = (results: AccommodationAddressDetails[], selec
     checked: selectedUprn === result.uprn,
   }))
 
-export const formatHousingArrangement = (proposedAddress: AccommodationDetail): string =>
-  `
-    ${formatArrangementWithDescription(proposedAddress)}
-    <p class="govuk-!-margin-bottom-2">${formatProposedAddressSettledType(proposedAddress.settledType)}</p>
-  `
+export const housingArrangementParts = (proposedAddress: AccommodationDetail): string[] => {
+  const type = formatProposedAddressArrangement(proposedAddress.arrangementSubType)
+  const description = proposedAddress.arrangementSubType === 'OTHER' && proposedAddress.arrangementSubTypeDescription
+  return [type, description].filter(Boolean)
+}
 
 export const addressDetailRows = (proposedAddress: AccommodationDetail): SummaryListRow[] =>
   [
     summaryListRow('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress))), 'html'),
     summaryListRow('Address', formatAddress(proposedAddress.address, '<br />'), 'html'),
-    summaryListRow('Housing arrangement', formatHousingArrangement(proposedAddress), 'html'),
+    summaryListRow(
+      'Housing arrangement',
+      toParagraphs([
+        housingArrangementParts(proposedAddress).join(', '),
+        formatProposedAddressSettledType(proposedAddress.settledType),
+      ]),
+      'html',
+    ),
     summaryListRow('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus)),
     proposedAddress.verificationStatus === 'PASSED' &&
       summaryListRow('Next address', formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)),
   ].filter(Boolean)
+
+const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): AccommodationDetail => {
+  const addressFields = [
+    'buildingNumber',
+    'buildingName',
+    'subBuildingName',
+    'thoroughfareName',
+    'dependentLocality',
+    'postTown',
+    'postcode',
+    'county',
+    'country',
+    'uprn',
+  ]
+
+  const filterChanges = (predicate: (change: FieldChange) => boolean) =>
+    Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
+
+  return {
+    ...filterChanges(change => !addressFields.includes(change.field)),
+    address: filterChanges(change => addressFields.includes(change.field)),
+  } as AccommodationDetail
+}
+
+export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
+  const { type } = auditRecord
+  const proposedAddress = auditRecordChangesToProposedAddress(auditRecord)
+
+  const housingArrangement = [
+    housingArrangementParts(proposedAddress).join(', '),
+    formatProposedAddressSettledType(proposedAddress.settledType),
+  ]
+    .filter(Boolean)
+    .map(text => `${text}. `)
+    .join('')
+
+  const addressChecks = formatProposedAddressStatus(proposedAddress.verificationStatus)
+
+  const nextAddress =
+    type === 'UPDATE' || proposedAddress.verificationStatus === 'PASSED'
+      ? formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)
+      : undefined
+
+  const label = type === 'CREATE' ? 'Address created' : 'Address updated'
+  const html = renderMacro('timelineProposedAddress', {
+    type,
+    status: proposedAddressStatusTag(displayStatus(proposedAddress)),
+    values: {
+      Address: formatAddress(proposedAddress.address),
+      'Housing arrangement': housingArrangement,
+      'Address checks': addressChecks,
+      'Next address': nextAddress,
+    },
+  })
+
+  return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+}

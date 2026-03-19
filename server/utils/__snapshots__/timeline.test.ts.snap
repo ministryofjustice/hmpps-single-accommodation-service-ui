@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`timelineEntry returns a timeline entry with the given details 1`] = `
+{
+  "byline": {
+    "text": "Bob Smith",
+  },
+  "datetime": {
+    "timestamp": "2025-09-13T13:45:00.000Z",
+    "type": "datetime",
+  },
+  "html": "<p>Some content</p>",
+  "label": {
+    "text": "Entry label",
+  },
+}
+`;

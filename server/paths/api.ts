@@ -21,6 +21,7 @@ export default {
       show: proposedAddressesPath.path(':id'),
       submit: proposedAddressesPath,
       update: proposedAddressesPath.path(':id'),
+      timeline: proposedAddressesPath.path(':id/timeline'),
     },
   },
   referenceData: path('/reference-data'),

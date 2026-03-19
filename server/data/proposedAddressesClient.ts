@@ -1,5 +1,5 @@
 import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
-import { AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
+import { AccommodationDetail, AccommodationDetailCommand, AuditRecordDto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -45,5 +45,9 @@ export default class ProposedAddressesClient extends RestClient {
       },
       asUser(token),
     )
+  }
+
+  async getTimeline(token: string, crn: string, id: string) {
+    return this.get<AuditRecordDto[]>({ path: apiPaths.cases.proposedAddresses.timeline({ crn, id }) }, asUser(token))
   }
 }

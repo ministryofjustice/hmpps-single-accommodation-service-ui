@@ -1,0 +1,15 @@
+{%- from "components/macros/statusTag.njk" import statusTag %}
+
+{%- macro timelineProposedAddress(context) -%}
+  {% set separator = ':' if context.type === 'CREATE' else ' changed to' %}
+
+  {% if context.status %}
+    <p>{{ statusTag(context.status) }}</p>
+  {% endif %}
+
+  {% for label, value in context.values %}
+    {% if value %}
+      <p class="govuk-!-margin-bottom-1">{{ label }}{{ separator }} {{ value }}</p>
+    {% endif %}
+  {% endfor %}
+{%- endmacro -%}

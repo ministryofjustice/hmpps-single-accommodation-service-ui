@@ -1,0 +1,1198 @@
+{
+  "e8409d49-494e-48db-8fef-2d84fade80d3": {
+    "type": "CREATE",
+    "author": "Nora Lebsack",
+    "commitDate": "2026-03-12T19:54:03.296Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "e8409d49-494e-48db-8fef-2d84fade80d3"
+      },
+      {
+        "field": "crn",
+        "value": "P712106"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "OTHER"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": "behind"
+      },
+      {
+        "field": "name",
+        "value": "Family"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "SETTLED"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "NOT_CHECKED_YET"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-09-13"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-10-20"
+      },
+      {
+        "field": "postcode",
+        "value": "XZ4 7LI"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName"
+      },
+      {
+        "field": "buildingNumber",
+        "value": "362"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Marcella Avenue"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Purdy-on-Gutkowski"
+      },
+      {
+        "field": "postTown",
+        "value": "High Boderidge"
+      },
+      {
+        "field": "county",
+        "value": "Borders"
+      },
+      {
+        "field": "country",
+        "value": "Heard Island and McDonald Islands"
+      },
+      {
+        "field": "uprn",
+        "value": "h1FwmLcn3Wb9"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-12T19:54:03.296Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Nora Lebsack"
+      }
+    ]
+  },
+  "18772d92-ea60-45e6-8c6f-a27b0583ca3c": {
+    "type": "CREATE",
+    "author": "Claudia Rogahn",
+    "commitDate": "2026-03-17T07:39:09.166Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "18772d92-ea60-45e6-8c6f-a27b0583ca3c"
+      },
+      {
+        "field": "crn",
+        "value": "T274481"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "SOCIAL_RENTED"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": ""
+      },
+      {
+        "field": "name",
+        "value": "Family"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "SETTLED"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "NOT_CHECKED_YET"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-10-14"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-08-06"
+      },
+      {
+        "field": "postcode",
+        "value": "TC94 9YG"
+      },
+      {
+        "field": "subBuildingName",
+        "value": "Apt. 411"
+      },
+      {
+        "field": "buildingName",
+        "value": "Mill Road"
+      },
+      {
+        "field": "buildingNumber"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Wyman Fold"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Little Beckerhill"
+      },
+      {
+        "field": "postTown",
+        "value": "Howewood"
+      },
+      {
+        "field": "county",
+        "value": "Kent"
+      },
+      {
+        "field": "country",
+        "value": "Haiti"
+      },
+      {
+        "field": "uprn",
+        "value": "n94ciyQWtl0y"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-17T07:39:09.166Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Claudia Rogahn"
+      }
+    ]
+  },
+  "fb6cde60-0e23-40ea-890e-93c2614ed791": {
+    "type": "CREATE",
+    "author": "Brad Nitzsche",
+    "commitDate": "2026-03-09T21:12:20.551Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "fb6cde60-0e23-40ea-890e-93c2614ed791"
+      },
+      {
+        "field": "crn",
+        "value": "T274481"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "FRIENDS_OR_FAMILY"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": ""
+      },
+      {
+        "field": "name",
+        "value": "Family"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "PASSED"
+      },
+      {
+        "field": "nextAccommodationStatus",
+        "value": "NO"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-09-22"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-09-08"
+      },
+      {
+        "field": "postcode",
+        "value": "GJ8 4YK"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName"
+      },
+      {
+        "field": "buildingNumber",
+        "value": "16"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Kent Road"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Reillydon"
+      },
+      {
+        "field": "postTown",
+        "value": "Gutmann-le-Davis"
+      },
+      {
+        "field": "county",
+        "value": "Essex"
+      },
+      {
+        "field": "country",
+        "value": "Taiwan"
+      },
+      {
+        "field": "uprn",
+        "value": "moonLFnzo0TS"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-09T21:12:20.551Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Brad Nitzsche"
+      }
+    ]
+  },
+  "f524ec39-df9f-4e22-9a81-dd1b8f88c5c8": {
+    "type": "CREATE",
+    "author": "Dianna Weissnat",
+    "commitDate": "2026-03-18T23:10:53.419Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "f524ec39-df9f-4e22-9a81-dd1b8f88c5c8"
+      },
+      {
+        "field": "crn",
+        "value": "T274481"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "OTHER"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": "carefully"
+      },
+      {
+        "field": "name",
+        "value": "Family"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "PASSED"
+      },
+      {
+        "field": "nextAccommodationStatus",
+        "value": "NO"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-08-08"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-12-14"
+      },
+      {
+        "field": "postcode",
+        "value": "VK7 5DZ"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName"
+      },
+      {
+        "field": "buildingNumber",
+        "value": "944"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Norfolk Road"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Newton Swift"
+      },
+      {
+        "field": "postTown",
+        "value": "Long Pfannerstill"
+      },
+      {
+        "field": "county",
+        "value": "Central"
+      },
+      {
+        "field": "country",
+        "value": "Austria"
+      },
+      {
+        "field": "uprn",
+        "value": "loE0S0txolIy"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-18T23:10:53.419Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Dianna Weissnat"
+      }
+    ]
+  },
+  "521bedd9-9ee3-4741-b804-a910b7b1a7c7": {
+    "type": "CREATE",
+    "author": "Andrea Kertzmann II",
+    "commitDate": "2026-03-10T10:43:05.551Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "521bedd9-9ee3-4741-b804-a910b7b1a7c7"
+      },
+      {
+        "field": "crn",
+        "value": "U934069"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "FRIENDS_OR_FAMILY"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": ""
+      },
+      {
+        "field": "name",
+        "value": "Friends"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "PASSED"
+      },
+      {
+        "field": "nextAccommodationStatus",
+        "value": "TO_BE_DECIDED"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-12-26"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-11-23"
+      },
+      {
+        "field": "postcode",
+        "value": "WE4 5TO"
+      },
+      {
+        "field": "subBuildingName",
+        "value": "Apt. 294"
+      },
+      {
+        "field": "buildingName",
+        "value": "Dach Mews"
+      },
+      {
+        "field": "buildingNumber"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Kautzer Drove"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "East Reinger"
+      },
+      {
+        "field": "postTown",
+        "value": "Heaney Gardens"
+      },
+      {
+        "field": "county",
+        "value": "Oxfordshire"
+      },
+      {
+        "field": "country",
+        "value": "Lithuania"
+      },
+      {
+        "field": "uprn",
+        "value": "bYlCQxQImBTs"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-10T10:43:05.551Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Andrea Kertzmann II"
+      }
+    ]
+  },
+  "0e2d356e-e05f-40ef-b611-39d6df1e0f9b": {
+    "type": "CREATE",
+    "author": "Angel Corwin Jr.",
+    "commitDate": "2026-03-18T05:11:06.120Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "0e2d356e-e05f-40ef-b611-39d6df1e0f9b"
+      },
+      {
+        "field": "crn",
+        "value": "U934069"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "SOCIAL_RENTED"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": ""
+      },
+      {
+        "field": "name",
+        "value": "Relatives"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "FAILED"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-04-14"
+      },
+      {
+        "field": "endDate",
+        "value": "2027-01-11"
+      },
+      {
+        "field": "postcode",
+        "value": "EL9 1QA"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName"
+      },
+      {
+        "field": "buildingNumber",
+        "value": "20"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Toy Side"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Goyette-over-Pouros"
+      },
+      {
+        "field": "postTown",
+        "value": "Huel-over-Hoppe"
+      },
+      {
+        "field": "county",
+        "value": "Berkshire"
+      },
+      {
+        "field": "country",
+        "value": "Finland"
+      },
+      {
+        "field": "uprn",
+        "value": "L38QgJHNIzNf"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-18T05:11:06.120Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Angel Corwin Jr."
+      }
+    ]
+  },
+  "e48dfb23-fd32-4225-9e7b-68806b53263d": {
+    "type": "CREATE",
+    "author": "Andres Wunsch",
+    "commitDate": "2026-03-16T12:24:01.892Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "e48dfb23-fd32-4225-9e7b-68806b53263d"
+      },
+      {
+        "field": "crn",
+        "value": "U934069"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "OTHER"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": "dearest"
+      },
+      {
+        "field": "name",
+        "value": "Friends"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "FAILED"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-08-10"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-12-27"
+      },
+      {
+        "field": "postcode",
+        "value": "BY6 2RZ"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName"
+      },
+      {
+        "field": "buildingNumber",
+        "value": "716"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Duncan Chase"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Long Auerdon"
+      },
+      {
+        "field": "postTown",
+        "value": "Long Rowe"
+      },
+      {
+        "field": "county",
+        "value": "County Londonderry"
+      },
+      {
+        "field": "country",
+        "value": "South Georgia and the South Sandwich Islands"
+      },
+      {
+        "field": "uprn",
+        "value": "BYQcvwzgi1qn"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-16T12:24:01.892Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Andres Wunsch"
+      }
+    ]
+  },
+  "3e957118-f3d3-4d8a-b12c-f816f33b7d05": {
+    "type": "CREATE",
+    "author": "Miss Theresa Schmidt-Price",
+    "commitDate": "2026-03-16T17:33:30.751Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "3e957118-f3d3-4d8a-b12c-f816f33b7d05"
+      },
+      {
+        "field": "crn",
+        "value": "I322559"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "SOCIAL_RENTED"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": ""
+      },
+      {
+        "field": "name",
+        "value": "Relatives"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "NOT_CHECKED_YET"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-09-23"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-07-22"
+      },
+      {
+        "field": "postcode",
+        "value": "AH2 5SB"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName"
+      },
+      {
+        "field": "buildingNumber",
+        "value": "7"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Beech Drive"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Botsford-upon-Zboncak"
+      },
+      {
+        "field": "postTown",
+        "value": "Howeborough"
+      },
+      {
+        "field": "county",
+        "value": "Fife"
+      },
+      {
+        "field": "country",
+        "value": "Germany"
+      },
+      {
+        "field": "uprn",
+        "value": "B8drfGZJri7S"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-16T17:33:30.751Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Miss Theresa Schmidt-Price"
+      }
+    ]
+  },
+  "b794e36b-9e10-44da-b549-53dc0c80b5a1": {
+    "type": "CREATE",
+    "author": "Jaime DuBuque",
+    "commitDate": "2026-03-13T14:41:30.350Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "b794e36b-9e10-44da-b549-53dc0c80b5a1"
+      },
+      {
+        "field": "crn",
+        "value": "L247269"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "OTHER"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": "straw along jeopardise"
+      },
+      {
+        "field": "name",
+        "value": "Family"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "SETTLED"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "NOT_CHECKED_YET"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2026-01-11"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-09-13"
+      },
+      {
+        "field": "postcode",
+        "value": "FK2 8OY"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName",
+        "value": "Renner Field"
+      },
+      {
+        "field": "buildingNumber"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Stracke Approach"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "New Zemlak"
+      },
+      {
+        "field": "postTown",
+        "value": "Nether Stokes"
+      },
+      {
+        "field": "county",
+        "value": "Surrey"
+      },
+      {
+        "field": "country",
+        "value": "Uzbekistan"
+      },
+      {
+        "field": "uprn",
+        "value": "1DzMX6OI9tet"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-13T14:41:30.350Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Jaime DuBuque"
+      }
+    ]
+  },
+  "e524ca1f-86f8-4a72-aa76-4fdd44e379bd": {
+    "type": "CREATE",
+    "author": "Miguel Schumm Sr.",
+    "commitDate": "2026-03-11T08:24:28.096Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "e524ca1f-86f8-4a72-aa76-4fdd44e379bd"
+      },
+      {
+        "field": "crn",
+        "value": "L247269"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "PRIVATE_RENTED_ROOM"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": ""
+      },
+      {
+        "field": "name",
+        "value": "Friends"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "NOT_CHECKED_YET"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-07-21"
+      },
+      {
+        "field": "endDate",
+        "value": "2027-01-29"
+      },
+      {
+        "field": "postcode",
+        "value": "ET5 4PJ"
+      },
+      {
+        "field": "subBuildingName"
+      },
+      {
+        "field": "buildingName",
+        "value": "Luettgen Grange"
+      },
+      {
+        "field": "buildingNumber"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Bluebell Close"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Veumhampton"
+      },
+      {
+        "field": "postTown",
+        "value": "Vandervort-under-Russel"
+      },
+      {
+        "field": "county",
+        "value": "Fife"
+      },
+      {
+        "field": "country",
+        "value": "Mexico"
+      },
+      {
+        "field": "uprn",
+        "value": "5go51iXN2MwR"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-11T08:24:28.096Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Miguel Schumm Sr."
+      }
+    ]
+  },
+  "14a5e9af-4b31-46e6-9c9b-6ccccf179b9e": {
+    "type": "CREATE",
+    "author": "Leigh Block",
+    "commitDate": "2026-03-12T18:25:15.099Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "14a5e9af-4b31-46e6-9c9b-6ccccf179b9e"
+      },
+      {
+        "field": "crn",
+        "value": "F608163"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "OTHER"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": "which tenant yowza"
+      },
+      {
+        "field": "name",
+        "value": "Family"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "NOT_CHECKED_YET"
+      },
+      {
+        "field": "nextAccommodationStatus"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-05-15"
+      },
+      {
+        "field": "endDate",
+        "value": "2026-11-17"
+      },
+      {
+        "field": "postcode",
+        "value": "XK7 7HW"
+      },
+      {
+        "field": "subBuildingName",
+        "value": "Suite 167"
+      },
+      {
+        "field": "buildingName",
+        "value": "Donnelly Drive"
+      },
+      {
+        "field": "buildingNumber"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Rectory Lane"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Kunze-upon-Nicolas"
+      },
+      {
+        "field": "postTown",
+        "value": "New Boyle"
+      },
+      {
+        "field": "county",
+        "value": "Rutland"
+      },
+      {
+        "field": "country",
+        "value": "Germany"
+      },
+      {
+        "field": "uprn",
+        "value": "YK4XTgf5sLAy"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-12T18:25:15.099Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Leigh Block"
+      }
+    ]
+  },
+  "a4e54424-88cf-4330-99cc-719341de9202": {
+    "type": "CREATE",
+    "author": "Holly Heathcote",
+    "commitDate": "2026-03-17T03:01:41.215Z",
+    "changes": [
+      {
+        "field": "id",
+        "value": "a4e54424-88cf-4330-99cc-719341de9202"
+      },
+      {
+        "field": "crn",
+        "value": "F608163"
+      },
+      {
+        "field": "arrangementType",
+        "value": "PRIVATE"
+      },
+      {
+        "field": "arrangementSubType",
+        "value": "PRIVATE_RENTED_WHOLE_PROPERTY"
+      },
+      {
+        "field": "arrangementSubTypeDescription",
+        "value": ""
+      },
+      {
+        "field": "name",
+        "value": "Relatives"
+      },
+      {
+        "field": "offenderReleaseType"
+      },
+      {
+        "field": "settledType",
+        "value": "TRANSIENT"
+      },
+      {
+        "field": "verificationStatus",
+        "value": "PASSED"
+      },
+      {
+        "field": "nextAccommodationStatus",
+        "value": "YES"
+      },
+      {
+        "field": "startDate",
+        "value": "2025-04-23"
+      },
+      {
+        "field": "endDate",
+        "value": "2027-01-14"
+      },
+      {
+        "field": "postcode",
+        "value": "LI79 7SL"
+      },
+      {
+        "field": "subBuildingName",
+        "value": "Apt. 517"
+      },
+      {
+        "field": "buildingName",
+        "value": "Hildegard Mews"
+      },
+      {
+        "field": "buildingNumber"
+      },
+      {
+        "field": "thoroughfareName",
+        "value": "Schuppe Croft"
+      },
+      {
+        "field": "dependentLocality",
+        "value": "Prohaska-on-Hickle"
+      },
+      {
+        "field": "postTown",
+        "value": "Long Ferry"
+      },
+      {
+        "field": "county",
+        "value": "Northamptonshire"
+      },
+      {
+        "field": "country",
+        "value": "Montserrat"
+      },
+      {
+        "field": "uprn",
+        "value": "9nwRCCcbt8Fz"
+      },
+      {
+        "field": "createdAt",
+        "value": "2026-03-17T03:01:41.215Z"
+      },
+      {
+        "field": "createdBy",
+        "value": "Holly Heathcote"
+      }
+    ]
+  }
+}

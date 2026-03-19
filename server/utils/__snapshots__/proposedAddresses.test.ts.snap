@@ -7,7 +7,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--grey">Failed</strong>",
+      "html": "<strong class="govuk-tag govuk-tag--grey">Checks failed</strong>",
     },
   },
   {
@@ -23,10 +23,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -63,10 +60,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -103,10 +97,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -135,7 +126,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--yellow">Passed</strong>",
+      "html": "<strong class="govuk-tag govuk-tag--yellow">Checks passed</strong>",
     },
   },
   {
@@ -151,10 +142,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    Friends or family (not tenant or owner)
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
     },
   },
   {
@@ -170,7 +158,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Next address",
     },
     "value": {
-      "text": "Unknown",
+      "text": undefined,
     },
   },
 ]
@@ -199,10 +187,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "
-    <p class="govuk-!-margin-bottom-2">Other</p><p class="govuk-!-margin-bottom-2">Some description</p>
-    <p class="govuk-!-margin-bottom-2">Settled</p>
-  ",
+      "html": "<p>Other, Some description</p><p>Settled</p>",
     },
   },
   {
@@ -214,6 +199,76 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
     },
   },
 ]
+`;
+
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address created record 1`] = `
+{
+  "byline": {
+    "text": "Dr. Kay Towne",
+  },
+  "datetime": {
+    "timestamp": "2026-03-06T21:37:21.666Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    <p><strong class="govuk-tag govuk-tag--green">Confirmed</strong></p>
+  
+
+  
+    
+      <p class="govuk-!-margin-bottom-1">Address: 1 Street, Town, P0 5TC</p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Housing arrangement: Other, Some reason. Settled. </p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Address checks: Passed</p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Next address: Yes</p>
+    
+  ",
+  "label": {
+    "text": "Address created",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address updated record 1`] = `
+{
+  "byline": {
+    "text": "Florence Collins",
+  },
+  "datetime": {
+    "timestamp": "2025-06-15T07:15:13.764Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    <p><strong class="govuk-tag govuk-tag--yellow">Checks passed</strong></p>
+  
+
+  
+    
+  
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">Address checks changed to Passed</p>
+    
+  
+    
+  ",
+  "label": {
+    "text": "Address updated",
+  },
+}
 `;
 
 exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks failed" proposed address status card object 1`] = `
@@ -254,7 +309,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "grey",
-    "text": "Failed",
+    "text": "Checks failed",
   },
 }
 `;
@@ -301,7 +356,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Passed",
+    "text": "Checks passed",
   },
 }
 `;
@@ -348,7 +403,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Passed",
+    "text": "Checks passed",
   },
 }
 `;
@@ -395,7 +450,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   ],
   "status": {
     "colour": "yellow",
-    "text": "Passed",
+    "text": "Checks passed",
   },
 }
 `;
@@ -490,6 +545,6 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
 }
 `;
 
-exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p class="govuk-!-margin-bottom-2">Other</p><p class="govuk-!-margin-bottom-2">Hostel</p>"`;
+exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p>Other</p><p>Hostel</p>"`;
 
-exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p class="govuk-!-margin-bottom-2">Failed</p><p class="govuk-!-margin-bottom-2">Not suitable</p>"`;
+exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p>Failed</p><p>Not suitable</p>"`;

@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 /* istanbul ignore file */
-
 import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
+import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
 import { convertObjectsToSelectOptions, initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
@@ -12,6 +12,8 @@ import { formatDate } from './dates'
 import uiPaths from '../paths/ui'
 import { riskLevelStatusTag } from './riskLevel'
 import { injectConditionals } from './form'
+
+const { mojDate } = mojFilters()
 
 const NUNJUCKS_TEMPLATE_PATHS = [
   path.join(__dirname, '../../server/views'),
@@ -23,6 +25,7 @@ const NUNJUCKS_TEMPLATE_PATHS = [
 const addFilters = (env: nunjucks.Environment) => {
   env.addFilter('initialiseName', initialiseName)
   env.addFilter('date', formatDate)
+  env.addFilter('mojDate', mojDate)
 }
 
 const addGlobals = (env: nunjucks.Environment) => {

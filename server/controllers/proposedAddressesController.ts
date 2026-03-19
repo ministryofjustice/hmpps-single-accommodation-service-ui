@@ -20,6 +20,7 @@ import {
   validateLookupFromSession,
   lookupResultsItems,
   addressDetailRows,
+  addressTimelineEntry,
 } from '../utils/proposedAddresses'
 import {
   fetchErrorsAndUserInput,
@@ -56,14 +57,18 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
 
-      const caseData = await this.casesService.getCase(token, crn)
-      const proposedAddress = await this.proposedAddressesService.getProposedAddress(token, crn, id)
+      const [caseData, proposedAddress, auditRecords] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.proposedAddressesService.getProposedAddress(token, crn, id),
+        this.proposedAddressesService.getTimeline(token, crn, id),
+      ])
 
       return res.render('pages/proposed-address/show', {
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
+        timeline: auditRecords.map(addressTimelineEntry),
       })
     }
   }

@@ -126,11 +126,16 @@ describe('date utilities', () => {
       expect(dateInputToIsoDate(date, 'field')).toEqual('2022-01-12')
     })
 
-    it('returns undefined if the date is blank', () => {
+    it.each([
+      ['', '', '', 'all fields are blank'],
+      ['', '12', '2022', 'day is blank'],
+      ['1', '', '2022', 'month is blank'],
+      ['1', '12', '', 'year is blank'],
+    ])('returns undefined when date is %s/%s/%s (%s)', (day, month, year) => {
       const date: DateFieldValues<'field'> = {
-        'field-day': '',
-        'field-month': '',
-        'field-year': '',
+        'field-day': day,
+        'field-month': month,
+        'field-year': year,
       }
 
       expect(dateInputToIsoDate(date, 'field')).toEqual(undefined)

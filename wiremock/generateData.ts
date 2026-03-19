@@ -2,9 +2,10 @@
 import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
-import { CaseDto } from '@sas/api'
+import { AccommodationDetail, CaseDto } from '@sas/api'
 import {
   accommodationFactory,
+  auditRecordFactory,
   caseFactory,
   dutyToReferFactory,
   eligibilityFactory,
@@ -94,4 +95,10 @@ if (generate.proposedAddresses) {
     {},
   )
   saveToFixture('proposedAddresses', proposedAddresses)
+  const auditRecords = Object.fromEntries(
+    Object.values(proposedAddresses)
+      .flat()
+      .map((address: AccommodationDetail) => [address.id, auditRecordFactory.proposedAddressCreated(address).build()]),
+  )
+  saveToFixture('proposedAddressesAuditRecords', auditRecords)
 }

@@ -27,18 +27,18 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
   "details": [
     {
       "key": {
-        "text": "Reference",
-      },
-      "value": {
-        "text": "REF123",
-      },
-    },
-    {
-      "key": {
         "text": "Submitted to",
       },
       "value": {
         "text": "Some Council",
+      },
+    },
+    {
+      "key": {
+        "text": "Reference",
+      },
+      "value": {
+        "text": "REF123",
       },
     },
     {

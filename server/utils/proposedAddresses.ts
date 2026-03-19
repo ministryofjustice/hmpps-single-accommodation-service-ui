@@ -1,4 +1,11 @@
-import { ProposedAddressDisplayStatus, ProposedAddressFormData, RadioItem, StatusCard, StatusTag } from '@sas/ui'
+import {
+  ProposedAddressDisplayStatus,
+  ProposedAddressFormData,
+  ProposedAddressFormPage,
+  RadioItem,
+  StatusCard,
+  StatusTag,
+} from '@sas/ui'
 import {
   AccommodationAddressDetails,
   AccommodationDetail,
@@ -7,7 +14,7 @@ import {
   FieldChange,
 } from '@sas/api'
 import { Request } from 'express'
-import { SummaryListRow, TimelineEntry } from '@govuk/ui'
+import { SummaryListActionItem, SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes } from './cases'
 import { summaryListRowText, summaryListRowHtml, toParagraphs } from './utils'
@@ -50,13 +57,13 @@ const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: s
       return [
         {
           text: 'Confirm as next address',
-          href: `${uiPaths.proposedAddresses.edit({ crn, id })}?flow=nextAccommodation`,
+          href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
         },
         { text: 'Notes', href: detailsLink },
       ]
     case 'NOT_CHECKED_YET':
       return [
-        { text: 'Add checks', href: `${uiPaths.proposedAddresses.edit({ crn, id })}?flow=status` },
+        { text: 'Add checks', href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }) },
         { text: 'Notes', href: detailsLink },
       ]
     default:
@@ -69,7 +76,8 @@ const settledTypes: Record<AccommodationDetail['settledType'], string> = {
   TRANSIENT: 'Transient',
 }
 
-export const flowRedirects: Record<string, (params: { crn: string }) => string> = {
+export const flowRedirects: Record<ProposedAddressFormPage, (params: { crn: string }) => string> = {
+  lookup: uiPaths.proposedAddresses.lookup,
   status: uiPaths.proposedAddresses.status,
   nextAccommodation: uiPaths.proposedAddresses.nextAccommodation,
   type: uiPaths.proposedAddresses.type,
@@ -421,24 +429,34 @@ export const housingArrangementParts = (proposedAddress: AccommodationDetail): s
   return [type, description].filter(Boolean)
 }
 
-export const addressDetailRows = (proposedAddress: AccommodationDetail): SummaryListRow[] =>
-  [
+export const addressDetailRows = (proposedAddress: AccommodationDetail): SummaryListRow[] => {
+  const editLink = (page: ProposedAddressFormPage): SummaryListActionItem => ({
+    text: 'Change',
+    href: uiPaths.proposedAddresses.edit({ crn: proposedAddress.crn, id: proposedAddress.id, page }),
+  })
+
+  return [
     summaryListRowHtml('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress)))),
-    summaryListRowHtml('Address', formatAddress(proposedAddress.address, '<br />')),
+    summaryListRowHtml('Address', formatAddress(proposedAddress.address, '<br />'), [editLink('lookup')]),
     summaryListRowHtml(
       'Housing arrangement',
       toParagraphs([
         housingArrangementParts(proposedAddress).join(', '),
         formatProposedAddressSettledType(proposedAddress.settledType),
       ]),
+      [editLink('type')],
     ),
-    summaryListRowText('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus)),
+    summaryListRowText('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus), [
+      editLink('status'),
+    ]),
     proposedAddress.verificationStatus === 'PASSED' &&
       summaryListRowText(
         'Next address',
         formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus),
+        [editLink('nextAccommodation')],
       ),
   ].filter(Boolean)
+}
 
 const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): AccommodationDetail => {
   const addressFields = [

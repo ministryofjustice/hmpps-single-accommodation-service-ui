@@ -7,12 +7,12 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
+import { addressDetailRows, addressTimelineEntry, lookupResultsItems } from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
 import { accommodationFactory, addressFactory, auditRecordFactory, caseFactory } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
-import { addressDetailRows, addressTimelineEntry, lookupResultsItems } from '../utils/proposedAddresses'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
 
@@ -28,7 +28,6 @@ describe('proposedAddressesController', () => {
 
   const lookupResults = addressFactory.buildList(3)
   const sessionData: ProposedAddressFormData = {
-    flow: 'full',
     nameOrNumber: 'BUILDING NAME',
     postcode: 'AB12CD',
     lookupResults,
@@ -514,21 +513,6 @@ describe('proposedAddressesController', () => {
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
     })
-
-    it('updates and redirects to profile tracker when flow is not "full" and status is not PASSED', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, flow: 'status' }
-      request.body = { verificationStatus: 'NOT_CHECKED_YET' }
-
-      await controller.saveStatus()(request, response, next)
-
-      expect(proposedAddressesService.update).toHaveBeenCalledWith(
-        'token-1',
-        'CRN123',
-        expect.objectContaining({ verificationStatus: 'NOT_CHECKED_YET' }),
-      )
-      expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
-    })
   })
 
   describe('nextAccommodation', () => {
@@ -599,21 +583,6 @@ describe('proposedAddressesController', () => {
       await controller.saveNextAccommodation()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
-    })
-
-    it('updates and redirects to profile tracker when flow is not "full"', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, flow: 'nextAccommodation' }
-      request.body = { nextAccommodationStatus: 'YES' }
-
-      await controller.saveNextAccommodation()(request, response, next)
-
-      expect(proposedAddressesService.update).toHaveBeenCalledWith(
-        'token-1',
-        'CRN123',
-        expect.objectContaining({ nextAccommodationStatus: 'YES' }),
-      )
-      expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
   })
 
@@ -692,12 +661,13 @@ describe('proposedAddressesController', () => {
 
   describe('edit', () => {
     it.each([
-      { flow: 'details', redirect: uiPaths.proposedAddresses.details },
-      { flow: 'type', redirect: uiPaths.proposedAddresses.type },
-      { flow: 'status', redirect: uiPaths.proposedAddresses.status },
-      { flow: 'nextAccommodation', redirect: uiPaths.proposedAddresses.nextAccommodation },
-    ])('redirects to the $flow page when flow is "$flow"', async ({ flow, redirect }) => {
-      request.query.flow = flow
+      { page: 'details', redirect: uiPaths.proposedAddresses.details },
+      { page: 'type', redirect: uiPaths.proposedAddresses.type },
+      { page: 'status', redirect: uiPaths.proposedAddresses.status },
+      { page: 'nextAccommodation', redirect: uiPaths.proposedAddresses.nextAccommodation },
+    ])('redirects to the $page form and sets the referrer as a redirect', async ({ page, redirect }) => {
+      request.headers.referer = '/referrer'
+      request.params.page = page
       request.params.id = 'address-id'
       const proposedAddress = accommodationFactory.build({ crn: 'CRN123', id: 'address-id' })
       proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
@@ -711,9 +681,7 @@ describe('proposedAddressesController', () => {
       expect(controller.formData.update).toHaveBeenCalledWith(
         'CRN123',
         request.session,
-        expect.objectContaining({
-          flow,
-        }),
+        expect.objectContaining({ redirect: '/referrer' }),
       )
       expect(response.redirect).toHaveBeenCalledWith(redirect({ crn: 'CRN123' }))
     })
@@ -734,11 +702,155 @@ describe('proposedAddressesController', () => {
   })
 
   describe('cancel', () => {
-    it('clears session data and redirects', async () => {
+    it('clears session data and redirects to the case details page', async () => {
       await controller.cancel()(request, response, next)
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
+
+    describe('if the Check your answer page has been reached', () => {
+      it('clears session data and redirects to the case details page', async () => {
+        request.session.multiPageFormData.proposedAddress.CRN123.redirect = uiPaths.proposedAddresses.checkYourAnswers({
+          crn: 'CRN123',
+        })
+
+        await controller.cancel()(request, response, next)
+
+        expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+        expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+      })
+    })
+  })
+
+  describe('when editing a new address from the Check your answers page', () => {
+    const checkYourAnswersUrl = uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' })
+
+    beforeEach(() => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        redirect: checkYourAnswersUrl,
+      }
+    })
+
+    describe('saveLookup', () => {
+      it('saves the address in session and redirects to Check your Answers if there is only one address result', async () => {
+        osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([lookupResults[1]])
+        request.body = { nameOrNumber: '23A', postcode: 'M21 0BP' }
+
+        await controller.saveLookup()(request, response, next)
+
+        expect(response.redirect).toHaveBeenCalledWith(checkYourAnswersUrl)
+        expect(controller.formData.update).toHaveBeenCalledTimes(2)
+        expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
+          lookupResults: [lookupResults[1]],
+          address: lookupResults[1],
+        })
+      })
+    })
+
+    it.each([
+      { handler: 'saveSelectAddress', body: { addressUprn: lookupResults[1].uprn } },
+      {
+        handler: 'saveDetails',
+        body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4', addressCountry: 'Wales' },
+      },
+      { handler: 'saveType', body: { arrangementSubType: 'FRIENDS_AND_FAMILY', settledType: 'SETTLED' } },
+      { handler: 'saveStatus', body: { verificationStatus: 'NOT_CHECKED_YET' } },
+      { handler: 'saveNextAccommodation', body: { nextAccommodationStatus: 'YES' } },
+    ])('saves the $handler data in session and redirects to the Check your answers page', async ({ handler, body }) => {
+      request.body = body
+
+      // @ts-expect-error dynamic method typing
+      await controller[handler]()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(checkYourAnswersUrl)
+      expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, expect.any(Object))
+    })
+
+    describe('saveStatus', () => {
+      it('redirects to the Next accommodation page when status is PASSED', async () => {
+        request.body = { verificationStatus: 'PASSED' }
+
+        await controller.saveStatus()(request, response, next)
+
+        expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
+        expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, expect.any(Object))
+      })
+    })
+  })
+
+  describe('when editing an existing address', () => {
+    const id = 'address-id'
+    const redirect = uiPaths.proposedAddresses.show({ crn: 'CRN123', id })
+
+    beforeEach(() => {
+      request.session.multiPageFormData.proposedAddress.CRN123 = {
+        ...sessionData,
+        id,
+        redirect,
+      }
+    })
+
+    describe('saveLookup', () => {
+      it('saves the address in session and redirects to the original page if there is only one address result', async () => {
+        osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([lookupResults[1]])
+        request.body = { nameOrNumber: '23A', postcode: 'M21 0BP' }
+
+        await controller.saveLookup()(request, response, next)
+
+        expect(response.redirect).toHaveBeenCalledWith(redirect)
+        expect(proposedAddressesService.update).toHaveBeenCalledWith(
+          'token-1',
+          'CRN123',
+          expect.objectContaining({ id: 'address-id' }),
+        )
+        expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      })
+    })
+
+    it.each([
+      { handler: 'saveSelectAddress', body: { addressUprn: lookupResults[1].uprn } },
+      {
+        handler: 'saveDetails',
+        body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4', addressCountry: 'Wales' },
+      },
+      { handler: 'saveType', body: { arrangementSubType: 'FRIENDS_AND_FAMILY', settledType: 'SETTLED' } },
+      { handler: 'saveStatus', body: { verificationStatus: 'NOT_CHECKED_YET' } },
+      { handler: 'saveNextAccommodation', body: { nextAccommodationStatus: 'YES' } },
+    ])('saves the $handler data in session and redirects to the Check your answers page', async ({ handler, body }) => {
+      request.body = body
+
+      // @ts-expect-error dynamic method typing
+      await controller[handler]()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(redirect)
+      expect(proposedAddressesService.update).toHaveBeenCalledWith(
+        'token-1',
+        'CRN123',
+        expect.objectContaining({ id: 'address-id' }),
+      )
+      expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+    })
+
+    describe('saveStatus', () => {
+      it('redirects to the Next accommodation page when status is PASSED', async () => {
+        request.body = { verificationStatus: 'PASSED' }
+
+        await controller.saveStatus()(request, response, next)
+
+        expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
+        expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, expect.any(Object))
+      })
+    })
+
+    describe('cancel', () => {
+      it('clears session data and redirects to the proposed address page', async () => {
+        await controller.cancel()(request, response, next)
+
+        expect(response.redirect).toHaveBeenCalledWith(redirect)
+        expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      })
     })
   })
 })

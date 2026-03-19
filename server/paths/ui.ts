@@ -18,7 +18,7 @@ export default {
   proposedAddresses: {
     show: proposedAddressesPath.path(':id/details'),
     start: proposedAddressesPath.path('start'),
-    edit: proposedAddressesPath.path(':id/edit'),
+    edit: proposedAddressesPath.path(':id/edit/:page'),
     lookup: proposedAddressesPath.path('lookup'),
     selectAddress: proposedAddressesPath.path('select-address'),
     details: proposedAddressesPath.path('details'),

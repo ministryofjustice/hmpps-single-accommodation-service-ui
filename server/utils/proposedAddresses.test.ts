@@ -355,7 +355,6 @@ describe('Proposed addresses utilities', () => {
     }
 
     const validUpToAddress = (): ProposedAddressFormData => ({
-      flow: 'full',
       address: validAddress,
     })
 
@@ -384,7 +383,6 @@ describe('Proposed addresses utilities', () => {
     describe('validateLookupFromSession', () => {
       it('sets errors and returns a redirect link to lookup when data is invalid', () => {
         const invalidLookup: ProposedAddressFormData = {
-          flow: 'full',
           nameOrNumber: '',
           postcode: '',
         }
@@ -398,7 +396,6 @@ describe('Proposed addresses utilities', () => {
 
       it.each(['N', 'NOPE', 'TH457UYTY', '   '])('sets error for invalid format postcode "%s"', postcode => {
         const invalidLookup: ProposedAddressFormData = {
-          flow: 'full',
           nameOrNumber: '123',
           postcode,
         }
@@ -411,7 +408,6 @@ describe('Proposed addresses utilities', () => {
 
       it('returns undefined when data is valid', () => {
         const validLookup: ProposedAddressFormData = {
-          flow: 'full',
           nameOrNumber: '123',
           postcode: 'AB1 2CD',
         }
@@ -681,6 +677,8 @@ describe('Proposed addresses utilities', () => {
 
   describe('addressDetailRows', () => {
     const baseProposedAddress = accommodationFactory.proposed().build({
+      id: 'address-id',
+      crn: 'X651925',
       arrangementSubType: 'FRIENDS_OR_FAMILY',
       settledType: 'SETTLED',
       verificationStatus: 'NOT_CHECKED_YET',

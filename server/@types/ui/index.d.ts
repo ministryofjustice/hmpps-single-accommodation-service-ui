@@ -14,8 +14,10 @@ export interface ErrorMessages {
   [key: string]: ErrorMessage
 }
 
+export type ProposedAddressFormPage = 'lookup' | 'details' | 'type' | 'status' | 'nextAccommodation'
+
 export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
-  flow: 'full' | 'details' | 'type' | 'status' | 'nextAccommodation'
+  redirect?: string
   id?: string
   nameOrNumber?: string
   postcode?: string

@@ -105,3 +105,11 @@ export const validateOutcome = (req: Request) => {
 
   return validateAndFlashErrors(req, errors)
 }
+
+export const formatDutyToReferStatus = (status: DutyToReferDto['status']): string =>
+  ({
+    NOT_ACCEPTED: 'Not accepted',
+    ACCEPTED: 'Accepted',
+    NOT_STARTED: 'Not started',
+    SUBMITTED: 'Submitted',
+  })[status]

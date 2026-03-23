@@ -41,6 +41,10 @@ export default class AbstractPage {
     await this.page.getByRole('button', { name: buttonText }).click()
   }
 
+  async shouldShowLink(text: string | RegExp, href: string, role: 'link' | 'button' = 'link') {
+    await expect(this.page.getByRole(role, { name: text })).toHaveAttribute('href', href)
+  }
+
   async clickLink(text: string | RegExp, container?: Locator): Promise<void> {
     await (container || this.page).getByRole('link', { name: text }).click()
   }
@@ -182,6 +186,6 @@ export default class AbstractPage {
       await expect(timelineEntry.getByRole('time')).toContainText(formatDate(datetime.timestamp))
     }
 
-    expect(await timelineEntry.locator('.moj-timeline__description').innerHTML()).toEqual(html)
+    expect(await timelineEntry.locator('.moj-timeline__description').innerHTML()).toEqual(html.replace(/&#39;/g, "'"))
   }
 }

@@ -10,6 +10,7 @@ import {
   formatProposedAddressStatus,
   proposedAddressStatusTag,
 } from '../../../server/utils/proposedAddresses'
+import uiPaths from '../../../server/paths/ui'
 
 export default class ProposedAddressDetailsPage extends PageWithCaseDetails {
   address: string
@@ -41,10 +42,25 @@ export default class ProposedAddressDetailsPage extends PageWithCaseDetails {
       'Address checks',
       formatProposedAddressStatus(this.proposedAddress.verificationStatus),
     )
+
     if (this.proposedAddress.verificationStatus === 'PASSED') {
       await this.shouldShowSummaryItem(
         'Next address',
         formatProposedAddressNextAccommodation(this.proposedAddress.nextAccommodationStatus),
+      )
+    }
+
+    const { crn, id } = this.proposedAddress
+
+    if (this.proposedAddress.verificationStatus === 'NOT_CHECKED_YET') {
+      await this.shouldShowLink('Add checks', uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }), 'button')
+    }
+
+    if (this.proposedAddress.verificationStatus === 'PASSED') {
+      await this.shouldShowLink(
+        'Confirm as next address',
+        uiPaths.proposedAddresses.edit({ crn, id, page: 'next-accommodation' }),
+        'button',
       )
     }
   }

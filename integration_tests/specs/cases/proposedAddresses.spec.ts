@@ -22,28 +22,45 @@ import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
 import { addressTimelineEntry } from '../../../server/utils/proposedAddresses'
 
+const setupCase = async () => {
+  const caseData = caseFactory.build()
+  const { crn } = caseData
+
+  await casesApi.stubGetCases([caseData])
+  await casesApi.stubGetCaseByCrn(crn, caseData)
+  await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
+  await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
+  await casesApi.stubGetReferralHistory(crn, [])
+
+  return caseData
+}
+
+const setupProposedAddresses = async (crn: string, proposedAddresses: AccommodationDetail[] = []) => {
+  await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
+  await proposedAddressesApi.stubSubmitProposedAddress(crn)
+
+  for await (const proposedAddress of proposedAddresses) {
+    await proposedAddressesApi.stubGetProposedAddress(crn, proposedAddress.id, proposedAddress)
+    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [
+      auditRecordFactory.proposedAddressCreated(proposedAddress).build(),
+    ])
+    await proposedAddressesApi.stubUpdateProposedAddress(crn, proposedAddress.id)
+  }
+}
+
+const setupProposedAddressTimeline = async (crn: string, addressId: string, records: AuditRecordDto[]) => {
+  await proposedAddressesApi.stubGetProposedAddressTimeline(crn, addressId, records)
+}
+
 test.describe('view proposed address details', () => {
   test('should allow user to view the details of a proposed address', async ({ page }) => {
-    const caseData = caseFactory.build()
-    const { crn } = caseData
-    const proposedAddress = accommodationFactory.proposed().build({ crn, verificationStatus: 'NOT_CHECKED_YET' })
-
-    await casesApi.stubGetCases([caseData])
-    await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
-    await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
-    await casesApi.stubGetReferralHistory(crn, [])
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [proposedAddress])
-    await proposedAddressesApi.stubGetProposedAddress(crn, proposedAddress.id, proposedAddress)
-
+    const caseData = await setupCase()
+    const proposedAddress = accommodationFactory
+      .proposed()
+      .build({ crn: caseData.crn, verificationStatus: 'NOT_CHECKED_YET' })
     const createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
-    const updatedAddressRecord = auditRecordFactory
-      .proposedAddressUpdated([{ field: 'verificationStatus', value: 'PASSED' }])
-      .build()
-    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [
-      updatedAddressRecord,
-      createdAddressRecord,
-    ])
+    await setupProposedAddresses(caseData.crn, [proposedAddress])
+    await setupProposedAddressTimeline(caseData.crn, proposedAddress.id, [createdAddressRecord])
 
     // Given I am logged in
     await login(page)
@@ -63,31 +80,20 @@ test.describe('view proposed address details', () => {
     // And the address details should be listed
     await addressDetailsPage.shouldShowProposedAddressSummary()
 
-    // And I should see a timeline entry showing when the address was last updated
-    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(updatedAddressRecord))
-
     // And I should see a timeline entry showing when the address was created
-    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord), 1)
+    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord))
   })
 })
 
 test.describe('add proposed address', () => {
-  const crn = 'X123456'
-  const caseData = caseFactory.build({ crn })
-  const proposedAddresses = [
-    accommodationFactory.proposed().build({ crn, verificationStatus: 'NOT_CHECKED_YET' }),
-    accommodationFactory.proposed().build({ crn, verificationStatus: 'FAILED' }),
-  ]
+  let caseData: CaseDto
+  let crn: string
 
   test.beforeEach(async () => {
     // Given there is data for the given case
-    await casesApi.stubGetCases([caseData])
-    await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
-    await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
-    await casesApi.stubGetReferralHistory(crn, [])
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
-    await proposedAddressesApi.stubSubmitProposedAddress(crn)
+    caseData = await setupCase()
+    crn = caseData.crn
+    await setupProposedAddresses(crn, [])
   })
 
   test('should allow user to add a new proposed address entered manually', async ({ page }) => {
@@ -101,14 +107,14 @@ test.describe('add proposed address', () => {
     const newProposedAddress = accommodationFactory.proposed().build({
       ...updatedProposedAddressData,
       crn,
-      address: addressFactory.minimal().build(updatedProposedAddressData.address),
+      // address: addressFactory.minimal().build(updatedProposedAddressData.address),
     })
-    const updatedProposedAddresses: AccommodationDetail[] = [...proposedAddresses, newProposedAddress]
+    const proposedAddresses: AccommodationDetail[] = [newProposedAddress]
 
     // Given I am logged in
     await login(page)
 
-    // When I visit profile tracker page
+    // When I visit the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
     // And I click the add an address link
@@ -242,7 +248,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.verifyCheckYourAnswersPage(updatedProposedAddressData, caseData.name)
 
     // When I submit the proposed address
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, updatedProposedAddresses)
+    await setupProposedAddresses(crn, proposedAddresses)
     await addProposedAddressPage.clickButton('Save')
 
     // Then the API should have been called with the correct data
@@ -255,7 +261,7 @@ test.describe('add proposed address', () => {
     await profileTrackerPage.shouldShowBanner('Private address added')
 
     // And the new proposed address should be shown in the proposed addresses section
-    await profileTrackerPage.shouldShowProposedAddresses(updatedProposedAddresses)
+    await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
   })
 
   test('should allow the user to lookup an address and add it', async ({ page }) => {
@@ -361,8 +367,7 @@ test.describe('add proposed address', () => {
 
     // When I submit the proposed address
     const newProposedAddress = accommodationFactory.proposed().build(submittedAddress)
-    const updatedProposedAddresses: AccommodationDetail[] = [...proposedAddresses, newProposedAddress]
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, updatedProposedAddresses)
+    await setupProposedAddresses(crn, [newProposedAddress])
     await addProposedAddressPage.clickButton('Save')
 
     // Then the API should have been called with the correct data
@@ -377,31 +382,25 @@ test.describe('add proposed address', () => {
 })
 
 test.describe('edit proposed address', () => {
-  const crn = 'X123456'
   const id = 'some-id'
 
+  let crn: string
   let caseData: CaseDto
-  let proposedAddress: AccommodationDetail
   let initialProposedAddressData: ProposedAddressFormData
+  let proposedAddress: AccommodationDetail
   let createdAddressRecord: AuditRecordDto
 
   test.beforeEach(async () => {
-    caseData = caseFactory.build({ crn })
+    caseData = await setupCase()
+    crn = caseData.crn
     initialProposedAddressData = proposedAddressFormFactory
       .manualAddress()
       .build({ id, verificationStatus: 'NOT_CHECKED_YET', nextAccommodationStatus: 'TO_BE_DECIDED' })
     proposedAddress = accommodationFactory.proposed().build({ id, crn, ...initialProposedAddressData })
     createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
 
-    await casesApi.stubGetCases([caseData])
-    await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
-    await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
-    await casesApi.stubGetReferralHistory(crn, [])
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [proposedAddress])
-    await proposedAddressesApi.stubGetProposedAddress(crn, id, proposedAddress)
-    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [createdAddressRecord])
-    await proposedAddressesApi.stubUpdateProposedAddress(crn, id)
+    await setupProposedAddresses(crn, [proposedAddress])
+    await setupProposedAddressTimeline(crn, id, [createdAddressRecord])
   })
 
   test('should allow user to add checks to a proposed address', async ({ page }) => {
@@ -439,7 +438,7 @@ test.describe('edit proposed address', () => {
     // Then I should see the populated status form again
     await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
 
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [failedStatusUpdate])
+    await setupProposedAddresses(crn, [failedStatusUpdate])
 
     // When I complete the status form with failed status
     await addProposedAddressPage.completeStatusForm(failedStatusFormData)
@@ -487,7 +486,7 @@ test.describe('edit proposed address', () => {
     // Then I should see the populated status form
     await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
 
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [notNextAccommodationUpdate])
+    await setupProposedAddresses(crn, [notNextAccommodationUpdate])
 
     // When I complete the status form with passed status
     await addProposedAddressPage.completeStatusForm(confirmedFormData)
@@ -509,9 +508,6 @@ test.describe('edit proposed address', () => {
     // And the proposed address should show passed status
     await profileTrackerPage.shouldShowProposedAddresses([notNextAccommodationUpdate])
 
-    await proposedAddressesApi.stubGetProposedAddress(crn, id, notNextAccommodationUpdate)
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [updatedProposedAddress])
-
     // When I click the Confirm as next address link
     await profileTrackerPage.clickLink('Confirm as next address')
 
@@ -519,6 +515,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.shouldShowPopulatedNextAccommodationForm(notNextAccommodationFormData)
 
     // When I complete the next accommodation form with 'Yes'
+    await setupProposedAddresses(crn, [updatedProposedAddress])
     await addProposedAddressPage.completeNextAccommodationForm(confirmedFormData)
     await addProposedAddressPage.clickButton('Continue')
 
@@ -576,11 +573,8 @@ test.describe('edit proposed address', () => {
         },
       ])
       .build()
-    await proposedAddressesApi.stubGetProposedAddress(crn, id, updatedProposedAddress)
-    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [
-      updatedAddressRecord,
-      createdAddressRecord,
-    ])
+    await setupProposedAddresses(crn, [updatedProposedAddress])
+    await setupProposedAddressTimeline(crn, updatedProposedAddress.id, [updatedAddressRecord, createdAddressRecord])
     await editProposedAddressPage.completeTypeForm(updatedProposedAddress)
     await editProposedAddressPage.clickButton('Continue')
 

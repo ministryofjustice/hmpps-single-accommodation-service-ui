@@ -12,7 +12,7 @@ import type { Request } from 'express'
  * @param defaultPath the path that is returned if there is no match in the session i.e. if the session has ended.
  * @return the url to use as the backlink for the page.
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export const getPageBackLink = (
   pagePattern: string,
   req: Request,
@@ -39,12 +39,7 @@ export const getPageBackLink = (
  * Reuses getPageBackLink, storing against the provided pattern
  * so it can be retrieved later in the flow.
  */
-export const setFlowRedirect = (
-  pagePattern: string,
-  req: Request,
-  matchList: Array<Path>,
-  defaultPath = '/',
-): void => {
+export const setFlowRedirect = (pagePattern: string, req: Request, matchList: Array<Path>, defaultPath = '/'): void => {
   getPageBackLink(pagePattern, req, matchList, defaultPath)
 }
 

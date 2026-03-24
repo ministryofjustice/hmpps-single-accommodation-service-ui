@@ -28,6 +28,8 @@ export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard =
 }
 
 export const linksForStatus = (serviceStatus?: string, crn?: string) => {
+  if (!crn) return []
+
   const notes = { text: 'Notes', href: uiPaths.dutyToRefer.show({ crn }) }
 
   switch (serviceStatus) {

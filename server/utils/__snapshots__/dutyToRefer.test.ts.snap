@@ -11,7 +11,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
       "text": "Add submission details",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/dtr/details",
       "text": "Notes",
     },
   ],
@@ -58,7 +58,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
       "text": "Add outcome",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/dtr/details",
       "text": "Notes",
     },
   ],

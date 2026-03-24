@@ -213,7 +213,7 @@ describe('dutyToReferController', () => {
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
       })
-      expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
+      expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details added')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 

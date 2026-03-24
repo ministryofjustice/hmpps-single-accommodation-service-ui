@@ -26,7 +26,6 @@ export default ProposedAddressFormFactory.define(({ params }) => {
   const accommodationDetailCommand = accommodationDetailCommandFactory.build(params)
 
   return {
-    flow: 'full' as const,
     nameOrNumber: accommodationDetailCommand.address.buildingName || accommodationDetailCommand.address.buildingNumber,
     postcode: accommodationDetailCommand.address.postcode,
     ...accommodationDetailCommand,

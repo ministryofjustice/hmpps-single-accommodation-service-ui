@@ -96,15 +96,12 @@ export default class ProposedAddressesController {
       const { crn, id, page } = req.params
       const { token } = res.locals.user
 
-      const formPagePath = flowRedirects[page]
-      if (!formPagePath) return res.redirect(uiPaths.cases.show({ crn }))
-
       await this.formData.remove(crn, req.session)
 
       const proposedAddress = await this.proposedAddressesService.getProposedAddress(token, crn, id)
       await this.formData.update(crn, req.session, { ...proposedAddress, redirect })
 
-      return res.redirect(formPagePath({ crn }))
+      return res.redirect(flowRedirects[page]({ crn }))
     }
   }
 

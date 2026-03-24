@@ -131,7 +131,6 @@ describe('proposedAddressesController', () => {
 
     it('renders the address lookup page with errors and session data', async () => {
       request.session.multiPageFormData.proposedAddress.CRN123 = {
-        flow: 'full',
         nameOrNumber: '',
         postcode: 'H23 8TY',
       }
@@ -684,20 +683,6 @@ describe('proposedAddressesController', () => {
         expect.objectContaining({ redirect: '/referrer' }),
       )
       expect(response.redirect).toHaveBeenCalledWith(redirect({ crn: 'CRN123' }))
-    })
-
-    it('redirects to profile tracker when flow is missing', async () => {
-      request.params.id = 'address-id'
-      request.query.flow = null
-
-      jest.spyOn(controller.formData, 'update')
-
-      await controller.edit()(request, response, next)
-
-      expect(controller.formData.remove).not.toHaveBeenCalled()
-      expect(proposedAddressesService.getProposedAddress).not.toHaveBeenCalled()
-      expect(controller.formData.update).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
   })
 

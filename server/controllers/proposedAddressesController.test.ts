@@ -660,6 +660,7 @@ describe('proposedAddressesController', () => {
 
   describe('edit', () => {
     it.each([
+      { page: 'lookup', redirect: uiPaths.proposedAddresses.lookup },
       { page: 'details', redirect: uiPaths.proposedAddresses.details },
       { page: 'type', redirect: uiPaths.proposedAddresses.type },
       { page: 'status', redirect: uiPaths.proposedAddresses.status },

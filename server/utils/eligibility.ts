@@ -6,10 +6,21 @@ const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): StatusTa
     NOT_ELIGIBLE: { text: 'Not eligible' },
     UPCOMING: { text: 'Upcoming', colour: 'yellow' },
     NOT_STARTED: { text: 'Not started', colour: 'red' },
+    NOT_SUBMITTED: { text: 'Not submitted', colour: 'red' },
+    INFO_REQUESTED: { text: 'Info requested', colour: 'yellow' },
     REJECTED: { text: 'Rejected', colour: 'red' },
     WITHDRAWN: { text: 'Withdrawn' },
     SUBMITTED: { text: 'Submitted', colour: 'yellow' },
+    PLACEMENT_BOOKED: { text: 'Placement booked' },
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
+    NOT_ARRIVED: { text: 'Not arrived' },
+    PLACEMENT_CANCELLED: { text: 'Placement cancelled' },
+    PLACEMENT_REQUEST_NOT_STARTED: { text: 'Placement request not started' },
+    PLACEMENT_REQUEST_WITHDRAWN: { text: 'Placement request withdrawn' },
+    PLACEMENT_REQUEST_SUBMITTED: { text: 'Placement request submitted' },
+    PLACEMENT_REQUEST_REJECTED: { text: 'Placement request rejected' },
+    APPLICATION_REJECTED: { text: 'Application rejected' },
+    ARRIVED: { text: 'Arrived' },
   })[status] || { text: 'Unknown' }
 
 export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) => {

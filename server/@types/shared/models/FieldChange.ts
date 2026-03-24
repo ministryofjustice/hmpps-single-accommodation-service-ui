@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type FieldChange = {
-  value?: any
-  field: string
-}
+    value?: any;
+    field: string;
+};
+

@@ -14,7 +14,7 @@
             },
             name: 'arrangementSubTypeDescription',
             id: 'arrangementSubTypeDescription',
-            value: proposedAddress.arrangementSubTypeDescription,
+            value: arrangementSubTypeDescription,
             errorMessage: errors.arrangementSubTypeDescription
         }
     ) }}
@@ -44,12 +44,12 @@
           {
               value: "SETTLED",
               text: "Settled",
-              checked: proposedAddress.settledType == "SETTLED"
+              checked: settledType == "SETTLED"
           },
           {
               value: "TRANSIENT",
               text: "Transient",
-              checked: proposedAddress.settledType == "TRANSIENT"
+              checked: settledType == "TRANSIENT"
           }
       ],
       errorMessage: errors.settledType

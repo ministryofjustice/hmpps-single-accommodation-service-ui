@@ -7,7 +7,15 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
 import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
-import { addressDetailRows, addressTimelineEntry, lookupResultsItems } from '../utils/proposedAddresses'
+import {
+  addressDetailRows,
+  addressTimelineEntry,
+  arrangementSubTypeItems,
+  checkYourAnswersRows,
+  lookupResultsItems,
+  nextAccommodationStatusItems,
+  verificationStatusItems,
+} from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
@@ -26,29 +34,47 @@ describe('proposedAddressesController', () => {
   const casesService = mock<CasesService>()
   const osDataHubService = mock<OsDataHubService>()
 
+  const nameOrNumber = '123'
+  const postcode = 'AB12CD'
   const lookupResults = addressFactory.buildList(3)
-  const sessionData: ProposedAddressFormData = {
-    nameOrNumber: 'BUILDING NAME',
-    postcode: 'AB12CD',
+  const address = {
+    uprn: '1234567890',
+    buildingName: 'Building name',
+    subBuildingName: 'Line 2',
+    postTown: 'Town',
+    county: 'Region',
+    postcode: 'AB1 2CD',
+    country: 'UK',
+  }
+  const arrangementType = 'PRIVATE' as const
+  const arrangementSubType = 'FRIENDS_OR_FAMILY' as const
+  const arrangementSubTypeDescription = ''
+  const settledType = 'SETTLED' as const
+  const verificationStatus = 'PASSED' as const
+  const nextAccommodationStatus = 'YES' as const
+
+  const fullSessionData: ProposedAddressFormData = {
+    nameOrNumber,
+    postcode,
     lookupResults,
-    address: {
-      uprn: '1234567890',
-      buildingName: 'Building name',
-      subBuildingName: 'Line 2',
-      postTown: 'Town',
-      county: 'Region',
-      postcode: 'AB1 2CD',
-      country: 'UK',
-    },
-    arrangementType: 'PRIVATE',
-    arrangementSubType: 'FRIENDS_OR_FAMILY',
-    arrangementSubTypeDescription: '',
-    settledType: 'SETTLED',
-    verificationStatus: 'PASSED',
-    nextAccommodationStatus: 'YES',
+    address,
+    arrangementType,
+    arrangementSubType,
+    arrangementSubTypeDescription,
+    settledType,
+    verificationStatus,
+    nextAccommodationStatus,
   }
 
   let controller: ProposedAddressesController
+
+  const setSessionData = (data: Partial<ProposedAddressFormData>) => {
+    request.session.multiPageFormData = {
+      proposedAddress: {
+        CRN123: data,
+      },
+    }
+  }
 
   beforeEach(() => {
     jest.restoreAllMocks()
@@ -60,9 +86,6 @@ describe('proposedAddressesController', () => {
       id: 'request-id',
       params: { crn: 'CRN123' },
       session: {
-        multiPageFormData: {
-          proposedAddress: {},
-        },
         save: jest.fn().mockImplementation((callback: () => unknown) => callback()),
       },
     })
@@ -106,16 +129,19 @@ describe('proposedAddressesController', () => {
   })
 
   describe('start', () => {
-    it('redirects to address lookup', async () => {
+    it('redirects to address lookup after setting up the session', async () => {
       await controller.start()(request, response, next)
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, {})
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
     })
   })
 
   describe('lookup', () => {
     it('renders the address lookup page', async () => {
+      setSessionData({})
+
       await controller.lookup()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_LOOKUP, {
@@ -130,10 +156,8 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders the address lookup page with errors and session data', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        nameOrNumber: '',
-        postcode: 'H23 8TY',
-      }
+      setSessionData({ nameOrNumber: '', postcode: 'H23 8TY' })
+
       const errors = { nameOrNumber: 'Enter a property name or number' }
       const errorSummary = [{ href: '#nameOrNumber', text: 'Enter a property name or number' }]
 
@@ -149,9 +173,19 @@ describe('proposedAddressesController', () => {
         errorSummary,
       })
     })
+
+    it('redirects to the Case details page if there is no session data', async () => {
+      await controller.lookup()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
   })
 
   describe('saveLookup', () => {
+    beforeEach(() => {
+      setSessionData({})
+    })
+
     it('redirects with errors if the submitted data is invalid', async () => {
       request.body = { nameOrNumber: '', postcode: '' }
       await controller.saveLookup()(request, response, next)
@@ -216,42 +250,58 @@ describe('proposedAddressesController', () => {
 
   describe('selectAddress', () => {
     it('renders the select address page with results from the session', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      setSessionData({
+        nameOrNumber,
+        postcode,
+        lookupResults,
+        address,
+      })
 
       await controller.selectAddress()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/select-address', {
         crn: 'CRN123',
-        nameOrNumber: 'BUILDING NAME',
-        postcode: 'AB12CD',
-        addresses: lookupResultsItems(lookupResults, sessionData.address.uprn),
+        nameOrNumber,
+        postcode,
+        addresses: lookupResultsItems(lookupResults, address.uprn),
         errors: {},
         errorSummary: [],
       })
     })
 
     it('redirects to the lookup page if there are no lookup results in the session', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
+      setSessionData({
+        nameOrNumber,
+        postcode,
         lookupResults: null,
-      }
+      })
 
       await controller.selectAddress()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
     })
+
+    it('redirects to the Case details page if there is no session data', async () => {
+      await controller.selectAddress()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
   })
 
   describe('saveSelectAddress', () => {
     beforeEach(() => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      setSessionData({
+        nameOrNumber,
+        postcode,
+        lookupResults,
+      })
     })
 
     it('redirects to the lookup page if there are no lookup results in the session', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
+      setSessionData({
+        ...fullSessionData,
         lookupResults: null,
-      }
+      })
 
       await controller.saveSelectAddress()(request, response, next)
 
@@ -294,6 +344,8 @@ describe('proposedAddressesController', () => {
 
   describe('details', () => {
     it('renders details page', async () => {
+      setSessionData({})
+
       await controller.details()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.ADD_PROPOSED_ADDRESS_DETAILS, {
@@ -310,30 +362,34 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders details page with session data', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      setSessionData({
+        address,
+      })
+
       await controller.details()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/details', {
         crn: 'CRN123',
         backLinkHref: uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }),
-        address: {
-          uprn: '1234567890',
-          buildingName: 'Building name',
-          subBuildingName: 'Line 2',
-          postTown: 'Town',
-          county: 'Region',
-          postcode: 'AB1 2CD',
-          country: 'UK',
-        },
+        address,
         errors: {},
         errorSummary: [],
       })
     })
+
+    it('redirects to the Case details page if there is no session data', async () => {
+      await controller.details()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
   })
 
   describe('saveDetails', () => {
-    it('redirects to type when address valid', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+    beforeEach(() => {
+      setSessionData({})
+    })
+
+    it('redirects to type when the submitted address is valid', async () => {
       request.body = {
         addressLine1: 'Line 1',
         addressLine2: 'Line 2',
@@ -349,6 +405,14 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects to details when address invalid', async () => {
+      request.body = {
+        addressLine1: '',
+        addressLine2: '',
+        addressTown: '',
+        addressCounty: '',
+        addressPostcode: '',
+        addressCountry: 'UK',
+      }
       await controller.saveDetails()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
@@ -357,11 +421,10 @@ describe('proposedAddressesController', () => {
 
   describe('type', () => {
     it('renders arrangement type page', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
-        arrangementSubType: undefined,
-        settledType: undefined,
-      }
+      setSessionData({
+        lookupResults,
+        address,
+      })
 
       await controller.type()(request, response, next)
 
@@ -372,31 +435,41 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
-        proposedAddress: { ...sessionData, arrangementSubType: undefined, settledType: undefined },
+        arrangementSubTypeDescription: undefined,
+        settledType: undefined,
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: expect.any(Array),
+        arrangementSubTypeItems: arrangementSubTypeItems(),
       })
     })
 
     it('renders arrangement type page with session data', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      setSessionData({
+        lookupResults,
+        address,
+        arrangementSubType,
+        arrangementSubTypeDescription,
+        settledType,
+      })
       await controller.type()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
-        proposedAddress: sessionData,
+        arrangementSubTypeDescription,
+        settledType,
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: expect.any(Array),
+        arrangementSubTypeItems: arrangementSubTypeItems(arrangementSubType),
       })
     })
 
     it('renders a back link to address details if there are no lookup results in the session', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, lookupResults: null }
+      setSessionData({
+        address,
+      })
 
       await controller.type()(request, response, next)
 
@@ -408,19 +481,24 @@ describe('proposedAddressesController', () => {
       )
     })
 
-    it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = undefined
+    it('redirects when the session data is invalid', async () => {
+      jest.spyOn(proposedAddressesUtils, 'validateUpToAddress').mockReturnValue('/redirect-url')
 
       await controller.type()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ crn: 'CRN123' }))
-      expect(auditService.logPageView).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
+      expect(auditService.logPageView).toHaveBeenCalled()
     })
   })
 
   describe('saveType', () => {
+    beforeEach(() => {
+      setSessionData({
+        address,
+      })
+    })
+
     it('redirects to status when arrangement type valid', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
       request.body = {
         arrangementSubType: 'FRIENDS_OR_FAMILY',
         settledType: 'SETTLED',
@@ -432,7 +510,10 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects to arrangement type when arrangement type invalid', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      request.body = {
+        arrangementSubType: undefined,
+        settledType: undefined,
+      }
 
       await controller.saveType()(request, response, next)
 
@@ -442,7 +523,11 @@ describe('proposedAddressesController', () => {
 
   describe('status', () => {
     it('renders status page', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, verificationStatus: undefined }
+      setSessionData({
+        address,
+        arrangementSubType,
+        settledType,
+      })
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
 
       await controller.status()(request, response, next)
@@ -453,42 +538,48 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
-        proposedAddress: { ...sessionData, verificationStatus: undefined },
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
-        verificationStatusItems: expect.any(Array),
+        verificationStatusItems: verificationStatusItems(),
       })
     })
 
     it('renders status page with session data', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      setSessionData({
+        address,
+        arrangementSubType,
+        settledType,
+        verificationStatus: 'NOT_CHECKED_YET',
+      })
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
       await controller.status()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
-        proposedAddress: sessionData,
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
-        verificationStatusItems: expect.any(Array),
+        verificationStatusItems: verificationStatusItems('NOT_CHECKED_YET'),
       })
     })
 
-    it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, arrangementSubType: undefined }
+    it('redirects when the session data is invalid', async () => {
+      jest.spyOn(proposedAddressesUtils, 'validateUpToType').mockReturnValue('/redirect-url')
 
       await controller.status()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
-      expect(auditService.logPageView).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
+      expect(auditService.logPageView).toHaveBeenCalled()
     })
   })
 
   describe('saveStatus', () => {
+    beforeEach(() => {
+      setSessionData(fullSessionData)
+    })
+
     it('redirects to check your answers when status valid and status is not PASSED', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
       request.body = { verificationStatus: 'NOT_CHECKED_YET' }
 
       await controller.saveStatus()(request, response, next)
@@ -497,7 +588,6 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects to next accommodation when status is PASSED', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
       request.body = { verificationStatus: 'PASSED' }
 
       await controller.saveStatus()(request, response, next)
@@ -506,7 +596,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects to status when status invalid', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      request.body = { verificationStatus: undefined }
 
       await controller.saveStatus()(request, response, next)
 
@@ -516,8 +606,13 @@ describe('proposedAddressesController', () => {
 
   describe('nextAccommodation', () => {
     it('renders next accommodation page', async () => {
+      setSessionData({
+        address,
+        arrangementSubType,
+        settledType,
+        verificationStatus: 'PASSED',
+      })
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, nextAccommodationStatus: undefined }
 
       await controller.nextAccommodation()(request, response, next)
 
@@ -527,8 +622,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
-        proposedAddress: { ...sessionData, nextAccommodationStatus: undefined },
-        nextAccommodationStatusItems: expect.any(Array),
+        nextAccommodationStatusItems: nextAccommodationStatusItems(),
         name: 'James Smith',
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
@@ -537,35 +631,44 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders next accommodation page with session data', async () => {
+      setSessionData({
+        address,
+        arrangementSubType,
+        settledType,
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'NO',
+      })
+
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.nextAccommodation()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
-        proposedAddress: sessionData,
         name: 'James Smith',
-        nextAccommodationStatusItems: expect.any(Array),
+        nextAccommodationStatusItems: nextAccommodationStatusItems('NO'),
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
         errorSummary: [],
       })
     })
 
-    it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, verificationStatus: undefined }
+    it('redirects when the session data is invalid', async () => {
+      jest.spyOn(proposedAddressesUtils, 'validateUpToStatus').mockReturnValue('/redirect-url')
 
       await controller.nextAccommodation()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
-      expect(auditService.logPageView).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
+      expect(auditService.logPageView).toHaveBeenCalled()
     })
   })
 
   describe('saveNextAccommodation', () => {
+    beforeEach(() => {
+      setSessionData(fullSessionData)
+    })
+
     it('redirects to check your answers when next accommodation valid', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
       request.body = { nextAccommodationStatus: 'YES' }
 
       await controller.saveNextAccommodation()(request, response, next)
@@ -573,11 +676,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects to next accommodation when next accommodation invalid', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
-        verificationStatus: 'PASSED',
-        nextAccommodationStatus: undefined,
-      }
+      request.body = { nextAccommodationStatus: undefined }
 
       await controller.saveNextAccommodation()(request, response, next)
 
@@ -587,15 +686,11 @@ describe('proposedAddressesController', () => {
 
   describe('checkYourAnswers', () => {
     it('renders check your answers', async () => {
-      jest
-        .spyOn(proposedAddressesUtils, 'checkYourAnswersRows')
-        .mockImplementation(() => [
-          { key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' }, actions: { items: [] } },
-        ])
+      setSessionData(fullSessionData)
+
       jest
         .spyOn(backlinks, 'getPageBackLink')
         .mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
 
       await controller.checkYourAnswers()(request, response, next)
 
@@ -605,53 +700,50 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
-        tableRows: [{ key: { text: 'Address' }, value: { html: 'Line 1<br />Line 2' }, actions: { items: [] } }],
+        tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', 'James Smith'),
         backLinkHref: uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }),
         errors: {},
         errorSummary: [],
       })
     })
 
-    it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, nextAccommodationStatus: undefined }
+    it('redirects when the session data is invalid', async () => {
+      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue('/redirect-url')
 
       await controller.checkYourAnswers()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
-      expect(auditService.logPageView).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
+      expect(auditService.logPageView).toHaveBeenCalled()
     })
   })
 
   describe('submit', () => {
     it('submits, clears session data and redirects', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      setSessionData(fullSessionData)
 
       await controller.submit()(request, response, next)
 
-      expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', sessionData)
+      expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', fullSessionData)
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
       expect(request.flash).toHaveBeenCalledWith('success', 'Private address added')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 
-    it('redirects when validation fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = { ...sessionData, nextAccommodationStatus: undefined }
+    it('redirects when the session data is invalid', async () => {
+      jest.spyOn(proposedAddressesUtils, 'validateUpToNextAccommodation').mockReturnValue('/redirect-url')
 
       await controller.submit()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
-      expect(proposedAddressesService.submit).not.toHaveBeenCalled()
-      expect(controller.formData.remove).not.toHaveBeenCalled()
-      expect(auditService.logPageView).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
     })
 
     it('redirects when api call fails', async () => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = sessionData
+      setSessionData(fullSessionData)
       jest.spyOn(proposedAddressesService, 'submit').mockRejectedValue(new Error('API error'))
 
       await controller.submit()(request, response, next)
 
-      expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', sessionData)
+      expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', fullSessionData)
       expect(controller.formData.remove).not.toHaveBeenCalled()
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }))
       expect(auditService.logPageView).not.toHaveBeenCalled()
@@ -689,6 +781,8 @@ describe('proposedAddressesController', () => {
 
   describe('cancel', () => {
     it('clears session data and redirects to the case details page', async () => {
+      setSessionData(fullSessionData)
+
       await controller.cancel()(request, response, next)
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
@@ -697,9 +791,7 @@ describe('proposedAddressesController', () => {
 
     describe('if the Check your answer page has been reached', () => {
       it('clears session data and redirects to the case details page', async () => {
-        request.session.multiPageFormData.proposedAddress.CRN123.redirect = uiPaths.proposedAddresses.checkYourAnswers({
-          crn: 'CRN123',
-        })
+        setSessionData({ ...fullSessionData, redirect: uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }) })
 
         await controller.cancel()(request, response, next)
 
@@ -713,10 +805,10 @@ describe('proposedAddressesController', () => {
     const checkYourAnswersUrl = uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' })
 
     beforeEach(() => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
+      setSessionData({
+        ...fullSessionData,
         redirect: checkYourAnswersUrl,
-      }
+      })
     })
 
     describe('saveLookup', () => {
@@ -761,7 +853,6 @@ describe('proposedAddressesController', () => {
         await controller.saveStatus()(request, response, next)
 
         expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
-        expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, expect.any(Object))
       })
     })
   })
@@ -771,11 +862,11 @@ describe('proposedAddressesController', () => {
     const redirect = uiPaths.proposedAddresses.show({ crn: 'CRN123', id })
 
     beforeEach(() => {
-      request.session.multiPageFormData.proposedAddress.CRN123 = {
-        ...sessionData,
+      setSessionData({
+        ...fullSessionData,
         id,
         redirect,
-      }
+      })
     })
 
     describe('saveLookup', () => {
@@ -804,7 +895,7 @@ describe('proposedAddressesController', () => {
       { handler: 'saveType', body: { arrangementSubType: 'FRIENDS_AND_FAMILY', settledType: 'SETTLED' } },
       { handler: 'saveStatus', body: { verificationStatus: 'NOT_CHECKED_YET' } },
       { handler: 'saveNextAccommodation', body: { nextAccommodationStatus: 'YES' } },
-    ])('saves the $handler data in session and redirects to the Check your answers page', async ({ handler, body }) => {
+    ])('saves the $handler data in session and redirects to the address details page', async ({ handler, body }) => {
       request.body = body
 
       // @ts-expect-error dynamic method typing
@@ -826,7 +917,6 @@ describe('proposedAddressesController', () => {
         await controller.saveStatus()(request, response, next)
 
         expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
-        expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, expect.any(Object))
       })
     })
 

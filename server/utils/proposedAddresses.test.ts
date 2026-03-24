@@ -419,6 +419,11 @@ describe('Proposed addresses utilities', () => {
     describe('validateUpToAddress', () => {
       it.each([
         {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
+        {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, buildingName: '' } },
           expected: uiPaths.proposedAddresses.details({ crn }),
@@ -453,6 +458,11 @@ describe('Proposed addresses utilities', () => {
 
     describe('validateUpToType', () => {
       it.each([
+        {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
@@ -523,6 +533,11 @@ describe('Proposed addresses utilities', () => {
     describe('validateUpToStatus', () => {
       it.each([
         {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
+        {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, country: '' } } as ProposedAddressFormData,
           expected: uiPaths.proposedAddresses.details({ crn }),
@@ -561,6 +576,11 @@ describe('Proposed addresses utilities', () => {
 
     describe('validateUpToNextAccommodation', () => {
       it.each([
+        {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, buildingName: '' } } as ProposedAddressFormData,

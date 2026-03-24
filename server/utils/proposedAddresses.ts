@@ -322,9 +322,11 @@ const validateNextAccommodationFromSession = (req: Request, sessionData: Propose
 }
 
 export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFormData): string | null => {
-  return !validateAddressFromSession(req, sessionData)
-    ? uiPaths.proposedAddresses.details({ crn: req.params.crn })
-    : undefined
+  const { crn } = req.params
+
+  if (!sessionData) return uiPaths.cases.show({ crn })
+
+  return !validateAddressFromSession(req, sessionData) ? uiPaths.proposedAddresses.details({ crn }) : undefined
 }
 
 export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {

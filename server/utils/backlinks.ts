@@ -33,3 +33,24 @@ export const getPageBackLink = (
 
   return foundReferer ? referer : lastReferer || defaultPath
 }
+
+/**
+ * Captures the redirect URL at the start of a flow.
+ * Reuses getPageBackLink, storing against the provided pattern
+ * so it can be retrieved later in the flow.
+ */
+export const setFlowRedirect = (
+  pagePattern: string,
+  req: Request,
+  matchList: Array<Path>,
+  defaultPath = '/',
+): void => {
+  getPageBackLink(pagePattern, req, matchList, defaultPath)
+}
+
+/**
+ * Retrieves the redirect URL that was captured at the start of the flow.
+ */
+export const getFlowRedirect = (pagePattern: string, req: Request, defaultPath = '/'): string => {
+  return req.session.pageReferers?.[pagePattern] || defaultPath
+}

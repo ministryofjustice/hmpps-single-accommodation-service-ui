@@ -217,7 +217,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(submittedDutyToRefer)
 
     // And I should see a success banner confirming submission details were added
-    await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
+    await dutyToReferDetailsPage.shouldShowBanner('Submission details added')
 
     // And the outcome details section should be empty
     await dutyToReferDetailsPage.shouldShowEmptyOutcomeDetails()
@@ -244,6 +244,6 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(acceptedDutyToRefer)
 
     // And I should see a success banner confirming outcome details were added
-    await dutyToReferDetailsPage.shouldShowBanner('Outcome details updated')
+    await dutyToReferDetailsPage.shouldShowBanner('Outcome details added')
   })
 })

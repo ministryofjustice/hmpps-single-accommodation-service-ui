@@ -12,7 +12,7 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   }
 
   async shouldShowSubmissionDetails(dutyToRefer: DutyToReferDto) {
-    await expect(this.page.getByRole('heading', { name: 'Submission details' })).toBeVisible()
+    await expect(this.page.getByRole('heading', { name: 'Submission details', exact: true })).toBeVisible()
 
     if (dutyToRefer.status === 'NOT_STARTED' || dutyToRefer.status === 'SUBMITTED') {
       await this.shouldShowSummaryItem('Status', formatDutyToReferStatus(dutyToRefer.status))
@@ -30,7 +30,7 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   }
 
   async shouldShowOutcomeDetails(dutyToRefer: DutyToReferDto) {
-    await expect(this.page.getByRole('heading', { name: 'Outcome details' })).toBeVisible()
+    await expect(this.page.getByRole('heading', { name: 'Outcome details', exact: true })).toBeVisible()
 
     const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${dutyToRefer.submission.localAuthority.localAuthorityAreaName} agreed to support this person with housing`
     await this.shouldShowSummaryItem('Status', statusText)

@@ -37,6 +37,7 @@ const proposedAddressesController = mock<ProposedAddressesController>({
 })
 
 const dutyToReferController = mock<DutyToReferController>({
+  show: mockHandler,
   guidance: mockHandler,
   submission: mockHandler,
   outcome: mockHandler,

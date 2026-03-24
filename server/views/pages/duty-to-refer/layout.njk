@@ -35,7 +35,7 @@
         <div class="govuk-grid-column-two-thirds">
             <form action="{{ formAction }}" method="post" novalidate="">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                
+
                 {% block formContent %}{% endblock %}
 
                 <div class="govuk-button-group">

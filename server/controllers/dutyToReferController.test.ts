@@ -7,8 +7,10 @@ import CasesService from '../services/casesService'
 import ReferenceDataService from '../services/referenceDataService'
 import uiPaths from '../paths/ui'
 import * as dutyToReferUtils from '../utils/dutyToRefer'
+import { detailsSummaryListRows, outcomeDetailsSummaryListRows } from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
 import { caseFactory, dutyToReferFactory, referenceDataFactory } from '../testutils/factories'
+import { caseAssignedTo } from '../utils/cases'
 
 describe('dutyToReferController', () => {
   let request: Request
@@ -139,7 +141,6 @@ describe('dutyToReferController', () => {
     })
 
     it('redirects to submission page when validation fails', async () => {
-      jest.spyOn(dutyToReferUtils, 'summaryListRows').mockReturnValue([])
       jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
       await controller.submit()(request, response, next)
 
@@ -233,6 +234,31 @@ describe('dutyToReferController', () => {
       await controller.update()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.outcome({ crn: 'CRN123' }))
+    })
+  })
+
+  describe('show', () => {
+    it('renders the duty to refer details page', async () => {
+      const crn = 'CRN123'
+      const dutyToRefer = dutyToReferFactory.notStarted().build({ crn })
+
+      dutyToReferService.getDutyToRefer.mockResolvedValue(dutyToRefer)
+
+      await controller.show()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.DUTY_TO_REFER_DETAILS, {
+        who: 'user1',
+        correlationId: 'request-id',
+      })
+
+      expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/show', {
+        crn,
+        caseData,
+        assignedTo: caseAssignedTo(caseData, 'user-id'),
+        submissionDetailRows: detailsSummaryListRows(dutyToRefer),
+        outcomeDetailRows: outcomeDetailsSummaryListRows(dutyToRefer),
+        status: dutyToRefer?.status,
+      })
     })
   })
 })

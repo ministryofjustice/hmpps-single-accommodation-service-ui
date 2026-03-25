@@ -16,10 +16,7 @@ import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
 import { getFlowRedirect, setFlowRedirect } from '../utils/backlinks'
 
-const FLOW_ENTRY_POINTS = [
-  uiPaths.dutyToRefer.show.pattern,
-  uiPaths.cases.show.pattern,
-]
+const FLOW_ENTRY_POINTS = [uiPaths.dutyToRefer.show.pattern, uiPaths.cases.show.pattern]
 
 export default class DutyToReferController {
   constructor(
@@ -44,8 +41,8 @@ export default class DutyToReferController {
         this.dutyToReferService.getDutyToRefer(token, crn),
       ])
 
-      const submissionDetailRows = dutyToRefer ? detailsSummaryListRows(dutyToRefer) : undefined
-      const outcomeDetailRows = dutyToRefer ? outcomeDetailsSummaryListRows(dutyToRefer) : undefined
+      const submissionDetailRows = detailsSummaryListRows(dutyToRefer)
+      const outcomeDetailRows = outcomeDetailsSummaryListRows(dutyToRefer)
 
       return res.render('pages/duty-to-refer/show', {
         crn,

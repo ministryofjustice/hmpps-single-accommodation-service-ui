@@ -2,8 +2,10 @@ import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
 import {
   detailsForStatus,
+  detailsSummaryListRows,
   dutyToReferStatusCard,
   linksForStatus,
+  outcomeDetailsSummaryListRows,
   summaryListRows,
   validateOutcome,
   validateSubmission,
@@ -151,6 +153,46 @@ describe('duty to refer utils', () => {
       expect(rows[5].key.text).toBe('Submission date')
       expect(rows[5].value.text).toBe(formatDateAndDaysAgo('2025-01-10'))
     })
+  })
+
+  describe('detailsSummaryListRows', () => {
+    const submission = {
+      id: 'submission-id',
+      localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
+      referenceNumber: 'REF123',
+      submissionDate: '2024-09-23',
+      createdBy: 'user1',
+      createdAt: '2024-09-23T00:00:00.000Z',
+    }
+
+    it.each(['NOT_STARTED', 'SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)(
+      'returns correct rows for status %s',
+      status => {
+        const dtr = dutyToReferFactory.build({ status, submission })
+
+        expect(detailsSummaryListRows(dtr)).toMatchSnapshot()
+      },
+    )
+  })
+
+  describe('outcomeDetailsSummaryListRows', () => {
+    const submission = {
+      id: 'submission-id',
+      localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
+      referenceNumber: 'REF123',
+      submissionDate: '2024-09-23',
+      createdBy: 'user1',
+      createdAt: '2024-09-23T00:00:00.000Z',
+    }
+
+    it.each(['NOT_STARTED', 'SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)(
+      'returns correct rows for status %s',
+      status => {
+        const dtr = dutyToReferFactory.build({ status, submission })
+
+        expect(outcomeDetailsSummaryListRows(dtr)).toMatchSnapshot()
+      },
+    )
   })
 
   describe('validateSubmission', () => {

@@ -41,14 +41,12 @@
                     rows: outcomeDetailRows
                     })
                 }}
-                <p>
-                    {{ govukButton({
-                        text: "Edit outcome details",
-                        classes: "govuk-button--secondary",
-                        href: '#',
-                        preventDoubleClick: true
-                    }) }}
-                </p>
+                {{ govukButton({
+                    text: "Edit outcome details",
+                    classes: "govuk-button--secondary",
+                    href: '#',
+                    preventDoubleClick: true
+                }) }}
             {% endif %}
 
             <h2 class="govuk-heading-m">Submission details</h2>
@@ -62,14 +60,12 @@
                     preventDoubleClick: true
                 }) }}
             {% else %}
-                <p>
-                    {{ govukButton({
-                        text: "Edit submission details",
-                        classes: "govuk-button--secondary",
-                        href: paths.dutyToRefer.submission({ crn: crn }),
-                        preventDoubleClick: true
-                    }) }}
-                </p>
+                {{ govukButton({
+                    text: "Edit submission details",
+                    classes: "govuk-button--secondary",
+                    href: '#',
+                    preventDoubleClick: true
+                }) }}
                 {% if not outcomeDetailRows.length %}
                     <h2 class="govuk-heading-m">Outcome details</h2>
                     <p>No details about the outcome have been added.</p>

@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { Session } from 'express-session'
 import { Request } from 'express'
-import { getPageBackLink } from './backlinks'
+import { getFlowRedirect, getPageBackLink } from './backlinks'
 
 describe('Link management', () => {
   const matchList = ['/pattern1/:param', '/pattern2/']
@@ -43,6 +43,29 @@ describe('Link management', () => {
       const request = mockRequest(null, null)
       request.session = {} as Session
       expect(getPageBackLink(pagePattern, request, matchList, 'defaultPath')).toEqual('defaultPath')
+    })
+  })
+
+  describe('getFlowRedirect', () => {
+    it('should return the stored referer for the given page pattern', () => {
+      const storedUrl = '/cases/CRN123/dtr'
+      const request = mockRequest(null, storedUrl)
+
+      expect(getFlowRedirect(pagePattern, request)).toEqual(storedUrl)
+    })
+
+    it('should return the default path when no stored referer exists', () => {
+      const request = mockRequest(null, null)
+      request.session = {} as Session
+
+      expect(getFlowRedirect(pagePattern, request, 'defaultPath')).toEqual('defaultPath')
+    })
+
+    it('should return "/" when no stored referer exists and no default is provided', () => {
+      const request = mockRequest(null, null)
+      request.session = {} as Session
+
+      expect(getFlowRedirect(pagePattern, request)).toEqual('/')
     })
   })
 })

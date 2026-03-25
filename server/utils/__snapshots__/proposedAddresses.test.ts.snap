@@ -337,6 +337,22 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
 ]
 `;
 
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for a note 1`] = `
+{
+  "byline": {
+    "text": "Candace Schumm",
+  },
+  "datetime": {
+    "timestamp": "2025-07-18T17:53:24.426Z",
+    "type": "datetime",
+  },
+  "html": "<p>Some note</p><p>line 2</p>",
+  "label": {
+    "text": "Note added",
+  },
+}
+`;
+
 exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address created record 1`] = `
 {
   "byline": {

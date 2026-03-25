@@ -65,4 +65,15 @@ export default {
         jsonBody: records || auditRecordFactory.proposedAddressCreated().buildList(1),
       },
     }),
+  stubSubmitProposedAddressTimelineNote: (crn: string, id: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.cases.proposedAddresses.timeline.submit({ crn, id }),
+      },
+      response: {
+        status: 201,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    }),
 }

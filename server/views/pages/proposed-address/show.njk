@@ -2,7 +2,9 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "moj/components/timeline/macro.njk" import mojTimeline %}
+{% from "components/macros/errorSummary.njk" import showErrorSummary %}
 {% from "components/macros/caseDetails.njk" import caseDetails %}
 
 {% set pageTitle = applicationName + " - Proposed address" %}
@@ -27,6 +29,8 @@
 {% endblock %}
 
 {% block content %}
+  {{ showErrorSummary(errorSummary) }}
+
   {{ caseDetails(caseData, assignedTo) }}
 
   <div class="govuk-grid-row">
@@ -49,6 +53,33 @@
         {% if nextAction %}
           {{ govukButton(nextAction) }}
         {% endif %}
+      </section>
+
+      <section class="govuk-!-margin-top-8 govuk-!-margin-bottom-4">
+        <form action="{{ currentUrl }}" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {{
+            govukTextarea({
+              name: "note",
+              label: {
+                text: "Add note",
+                classes: "govuk-label--s"
+              },
+              classes: "govuk-!-width-two-thirds",
+              value: note,
+              errorMessage: errors.note
+            })
+          }}
+
+          {{
+            govukButton({
+              text: "Add note",
+              preventDoubleClick: true,
+              classes: "govuk-button--secondary"
+            })
+          }}
+        </form>
       </section>
     </div>
 

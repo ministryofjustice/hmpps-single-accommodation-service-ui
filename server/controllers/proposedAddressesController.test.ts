@@ -85,7 +85,7 @@ describe('proposedAddressesController', () => {
 
     request = mock<Request>({
       id: 'request-id',
-      params: { crn: 'CRN123' },
+      params: { crn: 'CRN123', id: 'address-id' },
       session: {
         save: jest.fn().mockImplementation((callback: () => unknown) => callback()),
       },
@@ -105,16 +105,19 @@ describe('proposedAddressesController', () => {
   })
 
   describe('show', () => {
-    it('renders the address details page', async () => {
-      const caseData = caseFactory.build()
-      const proposedAddress = accommodationFactory.build({
-        verificationStatus: 'PASSED',
-      })
-      const auditRecords = auditRecordFactory.buildList(2)
+    const caseData = caseFactory.build()
+    const proposedAddress = accommodationFactory.build({
+      verificationStatus: 'PASSED',
+    })
+    const auditRecords = auditRecordFactory.buildList(2)
+
+    beforeEach(() => {
       casesService.getCase.mockResolvedValue(caseData)
       proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
       proposedAddressesService.getTimeline.mockResolvedValue(auditRecords)
+    })
 
+    it('renders the address details page', async () => {
       await controller.show()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.PROPOSED_ADDRESS_DETAILS, {
@@ -128,7 +131,75 @@ describe('proposedAddressesController', () => {
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),
         nextAction: nextActionButton(proposedAddress),
+        errors: {},
+        errorSummary: [],
       })
+    })
+
+    it('shows errors', async () => {
+      const userInput = { note: '' }
+      const errors = { note: 'Enter a note' }
+      const errorSummary = [{ href: '#note', text: 'Enter a note' }]
+
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput })
+
+      await controller.show()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/proposed-address/show',
+        expect.objectContaining({
+          errors,
+          errorSummary,
+          note: userInput.note,
+        }),
+      )
+    })
+  })
+
+  describe('saveNote', () => {
+    it('redirects with an error if the note is empty', async () => {
+      request.body = { note: '' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.show({ crn: 'CRN123', id: 'address-id' }),
+      )
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        note: 'Enter a note',
+      })
+    })
+
+    it('redirects with an error if the API returns an error', async () => {
+      proposedAddressesService.submitTimelineNote.mockRejectedValue(new Error('API error'))
+
+      request.body = { note: 'Some valid note' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.show({ crn: 'CRN123', id: 'address-id' }),
+      )
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'API error')
+    })
+
+    it('saves the note and redirects to the address details page with a success message', async () => {
+      proposedAddressesService.submitTimelineNote.mockResolvedValue()
+
+      request.body = { note: 'Some valid note' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.show({ crn: 'CRN123', id: 'address-id' }),
+      )
+      expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
+      expect(proposedAddressesService.submitTimelineNote).toHaveBeenCalledWith(
+        'token-1',
+        'CRN123',
+        'address-id',
+        'Some valid note',
+      )
     })
   })
 

@@ -60,6 +60,7 @@ test.describe('view proposed address details', () => {
       .build({ crn: caseData.crn, verificationStatus: 'NOT_CHECKED_YET' })
     const createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
     await setupProposedAddresses(caseData.crn, [proposedAddress])
+    const noteAddressRecord = auditRecordFactory.note('This is a note\n\nWith line breaks').build()
     await setupProposedAddressTimeline(caseData.crn, proposedAddress.id, [createdAddressRecord])
 
     // Given I am logged in
@@ -82,6 +83,29 @@ test.describe('view proposed address details', () => {
 
     // And I should see a timeline entry showing when the address was created
     await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord))
+
+    // When I click the button to add a note
+    await addressDetailsPage.clickButton('Add note')
+
+    // Then I should see an error
+    await addressDetailsPage.shouldShowErrorMessagesForFields({
+      note: 'Enter a note',
+    })
+
+    // When I enter a note and submit
+    await proposedAddressesApi.stubSubmitProposedAddressTimelineNote(caseData.crn, proposedAddress.id)
+    await proposedAddressesApi.stubGetProposedAddressTimeline(caseData.crn, proposedAddress.id, [
+      noteAddressRecord,
+      createdAddressRecord,
+    ])
+    await addressDetailsPage.completeInputByLabel('Add note', 'This is a note\n\nWith line breaks')
+    await addressDetailsPage.clickButton('Add note')
+
+    // Then I should see a success banner
+    await addressDetailsPage.shouldShowBanner('Note added')
+
+    // And the note should be shown in the timeline at the top
+    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(noteAddressRecord), 0)
   })
 })
 

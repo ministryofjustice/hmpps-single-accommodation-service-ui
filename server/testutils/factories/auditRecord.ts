@@ -31,6 +31,14 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
       changes,
     })
   }
+
+  note(note: string) {
+    return this.params({
+      // @ts-expect-error needs updated API types
+      type: 'NOTE',
+      changes: [{ field: 'note', value: note }],
+    })
+  }
 }
 
 export default AuditRecordFactory.define(() => ({

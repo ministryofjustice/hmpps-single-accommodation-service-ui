@@ -72,6 +72,8 @@ export default class ProposedAddressesController {
         this.proposedAddressesService.getTimeline(token, crn, id),
       ])
 
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+
       return res.render('pages/proposed-address/show', {
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
@@ -79,7 +81,39 @@ export default class ProposedAddressesController {
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),
         nextAction: nextActionButton(proposedAddress),
+        ...userInput,
+        errors,
+        errorSummary,
       })
+    }
+  }
+
+  saveNote(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.PROPOSED_ADDRESS_DETAILS_ADD_NOTE, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+      const { note } = req.body
+
+      if (!note) {
+        validateAndFlashErrors(req, {
+          note: 'Enter a note',
+        })
+        return res.redirect(uiPaths.proposedAddresses.show({ crn, id }))
+      }
+
+      try {
+        await this.proposedAddressesService.submitTimelineNote(token, crn, id, note)
+        req.flash('success', 'Note added')
+      } catch (error) {
+        addGenericErrorToFlash(req, error.message)
+      }
+
+      return res.redirect(uiPaths.proposedAddresses.show({ crn, id }))
     }
   }
 

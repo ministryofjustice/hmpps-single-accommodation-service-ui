@@ -772,6 +772,15 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('addressTimelineEntry', () => {
+    it('returns a timeline entry for a note', () => {
+      const auditRecord = auditRecordFactory.note('Some note\nline 2').build({
+        commitDate: '2025-07-18T17:53:24.426Z',
+        author: 'Candace Schumm',
+      })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
     it('returns a timeline entry for an address created record', () => {
       const proposedAddress = accommodationFactory.proposed().build({
         address: addressFactory.minimal().build({

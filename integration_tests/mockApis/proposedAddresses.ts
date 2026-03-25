@@ -57,7 +57,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.proposedAddresses.timeline({ crn, id }),
+        urlPattern: apiPaths.cases.proposedAddresses.timeline.index({ crn, id }),
       },
       response: {
         status: 200,

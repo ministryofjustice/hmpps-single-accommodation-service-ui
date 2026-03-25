@@ -117,7 +117,7 @@ describeClient('ProposedAddressesClient', provider => {
       uponReceiving: 'a request to get a proposed address timeline for a case by CRN and address ID',
       withRequest: {
         method: 'GET',
-        path: apiPaths.cases.proposedAddresses.timeline({ crn, id: proposedAddress.id }),
+        path: apiPaths.cases.proposedAddresses.timeline.index({ crn, id: proposedAddress.id }),
         headers: {
           authorization: 'Bearer test-user-token',
         },
@@ -129,5 +129,30 @@ describeClient('ProposedAddressesClient', provider => {
     })
 
     await proposedAddressesClient.getTimeline(token, crn, proposedAddress.id)
+  })
+
+  // TODO: Enable test when API endpoint exists
+  it.skip('should make a POST request to /cases/:crn/proposed-accommodations/:id/timeline', async () => {
+    const crn = crnFactory()
+    const proposedAddress = accommodationFactory.proposed().build()
+    const note = 'This is a note\n\nWith multiple lines'
+
+    await provider.addInteraction({
+      state: `A proposed address timeline exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to post a proposed address timeline note for a case by CRN and address ID',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.proposedAddresses.timeline.submit({ crn, id: proposedAddress.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: { note },
+      },
+    })
+
+    await proposedAddressesClient.submitTimelineNote(token, crn, proposedAddress.id, note)
   })
 })

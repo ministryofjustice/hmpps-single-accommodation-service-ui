@@ -94,4 +94,14 @@ describe('ProposedAddressesService', () => {
       expect(result).toEqual(auditRecords)
     })
   })
+
+  describe('submitTimelineNote', () => {
+    it('should call submitTimelineNote on the api client with the note data', async () => {
+      const note = 'This is a note\n\nWith multiple lines'
+
+      await proposedAddressesService.submitTimelineNote(token, crn, id, note)
+
+      expect(proposedAddressesClient.submitTimelineNote).toHaveBeenCalledWith(token, crn, id, note)
+    })
+  })
 })

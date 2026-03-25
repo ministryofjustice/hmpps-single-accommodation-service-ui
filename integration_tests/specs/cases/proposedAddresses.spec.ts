@@ -536,6 +536,11 @@ test.describe('edit proposed address', () => {
       arrangementSubTypeDescription: 'Other',
       settledType: 'SETTLED',
     })
+    const checksPassedProposedAddress = accommodationFactory.build({
+      ...updatedProposedAddress,
+      verificationStatus: 'PASSED',
+      nextAccommodationStatus: 'TO_BE_DECIDED',
+    })
 
     // Given I am logged in
     await login(page)
@@ -589,5 +594,47 @@ test.describe('edit proposed address', () => {
 
     // And a timeline entry should be shown
     await updatedAddressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(updatedAddressRecord))
+
+    // When I click the Change address checks link
+    await updatedAddressDetailsPage.clickChangeLink('Address checks')
+
+    // And I update the address checks
+    const checksPassedAddressRecord = auditRecordFactory
+      .proposedAddressUpdated([
+        {
+          field: 'verificationStatus',
+          value: checksPassedProposedAddress.verificationStatus,
+        },
+        {
+          field: 'nextAccommodationStatus',
+          value: checksPassedProposedAddress.nextAccommodationStatus,
+        },
+      ])
+      .build()
+    await setupProposedAddresses(crn, [checksPassedProposedAddress])
+    await setupProposedAddressTimeline(crn, updatedProposedAddress.id, [
+      checksPassedAddressRecord,
+      updatedAddressRecord,
+      createdAddressRecord,
+    ])
+    await editProposedAddressPage.completeStatusForm(checksPassedProposedAddress)
+    await editProposedAddressPage.clickButton('Continue')
+    await editProposedAddressPage.completeNextAccommodationForm(checksPassedProposedAddress)
+    await editProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the address details page
+    const checksPassedAddressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(
+      page,
+      checksPassedProposedAddress,
+    )
+
+    // And a banner should be shown confirming the proposed address was updated
+    await checksPassedAddressDetailsPage.shouldShowBanner('Address updated')
+
+    // And the address details should be updated
+    await checksPassedAddressDetailsPage.shouldShowProposedAddressSummary()
+
+    // And a timeline entry should be shown
+    await checksPassedAddressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(checksPassedAddressRecord))
   })
 })

@@ -21,6 +21,7 @@ import {
   lookupResultsItems,
   addressDetailRows,
   addressTimelineEntry,
+  nextActionButton,
 } from '../utils/proposedAddresses'
 import {
   fetchErrorsAndUserInput,
@@ -71,28 +72,13 @@ export default class ProposedAddressesController {
         this.proposedAddressesService.getTimeline(token, crn, id),
       ])
 
-      let nextAction: { text: string; href: string } | undefined
-
-      if (proposedAddress.verificationStatus === 'NOT_CHECKED_YET') {
-        nextAction = {
-          text: 'Add checks',
-          href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }),
-        }
-      }
-      if (proposedAddress.verificationStatus === 'PASSED' && proposedAddress.nextAccommodationStatus !== 'YES') {
-        nextAction = {
-          text: 'Confirm as next address',
-          href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
-        }
-      }
-
       return res.render('pages/proposed-address/show', {
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),
-        nextAction,
+        nextAction: nextActionButton(proposedAddress),
       })
     }
   }

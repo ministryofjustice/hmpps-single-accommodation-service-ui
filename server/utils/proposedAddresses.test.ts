@@ -21,6 +21,7 @@ import {
   lookupResultsItems,
   addressDetailRows,
   addressTimelineEntry,
+  nextActionButton,
 } from './proposedAddresses'
 import {
   accommodationFactory,
@@ -733,6 +734,40 @@ describe('Proposed addresses utilities', () => {
       })
 
       expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
+    })
+  })
+
+  describe('nextActionButton', () => {
+    const proposedAddress = accommodationFactory.proposed().build({
+      crn,
+      verificationStatus: 'NOT_CHECKED_YET',
+      nextAccommodationStatus: undefined,
+    })
+    const { id } = proposedAddress
+
+    it('returns a button to add checks', () => {
+      expect(nextActionButton(proposedAddress)).toEqual({
+        text: 'Add checks',
+        href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }),
+      })
+    })
+
+    it('returns a button to confirm as next address when checks have passed', () => {
+      const checksPassedAddress = accommodationFactory.build({ ...proposedAddress, verificationStatus: 'PASSED' })
+
+      expect(nextActionButton(checksPassedAddress)).toEqual({
+        text: 'Confirm as next address',
+        href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
+      })
+    })
+
+    it.each([
+      ['has failed checks', { verificationStatus: 'FAILED' as const }],
+      ['has been confirmed', { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const }],
+    ])('returns nothing when the proposed address %s', (_, proposedAddressParams: Partial<AccommodationDetail>) => {
+      const noButtonAddress = accommodationFactory.build({ ...proposedAddress, ...proposedAddressParams })
+
+      expect(nextActionButton(noButtonAddress)).toBeUndefined()
     })
   })
 

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { ProposedAddressFormData } from '@sas/ui'
-import { AccommodationDetail } from '@sas/api'
 import ProposedAddressesController from './proposedAddressesController'
 import AuditService, { Page } from '../services/auditService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -15,6 +14,7 @@ import {
   checkYourAnswersRows,
   lookupResultsItems,
   nextAccommodationStatusItems,
+  nextActionButton,
   verificationStatusItems,
 } from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
@@ -107,7 +107,9 @@ describe('proposedAddressesController', () => {
   describe('show', () => {
     it('renders the address details page', async () => {
       const caseData = caseFactory.build()
-      const proposedAddress = accommodationFactory.build()
+      const proposedAddress = accommodationFactory.build({
+        verificationStatus: 'PASSED',
+      })
       const auditRecords = auditRecordFactory.buildList(2)
       casesService.getCase.mockResolvedValue(caseData)
       proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
@@ -125,55 +127,9 @@ describe('proposedAddressesController', () => {
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),
+        nextAction: nextActionButton(proposedAddress),
       })
     })
-
-    it.each([
-      {
-        title: 'not checked yet',
-        data: { verificationStatus: 'NOT_CHECKED_YET' as const },
-        buttonText: 'Add checks',
-        editPage: 'status',
-      },
-      {
-        title: 'passed but not confirmed',
-        data: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'NO' as const },
-        buttonText: 'Confirm as next address',
-        editPage: 'nextAccommodation',
-      },
-    ])(
-      'renders an action if the address status is $title',
-      async ({
-        data,
-        editPage,
-        buttonText,
-      }: {
-        data: Partial<AccommodationDetail>
-        buttonText: string
-        editPage: string
-      }) => {
-        const caseData = caseFactory.build()
-        const proposedAddress = accommodationFactory.build(data)
-        const auditRecords = auditRecordFactory.buildList(2)
-        casesService.getCase.mockResolvedValue(caseData)
-        proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
-        proposedAddressesService.getTimeline.mockResolvedValue(auditRecords)
-
-        request.params.id = proposedAddress.id
-
-        await controller.show()(request, response, next)
-
-        expect(response.render).toHaveBeenCalledWith(
-          'pages/proposed-address/show',
-          expect.objectContaining({
-            nextAction: {
-              text: buttonText,
-              href: uiPaths.proposedAddresses.edit({ crn: 'CRN123', id: proposedAddress.id, page: editPage }),
-            },
-          }),
-        )
-      },
-    )
   })
 
   describe('start', () => {

@@ -28,6 +28,7 @@ import {
   addErrorToFlash,
   validateAndFlashErrors,
   addGenericErrorToFlash,
+  addUserInputToFlash,
 } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
@@ -111,6 +112,7 @@ export default class ProposedAddressesController {
         req.flash('success', 'Note added')
       } catch (error) {
         addGenericErrorToFlash(req, error.message)
+        addUserInputToFlash(req)
       }
 
       return res.redirect(uiPaths.proposedAddresses.show({ crn, id }))

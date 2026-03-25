@@ -5,6 +5,7 @@ import {
   addErrorToFlash,
   addGenericErrorToFlash,
   fetchErrorsAndUserInput,
+  addUserInputToFlash,
   generateErrorMessages,
   generateErrorSummary,
   isValidUKPostcode,
@@ -143,6 +144,21 @@ describe('generateErrorMessages', () => {
       field1: { text: 'error 1' },
       field2: { text: 'error 2' },
     })
+  })
+})
+
+describe('addUserInputToFlash', () => {
+  const request = mock<Request>({})
+
+  it('saves the user input to flash', () => {
+    request.body = {
+      foo: 'bar',
+      baz: '1',
+    }
+
+    addUserInputToFlash(request)
+
+    expect(request.flash).toHaveBeenCalledWith('userInput', '{"foo":"bar","baz":"1"}')
   })
 })
 

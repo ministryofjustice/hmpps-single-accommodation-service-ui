@@ -97,6 +97,7 @@ describe('proposedAddressesController', () => {
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
+    jest.spyOn(validationUtils, 'addUserInputToFlash')
 
     jest.spyOn(controller.formData, 'remove')
     jest.spyOn(controller.formData, 'update')
@@ -181,6 +182,7 @@ describe('proposedAddressesController', () => {
         uiPaths.proposedAddresses.show({ crn: 'CRN123', id: 'address-id' }),
       )
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'API error')
+      expect(validationUtils.addUserInputToFlash).toHaveBeenCalledWith(request)
     })
 
     it('saves the note and redirects to the address details page with a success message', async () => {

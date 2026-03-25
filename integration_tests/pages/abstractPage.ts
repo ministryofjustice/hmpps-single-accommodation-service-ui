@@ -45,6 +45,15 @@ export default class AbstractPage {
     await (container || this.page).getByRole('link', { name: text }).click()
   }
 
+  async clickChangeLink(key: string) {
+    await this.page
+      .locator('.govuk-summary-list__row', {
+        has: this.page.locator('.govuk-summary-list__key').getByText(key, { exact: true }),
+      })
+      .getByRole('link', { name: 'Change' })
+      .click()
+  }
+
   async completeInputByLabel(label: string, value: string) {
     await this.page.getByRole('textbox', { name: label }).fill(value)
   }
@@ -158,12 +167,12 @@ export default class AbstractPage {
     await expect(this.page.getByRole('combobox', { name: label })).toHaveValue(value)
   }
 
-  async shouldShowTimelineEntry(entry: TimelineEntry) {
+  async shouldShowTimelineEntry(entry: TimelineEntry, position = 0) {
     const { label, byline, datetime, html } = entry
 
-    const timelineEntry = this.page.locator('.moj-timeline__item', {
-      has: this.page.getByRole('heading', { name: label.text }),
-    })
+    const timelineEntry = this.page.locator('.moj-timeline__item').nth(position)
+
+    await expect(timelineEntry.getByRole('heading', { name: label.text })).toBeVisible()
 
     if (byline) {
       await expect(timelineEntry.getByText(`by ${byline.text}`)).toBeVisible()

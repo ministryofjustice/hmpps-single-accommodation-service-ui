@@ -355,7 +355,6 @@ describe('Proposed addresses utilities', () => {
     }
 
     const validUpToAddress = (): ProposedAddressFormData => ({
-      flow: 'full',
       address: validAddress,
     })
 
@@ -384,7 +383,6 @@ describe('Proposed addresses utilities', () => {
     describe('validateLookupFromSession', () => {
       it('sets errors and returns a redirect link to lookup when data is invalid', () => {
         const invalidLookup: ProposedAddressFormData = {
-          flow: 'full',
           nameOrNumber: '',
           postcode: '',
         }
@@ -398,7 +396,6 @@ describe('Proposed addresses utilities', () => {
 
       it.each(['N', 'NOPE', 'TH457UYTY', '   '])('sets error for invalid format postcode "%s"', postcode => {
         const invalidLookup: ProposedAddressFormData = {
-          flow: 'full',
           nameOrNumber: '123',
           postcode,
         }
@@ -411,7 +408,6 @@ describe('Proposed addresses utilities', () => {
 
       it('returns undefined when data is valid', () => {
         const validLookup: ProposedAddressFormData = {
-          flow: 'full',
           nameOrNumber: '123',
           postcode: 'AB1 2CD',
         }
@@ -422,6 +418,11 @@ describe('Proposed addresses utilities', () => {
 
     describe('validateUpToAddress', () => {
       it.each([
+        {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, buildingName: '' } },
@@ -457,6 +458,11 @@ describe('Proposed addresses utilities', () => {
 
     describe('validateUpToType', () => {
       it.each([
+        {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
@@ -527,6 +533,11 @@ describe('Proposed addresses utilities', () => {
     describe('validateUpToStatus', () => {
       it.each([
         {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
+        {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, country: '' } } as ProposedAddressFormData,
           expected: uiPaths.proposedAddresses.details({ crn }),
@@ -565,6 +576,11 @@ describe('Proposed addresses utilities', () => {
 
     describe('validateUpToNextAccommodation', () => {
       it.each([
+        {
+          name: 'redirects to case details when there is no session data',
+          data: undefined,
+          expected: uiPaths.cases.show({ crn }),
+        },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, buildingName: '' } } as ProposedAddressFormData,
@@ -681,6 +697,8 @@ describe('Proposed addresses utilities', () => {
 
   describe('addressDetailRows', () => {
     const baseProposedAddress = accommodationFactory.proposed().build({
+      id: 'address-id',
+      crn: 'X651925',
       arrangementSubType: 'FRIENDS_OR_FAMILY',
       settledType: 'SETTLED',
       verificationStatus: 'NOT_CHECKED_YET',
@@ -696,7 +714,10 @@ describe('Proposed addresses utilities', () => {
     it.each([
       { title: 'that failed checks', params: { verificationStatus: 'FAILED' as const } },
       { title: 'that has not been checked', params: { verificationStatus: 'NOT_CHECKED_YET' as const } },
-      { title: 'that passed checks', params: { verificationStatus: 'PASSED' as const } },
+      {
+        title: 'that passed checks',
+        params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'TO_BE_DECIDED' as const },
+      },
       {
         title: 'that is confirmed',
         params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const },

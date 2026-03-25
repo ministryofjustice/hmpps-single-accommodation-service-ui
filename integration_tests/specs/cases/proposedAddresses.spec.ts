@@ -1,5 +1,5 @@
 import { test } from '@playwright/test'
-import { AccommodationDetail, CaseDto } from '@sas/api'
+import { AccommodationDetail, AuditRecordDto, CaseDto } from '@sas/api'
 import { ProposedAddressFormData } from '@sas/ui'
 import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
@@ -17,11 +17,9 @@ import {
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import AddProposedAddressPage from '../../pages/cases/addProposedAddressPage'
 import osDataHubApiResponse from '../../../server/testutils/fixtures/osDataHubApi/getPostcode.json'
-
 import { resultToAddressDetails } from '../../../server/utils/osDataHub'
 import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
-
 import { addressTimelineEntry } from '../../../server/utils/proposedAddresses'
 
 test.describe('view proposed address details', () => {
@@ -65,11 +63,11 @@ test.describe('view proposed address details', () => {
     // And the address details should be listed
     await addressDetailsPage.shouldShowProposedAddressSummary()
 
-    // And I should see a timeline showing when the address was last updated
+    // And I should see a timeline entry showing when the address was last updated
     await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(updatedAddressRecord))
 
-    // And I should see a timeline showing when the address was created
-    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord))
+    // And I should see a timeline entry showing when the address was created
+    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord), 1)
   })
 })
 
@@ -208,11 +206,31 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeAddressForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
-    // And I complete the type form with new data
+    // Then I should see the check your answers page with my updated data
+    await addProposedAddressPage.verifyCheckYourAnswersPage(
+      { ...initialProposedAddressData, address: updatedProposedAddressData.address },
+      caseData.name,
+    )
+
+    // When I click to change the type
+    await addProposedAddressPage.clickChangeLink(`What will be ${caseData.name}'s housing arrangement at this address?`)
     await addProposedAddressPage.completeTypeForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
-    // And I complete the status form with new data
+    // Then I should see the check your answers page with my updated data
+    await addProposedAddressPage.verifyCheckYourAnswersPage(
+      {
+        ...initialProposedAddressData,
+        arrangementSubType: updatedProposedAddressData.arrangementSubType,
+        arrangementSubTypeDescription: updatedProposedAddressData.arrangementSubTypeDescription,
+        settledType: updatedProposedAddressData.settledType,
+        address: updatedProposedAddressData.address,
+      },
+      caseData.name,
+    )
+
+    // When I click to change the status checks
+    await addProposedAddressPage.clickChangeLink('What is the status of the address checks?')
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
@@ -365,6 +383,7 @@ test.describe('edit proposed address', () => {
   let caseData: CaseDto
   let proposedAddress: AccommodationDetail
   let initialProposedAddressData: ProposedAddressFormData
+  let createdAddressRecord: AuditRecordDto
 
   test.beforeEach(async () => {
     caseData = caseFactory.build({ crn })
@@ -372,6 +391,7 @@ test.describe('edit proposed address', () => {
       .manualAddress()
       .build({ id, verificationStatus: 'NOT_CHECKED_YET', nextAccommodationStatus: 'TO_BE_DECIDED' })
     proposedAddress = accommodationFactory.proposed().build({ id, crn, ...initialProposedAddressData })
+    createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
 
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
@@ -380,10 +400,11 @@ test.describe('edit proposed address', () => {
     await casesApi.stubGetReferralHistory(crn, [])
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [proposedAddress])
     await proposedAddressesApi.stubGetProposedAddress(crn, id, proposedAddress)
+    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [createdAddressRecord])
     await proposedAddressesApi.stubUpdateProposedAddress(crn, id)
   })
 
-  test('should allow user to update address with failed checks', async ({ page }) => {
+  test('should allow user to add checks to a proposed address', async ({ page }) => {
     const failedStatusFormData = { ...initialProposedAddressData, verificationStatus: 'FAILED' as const }
     const failedStatusUpdate = { ...proposedAddress, verificationStatus: 'FAILED' as const }
 
@@ -434,7 +455,7 @@ test.describe('edit proposed address', () => {
     await profileTrackerPage.shouldShowProposedAddresses([failedStatusUpdate])
   })
 
-  test('should allow user to update address with passed checks and confirm next accommodation', async ({ page }) => {
+  test('should allow user to confirm a proposed address as next accommodation', async ({ page }) => {
     const confirmedFormData = proposedAddressFormFactory
       .manualAddress()
       .build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' })
@@ -509,5 +530,70 @@ test.describe('edit proposed address', () => {
 
     // And the proposed address should show the confirmed status
     await profileTrackerPage.shouldShowProposedAddresses([updatedProposedAddress])
+  })
+
+  test('should allow the user to change details of an existing proposed address', async ({ page }) => {
+    const updatedProposedAddress = accommodationFactory.build({
+      ...proposedAddress,
+      arrangementSubType: 'OTHER',
+      arrangementSubTypeDescription: 'Other',
+      settledType: 'SETTLED',
+    })
+
+    // Given I am logged in
+    await login(page)
+
+    // When I visit a profile tracker page with a proposed address
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // When I click the link to view address details in the proposed address card
+    await profileTrackerPage.clickLink('Notes', profileTrackerPage.getCard(formatAddress(proposedAddress.address)))
+
+    // Then I should see the address details page
+    const addressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(page, proposedAddress)
+
+    // When I click the Change arrangement type link
+    await addressDetailsPage.clickChangeLink('Housing arrangement')
+
+    // Then I should see the populated type form
+    const editProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
+      page,
+      crn,
+      `What will be ${caseData.name}'s housing arrangement at this address?`,
+    )
+    await editProposedAddressPage.shouldShowPopulatedTypeForm(proposedAddress)
+
+    // When I update the arrangement type
+    const updatedAddressRecord = auditRecordFactory
+      .proposedAddressUpdated([
+        {
+          field: 'arrangementSubType',
+          value: updatedProposedAddress.arrangementSubType,
+        },
+        {
+          field: 'settledType',
+          value: updatedProposedAddress.settledType,
+        },
+      ])
+      .build()
+    await proposedAddressesApi.stubGetProposedAddress(crn, id, updatedProposedAddress)
+    await proposedAddressesApi.stubGetProposedAddressTimeline(crn, proposedAddress.id, [
+      updatedAddressRecord,
+      createdAddressRecord,
+    ])
+    await editProposedAddressPage.completeTypeForm(updatedProposedAddress)
+    await editProposedAddressPage.clickButton('Continue')
+
+    // Then I should see the address details page
+    const updatedAddressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(page, updatedProposedAddress)
+
+    // And a banner should be shown confirming the proposed address was updated
+    await updatedAddressDetailsPage.shouldShowBanner('Address updated')
+
+    // And the address details should be updated
+    await updatedAddressDetailsPage.shouldShowProposedAddressSummary()
+
+    // And a timeline entry should be shown
+    await updatedAddressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(updatedAddressRecord))
   })
 })

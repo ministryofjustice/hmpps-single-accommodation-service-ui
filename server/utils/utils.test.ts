@@ -3,6 +3,8 @@ import {
   convertToTitleCase,
   htmlContent,
   initialiseName,
+  summaryListRowText,
+  summaryListRowHtml,
   textContent,
   toParagraphs,
 } from './utils'
@@ -126,5 +128,59 @@ describe('convertObjectsToSelectOptions', () => {
         selected: false,
       },
     ])
+  })
+})
+
+describe('summaryListRowText', () => {
+  it('returns a row for a summary list', () => {
+    expect(summaryListRowText('Label', 'Value')).toEqual({
+      key: { text: 'Label' },
+      value: { text: 'Value' },
+    })
+  })
+
+  it('returns a row for a summary list with actions', () => {
+    expect(
+      summaryListRowText('Label', 'Value', [
+        { text: 'Link 1', href: '#' },
+        { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
+      ]),
+    ).toEqual({
+      key: { text: 'Label' },
+      value: { text: 'Value' },
+      actions: {
+        items: [
+          { text: 'Link 1', href: '#' },
+          { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
+        ],
+      },
+    })
+  })
+})
+
+describe('summaryListRowHtml', () => {
+  it('returns a row for a summary list with HTML content', () => {
+    expect(summaryListRowHtml('Label', '<p>Value</p>')).toEqual({
+      key: { text: 'Label' },
+      value: { html: '<p>Value</p>' },
+    })
+  })
+
+  it('returns a row for a summary list with HTML content and actions', () => {
+    expect(
+      summaryListRowHtml('Label', '<p>Value</p>', [
+        { text: 'Link 1', href: '#' },
+        { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
+      ]),
+    ).toEqual({
+      key: { text: 'Label' },
+      value: { html: '<p>Value</p>' },
+      actions: {
+        items: [
+          { text: 'Link 1', href: '#' },
+          { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
+        ],
+      },
+    })
   })
 })

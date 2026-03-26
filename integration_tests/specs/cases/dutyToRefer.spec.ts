@@ -203,6 +203,15 @@ test.describe('duty to refer', () => {
     // Then I should see the duty to refer submission form
     await dutyToReferPage.shouldShowSubmissionForm(caseData)
 
+    // When I submit the form with missing fields
+    await dutyToReferPage.clickButton('Save and continue')
+
+    // Then I should see errors
+    await dutyToReferPage.shouldShowErrorMessagesForFields({
+      submissionDate: 'Enter a submission date',
+      localAuthorityAreaId: 'Select a local authority',
+    })
+
     // When I complete the form and submit
     await dutyToReferPage.completeSubmissionForm(submittedCommand, localAuthority.name)
     await dutyToReferApi.stubSubmitDutyToRefer(crn)
@@ -228,6 +237,14 @@ test.describe('duty to refer', () => {
     // Then I should see the duty to refer outcome form
     const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome details')
     await outcomePage.shouldShowOutcomePage(caseData, submittedDutyToRefer)
+
+    // When I submit the form with missing fields
+    await outcomePage.clickButton('Save and continue')
+
+    // Then I should see errors
+    await outcomePage.shouldShowErrorMessagesForFields({
+      outcomeStatus: 'Select duty to refer outcome',
+    })
 
     // When I complete the form and submit
     await outcomePage.completeOutcomeForm(acceptedCommand)

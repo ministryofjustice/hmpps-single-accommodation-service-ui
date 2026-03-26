@@ -1,6 +1,7 @@
 {% extends "partials/layout.njk" %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "moj/components/timeline/macro.njk" import mojTimeline %}
 {% from "components/macros/caseDetails.njk" import caseDetails %}
 
@@ -44,6 +45,10 @@
             rows: addressDetailRows
           })
         }}
+
+        {% if nextAction %}
+          {{ govukButton(nextAction) }}
+        {% endif %}
       </section>
     </div>
 

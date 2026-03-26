@@ -21,6 +21,7 @@ import {
   lookupResultsItems,
   addressDetailRows,
   addressTimelineEntry,
+  nextActionButton,
 } from '../utils/proposedAddresses'
 import {
   fetchErrorsAndUserInput,
@@ -77,6 +78,7 @@ export default class ProposedAddressesController {
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),
+        nextAction: nextActionButton(proposedAddress),
       })
     }
   }

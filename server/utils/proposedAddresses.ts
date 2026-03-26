@@ -14,7 +14,7 @@ import {
   FieldChange,
 } from '@sas/api'
 import { Request } from 'express'
-import { SummaryListActionItem, SummaryListRow, TimelineEntry } from '@govuk/ui'
+import { Button, SummaryListActionItem, SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
 import { arrangementSubTypes } from './cases'
 import { summaryListRowText, summaryListRowHtml, toParagraphs } from './utils'
@@ -458,6 +458,25 @@ export const addressDetailRows = (proposedAddress: AccommodationDetail): Summary
         [editLink('nextAccommodation')],
       ),
   ].filter(Boolean)
+}
+
+export const nextActionButton = (proposedAddress: AccommodationDetail): Button => {
+  const { crn, id, verificationStatus, nextAccommodationStatus } = proposedAddress
+
+  if (verificationStatus === 'NOT_CHECKED_YET') {
+    return {
+      text: 'Add checks',
+      href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }),
+    }
+  }
+  if (verificationStatus === 'PASSED' && nextAccommodationStatus !== 'YES') {
+    return {
+      text: 'Confirm as next address',
+      href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
+    }
+  }
+
+  return undefined
 }
 
 const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): AccommodationDetail => {

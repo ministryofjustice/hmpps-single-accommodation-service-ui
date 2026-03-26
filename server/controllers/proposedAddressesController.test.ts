@@ -14,6 +14,7 @@ import {
   checkYourAnswersRows,
   lookupResultsItems,
   nextAccommodationStatusItems,
+  nextActionButton,
   verificationStatusItems,
 } from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
@@ -106,7 +107,9 @@ describe('proposedAddressesController', () => {
   describe('show', () => {
     it('renders the address details page', async () => {
       const caseData = caseFactory.build()
-      const proposedAddress = accommodationFactory.build()
+      const proposedAddress = accommodationFactory.build({
+        verificationStatus: 'PASSED',
+      })
       const auditRecords = auditRecordFactory.buildList(2)
       casesService.getCase.mockResolvedValue(caseData)
       proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
@@ -124,6 +127,7 @@ describe('proposedAddressesController', () => {
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),
+        nextAction: nextActionButton(proposedAddress),
       })
     })
   })

@@ -76,3 +76,16 @@ export type TimelineEntry = TextOrHtmlContent & {
   classes?: string
   attributes?: HtmlAttributes
 }
+
+export type Button = TextOrHtmlContent & {
+  type?: 'submit' | 'button' | 'reset'
+  name?: string
+  value?: string
+  disabled?: boolean
+  href?: string
+  classes?: string
+  attributes?: HtmlAttributes
+  preventDoubleClick?: boolean
+  isStartButton?: boolean
+  id?: string
+}

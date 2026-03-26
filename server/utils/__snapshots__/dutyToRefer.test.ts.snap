@@ -7,7 +7,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Date submitted",
     },
     "value": {
-      "text": "23 September 2024 (548 days ago)",
+      "text": "23 September 2024 (485 days ago)",
     },
   },
   {
@@ -36,7 +36,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Date submitted",
     },
     "value": {
-      "text": "23 September 2024 (548 days ago)",
+      "text": "23 September 2024 (485 days ago)",
     },
   },
   {
@@ -86,7 +86,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Date submitted",
     },
     "value": {
-      "text": "23 September 2024 (548 days ago)",
+      "text": "23 September 2024 (485 days ago)",
     },
   },
   {

@@ -156,6 +156,14 @@ describe('duty to refer utils', () => {
   })
 
   describe('detailsSummaryListRows', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-01-21'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
     const submission = {
       id: 'submission-id',
       localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },

@@ -6,7 +6,7 @@ import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './da
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
 import { statusTag } from './macros'
-import { summaryListRowText } from './utils'
+import { summaryListRowHtml, summaryListRowText } from './utils'
 
 const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
   ({
@@ -70,17 +70,17 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
   const rows = []
 
   if (dutyToRefer?.status === 'NOT_STARTED' || dutyToRefer?.status === 'SUBMITTED') {
-    rows.push(summaryListRow('Status', statusTag(dutyToReferStatusTag(dutyToRefer.status)), 'html'))
+    rows.push(summaryListRowHtml('Status', statusTag(dutyToReferStatusTag(dutyToRefer.status))))
   }
   if (dutyToRefer?.status !== 'NOT_STARTED') {
     rows.push(
-      summaryListRow(
+      summaryListRowText(
         'Date submitted',
         dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
       ),
     )
-    rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
-    rows.push(summaryListRow('Reference', dutyToRefer.submission.referenceNumber))
+    rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+    rows.push(summaryListRowText('Reference', dutyToRefer.submission.referenceNumber))
   }
   return rows
 }
@@ -90,10 +90,9 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
 
   if (dutyToRefer?.status !== 'NOT_STARTED' && dutyToRefer?.status !== 'SUBMITTED') {
     rows.push(
-      summaryListRow(
+      summaryListRowHtml(
         'Status',
         `${statusTag(dutyToReferStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
-        'html',
       ),
     )
   }
@@ -106,11 +105,6 @@ const outcomeSupportText = (dutyToRefer: DutyToReferDto): string => {
     ? `${localAuthority} will not support this person with housing`
     : `${localAuthority} agreed to support this person with housing`
 }
-
-export const summaryListRow = (label: string, value: string, renderAs: 'text' | 'html' = 'text'): SummaryListRow => ({
-  key: { text: label },
-  value: renderAs === 'html' ? { html: value } : { text: value },
-})
 
 export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
   const { status } = dutyToRefer ?? {}

@@ -103,13 +103,18 @@ jobs:
       app_version: '${{ needs.build.outputs.app_version }}'
       slack_notification: 'false' # if 'true', it needs a valid NONPROD_RELEASES_SLACK_CHANNEL variable to be set
 
-#  e2e_tests:
+  e2e_test:
+    name: "E2E Tests 🧪"
+    needs:
+      - deploy_dev
+    uses: ./.github/workflows/e2e_tests.yml
+    secrets: inherit
 
   deploy_preprod:
     name: Deploy to pre-production environment
     needs:
       - build
-      - deploy_dev
+      - e2e_test
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:

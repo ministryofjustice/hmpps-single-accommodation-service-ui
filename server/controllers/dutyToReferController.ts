@@ -1,12 +1,22 @@
 import { Request, RequestHandler, Response } from 'express'
 import uiPaths from '../paths/ui'
-import { validateSubmission, summaryListRows, validateOutcome } from '../utils/dutyToRefer'
+import {
+  validateSubmission,
+  summaryListRows,
+  validateOutcome,
+  detailsSummaryListRows,
+  outcomeDetailsSummaryListRows,
+} from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
 import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
+import { caseAssignedTo } from '../utils/cases'
+import { getFlowRedirect, setFlowRedirect } from '../utils/backlinks'
+
+const FLOW_ENTRY_POINTS = [uiPaths.dutyToRefer.show.pattern, uiPaths.cases.show.pattern]
 
 export default class DutyToReferController {
   constructor(
@@ -16,9 +26,40 @@ export default class DutyToReferController {
     private readonly referenceDataService: ReferenceDataService,
   ) {}
 
+  show(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.params
+      const { token } = res.locals.user
+
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_DETAILS, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const [caseData, dutyToRefer] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.dutyToReferService.getDutyToRefer(token, crn),
+      ])
+
+      const submissionDetailRows = detailsSummaryListRows(dutyToRefer)
+      const outcomeDetailRows = outcomeDetailsSummaryListRows(dutyToRefer)
+
+      return res.render('pages/duty-to-refer/show', {
+        crn,
+        caseData,
+        assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+        submissionDetailRows,
+        outcomeDetailRows,
+        status: dutyToRefer?.status,
+      })
+    }
+  }
+
   guidance(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
+
+      setFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, FLOW_ENTRY_POINTS)
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_GUIDANCE, {
         who: res.locals.user.username,
@@ -66,6 +107,7 @@ export default class DutyToReferController {
       }
 
       const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
+      const redirect = getFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, uiPaths.cases.show({ crn }))
 
       try {
         await this.dutyToReferService.submit(token, crn, {
@@ -76,7 +118,7 @@ export default class DutyToReferController {
         })
 
         req.flash('success', 'Submission details added')
-        return res.redirect(uiPaths.cases.show({ crn }))
+        return res.redirect(redirect)
       } catch {
         addGenericErrorToFlash(req, 'There was a problem submitting the duty to refer. Please try again.')
         return res.redirect(uiPaths.dutyToRefer.submission({ crn }))
@@ -103,6 +145,8 @@ export default class DutyToReferController {
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
+      setFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, FLOW_ENTRY_POINTS)
+
       return res.render('pages/duty-to-refer/outcome', {
         crn,
         tableRows,
@@ -120,6 +164,8 @@ export default class DutyToReferController {
 
       if (!validateOutcome(req)) return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))
 
+      const redirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
+
       try {
         const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
         const submission = dtr?.submission
@@ -130,8 +176,8 @@ export default class DutyToReferController {
           referenceNumber: submission.referenceNumber,
         })
 
-        req.flash('success', 'Submission details updated')
-        return res.redirect(uiPaths.cases.show({ crn }))
+        req.flash('success', 'Outcome details added')
+        return res.redirect(redirect)
       } catch {
         addGenericErrorToFlash(req, 'There was a problem updating the duty to refer. Please try again.')
         return res.redirect(uiPaths.dutyToRefer.outcome({ crn }))

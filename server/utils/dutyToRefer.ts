@@ -5,7 +5,8 @@ import { StatusCard, StatusTag } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
-import { summaryListRowText } from './utils'
+import { statusTag } from './macros'
+import { summaryListRowHtml, summaryListRowText } from './utils'
 
 const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
   ({
@@ -27,7 +28,10 @@ export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard =
 }
 
 export const linksForStatus = (serviceStatus?: string, crn?: string) => {
-  const notes = { text: 'Notes', href: '#' }
+  if (!crn) return []
+
+  const notes = { text: 'Notes', href: uiPaths.dutyToRefer.show({ crn }) }
+
   switch (serviceStatus) {
     case 'NOT_ACCEPTED':
     case 'ACCEPTED':
@@ -60,6 +64,46 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
   }
 
   return rows
+}
+
+export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
+  const rows = []
+
+  if (dutyToRefer?.status === 'NOT_STARTED' || dutyToRefer?.status === 'SUBMITTED') {
+    rows.push(summaryListRowHtml('Status', statusTag(dutyToReferStatusTag(dutyToRefer.status))))
+  }
+  if (dutyToRefer?.status !== 'NOT_STARTED') {
+    rows.push(
+      summaryListRowText(
+        'Date submitted',
+        dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
+      ),
+    )
+    rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+    rows.push(summaryListRowText('Reference', dutyToRefer.submission.referenceNumber))
+  }
+  return rows
+}
+
+export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
+  const rows = []
+
+  if (dutyToRefer?.status !== 'NOT_STARTED' && dutyToRefer?.status !== 'SUBMITTED') {
+    rows.push(
+      summaryListRowHtml(
+        'Status',
+        `${statusTag(dutyToReferStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
+      ),
+    )
+  }
+  return rows
+}
+
+const outcomeSupportText = (dutyToRefer: DutyToReferDto): string => {
+  const localAuthority = dutyToRefer.submission.localAuthority.localAuthorityAreaName
+  return dutyToRefer.status === 'NOT_ACCEPTED'
+    ? `${localAuthority} will not support this person with housing`
+    : `${localAuthority} agreed to support this person with housing`
 }
 
 export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
@@ -105,3 +149,11 @@ export const validateOutcome = (req: Request) => {
 
   return validateAndFlashErrors(req, errors)
 }
+
+export const formatDutyToReferStatus = (status: DutyToReferDto['status']): string =>
+  ({
+    NOT_ACCEPTED: 'Not accepted',
+    ACCEPTED: 'Accepted',
+    NOT_STARTED: 'Not started',
+    SUBMITTED: 'Submitted',
+  })[status]

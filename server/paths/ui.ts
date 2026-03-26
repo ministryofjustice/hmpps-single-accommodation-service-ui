@@ -11,6 +11,7 @@ export default {
     search: casesPath.path('search'),
   },
   dutyToRefer: {
+    show: dutyToReferPath.path('details'),
     guidance: dutyToReferPath.path('guidance'),
     submission: dutyToReferPath.path('submission'),
     outcome: dutyToReferPath.path('outcome'),

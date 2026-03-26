@@ -1,5 +1,113 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`duty to refer utils detailsSummaryListRows returns correct rows for status ACCEPTED 1`] = `
+[
+  {
+    "key": {
+      "text": "Date submitted",
+    },
+    "value": {
+      "text": "23 September 2024 (485 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Local authority",
+    },
+    "value": {
+      "text": "Some Council",
+    },
+  },
+  {
+    "key": {
+      "text": "Reference",
+    },
+    "value": {
+      "text": "REF123",
+    },
+  },
+]
+`;
+
+exports[`duty to refer utils detailsSummaryListRows returns correct rows for status NOT_ACCEPTED 1`] = `
+[
+  {
+    "key": {
+      "text": "Date submitted",
+    },
+    "value": {
+      "text": "23 September 2024 (485 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Local authority",
+    },
+    "value": {
+      "text": "Some Council",
+    },
+  },
+  {
+    "key": {
+      "text": "Reference",
+    },
+    "value": {
+      "text": "REF123",
+    },
+  },
+]
+`;
+
+exports[`duty to refer utils detailsSummaryListRows returns correct rows for status NOT_STARTED 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--red">Not started</strong>",
+    },
+  },
+]
+`;
+
+exports[`duty to refer utils detailsSummaryListRows returns correct rows for status SUBMITTED 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--yellow">Submitted</strong>",
+    },
+  },
+  {
+    "key": {
+      "text": "Date submitted",
+    },
+    "value": {
+      "text": "23 September 2024 (485 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Local authority",
+    },
+    "value": {
+      "text": "Some Council",
+    },
+  },
+  {
+    "key": {
+      "text": "Reference",
+    },
+    "value": {
+      "text": "REF123",
+    },
+  },
+]
+`;
+
 exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to refer status card object 1`] = `
 {
   "details": [],
@@ -11,7 +119,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
       "text": "Add submission details",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/dtr/details",
       "text": "Notes",
     },
   ],
@@ -58,7 +166,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
       "text": "Add outcome",
     },
     {
-      "href": "#",
+      "href": "/cases/CRN123/dtr/details",
       "text": "Notes",
     },
   ],
@@ -80,3 +188,33 @@ exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refe
   },
 }
 `;
+
+exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows for status ACCEPTED 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag govuk-tag--yellow">Accepted</strong> <p class="govuk-!-margin-top-4">Some Council agreed to support this person with housing</p>",
+    },
+  },
+]
+`;
+
+exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows for status NOT_ACCEPTED 1`] = `
+[
+  {
+    "key": {
+      "text": "Status",
+    },
+    "value": {
+      "html": "<strong class="govuk-tag">Not accepted</strong> <p class="govuk-!-margin-top-4">Some Council will not support this person with housing</p>",
+    },
+  },
+]
+`;
+
+exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows for status NOT_STARTED 1`] = `[]`;
+
+exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows for status SUBMITTED 1`] = `[]`;

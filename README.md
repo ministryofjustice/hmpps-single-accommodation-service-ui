@@ -79,34 +79,52 @@ Commit hooks have been set up to run linters, typecheck and unit tests on commit
 
 ### Running linter
 
+The linter and typecheck are run automatically on commit. To run them manually:
+
 - `npm run lint` runs `eslint`.
 - `npm run typecheck` runs the TypeScript compiler `tsc`.
 
-### Running unit tests
+### Unit tests
 
-`npm run test`
+The unit tests should cover all TypeScript/implementation code.
 
-### Running integration tests
+To run all the unit tests, run:
 
-For local running, start a wiremock instance by:
+```shell
+npm run test
+```
 
-`docker compose -f docker-compose-test.yml up`
+The unit tests also run a number of contract tests against the API OpenAPI spec. This spec is downloaded to `tmp/sas-api.json` if the file does not exist. It may sometimes be necessary to remove this file to ensure the latest is downloaded from the dev API.
 
-Then run the server in test mode by:
+### Integration tests
 
-`npm run start-feature` (or `npm run start-feature:dev` to run with auto-restart on changes)
+The integration tests should cover the rendering of all templates, ensuring all elements are present on any given page. They should test that any field with validation can be rendered in an error state, although details of the validation itself (covering the various _types_ of error possible for the field) should be covered in unit tests.
 
-After first install ensure playwright is initialised:
+For running the integration tests locally the following command will bring up the required local infrastructure, start the service in dev mode and bring up the PlayWright UI:
 
-`npm run int-test-init`
+```shell
+npm run test:integration:ui
+```
 
-And then either, run tests in headless mode with:
 
-`npm run int-test`
+### E2E tests
 
-Or run tests with the UI:
+The E2E tests should cover any journey that interacts with the API, to ensure the correct flow of data between the UI and an actual API. These tests only need to cover 'happy paths', that is, successful journeys through the service, resulting in actions being recorded. The E2E tests only need to verify the rendering of errors that are the result of a business logic violation: for instance, when a user attempts to create a booking for a room that is already booked, the API may return a conflict error.
 
-`npm run int-test-ui`
+The E2E tests can be run against other environments from your local machine by setting the `E2E_BASE_URL` environment variable in the `e2e.env` file.
+
+The tests can be run headless with:
+
+```shell
+npm run test:e2e
+```
+
+To run the tests in the PlayWright UI:
+
+```shell
+npm run test:e2e:ui
+```
+
 
 ## Change log
 

@@ -7,7 +7,7 @@ on:
 jobs:
   e2e_test:
     name: "SAS E2E Tests 🧪"
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
     strategy:
       fail-fast: false
       # Add to the matrix to start splitting the tests across multiple shards
@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SAS-E2E-playwright-report-${{ matrix.shard }}-of-${{ strategy.job-total }}
-          path: playwright-report
+          path: e2e/report
           retention-days: 30
           if-no-files-found: ignore
 
@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SAS-E2E-artefacts-${{ matrix.shard }}-of-${{ strategy.job-total }}
-          path: test-results
+          path: e2e/artefacts
           retention-days: 30
           if-no-files-found: ignore
 

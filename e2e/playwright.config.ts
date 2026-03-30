@@ -15,7 +15,7 @@ export default defineConfig<TestOptions>({
   maxFailures: process.env.CI ? 3 : 1,
   workers: 2,
   reporter: [['html', { outputFolder: '../test_results/e2e/report' }]],
-  outputDir: '../test_results/e2e',
+  outputDir: '../test_results/e2e/artefacts',
   timeout: process.env.CI ? 5 * 60 * 1000 : 2 * 60 * 1000,
   use: {
     trace: 'retain-on-failure',

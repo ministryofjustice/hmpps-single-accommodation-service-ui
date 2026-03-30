@@ -37,7 +37,7 @@ jobs:
           E2E_BASE_URL: 'https://single-accommodation-service-dev.hmpps.service.justice.gov.uk'
           SAS_E2E_PROBATION_USER_USERNAME: ${{ secrets.E2E_USER_AP_USER_TEST_1_USERNAME }}
           SAS_E2E_PROBATION_USER_PASSWORD: ${{ secrets.E2E_USER_AP_USER_TEST_1_PASSWORD }}
-        run: npm run test:e2e:ci -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        run: npm run test:e2e -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

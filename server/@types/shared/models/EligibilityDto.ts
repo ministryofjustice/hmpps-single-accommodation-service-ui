@@ -6,10 +6,10 @@ import type { ServiceResult } from './ServiceResult';
 export type EligibilityDto = {
     crn: string;
     cas1: ServiceResult;
-    cas2Hdc?: ServiceResult;
-    cas2PrisonBail?: ServiceResult;
-    cas2CourtBail?: ServiceResult;
-    cas3?: ServiceResult;
+    cas2Hdc: ServiceResult;
+    cas2PrisonBail: ServiceResult;
+    cas2CourtBail: ServiceResult;
+    cas3: ServiceResult;
     caseActions: Array<string>;
     caseStatus: 'NO_ACTION_REQUIRED' | 'ACTION_UPCOMING' | 'ACTION_NEEDED';
 };

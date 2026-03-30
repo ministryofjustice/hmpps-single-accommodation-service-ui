@@ -4,9 +4,9 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
-{% set formAction = paths.dutyToRefer.submission({crn: crn}) %}
+{% set formAction = paths.dutyToRefer.submission({crn: crn}) + ('?flow=edit' if submissionFlow == 'edit' else '') %}
 {% set backLinkHref = paths.dutyToRefer.guidance({crn: crn}) %}
-{% set pageTitle = "Add Duty to Refer (DTR) submission details" %}
+{% set pageTitle = "Edit Duty to Refer (DTR) submission details" if submissionFlow == 'edit' else "Add Duty to Refer (DTR) submission details" %}
 
 {% block formContent %}
     {{ govukDateInput({

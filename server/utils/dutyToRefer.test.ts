@@ -4,11 +4,14 @@ import {
   detailsForStatus,
   detailsSummaryListRows,
   dutyToReferStatusCard,
+  getDutyToReferFlow,
   linksForStatus,
   outcomeDetailsSummaryListRows,
+  outcomeSupportText,
   summaryListRows,
   validateOutcome,
   validateSubmission,
+  withEditFlow,
 } from './dutyToRefer'
 import * as validationUtils from './validation'
 import { dutyToReferFactory } from '../testutils/factories'
@@ -201,6 +204,43 @@ describe('duty to refer utils', () => {
         expect(outcomeDetailsSummaryListRows(dtr)).toMatchSnapshot()
       },
     )
+  })
+
+  describe('getDutyToReferFlow', () => {
+    it.each([
+      [{ flow: 'edit' }, 'edit'],
+      [{ flow: undefined }, 'add'],
+      [{}, 'add'],
+    ])('returns %s when query is %s', (query, flow) => {
+      req = mock<Request>({ query })
+
+      expect(getDutyToReferFlow(req)).toBe(flow)
+    })
+  })
+
+  describe('withEditFlow', () => {
+    it.each([
+      ['edit', '/cases/CRN123/dtr/submission?flow=edit'],
+      ['add', '/cases/CRN123/dtr/submission'],
+    ] as const)('returns %s path for %s flow', (flow, expectedPath) => {
+      expect(withEditFlow('/cases/CRN123/dtr/submission', flow)).toBe(expectedPath)
+    })
+  })
+
+  describe('outcomeSupportText', () => {
+    it.each([
+      ['ACCEPTED', 'Some Council agreed to support this person with housing'],
+      ['NOT_ACCEPTED', 'Some Council will not support this person with housing'],
+    ] as const)('returns %s text for %s status', (status, expectedText) => {
+      const dutyToRefer = dutyToReferFactory.build({
+        status,
+        submission: {
+          localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
+        },
+      })
+
+      expect(outcomeSupportText(dutyToRefer)).toBe(expectedText)
+    })
   })
 
   describe('validateSubmission', () => {

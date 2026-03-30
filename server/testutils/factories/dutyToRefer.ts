@@ -8,7 +8,7 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
   notStarted() {
     return this.params({
       status: 'NOT_STARTED',
-      submission: undefined,
+      submission: null,
     })
   }
 

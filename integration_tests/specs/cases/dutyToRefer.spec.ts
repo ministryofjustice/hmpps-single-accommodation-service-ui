@@ -304,7 +304,7 @@ test.describe('duty to refer', () => {
 
     // And the submission details should be shown
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(submittedDutyToRefer)
-    
+
     // Then I click the Edit submission details button
     await dutyToReferDetailsPage.clickButton('Edit submission details')
 

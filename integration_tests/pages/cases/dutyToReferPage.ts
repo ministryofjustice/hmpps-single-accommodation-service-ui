@@ -1,10 +1,10 @@
 import { expect, Page } from '@playwright/test'
 import { DutyToReferDto, DtrCommand, CaseDto as Case } from '@sas/api'
+import { DutyToReferFlow } from '@sas/ui'
 import AbstractPage from '../abstractPage'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
-import { DutyToReferFlow } from '@sas/ui'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -17,7 +17,8 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async shouldShowSubmissionForm(caseData: Case, flow: DutyToReferFlow = 'add') {
-    const heading = flow === 'add' ? 'Add Duty to Refer (DTR) submission details' : 'Edit Duty to Refer (DTR) submission details'
+    const heading =
+      flow === 'add' ? 'Add Duty to Refer (DTR) submission details' : 'Edit Duty to Refer (DTR) submission details'
     await expect(this.page.getByRole('heading', { name: heading })).toBeVisible()
 
     this.shouldShowSummaryItem('Name', caseData.name)
@@ -35,7 +36,8 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async shouldShowOutcomePage(caseData: Case, dtr: DutyToReferDto, flow: DutyToReferFlow = 'add') {
-    const heading = flow === 'add' ? 'Add Duty to Refer (DTR) outcome details' : 'Edit Duty to Refer (DTR) outcome details'
+    const heading =
+      flow === 'add' ? 'Add Duty to Refer (DTR) outcome details' : 'Edit Duty to Refer (DTR) outcome details'
     await expect(this.page.getByRole('heading', { name: heading })).toBeVisible()
 
     this.shouldShowSummaryItem('Name', caseData.name)

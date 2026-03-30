@@ -7,7 +7,7 @@ on:
 jobs:
   e2e_test:
     name: "SAS E2E Tests 🧪"
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
     strategy:
       fail-fast: false
       # Add to the matrix to start splitting the tests across multiple shards

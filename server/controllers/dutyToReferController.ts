@@ -102,7 +102,7 @@ export default class DutyToReferController {
     }
   }
 
-  submit(): RequestHandler {
+  saveSubmission(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
       const { token } = res.locals.user
@@ -172,7 +172,7 @@ export default class DutyToReferController {
     }
   }
 
-  update(): RequestHandler {
+  saveOutcome(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
       const { token } = res.locals.user

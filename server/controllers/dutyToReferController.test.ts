@@ -112,7 +112,7 @@ describe('dutyToReferController', () => {
     })
   })
 
-  describe('submit', () => {
+  describe('saveSubmission', () => {
     beforeEach(() => {
       request = mock<Request>({
         params: { crn: 'CRN123' },
@@ -130,7 +130,7 @@ describe('dutyToReferController', () => {
     it('submits and redirects to the case page', async () => {
       jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
 
-      await controller.submit()(request, response, next)
+      await controller.saveSubmission()(request, response, next)
 
       expect(dutyToReferService.submit).toHaveBeenCalledWith('token-1', 'CRN123', {
         status: 'SUBMITTED',
@@ -149,7 +149,7 @@ describe('dutyToReferController', () => {
       jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
       request.query = { flow: 'edit' }
 
-      await controller.submit()(request, response, next)
+      await controller.saveSubmission()(request, response, next)
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', dutyToRefer.submission.id, {
         status: 'SUBMITTED',
@@ -164,7 +164,7 @@ describe('dutyToReferController', () => {
 
     it('redirects to submission page when validation fails', async () => {
       jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
-      await controller.submit()(request, response, next)
+      await controller.saveSubmission()(request, response, next)
 
       expect(dutyToReferService.submit).not.toHaveBeenCalled()
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.submission({ crn: 'CRN123' }))
@@ -174,7 +174,7 @@ describe('dutyToReferController', () => {
       jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
       request.query = { flow: 'edit' }
 
-      await controller.submit()(request, response, next)
+      await controller.saveSubmission()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.dutyToRefer.submission({ crn: 'CRN123' })}?flow=edit`)
     })
@@ -183,7 +183,7 @@ describe('dutyToReferController', () => {
       jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(true)
       dutyToReferService.submit.mockRejectedValueOnce(new Error('API error'))
 
-      await controller.submit()(request, response, next)
+      await controller.saveSubmission()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.submission({ crn: 'CRN123' }))
     })
@@ -197,7 +197,7 @@ describe('dutyToReferController', () => {
 
       dutyToReferService.update.mockRejectedValueOnce(new Error('API error'))
 
-      await controller.submit()(request, response, next)
+      await controller.saveSubmission()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.dutyToRefer.submission({ crn: 'CRN123' })}?flow=edit`)
     })
@@ -227,7 +227,7 @@ describe('dutyToReferController', () => {
     })
   })
 
-  describe('update', () => {
+  describe('saveOutcome', () => {
     const dtr = dutyToReferFactory.submitted().build({
       crn: 'CRN123',
       submission: {
@@ -252,7 +252,7 @@ describe('dutyToReferController', () => {
     it('updates and redirects to the case page', async () => {
       jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(true)
 
-      await controller.update()(request, response, next)
+      await controller.saveOutcome()(request, response, next)
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         status: 'ACCEPTED',
@@ -267,7 +267,7 @@ describe('dutyToReferController', () => {
     it('redirects back when validation fails', async () => {
       jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(false)
 
-      await controller.update()(request, response, next)
+      await controller.saveOutcome()(request, response, next)
 
       expect(dutyToReferService.update).not.toHaveBeenCalled()
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.outcome({ crn: 'CRN123' }))
@@ -277,7 +277,7 @@ describe('dutyToReferController', () => {
       jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(false)
       request.query = { flow: 'edit' }
 
-      await controller.update()(request, response, next)
+      await controller.saveOutcome()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.dutyToRefer.outcome({ crn: 'CRN123' })}?flow=edit`)
     })
@@ -286,7 +286,7 @@ describe('dutyToReferController', () => {
       jest.spyOn(dutyToReferUtils, 'validateOutcome').mockReturnValue(true)
       dutyToReferService.update.mockRejectedValueOnce(new Error('API error'))
 
-      await controller.update()(request, response, next)
+      await controller.saveOutcome()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.outcome({ crn: 'CRN123' }))
     })
@@ -296,7 +296,7 @@ describe('dutyToReferController', () => {
       request.query = { flow: 'edit' }
       dutyToReferService.update.mockRejectedValueOnce(new Error('API error'))
 
-      await controller.update()(request, response, next)
+      await controller.saveOutcome()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.dutyToRefer.outcome({ crn: 'CRN123' })}?flow=edit`)
     })

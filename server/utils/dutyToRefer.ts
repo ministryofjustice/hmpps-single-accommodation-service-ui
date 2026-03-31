@@ -10,9 +10,9 @@ import { summaryListRowHtml, summaryListRowText } from './utils'
 
 const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
   ({
-    NOT_ACCEPTED: { text: 'Not accepted' },
+    NOT_ACCEPTED: { text: 'Not accepted', colour: 'grey' },
     ACCEPTED: { text: 'Accepted', colour: 'yellow' },
-    NOT_STARTED: { text: 'Not started', colour: 'red' },
+    NOT_STARTED: { text: 'Not started', colour: 'orange' },
     SUBMITTED: { text: 'Submitted', colour: 'yellow' },
   })[status] || { text: 'Unknown' }
 

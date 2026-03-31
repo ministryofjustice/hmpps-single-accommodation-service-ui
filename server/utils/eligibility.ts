@@ -3,9 +3,9 @@ import { StatusCard, StatusTag } from '@sas/ui'
 
 const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): StatusTag =>
   ({
-    NOT_ELIGIBLE: { text: 'Not eligible' },
+    NOT_ELIGIBLE: { text: 'Not eligible', colour: 'grey' },
     UPCOMING: { text: 'Upcoming', colour: 'yellow' },
-    NOT_STARTED: { text: 'Not started', colour: 'red' },
+    NOT_STARTED: { text: 'Not started', colour: 'orange' },
     NOT_SUBMITTED: { text: 'Not submitted', colour: 'red' },
     INFO_REQUESTED: { text: 'Info requested', colour: 'yellow' },
     REJECTED: { text: 'Rejected', colour: 'red' },

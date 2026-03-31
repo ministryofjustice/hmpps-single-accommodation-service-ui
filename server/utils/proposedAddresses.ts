@@ -28,7 +28,7 @@ import { timelineEntry } from './timeline'
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
     PASSED: { text: 'Checks passed', colour: 'yellow' },
-    NOT_CHECKED_YET: { text: 'Not checked yet', colour: 'red' },
+    NOT_CHECKED_YET: { text: 'Not checked', colour: 'orange' },
     FAILED: { text: 'Checks failed', colour: 'grey' },
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
   })[status]
@@ -101,7 +101,7 @@ export const displayStatus = (proposedAddress: AccommodationDetail): ProposedAdd
 
 export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string =>
   ({
-    NOT_CHECKED_YET: 'Not checked yet',
+    NOT_CHECKED_YET: 'Not checked',
     FAILED: 'Failed',
     PASSED: 'Passed',
     CONFIRMED: 'Confirmed',
@@ -366,7 +366,7 @@ export const arrangementSubTypeItems = (arrangementSubType?: AccommodationDetail
 export const verificationStatusItems = (verificationStatus?: AccommodationDetail['verificationStatus']) => [
   {
     value: 'NOT_CHECKED_YET',
-    text: 'Not checked yet',
+    text: 'Not checked',
     checked: verificationStatus === 'NOT_CHECKED_YET',
   },
   {

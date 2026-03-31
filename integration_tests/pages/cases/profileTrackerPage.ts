@@ -109,7 +109,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
 
   async shouldShowProposedAddresses(proposedAddresses: AccommodationDetail[] = []) {
     const proposedAddressesSection = this.page.locator('section', {
-      has: this.page.getByRole('heading', { name: 'Private addresses' }),
+      has: this.page.getByRole('heading', { name: 'Proposed addresses' }),
     })
 
     await expect(proposedAddressesSection).toBeVisible()

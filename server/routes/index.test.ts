@@ -41,8 +41,8 @@ const dutyToReferController = mock<DutyToReferController>({
   guidance: mockHandler,
   submission: mockHandler,
   outcome: mockHandler,
-  submit: mockHandler,
-  update: mockHandler,
+  saveSubmission: mockHandler,
+  saveOutcome: mockHandler,
 })
 
 jest.mock('../controllers', () => ({

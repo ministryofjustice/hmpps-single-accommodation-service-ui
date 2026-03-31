@@ -31,18 +31,7 @@
   },
   "T274481": {
     "crn": "T274481",
-    "status": "NOT_STARTED",
-    "submission": {
-      "id": "4cf6014c-7cf3-4a56-8414-90a8cdff3451",
-      "localAuthority": {
-        "localAuthorityAreaId": "b690ff36-b375-4812-9445-aadcd8e2e00f",
-        "localAuthorityAreaName": "Upton McClureridge"
-      },
-      "referenceNumber": "P2BZYGOCSE",
-      "submissionDate": "2025-03-22",
-      "createdBy": "Audrey Wisoky",
-      "createdAt": "2025-11-17T12:34:04.095Z"
-    }
+    "status": "NOT_STARTED"
   },
   "V938951": {
     "crn": "V938951",
@@ -136,17 +125,6 @@
   },
   "F608163": {
     "crn": "F608163",
-    "status": "NOT_STARTED",
-    "submission": {
-      "id": "8b006e2a-a1fb-4f5c-9ef7-31f0ecadc1fb",
-      "localAuthority": {
-        "localAuthorityAreaId": "2d25bc79-31ec-4f2c-aba4-a9b22faf31f8",
-        "localAuthorityAreaName": "Little Schimmel"
-      },
-      "referenceNumber": "X3QKCKITPW",
-      "submissionDate": "2025-12-15",
-      "createdBy": "Jeffrey Zemlak",
-      "createdAt": "2025-08-29T02:38:44.667Z"
-    }
+    "status": "NOT_STARTED"
   }
 }

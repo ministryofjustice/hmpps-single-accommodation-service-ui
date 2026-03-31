@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { CaseDto, DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
-import { StatusCard, StatusTag } from '@sas/ui'
+import { DutyToReferFlow, StatusCard, StatusTag } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
@@ -99,7 +99,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
   return rows
 }
 
-const outcomeSupportText = (dutyToRefer: DutyToReferDto): string => {
+export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string => {
   const localAuthority = dutyToRefer.submission.localAuthority.localAuthorityAreaName
   return dutyToRefer.status === 'NOT_ACCEPTED'
     ? `${localAuthority} will not support this person with housing`
@@ -157,3 +157,7 @@ export const formatDutyToReferStatus = (status: DutyToReferDto['status']): strin
     NOT_STARTED: 'Not started',
     SUBMITTED: 'Submitted',
   })[status]
+
+export const getDutyToReferFlow = (req: Request): DutyToReferFlow => (req.query.flow === 'edit' ? 'edit' : 'add')
+
+export const withEditFlow = (path: string, flow: DutyToReferFlow) => (flow === 'edit' ? `${path}?flow=edit` : path)

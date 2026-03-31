@@ -17,7 +17,7 @@ test.describe('List of cases', () => {
     // WHEN I sign in
     await login(page)
 
-    // THEN I should see the Case List
+    // THEN I should see the Case list
     const casesListPage = await CasesListPage.verifyOnPage(page)
 
     // AND the filters should be set to default values

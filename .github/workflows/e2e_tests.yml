@@ -4,6 +4,9 @@ on:
   workflow_call:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   e2e_test:
     name: "SAS E2E Tests 🧪"
@@ -15,13 +18,13 @@ jobs:
         shard: [1]
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           # Repository is specified to run the workflow from the SAS API repository
           repository: 'ministryofjustice/hmpps-single-accommodation-service-ui'
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
         with:
           node-version-file: '.node-version'
           cache: 'npm'
@@ -41,7 +44,7 @@ jobs:
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: SAS-E2E-playwright-report-${{ matrix.shard }}-of-${{ strategy.job-total }}
           path: e2e/report
@@ -50,7 +53,7 @@ jobs:
 
       - name: Upload E2E artefacts
         if: failure()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: SAS-E2E-artefacts-${{ matrix.shard }}-of-${{ strategy.job-total }}
           path: e2e/artefacts
@@ -64,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack notification
-        uses: ministryofjustice/hmpps-approved-premises-ui/.github/actions/slack_failure_notification@main
+        uses: ministryofjustice/hmpps-approved-premises-ui/.github/actions/slack_failure_notification@be120bcd43880df01f4fd9693e3773092501e2b9 # main
         with:
           title: "SAS E2E Tests"
           job: "e2e_test"

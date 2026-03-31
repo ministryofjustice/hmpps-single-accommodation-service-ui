@@ -117,8 +117,8 @@ test.describe('add proposed address', () => {
     // When I visit the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-    // And I click the add an address link
-    await profileTrackerPage.clickLink('Add an address')
+    // And I click the add a proposed address link
+    await profileTrackerPage.clickLink('Add a proposed address')
 
     // Then I should see the address lookup form
     const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(page, crn)
@@ -287,8 +287,8 @@ test.describe('add proposed address', () => {
     // When I visit profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-    // And I click the add an address link
-    await profileTrackerPage.clickLink('Add an address')
+    // And I click the add a proposed address link
+    await profileTrackerPage.clickLink('Add a proposed address')
 
     // Then I should see the address lookup form
     const addProposedAddressPage = await AddProposedAddressPage.verifyOnPage(page, crn)

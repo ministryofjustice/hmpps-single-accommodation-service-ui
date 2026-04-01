@@ -41,6 +41,7 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
 
 export default DutyToReferFactory.define(() => {
   return {
+    caseId: faker.string.uuid(),
     crn: crn(),
     status: faker.helpers.arrayElement(['SUBMITTED', 'NOT_STARTED', 'ACCEPTED', 'NOT_ACCEPTED']),
     submission: dtrSubmissionFactory.build(),

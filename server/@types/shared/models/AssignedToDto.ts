@@ -3,7 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 export type AssignedToDto = {
-    id: number;
+    /**
+     * no longer be surfacing this with the new `case-list` endpoint - to be removed soon
+     * @deprecated
+     */
+    id?: number;
     name: string;
+    username?: string;
 };
 

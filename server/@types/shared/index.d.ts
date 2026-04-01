@@ -22,5 +22,4 @@ export type { LocalAuthorityDto } from './models/LocalAuthorityDto';
 export type { PurgeQueueResult } from './models/PurgeQueueResult';
 export type { ReferenceDataDto } from './models/ReferenceDataDto';
 export type { RetryDlqResult } from './models/RetryDlqResult';
-export type { RuleAction } from './models/RuleAction';
 export type { ServiceResult } from './models/ServiceResult';

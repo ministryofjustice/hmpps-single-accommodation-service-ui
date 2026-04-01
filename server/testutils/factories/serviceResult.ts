@@ -1,7 +1,6 @@
 import { ServiceResult } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
-import ruleActionFactory from './ruleAction'
 
 const serviceStatuses: Array<ServiceResult['serviceStatus']> = [
   'NOT_ELIGIBLE',
@@ -21,5 +20,5 @@ class ServiceResultFactory extends Factory<ServiceResult> {
 
 export default ServiceResultFactory.define(() => ({
   serviceStatus: faker.helpers.arrayElement(serviceStatuses),
-  action: faker.helpers.maybe(() => ruleActionFactory.build()),
+  action: faker.helpers.maybe(() => faker.lorem.words(5)),
 }))

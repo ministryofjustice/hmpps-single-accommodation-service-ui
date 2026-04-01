@@ -16,7 +16,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
       },
     ],
     "status": {
-      "colour": "red",
+      "colour": "orange",
       "text": "Not started",
     },
   },
@@ -44,6 +44,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
       },
     ],
     "status": {
+      "colour": "grey",
       "text": "Not eligible",
     },
   },

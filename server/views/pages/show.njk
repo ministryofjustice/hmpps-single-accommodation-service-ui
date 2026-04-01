@@ -13,7 +13,7 @@
   {{ govukBreadcrumbs({
       items: [
           {
-              text: "Case List",
+              text: "Case list",
               href: "/"
           }
       ]
@@ -23,7 +23,11 @@
 
 {% block content %}
   {{ caseDetails(caseData, assignedTo) }}
-
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h2 class="govuk-heading-l govuk-!-margin-top-2">Arrange next accommodation</h2>
+    </div>
+  </div>
   <div class="govuk-grid-row govuk-grid-row--reverse">
     <section class="govuk-grid-column-one-third-from-desktop">
       <h2 class="govuk-visually-hidden">Current situation</h2>
@@ -45,8 +49,8 @@
 
       <section class="govuk-!-margin-top-8">
         <header class="sas-section__header">
-          <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Private addresses</h2>
-          <a href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}" class="govuk-link govuk-link--no-visited-state govuk-body">Add an address</a>
+          <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Proposed addresses</h2>
+          <a href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}" class="govuk-link govuk-link--no-visited-state govuk-body">Add a proposed address</a>
         </header>
 
         {% if proposedAddresses | length %}

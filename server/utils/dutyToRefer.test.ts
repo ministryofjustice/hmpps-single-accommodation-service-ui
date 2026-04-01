@@ -108,10 +108,10 @@ describe('duty to refer utils', () => {
 
   describe('linksForStatus', () => {
     it.each([
-      [['Add submission details', 'Notes'], 'NOT_STARTED' as const],
-      [['Add outcome', 'Notes'], 'SUBMITTED' as const],
-      [['Notes'], 'NOT_ACCEPTED' as const],
-      [['Notes'], 'ACCEPTED' as const],
+      [['Add submission details', 'View referral and notes'], 'NOT_STARTED' as const],
+      [['Add outcome', 'View referral and notes'], 'SUBMITTED' as const],
+      [['View referral and notes'], 'NOT_ACCEPTED' as const],
+      [['View referral and notes'], 'ACCEPTED' as const],
       [[], undefined],
     ])('returns links %s for status %s', (expectedLinks, status) => {
       const links = linksForStatus(status, 'CRN123').map(link => link.text)

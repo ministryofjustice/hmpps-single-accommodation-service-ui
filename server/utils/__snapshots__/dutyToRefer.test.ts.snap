@@ -65,7 +65,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--red">Not started</strong>",
+      "html": "<strong class="govuk-tag govuk-tag--orange">Not started</strong>",
     },
   },
 ]
@@ -120,11 +120,11 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
     },
     {
       "href": "/cases/CRN123/dtr/details",
-      "text": "Notes",
+      "text": "View referral and notes",
     },
   ],
   "status": {
-    "colour": "red",
+    "colour": "orange",
     "text": "Not started",
   },
 }
@@ -167,7 +167,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
     },
     {
       "href": "/cases/CRN123/dtr/details",
-      "text": "Notes",
+      "text": "View referral and notes",
     },
   ],
   "status": {
@@ -209,7 +209,7 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag">Not accepted</strong> <p class="govuk-!-margin-top-4">Some Council will not support this person with housing</p>",
+      "html": "<strong class="govuk-tag govuk-tag--grey">Not accepted</strong> <p class="govuk-!-margin-top-4">Some Council will not support this person with housing</p>",
     },
   },
 ]

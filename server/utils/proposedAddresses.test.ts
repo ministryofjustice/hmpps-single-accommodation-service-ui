@@ -314,7 +314,7 @@ describe('Proposed addresses utilities', () => {
       const items = verificationStatusItems('PASSED')
 
       expect(items).toEqual([
-        { value: 'NOT_CHECKED_YET', text: 'Not checked yet', checked: false },
+        { value: 'NOT_CHECKED_YET', text: 'Not checked', checked: false },
         { value: 'PASSED', text: 'Passed', checked: true },
         { value: 'FAILED', text: 'Failed', checked: false },
       ])

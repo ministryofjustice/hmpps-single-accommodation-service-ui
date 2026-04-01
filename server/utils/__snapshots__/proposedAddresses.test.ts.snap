@@ -68,7 +68,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--red">Not checked yet</strong>",
+      "html": "<strong class="govuk-tag govuk-tag--orange">Not checked</strong>",
     },
   },
   {
@@ -116,7 +116,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Address checks",
     },
     "value": {
-      "text": "Not checked yet",
+      "text": "Not checked",
     },
   },
 ]
@@ -283,7 +283,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--red">Not checked yet</strong>",
+      "html": "<strong class="govuk-tag govuk-tag--orange">Not checked</strong>",
     },
   },
   {
@@ -331,7 +331,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Address checks",
     },
     "value": {
-      "text": "Not checked yet",
+      "text": "Not checked",
     },
   },
 ]
@@ -675,8 +675,8 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
     },
   ],
   "status": {
-    "colour": "red",
-    "text": "Not checked yet",
+    "colour": "orange",
+    "text": "Not checked",
   },
 }
 `;

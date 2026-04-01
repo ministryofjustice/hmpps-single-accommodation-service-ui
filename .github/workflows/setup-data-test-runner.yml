@@ -23,7 +23,7 @@ on:
 
 permissions:
   contents: read
-  
+
 jobs:
   test:
     runs-on: [ self-hosted, hmpps-github-actions-runner ]
@@ -59,6 +59,9 @@ jobs:
         with:
           cache: npm
           node-version-file: .nvmrc
+
+      - name: SLSA
+        uses: ministryofjustice/devsecops-actions/sca/slsa@4cd163be7859cd130800d6719d925318826038ea
 
       - name: Install dependencies
         run: |

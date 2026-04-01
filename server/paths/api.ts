@@ -14,6 +14,9 @@ export default {
       show: dutyToReferPath.path(':id'),
       update: dutyToReferPath.path(':id'),
       submit: dutyToReferPath,
+      timeline: {
+        submit: dutyToReferPath.path(':id/timeline'),
+      },
     },
     eligibility: casePath.path('eligibility'),
     referrals: casePath.path('applications'),

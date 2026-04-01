@@ -37,4 +37,14 @@ export default class DutyToReferClient extends RestClient {
       asUser(token),
     )
   }
+
+  async submitTimelineNote(token: string, crn: string, id: string, note: string) {
+    return this.post<void>(
+      {
+        path: apiPaths.cases.dutyToRefer.timeline.submit({ crn, id }),
+        data: { note },
+      },
+      asUser(token),
+    )
+  }
 }

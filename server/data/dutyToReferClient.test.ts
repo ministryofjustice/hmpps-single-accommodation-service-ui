@@ -114,4 +114,29 @@ describeClient('DutyToReferClient', provider => {
 
     await dutyToReferClient.update('test-user-token', crn, id, command)
   })
+
+  // TODO: Enable test when API endpoint exists
+  it.skip('should make a POST request to /cases/:crn/dtr/:id/timeline', async () => {
+    const crn = crnFactory()
+    const dtr = dutyToReferFactory.submitted().build()
+    const note = 'This is a note\n\nWith multiple lines'
+
+    await provider.addInteraction({
+      state: `A duty to refer timeline exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to post a duty to refer timeline note for a case by CRN and dtr ID',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.dutyToRefer.timeline.submit({ crn, id: dtr.submission.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: { note },
+      },
+    })
+
+    await dutyToReferClient.submitTimelineNote('test-user-token', crn, dtr.submission.id, note)
+  })
 })

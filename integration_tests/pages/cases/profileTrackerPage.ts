@@ -67,12 +67,14 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await this.shouldShowAddress(accommodation, card)
 
     await expect(card).toContainText(`From ${formatDate(accommodation.startDate, 'long')}`)
+    await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
   }
 
   async shouldShowNextAccommodationAlert(accommodation: AccommodationDetail) {
-    const card = this.page.locator('.moj-alert', { hasText: /No fixed abode/ })
+    const card = this.page.locator('.moj-alert', { hasText: /Risk of no fixed abode/ })
     const { startDate } = accommodation
-    await expect(card).toContainText(`From ${formatDate(startDate, 'long')} (${formatDate(startDate, 'days for/in')})`)
+    await expect(card).toContainText(`From ${formatDate(startDate, 'long')}`)
+    await expect(card).toContainText(`(${formatDate(startDate, 'days for/in')})`)
   }
 
   async shouldShowCurrentAccommodationCard(accommodation: AccommodationDetail) {
@@ -85,12 +87,14 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await this.shouldShowAddress(accommodation, card)
 
     await expect(card).toContainText(`Until ${formatDate(accommodation.endDate, 'long')}`)
+    await expect(card).toContainText(`(${formatDate(accommodation.endDate, 'days for/in')})`)
   }
 
   async shouldShowCurrentAccommodationAlert(accommodation: AccommodationDetail) {
     const card = this.page.locator('.moj-alert', { hasText: 'No fixed abode' })
     const { startDate } = accommodation
-    await expect(card).toContainText(`Since ${formatDate(startDate, 'long')} (${formatDate(startDate, 'days for/in')})`)
+    await expect(card).toContainText(`Since ${formatDate(startDate, 'long')}`)
+    await expect(card).toContainText(`(${formatDate(startDate, 'days for/in')})`)
   }
 
   async shouldShowReferralHistory(referrals: Referral[]) {

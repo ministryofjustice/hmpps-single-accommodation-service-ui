@@ -5,6 +5,7 @@
 import type { AccommodationAddressDetails } from './AccommodationAddressDetails';
 export type AccommodationDetail = {
     id: string;
+    caseId: string;
     crn: string;
     name?: string;
     arrangementType: 'PRISON' | 'CAS1' | 'CAS2' | 'CAS2V2' | 'CAS3' | 'PRIVATE' | 'NO_FIXED_ABODE';

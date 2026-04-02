@@ -57,7 +57,7 @@ export default CaseFactory.define(() => {
     crn: crn(),
     dateOfBirth: faker.date.birthdate().toISOString().substring(0, 10),
     prisonNumber: prisonNumber(),
-    tier: tier(),
+    tierScore: tier(),
     riskLevel: riskLevel(),
     pncReference: pncReference(),
     assignedTo: assignedUserFactory.build(),

@@ -51,7 +51,7 @@ describe('cases utilities', () => {
         crn: 'C321654',
         prisonNumber: 'A1234BC',
         dateOfBirth: '1980-10-09',
-        tier: 'B2',
+        tierScore: 'B2',
         riskLevel: 'VERY_HIGH',
       })
 

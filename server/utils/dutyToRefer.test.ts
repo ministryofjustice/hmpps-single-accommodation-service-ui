@@ -127,6 +127,7 @@ describe('duty to refer utils', () => {
       name: 'John Smith',
       dateOfBirth: '1990-01-15',
       prisonNumber: 'A1234BC',
+      actions: ['action1', 'action2'],
     }
 
     it('formats case data without duty to refer', () => {

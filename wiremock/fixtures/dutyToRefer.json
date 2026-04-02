@@ -1,5 +1,6 @@
 {
   "S511935": {
+    "caseId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
     "crn": "S511935",
     "status": "SUBMITTED",
     "submission": {
@@ -15,6 +16,7 @@
     }
   },
   "P712106": {
+    "caseId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
     "crn": "P712106",
     "status": "NOT_ACCEPTED",
     "submission": {
@@ -30,10 +32,12 @@
     }
   },
   "T274481": {
+    "caseId": "c3d4e5f6-a7b8-9012-cdef-012345678902",
     "crn": "T274481",
     "status": "NOT_STARTED"
   },
   "V938951": {
+    "caseId": "d4e5f6a7-b8c9-0123-defa-123456789013",
     "crn": "V938951",
     "status": "SUBMITTED",
     "submission": {
@@ -49,6 +53,7 @@
     }
   },
   "T229440": {
+    "caseId": "e5f6a7b8-c9d0-1234-efab-234567890124",
     "crn": "T229440",
     "status": "NOT_ACCEPTED",
     "submission": {
@@ -64,6 +69,7 @@
     }
   },
   "H271226": {
+    "caseId": "f6a7b8c9-d0e1-2345-fabc-345678901235",
     "crn": "H271226",
     "status": "SUBMITTED",
     "submission": {
@@ -79,6 +85,7 @@
     }
   },
   "U934069": {
+    "caseId": "a7b8c9d0-e1f2-3456-abcd-456789012346",
     "crn": "U934069",
     "status": "ACCEPTED",
     "submission": {
@@ -94,6 +101,7 @@
     }
   },
   "I322559": {
+    "caseId": "b8c9d0e1-f2a3-4567-bcde-567890123457",
     "crn": "I322559",
     "status": "SUBMITTED",
     "submission": {
@@ -109,6 +117,7 @@
     }
   },
   "L247269": {
+    "caseId": "c9d0e1f2-a3b4-5678-cdef-678901234568",
     "crn": "L247269",
     "status": "SUBMITTED",
     "submission": {
@@ -124,6 +133,7 @@
     }
   },
   "F608163": {
+    "caseId": "d0e1f2a3-b4c5-6789-defa-789012345679",
     "crn": "F608163",
     "status": "NOT_STARTED"
   }

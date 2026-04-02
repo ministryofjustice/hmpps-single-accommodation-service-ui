@@ -11,10 +11,7 @@
     },
     "cas2CourtBail": {
       "serviceStatus": "SUBMITTED",
-      "action": {
-        "text": "see",
-        "isUpcoming": false
-      }
+      "actions": ["see"]
     },
     "cas2PrisonBail": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -38,10 +35,7 @@
     },
     "cas2PrisonBail": {
       "serviceStatus": "UPCOMING",
-      "action": {
-        "text": "biodegrade",
-        "isUpcoming": false
-      }
+      "actions": ["biodegrade"]
     },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -65,10 +59,7 @@
     },
     "cas3": {
       "serviceStatus": "UPCOMING",
-      "action": {
-        "text": "perspire",
-        "isUpcoming": true
-      }
+      "actions": ["perspire"]
     }
   },
   "V938951": {
@@ -89,10 +80,7 @@
     },
     "cas3": {
       "serviceStatus": "CONFIRMED",
-      "action": {
-        "text": "cripple",
-        "isUpcoming": false
-      }
+      "actions": ["cripple"]
     }
   },
   "T229440": {
@@ -110,10 +98,7 @@
     },
     "cas2PrisonBail": {
       "serviceStatus": "CONFIRMED",
-      "action": {
-        "text": "amount",
-        "isUpcoming": true
-      }
+      "actions": ["amount"]
     },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -134,10 +119,7 @@
     },
     "cas2PrisonBail": {
       "serviceStatus": "CONFIRMED",
-      "action": {
-        "text": "intrigue",
-        "isUpcoming": false
-      }
+      "actions": ["intrigue"]
     },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"

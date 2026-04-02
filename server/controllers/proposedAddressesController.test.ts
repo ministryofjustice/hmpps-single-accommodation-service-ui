@@ -81,7 +81,7 @@ describe('proposedAddressesController', () => {
     jest.restoreAllMocks()
     jest.clearAllMocks()
 
-    casesService.getCase.mockResolvedValue({ name: 'James Smith' })
+    casesService.getCase.mockResolvedValue({ name: 'James Smith', actions: [] })
 
     request = mock<Request>({
       id: 'request-id',

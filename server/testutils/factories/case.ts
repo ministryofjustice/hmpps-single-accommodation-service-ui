@@ -63,5 +63,6 @@ export default CaseFactory.define(() => {
     assignedTo: assignedUserFactory.build(),
     currentAccommodation,
     nextAccommodation,
+    actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(5), faker.lorem.words(5)]) ?? [],
   }
 })

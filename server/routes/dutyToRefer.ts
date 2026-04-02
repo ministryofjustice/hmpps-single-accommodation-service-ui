@@ -4,6 +4,7 @@ import uiPaths from '../paths/ui'
 
 export default function dutyToReferRoutes(router: Router, dutyToReferController: DutyToReferController): void {
   router.get(uiPaths.dutyToRefer.show.pattern, dutyToReferController.show())
+  router.post(uiPaths.dutyToRefer.show.pattern, dutyToReferController.saveNote())
 
   router.get(uiPaths.dutyToRefer.guidance.pattern, dutyToReferController.guidance())
   router.get(uiPaths.dutyToRefer.submission.pattern, dutyToReferController.submission())

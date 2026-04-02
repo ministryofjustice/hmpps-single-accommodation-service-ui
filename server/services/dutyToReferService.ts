@@ -12,6 +12,10 @@ export default class DutyToReferService {
     return this.dutyToReferClient.getDtrBySubmissionId(token, crn, id)
   }
 
+  getDutyToReferById(token: string, crn: string, id: string) {
+    return this.dutyToReferClient.getDutyToReferById(token, crn, id)
+  }
+
   update(token: string, crn: string, id: string, dutyToReferData: DtrCommand) {
     return this.dutyToReferClient.update(token, crn, id, dutyToReferData)
   }

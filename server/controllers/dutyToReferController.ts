@@ -10,7 +10,7 @@ import {
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
-import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import { addGenericErrorToFlash, fetchErrorsAndUserInput, validateAndFlashErrors } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
@@ -44,6 +44,8 @@ export default class DutyToReferController {
       const submissionDetailRows = detailsSummaryListRows(dutyToRefer)
       const outcomeDetailRows = outcomeDetailsSummaryListRows(dutyToRefer)
 
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+
       return res.render('pages/duty-to-refer/show', {
         crn,
         dtrId: id,
@@ -52,6 +54,9 @@ export default class DutyToReferController {
         submissionDetailRows,
         outcomeDetailRows,
         status: dutyToRefer?.status,
+        ...userInput,
+        errors,
+        errorSummary,
       })
     }
   }
@@ -199,6 +204,35 @@ export default class DutyToReferController {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
         return res.redirect(errorRedirect)
       }
+    }
+  }
+
+  saveNote(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_DETAILS_ADD_NOTE, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const { crn } = req.params
+      const { token } = res.locals.user
+      const { note } = req.body
+
+      if (!note) {
+        validateAndFlashErrors(req, { note: 'Enter a note' })
+        return res.redirect(uiPaths.dutyToRefer.show({ crn }))
+      }
+
+      try {
+        const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
+        const submission = dtr?.submission
+
+        await this.dutyToReferService.submitTimelineNote(token, crn, submission.id, note)
+        req.flash('success', 'Note added')
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')
+      }
+      return res.redirect(uiPaths.dutyToRefer.show({ crn }))
     }
   }
 

@@ -50,4 +50,15 @@ export default {
         status: 200,
       },
     }),
+  stubSubmitDutyToReferTimelineNote: (crn: string, id: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.cases.dutyToRefer.timeline.submit({ crn, id }),
+      },
+      response: {
+        status: 201,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    }),
 }

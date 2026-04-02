@@ -45,6 +45,9 @@ describe('dutyToReferController', () => {
     jest
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
+
+    jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    jest.spyOn(validationUtils, 'addGenericErrorToFlash')
   })
 
   describe('guidance', () => {
@@ -346,7 +349,84 @@ describe('dutyToReferController', () => {
         submissionDetailRows: detailsSummaryListRows(dutyToRefer),
         outcomeDetailRows: outcomeDetailsSummaryListRows(dutyToRefer),
         status: dutyToRefer?.status,
+        errors: {},
+        errorSummary: [],
       })
+    })
+
+    it('shows errors', async () => {
+      const crn = 'CRN123'
+      const dutyToRefer = dutyToReferFactory.notStarted().build({ crn })
+
+      const userInput = { note: '' }
+      const errors = { note: 'Enter a note' }
+      const errorSummary = [{ href: '#note', text: 'Enter a note' }]
+
+      dutyToReferService.getDutyToRefer.mockResolvedValue(dutyToRefer)
+
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput })
+
+      await controller.show()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/duty-to-refer/show',
+        expect.objectContaining({
+          errors,
+          errorSummary,
+          note: userInput.note,
+        }),
+      )
+    })
+  })
+
+  describe('saveNote', () => {
+    it('redirects with an error if the note is empty', async () => {
+      request.body = { note: '' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123' }))
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        note: 'Enter a note',
+      })
+    })
+
+    it('redirects with an error if the API returns an error', async () => {
+      dutyToReferService.submitTimelineNote.mockRejectedValue(new Error('API error'))
+
+      request.body = { note: 'Some valid note' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123' }))
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
+        request,
+        'There was a problem saving the note. Please try again.',
+      )
+    })
+
+    it('saves the note and redirects to the duty to refer details page with a success message', async () => {
+      const dutyToRefer = dutyToReferFactory.submitted().build({
+        crn: 'CRN123',
+        submission: {
+          id: 'submission-id',
+        },
+      })
+      dutyToReferService.getDutyToRefer.mockResolvedValue(dutyToRefer)
+      dutyToReferService.submitTimelineNote.mockResolvedValue()
+
+      request.body = { note: 'Some valid note' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123' }))
+      expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
+      expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith(
+        'token-1',
+        'CRN123',
+        'submission-id',
+        'Some valid note',
+      )
     })
   })
 })

@@ -55,6 +55,7 @@ async function stubDutyToRefer() {
     if (dtr?.submission?.id) {
       await dutyToReferApi.stubGetDtrBySubmissionId(caseDto.crn, dtr.submission.id, dtr)
       await dutyToReferApi.stubUpdateDutyToRefer(caseDto.crn, dtr.submission.id)
+      await dutyToReferApi.stubSubmitDutyToReferTimelineNote(caseDto.crn, dtr.submission.id)
     }
     await dutyToReferApi.stubSubmitDutyToRefer(caseDto.crn)
   }

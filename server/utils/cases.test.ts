@@ -91,7 +91,13 @@ describe('cases utilities', () => {
       const cas3Accommodation = factory('2026-07-31').cas('CAS3').build({ address })
       const privateAccommodation = factory('2026-09-10')
         .privateAddress()
-        .build({ name: "Parents' home", arrangementSubType: 'FRIENDS_OR_FAMILY', address })
+        .build({ settledType: 'SETTLED', arrangementSubType: 'FRIENDS_OR_FAMILY', address })
+      const transientPrivateAccommodation = factory('2026-09-10').privateAddress().build({
+        settledType: 'TRANSIENT',
+        arrangementSubType: 'OTHER',
+        arrangementSubTypeDescription: 'Some place',
+        address,
+      })
       const noFixedAbode = factory('2026-09-10').noFixedAbode().build()
 
       const testCases: [string, AccommodationDetail][] = [
@@ -101,7 +107,8 @@ describe('cases utilities', () => {
         ['CAS2', cas2Accommodation],
         ['CAS2v2', cas2v2Accommodation],
         ['CAS3', cas3Accommodation],
-        ['Private address', privateAccommodation],
+        ['Settled Private address', privateAccommodation],
+        ['Transient Private address', transientPrivateAccommodation],
         ['No fixed abode', noFixedAbode],
         ['Undefined', undefined],
       ]

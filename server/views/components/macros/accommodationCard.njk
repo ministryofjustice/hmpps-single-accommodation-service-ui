@@ -1,32 +1,55 @@
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{%- from "components/macros/statusTag.njk" import statusTag %}
 
 {%- macro accommodationCard(context) -%}
-  {%- if context.arrangementType === 'NO_FIXED_ABODE' -%}
-    {%- set html %}
-      {{ 'Since' if (context.startDate | date('days') < 0) else 'From' }}
-      {{ context.startDate | date('long') }} ({{ context.startDate | date('days for/in') }})
-    {% endset -%}
+  {% if context %}
+    {%- set startDateHtml -%}
+      {% if context.startDate %}
+        <p>
+          {{ 'Since' if (context.startDate | date('days') < 0) else 'From' }} {{ context.startDate | date('long') }}<br />
+          ({{ context.startDate | date('days for/in') }})
+        </p>
+      {% endif %}
+    {%- endset -%}
 
-    {{
-      mojAlert({
-        variant: "warning",
-        title: "Currently no fixed abode" if context.cardType == 'current' else "No fixed abode",
-        showTitleAsHeading: true,
-        dismissible: false,
-        html: html
-      })
-    }}
-  {%- else -%}
-    <div class="sas-card govuk-!-margin-bottom-4">
-      <h3 class="govuk-heading-m">{{ context.heading }}</h3>
 
+    {%- set endDateHtml -%}
+      {% if context.endDate %}
+        <p>
+          Until {{ context.endDate | date('long') }}<br />
+          ({{ context.endDate | date('days for/in') }})
+        </p>
+      {% endif %}
+    {%- endset -%}
+
+    {%- if context.arrangementType === 'NO_FIXED_ABODE' -%}
       {{
-        govukSummaryList({
-          classes: 'govuk-summary-card__content govuk-!-margin-bottom-0',
-          rows: context.rows
+        mojAlert({
+          variant: "warning",
+          title: "No fixed abode" if context.cardType === 'current' else "No fixed abode risk",
+          showTitleAsHeading: true,
+          dismissible: false,
+          html: startDateHtml
         })
       }}
-    </div>
-  {%- endif -%}
+    {%- else -%}
+      <div class="sas-card govuk-!-margin-bottom-4">
+        <h3 class="govuk-heading-m">{{ 'Current' if context.cardType === 'current' else 'Next' }} accommodation</h3>
+
+        {% if context.settledTag -%}
+          <div class="govuk-!-margin-bottom-4">{{ statusTag(context.settledTag) }}</div>
+        {%- endif %}
+
+        <p>
+          {{ context.name }}<br />
+          <span class="govuk-hint">{{ context.address | safe }}</span>
+        </p>
+
+        {{ startDateHtml | safe }}
+
+        {{ endDateHtml | safe }}
+      </div>
+    {%- endif -%}
+  {% endif %}
 {%- endmacro -%}

@@ -31,9 +31,17 @@
   <div class="govuk-grid-row govuk-grid-row--reverse">
     <section class="govuk-grid-column-one-third-from-desktop">
       <h2 class="govuk-visually-hidden">Current situation</h2>
-      {{ accommodationCard(nextAccommodationCard) }}
+      {% if caseData.nextAccommodation and caseData.nextAccommodation.arrangementType === 'NO_FIXED_ABODE' %}
+        {{ accommodationCard(nextAccommodationCard) }}
+      {% endif %}
+
+      <!-- actions -->
 
       {{ accommodationCard(currentAccommodationCard) }}
+
+      {% if caseData.nextAccommodation and caseData.nextAccommodation.arrangementType !== 'NO_FIXED_ABODE' %}
+        {{ accommodationCard(nextAccommodationCard) }}
+      {% endif %}
     </section>
 
     <div class="govuk-grid-column-two-thirds-from-desktop">

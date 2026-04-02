@@ -1,96 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS1 accommodation 1`] = `
-"
-    Approved Premises (CAS1)
-    
-  
+"Approved Premises (CAS1)
       <br />
-      <span class="govuk-hint">until 3 February 2026</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">55 days left</span>
+      <span class="govuk-hint">Until 3 February 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS2 accommodation 1`] = `
-"
-    CAS2 for HDC
-    
-  
+"CAS2 for HDC
       <br />
-      <span class="govuk-hint">until 12 March 2026</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">92 days left</span>
+      <span class="govuk-hint">Until 12 March 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS2v2 accommodation 1`] = `
-"
-    CAS2 for Bail
-    
-  
+"CAS2 Bail
       <br />
-      <span class="govuk-hint">until 23 May 2026</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">164 days left</span>
+      <span class="govuk-hint">Until 23 May 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS3 accommodation 1`] = `
-"
-    Temporary Accommodation (CAS3)
-    
-  
+"CAS3
       <br />
-      <span class="govuk-hint">until 31 July 2026</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">233 days left</span>
+      <span class="govuk-hint">Until 31 July 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a No fixed abode accommodation 1`] = `
-"
-    No fixed abode
-    
-  
+"No accommodation
       <br />
-      <span class="govuk-hint">until 10 September 2026</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">274 days left</span>
+      <span class="govuk-hint">Until 10 September 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Prison (no qualifier) accommodation 1`] = `
-"
-    HMP Foobar
-  
+"HMP Foobar
       <br />
-      <span class="govuk-hint">until 11 December 2025</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">1 day left</span>
+      <span class="govuk-hint">Until 11 December 2025</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Prison accommodation 1`] = `
-"
-    HMP Foobar (licence)
-  
+"HMP Foobar
       <br />
-      <span class="govuk-hint">until 1 January 2026</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">22 days left</span>
+      <span class="govuk-hint">Until 1 January 2026</span>
     "
 `;
 
-exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Private address accommodation 1`] = `
-"
-    Private address
-    <br />Friends or family (not tenant or owner)
-  
+exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Settled Private address accommodation 1`] = `
+"Friends or family (not tenant or owner)
       <br />
-      <span class="govuk-hint">until 10 September 2026</span>
+      <span class="govuk-hint">9 Foo Bar</span>
+    "
+`;
+
+exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Transient Private address accommodation 1`] = `
+"Other: Some place
       <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">274 days left</span>
+      <span class="govuk-hint">9 Foo Bar</span>
     "
 `;
 
@@ -98,156 +67,48 @@ exports[`cases utilities accommodationCell and accommodationCard macros for curr
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS1 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS1",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Type",
-      },
-      "value": {
-        "html": "Approved Premises (CAS1)",
-      },
-    },
-    {
-      "key": {
-        "text": "End date",
-      },
-      "value": {
-        "html": "
-          3 February 2026
-          <br />
-          55 days left
-        ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": "2026-02-03",
+  "name": "Approved Premises (CAS1)",
+  "settledTag": undefined,
   "startDate": "2025-12-01",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS2",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Type",
-      },
-      "value": {
-        "html": "CAS2 for HDC",
-      },
-    },
-    {
-      "key": {
-        "text": "End date",
-      },
-      "value": {
-        "html": "
-          12 March 2026
-          <br />
-          92 days left
-        ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": "2026-03-12",
+  "name": "CAS2 for HDC",
+  "settledTag": undefined,
   "startDate": "2025-12-01",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS2v2 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS2V2",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Type",
-      },
-      "value": {
-        "html": "CAS2 for Bail",
-      },
-    },
-    {
-      "key": {
-        "text": "End date",
-      },
-      "value": {
-        "html": "
-          23 May 2026
-          <br />
-          164 days left
-        ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": "2026-05-23",
+  "name": "CAS2 Bail",
+  "settledTag": undefined,
   "startDate": "2025-12-01",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS3 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS3",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Type",
-      },
-      "value": {
-        "html": "Temporary Accommodation (CAS3)",
-      },
-    },
-    {
-      "key": {
-        "text": "End date",
-      },
-      "value": {
-        "html": "
-          31 July 2026
-          <br />
-          233 days left
-        ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": "2026-07-31",
+  "name": "CAS3",
+  "settledTag": undefined,
   "startDate": "2025-12-01",
 }
 `;
@@ -256,206 +117,127 @@ exports[`cases utilities accommodationCell and accommodationCard macros for curr
 {
   "arrangementType": "NO_FIXED_ABODE",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [],
+  "endDate": "2026-09-10",
   "startDate": "2025-12-01",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Prison (no qualifier) accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "PRISON",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Type",
-      },
-      "value": {
-        "html": "Prison",
-      },
-    },
-    {
-      "key": {
-        "text": "Release date",
-      },
-      "value": {
-        "html": "
-          11 December 2025
-          <br />
-          1 day left
-        ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": "2025-12-11",
+  "name": "HMP Foobar",
+  "settledTag": undefined,
   "startDate": "2025-12-01",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Prison accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "PRISON",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Type",
-      },
-      "value": {
-        "html": "Prison (licence)",
-      },
-    },
-    {
-      "key": {
-        "text": "Release date",
-      },
-      "value": {
-        "html": "
-          1 January 2026
-          <br />
-          22 days left
-        ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": "2026-01-01",
+  "name": "HMP Foobar",
+  "settledTag": undefined,
   "startDate": "2025-12-01",
 }
 `;
 
-exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Private address accommodation 1`] = `
+exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Settled Private address accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "PRIVATE",
   "cardType": "current",
-  "heading": "Current accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Type",
-      },
-      "value": {
-        "html": "Private address",
-      },
-    },
-    {
-      "key": {
-        "text": "End date",
-      },
-      "value": {
-        "html": "
-          10 September 2026
-          <br />
-          274 days left
-        ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "<strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": "2026-09-10",
+  "name": "Friends or family (not tenant or owner)",
+  "settledTag": {
+    "colour": "green",
+    "text": "Settled",
+  },
   "startDate": "2025-12-01",
 }
 `;
 
-exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Undefined accommodation 1`] = `""`;
+exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Transient Private address accommodation 1`] = `
+{
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+  "arrangementType": "PRIVATE",
+  "cardType": "current",
+  "endDate": "2026-09-10",
+  "name": "Other: Some place",
+  "settledTag": {
+    "colour": "purple",
+    "text": "Transient",
+  },
+  "startDate": "2025-12-01",
+}
+`;
+
+exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Undefined accommodation 1`] = `undefined`;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS1 accommodation 1`] = `
-"
-    Approved Premises (CAS1)
-    
-  
+"Approved Premises (CAS1)
       <br />
-      <span class="govuk-hint">from 3 February 2026</span>
+      <span class="govuk-hint">From 3 February 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS2 accommodation 1`] = `
-"
-    CAS2 for HDC
-    
-  
+"CAS2 for HDC
       <br />
-      <span class="govuk-hint">from 12 March 2026</span>
+      <span class="govuk-hint">From 12 March 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS2v2 accommodation 1`] = `
-"
-    CAS2 for Bail
-    
-  
+"CAS2 Bail
       <br />
-      <span class="govuk-hint">from 23 May 2026</span>
+      <span class="govuk-hint">From 23 May 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS3 accommodation 1`] = `
-"
-    Temporary Accommodation (CAS3)
-    
-  
+"CAS3
       <br />
-      <span class="govuk-hint">from 31 July 2026</span>
+      <span class="govuk-hint">From 31 July 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a No fixed abode accommodation 1`] = `
-"
-    No fixed abode
-    
-  
+"No accommodation
       <br />
-      <span class="govuk-hint">from 10 September 2026</span>
+      <span class="govuk-hint">From 10 September 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Prison (no qualifier) accommodation 1`] = `
-"
-    HMP Foobar
-  
+"HMP Foobar
       <br />
-      <span class="govuk-hint">from 11 December 2025</span>
+      <span class="govuk-hint">From 11 December 2025</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Prison accommodation 1`] = `
-"
-    HMP Foobar (licence)
-  
+"HMP Foobar
       <br />
-      <span class="govuk-hint">from 1 January 2026</span>
+      <span class="govuk-hint">From 1 January 2026</span>
     "
 `;
 
-exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Private address accommodation 1`] = `
-"
-    Private address
-    <br />Friends or family (not tenant or owner)
-  
+exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Settled Private address accommodation 1`] = `
+"Friends or family (not tenant or owner)
       <br />
-      <span class="govuk-hint">from 10 September 2026</span>
+      <span class="govuk-hint">9 Foo Bar</span>
+    "
+`;
+
+exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Transient Private address accommodation 1`] = `
+"Other: Some place
+      <br />
+      <span class="govuk-hint">9 Foo Bar</span>
     "
 `;
 
@@ -463,128 +245,48 @@ exports[`cases utilities accommodationCell and accommodationCard macros for next
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS1 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS1",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Status",
-      },
-      "value": {
-        "html": "
-        <p>
-          <strong>Approved Premises (CAS1)</strong>
-          <br /><span class="govuk-hint">From Tuesday 3 February 2026</span>
-        </p>
-      ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": undefined,
+  "name": "Approved Premises (CAS1)",
+  "settledTag": undefined,
   "startDate": "2026-02-03",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS2",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Status",
-      },
-      "value": {
-        "html": "
-        <p>
-          <strong>CAS2 for HDC</strong>
-          <br /><span class="govuk-hint">From Thursday 12 March 2026</span>
-        </p>
-      ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": undefined,
+  "name": "CAS2 for HDC",
+  "settledTag": undefined,
   "startDate": "2026-03-12",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS2v2 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS2V2",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Status",
-      },
-      "value": {
-        "html": "
-        <p>
-          <strong>CAS2 for Bail</strong>
-          <br /><span class="govuk-hint">From Saturday 23 May 2026</span>
-        </p>
-      ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": undefined,
+  "name": "CAS2 Bail",
+  "settledTag": undefined,
   "startDate": "2026-05-23",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS3 accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "CAS3",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Status",
-      },
-      "value": {
-        "html": "
-        <p>
-          <strong>Temporary Accommodation (CAS3)</strong>
-          <br /><span class="govuk-hint">From Friday 31 July 2026</span>
-        </p>
-      ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": undefined,
+  "name": "CAS3",
+  "settledTag": undefined,
   "startDate": "2026-07-31",
 }
 `;
@@ -593,109 +295,66 @@ exports[`cases utilities accommodationCell and accommodationCard macros for next
 {
   "arrangementType": "NO_FIXED_ABODE",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [],
+  "endDate": undefined,
   "startDate": "2026-09-10",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Prison (no qualifier) accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "PRISON",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Status",
-      },
-      "value": {
-        "html": "
-        <p>
-          <strong>Prison</strong>
-          <br /><span class="govuk-hint">From Thursday 11 December 2025</span>
-        </p>
-      ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": undefined,
+  "name": "HMP Foobar",
+  "settledTag": undefined,
   "startDate": "2025-12-11",
 }
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Prison accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "PRISON",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Status",
-      },
-      "value": {
-        "html": "
-        <p>
-          <strong>Prison (licence)</strong>
-          <br /><span class="govuk-hint">From Thursday 1 January 2026</span>
-        </p>
-      ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "<strong>HMP Foobar</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": undefined,
+  "name": "HMP Foobar",
+  "settledTag": undefined,
   "startDate": "2026-01-01",
 }
 `;
 
-exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Private address accommodation 1`] = `
+exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Settled Private address accommodation 1`] = `
 {
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "arrangementType": "PRIVATE",
   "cardType": "next",
-  "heading": "Next accommodation",
-  "rows": [
-    {
-      "key": {
-        "text": "Status",
-      },
-      "value": {
-        "html": "
-        <p>
-          <strong>Private address</strong>
-          <br /><span class="govuk-hint">From Thursday 10 September 2026</span>
-        </p>
-      ",
-      },
-    },
-    {
-      "key": {
-        "text": "Address",
-      },
-      "value": {
-        "html": "<strong>Friends or family (not tenant or owner)</strong><br />9 Foo Bar<br />Foocity<br />FO0 1BA",
-      },
-    },
-  ],
+  "endDate": undefined,
+  "name": "Friends or family (not tenant or owner)",
+  "settledTag": {
+    "colour": "green",
+    "text": "Settled",
+  },
   "startDate": "2026-09-10",
 }
 `;
 
-exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Undefined accommodation 1`] = `""`;
+exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Transient Private address accommodation 1`] = `
+{
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+  "arrangementType": "PRIVATE",
+  "cardType": "next",
+  "endDate": undefined,
+  "name": "Other: Some place",
+  "settledTag": {
+    "colour": "purple",
+    "text": "Transient",
+  },
+  "startDate": "2026-09-10",
+}
+`;
+
+exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Undefined accommodation 1`] = `undefined`;
 
 exports[`cases utilities personCell macro renders a formatted cell for a given person 1`] = `
 "<div class="sas-person-cell">

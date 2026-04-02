@@ -1,26 +1,20 @@
 {%- macro accommodationCell(context) -%}
-  {% if context.arrangementType === 'PRISON' %}
-    {{ context.accommodationType | replace('Prison', context.name) }}
-  {% else %}
-    {{ context.accommodationType }}
-    {% if context.addressTitle %}<br />{{ context.addressTitle }}{% endif %}
-  {% endif %}
+  {{ context.accommodationType }}
 
-  {%- if context.cellType === 'current' %}
+  {%- if context.arrangementType === 'PRIVATE' -%}
+    {%- if context.addressLine1 %}
+      <br />
+      <span class="govuk-hint">{{ context.addressLine1 }}</span>
+    {% endif -%}
+  {%- else -%}
+    {%- if context.cellType !== 'current' and context.startDate %}
+      <br />
+      <span class="govuk-hint">From {{ context.startDate | date }}</span>
+    {% endif -%}
+
     {%- if context.endDate %}
       <br />
-      <span class="govuk-hint">until {{ context.endDate | date }}</span>
-      <br />
-      <span class="govuk-!-display-inline-block govuk-!-margin-top-1">{{ context.endDate | date('days for/left') }}</span>
+      <span class="govuk-hint">Until {{ context.endDate | date }}</span>
     {% endif -%}
-  {% else %}
-    {%- if context.startDate %}
-      <br />
-      <span class="govuk-hint">from {{ context.startDate | date }}</span>
-    {% endif -%}
-    {%- if context.endDate %}
-      <br />
-      <span class="govuk-hint">{{ 'to' if context.startDate else 'until' }} {{ context.endDate | date }}</span>
-    {% endif -%}
-  {% endif -%}
+  {%- endif -%}
 {%- endmacro -%}

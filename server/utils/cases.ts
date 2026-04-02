@@ -1,16 +1,9 @@
 import { AccommodationDetail, CaseDto as Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery } from '@sas/ui'
-import { htmlContent, initialiseName, summaryListRowHtml } from './utils'
-import { formatDate } from './dates'
+import { GetCasesQuery, StatusTag } from '@sas/ui'
+import { htmlContent, initialiseName } from './utils'
 import { addressLines } from './addresses'
 import { renderMacro } from './macros'
-
-const offenderReleaseTypes: Record<AccommodationDetail['offenderReleaseType'], string> = {
-  REMAND: 'remand',
-  LICENCE: 'licence',
-  BAIL: 'bail',
-}
 
 export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
   FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
@@ -55,35 +48,24 @@ export const casesTableCaption = (cases: Case[], query: GetCasesQuery = {}, user
 export const personCell = (c: Case): string => renderMacro('personCell', c)
 
 export const accommodationType = (accommodation: AccommodationDetail): string => {
-  const { arrangementType, offenderReleaseType } = accommodation
+  const { arrangementType, arrangementSubType, arrangementSubTypeDescription, name } = accommodation
 
   switch (arrangementType) {
     case 'PRISON':
-      return `Prison${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
+      return name
     case 'PRIVATE':
-      return `Private address${offenderReleaseType ? ` (${offenderReleaseTypes[offenderReleaseType]})` : ''}`
+      if (arrangementSubType === 'OTHER') return `Other: ${arrangementSubTypeDescription}`
+      return arrangementSubTypes[arrangementSubType]
     case 'NO_FIXED_ABODE':
-      return 'No fixed abode'
+      return 'No accommodation'
     case 'CAS1':
       return 'Approved Premises (CAS1)'
     case 'CAS2':
       return 'CAS2 for HDC'
     case 'CAS2V2':
-      return 'CAS2 for Bail'
+      return 'CAS2 Bail'
     case 'CAS3':
-      return 'Temporary Accommodation (CAS3)'
-    default:
-      return ''
-  }
-}
-
-export const addressTitle = (accommodation: AccommodationDetail): string => {
-  const { arrangementType, name, arrangementSubType } = accommodation
-  switch (arrangementType) {
-    case 'PRISON':
-      return `${name}`
-    case 'PRIVATE':
-      return arrangementSubTypes[arrangementSubType]
+      return 'CAS3'
     default:
       return ''
   }
@@ -94,67 +76,50 @@ export const accommodationCell = (cellType: 'current' | 'next', accommodation?: 
     ? renderMacro('accommodationCell', {
         cellType,
         accommodationType: accommodationType(accommodation),
-        addressTitle: addressTitle(accommodation),
+        addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
         ...accommodation,
       })
     : ''
 
-export const accommodationCard = (cardType: 'current' | 'next', accommodation?: AccommodationDetail) => {
-  if (!accommodation) return ''
+type AccommodationCardContext = {
+  cardType: 'current' | 'next'
+  arrangementType: AccommodationDetail['arrangementType']
+  settledTag?: StatusTag
+  name?: string
+  address?: string
+  startDate?: string
+  endDate?: string
+  link?: string
+}
 
-  const { arrangementType, startDate, endDate } = accommodation
+export const settledTag = (settledType?: AccommodationDetail['settledType']): StatusTag =>
+  ({
+    SETTLED: { text: 'Settled', colour: 'green' },
+    TRANSIENT: { text: 'Transient', colour: 'purple' },
+  })[settledType]
 
-  const heading = cardType === 'current' ? 'Current accommodation' : 'Next accommodation'
-  const rows = []
+export const accommodationCard = (
+  cardType: 'current' | 'next',
+  accommodation?: AccommodationDetail,
+): AccommodationCardContext => {
+  if (!accommodation) return undefined
 
-  if (arrangementType !== 'NO_FIXED_ABODE') {
-    if (cardType === 'current') {
-      rows.push(summaryListRowHtml('Type', accommodationType(accommodation)))
+  const { arrangementType, settledType, startDate, endDate } = accommodation
 
-      if (accommodation.endDate) {
-        const endDateHtml = `
-          ${formatDate(accommodation.endDate)}
-          <br />
-          ${formatDate(accommodation.endDate, 'days for/left')}
-        `
-        rows.push(summaryListRowHtml(arrangementType === 'PRISON' ? 'Release date' : 'End date', endDateHtml))
-      }
-    }
-
-    if (cardType === 'next') {
-      let datesHtml = ''
-
-      if (startDate) {
-        datesHtml += `From ${formatDate(startDate, 'long')}`
-      }
-      if (endDate) {
-        datesHtml += `${startDate ? `<br />to ` : 'Until'} ${formatDate(endDate, 'long')}`
-      }
-
-      const statusHtml = `
-        <p>
-          <strong>${accommodationType(accommodation)}</strong>
-          ${datesHtml ? `<br /><span class="govuk-hint">${datesHtml}</span>` : ''}
-        </p>
-      `
-
-      rows.push(summaryListRowHtml('Status', statusHtml))
-    }
-
-    const address = [
-      addressTitle(accommodation) ? `<strong>${addressTitle(accommodation)}</strong>` : '',
-      ...addressLines(accommodation.address),
-    ].filter(Boolean)
-
-    if (address.length > 0) rows.push(summaryListRowHtml('Address', address.join('<br />')))
-  }
-
-  return {
+  const context: AccommodationCardContext = {
     cardType,
-    heading,
     arrangementType,
     startDate,
-    rows,
+    endDate,
+  }
+
+  if (arrangementType === 'NO_FIXED_ABODE') return context
+
+  return {
+    ...context,
+    settledTag: settledTag(settledType),
+    name: accommodationType(accommodation),
+    address: addressLines(accommodation.address).join('<br />'),
   }
 }
 

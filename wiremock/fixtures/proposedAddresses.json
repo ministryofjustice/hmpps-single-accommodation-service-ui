@@ -3,6 +3,7 @@
   "P712106": [
     {
       "id": "e8409d49-494e-48db-8fef-2d84fade80d3",
+      "caseId": "",
       "crn": "P712106",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OTHER",
@@ -29,6 +30,7 @@
   "T274481": [
     {
       "id": "18772d92-ea60-45e6-8c6f-a27b0583ca3c",
+      "caseId": "",
       "crn": "T274481",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "SOCIAL_RENTED",
@@ -54,6 +56,7 @@
     },
     {
       "id": "fb6cde60-0e23-40ea-890e-93c2614ed791",
+      "caseId": "",
       "crn": "T274481",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "FRIENDS_OR_FAMILY",
@@ -79,6 +82,7 @@
     },
     {
       "id": "f524ec39-df9f-4e22-9a81-dd1b8f88c5c8",
+      "caseId": "",
       "crn": "T274481",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OTHER",
@@ -109,6 +113,7 @@
   "U934069": [
     {
       "id": "521bedd9-9ee3-4741-b804-a910b7b1a7c7",
+      "caseId": "",
       "crn": "U934069",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "FRIENDS_OR_FAMILY",
@@ -135,6 +140,7 @@
     },
     {
       "id": "0e2d356e-e05f-40ef-b611-39d6df1e0f9b",
+      "caseId": "",
       "crn": "U934069",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "SOCIAL_RENTED",
@@ -159,6 +165,7 @@
     },
     {
       "id": "e48dfb23-fd32-4225-9e7b-68806b53263d",
+      "caseId": "",
       "crn": "U934069",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OTHER",
@@ -185,6 +192,7 @@
   "I322559": [
     {
       "id": "3e957118-f3d3-4d8a-b12c-f816f33b7d05",
+      "caseId": "",
       "crn": "I322559",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "SOCIAL_RENTED",
@@ -211,6 +219,7 @@
   "L247269": [
     {
       "id": "b794e36b-9e10-44da-b549-53dc0c80b5a1",
+      "caseId": "",
       "crn": "L247269",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OTHER",
@@ -235,6 +244,7 @@
     },
     {
       "id": "e524ca1f-86f8-4a72-aa76-4fdd44e379bd",
+      "caseId": "",
       "crn": "L247269",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "PRIVATE_RENTED_ROOM",
@@ -261,6 +271,7 @@
   "F608163": [
     {
       "id": "14a5e9af-4b31-46e6-9c9b-6ccccf179b9e",
+      "caseId": "",
       "crn": "F608163",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "OTHER",
@@ -286,6 +297,7 @@
     },
     {
       "id": "a4e54424-88cf-4330-99cc-719341de9202",
+      "caseId": "",
       "crn": "F608163",
       "arrangementType": "PRIVATE",
       "arrangementSubType": "PRIVATE_RENTED_WHOLE_PROPERTY",

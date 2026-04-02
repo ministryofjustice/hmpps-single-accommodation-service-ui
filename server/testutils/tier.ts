@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { CaseDto as Case } from '@sas/api'
 
-const tiers: Case['tier'][] = [
+const tiers: Case['tierScore'][] = [
   'A3',
   'A2',
   'A1',
@@ -28,4 +28,4 @@ const tiers: Case['tier'][] = [
   'D1S',
 ]
 
-export default (): Case['tier'] => faker.helpers.arrayElement(tiers)
+export default (): Case['tierScore'] => faker.helpers.arrayElement(tiers)

@@ -8,7 +8,7 @@ export default class PageWithCaseDetails extends AbstractPage {
   async shouldShowCaseDetails(caseData: CaseDto) {
     const details = [
       { label: 'RoSH', value: riskLevelStatusTag(caseData.riskLevel).text },
-      { label: 'Tier', value: caseData.tier },
+      { label: 'Tier', value: caseData.tierScore },
       { label: 'CRN', value: caseData.crn },
       { label: 'Prison number', value: caseData.prisonNumber },
       { label: 'PNC reference', value: caseData.pncReference },

@@ -116,6 +116,7 @@ export default AccommodationFactory.define((): AccommodationDetail => {
 
   return {
     id: faker.string.uuid(),
+    caseId: faker.string.uuid(),
     crn: crn(),
     arrangementType,
     arrangementSubType,

@@ -148,8 +148,7 @@ describeClient('ProposedAddressesClient', provider => {
         },
       },
       willRespondWith: {
-        status: 200,
-        body: { note },
+        status: 201,
       },
     })
 

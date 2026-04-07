@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test'
-import { StatusCard } from '@sas/ui'
+import { StatusCard, StatusTag } from '@sas/ui'
 import { TimelineEntry } from '@govuk/ui'
 import { formatDate } from '../../server/utils/dates'
 
@@ -135,6 +135,15 @@ export default class AbstractPage {
 
     for await (const link of cardData.links || []) {
       await expect(card.getByRole('link', { name: link.text })).toHaveAttribute('href', link.href)
+    }
+  }
+
+  async shouldShowStatusTag(statusTag: StatusTag, container?: Locator) {
+    const tag = (container || this.page).locator('.govuk-tag', { hasText: statusTag.text })
+    await expect(tag).toBeVisible()
+
+    if (statusTag.colour) {
+      await expect(tag).toContainClass(`govuk-tag--${statusTag.colour}`)
     }
   }
 

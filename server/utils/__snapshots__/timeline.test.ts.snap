@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`noteTimelineEntry returns a formatted note timeline entry 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2026-03-25T15:22:00.000Z",
+    "type": "datetime",
+  },
+  "html": "<p>Line 1</p><p>Line 2</p>",
+  "label": {
+    "text": "Note added",
+  },
+}
+`;
+
 exports[`timelineEntry returns a timeline entry with the given details 1`] = `
 {
   "byline": {

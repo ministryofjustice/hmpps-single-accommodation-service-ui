@@ -3,6 +3,7 @@ import { path } from 'static-path'
 const casesPath = path('/cases')
 const casePath = casesPath.path(':crn')
 const proposedAddressesPath = casePath.path('proposed-accommodations')
+const proposedAddressPath = proposedAddressesPath.path(':id')
 const dutyToReferPath = casePath.path('dtr')
 
 export default {
@@ -18,10 +19,13 @@ export default {
     referrals: casePath.path('applications'),
     proposedAddresses: {
       index: proposedAddressesPath,
-      show: proposedAddressesPath.path(':id'),
+      show: proposedAddressPath,
       submit: proposedAddressesPath,
-      update: proposedAddressesPath.path(':id'),
-      timeline: proposedAddressesPath.path(':id/timeline'),
+      update: proposedAddressPath,
+      timeline: {
+        index: proposedAddressPath.path('timeline'),
+        submit: proposedAddressPath.path('timeline'),
+      },
     },
   },
   referenceData: path('/reference-data'),

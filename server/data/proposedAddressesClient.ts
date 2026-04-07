@@ -48,6 +48,19 @@ export default class ProposedAddressesClient extends RestClient {
   }
 
   async getTimeline(token: string, crn: string, id: string) {
-    return this.get<AuditRecordDto[]>({ path: apiPaths.cases.proposedAddresses.timeline({ crn, id }) }, asUser(token))
+    return this.get<AuditRecordDto[]>(
+      { path: apiPaths.cases.proposedAddresses.timeline.index({ crn, id }) },
+      asUser(token),
+    )
+  }
+
+  async submitTimelineNote(token: string, crn: string, id: string, note: string) {
+    return this.post<void>(
+      {
+        path: apiPaths.cases.proposedAddresses.timeline.submit({ crn, id }),
+        data: { note },
+      },
+      asUser(token),
+    )
   }
 }

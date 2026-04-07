@@ -38,4 +38,8 @@ export default class ProposedAddressesService {
   async getTimeline(token: string, crn: string, id: string) {
     return this.proposedAddressesClient.getTimeline(token, crn, id)
   }
+
+  async submitTimelineNote(token: string, crn: string, id: string, note: string) {
+    return this.proposedAddressesClient.submitTimelineNote(token, crn, id, note)
+  }
 }

@@ -55,6 +55,10 @@ export const addGenericErrorToFlash = (request: Request, error: string): void =>
   request.flash('errorSummary', JSON.stringify([{ text: error }]))
 }
 
+export const addUserInputToFlash = (request: Request): void => {
+  request.flash('userInput', JSON.stringify(request.body))
+}
+
 export const validateAndFlashErrors = (request: Request, errors: Record<string, string>): boolean => {
   if (Object.keys(errors).length === 0) {
     return true
@@ -65,7 +69,7 @@ export const validateAndFlashErrors = (request: Request, errors: Record<string, 
 
   request.flash('errors', JSON.stringify(errorMessages))
   request.flash('errorSummary', JSON.stringify(errorSummary))
-  request.flash('userInput', JSON.stringify(request.body))
+  addUserInputToFlash(request)
 
   return false
 }

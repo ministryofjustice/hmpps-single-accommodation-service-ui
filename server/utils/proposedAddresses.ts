@@ -23,7 +23,7 @@ import MultiPageFormManager from './multiPageFormManager'
 import { isValidUKPostcode, validateAndFlashErrors } from './validation'
 import { addressLines, formatAddress } from './addresses'
 import { renderMacro, statusTag } from './macros'
-import { timelineEntry } from './timeline'
+import { noteTimelineEntry, timelineEntry } from './timeline'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
@@ -504,6 +504,10 @@ const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): Accom
 
 export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
   const { type } = auditRecord
+
+  // @ts-expect-error requires updated API types
+  if (type === 'NOTE') return noteTimelineEntry(auditRecord)
+
   const proposedAddress = auditRecordChangesToProposedAddress(auditRecord)
 
   const housingArrangement = [

@@ -157,9 +157,9 @@ describe('cases utilities', () => {
     it('returns all active filter tags when multiple filters are applied', () => {
       const url = '/?assignedTo=anyone&riskLevel=HIGH&searchTerm=CRN123'
       expect(queryToFilters({ assignedTo: 'anyone', riskLevel: 'HIGH', searchTerm: 'CRN123' }, url)).toEqual([
+        { text: "Search: 'CRN123'", href: '/?assignedTo=anyone&riskLevel=HIGH' },
         { text: 'Assigned to: anyone', href: '/?riskLevel=HIGH&searchTerm=CRN123' },
         { text: 'RoSH: High', href: '/?assignedTo=anyone&searchTerm=CRN123' },
-        { text: "Search: 'CRN123'", href: '/?assignedTo=anyone&riskLevel=HIGH' },
       ])
     })
 

@@ -33,12 +33,12 @@ export const casesResultsSummary = (cases: Case[]): string => {
 
 export const queryToFilters = (query: GetCasesQuery, currentUrl: string): { text: string; href: string }[] => {
   const filters: { text: string; href: string }[] = []
+  if (query?.searchTerm)
+    filters.push({ text: `Search: '${query.searchTerm}'`, href: removeQueryParam(currentUrl, 'searchTerm') })
   if (query?.assignedTo && query.assignedTo !== 'you')
     filters.push({ text: `Assigned to: ${query.assignedTo}`, href: removeQueryParam(currentUrl, 'assignedTo') })
   if (query?.riskLevel)
     filters.push({ text: `RoSH: ${formatRiskLevel(query.riskLevel)}`, href: removeQueryParam(currentUrl, 'riskLevel') })
-  if (query?.searchTerm)
-    filters.push({ text: `Search: '${query.searchTerm}'`, href: removeQueryParam(currentUrl, 'searchTerm') })
   return filters
 }
 

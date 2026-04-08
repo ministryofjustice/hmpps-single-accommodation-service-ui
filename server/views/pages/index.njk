@@ -26,30 +26,32 @@
       </div>                
     </div>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter">
-          {{
-            govukSelect({
-              label: {
-                text: 'Assigned to'
-              },
-              name: 'assignedTo',
-              value: query.assignedTo,
-              items: assignedToOptions
-            })
-          }}
-        </div>
-        <div class="govuk-grid-column-one-quarter">
-          {{
-            govukSelect({
-              label: {
-                text: 'RoSH'
-              },
-              name: 'riskLevel',
-              value: query.riskLevel,
-              items: riskLevelOptions
-            })
-          }}
-        </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{
+          govukSelect({
+            label: {
+              text: 'Assigned to'
+            },
+            name: 'assignedTo',
+            value: query.assignedTo,
+            items: assignedToOptions,
+            classes: 'govuk-!-width-full'
+          })
+        }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{
+          govukSelect({
+            label: {
+              text: 'RoSH'
+            },
+            name: 'riskLevel',
+            value: query.riskLevel,
+            items: riskLevelOptions,
+            classes: 'govuk-!-width-full'
+          })
+        }}
+      </div>
     </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

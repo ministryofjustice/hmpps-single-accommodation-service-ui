@@ -28,8 +28,8 @@
       <h2 class="govuk-heading-l govuk-!-margin-top-2">Arrange next accommodation</h2>
     </div>
   </div>
-  <div class="govuk-grid-row govuk-grid-row--reverse">
-    <section class="govuk-grid-column-one-third-from-desktop">
+  <div class="govuk-grid-row">
+    <section class="govuk-grid-column-one-third-from-desktop govuk-grid-column-right">
       <h2 class="govuk-visually-hidden">Current situation</h2>
       {% if caseData.nextAccommodation and caseData.nextAccommodation.arrangementType === 'NO_FIXED_ABODE' %}
         {{ accommodationCard(nextAccommodationCard) }}

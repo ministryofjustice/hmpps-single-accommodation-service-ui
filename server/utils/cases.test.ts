@@ -1,46 +1,26 @@
 import { AccommodationDetail, AccommodationAddressDetails } from '@sas/api'
-import { GetCasesQuery } from '@sas/ui'
 import {
   accommodationCell,
   caseAssignedTo,
-  casesTableCaption,
+  casesResultsSummary,
   casesToRows,
   personCell,
   accommodationCard,
   mapGetCasesQuery,
+  queryToFilters,
 } from './cases'
 import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
 
 describe('cases utilities', () => {
-  describe('casesTableCaption', () => {
+  describe('casesResultsSummary', () => {
     it.each([
-      [1, 'with no filter', {}, '1 person'],
-      [0, 'with no filter', {}, '0 people'],
-      [32, 'with no filter', {}, '32 people'],
-      [4, 'with a search term', { searchTerm: 'Foo' }, "4 people matching 'Foo'"],
-      [1, 'with an assigned to you filter', { assignedTo: 'you' }, '1 person assigned to you (J. Doe)'],
-      [3, 'with an assigned to anyone filter', { assignedTo: 'anyone' }, '3 people assigned to anyone'],
-      [2, 'with a RoSH filter', { riskLevel: 'HIGH' }, '2 people filtered by high RoSH'],
-      [
-        3,
-        'with a search term and RoSH filter',
-        { searchTerm: 'Aaron', riskLevel: 'VERY_HIGH' },
-        "3 people matching 'Aaron', filtered by very high RoSH",
-      ],
-      [
-        2,
-        'with a search term, assigned to and risk filter',
-        { searchTerm: 'X234567', assignedTo: 'anyone', riskLevel: 'LOW' },
-        "2 people matching 'X234567', assigned to anyone filtered by low RoSH",
-      ],
-    ])('renders a table caption for %s results %s', (resultsCount, _, query: GetCasesQuery, expected) => {
+      [1, '1 person'],
+      [0, '0 people'],
+      [32, '32 people'],
+    ])('renders results summary for %s results %s', (resultsCount, expected) => {
       const cases = caseFactory.buildList(resultsCount)
 
-      expect(casesTableCaption(cases, query, 'Jane Doe')).toEqual(expected)
-    })
-
-    it('should not add the name if it cannot be shown', () => {
-      expect(casesTableCaption([], { assignedTo: 'you' }, '')).toEqual('0 people assigned to you')
+      expect(casesResultsSummary(cases)).toEqual(expected)
     })
   })
 
@@ -162,6 +142,48 @@ describe('cases utilities', () => {
 
     it('maps a UI query for anyone to the correct API query', () => {
       expect(mapGetCasesQuery({ assignedTo: 'anyone' }, '123')).toEqual({ assignedTo: '' })
+    })
+  })
+
+  describe('queryToFilters', () => {
+    it('returns an empty array when no filters are applied', () => {
+      expect(queryToFilters({}, '/')).toEqual([])
+    })
+
+    it('does not include a filter tag when assignedTo is "you"', () => {
+      expect(queryToFilters({ assignedTo: 'you' }, '/')).toEqual([])
+    })
+
+    it('returns all active filter tags when multiple filters are applied', () => {
+      const url = '/?assignedTo=anyone&riskLevel=HIGH&searchTerm=CRN123'
+      expect(queryToFilters({ assignedTo: 'anyone', riskLevel: 'HIGH', searchTerm: 'CRN123' }, url)).toEqual([
+        { text: 'Assigned to: anyone', href: '/?riskLevel=HIGH&searchTerm=CRN123' },
+        { text: 'RoSH: High', href: '/?assignedTo=anyone&searchTerm=CRN123' },
+        { text: "Search: 'CRN123'", href: '/?assignedTo=anyone&riskLevel=HIGH' },
+      ])
+    })
+
+    it.each([
+      [
+        'assignedTo',
+        { assignedTo: 'anyone' } as const,
+        '/?assignedTo=anyone&riskLevel=HIGH',
+        [{ text: 'Assigned to: anyone', href: '/?riskLevel=HIGH' }],
+      ],
+      [
+        'riskLevel',
+        { riskLevel: 'VERY_HIGH' } as const,
+        '/?assignedTo=anyone&riskLevel=VERY_HIGH',
+        [{ text: 'RoSH: Very high', href: '/?assignedTo=anyone' }],
+      ],
+      [
+        'searchTerm',
+        { searchTerm: 'CRN123' } as const,
+        '/?searchTerm=CRN123&riskLevel=LOW',
+        [{ text: "Search: 'CRN123'", href: '/?riskLevel=LOW' }],
+      ],
+    ])('includes a filter tag when %s is set', (_, query, url, expected) => {
+      expect(queryToFilters(query, url)).toEqual(expected)
     })
   })
 })

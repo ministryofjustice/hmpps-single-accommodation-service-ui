@@ -1,7 +1,7 @@
 import { AccommodationDetail, CaseDto as Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, StatusTag } from '@sas/ui'
-import { htmlContent, initialiseName } from './utils'
+import { htmlContent } from './utils'
 import { addressLines } from './addresses'
 import { renderMacro } from './macros'
 
@@ -25,24 +25,30 @@ export const formatRiskLevel = (level?: Case['riskLevel']) => {
   )
 }
 
-export const casesTableCaption = (cases: Case[], query: GetCasesQuery = {}, userFullName?: string): string => {
-  const filters: string[] = []
-  if (query.riskLevel) filters.push(`${formatRiskLevel(query.riskLevel).toLowerCase()} RoSH`)
+export const casesResultsSummary = (cases: Case[]): string => {
+  const summary = `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
 
-  let caption = `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
+  return summary
+}
 
-  if (query.searchTerm) {
-    caption += ` matching '${query.searchTerm}'`
-    if (query.assignedTo || filters.length > 0) caption += `,`
-  }
+export const queryToFilters = (query: GetCasesQuery, currentUrl: string): { text: string; href: string }[] => {
+  const filters: { text: string; href: string }[] = []
+  if (query?.assignedTo && query.assignedTo !== 'you')
+    filters.push({ text: `Assigned to: ${query.assignedTo}`, href: removeQueryParam(currentUrl, 'assignedTo') })
+  if (query?.riskLevel)
+    filters.push({ text: `RoSH: ${formatRiskLevel(query.riskLevel)}`, href: removeQueryParam(currentUrl, 'riskLevel') })
+  if (query?.searchTerm)
+    filters.push({ text: `Search: '${query.searchTerm}'`, href: removeQueryParam(currentUrl, 'searchTerm') })
+  return filters
+}
 
-  if (query.assignedTo) caption += ` assigned to ${query.assignedTo}`
-  const initialisedName = initialiseName(userFullName)
-  if (query.assignedTo === 'you' && initialisedName) caption += ` (${initialisedName})`
+const removeQueryParam = (url: string, param: string): string => {
+  const [path, search] = url.split('?')
+  const params = new URLSearchParams(search)
+  params.delete(param)
+  const queryString = params.toString()
 
-  if (filters.length > 0) caption += ` filtered by ${filters.join(', ')}`
-
-  return caption
+  return queryString ? `${path}?${queryString}` : path
 }
 
 export const personCell = (c: Case): string => renderMacro('personCell', c)

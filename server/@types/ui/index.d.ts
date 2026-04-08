@@ -24,8 +24,6 @@ export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
   lookupResults?: AccommodationAddressDetails[] | null
 }
 
-export type DutyToReferFlow = 'add' | 'edit'
-
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']
 
 export interface StatusTag {

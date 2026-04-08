@@ -4,14 +4,12 @@ import {
   detailsForStatus,
   detailsSummaryListRows,
   dutyToReferStatusCard,
-  getDutyToReferFlow,
   linksForStatus,
   outcomeDetailsSummaryListRows,
   outcomeSupportText,
   summaryListRows,
   validateOutcome,
   validateSubmission,
-  withEditFlow,
 } from './dutyToRefer'
 import * as validationUtils from './validation'
 import { dutyToReferFactory } from '../testutils/factories'
@@ -49,6 +47,7 @@ describe('duty to refer utils', () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({
         crn: 'CRN123',
         submission: {
+          id: 'submission-id',
           submissionDate: '2025-12-01',
           referenceNumber: 'REF123',
           localAuthority: { localAuthorityAreaName: 'Some Council' },
@@ -108,13 +107,25 @@ describe('duty to refer utils', () => {
 
   describe('linksForStatus', () => {
     it.each([
-      [['Add submission details', 'View referral and notes'], 'NOT_STARTED' as const],
-      [['Add outcome', 'View referral and notes'], 'SUBMITTED' as const],
-      [['View referral and notes'], 'NOT_ACCEPTED' as const],
-      [['View referral and notes'], 'ACCEPTED' as const],
-      [[], undefined],
-    ])('returns links %s for status %s', (expectedLinks, status) => {
-      const links = linksForStatus(status, 'CRN123').map(link => link.text)
+      {
+        status: 'not started',
+        expectedLinks: ['Add submission details'],
+        dtr: dutyToReferFactory.notStarted().build(),
+      },
+      {
+        status: 'submitted',
+        expectedLinks: ['Add outcome', 'View referral and notes'],
+        dtr: dutyToReferFactory.submitted().build(),
+      },
+      {
+        status: 'not accepted',
+        expectedLinks: ['View referral and notes'],
+        dtr: dutyToReferFactory.notAccepted().build(),
+      },
+      { status: 'accepted', expectedLinks: ['View referral and notes'], dtr: dutyToReferFactory.accepted().build() },
+      { status: 'undefined', expectedLinks: [], dtr: undefined },
+    ])('returns links $links for status $status', ({ expectedLinks, dtr }) => {
+      const links = linksForStatus(dtr).map(link => link.text)
 
       expect(links).toEqual(expect.arrayContaining(expectedLinks))
       expect(links).toHaveLength(expectedLinks.length)
@@ -205,27 +216,6 @@ describe('duty to refer utils', () => {
         expect(outcomeDetailsSummaryListRows(dtr)).toMatchSnapshot()
       },
     )
-  })
-
-  describe('getDutyToReferFlow', () => {
-    it.each([
-      [{ flow: 'edit' }, 'edit'],
-      [{ flow: undefined }, 'add'],
-      [{}, 'add'],
-    ])('returns %s when query is %s', (query, flow) => {
-      req = mock<Request>({ query })
-
-      expect(getDutyToReferFlow(req)).toBe(flow)
-    })
-  })
-
-  describe('withEditFlow', () => {
-    it.each([
-      ['edit', '/cases/CRN123/dtr/submission?flow=edit'],
-      ['add', '/cases/CRN123/dtr/submission'],
-    ] as const)('returns %s path for %s flow', (flow, expectedPath) => {
-      expect(withEditFlow('/cases/CRN123/dtr/submission', flow)).toBe(expectedPath)
-    })
   })
 
   describe('outcomeSupportText', () => {

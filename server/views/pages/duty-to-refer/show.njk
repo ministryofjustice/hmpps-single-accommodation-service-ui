@@ -44,7 +44,7 @@
                 {{ govukButton({
                     text: "Edit outcome details",
                     classes: "govuk-button--secondary",
-                    href: paths.dutyToRefer.outcome({ crn: crn }) + '?flow=edit',
+                    href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
                     preventDoubleClick: true
                 }) }}
             {% endif %}
@@ -63,7 +63,7 @@
                 {{ govukButton({
                     text: "Edit submission details",
                     classes: "govuk-button--secondary",
-                    href: paths.dutyToRefer.submission({ crn: crn }) + '?flow=edit',
+                    href: paths.dutyToRefer.edit({ crn: crn, id: dtrId }),
                     preventDoubleClick: true
                 }) }}
                 {% if not outcomeDetailRows.length %}
@@ -71,7 +71,7 @@
                     <p>No details about the outcome have been added.</p>
                     {{ govukButton({
                         text: "Add outcome",
-                        href: paths.dutyToRefer.outcome({ crn: crn }),
+                        href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
                         preventDoubleClick: true
                     }) }}
                 {% endif %}

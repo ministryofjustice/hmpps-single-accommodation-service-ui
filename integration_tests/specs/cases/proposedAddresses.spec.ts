@@ -28,7 +28,7 @@ const setupCase = async () => {
 
   await casesApi.stubGetCases([caseData])
   await casesApi.stubGetCaseByCrn(crn, caseData)
-  await dutyToReferApi.stubGetDutyToReferByCrn(crn, undefined)
+  await dutyToReferApi.stubGetCurrentDtr(crn, undefined)
   await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
   await casesApi.stubGetReferralHistory(crn, [])
 

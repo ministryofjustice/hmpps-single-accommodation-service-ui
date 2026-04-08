@@ -1,14 +1,14 @@
 import { Request } from 'express'
 import { CaseDto, DutyToReferDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
-import { DutyToReferFlow, StatusCard, StatusTag } from '@sas/ui'
+import { StatusCard, StatusTag } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
 import { statusTag } from './macros'
 import { summaryListRowHtml, summaryListRowText } from './utils'
 
-const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
+const dutyToReferStatusTag = (status?: DutyToReferDto['status']): StatusTag =>
   ({
     NOT_ACCEPTED: { text: 'Not accepted', colour: 'grey' },
     ACCEPTED: { text: 'Accepted', colour: 'yellow' },
@@ -16,30 +16,34 @@ const dutyToReferStatusTag = (status: DutyToReferDto['status']): StatusTag =>
     SUBMITTED: { text: 'Submitted', colour: 'yellow' },
   })[status] || { text: 'Unknown' }
 
-export const dutyToReferStatusCard = (dutyToRefer: DutyToReferDto): StatusCard => {
-  const status = dutyToRefer?.status
+export const dutyToReferStatusCard = (dutyToRefer?: DutyToReferDto): StatusCard => {
+  const { status } = dutyToRefer || {}
+
   return {
     heading: 'Duty to Refer (DTR)',
     inactive: status === 'NOT_ACCEPTED',
     status: dutyToReferStatusTag(status),
     details: detailsForStatus(dutyToRefer),
-    links: linksForStatus(status, dutyToRefer?.crn),
+    links: linksForStatus(dutyToRefer),
   }
 }
 
-export const linksForStatus = (serviceStatus?: string, crn?: string) => {
-  if (!crn) return []
+export const linksForStatus = (dutyToRefer: DutyToReferDto) => {
+  const { status, crn, submission } = dutyToRefer || {}
 
-  const notes = { text: 'View referral and notes', href: uiPaths.dutyToRefer.show({ crn }) }
+  const notes = submission?.id && {
+    text: 'View referral and notes',
+    href: uiPaths.dutyToRefer.show({ crn, id: submission.id }),
+  }
 
-  switch (serviceStatus) {
+  switch (status) {
     case 'NOT_ACCEPTED':
     case 'ACCEPTED':
       return [notes]
     case 'NOT_STARTED':
-      return crn ? [{ text: 'Add submission details', href: uiPaths.dutyToRefer.guidance({ crn }) }, notes] : [notes]
+      return [{ text: 'Add submission details', href: uiPaths.dutyToRefer.guidance({ crn }) }]
     case 'SUBMITTED':
-      return crn ? [{ text: 'Add outcome', href: uiPaths.dutyToRefer.outcome({ crn }) }, notes] : [notes]
+      return [{ text: 'Add outcome', href: uiPaths.dutyToRefer.outcome({ crn, id: submission?.id }) }, notes]
     default:
       return []
   }
@@ -157,7 +161,3 @@ export const formatDutyToReferStatus = (status: DutyToReferDto['status']): strin
     NOT_STARTED: 'Not started',
     SUBMITTED: 'Submitted',
   })[status]
-
-export const getDutyToReferFlow = (req: Request): DutyToReferFlow => (req.query.flow === 'edit' ? 'edit' : 'add')
-
-export const withEditFlow = (path: string, flow: DutyToReferFlow) => (flow === 'edit' ? `${path}?flow=edit` : path)

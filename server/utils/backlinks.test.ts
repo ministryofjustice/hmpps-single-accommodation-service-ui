@@ -1,7 +1,8 @@
 import { mock } from 'jest-mock-extended'
 import { Session } from 'express-session'
 import { Request } from 'express'
-import { getFlowRedirect, getPageBackLink } from './backlinks'
+import * as backlinksUtils from './backlinks'
+import { getFlowRedirect, getPageBackLink, setFlowRedirect } from './backlinks'
 
 describe('Link management', () => {
   const matchList = ['/pattern1/:param', '/pattern2/']
@@ -43,6 +44,18 @@ describe('Link management', () => {
       const request = mockRequest(null, null)
       request.session = {} as Session
       expect(getPageBackLink(pagePattern, request, matchList, 'defaultPath')).toEqual('defaultPath')
+    })
+  })
+
+  describe('setFlowRedirect', () => {
+    it('should call getPageBackLink and return the result', () => {
+      const request = mockRequest(null, '/last-stored-url')
+      jest.spyOn(backlinksUtils, 'getPageBackLink')
+
+      const redirect = setFlowRedirect(pagePattern, request, matchList)
+
+      expect(backlinksUtils.getPageBackLink).toHaveBeenCalledWith(pagePattern, request, matchList, '/')
+      expect(redirect).toEqual('/last-stored-url')
     })
   })
 

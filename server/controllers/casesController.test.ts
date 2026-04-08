@@ -132,7 +132,7 @@ describe('casesController', () => {
       casesService.getCase.mockResolvedValue(caseData)
       referralsService.getReferralHistory.mockResolvedValue(referralHistory)
       eligibilityService.getEligibility.mockResolvedValue(eligibility)
-      dutyToReferService.getDutyToRefer.mockResolvedValue(dutyToRefer)
+      dutyToReferService.getCurrentDtr.mockResolvedValue(dutyToRefer)
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ proposed, failedChecks })
 
       await casesController.show()(request, response, next)
@@ -144,7 +144,7 @@ describe('casesController', () => {
       expect(casesService.getCase).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(referralsService.getReferralHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(eligibilityService.getEligibility).toHaveBeenCalledWith(TEST_TOKEN, crn)
-      expect(dutyToReferService.getDutyToRefer).toHaveBeenCalledWith(TEST_TOKEN, crn)
+      expect(dutyToReferService.getCurrentDtr).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(proposedAddressesService.getProposedAddresses).toHaveBeenCalledWith(TEST_TOKEN, crn)
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {

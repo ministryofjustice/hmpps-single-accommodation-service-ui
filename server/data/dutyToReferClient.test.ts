@@ -5,6 +5,7 @@ import DutyToReferClient from './dutyToReferClient'
 import { dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
+import dtrSubmissionFactory from '../testutils/factories/dutyToReferSubmission'
 
 describeClient('DutyToReferClient', provider => {
   let dutyToReferClient: DutyToReferClient
@@ -20,10 +21,10 @@ describeClient('DutyToReferClient', provider => {
 
     await provider.addInteraction({
       state: `DutyToRefer exists for case with CRN ${crn}`,
-      uponReceiving: 'a request to get dutyToRefer for a user case by CRN',
+      uponReceiving: 'a request to get the current Duty to refer for a user case by CRN',
       withRequest: {
         method: 'GET',
-        path: apiPaths.cases.dutyToRefer.index({ crn }),
+        path: apiPaths.cases.dutyToRefer.current({ crn }),
         headers: {
           authorization: 'Bearer test-user-token',
         },
@@ -34,7 +35,31 @@ describeClient('DutyToReferClient', provider => {
       },
     })
 
-    const response = await dutyToReferClient.getDutyToRefer('test-user-token', crn)
+    const response = await dutyToReferClient.getCurrentDtr('test-user-token', crn)
+    expect(response).toEqual(dutyToRefer)
+  })
+
+  it('should make a GET request to /cases/:crn/dtr/:id using user token and return the response body', async () => {
+    const dutyToRefer = dutyToReferFactory.build({ submission: dtrSubmissionFactory.build() })
+    const crn = crnFactory()
+
+    await provider.addInteraction({
+      state: `DutyToRefer exists for submission ID ${dutyToRefer.submission.id}`,
+      uponReceiving: 'a request to get the a Duty to refer by CRN and submission ID',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.dutyToRefer.show({ crn, id: dutyToRefer.submission.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: dutyToRefer,
+      },
+    })
+
+    const response = await dutyToReferClient.getDtrBySubmissionId('test-user-token', crn, dutyToRefer.submission.id)
     expect(response).toEqual(dutyToRefer)
   })
 

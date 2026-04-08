@@ -4,10 +4,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% set formAction = paths.dutyToRefer.outcome({crn: crn}) + ('?flow=edit' if outcomeFlow == 'edit' else '') %}
-{% set backLinkHref = paths.cases.show({crn: crn}) %}
-{% set pageTitle = "Edit Duty to Refer (DTR) outcome details" if outcomeFlow == 'edit' else "Add Duty to Refer (DTR) outcome details" %}
-
 {% block formContent %}
     {{ govukRadios({
         id: "outcomeStatus",

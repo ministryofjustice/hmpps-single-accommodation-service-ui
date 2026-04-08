@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker/locale/en_GB'
-import { DtrCommand, DutyToReferDto } from '@sas/api'
+import { DutyToReferDto } from '@sas/api'
 import { Factory } from 'fishery'
 import crn from '../crn'
 import dtrSubmissionFactory from './dutyToReferSubmission'
@@ -23,27 +23,15 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
   notAccepted() {
     return this.params({ status: 'NOT_ACCEPTED', submission: dtrSubmissionFactory.build() })
   }
-
-  fromSubmission(command: DtrCommand, localAuthorityAreaName: string) {
-    return this.params({
-      status: command.status,
-      submission: dtrSubmissionFactory.build({
-        submissionDate: command.submissionDate,
-        referenceNumber: command.referenceNumber,
-        localAuthority: {
-          localAuthorityAreaId: command.localAuthorityAreaId,
-          localAuthorityAreaName,
-        },
-      }),
-    })
-  }
 }
 
 export default DutyToReferFactory.define(() => {
+  const status = faker.helpers.arrayElement(['SUBMITTED', 'NOT_STARTED', 'ACCEPTED', 'NOT_ACCEPTED'])
+
   return {
     caseId: faker.string.uuid(),
     crn: crn(),
-    status: faker.helpers.arrayElement(['SUBMITTED', 'NOT_STARTED', 'ACCEPTED', 'NOT_ACCEPTED']),
-    submission: dtrSubmissionFactory.build(),
+    status,
+    submission: status !== 'NOT_STARTED' ? dtrSubmissionFactory.build() : undefined,
   }
 })

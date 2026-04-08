@@ -12,7 +12,14 @@ import {
   eligibilityFactory,
   referralFactory,
 } from '../testutils/factories'
-import { accommodationCard, caseAssignedTo, casesResultsSummary, casesToRows, queryToFilters } from '../utils/cases'
+import {
+  accommodationCard,
+  caseAssignedTo,
+  casesResultsSummary,
+  casesTabs,
+  casesToRows,
+  queryToFilters,
+} from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -48,7 +55,7 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', url: '/' })
+    request = mock<Request>({ id: 'request-id', originalUrl: '/' })
   })
 
   describe('index', () => {
@@ -81,6 +88,8 @@ describe('casesController', () => {
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
+        tabs: casesTabs(request.originalUrl, 'nfarisk'),
+        peopleType: 'nfarisk',
         resultsSummary: casesResultsSummary(cases),
         casesRows: casesToRows(cases),
         filters: [],
@@ -98,8 +107,9 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         assignedTo: 'anyone',
         riskLevel: 'HIGH',
+        peopleType: 'housed',
       }
-      request.url = '/?searchTerm=some-crn&assignedTo=anyone&riskLevel=HIGH'
+      request.originalUrl = '/?searchTerm=some-crn&assignedTo=anyone&riskLevel=HIGH'
 
       await casesController.index()(request, response, next)
 
@@ -110,8 +120,10 @@ describe('casesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
+        tabs: casesTabs(request.originalUrl, 'housed'),
+        peopleType: 'housed',
         resultsSummary: casesResultsSummary(cases),
-        filters: queryToFilters(request.query, request.url),
+        filters: queryToFilters(request.query, request.originalUrl),
         casesRows: casesToRows(cases),
         query: request.query,
       })

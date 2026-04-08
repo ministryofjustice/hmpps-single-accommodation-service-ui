@@ -9,6 +9,7 @@ import {
   caseAssignedTo,
   mapGetCasesQuery,
   queryToFilters,
+  casesTabs,
 } from '../utils/cases'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
@@ -23,7 +24,7 @@ import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
 
 interface IndexRequest extends Request {
-  query: GetCasesQuery
+  query: GetCasesQuery & { peopleType?: 'nfarisk' | 'housed' }
 }
 
 export default class CasesController {
@@ -41,16 +42,19 @@ export default class CasesController {
       const { token, userId, username, displayName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
+      const { peopleType = 'nfarisk' } = query
 
       if (query.assignedTo === undefined) query.assignedTo = 'you'
+
       const cases = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
-      const filters = queryToFilters(query, req.url)
 
       return res.render('pages/index', {
+        peopleType,
+        tabs: casesTabs(req.originalUrl, peopleType),
         resultsSummary: casesResultsSummary(cases),
         casesRows: casesToRows(cases),
         query,
-        filters,
+        filters: queryToFilters(query, req.originalUrl),
         assignedToOptions: [
           { value: 'you', text: `You (${initialiseName(displayName)})` },
           { value: 'anyone', text: 'Anyone' },

@@ -14,9 +14,8 @@ export default class CasesListPage extends AbstractPage {
     this.casesRows = page.getByRole('table', { name: 'List of cases' }).getByRole('row')
   }
 
-  async shouldShowTableCaption(caption: string, filterApplied = false) {
+  async shouldShowResultsSummary(caption: string) {
     await expect(this.page.getByRole('heading', { name: caption })).toBeVisible()
-    await expect(this.page.getByRole('button', { name: 'Clear search' })).toBeVisible({ visible: filterApplied })
   }
 
   async shouldShowCases(cases: Case[]) {
@@ -43,5 +42,14 @@ export default class CasesListPage extends AbstractPage {
     await this.verifyTextInput('Search by name, CRN or prison number', searchTerm)
     await this.verifySelectInput('Assigned to', assignedTo)
     await this.verifySelectInput('RoSH', riskLevel)
+  }
+
+  async shouldShowFilterTags(filters: Record<string, string>) {
+    for await (const [key, value] of Object.entries(filters)) {
+      if (value) {
+        const filterText = `${key}: ${value}`
+        await expect(this.page.getByRole('link', { name: filterText })).toBeVisible()
+      }
+    }
   }
 }

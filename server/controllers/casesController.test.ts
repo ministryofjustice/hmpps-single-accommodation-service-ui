@@ -12,7 +12,7 @@ import {
   eligibilityFactory,
   referralFactory,
 } from '../testutils/factories'
-import { accommodationCard, caseAssignedTo, casesTableCaption, casesToRows } from '../utils/cases'
+import { accommodationCard, caseAssignedTo, casesResultsSummary, casesToRows, queryToFilters } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -48,7 +48,7 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id' })
+    request = mock<Request>({ id: 'request-id', url: '/' })
   })
 
   describe('index', () => {
@@ -81,9 +81,9 @@ describe('casesController', () => {
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
-        tableCaption: casesTableCaption(cases, { assignedTo: 'you' }, 'Jane Doe'),
+        resultsSummary: casesResultsSummary(cases),
         casesRows: casesToRows(cases),
-        filterIsApplied: false,
+        filters: [],
         query: {
           assignedTo: 'you',
         },
@@ -99,6 +99,7 @@ describe('casesController', () => {
         assignedTo: 'anyone',
         riskLevel: 'HIGH',
       }
+      request.url = '/?searchTerm=some-crn&assignedTo=anyone&riskLevel=HIGH'
 
       await casesController.index()(request, response, next)
 
@@ -109,9 +110,9 @@ describe('casesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
-        tableCaption: casesTableCaption(cases, request.query, 'Jane Doe'),
+        resultsSummary: casesResultsSummary(cases),
+        filters: queryToFilters(request.query, request.url),
         casesRows: casesToRows(cases),
-        filterIsApplied: true,
         query: request.query,
       })
     })

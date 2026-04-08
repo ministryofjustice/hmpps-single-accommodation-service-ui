@@ -2,7 +2,14 @@ import { Request, RequestHandler, Response } from 'express'
 import { GetCasesQuery } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
-import { accommodationCard, casesTableCaption, casesToRows, caseAssignedTo, mapGetCasesQuery } from '../utils/cases'
+import {
+  accommodationCard,
+  casesResultsSummary,
+  casesToRows,
+  caseAssignedTo,
+  mapGetCasesQuery,
+  queryToFilters,
+} from '../utils/cases'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -35,17 +42,15 @@ export default class CasesController {
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
 
-      const filterIsApplied = query.assignedTo !== undefined
-
-      if (!filterIsApplied) query.assignedTo = 'you'
-
+      if (query.assignedTo === undefined) query.assignedTo = 'you'
       const cases = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
+      const filters = queryToFilters(query, req.url)
 
       return res.render('pages/index', {
-        tableCaption: casesTableCaption(cases, query, displayName),
+        resultsSummary: casesResultsSummary(cases),
         casesRows: casesToRows(cases),
         query,
-        filterIsApplied,
+        filters,
         assignedToOptions: [
           { value: 'you', text: `You (${initialiseName(displayName)})` },
           { value: 'anyone', text: 'Anyone' },

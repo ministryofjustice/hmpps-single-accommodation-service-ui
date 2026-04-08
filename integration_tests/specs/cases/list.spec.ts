@@ -28,7 +28,7 @@ test.describe('List of cases', () => {
     })
 
     // AND all the cases should be shown
-    await casesListPage.shouldShowTableCaption('25 people assigned to you')
+    await casesListPage.shouldShowResultsSummary('25 people')
     await casesListPage.shouldShowCases(cases)
 
     // WHEN I filter the results
@@ -39,10 +39,7 @@ test.describe('List of cases', () => {
     })
 
     // THEN the relevant cases are shown
-    await casesListPage.shouldShowTableCaption(
-      `1 person matching '${prisonNumber}', assigned to anyone filtered by very high RoSH`,
-      true,
-    )
+    await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
     await casesListPage.shouldShowCases([filteredCase])
 
     // AND the filters are populated with the selected values
@@ -50,6 +47,13 @@ test.describe('List of cases', () => {
       searchTerm: prisonNumber,
       assignedTo: 'anyone',
       riskLevel: 'VERY_HIGH',
+    })
+
+    // AND the active filter tags are shown
+    await casesListPage.shouldShowFilterTags({
+      Search: `'${prisonNumber}'`,
+      'Assigned to': 'anyone',
+      RoSH: 'Very high',
     })
   })
 })

@@ -11,63 +11,77 @@
 {% block content %}
   <h1>Cases</h1>
 
-  <form method="get" class="sas-filters">
+  <form method="get" class="govuk-!-margin-bottom-8">
     {# FIXME -- Experimental Easter Egg #}
     <input type="hidden" name="crns" value="{{ query.crns }}">
-
-    <div class="sas-filters__filter sas-filters__filter--grow">
-      {{
-        govukInput({
-          label: { text: 'Search by name, CRN or prison number' },
-          name: 'searchTerm',
-          value: query.searchTerm
-        })
-      }}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        {{
+          govukInput({
+            label: { text: 'Search by name, CRN or prison number' },
+            name: 'searchTerm',
+            value: query.searchTerm
+          })
+        }}
+      </div>                
     </div>
-
-    <div class="sas-filters__filter">
-      {{
-        govukSelect({
-          label: {
-            text: 'Assigned to'
-          },
-          name: 'assignedTo',
-          value: query.assignedTo,
-          items: assignedToOptions
-        })
-      }}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        {{
+          govukSelect({
+            label: {
+              text: 'Assigned to'
+            },
+            name: 'assignedTo',
+            value: query.assignedTo,
+            items: assignedToOptions,
+            classes: 'govuk-!-width-full'
+          })
+        }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{
+          govukSelect({
+            label: {
+              text: 'RoSH'
+            },
+            name: 'riskLevel',
+            value: query.riskLevel,
+            items: riskLevelOptions,
+            classes: 'govuk-!-width-full'
+          })
+        }}
+      </div>
     </div>
-
-    <div class="sas-filters__filter">
-      {{
-        govukSelect({
-          label: {
-            text: 'RoSH'
-          },
-          name: 'riskLevel',
-          value: query.riskLevel,
-          items: riskLevelOptions
-        })
-      }}
-    </div>
-
-    <div class="sas-filters__actions">
-      {{ govukButton({ text: 'Apply filters' }) }}
-
-      <a class="govuk-link govuk-link--no-visited-state" href="/" role="button">Clear</a>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="sas-filters__actions">
+          {{ govukButton({ text: 'Apply filters' }) }}
+        </div>
+      </div>
     </div>
   </form>
-
-  <h2 id="case-list-caption" class="govuk-heading-m">{{ tableCaption }}</h2>
-
-  {% if filterIsApplied === true %}
-    <p><a class="govuk-link govuk-link--no-visited-state" href="/" role="button">Clear search</a></p>
+  {% if filters and filters.length %}
+    <div class="sas-filters__summary">
+      <h2 id="case-list-summary" class="govuk-heading-m">
+        Showing {{ resultsSummary }}
+      </h2>
+      <p class="govuk-!-margin-bottom-1">Filters applied:</p>
+      <ul class="moj-filter-tags">
+        {% for filter in filters %}
+          <li><a class="moj-filter__tag" href="{{ filter.href }}"><span class="govuk-visually-hidden">Remove this filter</span> {{ filter.text }}</a></li>
+        {% endfor %}
+      </ul>
+      <p class="govuk-!-margin-bottom-1"><a class="govuk-link govuk-link--no-visited-state" href="/">Clear filters</a></p>
+    </div>
+  {% else %}
+    <h2 id="case-list-summary" class="govuk-heading-m">{{ resultsSummary }}</h2>
   {% endif %}
 
   {{
     govukTable({
       attributes: {
-        'aria-labelledby': 'case-list-caption'
+        'aria-labelledby': 'case-list-summary'
       },
       head: [
         { text: "Person" },

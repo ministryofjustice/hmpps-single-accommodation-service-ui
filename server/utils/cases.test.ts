@@ -8,6 +8,8 @@ import {
   actionsCell,
   displayName,
   assignedToOptions,
+  updateQueryParams,
+  removeQueryParam,
 } from './cases'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { statusCell } from './macros'
@@ -352,6 +354,64 @@ describe('cases utilities', () => {
         { value: 'team-one-code', text: 'Team One' },
         { value: 'team-two-code', text: 'Team Two' },
       ])
+    })
+  })
+
+  describe('updateQueryParams', () => {
+    it('adds a query param', () => {
+      expect(updateQueryParams('/baseurl?one=1', { foo: 'bar' })).toEqual('/baseurl?one=1&foo=bar')
+    })
+    it('updates an existing query param', () => {
+      expect(updateQueryParams('/baseurl?foo=bar', { foo: 'baz' })).toEqual('/baseurl?foo=baz')
+    })
+
+    it('leaves existing query params unchanged', () => {
+      expect(updateQueryParams('/baseurl?foo=bar&baz=qux', { quux: 'quuz' })).toEqual(
+        '/baseurl?foo=bar&baz=qux&quux=quuz',
+      )
+    })
+
+    it.each(['', false, null, undefined])('removes a query param when its value is set to %s', newValue => {
+      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: newValue })).toEqual('/baseurl?bar=baz')
+    })
+
+    it('only returns the path when there are no query parameters left', () => {
+      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: null, bar: null })).toEqual('/baseurl')
+    })
+  })
+
+  describe('removeQueryParam', () => {
+    it('removes the given query parameter from the query string', () => {
+      expect(removeQueryParam('/baseurl?foo=bar&bar=baz', 'foo')).toEqual('/baseurl?bar=baz')
+    })
+  })
+
+  describe('updateQueryParams', () => {
+    it('adds a query param', () => {
+      expect(updateQueryParams('/baseurl?one=1', { foo: 'bar' })).toEqual('/baseurl?one=1&foo=bar')
+    })
+    it('updates an existing query param', () => {
+      expect(updateQueryParams('/baseurl?foo=bar', { foo: 'baz' })).toEqual('/baseurl?foo=baz')
+    })
+
+    it('leaves existing query params unchanged', () => {
+      expect(updateQueryParams('/baseurl?foo=bar&baz=qux', { quux: 'quuz' })).toEqual(
+        '/baseurl?foo=bar&baz=qux&quux=quuz',
+      )
+    })
+
+    it.each(['', false, null, undefined])('removes a query param when its value is set to %s', newValue => {
+      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: newValue })).toEqual('/baseurl?bar=baz')
+    })
+
+    it('only returns the path when there are no query parameters left', () => {
+      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: null, bar: null })).toEqual('/baseurl')
+    })
+  })
+
+  describe('removeQueryParam', () => {
+    it('removes the given query parameter from the query string', () => {
+      expect(removeQueryParam('/baseurl?foo=bar&bar=baz', 'foo')).toEqual('/baseurl?bar=baz')
     })
   })
 })

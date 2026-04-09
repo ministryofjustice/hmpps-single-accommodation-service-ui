@@ -106,6 +106,36 @@ describe('cases utilities', () => {
     })
   })
 
+  describe('actionsCell macro', () => {
+    it('renders a formatted cell for a given list of actions', () => {
+      expect(actionsCell(['Action 1', 'Action 2'])).toMatchSnapshot()
+    })
+
+    it('renders an empty cell when no actions are provided', () => {
+      expect(actionsCell([])).toMatchSnapshot()
+    })
+  })
+
+  describe('caseStatusTag', () => {
+    it.each([
+      ['RISK_OF_NO_FIXED_ABODE', 'Risk of no fixed abode', 'orange'],
+      ['NO_FIXED_ABODE', 'No fixed abode', 'grey'],
+      ['TRANSIENT', 'Transient', 'purple'],
+      ['SETTLED', 'Settled', 'green'],
+    ] as const)('returns the correct tag for %s status', (status, text, colour) => {
+      const person = caseFactory.build({ status })
+      expect(caseStatusTag(person)).toEqual(expect.objectContaining({ text, colour }))
+    })
+
+    it('includes the date for RISK_OF_NO_FIXED_ABODE status', () => {
+      const person = caseFactory.build({
+        status: 'RISK_OF_NO_FIXED_ABODE',
+        currentAccommodation: accommodationFactory.current('2026-06-01', '2025-12-01').prison().build(),
+      })
+      expect(caseStatusTag(person)).toEqual(expect.objectContaining({ date: '2026-06-01' }))
+    })
+  })
+
   describe('casesToRows', () => {
     it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)

@@ -42,12 +42,12 @@ export default class CasesListPage extends AbstractPage {
       }
 
       if (headers.includes('Status') && person.status) {
-        await expect(row).toContainText(caseStatusTag(person).text)
+        await this.shouldShowStatusTag(caseStatusTag(person), row)
       }
 
       if (headers.includes('Actions')) {
-        for (const action of person.actions) {
-          expect(row).toContainText(action)
+        for await (const action of person.actions) {
+          await expect(row).toContainText(action)
         }
       }
     }

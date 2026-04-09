@@ -1,4 +1,6 @@
 {%- macro accommodationCell(context) -%}
+  <span class="sas-case-list__cell-header" aria-hidden="true">{{ 'Current accommodation' if context.cellType === 'current' else 'Next accommodation' }}</span>
+
   {{ context.accommodationType }}
 
   {%- if context.arrangementType === 'PRIVATE' -%}

@@ -1,63 +1,81 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS1 accommodation 1`] = `
-"Approved Premises (CAS1)
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  Approved Premises (CAS1)
       <br />
       <span class="govuk-hint">Until 3 February 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS2 accommodation 1`] = `
-"CAS2 for HDC
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  CAS2 for HDC
       <br />
       <span class="govuk-hint">Until 12 March 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS2v2 accommodation 1`] = `
-"CAS2 Bail
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  CAS2 Bail
       <br />
       <span class="govuk-hint">Until 23 May 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS3 accommodation 1`] = `
-"CAS3
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  CAS3
       <br />
       <span class="govuk-hint">Until 31 July 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a No fixed abode accommodation 1`] = `
-"No accommodation
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  No accommodation
       <br />
       <span class="govuk-hint">Until 10 September 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Prison (no qualifier) accommodation 1`] = `
-"HMP Foobar
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  HMP Foobar
       <br />
       <span class="govuk-hint">Until 11 December 2025</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Prison accommodation 1`] = `
-"HMP Foobar
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  HMP Foobar
       <br />
       <span class="govuk-hint">Until 1 January 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Settled Private address accommodation 1`] = `
-"Friends or family (not tenant or owner)
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  Friends or family (not tenant or owner)
       <br />
       <span class="govuk-hint">9 Foo Bar</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Transient Private address accommodation 1`] = `
-"Other: Some place
+"<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>
+
+  Other: Some place
       <br />
       <span class="govuk-hint">9 Foo Bar</span>
     "
@@ -179,63 +197,81 @@ exports[`cases utilities accommodationCell and accommodationCard macros for curr
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Undefined accommodation 1`] = `undefined`;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS1 accommodation 1`] = `
-"Approved Premises (CAS1)
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  Approved Premises (CAS1)
       <br />
       <span class="govuk-hint">From 3 February 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS2 accommodation 1`] = `
-"CAS2 for HDC
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  CAS2 for HDC
       <br />
       <span class="govuk-hint">From 12 March 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS2v2 accommodation 1`] = `
-"CAS2 Bail
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  CAS2 Bail
       <br />
       <span class="govuk-hint">From 23 May 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS3 accommodation 1`] = `
-"CAS3
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  CAS3
       <br />
       <span class="govuk-hint">From 31 July 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a No fixed abode accommodation 1`] = `
-"None
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  None
       <br />
       <span class="govuk-hint">From 10 September 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Prison (no qualifier) accommodation 1`] = `
-"HMP Foobar
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  HMP Foobar
       <br />
       <span class="govuk-hint">From 11 December 2025</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Prison accommodation 1`] = `
-"HMP Foobar
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  HMP Foobar
       <br />
       <span class="govuk-hint">From 1 January 2026</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Settled Private address accommodation 1`] = `
-"Friends or family (not tenant or owner)
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  Friends or family (not tenant or owner)
       <br />
       <span class="govuk-hint">9 Foo Bar</span>
     "
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Transient Private address accommodation 1`] = `
-"Other: Some place
+"<span class="sas-case-list__cell-header" aria-hidden="true">Next accommodation</span>
+
+  Other: Some place
       <br />
       <span class="govuk-hint">9 Foo Bar</span>
     "
@@ -358,6 +394,8 @@ exports[`cases utilities accommodationCell and accommodationCard macros for next
 
 exports[`cases utilities actionsCell macro renders a formatted cell for a given list of actions 1`] = `
 "
+    <span class="sas-case-list__cell-header" aria-hidden="true">Actions</span>
+
     <ul class="govuk-list">
         <li>Action 1</li>
         <li>Action 2</li>
@@ -368,7 +406,9 @@ exports[`cases utilities actionsCell macro renders a formatted cell for a given 
 exports[`cases utilities actionsCell macro renders an empty cell when no actions are provided 1`] = `""`;
 
 exports[`cases utilities personCell macro renders a formatted cell for a given person 1`] = `
-"<div class="sas-person-cell">
+"<span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
+
+  <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2">
       <a
         class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold"

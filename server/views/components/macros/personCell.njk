@@ -1,6 +1,8 @@
 {% from "components/macros/riskLevelTag.njk" import riskLevelTag %}
 
 {%- macro personCell(person) -%}
+  <span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
+
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2">
       <a

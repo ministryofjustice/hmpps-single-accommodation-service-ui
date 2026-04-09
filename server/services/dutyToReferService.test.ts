@@ -16,14 +16,25 @@ describe('DutyToReferService', () => {
     dutyToReferService = new DutyToReferService(dutyToReferClient)
   })
 
-  it('should call getDutyToRefer on the api client and return its result', async () => {
+  it('should call getCurrentDtr on the api client and return its result', async () => {
     const crn = crnFactory()
     const dutyToRefer = dutyToReferFactory.build({ crn })
-    dutyToReferClient.getDutyToRefer.mockResolvedValue(dutyToRefer)
+    dutyToReferClient.getCurrentDtr.mockResolvedValue(dutyToRefer)
 
-    const result = await dutyToReferService.getDutyToRefer(token, crn)
+    const result = await dutyToReferService.getCurrentDtr(token, crn)
 
-    expect(dutyToReferClient.getDutyToRefer).toHaveBeenCalledWith(token, crn)
+    expect(dutyToReferClient.getCurrentDtr).toHaveBeenCalledWith(token, crn)
+    expect(result).toEqual(dutyToRefer)
+  })
+
+  it('should call getDtrBySubmissionId on the api client and return its result', async () => {
+    const crn = crnFactory()
+    const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
+    dutyToReferClient.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
+
+    const result = await dutyToReferService.getDtrBySubmissionId(token, crn, dutyToRefer.submission.id)
+
+    expect(dutyToReferClient.getDtrBySubmissionId).toHaveBeenCalledWith(token, crn, dutyToRefer.submission.id)
     expect(result).toEqual(dutyToRefer)
   })
 

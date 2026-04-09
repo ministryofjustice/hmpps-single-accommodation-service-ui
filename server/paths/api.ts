@@ -11,7 +11,8 @@ export default {
     index: casesPath,
     show: casePath,
     dutyToRefer: {
-      index: casePath.path('dtr'),
+      current: dutyToReferPath,
+      show: dutyToReferPath.path(':id'),
       update: dutyToReferPath.path(':id'),
       submit: dutyToReferPath,
     },

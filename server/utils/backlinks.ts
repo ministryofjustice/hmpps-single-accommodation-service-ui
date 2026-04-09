@@ -39,9 +39,8 @@ export const getPageBackLink = (
  * Reuses getPageBackLink, storing against the provided pattern
  * so it can be retrieved later in the flow.
  */
-export const setFlowRedirect = (pagePattern: string, req: Request, matchList: Array<Path>, defaultPath = '/'): void => {
+export const setFlowRedirect = (pagePattern: string, req: Request, matchList: Array<Path>, defaultPath = '/'): string =>
   getPageBackLink(pagePattern, req, matchList, defaultPath)
-}
 
 /**
  * Retrieves the redirect URL that was captured at the start of the flow.

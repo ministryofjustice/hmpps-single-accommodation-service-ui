@@ -6,8 +6,6 @@ import {
   validateOutcome,
   detailsSummaryListRows,
   outcomeDetailsSummaryListRows,
-  getDutyToReferFlow,
-  withEditFlow,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -30,7 +28,7 @@ export default class DutyToReferController {
 
   show(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const { crn } = req.params
+      const { crn, id } = req.params
       const { token } = res.locals.user
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_DETAILS, {
@@ -40,7 +38,7 @@ export default class DutyToReferController {
 
       const [caseData, dutyToRefer] = await Promise.all([
         this.casesService.getCase(token, crn),
-        this.dutyToReferService.getDutyToRefer(token, crn),
+        this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
       ])
 
       const submissionDetailRows = detailsSummaryListRows(dutyToRefer)
@@ -48,6 +46,7 @@ export default class DutyToReferController {
 
       return res.render('pages/duty-to-refer/show', {
         crn,
+        dtrId: id,
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         submissionDetailRows,
@@ -77,11 +76,12 @@ export default class DutyToReferController {
   submission(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { token } = res.locals.user
-      const { crn } = req.params
-      const submissionFlow = getDutyToReferFlow(req)
-      if (submissionFlow === 'edit') {
-        setFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, FLOW_ENTRY_POINTS)
-      }
+      const { crn, id } = req.params
+
+      const backLinkHref = id
+        ? setFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, FLOW_ENTRY_POINTS)
+        : uiPaths.dutyToRefer.guidance({ crn })
+
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -91,30 +91,31 @@ export default class DutyToReferController {
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/duty-to-refer/submission', {
+        pageTitle: `${id ? 'Edit' : 'Add'} Duty to Refer (DTR) submission details`,
+        backLinkHref,
         crn,
         tableRows,
         localAuthorities,
         errors,
         errorSummary,
         formValues: userInput,
-        submissionFlow,
       })
     }
   }
 
   saveSubmission(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const { crn } = req.params
+      const { crn, id } = req.params
       const { token } = res.locals.user
-      const submissionFlow = getDutyToReferFlow(req)
       const { localAuthorityAreaId, referenceNumber } = req.body
+      const errorRedirect = id ? uiPaths.dutyToRefer.edit({ crn, id }) : uiPaths.dutyToRefer.submission({ crn })
+      const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateSubmission(req)) {
-        return res.redirect(withEditFlow(uiPaths.dutyToRefer.submission({ crn }), submissionFlow))
+        return res.redirect(errorRedirect)
       }
 
       const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
-      const redirect = getFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, uiPaths.cases.show({ crn }))
 
       try {
         const submission = {
@@ -124,27 +125,25 @@ export default class DutyToReferController {
           referenceNumber,
         }
 
-        if (submissionFlow === 'edit') {
-          const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
-          await this.dutyToReferService.update(token, crn, dtr.submission.id, submission)
+        if (id) {
+          await this.dutyToReferService.update(token, crn, id, submission)
           req.flash('success', 'Submission details updated')
         } else {
           await this.dutyToReferService.submit(token, crn, submission)
           req.flash('success', 'Submission details added')
         }
-        return res.redirect(redirect)
+        return res.redirect(successRedirect)
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
-        return res.redirect(withEditFlow(uiPaths.dutyToRefer.submission({ crn }), submissionFlow))
+        return res.redirect(errorRedirect)
       }
     }
   }
 
   outcome(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const { crn } = req.params
+      const { crn, id } = req.params
       const { token } = res.locals.user
-      const outcomeFlow = getDutyToReferFlow(req)
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_OUTCOME, {
         who: res.locals.user.username,
@@ -153,54 +152,52 @@ export default class DutyToReferController {
 
       const [caseData, dtr] = await Promise.all([
         this.casesService.getCase(token, crn),
-        this.dutyToReferService.getDutyToRefer(token, crn),
+        this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
       ])
 
       const tableRows = summaryListRows(caseData, dtr)
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
-      setFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, FLOW_ENTRY_POINTS)
+      const backLinkHref = setFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, FLOW_ENTRY_POINTS)
 
       return res.render('pages/duty-to-refer/outcome', {
+        pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome details`,
+        backLinkHref,
         crn,
+        dtr,
         tableRows,
         errors,
         errorSummary,
-        outcomeFlow,
       })
     }
   }
 
   saveOutcome(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const { crn } = req.params
+      const { crn, id } = req.params
       const { token } = res.locals.user
-      const { outcomeStatus } = req.body
-      const outcomeFlow = getDutyToReferFlow(req)
+      const { outcomeStatus, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
+      const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
+      const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateOutcome(req)) {
-        return res.redirect(withEditFlow(uiPaths.dutyToRefer.outcome({ crn }), outcomeFlow))
+        return res.redirect(errorRedirect)
       }
 
-      const redirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
-
       try {
-        const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
-        const submission = dtr?.submission
-
-        await this.dutyToReferService.update(token, crn, submission.id, {
+        await this.dutyToReferService.update(token, crn, id, {
           status: outcomeStatus,
-          submissionDate: submission.submissionDate,
-          localAuthorityAreaId: submission.localAuthority?.localAuthorityAreaId,
-          referenceNumber: submission.referenceNumber,
+          submissionDate,
+          localAuthorityAreaId,
+          referenceNumber,
         })
 
-        req.flash('success', outcomeFlow === 'edit' ? 'Outcome details updated' : 'Outcome details added')
-        return res.redirect(redirect)
+        req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
+        return res.redirect(successRedirect)
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
-        return res.redirect(withEditFlow(uiPaths.dutyToRefer.outcome({ crn }), outcomeFlow))
+        return res.redirect(errorRedirect)
       }
     }
   }

@@ -118,10 +118,6 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
       "href": "/cases/CRN123/dtr/guidance",
       "text": "Add submission details",
     },
-    {
-      "href": "/cases/CRN123/dtr/details",
-      "text": "View referral and notes",
-    },
   ],
   "status": {
     "colour": "orange",
@@ -162,11 +158,11 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
   "inactive": false,
   "links": [
     {
-      "href": "/cases/CRN123/dtr/outcome",
+      "href": "/cases/CRN123/dtr/submission-id/outcome",
       "text": "Add outcome",
     },
     {
-      "href": "/cases/CRN123/dtr/details",
+      "href": "/cases/CRN123/dtr/submission-id/details",
       "text": "View referral and notes",
     },
   ],

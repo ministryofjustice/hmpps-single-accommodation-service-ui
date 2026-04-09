@@ -90,7 +90,7 @@ export default class CasesController {
           this.casesService.getCase(token, crn),
           this.referralsService.getReferralHistory(token, crn),
           this.eligibilityService.getEligibility(token, crn),
-          this.dutyToReferService.getDutyToRefer(token, crn),
+          this.dutyToReferService.getCurrentDtr(token, crn),
           this.proposedAddressesService.getProposedAddresses(token, crn),
         ])
 

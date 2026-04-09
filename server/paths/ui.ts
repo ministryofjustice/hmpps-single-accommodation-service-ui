@@ -11,10 +11,11 @@ export default {
     search: casesPath.path('search'),
   },
   dutyToRefer: {
-    show: dutyToReferPath.path('details'),
+    show: dutyToReferPath.path(':id/details'),
     guidance: dutyToReferPath.path('guidance'),
     submission: dutyToReferPath.path('submission'),
-    outcome: dutyToReferPath.path('outcome'),
+    edit: dutyToReferPath.path(':id/edit'),
+    outcome: dutyToReferPath.path(':id/outcome'),
   },
   proposedAddresses: {
     show: proposedAddressesPath.path(':id/details'),

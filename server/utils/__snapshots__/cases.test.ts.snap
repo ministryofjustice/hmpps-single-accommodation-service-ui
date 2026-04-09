@@ -207,7 +207,7 @@ exports[`cases utilities accommodationCell and accommodationCard macros for next
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a No fixed abode accommodation 1`] = `
-"No accommodation
+"None
       <br />
       <span class="govuk-hint">From 10 September 2026</span>
     "

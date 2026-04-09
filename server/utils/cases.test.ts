@@ -8,8 +8,11 @@ import {
   accommodationCard,
   mapGetCasesQuery,
   queryToFilters,
+  caseStatusTag,
+  actionsCell,
 } from './cases'
 import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
+import { statusTag } from './macros'
 
 describe('cases utilities', () => {
   describe('casesResultsSummary', () => {
@@ -112,7 +115,8 @@ describe('cases utilities', () => {
           { html: personCell(cases[0]) },
           { html: accommodationCell('current', cases[0].currentAccommodation) },
           { html: accommodationCell('next', cases[0].nextAccommodation) },
-          { html: '' },
+          { html: statusTag(caseStatusTag(cases[0])) },
+          { html: actionsCell(cases[0].actions) },
         ],
       ])
     })

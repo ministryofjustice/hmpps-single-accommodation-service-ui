@@ -51,10 +51,10 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
   }
 
-  async shouldShowAddress(accommodation: AccommodationDetail, card: Locator) {
+  async shouldShowAddress(accommodation: AccommodationDetail, card: Locator, type: 'current' | 'next') {
     const addressParts = addressLines(accommodation.address)
 
-    await expect(card).toContainText(accommodationType(accommodation))
+    await expect(card).toContainText(accommodationType(accommodation, type))
 
     for await (const addressPart of addressParts) {
       await expect(card).toContainText(addressPart)
@@ -64,7 +64,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   async shouldShowNextAccommodationCard(accommodation: AccommodationDetail) {
     const card = this.page.locator('.sas-card', { hasText: 'Next accommodation' })
 
-    await this.shouldShowAddress(accommodation, card)
+    await this.shouldShowAddress(accommodation, card, 'next')
 
     await expect(card).toContainText(`From ${formatDate(accommodation.startDate, 'long')}`)
     await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
@@ -84,7 +84,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       await this.shouldShowStatusTag(settledTag(accommodation.settledType), card)
     }
 
-    await this.shouldShowAddress(accommodation, card)
+    await this.shouldShowAddress(accommodation, card, 'current')
 
     await expect(card).toContainText(`Until ${formatDate(accommodation.endDate, 'long')}`)
     await expect(card).toContainText(`(${formatDate(accommodation.endDate, 'days for/in')})`)

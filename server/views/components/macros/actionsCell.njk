@@ -1,0 +1,9 @@
+{%- macro actionsCell(context) -%}
+  {% if context.actions and context.actions.length %}
+    <ul class="govuk-list">
+      {%- for action in context.actions %}
+        <li>{{ action }}</li>
+      {%- endfor %}
+    </ul>
+  {% endif %}
+{%- endmacro -%}

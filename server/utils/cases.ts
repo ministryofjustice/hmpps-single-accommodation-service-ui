@@ -3,7 +3,7 @@ import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, StatusTag } from '@sas/ui'
 import { htmlContent } from './utils'
 import { addressLines } from './addresses'
-import { renderMacro } from './macros'
+import { renderMacro, statusTag } from './macros'
 
 export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
   FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
@@ -53,7 +53,9 @@ const removeQueryParam = (url: string, param: string): string => {
 
 export const personCell = (c: Case): string => renderMacro('personCell', c)
 
-export const accommodationType = (accommodation: AccommodationDetail): string => {
+export const actionsCell = (actions: Case['actions']): string => renderMacro('actionsCell', { actions })
+
+export const accommodationType = (accommodation: AccommodationDetail, type: 'current' | 'next'): string => {
   const { arrangementType, arrangementSubType, arrangementSubTypeDescription, name } = accommodation
 
   switch (arrangementType) {
@@ -63,7 +65,7 @@ export const accommodationType = (accommodation: AccommodationDetail): string =>
       if (arrangementSubType === 'OTHER') return `Other: ${arrangementSubTypeDescription}`
       return arrangementSubTypes[arrangementSubType]
     case 'NO_FIXED_ABODE':
-      return 'No accommodation'
+      return type === 'current' ? 'No accommodation' : 'None'
     case 'CAS1':
       return 'Approved Premises (CAS1)'
     case 'CAS2':
@@ -81,7 +83,7 @@ export const accommodationCell = (cellType: 'current' | 'next', accommodation?: 
   accommodation
     ? renderMacro('accommodationCell', {
         cellType,
-        accommodationType: accommodationType(accommodation),
+        accommodationType: accommodationType(accommodation, cellType),
         addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
         ...accommodation,
       })
@@ -124,7 +126,7 @@ export const accommodationCard = (
   return {
     ...context,
     settledTag: settledTag(settledType),
-    name: accommodationType(accommodation),
+    name: accommodationType(accommodation, cardType),
     address: addressLines(accommodation.address).join('<br />'),
   }
 }
@@ -134,8 +136,19 @@ export const casesToRows = (cases: Case[]): TableRow[] =>
     htmlContent(personCell(c)),
     htmlContent(accommodationCell('current', c.currentAccommodation)),
     htmlContent(accommodationCell('next', c.nextAccommodation)),
-    htmlContent(),
+    htmlContent(statusTag(caseStatusTag(c))),
+    htmlContent(actionsCell(c.actions)),
   ])
+
+export const casesTableColumns = () => {
+  return [
+    { text: 'Person' },
+    { text: 'Current accommodation' },
+    { text: 'Next accommodation' },
+    { text: 'Status' },
+    { text: 'Actions' },
+  ]
+}
 
 export const caseAssignedTo = (c: Case, id: string): string => {
   return String(c.assignedTo?.id) === id ? `You (${c.assignedTo.name})` : c.assignedTo?.name
@@ -166,4 +179,16 @@ export const mapGetCasesQuery = (query: GetCasesQuery, userId: string): GetCases
     crns,
     searchTerm,
   }
+}
+
+export const caseStatusTag = (c: Case): StatusTag => {
+  const date = c.currentAccommodation?.endDate
+  return (
+    {
+      RISK_OF_NO_FIXED_ABODE: { text: 'Risk of no fixed abode', colour: 'orange', date },
+      NO_FIXED_ABODE: { text: 'No fixed abode', colour: 'grey' },
+      TRANSIENT: { text: 'Transient', colour: 'purple' },
+      SETTLED: { text: 'Settled', colour: 'green' },
+    }[c.status] || { text: 'Unknown' }
+  )
 }

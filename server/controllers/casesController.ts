@@ -8,6 +8,7 @@ import {
   casesToRows,
   caseAssignedTo,
   mapGetCasesQuery,
+  casesTableColumns,
   queryToFilters,
 } from '../utils/cases'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
@@ -48,6 +49,7 @@ export default class CasesController {
 
       return res.render('pages/index', {
         resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases),
         query,
         filters,

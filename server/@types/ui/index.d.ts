@@ -29,6 +29,7 @@ export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['ve
 export interface StatusTag {
   text: string
   colour?: string
+  date?: string
 }
 
 export interface StatusCard {

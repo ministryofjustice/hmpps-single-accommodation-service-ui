@@ -1,11 +1,16 @@
 {% extends "pages/duty-to-refer/layout.njk" %}
-
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block formContent %}
-    {{ govukRadios({
+  <input type="hidden" name="currentStatus" value="{{ dtr.status }}" />
+  <input type="hidden" name="submissionDate" value="{{ dtr.submission.submissionDate }}" />
+  <input type="hidden" name="localAuthorityAreaId" value="{{ dtr.submission.localAuthority.localAuthorityAreaId }}" />
+  <input type="hidden" name="referenceNumber" value="{{ dtr.submission.referenceNumber }}" />
+
+  {{
+    govukRadios({
         id: "outcomeStatus",
         name: "outcomeStatus",
         fieldset: {
@@ -25,5 +30,6 @@
             }
         ],
         errorMessage: errors.outcomeStatus
-    }) }}
+    })
+  }}
 {% endblock %}

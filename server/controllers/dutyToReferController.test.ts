@@ -227,6 +227,7 @@ describe('dutyToReferController', () => {
         pageTitle: 'Add Duty to Refer (DTR) outcome details',
         backLinkHref: '/cases/CRN123',
         crn: 'CRN123',
+        dtr,
         tableRows: summaryListRows(caseData, dtr),
         errors: {},
         errorSummary: [],
@@ -251,24 +252,17 @@ describe('dutyToReferController', () => {
   })
 
   describe('saveOutcome', () => {
-    const dtr = dutyToReferFactory.submitted().build({
-      crn: 'CRN123',
-      submission: {
-        id: 'submission-id',
-        localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
-        referenceNumber: 'REF123',
-        submissionDate: '2025-06-15',
-        createdBy: 'user1',
-        createdAt: '2025-06-15T00:00:00.000Z',
-      },
-    })
-
     beforeEach(() => {
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dtr)
       dutyToReferService.update.mockResolvedValue()
       request = mock<Request>({
         params: { crn: 'CRN123', id: 'submission-id' },
-        body: { outcomeStatus: 'ACCEPTED' },
+        body: {
+          outcomeStatus: 'ACCEPTED',
+          submissionDate: '2025-06-15',
+          localAuthorityAreaId: 'la-id',
+          referenceNumber: 'REF123',
+          currentStatus: 'SUBMITTED',
+        },
         flash: jest.fn(),
       })
     })
@@ -291,8 +285,7 @@ describe('dutyToReferController', () => {
     it('updates an existing outcome and redirects to the flow redirect page', async () => {
       jest.spyOn(backlinksUtils, 'getFlowRedirect').mockReturnValue('/some-other-redirect')
 
-      const dtrWithOutcome = dutyToReferFactory.build({ ...dtr, status: 'NOT_ACCEPTED' })
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dtrWithOutcome)
+      request.body.currentStatus = 'NOT_ACCEPTED'
 
       await controller.saveOutcome()(request, response, next)
 

@@ -76,7 +76,6 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubSubmitDutyToRefer(crn)
-    await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
     await dutyToReferApi.stubGetCurrentDtr(crn, submittedDutyToRefer)
 
     await dutyToReferPage.completeSubmissionForm(submittedDutyToRefer)
@@ -90,6 +89,7 @@ test.describe('duty to refer', () => {
     await profileTrackerPage.shouldShowDutyToRefer(submittedDutyToRefer)
 
     // When I click the add outcome link
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
     await profileTrackerPage.clickLink('Add outcome')
 
     // Then I should see the duty to refer outcome form
@@ -106,7 +106,6 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
-    await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, acceptedDutyToRefer)
     await dutyToReferApi.stubGetCurrentDtr(crn, acceptedDutyToRefer)
 
     await outcomePage.completeOutcomeForm(acceptedDutyToRefer)
@@ -119,10 +118,8 @@ test.describe('duty to refer', () => {
     await ProfileTrackerPage.verifyOnPage(page, caseData)
     await profileTrackerPage.shouldShowDutyToRefer(acceptedDutyToRefer)
 
-    // FIXME: we update the stub before the submit handler can check the existing submission status, so the banner
-    //  always shows 'Outcome details updated' :/
     // And I should see a success banner confirming outcome details were added
-    // await profileTrackerPage.shouldShowBanner('Outcome details added')
+    await profileTrackerPage.shouldShowBanner('Outcome details added')
   })
 
   test('should allow the user to view the details of a submitted duty to refer and add outcome from the DTR details page', async ({
@@ -162,7 +159,6 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
-    await dutyToReferApi.stubGetCurrentDtr(crn, notAcceptedDutyToRefer)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, notAcceptedDutyToRefer)
 
     await outcomePage.completeOutcomeForm(notAcceptedDutyToRefer)
@@ -176,10 +172,8 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(notAcceptedDutyToRefer)
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(notAcceptedDutyToRefer)
 
-    // FIXME: we update the stub before the submit handler can check the existing submission status, so the banner
-    //  always shows 'Outcome details updated' :/
     // And I should see a success banner confirming outcome details were added
-    // await dutyToReferDetailsPage.shouldShowBanner('Outcome details added')
+    await dutyToReferDetailsPage.shouldShowBanner('Outcome details added')
   })
 
   test('should allow the user to edit submission details', async ({ page }) => {
@@ -230,7 +224,6 @@ test.describe('duty to refer', () => {
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
-    await dutyToReferApi.stubGetCurrentDtr(crn, updatedDutyToRefer)
 
     await dutyToReferPage.completeSubmissionForm(updatedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')
@@ -289,7 +282,6 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
-    await dutyToReferApi.stubGetCurrentDtr(crn, updatedDutyToRefer)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
 
     await dutyToReferPage.completeOutcomeForm(updatedDutyToRefer)

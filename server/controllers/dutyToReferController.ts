@@ -165,6 +165,7 @@ export default class DutyToReferController {
         pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome details`,
         backLinkHref,
         crn,
+        dtr,
         tableRows,
         errors,
         errorSummary,
@@ -176,7 +177,7 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { outcomeStatus } = req.body
+      const { outcomeStatus, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
       const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
 
@@ -185,15 +186,6 @@ export default class DutyToReferController {
       }
 
       try {
-        const {
-          status: currentStatus,
-          submission: {
-            submissionDate,
-            localAuthority: { localAuthorityAreaId },
-            referenceNumber,
-          },
-        } = await this.dutyToReferService.getDtrBySubmissionId(token, crn, id)
-
         await this.dutyToReferService.update(token, crn, id, {
           status: outcomeStatus,
           submissionDate,

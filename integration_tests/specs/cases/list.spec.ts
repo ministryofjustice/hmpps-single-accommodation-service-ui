@@ -79,5 +79,16 @@ test.describe('List of cases', () => {
       'Assigned to': 'anyone',
       RoSH: 'Very high',
     })
+
+    // WHEN I click to clear the filter
+    await casesListPage.clickLink('Clear filters')
+
+    // THEN I should see no filters selected on the housing secured list
+    await casesListPage.shouldShowTab('Settled housing secured')
+    await casesListPage.verifyFilters({
+      searchTerm: '',
+      assignedTo: 'you',
+      riskLevel: '',
+    })
   })
 })

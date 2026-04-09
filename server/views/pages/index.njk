@@ -25,7 +25,7 @@
     </ul>
 
     <div class="govuk-tabs__panel">
-      <h2 class="govuk-heading-l">{{ 'Housing support needed' if peopleType === 'nfarisk' else 'Settled housing secured' }}</h2>
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-8">{{ 'Housing support needed' if peopleType === 'nfarisk' else 'Settled housing secured' }}</h2>
 
       <form method="get" class="govuk-!-margin-bottom-8">
         <input type="hidden" name="peopleType" value="{{ peopleType }}" />
@@ -91,7 +91,7 @@
             {% endfor %}
           </ul>
           <p class="govuk-!-margin-bottom-1">
-            <a class="govuk-link govuk-link--no-visited-state" href="/">Clear filters</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="/?peopleType={{ peopleType }}">Clear filters</a>
           </p>
         </div>
       {% else %}

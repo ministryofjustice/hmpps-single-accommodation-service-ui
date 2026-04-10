@@ -20,6 +20,15 @@ describe('Macros', () => {
 
       expect(statusTag(tag)).toMatchSnapshot()
     })
+
+    it('renders a status tag with noWrap class when noWrap is true', () => {
+      const tag: StatusTag = {
+        text: 'Qux',
+        colour: 'blue',
+      }
+
+      expect(statusTag(tag, true)).toMatchSnapshot()
+    })
   })
 
   describe('Status Cell', () => {

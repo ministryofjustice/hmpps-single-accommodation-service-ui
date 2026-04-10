@@ -4,6 +4,10 @@
   min-height: 600px;
 }
 
+.govuk-tag--no-wrap {
+  white-space: nowrap;
+}
+
 .govuk-template .govuk-width-container {
   @include govuk-width-container;
 }

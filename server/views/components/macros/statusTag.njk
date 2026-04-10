@@ -1,3 +1,3 @@
-{%- macro statusTag(status) -%}
-  <strong class="govuk-tag{{ ' govuk-tag--' + status.colour if status.colour }}">{{ status.text }}</strong>
+{%- macro statusTag(status, noWrap) -%}
+  <strong class="govuk-tag{{ ' govuk-tag--' + status.colour if status.colour }}{{ ' govuk-tag--no-wrap' if noWrap }}">{{ status.text }}</strong>
 {%- endmacro -%}

@@ -8,11 +8,11 @@ import {
   accommodationCard,
   mapGetCasesQuery,
   queryToFilters,
-  caseStatusTag,
   actionsCell,
+  caseStatusCell,
 } from './cases'
 import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
-import { statusTag } from './macros'
+import { statusCell } from './macros'
 
 describe('cases utilities', () => {
   describe('casesResultsSummary', () => {
@@ -116,7 +116,7 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('caseStatusTag', () => {
+  describe('caseStatusCell', () => {
     it.each([
       ['RISK_OF_NO_FIXED_ABODE', 'Risk of no fixed abode', 'orange'],
       ['NO_FIXED_ABODE', 'No fixed abode', 'grey'],
@@ -124,7 +124,7 @@ describe('cases utilities', () => {
       ['SETTLED', 'Settled', 'green'],
     ] as const)('returns the correct tag for %s status', (status, text, colour) => {
       const person = caseFactory.build({ status })
-      expect(caseStatusTag(person)).toEqual(expect.objectContaining({ text, colour }))
+      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ status: { text, colour } }))
     })
 
     it('includes the date for RISK_OF_NO_FIXED_ABODE status', () => {
@@ -132,7 +132,7 @@ describe('cases utilities', () => {
         status: 'RISK_OF_NO_FIXED_ABODE',
         currentAccommodation: accommodationFactory.current('2026-06-01', '2025-12-01').prison().build(),
       })
-      expect(caseStatusTag(person)).toEqual(expect.objectContaining({ date: '2026-06-01' }))
+      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ date: '2026-06-01' }))
     })
   })
 
@@ -145,7 +145,7 @@ describe('cases utilities', () => {
           { html: personCell(cases[0]) },
           { html: accommodationCell('current', cases[0].currentAccommodation) },
           { html: accommodationCell('next', cases[0].nextAccommodation) },
-          { html: statusTag(caseStatusTag(cases[0])) },
+          { html: statusCell(caseStatusCell(cases[0])) },
           { html: actionsCell(cases[0].actions) },
         ],
       ])

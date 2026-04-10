@@ -4,6 +4,7 @@ import { nunjucksInline } from './nunjucksSetup'
 
 type Macro =
   | 'statusTag'
+  | 'statusCell'
   | 'riskLevelTag'
   | 'statusCard'
   | 'referralHistoryTable'
@@ -21,6 +22,8 @@ export const renderMacro = <T>(macroName: Macro, context: T): string =>
   )
 
 export const statusTag = (status: StatusTag) => renderMacro('statusTag', status)
+
+export const statusCell = (context: { status: StatusTag; date?: string }) => renderMacro('statusCell', context)
 
 export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('riskLevelTag', riskLevel)
 

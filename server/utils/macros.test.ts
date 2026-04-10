@@ -1,6 +1,6 @@
-import { StatusCard, StatusTag } from '@sas/ui'
+import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
 import { CaseDto as Case } from '@sas/api'
-import { riskLevelTag, statusCard, statusTag } from './macros'
+import { riskLevelTag, statusCard, statusCell, statusTag } from './macros'
 
 describe('Macros', () => {
   describe('Status Tag', () => {
@@ -19,6 +19,33 @@ describe('Macros', () => {
       }
 
       expect(statusTag(tag)).toMatchSnapshot()
+    })
+  })
+
+  describe('Status Cell', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it('renders a status cell with a date', () => {
+      const cell: StatusCell = {
+        status: { text: 'Foo', colour: 'red' },
+        date: '2026-06-01',
+      }
+
+      expect(statusCell(cell)).toMatchSnapshot()
+    })
+
+    it('renders a status cell without a date', () => {
+      const cell: StatusCell = {
+        status: { text: 'John' },
+      }
+
+      expect(statusCell(cell)).toMatchSnapshot()
     })
   })
 

@@ -71,6 +71,17 @@ exports[`Macros Status Card renders an inactive status card 1`] = `
   </article>"
 `;
 
+exports[`Macros Status Cell renders a status cell with a date 1`] = `
+"<strong class="govuk-tag govuk-tag--red">Foo</strong>
+    <p class="govuk-hint govuk-!-margin-top-2">
+      From 1 June 2026
+      <br/>
+      (in 173 days)
+    </p>"
+`;
+
+exports[`Macros Status Cell renders a status cell without a date 1`] = `"<strong class="govuk-tag">John</strong>"`;
+
 exports[`Macros Status Tag renders a status tag with given colour 1`] = `"<strong class="govuk-tag govuk-tag--red">Foo</strong>"`;
 
 exports[`Macros Status Tag renders a status tag with the default colour 1`] = `"<strong class="govuk-tag">Baz</strong>"`;

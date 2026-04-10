@@ -3,7 +3,7 @@ import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
-import { accommodationType, caseStatusTag } from '../../../server/utils/cases'
+import { accommodationType, caseStatusCell } from '../../../server/utils/cases'
 
 export default class CasesListPage extends AbstractPage {
   readonly casesRows: Locator
@@ -42,7 +42,7 @@ export default class CasesListPage extends AbstractPage {
       }
 
       if (headers.includes('Status') && person.status) {
-        await this.shouldShowStatusTag(caseStatusTag(person), row)
+        await this.shouldShowStatusCell(caseStatusCell(person), row)
       }
 
       if (headers.includes('Actions')) {

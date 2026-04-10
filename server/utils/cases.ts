@@ -1,9 +1,9 @@
 import { AccommodationDetail, CaseDto as Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, StatusTag } from '@sas/ui'
+import { GetCasesQuery, StatusCell, StatusTag } from '@sas/ui'
 import { htmlContent } from './utils'
 import { addressLines } from './addresses'
-import { renderMacro, statusTag } from './macros'
+import { renderMacro, statusCell } from './macros'
 
 export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
   FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
@@ -136,7 +136,7 @@ export const casesToRows = (cases: Case[]): TableRow[] =>
     htmlContent(personCell(c)),
     htmlContent(accommodationCell('current', c.currentAccommodation)),
     htmlContent(accommodationCell('next', c.nextAccommodation)),
-    htmlContent(statusTag(caseStatusTag(c))),
+    htmlContent(statusCell(caseStatusCell(c))),
     htmlContent(actionsCell(c.actions)),
   ])
 
@@ -181,14 +181,14 @@ export const mapGetCasesQuery = (query: GetCasesQuery, userId: string): GetCases
   }
 }
 
-export const caseStatusTag = (c: Case): StatusTag => {
+export const caseStatusCell = (c: Case): StatusCell => {
   const date = c.currentAccommodation?.endDate
   return (
     {
-      RISK_OF_NO_FIXED_ABODE: { text: 'Risk of no fixed abode', colour: 'orange', date },
-      NO_FIXED_ABODE: { text: 'No fixed abode', colour: 'grey' },
-      TRANSIENT: { text: 'Transient', colour: 'purple' },
-      SETTLED: { text: 'Settled', colour: 'green' },
-    }[c.status] || { text: 'Unknown' }
+      RISK_OF_NO_FIXED_ABODE: { status: { text: 'Risk of no fixed abode', colour: 'orange' }, date },
+      NO_FIXED_ABODE: { status: { text: 'No fixed abode', colour: 'grey' } },
+      TRANSIENT: { status: { text: 'Transient', colour: 'purple' } },
+      SETTLED: { status: { text: 'Settled', colour: 'green' } },
+    }[c.status] || { status: { text: 'Unknown' } }
   )
 }

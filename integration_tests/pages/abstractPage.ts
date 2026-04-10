@@ -125,7 +125,7 @@ export default class AbstractPage {
       await expect(tag).toBeVisible()
 
       if (cardData.status.colour) {
-        await expect(tag).toHaveClass(`govuk-tag govuk-tag--${cardData.status.colour}`)
+        await expect(tag).toHaveClass(`govuk-tag govuk-tag--${cardData.status.colour} govuk-tag--no-wrap`)
       }
     }
 

@@ -97,7 +97,7 @@ describe('ProposedAddressesService', () => {
 
   describe('submitTimelineNote', () => {
     it('should call submitTimelineNote on the api client with the note data', async () => {
-      const note = 'This is a note\n\nWith multiple lines'
+      const note = { note: 'This is a note\n\nWith multiple lines' }
 
       await proposedAddressesService.submitTimelineNote(token, crn, id, note)
 

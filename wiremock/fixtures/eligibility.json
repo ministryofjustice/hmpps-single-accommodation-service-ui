@@ -1,7 +1,6 @@
 {
   "S511935": {
     "crn": "S511935",
-    "caseStatus": "ACTION_NEEDED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -22,7 +21,6 @@
   },
   "P712106": {
     "crn": "P712106",
-    "caseStatus": "ACTION_NEEDED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -43,7 +41,6 @@
   },
   "T274481": {
     "crn": "T274481",
-    "caseStatus": "NO_ACTION_REQUIRED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -64,7 +61,6 @@
   },
   "V938951": {
     "crn": "V938951",
-    "caseStatus": "ACTION_NEEDED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -85,7 +81,6 @@
   },
   "T229440": {
     "crn": "T229440",
-    "caseStatus": "ACTION_UPCOMING",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -106,7 +101,6 @@
   },
   "H271226": {
     "crn": "H271226",
-    "caseStatus": "NO_ACTION_REQUIRED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -127,7 +121,6 @@
   },
   "U934069": {
     "crn": "U934069",
-    "caseStatus": "NO_ACTION_REQUIRED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -147,7 +140,6 @@
   },
   "I322559": {
     "crn": "I322559",
-    "caseStatus": "ACTION_NEEDED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -167,7 +159,6 @@
   },
   "L247269": {
     "crn": "L247269",
-    "caseStatus": "ACTION_NEEDED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
@@ -187,7 +178,6 @@
   },
   "F608163": {
     "crn": "F608163",
-    "caseStatus": "ACTION_NEEDED",
     "caseActions": [],
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"

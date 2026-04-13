@@ -19,6 +19,7 @@ export type { EligibilityDto } from './models/EligibilityDto';
 export type { FieldChange } from './models/FieldChange';
 export type { GetDlqResult } from './models/GetDlqResult';
 export type { LocalAuthorityDto } from './models/LocalAuthorityDto';
+export type { NoteCommand } from './models/NoteCommand';
 export type { PurgeQueueResult } from './models/PurgeQueueResult';
 export type { ReferenceDataDto } from './models/ReferenceDataDto';
 export type { RetryDlqResult } from './models/RetryDlqResult';

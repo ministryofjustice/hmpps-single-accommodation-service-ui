@@ -76,7 +76,7 @@ describeClient('ProposedAddressesClient', provider => {
         body: proposedAddressData,
       },
       willRespondWith: {
-        status: 200,
+        status: 201,
       },
     })
 

@@ -10,5 +10,6 @@ export type AssignedToDto = {
     id?: number;
     name: string;
     username?: string;
+    staffCode?: string;
 };
 

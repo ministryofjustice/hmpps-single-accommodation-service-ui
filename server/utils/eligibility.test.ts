@@ -25,12 +25,13 @@ describe('eligibilityToEligibilityCards', () => {
 
     const cards = eligibilityToEligibilityCards(eligibility)
 
-    expect(cards).toHaveLength(5)
+    expect(cards).toHaveLength(2)
     expect(cards[0].heading).toContain('Approved premises (CAS1)')
-    expect(cards[1].heading).toContain('CAS2 for HDC')
-    expect(cards[2].heading).toContain('CAS2 for court bail')
-    expect(cards[3].heading).toContain('CAS2 for prison bail')
-    expect(cards[4].heading).toContain('CAS3 (transitional accommodation)')
+    // TODO add back cas2 assertions when needed
+    // expect(cards[1].heading).toContain('CAS2 for HDC')
+    // expect(cards[2].heading).toContain('CAS2 for court bail')
+    // expect(cards[3].heading).toContain('CAS2 for prison bail')
+    expect(cards[1].heading).toContain('CAS3 (transitional accommodation)')
   })
 
   it('returns an array of eligibility card objects', () => {

@@ -19,6 +19,7 @@
     "typecheck": "tsc && tsc -p integration_tests",
     "test": "jest",
     "test:ci": "jest --runInBand",
+    "test:client": "rm -rf tmp/pacts && rm tmp/sas-api.json && jest Client --no-coverage",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "npx playwright test",
     "int-test-ui": "npx playwright test --ui",

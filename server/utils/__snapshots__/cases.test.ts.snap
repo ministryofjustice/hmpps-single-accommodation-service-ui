@@ -207,7 +207,7 @@ exports[`cases utilities accommodationCell and accommodationCard macros for next
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a No fixed abode accommodation 1`] = `
-"No accommodation
+"None
       <br />
       <span class="govuk-hint">From 10 September 2026</span>
     "
@@ -355,6 +355,17 @@ exports[`cases utilities accommodationCell and accommodationCard macros for next
 `;
 
 exports[`cases utilities accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Undefined accommodation 1`] = `undefined`;
+
+exports[`cases utilities actionsCell macro renders a formatted cell for a given list of actions 1`] = `
+"
+    <ul class="govuk-list">
+        <li>Action 1</li>
+        <li>Action 2</li>
+    </ul>
+  "
+`;
+
+exports[`cases utilities actionsCell macro renders an empty cell when no actions are provided 1`] = `""`;
 
 exports[`cases utilities personCell macro renders a formatted cell for a given person 1`] = `
 "<div class="sas-person-cell">

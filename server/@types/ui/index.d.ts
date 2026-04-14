@@ -31,6 +31,11 @@ export interface StatusTag {
   colour?: string
 }
 
+export interface StatusCell {
+  status: StatusTag
+  date?: string
+}
+
 export interface StatusCard {
   heading: string
   inactive?: boolean

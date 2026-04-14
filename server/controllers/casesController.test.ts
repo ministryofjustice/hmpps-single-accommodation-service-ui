@@ -12,7 +12,14 @@ import {
   eligibilityFactory,
   referralFactory,
 } from '../testutils/factories'
-import { accommodationCard, caseAssignedTo, casesResultsSummary, casesToRows, queryToFilters } from '../utils/cases'
+import {
+  accommodationCard,
+  caseAssignedTo,
+  casesResultsSummary,
+  casesTableColumns,
+  casesToRows,
+  queryToFilters,
+} from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -82,6 +89,7 @@ describe('casesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
         resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases),
         filters: [],
         query: {
@@ -112,6 +120,7 @@ describe('casesController', () => {
         ...baseContext,
         resultsSummary: casesResultsSummary(cases),
         filters: queryToFilters(request.query, request.url),
+        casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases),
         query: request.query,
       })

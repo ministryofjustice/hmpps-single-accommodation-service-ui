@@ -29,7 +29,13 @@ test.describe('List of cases', () => {
 
     // AND all the cases should be shown
     await casesListPage.shouldShowResultsSummary('25 people')
-    await casesListPage.shouldShowCases(cases)
+    await casesListPage.shouldShowCases(cases, [
+      'Person',
+      'Current accommodation',
+      'Next accommodation',
+      'Status',
+      'Actions',
+    ])
 
     // WHEN I filter the results
     await casesListPage.applyFilters({
@@ -40,7 +46,10 @@ test.describe('List of cases', () => {
 
     // THEN the relevant cases are shown
     await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
-    await casesListPage.shouldShowCases([filteredCase])
+    await casesListPage.shouldShowCases(
+      [filteredCase],
+      ['Person', 'Current accommodation', 'Next accommodation', 'Status', 'Actions'],
+    )
 
     // AND the filters are populated with the selected values
     await casesListPage.verifyFilters({

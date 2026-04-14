@@ -63,6 +63,7 @@ export default CaseFactory.define(() => {
     assignedTo: assignedUserFactory.build(),
     currentAccommodation,
     nextAccommodation,
-    actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(5), faker.lorem.words(5)]) ?? [],
+    status: faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE', 'TRANSIENT', 'SETTLED']),
+    actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(3), faker.lorem.words(3)]) ?? [],
   }
 })

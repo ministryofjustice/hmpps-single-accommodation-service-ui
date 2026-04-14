@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test'
-import { StatusCard, StatusTag } from '@sas/ui'
+import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
 import { TimelineEntry } from '@govuk/ui'
 import { formatDate } from '../../server/utils/dates'
 
@@ -125,7 +125,7 @@ export default class AbstractPage {
       await expect(tag).toBeVisible()
 
       if (cardData.status.colour) {
-        await expect(tag).toHaveClass(`govuk-tag govuk-tag--${cardData.status.colour}`)
+        await expect(tag).toHaveClass(`govuk-tag govuk-tag--${cardData.status.colour} govuk-tag--no-wrap`)
       }
     }
 
@@ -144,6 +144,16 @@ export default class AbstractPage {
 
     if (statusTag.colour) {
       await expect(tag).toContainClass(`govuk-tag--${statusTag.colour}`)
+    }
+  }
+
+  async shouldShowStatusCell(statusCell: StatusCell, container?: Locator) {
+    await this.shouldShowStatusTag(statusCell.status, container)
+
+    if (statusCell.date) {
+      const hint = (container || this.page).locator('p.govuk-hint')
+      await expect(hint).toContainText(formatDate(statusCell.date))
+      await expect(hint).toContainText(`(${formatDate(statusCell.date, 'days for/in')})`)
     }
   }
 

@@ -1,0 +1,12 @@
+{%- from "components/macros/statusTag.njk" import statusTag %}
+
+{%- macro statusCell(context) -%}
+  {{ statusTag(context.status) }}
+  {%- if context.date %}
+    <p class="govuk-hint govuk-!-margin-top-2">
+      From {{ context.date | date }}
+      <br/>
+      ({{ context.date | date('days for/in') }})
+    </p>
+  {%- endif %}
+{%- endmacro -%}

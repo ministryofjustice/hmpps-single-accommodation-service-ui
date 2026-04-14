@@ -8,8 +8,11 @@ import {
   accommodationCard,
   mapGetCasesQuery,
   queryToFilters,
+  actionsCell,
+  caseStatusCell,
 } from './cases'
 import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
+import { statusCell } from './macros'
 
 describe('cases utilities', () => {
   describe('casesResultsSummary', () => {
@@ -103,6 +106,36 @@ describe('cases utilities', () => {
     })
   })
 
+  describe('actionsCell macro', () => {
+    it('renders a formatted cell for a given list of actions', () => {
+      expect(actionsCell(['Action 1', 'Action 2'])).toMatchSnapshot()
+    })
+
+    it('renders an empty cell when no actions are provided', () => {
+      expect(actionsCell([])).toMatchSnapshot()
+    })
+  })
+
+  describe('caseStatusCell', () => {
+    it.each([
+      ['RISK_OF_NO_FIXED_ABODE', 'Risk of no fixed abode', 'orange'],
+      ['NO_FIXED_ABODE', 'No fixed abode', 'grey'],
+      ['TRANSIENT', 'Transient', 'purple'],
+      ['SETTLED', 'Settled', 'green'],
+    ] as const)('returns the correct tag for %s status', (status, text, colour) => {
+      const person = caseFactory.build({ status })
+      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ status: { text, colour } }))
+    })
+
+    it('includes the date for RISK_OF_NO_FIXED_ABODE status', () => {
+      const person = caseFactory.build({
+        status: 'RISK_OF_NO_FIXED_ABODE',
+        currentAccommodation: accommodationFactory.current('2026-06-01', '2025-12-01').prison().build(),
+      })
+      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ date: '2026-06-01' }))
+    })
+  })
+
   describe('casesToRows', () => {
     it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)
@@ -112,7 +145,8 @@ describe('cases utilities', () => {
           { html: personCell(cases[0]) },
           { html: accommodationCell('current', cases[0].currentAccommodation) },
           { html: accommodationCell('next', cases[0].nextAccommodation) },
-          { html: '' },
+          { html: statusCell(caseStatusCell(cases[0])) },
+          { html: actionsCell(cases[0].actions) },
         ],
       ])
     })

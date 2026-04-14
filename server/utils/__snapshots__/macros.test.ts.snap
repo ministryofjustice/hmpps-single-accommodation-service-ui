@@ -84,7 +84,7 @@ exports[`Macros Status Cell renders a status cell without a date 1`] = `"<strong
 
 exports[`Macros Status Tag renders a status tag with given colour 1`] = `"<strong class="govuk-tag govuk-tag--red">Foo</strong>"`;
 
-exports[`Macros Status Tag renders a status tag with noWrap class when noWrap is true 1`] = `"<strong class="govuk-tag govuk-tag--blue">Qux</strong>"`;
+exports[`Macros Status Tag renders a status tag with noWrap class when noWrap is true 1`] = `"<strong class="govuk-tag govuk-tag--blue govuk-tag--no-wrap">Qux</strong>"`;
 
 exports[`Macros Status Tag renders a status tag with the default colour 1`] = `"<strong class="govuk-tag">Baz</strong>"`;
 

@@ -9,7 +9,7 @@ export default class CasesListPage extends AbstractPage {
 
   constructor(page: Page) {
     super(page)
-    this.header = page.locator('h1', { hasText: 'Cases' })
+    this.header = page.locator('h1', { hasText: 'Accommodation service' })
 
     this.casesRows = page.getByRole('table', { name: 'List of cases' }).getByRole('row')
   }
@@ -51,5 +51,12 @@ export default class CasesListPage extends AbstractPage {
         await expect(this.page.getByRole('link', { name: filterText })).toBeVisible()
       }
     }
+  }
+
+  async shouldShowTab(text: string) {
+    await expect(
+      this.page.getByRole('listitem').filter({ has: this.page.getByRole('link', { name: text }) }),
+    ).toContainClass('govuk-tabs__list-item--selected')
+    await expect(this.page.getByRole('heading', { name: text })).toBeVisible()
   }
 }

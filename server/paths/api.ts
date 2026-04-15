@@ -23,10 +23,8 @@ export default {
       show: proposedAddressPath,
       submit: proposedAddressesPath,
       update: proposedAddressPath,
-      timeline: {
-        index: proposedAddressPath.path('timeline'),
-        submit: proposedAddressPath.path('timeline'),
-      },
+      timeline: proposedAddressPath.path('timeline'),
+      notes: proposedAddressPath.path('notes'),
     },
   },
   referenceData: path('/reference-data'),

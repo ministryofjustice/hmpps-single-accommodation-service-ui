@@ -196,12 +196,9 @@ describe('proposedAddressesController', () => {
         uiPaths.proposedAddresses.show({ crn: 'CRN123', id: 'address-id' }),
       )
       expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
-      expect(proposedAddressesService.submitTimelineNote).toHaveBeenCalledWith(
-        'token-1',
-        'CRN123',
-        'address-id',
-        'Some valid note',
-      )
+      expect(proposedAddressesService.submitTimelineNote).toHaveBeenCalledWith('token-1', 'CRN123', 'address-id', {
+        note: 'Some valid note',
+      })
     })
   })
 

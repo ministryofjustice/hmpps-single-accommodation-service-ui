@@ -108,7 +108,7 @@ export default class ProposedAddressesController {
       }
 
       try {
-        await this.proposedAddressesService.submitTimelineNote(token, crn, id, note)
+        await this.proposedAddressesService.submitTimelineNote(token, crn, id, { note })
         req.flash('success', 'Note added')
       } catch (error) {
         addGenericErrorToFlash(req, error.message)

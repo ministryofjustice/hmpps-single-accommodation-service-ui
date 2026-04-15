@@ -1,5 +1,5 @@
 import { ProposedAddressFormData } from '@sas/ui'
-import { AccommodationDetail } from '@sas/api'
+import { AccommodationDetail, NoteCommand } from '@sas/api'
 import { ProposedAddressesClient } from '../data'
 import { formDataToRequestBody } from '../utils/proposedAddresses'
 
@@ -39,7 +39,7 @@ export default class ProposedAddressesService {
     return this.proposedAddressesClient.getTimeline(token, crn, id)
   }
 
-  async submitTimelineNote(token: string, crn: string, id: string, note: string) {
+  async submitTimelineNote(token: string, crn: string, id: string, note: NoteCommand) {
     return this.proposedAddressesClient.submitTimelineNote(token, crn, id, note)
   }
 }

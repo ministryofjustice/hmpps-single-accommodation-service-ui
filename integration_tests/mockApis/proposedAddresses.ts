@@ -57,7 +57,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.proposedAddresses.timeline.index({ crn, id }),
+        urlPattern: apiPaths.cases.proposedAddresses.timeline({ crn, id }),
       },
       response: {
         status: 200,
@@ -69,7 +69,7 @@ export default {
     stubFor({
       request: {
         method: 'POST',
-        urlPattern: apiPaths.cases.proposedAddresses.timeline.submit({ crn, id }),
+        urlPattern: apiPaths.cases.proposedAddresses.notes({ crn, id }),
       },
       response: {
         status: 201,

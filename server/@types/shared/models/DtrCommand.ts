@@ -4,7 +4,7 @@
 /* eslint-disable */
 export type DtrCommand = {
     localAuthorityAreaId: string;
-    referenceNumber?: string;
+    referenceNumber?: string | null;
     submissionDate: string;
     status: 'NOT_STARTED' | 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED';
 };

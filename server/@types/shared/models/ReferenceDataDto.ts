@@ -4,6 +4,6 @@
 /* eslint-disable */
 export type ReferenceDataDto = {
     id: string;
-    name?: string;
+    name?: string | null;
 };
 

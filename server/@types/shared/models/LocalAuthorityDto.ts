@@ -4,6 +4,6 @@
 /* eslint-disable */
 export type LocalAuthorityDto = {
     localAuthorityAreaId: string;
-    localAuthorityAreaName?: string;
+    localAuthorityAreaName?: string | null;
 };
 

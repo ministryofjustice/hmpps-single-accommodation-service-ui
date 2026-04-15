@@ -7,6 +7,6 @@ export type DutyToReferDto = {
     caseId: string;
     crn: string;
     status: 'NOT_STARTED' | 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED';
-    submission?: DtrSubmissionDto;
+    submission?: (DtrSubmissionDto | null);
 };
 

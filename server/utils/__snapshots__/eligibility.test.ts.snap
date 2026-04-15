@@ -21,43 +21,6 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     },
   },
   {
-    "heading": "CAS2 for HDC",
-    "inactive": false,
-    "links": [
-      {
-        "href": "#",
-        "text": "Notes",
-      },
-    ],
-    "status": {
-      "colour": "yellow",
-      "text": "Upcoming",
-    },
-  },
-  {
-    "heading": "CAS2 for court bail",
-    "inactive": true,
-    "links": [
-      {
-        "href": "#",
-        "text": "Notes",
-      },
-    ],
-    "status": {
-      "colour": "grey",
-      "text": "Not eligible",
-    },
-  },
-  {
-    "heading": "CAS2 for prison bail",
-    "inactive": false,
-    "links": [],
-    "status": {
-      "colour": "yellow",
-      "text": "Submitted",
-    },
-  },
-  {
     "heading": "CAS3 (transitional accommodation)",
     "inactive": false,
     "links": [],

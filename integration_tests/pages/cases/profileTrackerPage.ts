@@ -37,9 +37,10 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   async shouldShowEligibility(eligibility: Eligibility) {
     const cardConfigs = [
       { title: 'Approved premises (CAS1)', service: eligibility.cas1 },
-      { title: 'CAS2 for HDC', service: eligibility.cas2Hdc },
-      { title: 'CAS2 for court bail', service: eligibility.cas2CourtBail },
-      { title: 'CAS2 for prison bail', service: eligibility.cas2PrisonBail },
+      // TODO add back cas2 when needed
+      // { title: 'CAS2 for HDC', service: eligibility.cas2Hdc },
+      // { title: 'CAS2 for court bail', service: eligibility.cas2CourtBail },
+      // { title: 'CAS2 for prison bail', service: eligibility.cas2PrisonBail },
       { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3 },
     ]
 

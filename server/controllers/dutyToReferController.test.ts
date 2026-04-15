@@ -362,7 +362,9 @@ describe('dutyToReferController', () => {
       const errors = { note: 'Enter a note' }
       const errorSummary = [{ href: '#note', text: 'Enter a note' }]
 
-      dutyToReferService.getDutyToRefer.mockResolvedValue(dutyToRefer)
+      request.params.id = 'submission-id'
+
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
 
       jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput })
 
@@ -380,12 +382,16 @@ describe('dutyToReferController', () => {
   })
 
   describe('saveNote', () => {
+    beforeEach(() => {
+      request.params.id = 'submission-id'
+    })
+
     it('redirects with an error if the note is empty', async () => {
       request.body = { note: '' }
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         note: 'Enter a note',
       })
@@ -398,7 +404,7 @@ describe('dutyToReferController', () => {
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
         request,
         'There was a problem saving the note. Please try again.',
@@ -412,14 +418,14 @@ describe('dutyToReferController', () => {
           id: 'submission-id',
         },
       })
-      dutyToReferService.getDutyToRefer.mockResolvedValue(dutyToRefer)
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
       dutyToReferService.submitTimelineNote.mockResolvedValue()
 
       request.body = { note: 'Some valid note' }
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
       expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
       expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith(
         'token-1',

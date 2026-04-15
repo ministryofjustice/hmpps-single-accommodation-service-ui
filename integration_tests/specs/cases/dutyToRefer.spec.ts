@@ -136,50 +136,6 @@ test.describe('duty to refer', () => {
     // Given I have stubbed the API responses
     const caseData = await setupStubs(submittedDutyToRefer)
 
-    // And I am logged in
-    await login(page)
-
-    // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
-
-    // And I click the add outcome link
-    await profileTrackerPage.clickLink('Add outcome')
-
-    // Then I should see the duty to refer outcome form
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome details')
-    await dutyToReferPage.shouldShowOutcomePage(caseData, submittedDutyToRefer)
-
-    // When I complete the form and submit
-    await dutyToReferPage.completeOutcomeForm(notAcceptedCommand)
-    await dutyToReferApi.stubUpdateDutyToRefer(crn, id)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, notAcceptedDutyToRefer)
-    await dutyToReferPage.clickButton('Save and continue')
-
-    // And the API should have been called to update the duty to refer
-    await dutyToReferPage.checkApiCalled(crn, notAcceptedCommand, 'update', id)
-
-    // Then I should see the profile tracker page with the updated duty to refer details
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await profileTrackerPage.shouldShowDutyToRefer(notAcceptedDutyToRefer)
-  })
-
-  test('should allow the user to view the details of a duty to refer, add submission, outcome, and timeline note', async ({
-    page,
-  }) => {
-    const localAuthority = referenceDataFactory.localAuthority().build()
-    const notStartedDutyToRefer = dutyToReferFactory.notStarted().build({ crn })
-    const submittedCommand = dtrCommandFactory.build({
-      localAuthorityAreaId: localAuthority.id,
-    })
-    const submittedDutyToRefer = dutyToReferFactory.fromSubmission(submittedCommand, localAuthority.name).build({ crn })
-
-    const acceptedCommand = dtrCommandFactory.build({ ...submittedCommand, status: 'ACCEPTED' })
-    const acceptedDutyToRefer = dutyToReferFactory.fromSubmission(acceptedCommand, localAuthority.name).build({ crn })
-
-    // Given I have stubbed the API responses
-    const caseData = await setupStubs(notStartedDutyToRefer)
-    await referenceDataApi.stubGetLocalAuthorities()
-
     // Given I am logged in
     await login(page)
 
@@ -228,8 +184,8 @@ test.describe('duty to refer', () => {
     })
 
     // When I enter a note and submit
-    await dutyToReferApi.stubSubmitDutyToReferTimelineNote(crn, acceptedDutyToRefer.submission.id)
-    await dutyToReferApi.stubGetDutyToReferByCrn(crn, acceptedDutyToRefer)
+    await dutyToReferApi.stubSubmitDutyToReferTimelineNote(crn, notAcceptedDutyToRefer.submission.id)
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, notAcceptedDutyToRefer.submission.id, notAcceptedDutyToRefer)
 
     await dutyToReferDetailsPage.completeInputByLabel('Add note', 'This is a note\n\nWith line breaks')
     await dutyToReferDetailsPage.clickButton('Add note')

@@ -214,17 +214,17 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const { crn } = req.params
+      const { crn, id } = req.params
       const { token } = res.locals.user
       const { note } = req.body
 
       if (!note) {
         validateAndFlashErrors(req, { note: 'Enter a note' })
-        return res.redirect(uiPaths.dutyToRefer.show({ crn }))
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       }
 
       try {
-        const dtr = await this.dutyToReferService.getDutyToRefer(token, crn)
+        const dtr = await this.dutyToReferService.getDtrBySubmissionId(token, crn, id)
         const submission = dtr?.submission
 
         await this.dutyToReferService.submitTimelineNote(token, crn, submission.id, note)
@@ -232,7 +232,7 @@ export default class DutyToReferController {
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')
       }
-      return res.redirect(uiPaths.dutyToRefer.show({ crn }))
+      return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
     }
   }
 

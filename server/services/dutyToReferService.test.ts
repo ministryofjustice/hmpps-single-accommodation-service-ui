@@ -30,7 +30,6 @@ describe('DutyToReferService', () => {
   })
 
   it('should call getDtrBySubmissionId on the api client and return its result', async () => {
-    const crn = crnFactory()
     const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
     const response = apiResponseFactory.dutyToRefer(dutyToRefer)
     dutyToReferClient.getDtrBySubmissionId.mockResolvedValue(response)

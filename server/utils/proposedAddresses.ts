@@ -505,7 +505,6 @@ const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): Accom
 export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
   const { type } = auditRecord
 
-  // @ts-expect-error requires updated API types
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
 
   const proposedAddress = auditRecordChangesToProposedAddress(auditRecord)

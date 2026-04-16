@@ -14,7 +14,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
           value: addressValue,
         }))
       }
-      return { field: property, value }
+      return { field: property, value: value as string }
     })
 
     return this.params({

@@ -7,9 +7,9 @@ export type AssignedToDto = {
      * no longer be surfacing this with the new `case-list` endpoint - to be removed soon
      * @deprecated
      */
-    id?: number;
+    id?: number | null;
     name: string;
-    username?: string;
-    staffCode?: string;
+    username?: string | null;
+    staffCode?: string | null;
 };
 

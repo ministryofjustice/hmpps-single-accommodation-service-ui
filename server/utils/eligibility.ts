@@ -21,6 +21,9 @@ const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): StatusTa
     PLACEMENT_REQUEST_REJECTED: { text: 'Placement request rejected' },
     APPLICATION_REJECTED: { text: 'Application rejected' },
     ARRIVED: { text: 'Arrived' },
+    BEDSPACE_OFFERED: { text: 'Bedspace offered' },
+    BOOKING_CONFIRMED: { text: 'Booking confirmed' },
+    BOOKING_CANCELLED: { text: 'Booking cancelled' },
   })[status] || { text: 'Unknown' }
 
 export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) => {

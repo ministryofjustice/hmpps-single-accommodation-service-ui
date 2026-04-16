@@ -6,7 +6,7 @@ import type { LocalAuthorityDto } from './LocalAuthorityDto';
 export type DtrSubmissionDto = {
     id: string;
     localAuthority: LocalAuthorityDto;
-    referenceNumber?: string;
+    referenceNumber?: string | null;
     submissionDate: string;
     createdBy: string;
     createdAt: string;

@@ -3,15 +3,15 @@
 /* tslint:disable */
 /* eslint-disable */
 export type AccommodationAddressDetails = {
-    postcode?: string;
-    subBuildingName?: string;
-    buildingName?: string;
-    buildingNumber?: string;
-    thoroughfareName?: string;
-    dependentLocality?: string;
-    postTown?: string;
-    county?: string;
-    country?: string;
-    uprn?: string;
+    postcode?: string | null;
+    subBuildingName?: string | null;
+    buildingName?: string | null;
+    buildingNumber?: string | null;
+    thoroughfareName?: string | null;
+    dependentLocality?: string | null;
+    postTown?: string | null;
+    county?: string | null;
+    country?: string | null;
+    uprn?: string | null;
 };
 

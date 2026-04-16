@@ -4,7 +4,7 @@
 /* eslint-disable */
 import type { FieldChange } from './FieldChange';
 export type AuditRecordDto = {
-    type: 'CREATE' | 'UPDATE';
+    type: 'CREATE' | 'UPDATE' | 'NOTE';
     author: string;
     commitDate: string;
     changes: Array<FieldChange>;

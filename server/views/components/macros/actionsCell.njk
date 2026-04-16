@@ -1,5 +1,7 @@
 {%- macro actionsCell(context) -%}
   {% if context.actions and context.actions.length %}
+    <span class="sas-case-list__cell-header" aria-hidden="true">Actions</span>
+
     <ul class="govuk-list">
       {%- for action in context.actions %}
         <li>{{ action }}</li>

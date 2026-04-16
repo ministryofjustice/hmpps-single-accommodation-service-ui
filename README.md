@@ -94,7 +94,11 @@ To run all the unit tests, run:
 npm run test
 ```
 
-The unit tests also run a number of contract tests against the API OpenAPI spec. This spec is downloaded to `tmp/sas-api.json` if the file does not exist. It may sometimes be necessary to remove this file to ensure the latest is downloaded from the dev API.
+The unit tests also run a number of contract tests (in `server/data`) against the API OpenAPI spec. This spec is downloaded to `tmp/sas-api.json` if the file does not exist. It may sometimes be necessary to remove this file to ensure the latest is downloaded from the dev API. The `test:client` script clears the existing spec, downloads the latest, and runs the client tests only:
+
+```shell
+npm run test:client
+```
 
 ### Integration tests
 

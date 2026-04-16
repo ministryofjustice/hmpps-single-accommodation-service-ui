@@ -1,14 +1,13 @@
 import { path } from 'static-path'
 
-const casesPath = path('/cases')
-const casePath = casesPath.path(':crn')
+const casePath = path('/cases/:crn')
 const proposedAddressesPath = casePath.path('proposed-accommodations')
 const proposedAddressPath = proposedAddressesPath.path(':id')
 const dutyToReferPath = casePath.path('dtr')
 
 export default {
   cases: {
-    index: casesPath,
+    index: path('/case-list'),
     show: casePath,
     dutyToRefer: {
       current: dutyToReferPath,

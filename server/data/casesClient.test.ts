@@ -35,7 +35,8 @@ describeClient('CasesClient', provider => {
     expect(response).toEqual(cases)
   })
 
-  it('should make a GET request to /cases using user token and query parameters and return the response body', async () => {
+  // TODO: Reinstate when new case list endpoint accepts parameters
+  it.skip('should make a GET request to /cases using user token and query parameters and return the response body', async () => {
     const cases = caseFactory.buildList(2)
 
     await provider.addInteraction({

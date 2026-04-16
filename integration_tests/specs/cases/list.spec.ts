@@ -37,32 +37,33 @@ test.describe('List of cases', () => {
       'Actions',
     ])
 
-    // WHEN I filter the results
-    await casesListPage.applyFilters({
-      searchTerm: prisonNumber,
-      assignedTo: 'Anyone',
-      riskLevel: 'Very high',
-    })
-
-    // THEN the relevant cases are shown
-    await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
-    await casesListPage.shouldShowCases(
-      [filteredCase],
-      ['Person', 'Current accommodation', 'Next accommodation', 'Status', 'Actions'],
-    )
-
-    // AND the filters are populated with the selected values
-    await casesListPage.verifyFilters({
-      searchTerm: prisonNumber,
-      assignedTo: 'anyone',
-      riskLevel: 'VERY_HIGH',
-    })
-
-    // AND the active filter tags are shown
-    await casesListPage.shouldShowFilterTags({
-      Search: `'${prisonNumber}'`,
-      'Assigned to': 'anyone',
-      RoSH: 'Very high',
-    })
+    // TODO: Reinstate filtering tests when new case list endpoint accepts parameters
+    // // WHEN I filter the results
+    // await casesListPage.applyFilters({
+    //   searchTerm: prisonNumber,
+    //   assignedTo: 'Anyone',
+    //   riskLevel: 'Very high',
+    // })
+    //
+    // // THEN the relevant cases are shown
+    // await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
+    // await casesListPage.shouldShowCases(
+    //   [filteredCase],
+    //   ['Person', 'Current accommodation', 'Next accommodation', 'Status', 'Actions'],
+    // )
+    //
+    // // AND the filters are populated with the selected values
+    // await casesListPage.verifyFilters({
+    //   searchTerm: prisonNumber,
+    //   assignedTo: 'anyone',
+    //   riskLevel: 'VERY_HIGH',
+    // })
+    //
+    // // AND the active filter tags are shown
+    // await casesListPage.shouldShowFilterTags({
+    //   Search: `'${prisonNumber}'`,
+    //   'Assigned to': 'anyone',
+    //   RoSH: 'Very high',
+    // })
   })
 })

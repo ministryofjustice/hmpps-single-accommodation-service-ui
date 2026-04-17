@@ -4,6 +4,7 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/timeline/macro.njk" import mojTimeline %}
 {% from "components/macros/caseDetails.njk" import caseDetails %}
 
 {% set pageTitle = "Duty to Refer (DTR) " + applicationName %}
@@ -114,5 +115,16 @@
                 </form>
             </section>
         </div>
+
+        <section class="govuk-grid-column-one-third-from-desktop">
+            <h2 class="govuk-heading-m">Events and notes timeline</h2>
+
+            {{
+            mojTimeline({
+                headingLevel: 3,
+                items: timeline
+            })
+            }}
+        </section>
     </div>
 {% endblock %}

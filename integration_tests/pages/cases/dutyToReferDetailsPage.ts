@@ -32,7 +32,7 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   async shouldShowOutcomeDetails(dutyToRefer: DutyToReferDto) {
     await expect(this.page.getByRole('heading', { name: 'Outcome details', exact: true })).toBeVisible()
 
-    const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${outcomeSupportText(dutyToRefer)}`
+    const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${outcomeSupportText(dutyToRefer.status, dutyToRefer.submission.localAuthority.localAuthorityAreaName)}`
     await this.shouldShowSummaryItem('Status', statusText)
   }
 }

@@ -1,0 +1,17 @@
+{%- from "components/macros/statusTag.njk" import statusTag %}
+
+{%- macro timelineDutyToRefer(context) -%}
+  {% if context.status %}
+    <p>{{ statusTag(context.status) }}</p>
+  {% endif %}
+
+  {% for label, value in context.values %}
+    {% if value %}
+      {% if context.status.text === 'Accepted' or context.status.text === 'Not accepted' %}
+        <p class="govuk-!-margin-bottom-1">{{ value }}</p>
+      {% else %}
+        <p class="govuk-!-margin-bottom-1">{{ label }}: {{ value }}</p>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{%- endmacro -%}

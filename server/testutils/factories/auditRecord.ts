@@ -1,5 +1,5 @@
 import { Factory } from 'fishery'
-import { AccommodationDetail, AuditRecordDto, FieldChange } from '@sas/api'
+import { AccommodationDetail, AuditRecordDto, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { faker } from '@faker-js/faker'
 import accommodationFactory from './accommodation'
 
@@ -29,6 +29,56 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     return this.params({
       type: 'UPDATE',
       changes,
+    })
+  }
+
+  dutyToReferCreated() {
+    return this.params({
+      type: 'CREATE',
+      changes: [{ field: 'status', value: 'NOT_STARTED' }],
+    })
+  }
+
+  dutyToReferSubmissionAdded(
+    dtrData: DtrSubmissionDto
+  ) {
+    const changes: FieldChange[] = [
+      { field: 'status', value: 'SUBMITTED' },
+      ...Object.entries(dtrData).map(([field, value]) => ({ field, value })),
+    ]
+
+    return this.params({
+      type: 'CREATE',
+      changes,
+    })
+  }
+
+  dutyToReferOutcomeAdded(outcomeStatus: DutyToReferDto['status'], localAuthorityAreaName: string) {
+    return this.params({
+      type: 'CREATE',
+      changes: [
+        { field: 'status', value: outcomeStatus },
+        { field: 'localAuthority', value: { localAuthorityAreaName } },
+      ],
+    })
+  }
+
+  dutyToReferSubmissionEdited(dtrData: DtrSubmissionDto) {
+    const changes: FieldChange[] = Object.entries(dtrData).map(([field, value]) => ({ field, value }))
+
+    return this.params({
+      type: 'UPDATE',
+      changes,
+    })
+  }
+
+  dutyToReferOutcomeEdited(outcomeStatus: DutyToReferDto['status'], localAuthorityAreaName: string) {
+    return this.params({
+      type: 'UPDATE',
+      changes: [
+        { field: 'status', value: outcomeStatus },
+        { field: 'localAuthority', value: { localAuthorityAreaName } },
+      ],
     })
   }
 

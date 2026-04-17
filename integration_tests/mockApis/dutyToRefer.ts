@@ -50,11 +50,23 @@ export default {
         status: 200,
       },
     }),
+  stubGetDutyToReferTimeline: (crn: string, id: string, records?: any[]): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: apiPaths.cases.dutyToRefer.timeline({ crn, id }),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: records || [],
+      },
+    }),
   stubSubmitDutyToReferTimelineNote: (crn: string, id: string): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'POST',
-        urlPattern: apiPaths.cases.dutyToRefer.timeline.submit({ crn, id }),
+        urlPattern: apiPaths.cases.dutyToRefer.notes({ crn, id }),
       },
       response: {
         status: 201,

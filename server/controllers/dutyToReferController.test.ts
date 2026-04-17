@@ -53,6 +53,7 @@ describe('dutyToReferController', () => {
 
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
+    jest.spyOn(validationUtils, 'addUserInputToFlash')
   })
 
   describe('guidance', () => {
@@ -416,10 +417,8 @@ describe('dutyToReferController', () => {
       await controller.saveNote()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
-      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
-        request,
-        'There was a problem saving the note. Please try again.',
-      )
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'API error')
+      expect(validationUtils.addUserInputToFlash).toHaveBeenCalledWith(request)
     })
 
     it('saves the note and redirects to the duty to refer details page with a success message', async () => {

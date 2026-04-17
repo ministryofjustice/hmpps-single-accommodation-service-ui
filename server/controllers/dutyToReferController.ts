@@ -11,7 +11,12 @@ import {
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
-import { addGenericErrorToFlash, fetchErrorsAndUserInput, validateAndFlashErrors } from '../utils/validation'
+import {
+  addGenericErrorToFlash,
+  addUserInputToFlash,
+  fetchErrorsAndUserInput,
+  validateAndFlashErrors,
+} from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
@@ -229,8 +234,9 @@ export default class DutyToReferController {
       try {
         await this.dutyToReferService.submitTimelineNote(token, crn, id, { note })
         req.flash('success', 'Note added')
-      } catch {
-        addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')
+      } catch (error) {
+        addGenericErrorToFlash(req, error.message)
+        addUserInputToFlash(req)
       }
       return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
     }

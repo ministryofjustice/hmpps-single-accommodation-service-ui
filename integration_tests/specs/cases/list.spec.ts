@@ -29,13 +29,7 @@ test.describe('List of cases', () => {
 
     // AND all the cases should be shown
     await casesListPage.shouldShowResultsSummary('25 people')
-    await casesListPage.shouldShowCases(cases, [
-      'Person',
-      'Current accommodation',
-      'Next accommodation',
-      'Status',
-      'Actions',
-    ])
+    await casesListPage.shouldShowCases(cases, ['Person'])
 
     // TODO: Reinstate filtering tests when new case list endpoint accepts parameters
     // // WHEN I filter the results

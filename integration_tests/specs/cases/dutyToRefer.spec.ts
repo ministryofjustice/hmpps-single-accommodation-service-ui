@@ -220,7 +220,6 @@ test.describe('duty to refer', () => {
     await dutyToReferApi.stubSubmitDutyToReferTimelineNote(crn, notAcceptedDutyToRefer.submission.id)
     timelineRecords.unshift(noteDutyToReferRecord)
     await setupDutyToReferTimeline(notAcceptedDutyToRefer.submission.id, timelineRecords)
-    await dutyToReferApi.stubGetDtrBySubmissionId(crn, notAcceptedDutyToRefer.submission.id, notAcceptedDutyToRefer)
 
     await dutyToReferDetailsPage.completeInputByLabel('Add note', 'This is a note\n\nWith line breaks')
     await dutyToReferDetailsPage.clickButton('Add note')

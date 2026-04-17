@@ -216,6 +216,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
 
   const html = renderMacro('timelineDutyToRefer', {
     type,
+    isOutcome,
     status: status ? dutyToReferStatusTag(status) : undefined,
     values: isOutcome ? { Outcome: outcomeText } : submissionValues,
   })

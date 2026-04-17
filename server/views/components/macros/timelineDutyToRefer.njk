@@ -7,7 +7,7 @@
 
   {% for label, value in context.values %}
     {% if value %}
-      {% if context.status.text === 'Accepted' or context.status.text === 'Not accepted' %}
+      {% if context.isOutcome %}
         <p class="govuk-!-margin-bottom-1">{{ value }}</p>
       {% else %}
         <p class="govuk-!-margin-bottom-1">{{ label }}: {{ value }}</p>

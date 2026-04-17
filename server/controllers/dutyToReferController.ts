@@ -227,10 +227,7 @@ export default class DutyToReferController {
       }
 
       try {
-        const dtr = await this.dutyToReferService.getDtrBySubmissionId(token, crn, id)
-        const submission = dtr?.submission
-
-        await this.dutyToReferService.submitTimelineNote(token, crn, submission.id, note)
+        await this.dutyToReferService.submitTimelineNote(token, crn, id, note)
         req.flash('success', 'Note added')
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')

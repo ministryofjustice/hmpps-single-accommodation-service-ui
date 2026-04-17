@@ -115,14 +115,14 @@ describeClient('DutyToReferClient', provider => {
     await dutyToReferClient.update('test-user-token', crn, id, command)
   })
 
-  it.skip('should make a GET request to /cases/:crn/proposed-accommodations/:id/timeline', async () => {
+  it.skip('should make a GET request to /cases/:crn/dtr/:id/timeline', async () => {
     const crn = crnFactory()
     const dtr = dutyToReferFactory.submitted().build()
     const auditRecords = auditRecordFactory.buildList(3)
 
     await provider.addInteraction({
-      state: `A proposed address timeline exists for case with CRN ${crn}`,
-      uponReceiving: 'a request to get a proposed address timeline for a case by CRN and address ID',
+      state: `A duty to refer timeline exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to get a duty to refer timeline for a case by CRN and dtr ID',
       withRequest: {
         method: 'GET',
         path: apiPaths.cases.dutyToRefer.timeline({ crn, id: dtr.submission.id }),

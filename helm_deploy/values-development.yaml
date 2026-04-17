@@ -18,6 +18,7 @@ generic-service:
     COMPONENT_API_URL: "https://probation-frontend-components-dev.hmpps.service.justice.gov.uk"
     OS_DATAHUB_API_URL: "https://api.os.uk"
     SAS_ALLOWED_ROLES: "ROLE_PROBATION"
+    V10_CASES_LIST: "false"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

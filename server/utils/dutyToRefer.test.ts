@@ -335,7 +335,7 @@ describe('duty to refer utils', () => {
         localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
         referenceNumber: 'REF456',
       })
-      const auditRecord = auditRecordFactory.dutyToReferSubmissionEdited(submission).build({
+      const auditRecord = auditRecordFactory.dutyToReferSubmissionUpdated(submission).build({
         commitDate: '2026-04-15T10:00:00.000Z',
         author: 'Jane Doe',
       })
@@ -344,19 +344,29 @@ describe('duty to refer utils', () => {
     })
 
     it('returns a timeline entry for an outcome added record', () => {
-      const auditRecord = auditRecordFactory.dutyToReferOutcomeAdded('ACCEPTED', 'Cherwell District Council').build({
-        commitDate: '2026-04-15T15:38:00.000Z',
-        author: 'Jane Doe',
-      })
+      const auditRecord = auditRecordFactory
+        .dutyToReferAdded([
+          { field: 'status', value: 'ACCEPTED' },
+          { field: 'localAuthority', value: { localAuthorityAreaName: 'Cherwell District Council' } },
+        ])
+        .build({
+          commitDate: '2026-04-15T15:38:00.000Z',
+          author: 'Jane Doe',
+        })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
     it('returns a timeline entry for an outcome updated record', () => {
-      const auditRecord = auditRecordFactory.dutyToReferOutcomeEdited('NOT_ACCEPTED', 'Oxford City Council').build({
-        commitDate: '2026-04-16T09:00:00.000Z',
-        author: 'Jane Doe',
-      })
+      const auditRecord = auditRecordFactory
+        .dutyToReferUpdated([
+          { field: 'status', value: 'NOT_ACCEPTED' },
+          { field: 'localAuthority', value: { localAuthorityAreaName: 'Oxford City Council' } },
+        ])
+        .build({
+          commitDate: '2026-04-16T09:00:00.000Z',
+          author: 'Jane Doe',
+        })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })

@@ -55,9 +55,7 @@ export default class DutyToReferController {
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         submissionDetailRows,
         outcomeDetailRows,
-        timeline: auditRecords.map(record =>
-          dutyToReferTimelineEntry(record, dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
-        ),
+        timeline: auditRecords.map(dutyToReferTimelineEntry),
         status: dutyToRefer?.status,
         ...userInput,
         errors,

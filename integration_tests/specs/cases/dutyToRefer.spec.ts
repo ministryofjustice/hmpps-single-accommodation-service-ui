@@ -144,10 +144,13 @@ test.describe('duty to refer', () => {
       .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
       .build()
     const outcomeAddedDutyToReferRecord = auditRecordFactory
-      .dutyToReferOutcomeAdded(
-        notAcceptedDutyToRefer.status,
-        notAcceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
-      )
+      .dutyToReferAdded([
+        { field: 'status', value: notAcceptedDutyToRefer.status },
+        {
+          field: 'localAuthority',
+          value: { localAuthorityAreaName: notAcceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName },
+        },
+      ])
       .build()
     const noteDutyToReferRecord = auditRecordFactory.note('This is a note\n\nWith line breaks').build()
 
@@ -238,7 +241,7 @@ test.describe('duty to refer', () => {
     })
     const createdDutyToReferRecord = auditRecordFactory.dutyToReferCreated().build()
     const updatedDutyReferRecord = auditRecordFactory
-      .dutyToReferSubmissionEdited(submittedDutyToRefer.submission)
+      .dutyToReferSubmissionUpdated(submittedDutyToRefer.submission)
       .build()
     const timelineRecords: AuditRecordDto[] = [createdDutyToReferRecord]
 
@@ -299,7 +302,7 @@ test.describe('duty to refer', () => {
     // And I should see a success banner confirming submission details were updated
     await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
 
-    // And I should see a timeline entry showing the submission details were edited
+    // And I should see a timeline entry showing the submission details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyReferRecord))
   })
 
@@ -312,10 +315,10 @@ test.describe('duty to refer', () => {
     const caseData = await setupStubs(acceptedDutyToRefer)
     const createdDutyToReferRecord = auditRecordFactory.dutyToReferCreated().build()
     const updatedDutyReferRecord = auditRecordFactory
-      .dutyToReferOutcomeEdited(
-        updatedDutyToRefer.status,
-        acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
-      )
+      .dutyToReferUpdated([
+        { field: 'status', value: updatedDutyToRefer.status },
+        { field: 'localAuthority', value: acceptedDutyToRefer.submission.localAuthority },
+      ])
       .build()
     const timelineRecords: AuditRecordDto[] = [createdDutyToReferRecord]
     await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
@@ -372,7 +375,7 @@ test.describe('duty to refer', () => {
     // And I should see a success banner confirming outcome details were updated
     await dutyToReferDetailsPage.shouldShowBanner('Outcome details updated')
 
-    // And I should see a timeline entry showing the outcome details were edited
+    // And I should see a timeline entry showing the outcome details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyReferRecord))
   })
 })

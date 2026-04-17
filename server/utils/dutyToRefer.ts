@@ -180,10 +180,7 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
   } as Partial<DutyToReferDto>
 }
 
-export const dutyToReferTimelineEntry = (
-  auditRecord: AuditRecordDto,
-  localAuthorityAreaName?: string,
-): TimelineEntry => {
+export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
   const { type } = auditRecord
 
   // @ts-expect-error requires updated API types
@@ -205,7 +202,7 @@ export const dutyToReferTimelineEntry = (
   }
 
   const { submissionDate, localAuthority, referenceNumber } = dtr.submission || {}
-  const localAuthorityName = localAuthority?.localAuthorityAreaName ?? localAuthorityAreaName
+  const localAuthorityName = localAuthority?.localAuthorityAreaName
   const outcomeText = isOutcome && localAuthorityName ? outcomeSupportText(status, localAuthorityName) : undefined
 
   const submissionValues =

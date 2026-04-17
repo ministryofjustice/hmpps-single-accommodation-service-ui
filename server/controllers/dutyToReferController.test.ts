@@ -357,9 +357,7 @@ describe('dutyToReferController', () => {
         crn,
         dtrId: 'submission-id',
         caseData,
-        timeline: auditRecords.map(record =>
-          dutyToReferTimelineEntry(record, dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
-        ),
+        timeline: auditRecords.map(dutyToReferTimelineEntry),
         assignedTo: caseAssignedTo(caseData, 'user-id'),
         submissionDetailRows: detailsSummaryListRows(dutyToRefer),
         outcomeDetailRows: outcomeDetailsSummaryListRows(dutyToRefer),

@@ -438,12 +438,9 @@ describe('dutyToReferController', () => {
 
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
       expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
-      expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith(
-        'token-1',
-        'CRN123',
-        'submission-id',
-        'Some valid note',
-      )
+      expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
+        note: 'Some valid note',
+      })
     })
   })
 })

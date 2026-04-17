@@ -71,7 +71,7 @@ describe('DutyToReferService', () => {
 
   describe('submitTimelineNote', () => {
     it('should call submitTimelineNote on the api client with the note data', async () => {
-      const note = 'This is a note\n\nWith multiple lines'
+      const note = { note: 'This is a note\n\nWith multiple lines' }
 
       await dutyToReferService.submitTimelineNote(token, crn, id, note)
 

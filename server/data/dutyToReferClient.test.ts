@@ -2,7 +2,7 @@ import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { faker } from '@faker-js/faker/locale/en'
 import describeClient from '../testutils/describeClient'
 import DutyToReferClient from './dutyToReferClient'
-import { apiResponseFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
+import { apiResponseFactory, auditRecordFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
 
@@ -115,8 +115,32 @@ describeClient('DutyToReferClient', provider => {
     await dutyToReferClient.update('test-user-token', crn, id, command)
   })
 
+  it.skip('should make a GET request to /cases/:crn/proposed-accommodations/:id/timeline', async () => {
+    const crn = crnFactory()
+    const dtr = dutyToReferFactory.submitted().build()
+    const auditRecords = auditRecordFactory.buildList(3)
+
+    await provider.addInteraction({
+      state: `A proposed address timeline exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to get a proposed address timeline for a case by CRN and address ID',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.dutyToRefer.timeline({ crn, id: dtr.submission.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body: auditRecords,
+      },
+    })
+
+    await dutyToReferClient.getTimeline('test-user-token', crn, dtr.submission.id)
+  })
+
   // TODO: Enable test when API endpoint exists
-  it.skip('should make a POST request to /cases/:crn/dtr/:id/timeline', async () => {
+  it.skip('should make a POST request to /cases/:crn/dtr/:id/notes', async () => {
     const crn = crnFactory()
     const dtr = dutyToReferFactory.submitted().build()
     const note = 'This is a note\n\nWith multiple lines'
@@ -126,7 +150,7 @@ describeClient('DutyToReferClient', provider => {
       uponReceiving: 'a request to post a duty to refer timeline note for a case by CRN and dtr ID',
       withRequest: {
         method: 'POST',
-        path: apiPaths.cases.dutyToRefer.timeline.submit({ crn, id: dtr.submission.id }),
+        path: apiPaths.cases.dutyToRefer.notes({ crn, id: dtr.submission.id }),
         headers: {
           authorization: 'Bearer test-user-token',
         },

@@ -17,28 +17,27 @@ import DutyToReferPage from '../../pages/cases/dutyToReferPage'
 import DutyToReferDetailsPage from '../../pages/cases/dutyToReferDetailsPage'
 import { dutyToReferTimelineEntry } from '../../../server/utils/dutyToRefer'
 
+const crn = 'X123456'
+const setupStubs = async (initialDutyToRefer: DutyToReferDto) => {
+  const caseData = caseFactory.build({ crn })
+  await casesApi.stubGetCases([caseData])
+  await casesApi.stubGetCaseByCrn(crn, caseData)
+  await dutyToReferApi.stubGetCurrentDtr(crn, initialDutyToRefer)
+  if (initialDutyToRefer.submission?.id) {
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, initialDutyToRefer.submission.id, initialDutyToRefer)
+  }
+  await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
+  await casesApi.stubGetReferralHistory(crn, [])
+  await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
+  await referenceDataApi.stubGetLocalAuthorities()
+  return caseData
+}
+
+const setupDutyToReferTimeline = async (submissionId: string, records: AuditRecordDto[]) => {
+  await dutyToReferApi.stubGetDutyToReferTimeline(crn, submissionId, records)
+}
+
 test.describe('duty to refer', () => {
-  const crn = 'X123456'
-
-  const setupStubs = async (initialDutyToRefer: DutyToReferDto) => {
-    const caseData = caseFactory.build({ crn })
-    await casesApi.stubGetCases([caseData])
-    await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetCurrentDtr(crn, initialDutyToRefer)
-    if (initialDutyToRefer.submission?.id) {
-      await dutyToReferApi.stubGetDtrBySubmissionId(crn, initialDutyToRefer.submission.id, initialDutyToRefer)
-    }
-    await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
-    await casesApi.stubGetReferralHistory(crn, [])
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
-    await referenceDataApi.stubGetLocalAuthorities()
-    return caseData
-  }
-
-  const setupDutyToReferTimeline = async (crn: string, submissionId: string, records: AuditRecordDto[]) => {
-    await dutyToReferApi.stubGetDutyToReferTimeline(crn, submissionId, records)
-  }
-
   test('should allow user to submit a duty to refer and add outcome from the Case details page', async ({ page }) => {
     const notStartedDutyToRefer = dutyToReferFactory.notStarted().build({ crn })
     const submittedDutyToRefer = dutyToReferFactory.build({
@@ -157,7 +156,7 @@ test.describe('duty to refer', () => {
     // Given I have stubbed the API responses
     const caseData = await setupStubs(submittedDutyToRefer)
     const timelineRecords: AuditRecordDto[] = [submissionAddedDutyReferRecord, createdDutyToReferRecord]
-    await setupDutyToReferTimeline(caseData.crn, submittedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
 
     // Given I am logged in
     await login(page)
@@ -187,7 +186,7 @@ test.describe('duty to refer', () => {
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, notAcceptedDutyToRefer)
     timelineRecords.unshift(outcomeAddedDutyToReferRecord)
-    await setupDutyToReferTimeline(caseData.crn, submittedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
 
     await outcomePage.completeOutcomeForm(notAcceptedDutyToRefer)
     await outcomePage.clickButton('Save and continue')
@@ -217,7 +216,7 @@ test.describe('duty to refer', () => {
     // When I enter a note and submit
     await dutyToReferApi.stubSubmitDutyToReferTimelineNote(crn, notAcceptedDutyToRefer.submission.id)
     timelineRecords.unshift(noteDutyToReferRecord)
-    await setupDutyToReferTimeline(crn, notAcceptedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(notAcceptedDutyToRefer.submission.id, timelineRecords)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, notAcceptedDutyToRefer.submission.id, notAcceptedDutyToRefer)
 
     await dutyToReferDetailsPage.completeInputByLabel('Add note', 'This is a note\n\nWith line breaks')
@@ -245,7 +244,7 @@ test.describe('duty to refer', () => {
 
     // Given I have stubbed the API responses
     const caseData = await setupStubs(submittedDutyToRefer)
-    await setupDutyToReferTimeline(caseData.crn, submittedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
 
     // Given I am logged in
     await login(page)
@@ -285,7 +284,7 @@ test.describe('duty to refer', () => {
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
     timelineRecords.unshift(updatedDutyReferRecord)
-    await setupDutyToReferTimeline(caseData.crn, submittedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
 
     await dutyToReferPage.completeSubmissionForm(updatedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')
@@ -319,7 +318,7 @@ test.describe('duty to refer', () => {
       )
       .build()
     const timelineRecords: AuditRecordDto[] = [createdDutyToReferRecord]
-    await setupDutyToReferTimeline(caseData.crn, acceptedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
 
     // Given I am logged in
     await login(page)
@@ -358,7 +357,7 @@ test.describe('duty to refer', () => {
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
     timelineRecords.unshift(updatedDutyReferRecord)
-    await setupDutyToReferTimeline(caseData.crn, acceptedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
 
     await dutyToReferPage.completeOutcomeForm(updatedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')

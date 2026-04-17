@@ -185,6 +185,168 @@ exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refe
 }
 `;
 
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a created record 1`] = `
+{
+  "byline": {
+    "text": "System",
+  },
+  "datetime": {
+    "timestamp": "2026-04-12T13:15:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+    <p><strong class="govuk-tag govuk-tag--orange">Not started</strong></p>
+  
+
+  ",
+  "label": {
+    "text": "Duty to Refer required",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a note 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2026-04-15T14:30:00.000Z",
+    "type": "datetime",
+  },
+  "html": "<p>Some note</p><p>line 2</p>",
+  "label": {
+    "text": "Note added",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission added record 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2026-04-12T17:07:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+    <p><strong class="govuk-tag govuk-tag--yellow">Submitted</strong></p>
+  
+
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Date submitted: 12 April 2026 (5 days ago)</p>
+      
+    
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Local authority: Cherwell District Council</p>
+      
+    
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Reference: REF123</p>
+      
+    
+  ",
+  "label": {
+    "text": "Submission details added",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission updated record 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2026-04-15T10:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Date submitted: 14 April 2026 (3 days ago)</p>
+      
+    
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Local authority: Oxford City Council</p>
+      
+    
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Reference: REF456</p>
+      
+    
+  ",
+  "label": {
+    "text": "Submission details updated",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for an outcome added record 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2026-04-15T15:38:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+    <p><strong class="govuk-tag govuk-tag--yellow">Accepted</strong></p>
+  
+
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Cherwell District Council agreed to support this person with housing</p>
+      
+    
+  ",
+  "label": {
+    "text": "Outcome details added",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for an outcome updated record 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2026-04-16T09:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+    <p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
+  
+
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Oxford City Council will not support this person with housing</p>
+      
+    
+  ",
+  "label": {
+    "text": "Outcome details updated",
+  },
+}
+`;
+
 exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows for status ACCEPTED 1`] = `
 [
   {

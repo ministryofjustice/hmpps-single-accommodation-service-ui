@@ -24,6 +24,10 @@ export default class DutyToReferService {
     return this.dutyToReferClient.submit(token, crn, dutyToReferData)
   }
 
+  async getTimeline(token: string, crn: string, id: string) {
+    return this.dutyToReferClient.getTimeline(token, crn, id)
+  }
+
   async submitTimelineNote(token: string, crn: string, id: string, note: string) {
     return this.dutyToReferClient.submitTimelineNote(token, crn, id, note)
   }

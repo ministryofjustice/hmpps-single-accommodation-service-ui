@@ -6,6 +6,7 @@ import {
   validateOutcome,
   detailsSummaryListRows,
   outcomeDetailsSummaryListRows,
+  dutyToReferTimelineEntry,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -36,9 +37,10 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [{ data: caseData }, { data: dutyToRefer }] = await Promise.all([
+      const [{ data: caseData }, { data: dutyToRefer }, auditRecords] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
+        this.dutyToReferService.getTimeline(token, crn, id),
       ])
 
       const submissionDetailRows = detailsSummaryListRows(dutyToRefer)
@@ -53,6 +55,9 @@ export default class DutyToReferController {
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         submissionDetailRows,
         outcomeDetailRows,
+        timeline: auditRecords.map(record =>
+          dutyToReferTimelineEntry(record, dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
+        ),
         status: dutyToRefer?.status,
         ...userInput,
         errors,

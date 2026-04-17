@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { DtrCommand, ApiResponseDtoDutyToReferDto } from '@sas/api'
+import { DtrCommand, ApiResponseDtoDutyToReferDto, AuditRecordDto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -16,10 +16,6 @@ export default class DutyToReferClient extends RestClient {
 
   getDtrBySubmissionId(token: string, crn: string, id: string) {
     return this.get<ApiResponseDtoDutyToReferDto>({ path: apiPaths.cases.dutyToRefer.show({ crn, id }) }, asUser(token))
-  }
-
-  getDutyToReferById(token: string, crn: string, id: string) {
-    return this.get<DutyToReferDto>({ path: apiPaths.cases.dutyToRefer.update({ crn, id }) }, asUser(token))
   }
 
   submit(token: string, crn: string, dutyToRefer: DtrCommand) {
@@ -42,10 +38,14 @@ export default class DutyToReferClient extends RestClient {
     )
   }
 
+  async getTimeline(token: string, crn: string, id: string) {
+    return this.get<AuditRecordDto[]>({ path: apiPaths.cases.dutyToRefer.timeline({ crn, id }) }, asUser(token))
+  }
+
   async submitTimelineNote(token: string, crn: string, id: string, note: string) {
     return this.post<void>(
       {
-        path: apiPaths.cases.dutyToRefer.timeline.submit({ crn, id }),
+        path: apiPaths.cases.dutyToRefer.notes({ crn, id }),
         data: { note },
       },
       asUser(token),

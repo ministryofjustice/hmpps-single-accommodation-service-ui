@@ -7,9 +7,14 @@ import CasesService from '../services/casesService'
 import ReferenceDataService from '../services/referenceDataService'
 import uiPaths from '../paths/ui'
 import * as dutyToReferUtils from '../utils/dutyToRefer'
-import { detailsSummaryListRows, outcomeDetailsSummaryListRows, summaryListRows } from '../utils/dutyToRefer'
+import {
+  detailsSummaryListRows,
+  dutyToReferTimelineEntry,
+  outcomeDetailsSummaryListRows,
+  summaryListRows,
+} from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
-import { apiResponseFactory, caseFactory, dutyToReferFactory, referenceDataFactory } from '../testutils/factories'
+import { apiResponseFactory, auditRecordFactory, caseFactory, dutyToReferFactory, referenceDataFactory } from '../testutils/factories'
 import { caseAssignedTo } from '../utils/cases'
 import * as backlinksUtils from '../utils/backlinks'
 
@@ -326,6 +331,13 @@ describe('dutyToReferController', () => {
   })
 
   describe('show', () => {
+    const auditRecords = auditRecordFactory.buildList(2)
+
+    beforeEach(() => {
+      request.params.id = 'submission-id'
+      dutyToReferService.getTimeline.mockResolvedValue(auditRecords)
+    })
+
     it('renders the duty to refer details page', async () => {
       const crn = 'CRN123'
       const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
@@ -345,6 +357,9 @@ describe('dutyToReferController', () => {
         crn,
         dtrId: 'submission-id',
         caseData,
+        timeline: auditRecords.map(record =>
+          dutyToReferTimelineEntry(record, dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
+        ),
         assignedTo: caseAssignedTo(caseData, 'user-id'),
         submissionDetailRows: detailsSummaryListRows(dutyToRefer),
         outcomeDetailRows: outcomeDetailsSummaryListRows(dutyToRefer),
@@ -361,8 +376,6 @@ describe('dutyToReferController', () => {
       const userInput = { note: '' }
       const errors = { note: 'Enter a note' }
       const errorSummary = [{ href: '#note', text: 'Enter a note' }]
-
-      request.params.id = 'submission-id'
 
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
 

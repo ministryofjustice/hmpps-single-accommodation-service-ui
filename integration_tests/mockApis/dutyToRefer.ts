@@ -1,5 +1,5 @@
 import type { SuperAgentRequest } from 'superagent'
-import { DutyToReferDto } from '@sas/api'
+import { AuditRecordDto, DutyToReferDto } from '@sas/api'
 import { stubFor, stubApiError } from './wiremock'
 import { apiResponseFactory, dutyToReferFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
@@ -50,7 +50,7 @@ export default {
         status: 200,
       },
     }),
-  stubGetDutyToReferTimeline: (crn: string, id: string, records?: any[]): SuperAgentRequest =>
+  stubGetDutyToReferTimeline: (crn: string, id: string, records?: AuditRecordDto[]): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',

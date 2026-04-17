@@ -39,9 +39,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     })
   }
 
-  dutyToReferSubmissionAdded(
-    dtrData: DtrSubmissionDto
-  ) {
+  dutyToReferSubmissionAdded(dtrData: DtrSubmissionDto) {
     const changes: FieldChange[] = [
       { field: 'status', value: 'SUBMITTED' },
       ...Object.entries(dtrData).map(([field, value]) => ({ field, value })),

@@ -4,6 +4,7 @@ import {
   detailsForStatus,
   detailsSummaryListRows,
   dutyToReferStatusCard,
+  dutyToReferTimelineEntry,
   linksForStatus,
   outcomeDetailsSummaryListRows,
   outcomeSupportText,
@@ -12,7 +13,7 @@ import {
   validateSubmission,
 } from './dutyToRefer'
 import * as validationUtils from './validation'
-import { dutyToReferFactory } from '../testutils/factories'
+import { auditRecordFactory, dtrSubmissionFactory, dutyToReferFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
 
 describe('duty to refer utils', () => {
@@ -223,14 +224,7 @@ describe('duty to refer utils', () => {
       ['ACCEPTED', 'Some Council agreed to support this person with housing'],
       ['NOT_ACCEPTED', 'Some Council will not support this person with housing'],
     ] as const)('returns %s text for %s status', (status, expectedText) => {
-      const dutyToRefer = dutyToReferFactory.build({
-        status,
-        submission: {
-          localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
-        },
-      })
-
-      expect(outcomeSupportText(dutyToRefer)).toBe(expectedText)
+      expect(outcomeSupportText(status, 'Some Council')).toBe(expectedText)
     })
   })
 
@@ -299,6 +293,72 @@ describe('duty to refer utils', () => {
       const result = validateOutcome(req)
 
       expect(result).toBe(true)
+    })
+  })
+
+  describe('dutyToReferTimelineEntry', () => {
+    it('returns a timeline entry for a note', () => {
+      const auditRecord = auditRecordFactory.note('Some note\nline 2').build({
+        commitDate: '2026-04-15T14:30:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a created record', () => {
+      const auditRecord = auditRecordFactory.dutyToReferCreated().build({
+        commitDate: '2026-04-12T13:15:00.000Z',
+        author: 'System',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a submission added record', () => {
+      const submission = dtrSubmissionFactory.build({
+        submissionDate: '2026-04-12',
+        localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
+        referenceNumber: 'REF123',
+      })
+      const auditRecord = auditRecordFactory.dutyToReferSubmissionAdded(submission).build({
+        commitDate: '2026-04-12T17:07:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a submission updated record', () => {
+      const submission = dtrSubmissionFactory.build({
+        submissionDate: '2026-04-14',
+        localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
+        referenceNumber: 'REF456',
+      })
+      const auditRecord = auditRecordFactory.dutyToReferSubmissionEdited(submission).build({
+        commitDate: '2026-04-15T10:00:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for an outcome added record', () => {
+      const auditRecord = auditRecordFactory.dutyToReferOutcomeAdded('ACCEPTED', 'Cherwell District Council').build({
+        commitDate: '2026-04-15T15:38:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for an outcome updated record', () => {
+      const auditRecord = auditRecordFactory.dutyToReferOutcomeEdited('NOT_ACCEPTED', 'Oxford City Council').build({
+        commitDate: '2026-04-16T09:00:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
   })
 })

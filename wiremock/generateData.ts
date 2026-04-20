@@ -2,7 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
-import { AccommodationDetail, CaseDto } from '@sas/api'
+import { AccommodationDetail, CaseDto, DutyToReferDto } from '@sas/api'
 import {
   accommodationFactory,
   auditRecordFactory,
@@ -82,6 +82,22 @@ if (generate.dutyToRefer) {
     {},
   )
   saveToFixture('dutyToRefer', dutyToRefer)
+  const auditRecords = Object.fromEntries(
+    Object.values(dutyToRefer)
+      .flat()
+      .filter((dtr: DutyToReferDto) => dtr.submission?.id)
+      .map((dtr: DutyToReferDto) => {
+        const records = [auditRecordFactory.dutyToReferCreated().build()]
+        if (dtr.status === 'SUBMITTED' || dtr.status === 'ACCEPTED' || dtr.status === 'NOT_ACCEPTED') {
+          records.push(auditRecordFactory.dutyToReferSubmissionAdded(dtr.submission).build())
+        }
+        if (dtr.status === 'ACCEPTED' || dtr.status === 'NOT_ACCEPTED') {
+          records.push(auditRecordFactory.dutyToReferAdded([{ field: 'status', value: dtr.status }]).build())
+        }
+        return [dtr.submission.id, records.reverse()]
+      }),
+  )
+  saveToFixture('dutyToReferAuditRecords', auditRecords)
 }
 
 if (generate.proposedAddresses) {

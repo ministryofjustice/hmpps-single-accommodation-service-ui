@@ -191,7 +191,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "text": "System",
   },
   "datetime": {
-    "timestamp": "2026-04-12T13:15:00.000Z",
+    "timestamp": "2025-04-12T13:15:00.000Z",
     "type": "datetime",
   },
   "html": "
@@ -211,7 +211,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "text": "Jane Doe",
   },
   "datetime": {
-    "timestamp": "2026-04-15T14:30:00.000Z",
+    "timestamp": "2025-04-15T14:30:00.000Z",
     "type": "datetime",
   },
   "html": "<p>Some note</p><p>line 2</p>",
@@ -227,7 +227,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "text": "Jane Doe",
   },
   "datetime": {
-    "timestamp": "2026-04-12T17:07:00.000Z",
+    "timestamp": "2025-04-12T17:07:00.000Z",
     "type": "datetime",
   },
   "html": "
@@ -237,7 +237,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
       
-        <p class="govuk-!-margin-bottom-1">Date submitted: 12 April 2026 (5 days ago)</p>
+        <p class="govuk-!-margin-bottom-1">Date submitted: 12 April 2025 (242 days ago)</p>
       
     
   
@@ -265,7 +265,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "text": "Jane Doe",
   },
   "datetime": {
-    "timestamp": "2026-04-15T10:00:00.000Z",
+    "timestamp": "2025-04-15T10:00:00.000Z",
     "type": "datetime",
   },
   "html": "
@@ -273,7 +273,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
       
-        <p class="govuk-!-margin-bottom-1">Date submitted: 14 April 2026 (3 days ago)</p>
+        <p class="govuk-!-margin-bottom-1">Date submitted: 14 April 2025 (240 days ago)</p>
       
     
   
@@ -301,7 +301,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "text": "Jane Doe",
   },
   "datetime": {
-    "timestamp": "2026-04-15T15:38:00.000Z",
+    "timestamp": "2025-04-15T15:38:00.000Z",
     "type": "datetime",
   },
   "html": "
@@ -327,7 +327,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "text": "Jane Doe",
   },
   "datetime": {
-    "timestamp": "2026-04-16T09:00:00.000Z",
+    "timestamp": "2025-04-16T09:00:00.000Z",
     "type": "datetime",
   },
   "html": "

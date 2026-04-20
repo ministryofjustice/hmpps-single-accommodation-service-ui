@@ -5,6 +5,7 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "moj/components/timeline/macro.njk" import mojTimeline %}
+{% from "components/macros/errorSummary.njk" import showErrorSummary %}
 {% from "components/macros/caseDetails.njk" import caseDetails %}
 
 {% set pageTitle = "Duty to Refer (DTR) " + applicationName %}
@@ -29,12 +30,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if errorSummary | length %}
-        {{ govukErrorSummary({
-            titleText: errorTitle if errorTitle else "There is a problem",
-            errorList: errorSummary
-        }) }}
-    {% endif %}
+    {{ showErrorSummary(errorSummary) }}
 
     {{ caseDetails(caseData, assignedTo) }}
     <div class="govuk-grid-row">

@@ -297,9 +297,17 @@ describe('duty to refer utils', () => {
   })
 
   describe('dutyToReferTimelineEntry', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
     it('returns a timeline entry for a note', () => {
       const auditRecord = auditRecordFactory.note('Some note\nline 2').build({
-        commitDate: '2026-04-15T14:30:00.000Z',
+        commitDate: '2025-04-15T14:30:00.000Z',
         author: 'Jane Doe',
       })
 
@@ -308,7 +316,7 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for a created record', () => {
       const auditRecord = auditRecordFactory.dutyToReferCreated().build({
-        commitDate: '2026-04-12T13:15:00.000Z',
+        commitDate: '2025-04-12T13:15:00.000Z',
         author: 'System',
       })
 
@@ -317,12 +325,12 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for a submission added record', () => {
       const submission = dtrSubmissionFactory.build({
-        submissionDate: '2026-04-12',
+        submissionDate: '2025-04-12',
         localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
         referenceNumber: 'REF123',
       })
       const auditRecord = auditRecordFactory.dutyToReferSubmissionAdded(submission).build({
-        commitDate: '2026-04-12T17:07:00.000Z',
+        commitDate: '2025-04-12T17:07:00.000Z',
         author: 'Jane Doe',
       })
 
@@ -331,12 +339,12 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for a submission updated record', () => {
       const submission = dtrSubmissionFactory.build({
-        submissionDate: '2026-04-14',
+        submissionDate: '2025-04-14',
         localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
         referenceNumber: 'REF456',
       })
       const auditRecord = auditRecordFactory.dutyToReferSubmissionUpdated(submission).build({
-        commitDate: '2026-04-15T10:00:00.000Z',
+        commitDate: '2025-04-15T10:00:00.000Z',
         author: 'Jane Doe',
       })
 
@@ -350,7 +358,7 @@ describe('duty to refer utils', () => {
           { field: 'localAuthority', value: { localAuthorityAreaName: 'Cherwell District Council' } },
         ])
         .build({
-          commitDate: '2026-04-15T15:38:00.000Z',
+          commitDate: '2025-04-15T15:38:00.000Z',
           author: 'Jane Doe',
         })
 
@@ -364,7 +372,7 @@ describe('duty to refer utils', () => {
           { field: 'localAuthority', value: { localAuthorityAreaName: 'Oxford City Council' } },
         ])
         .build({
-          commitDate: '2026-04-16T09:00:00.000Z',
+          commitDate: '2025-04-16T09:00:00.000Z',
           author: 'Jane Doe',
         })
 

@@ -1,13 +1,13 @@
 {
   "S511935": {
-    "caseId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "caseId": "3e6ffc8c-d488-455a-abb5-5ddfbdc1a6b9",
     "crn": "S511935",
-    "status": "SUBMITTED",
+    "status": "NOT_ACCEPTED",
     "submission": {
-      "id": "31f9c786-c73b-4948-9e7e-7c0750d0a89d",
+      "id": "def7cd80-0258-4a5b-aa28-0e8eee3f0147",
       "localAuthority": {
-        "localAuthorityAreaId": "cb974b11-fad8-4b1e-a921-07a570fbe04e",
-        "localAuthorityAreaName": "Kunzehill"
+        "localAuthorityAreaId": "82464972-cf99-4fc4-9541-153b427f2430",
+        "localAuthorityAreaName": "North Warwickshire"
       },
       "submissionDate": "2025-07-29",
       "createdBy": "Jacob O'Connell-Gusikowski",
@@ -15,125 +15,136 @@
     }
   },
   "P712106": {
-    "caseId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "caseId": "8fd2e5e5-4b92-434b-8403-d6d114ca85d4",
     "crn": "P712106",
-    "status": "NOT_ACCEPTED",
+    "status": "ACCEPTED",
     "submission": {
-      "id": "cbd05aed-cef2-40f8-ad70-370d9e119306",
+      "id": "de7cca02-ff51-4b69-ba89-6e4f3526d922",
       "localAuthority": {
-        "localAuthorityAreaId": "e73b0457-d5bd-4e66-be56-2426dd403b2b",
-        "localAuthorityAreaName": "Pacocha-upon-Hermiston"
+        "localAuthorityAreaId": "52ecbfff-c361-4138-9d70-655e708734e4",
+        "localAuthorityAreaName": "Ards and North Down"
       },
-      "referenceNumber": "BIHHYJ0CFZ",
-      "submissionDate": "2025-12-12",
-      "createdBy": "Sidney Willms",
-      "createdAt": "2025-08-27T03:10:59.485Z"
+      "referenceNumber": "VF2JEZBR1K",
+      "submissionDate": "2025-05-17",
+      "createdBy": "Barbara Schimmel",
+      "createdAt": "2025-05-07T08:53:50.675Z"
     }
   },
   "T274481": {
-    "caseId": "c3d4e5f6-a7b8-9012-cdef-012345678902",
+    "caseId": "47adb9ec-4c9d-403b-ac31-678d81598eb1",
     "crn": "T274481",
-    "status": "NOT_STARTED"
+    "status": "SUBMITTED",
+    "submission": {
+      "id": "fae70f91-1b80-4520-8fc2-fe518abfc519",
+      "localAuthority": {
+        "localAuthorityAreaId": "4e15e31a-d863-4e10-9fed-c25128888102",
+        "localAuthorityAreaName": "Fermanagh and Omagh"
+      },
+      "referenceNumber": "9EM2JFZGYL",
+      "submissionDate": "2025-05-06",
+      "createdBy": "Dr. Noah Kling",
+      "createdAt": "2026-01-31T05:30:30.991Z"
+    }
   },
   "V938951": {
-    "caseId": "d4e5f6a7-b8c9-0123-defa-123456789013",
+    "caseId": "f3d230ae-1812-46ae-856a-9a34ead9b968",
     "crn": "V938951",
     "status": "SUBMITTED",
     "submission": {
-      "id": "72a76e05-5dc0-4523-a2bd-b5db80b22834",
+      "id": "e0b70402-2206-4004-b5b5-3b6c2111745d",
       "localAuthority": {
-        "localAuthorityAreaId": "6c57b79d-9185-49c2-8e44-4f0ccadc804b",
-        "localAuthorityAreaName": "Upton Rice"
+        "localAuthorityAreaId": "f33dafb8-4c65-46b2-a976-f5e62baac812",
+        "localAuthorityAreaName": "Wrexham"
       },
-      "referenceNumber": "8DOJHCECHT",
-      "submissionDate": "2025-07-18",
-      "createdBy": "Carrie Homenick",
-      "createdAt": "2025-11-16T20:24:28.171Z"
+      "referenceNumber": "1INZRS7AD2",
+      "submissionDate": "2025-04-30",
+      "createdBy": "Willis Hartmann",
+      "createdAt": "2025-12-29T04:08:00.882Z"
     }
   },
   "T229440": {
-    "caseId": "e5f6a7b8-c9d0-1234-efab-234567890124",
+    "caseId": "127e3f2f-cec2-4186-a958-d63db3692f7a",
     "crn": "T229440",
     "status": "NOT_ACCEPTED",
     "submission": {
-      "id": "f43d5a9f-b5aa-4d6c-88fb-1ebce0f3756a",
+      "id": "018583e0-7cb8-43f3-a748-797b42046d80",
       "localAuthority": {
-        "localAuthorityAreaId": "1a7c9cb6-5c61-4393-aaaf-4d1118f95a67",
-        "localAuthorityAreaName": "Bartolettiham"
+        "localAuthorityAreaId": "4f1e21c6-ec5f-4da5-9154-e166d4f98057",
+        "localAuthorityAreaName": "Moray"
       },
-      "referenceNumber": "WSM5KRC7C2",
-      "submissionDate": "2025-07-24",
-      "createdBy": "Ollie Friesen",
-      "createdAt": "2025-12-14T02:01:03.957Z"
+      "referenceNumber": "HSNGKTFAZY",
+      "submissionDate": "2025-06-07",
+      "createdBy": "Mattie Berge",
+      "createdAt": "2025-10-21T14:22:05.277Z"
     }
   },
   "H271226": {
-    "caseId": "f6a7b8c9-d0e1-2345-fabc-345678901235",
+    "caseId": "916525a0-b7b5-498f-94a7-cbf28d69a723",
     "crn": "H271226",
-    "status": "SUBMITTED",
+    "status": "NOT_ACCEPTED",
     "submission": {
-      "id": "ce392295-9d84-4784-8e28-4574d8846678",
+      "id": "2dd0e325-e48f-48eb-9983-8b89411be9d0",
       "localAuthority": {
-        "localAuthorityAreaId": "f2952157-259b-4e56-b737-02a3bacb2373",
-        "localAuthorityAreaName": "Little Ortiz"
+        "localAuthorityAreaId": "5ec1bc45-9891-421c-aaca-a092d8bb4f1a",
+        "localAuthorityAreaName": "Lancashire"
       },
-      "referenceNumber": "1T2XQNEQPC",
-      "submissionDate": "2025-07-27",
-      "createdBy": "Robyn Graham",
-      "createdAt": "2025-11-11T22:31:39.871Z"
+      "referenceNumber": "ZN4A1TN24M",
+      "submissionDate": "2025-11-03",
+      "createdBy": "Lester Waelchi",
+      "createdAt": "2026-01-29T20:27:58.912Z"
     }
   },
   "U934069": {
-    "caseId": "a7b8c9d0-e1f2-3456-abcd-456789012346",
+    "caseId": "9b7d50b6-bc25-49d5-b97a-857ae300a7bf",
     "crn": "U934069",
-    "status": "ACCEPTED",
-    "submission": {
-      "id": "c3b210ed-795f-4504-b198-6bf03bdea664",
-      "localAuthority": {
-        "localAuthorityAreaId": "7d20be18-860e-4f72-a9e9-e98ca109aa06",
-        "localAuthorityAreaName": "South Willmsworth"
-      },
-      "referenceNumber": "USQAA1MTF7",
-      "submissionDate": "2025-04-19",
-      "createdBy": "Bobby Kunze-Sauer",
-      "createdAt": "2025-10-17T07:44:58.264Z"
-    }
+    "status": "NOT_STARTED"
   },
   "I322559": {
-    "caseId": "b8c9d0e1-f2a3-4567-bcde-567890123457",
+    "caseId": "ed36d7c8-6745-45dc-9dac-8bf5c869baee",
     "crn": "I322559",
-    "status": "SUBMITTED",
+    "status": "ACCEPTED",
     "submission": {
-      "id": "2432f329-988e-4d8e-ab4d-e89ec1abaad2",
+      "id": "7ebb8a53-ab24-48e1-ab76-8568c3f9753c",
       "localAuthority": {
-        "localAuthorityAreaId": "58e0c264-0df9-44a4-851a-b233d44fda15",
-        "localAuthorityAreaName": "East Cremin"
+        "localAuthorityAreaId": "e5faac5d-b227-44dd-a31e-0f0b7254eb0f",
+        "localAuthorityAreaName": "West Midlands"
       },
-      "referenceNumber": "X8EO6RTBJE",
-      "submissionDate": "2025-09-15",
-      "createdBy": "Claudia Ferry",
-      "createdAt": "2025-09-01T12:55:35.666Z"
+      "referenceNumber": "ZYBVXCTIFV",
+      "submissionDate": "2025-09-29",
+      "createdBy": "Alexis Stroman",
+      "createdAt": "2025-06-23T11:29:38.270Z"
     }
   },
   "L247269": {
-    "caseId": "c9d0e1f2-a3b4-5678-cdef-678901234568",
+    "caseId": "1135c4d8-ab7d-4749-b309-68643b462bed",
     "crn": "L247269",
     "status": "SUBMITTED",
     "submission": {
-      "id": "bc5d86b5-ec5e-427b-b83b-11ed2535a1c5",
+      "id": "e0330fc5-bb50-49fc-a035-1e1380d8b724",
       "localAuthority": {
-        "localAuthorityAreaId": "6b33caa1-4263-4a5f-bc78-161d2fe0bc25",
-        "localAuthorityAreaName": "Lower Stroman Court"
+        "localAuthorityAreaId": "bb91cbdb-c4a4-4471-834d-e2a3d954a700",
+        "localAuthorityAreaName": "Wiltshire"
       },
-      "referenceNumber": "GAHQKKSBQF",
-      "submissionDate": "2026-02-06",
-      "createdBy": "Randolph Doyle",
-      "createdAt": "2025-11-24T11:12:39.093Z"
+      "referenceNumber": "S6JDBOOIBD",
+      "submissionDate": "2025-09-10",
+      "createdBy": "Samantha Morissette",
+      "createdAt": "2025-11-11T19:07:09.653Z"
     }
   },
   "F608163": {
-    "caseId": "d0e1f2a3-b4c5-6789-defa-789012345679",
+    "caseId": "917e5545-b40a-4f97-b3fe-251e72fcfbab",
     "crn": "F608163",
-    "status": "NOT_STARTED"
+    "status": "NOT_ACCEPTED",
+    "submission": {
+      "id": "d24329e2-a352-495a-839d-8467ceadf62b",
+      "localAuthority": {
+        "localAuthorityAreaId": "ac364104-06af-4b29-8127-113f490f252f",
+        "localAuthorityAreaName": "Tees Valley"
+      },
+      "referenceNumber": "SD74EUCJ0W",
+      "submissionDate": "2025-06-16",
+      "createdBy": "Kimberly Welch",
+      "createdAt": "2025-07-25T13:01:23.580Z"
+    }
   }
 }

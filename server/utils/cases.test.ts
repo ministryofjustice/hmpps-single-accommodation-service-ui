@@ -138,19 +138,11 @@ describe('cases utilities', () => {
   })
 
   describe('casesToRows', () => {
-    afterEach(() => {
-      config.flags.v10CasesList = false
-    })
-
-    it('returns only person when v10CasesList flag is off', () => {
-      const cases = caseFactory.buildList(1)
-
-      expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }]])
-    })
-
-    it('returns full formatted rows when v10CasesList flag is on', () => {
+    beforeEach(() => {
       config.flags.v10CasesList = true
+    })
 
+    it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)
 
       expect(casesToRows(cases)).toEqual([
@@ -162,6 +154,18 @@ describe('cases utilities', () => {
           { html: actionsCell(cases[0].actions) },
         ],
       ])
+    })
+
+    describe('when v10CasesList flag is off', () => {
+      beforeEach(() => {
+        config.flags.v10CasesList = false
+      })
+
+      it('returns only person cell', () => {
+        const cases = caseFactory.buildList(1)
+
+        expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }]])
+      })
     })
   })
 

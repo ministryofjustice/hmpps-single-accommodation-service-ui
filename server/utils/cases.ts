@@ -134,29 +134,31 @@ export const accommodationCard = (
 
 export const casesToRows = (cases: Case[]): TableRow[] =>
   cases.map(c => {
-    const row: TableRow = [htmlContent(personCell(c))]
-    if (config.flags.v10CasesList) {
-      row.push(
-        htmlContent(accommodationCell('current', c.currentAccommodation)),
-        htmlContent(accommodationCell('next', c.nextAccommodation)),
-        htmlContent(statusCell(caseStatusCell(c))),
-        htmlContent(actionsCell(c.actions)),
-      )
+    if (!config.flags.v10CasesList) {
+      return [htmlContent(personCell(c))]
     }
-    return row
+
+    return [
+      htmlContent(personCell(c)),
+      htmlContent(accommodationCell('current', c.currentAccommodation)),
+      htmlContent(accommodationCell('next', c.nextAccommodation)),
+      htmlContent(statusCell(caseStatusCell(c))),
+      htmlContent(actionsCell(c.actions)),
+    ]
   })
 
 export const casesTableColumns = () => {
-  const columns = [{ text: 'Person' }]
-  if (config.flags.v10CasesList) {
-    columns.push(
-      { text: 'Current accommodation' },
-      { text: 'Next accommodation' },
-      { text: 'Status' },
-      { text: 'Actions' },
-    )
+  if (!config.flags.v10CasesList) {
+    return [{ text: 'Person' }]
   }
-  return columns
+
+  return [
+    { text: 'Person' },
+    { text: 'Current accommodation' },
+    { text: 'Next accommodation' },
+    { text: 'Status' },
+    { text: 'Actions' },
+  ]
 }
 
 export const caseAssignedTo = (c: Case, id: string): string => {

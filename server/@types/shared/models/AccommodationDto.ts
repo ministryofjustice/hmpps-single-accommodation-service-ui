@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AccommodationDetail } from './AccommodationDetail';
+import type { AccommodationSummaryDto } from './AccommodationSummaryDto';
 export type AccommodationDto = {
     crn: string;
-    current?: (AccommodationDetail | null);
-    next?: (AccommodationDetail | null);
+    current?: (AccommodationSummaryDto | null);
+    next?: (AccommodationSummaryDto | null);
 };
 

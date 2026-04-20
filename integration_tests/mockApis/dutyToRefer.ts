@@ -37,7 +37,7 @@ export default {
         urlPattern: apiPaths.cases.dutyToRefer.submit({ crn }),
       },
       response: {
-        status: 200,
+        status: 201,
       },
     }),
   stubUpdateDutyToRefer: (crn: string, id: string): SuperAgentRequest =>

@@ -79,7 +79,7 @@ describeClient('DutyToReferClient', provider => {
         body: command,
       },
       willRespondWith: {
-        status: 200,
+        status: 201,
       },
     })
 

@@ -11,6 +11,11 @@
   @include govuk-font($size: 19, $weight: 'regular');
 }
 
+.sas-card--block {
+  border-width: 0;
+  background: govuk-colour("light-grey");
+}
+
 .sas-card__head {
   display: flex;
   align-items: baseline;

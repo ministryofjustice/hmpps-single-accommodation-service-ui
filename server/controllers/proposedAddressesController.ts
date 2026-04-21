@@ -67,7 +67,7 @@ export default class ProposedAddressesController {
         correlationId: req.id,
       })
 
-      const [caseData, proposedAddress, auditRecords] = await Promise.all([
+      const [{ data: caseData }, { data: proposedAddress }, { data: auditRecords }] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.proposedAddressesService.getProposedAddress(token, crn, id),
         this.proposedAddressesService.getTimeline(token, crn, id),
@@ -136,7 +136,7 @@ export default class ProposedAddressesController {
 
       await this.formData.remove(crn, req.session)
 
-      const proposedAddress = await this.proposedAddressesService.getProposedAddress(token, crn, id)
+      const { data: proposedAddress } = await this.proposedAddressesService.getProposedAddress(token, crn, id)
       await this.formData.update(crn, req.session, { ...proposedAddress, redirect })
 
       return res.redirect(flowRedirects[page]({ crn }))
@@ -307,7 +307,7 @@ export default class ProposedAddressesController {
 
       const { arrangementSubTypeDescription, settledType } = proposedAddressFormSessionData
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
-      const caseData = await this.casesService.getCase(token, crn)
+      const { data: caseData } = await this.casesService.getCase(token, crn)
 
       return res.render('pages/proposed-address/type', {
         crn,
@@ -392,7 +392,7 @@ export default class ProposedAddressesController {
       if (redirect) return res.redirect(redirect)
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
-      const caseData = await this.casesService.getCase(token, crn)
+      const { data: caseData } = await this.casesService.getCase(token, crn)
 
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.nextAccommodation.pattern, req, [
         uiPaths.cases.show.pattern,
@@ -439,7 +439,7 @@ export default class ProposedAddressesController {
       await this.formData.update(crn, req.session, { redirect: uiPaths.proposedAddresses.checkYourAnswers({ crn }) })
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
-      const caseData = await this.casesService.getCase(token, crn)
+      const { data: caseData } = await this.casesService.getCase(token, crn)
 
       const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, caseData.name)
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.checkYourAnswers.pattern, req, [

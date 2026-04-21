@@ -2,7 +2,7 @@ import type { SuperAgentRequest } from 'superagent'
 import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
 import { GetCasesQuery } from '@sas/ui'
 import { queryParameters, stubApiError, stubFor } from './wiremock'
-import { caseFactory } from '../../server/testutils/factories'
+import { apiResponseFactory, caseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
 export default {
@@ -16,7 +16,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: cases || caseFactory.buildList(5),
+        jsonBody: apiResponseFactory.caseList(cases || caseFactory.buildList(5)),
       },
     }),
   stubGetCases500: (): SuperAgentRequest => stubApiError(apiPaths.cases.index({})),
@@ -29,7 +29,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: caseData || caseFactory.build({ crn }),
+        jsonBody: apiResponseFactory.case(caseData || caseFactory.build({ crn })),
       },
     }),
   stubGetCaseByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.show({ crn })),
@@ -42,7 +42,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: referrals || [],
+        jsonBody: apiResponseFactory.referralHistory(referrals || []),
       },
     }),
   stubGetReferralHistory500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.referrals({ crn })),

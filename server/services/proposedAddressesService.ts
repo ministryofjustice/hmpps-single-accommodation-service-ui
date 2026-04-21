@@ -1,5 +1,5 @@
 import { ProposedAddressFormData } from '@sas/ui'
-import { AccommodationDetail, NoteCommand } from '@sas/api'
+import { AccommodationDetail, NoteCommand, UpstreamFailureDto } from '@sas/api'
 import { ProposedAddressesClient } from '../data'
 import { formDataToRequestBody } from '../utils/proposedAddresses'
 
@@ -9,16 +9,25 @@ export default class ProposedAddressesService {
   async getProposedAddresses(
     token: string,
     crn: string,
-  ): Promise<{ proposed: AccommodationDetail[]; failedChecks: AccommodationDetail[] }> {
-    const allProposedAddresses = await this.proposedAddressesClient.getProposedAddresses(token, crn)
+  ): Promise<{
+    upstreamFailures?: UpstreamFailureDto[]
+    data: {
+      proposed: AccommodationDetail[]
+      failedChecks: AccommodationDetail[]
+    }
+  }> {
+    const { data, upstreamFailures } = await this.proposedAddressesClient.getProposedAddresses(token, crn)
 
     return {
-      proposed: allProposedAddresses.filter(address => address.verificationStatus !== 'FAILED'),
-      failedChecks: allProposedAddresses.filter(address => address.verificationStatus === 'FAILED'),
+      upstreamFailures,
+      data: {
+        proposed: data.filter(address => address.verificationStatus !== 'FAILED'),
+        failedChecks: data.filter(address => address.verificationStatus === 'FAILED'),
+      },
     }
   }
 
-  async getProposedAddress(token: string, crn: string, id: string): Promise<AccommodationDetail> {
+  async getProposedAddress(token: string, crn: string, id: string) {
     return this.proposedAddressesClient.getProposedAddress(token, crn, id)
   }
 

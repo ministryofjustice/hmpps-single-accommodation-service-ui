@@ -2,7 +2,7 @@ import type { SuperAgentRequest } from 'superagent'
 import { AccommodationDetail, AuditRecordDto } from '@sas/api'
 import { stubApiError, stubFor } from './wiremock'
 import apiPaths from '../../server/paths/api'
-import { auditRecordFactory } from '../../server/testutils/factories'
+import { apiResponseFactory, auditRecordFactory } from '../../server/testutils/factories'
 
 export default {
   stubGetProposedAddressesByCrn: (crn: string, proposedAddresses?: AccommodationDetail[]): SuperAgentRequest =>
@@ -14,7 +14,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: proposedAddresses || [],
+        jsonBody: apiResponseFactory.proposedAddresses(proposedAddresses || []),
       },
     }),
   stubGetProposedAddress: (crn: string, id: string, proposedAddress: AccommodationDetail): SuperAgentRequest =>
@@ -26,7 +26,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: proposedAddress,
+        jsonBody: apiResponseFactory.proposedAddress(proposedAddress),
       },
     }),
   stubUpdateProposedAddress: (crn: string, id: string): SuperAgentRequest =>
@@ -62,7 +62,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: records || auditRecordFactory.proposedAddressCreated().buildList(1),
+        jsonBody: apiResponseFactory.auditRecords(records || auditRecordFactory.proposedAddressCreated().buildList(1)),
       },
     }),
   stubSubmitProposedAddressTimelineNote: (crn: string, id: string): SuperAgentRequest =>

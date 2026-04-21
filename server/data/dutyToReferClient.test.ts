@@ -2,10 +2,9 @@ import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { faker } from '@faker-js/faker/locale/en'
 import describeClient from '../testutils/describeClient'
 import DutyToReferClient from './dutyToReferClient'
-import { dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
+import { apiResponseFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
-import dtrSubmissionFactory from '../testutils/factories/dutyToReferSubmission'
 
 describeClient('DutyToReferClient', provider => {
   let dutyToReferClient: DutyToReferClient
@@ -16,7 +15,7 @@ describeClient('DutyToReferClient', provider => {
   })
 
   it('should make a GET request to /cases/:crn/dtr using user token and return the response body', async () => {
-    const dutyToRefer = dutyToReferFactory.build()
+    const body = apiResponseFactory.dutyToRefer()
     const crn = crnFactory()
 
     await provider.addInteraction({
@@ -31,36 +30,42 @@ describeClient('DutyToReferClient', provider => {
       },
       willRespondWith: {
         status: 200,
-        body: dutyToRefer,
+        body,
       },
     })
 
     const response = await dutyToReferClient.getCurrentDtr('test-user-token', crn)
-    expect(response).toEqual(dutyToRefer)
+    expect(response).toEqual(body)
   })
 
   it('should make a GET request to /cases/:crn/dtr/:id using user token and return the response body', async () => {
-    const dutyToRefer = dutyToReferFactory.build({ submission: dtrSubmissionFactory.build() })
-    const crn = crnFactory()
+    const dutyToRefer = dutyToReferFactory.submitted().build()
+    const body = apiResponseFactory.dutyToRefer(dutyToRefer)
+    const {
+      data: {
+        crn,
+        submission: { id },
+      },
+    } = body
 
     await provider.addInteraction({
-      state: `DutyToRefer exists for submission ID ${dutyToRefer.submission.id}`,
+      state: `DutyToRefer exists for submission ID ${id}`,
       uponReceiving: 'a request to get the a Duty to refer by CRN and submission ID',
       withRequest: {
         method: 'GET',
-        path: apiPaths.cases.dutyToRefer.show({ crn, id: dutyToRefer.submission.id }),
+        path: apiPaths.cases.dutyToRefer.show({ crn, id }),
         headers: {
           authorization: 'Bearer test-user-token',
         },
       },
       willRespondWith: {
         status: 200,
-        body: dutyToRefer,
+        body,
       },
     })
 
-    const response = await dutyToReferClient.getDtrBySubmissionId('test-user-token', crn, dutyToRefer.submission.id)
-    expect(response).toEqual(dutyToRefer)
+    const response = await dutyToReferClient.getDtrBySubmissionId('test-user-token', crn, id)
+    expect(response).toEqual(body)
   })
 
   it('should make a POST request to /cases/:crn/dtr with data and return 200', async () => {

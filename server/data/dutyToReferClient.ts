@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { DutyToReferDto, DtrCommand } from '@sas/api'
+import { DtrCommand, ApiResponseDtoDutyToReferDto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -11,11 +11,11 @@ export default class DutyToReferClient extends RestClient {
   }
 
   getCurrentDtr(token: string, crn: string) {
-    return this.get<DutyToReferDto>({ path: apiPaths.cases.dutyToRefer.current({ crn }) }, asUser(token))
+    return this.get<ApiResponseDtoDutyToReferDto>({ path: apiPaths.cases.dutyToRefer.current({ crn }) }, asUser(token))
   }
 
   getDtrBySubmissionId(token: string, crn: string, id: string) {
-    return this.get<DutyToReferDto>({ path: apiPaths.cases.dutyToRefer.show({ crn, id }) }, asUser(token))
+    return this.get<ApiResponseDtoDutyToReferDto>({ path: apiPaths.cases.dutyToRefer.show({ crn, id }) }, asUser(token))
   }
 
   submit(token: string, crn: string, dutyToRefer: DtrCommand) {

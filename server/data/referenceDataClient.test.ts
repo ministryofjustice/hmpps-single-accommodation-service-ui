@@ -2,7 +2,7 @@ import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients
 import ReferenceDataClient from './referenceDataClient'
 import describeClient from '../testutils/describeClient'
 import apiPaths from '../paths/api'
-import { referenceDataFactory } from '../testutils/factories'
+import { apiResponseFactory } from '../testutils/factories'
 
 describeClient('ReferenceDataClient', provider => {
   let referenceDataClient: ReferenceDataClient
@@ -14,7 +14,7 @@ describeClient('ReferenceDataClient', provider => {
   })
 
   it('should make a GET request to /reference-data?type=LOCAL_AUTHORITY_AREAS and return the response body', async () => {
-    const referenceData = referenceDataFactory.buildList(3)
+    const body = apiResponseFactory.referenceData()
     const objectType = 'LOCAL_AUTHORITY_AREAS'
 
     await provider.addInteraction({
@@ -27,11 +27,11 @@ describeClient('ReferenceDataClient', provider => {
       },
       willRespondWith: {
         status: 200,
-        body: referenceData,
+        body,
       },
     })
 
     const response = await referenceDataClient.getReferenceData(token, objectType)
-    expect(response).toEqual(referenceData)
+    expect(response).toEqual(body)
   })
 })

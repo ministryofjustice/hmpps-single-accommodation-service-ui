@@ -7,6 +7,7 @@ import ReferralsService from '../services/referralsService'
 import { user } from '../routes/testutils/appSetup'
 import {
   accommodationFactory,
+  apiResponseFactory,
   caseFactory,
   dutyToReferFactory,
   eligibilityFactory,
@@ -75,7 +76,7 @@ describe('casesController', () => {
 
     it('renders the case list page for the current user by default', async () => {
       const cases = caseFactory.buildList(3)
-      casesService.getCases.mockResolvedValue(cases)
+      casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
 
       request.query = {}
 
@@ -100,7 +101,7 @@ describe('casesController', () => {
 
     it('renders a filtered case list page', async () => {
       const cases = caseFactory.buildList(3, { riskLevel: 'HIGH' })
-      casesService.getCases.mockResolvedValue(cases)
+      casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
 
       request.query = {
         searchTerm: 'some-crn',
@@ -139,11 +140,11 @@ describe('casesController', () => {
       const proposed = accommodationFactory.proposed().buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
 
-      casesService.getCase.mockResolvedValue(caseData)
-      referralsService.getReferralHistory.mockResolvedValue(referralHistory)
-      eligibilityService.getEligibility.mockResolvedValue(eligibility)
-      dutyToReferService.getCurrentDtr.mockResolvedValue(dutyToRefer)
-      proposedAddressesService.getProposedAddresses.mockResolvedValue({ proposed, failedChecks })
+      casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
+      referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
+      eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility(eligibility))
+      dutyToReferService.getCurrentDtr.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
+      proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed, failedChecks } })
 
       await casesController.show()(request, response, next)
 

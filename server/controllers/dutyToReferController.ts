@@ -36,7 +36,7 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [caseData, dutyToRefer] = await Promise.all([
+      const [{ data: caseData }, { data: dutyToRefer }] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
       ])
@@ -150,7 +150,7 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [caseData, dtr] = await Promise.all([
+      const [{ data: caseData }, { data: dtr }] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
       ])
@@ -203,7 +203,7 @@ export default class DutyToReferController {
   }
 
   private async getSubmissionPageData(token: string, crn: string) {
-    const [caseData, localAuthorities] = await Promise.all([
+    const [{ data: caseData }, { data: localAuthorities }] = await Promise.all([
       this.casesService.getCase(token, crn),
       this.referenceDataService.getLocalAuthorities(token),
     ])

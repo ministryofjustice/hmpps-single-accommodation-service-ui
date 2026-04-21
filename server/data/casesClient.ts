@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { CaseDto as Case } from '@sas/api'
+import { ApiResponseDtoCaseDto, ApiResponseDtoListCaseDto } from '@sas/api'
 import { GetCasesQuery } from '@sas/ui'
 import config from '../config'
 import logger from '../../logger'
@@ -60,10 +60,10 @@ export default class CasesClient extends RestClient {
   // TODO: Reinstate query when new case list endpoint accepts parameters
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getCases(token: string, query?: GetCasesQuery) {
-    return this.get<Case[]>({ path: apiPaths.cases.index({}) }, asUser(token))
+    return this.get<ApiResponseDtoListCaseDto>({ path: apiPaths.cases.index({}) }, asUser(token))
   }
 
   getCase(token: string, crn: string) {
-    return this.get<Case>({ path: apiPaths.cases.show({ crn }) }, asUser(token))
+    return this.get<ApiResponseDtoCaseDto>({ path: apiPaths.cases.show({ crn }) }, asUser(token))
   }
 }

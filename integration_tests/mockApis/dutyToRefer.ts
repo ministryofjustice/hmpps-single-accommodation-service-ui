@@ -1,7 +1,7 @@
 import type { SuperAgentRequest } from 'superagent'
 import { DutyToReferDto } from '@sas/api'
 import { stubFor, stubApiError } from './wiremock'
-import { dutyToReferFactory } from '../../server/testutils/factories'
+import { apiResponseFactory, dutyToReferFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
 export default {
@@ -14,7 +14,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: dutyToReferData || dutyToReferFactory.build(),
+        jsonBody: apiResponseFactory.dutyToRefer(dutyToReferData),
       },
     }),
   stubGetCurrentDtr500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.dutyToRefer.current({ crn })),
@@ -27,7 +27,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: dutyToReferData || dutyToReferFactory.submitted().build(),
+        jsonBody: apiResponseFactory.dutyToRefer(dutyToReferData || dutyToReferFactory.submitted().build()),
       },
     }),
   stubSubmitDutyToRefer: (crn: string): SuperAgentRequest =>

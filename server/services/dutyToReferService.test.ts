@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import DutyToReferService from './dutyToReferService'
 import DutyToReferClient from '../data/dutyToReferClient'
-import { dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
+import { apiResponseFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import crnFactory from '../testutils/crn'
 
 jest.mock('../data/dutyToReferClient')
@@ -19,23 +19,25 @@ describe('DutyToReferService', () => {
   it('should call getCurrentDtr on the api client and return its result', async () => {
     const crn = crnFactory()
     const dutyToRefer = dutyToReferFactory.build({ crn })
-    dutyToReferClient.getCurrentDtr.mockResolvedValue(dutyToRefer)
+    const response = apiResponseFactory.dutyToRefer(dutyToRefer)
+    dutyToReferClient.getCurrentDtr.mockResolvedValue(response)
 
     const result = await dutyToReferService.getCurrentDtr(token, crn)
 
     expect(dutyToReferClient.getCurrentDtr).toHaveBeenCalledWith(token, crn)
-    expect(result).toEqual(dutyToRefer)
+    expect(result).toEqual(response)
   })
 
   it('should call getDtrBySubmissionId on the api client and return its result', async () => {
     const crn = crnFactory()
     const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
-    dutyToReferClient.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
+    const response = apiResponseFactory.dutyToRefer(dutyToRefer)
+    dutyToReferClient.getDtrBySubmissionId.mockResolvedValue(response)
 
     const result = await dutyToReferService.getDtrBySubmissionId(token, crn, dutyToRefer.submission.id)
 
     expect(dutyToReferClient.getDtrBySubmissionId).toHaveBeenCalledWith(token, crn, dutyToRefer.submission.id)
-    expect(result).toEqual(dutyToRefer)
+    expect(result).toEqual(response)
   })
 
   it('should call update on the api client with dtr command data and return its result', async () => {

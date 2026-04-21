@@ -1,7 +1,7 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import CasesClient from './casesClient'
 import describeClient from '../testutils/describeClient'
-import { caseFactory } from '../testutils/factories'
+import { apiResponseFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 
 describeClient('CasesClient', provider => {
@@ -13,7 +13,7 @@ describeClient('CasesClient', provider => {
   })
 
   it('should make a GET request to /case-list using user token and return the response body', async () => {
-    const cases = caseFactory.buildList(2)
+    const body = apiResponseFactory.caseList()
 
     await provider.addInteraction({
       state: 'Cases exist for user',
@@ -27,17 +27,17 @@ describeClient('CasesClient', provider => {
       },
       willRespondWith: {
         status: 200,
-        body: cases,
+        body,
       },
     })
 
     const response = await casesClient.getCases('test-user-token')
-    expect(response).toEqual(cases)
+    expect(response).toEqual(body)
   })
 
   // TODO: Reinstate when new case list endpoint accepts parameters
   it.skip('should make a GET request to /case-list using user token and query parameters and return the response body', async () => {
-    const cases = caseFactory.buildList(2)
+    const body = apiResponseFactory.caseList()
 
     await provider.addInteraction({
       state: 'Cases exist for user with requested parameters',
@@ -55,17 +55,19 @@ describeClient('CasesClient', provider => {
       },
       willRespondWith: {
         status: 200,
-        body: cases,
+        body,
       },
     })
 
     const response = await casesClient.getCases('test-user-token', { searchTerm: 'bob', riskLevel: 'LOW' })
-    expect(response).toEqual(cases)
+    expect(response).toEqual(body)
   })
 
   it('should make a GET request to /cases/:crn using user token and return the response body', async () => {
-    const caseData = caseFactory.build()
-    const { crn } = caseData
+    const body = apiResponseFactory.case()
+    const {
+      data: { crn },
+    } = body
 
     await provider.addInteraction({
       state: `Case with CRN ${crn} exists for user`,
@@ -79,11 +81,11 @@ describeClient('CasesClient', provider => {
       },
       willRespondWith: {
         status: 200,
-        body: caseData,
+        body,
       },
     })
 
     const response = await casesClient.getCase('test-user-token', crn)
-    expect(response).toEqual(caseData)
+    expect(response).toEqual(body)
   })
 })

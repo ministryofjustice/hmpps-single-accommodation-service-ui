@@ -44,7 +44,7 @@ export default class CasesController {
       const { query } = req
 
       if (query.assignedTo === undefined) query.assignedTo = 'you'
-      const cases = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
+      const { data: cases } = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
       const filters = queryToFilters(query, req.url)
 
       return res.render('pages/index', {
@@ -88,7 +88,13 @@ export default class CasesController {
       })
       const { token } = res.locals.user
       try {
-        const [caseData, referralHistory, eligibility, dutyToRefer, proposedAddresses] = await Promise.all([
+        const [
+          { data: caseData },
+          { data: referralHistory },
+          { data: eligibility },
+          { data: dutyToRefer },
+          { data: proposedAddresses },
+        ] = await Promise.all([
           this.casesService.getCase(token, crn),
           this.referralsService.getReferralHistory(token, crn),
           this.eligibilityService.getEligibility(token, crn),

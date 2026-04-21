@@ -13,6 +13,7 @@ import {
 } from './cases'
 import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
+import config from '../config'
 
 describe('cases utilities', () => {
   describe('casesResultsSummary', () => {
@@ -137,6 +138,10 @@ describe('cases utilities', () => {
   })
 
   describe('casesToRows', () => {
+    beforeEach(() => {
+      config.flags.v10CasesList = true
+    })
+
     it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)
 
@@ -149,6 +154,18 @@ describe('cases utilities', () => {
           { html: actionsCell(cases[0].actions) },
         ],
       ])
+    })
+
+    describe('when v10CasesList flag is off', () => {
+      beforeEach(() => {
+        config.flags.v10CasesList = false
+      })
+
+      it('returns only person cell', () => {
+        const cases = caseFactory.buildList(1)
+
+        expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }]])
+      })
     })
   })
 

@@ -4,6 +4,7 @@ import { GetCasesQuery, StatusCell, StatusTag } from '@sas/ui'
 import { htmlContent } from './utils'
 import { addressLines } from './addresses'
 import { renderMacro, statusCell } from './macros'
+import config from '../config'
 
 export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
   FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
@@ -132,15 +133,25 @@ export const accommodationCard = (
 }
 
 export const casesToRows = (cases: Case[]): TableRow[] =>
-  cases.map(c => [
-    htmlContent(personCell(c)),
-    htmlContent(accommodationCell('current', c.currentAccommodation)),
-    htmlContent(accommodationCell('next', c.nextAccommodation)),
-    htmlContent(statusCell(caseStatusCell(c))),
-    htmlContent(actionsCell(c.actions)),
-  ])
+  cases.map(c => {
+    if (!config.flags.v10CasesList) {
+      return [htmlContent(personCell(c))]
+    }
+
+    return [
+      htmlContent(personCell(c)),
+      htmlContent(accommodationCell('current', c.currentAccommodation)),
+      htmlContent(accommodationCell('next', c.nextAccommodation)),
+      htmlContent(statusCell(caseStatusCell(c))),
+      htmlContent(actionsCell(c.actions)),
+    ]
+  })
 
 export const casesTableColumns = () => {
+  if (!config.flags.v10CasesList) {
+    return [{ text: 'Person' }]
+  }
+
   return [
     { text: 'Person' },
     { text: 'Current accommodation' },

@@ -114,4 +114,7 @@ export default {
   allowedRoles: get('SAS_ALLOWED_ROLES', '', requiredInProduction)
     .split(/[\s,]+/)
     .filter(Boolean),
+  flags: {
+    v10CasesList: get('V10_CASES_LIST', 'false') === 'true',
+  },
 }

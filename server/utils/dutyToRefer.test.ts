@@ -224,7 +224,13 @@ describe('duty to refer utils', () => {
       ['ACCEPTED', 'Some Council agreed to support this person with housing'],
       ['NOT_ACCEPTED', 'Some Council will not support this person with housing'],
     ] as const)('returns %s text for %s status', (status, expectedText) => {
-      expect(outcomeSupportText(status, 'Some Council')).toBe(expectedText)
+      const dutyToRefer = dutyToReferFactory.build({
+        status,
+        submission: dtrSubmissionFactory.build({
+          localAuthority: { localAuthorityAreaId: '1', localAuthorityAreaName: 'Some Council' },
+        }),
+      })
+      expect(outcomeSupportText(dutyToRefer)).toBe(expectedText)
     })
   })
 

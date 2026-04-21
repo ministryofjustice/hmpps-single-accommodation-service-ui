@@ -97,17 +97,17 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
     rows.push(
       summaryListRowHtml(
         'Status',
-        `${statusTag(dutyToReferStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer.status, dutyToRefer.submission.localAuthority.localAuthorityAreaName)}</p>`,
+        `${statusTag(dutyToReferStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
       ),
     )
   }
   return rows
 }
 
-export const outcomeSupportText = (status: DutyToReferDto['status'], localAuthorityAreaName: string): string =>
-  status === 'NOT_ACCEPTED'
-    ? `${localAuthorityAreaName} will not support this person with housing`
-    : `${localAuthorityAreaName} agreed to support this person with housing`
+export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string =>
+  dutyToRefer.status === 'NOT_ACCEPTED'
+    ? `${dutyToRefer.submission?.localAuthority?.localAuthorityAreaName} will not support this person with housing`
+    : `${dutyToRefer.submission?.localAuthority?.localAuthorityAreaName} agreed to support this person with housing`
 
 export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
   const { status } = dutyToRefer ?? {}
@@ -203,7 +203,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
 
   const { submissionDate, localAuthority, referenceNumber } = dtr.submission || {}
   const localAuthorityName = localAuthority?.localAuthorityAreaName
-  const outcomeText = isOutcome && localAuthorityName ? outcomeSupportText(status, localAuthorityName) : undefined
+  const outcomeText = isOutcome && localAuthorityName ? outcomeSupportText(dtr as DutyToReferDto) : undefined
 
   const submissionValues =
     status !== 'NOT_STARTED' && (submissionDate || localAuthorityName || referenceNumber)

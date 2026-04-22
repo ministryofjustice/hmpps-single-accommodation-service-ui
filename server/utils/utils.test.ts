@@ -3,6 +3,7 @@ import {
   convertToTitleCase,
   htmlContent,
   initialiseName,
+  summaryListRowOptional,
   summaryListRowText,
   summaryListRowHtml,
   textContent,
@@ -181,6 +182,22 @@ describe('summaryListRowHtml', () => {
           { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
         ],
       },
+    })
+  })
+})
+
+describe('summaryListRowOptional', () => {
+  it('returns a row for summary list when value is present', () => {
+    expect(summaryListRowOptional('Reference', 'ABC123', 'No reference added')).toEqual({
+      key: { text: 'Reference' },
+      value: { text: 'ABC123' },
+    })
+  })
+
+  it('returns a row for summary list when value is undefined', () => {
+    expect(summaryListRowOptional('Reference', undefined, 'No reference added')).toEqual({
+      key: { text: 'Reference' },
+      value: { html: '<span class="sas-colour--dark-grey">No reference added</span>' },
     })
   })
 })

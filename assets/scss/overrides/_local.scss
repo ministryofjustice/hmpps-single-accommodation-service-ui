@@ -11,3 +11,7 @@
 .govuk-template .govuk-width-container {
   @include govuk-width-container;
 }
+
+.sas-colour--dark-grey {
+  color: govuk-colour("dark-grey");
+}

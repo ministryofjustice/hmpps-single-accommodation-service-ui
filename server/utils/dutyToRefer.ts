@@ -6,7 +6,7 @@ import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './da
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
 import { statusTag } from './macros'
-import { summaryListRowHtml, summaryListRowText } from './utils'
+import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
 
 const dutyToReferStatusTag = (status?: DutyToReferDto['status']): StatusTag =>
   ({
@@ -84,7 +84,7 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
       ),
     )
     rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
-    rows.push(summaryListRowText('Reference', dutyToRefer.submission.referenceNumber))
+    rows.push(summaryListRowOptional('Reference', dutyToRefer.submission.referenceNumber, 'No reference added'))
   }
   return rows
 }
@@ -121,7 +121,7 @@ export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] 
     case 'SUBMITTED':
       return [
         summaryListRowText('Submitted to', dutyToRefer?.submission?.localAuthority?.localAuthorityAreaName),
-        summaryListRowText('Reference', dutyToRefer?.submission?.referenceNumber),
+        summaryListRowOptional('Reference', dutyToRefer?.submission?.referenceNumber, 'No reference added'),
         summaryListRowText('Submitted', formatDateAndDaysAgo(dutyToRefer?.submission?.submissionDate)),
       ]
     default:

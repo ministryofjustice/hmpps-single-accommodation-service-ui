@@ -82,3 +82,12 @@ export const summaryListRowHtml = (
   ...summaryListRowText(label, value, actions),
   value: htmlContent(value),
 })
+
+export const noValueHtml = (text: string, classes: string = 'sas-colour--dark-grey'): string =>
+  `<span class="${classes}">${text}</span>`
+
+export const summaryListRowOptional = (
+  label: string,
+  value: string | undefined,
+  noValueText: string,
+): SummaryListRow => (value ? summaryListRowText(label, value) : summaryListRowHtml(label, noValueHtml(noValueText)))

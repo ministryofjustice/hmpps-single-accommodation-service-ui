@@ -6,11 +6,11 @@
 export type { AccommodationAddressDetails } from './models/AccommodationAddressDetails';
 export type { AccommodationDetail } from './models/AccommodationDetail';
 export type { AccommodationDetailCommand } from './models/AccommodationDetailCommand';
-export type { AccommodationDto } from './models/AccommodationDto';
 export type { AccommodationReferralDto } from './models/AccommodationReferralDto';
 export type { AccommodationStatusDto } from './models/AccommodationStatusDto';
 export type { AccommodationSummaryDto } from './models/AccommodationSummaryDto';
 export type { AccommodationTypeDto } from './models/AccommodationTypeDto';
+export type { ApiResponseDtoAccommodationSummaryDto } from './models/ApiResponseDtoAccommodationSummaryDto';
 export type { ApiResponseDtoCaseDto } from './models/ApiResponseDtoCaseDto';
 export type { ApiResponseDtoListAccommodationSummaryDto } from './models/ApiResponseDtoListAccommodationSummaryDto';
 export type { ApiResponseDtoListCaseDto } from './models/ApiResponseDtoListCaseDto';

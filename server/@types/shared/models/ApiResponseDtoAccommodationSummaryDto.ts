@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AccommodationSummaryDto } from './AccommodationSummaryDto';
-export type AccommodationDto = {
-    crn: string;
-    current?: (AccommodationSummaryDto | null);
-    next?: (AccommodationSummaryDto | null);
+import type { UpstreamFailureDto } from './UpstreamFailureDto';
+export type ApiResponseDtoAccommodationSummaryDto = {
+    data: AccommodationSummaryDto;
+    upstreamFailures: Array<UpstreamFailureDto>;
 };
 

@@ -4,6 +4,15 @@ import { faker } from '@faker-js/faker'
 import crn from '../crn'
 import serviceResultFactory from './serviceResult'
 
+const caseActions = [
+  'Confirm next address',
+  'Add DTR outcome',
+  'Add proposed address',
+  'Start CAS3 referral',
+  'Submit a CRS referral',
+  'Consider home visit',
+]
+
 export default Factory.define<EligibilityDto>(() => {
   const allServiceResults = {
     cas1: serviceResultFactory.notEligible().build(),
@@ -18,7 +27,7 @@ export default Factory.define<EligibilityDto>(() => {
 
   return {
     crn: crn(),
-    caseActions: [],
+    caseActions: faker.helpers.arrayElements(caseActions, { min: 1, max: 3 }),
     ...allServiceResults,
   }
 })

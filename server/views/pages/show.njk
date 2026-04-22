@@ -3,21 +3,22 @@
 {% from "components/macros/statusCard.njk" import statusCard %}
 {% from "components/macros/accommodationCard.njk" import accommodationCard %}
 {% from "components/macros/referralHistoryTable.njk" import referralHistoryTable %}
-
 {% extends "partials/layout.njk" %}
 
 {% set pageTitle = applicationName + " - Profile" %}
 {% set mainClasses = "sas-profile-page" %}
 
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-      items: [
-          {
-              text: "Case list",
-              href: "/"
-          }
-      ]
-  }) }}
+  {{
+    govukBreadcrumbs({
+        items: [
+            {
+                text: "Case list",
+                href: "/"
+            }
+        ]
+    })
+  }}
   {{ super() }}
 {% endblock %}
 
@@ -35,7 +36,17 @@
         {{ accommodationCard(nextAccommodationCard) }}
       {% endif %}
 
-      <!-- actions -->
+      {% if nextActions | length %}
+        <div class="sas-card sas-card--block">
+          <h3 class="govuk-heading-m">Next actions</h3>
+
+          <ul class="govuk-list govuk-list--bullet">
+            {% for action in nextActions %}
+              <li>{{ action }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
 
       {{ accommodationCard(currentAccommodationCard) }}
 
@@ -58,7 +69,11 @@
       <section class="govuk-!-margin-top-8">
         <header class="sas-section__header">
           <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Proposed addresses</h2>
-          <a href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}" class="govuk-link govuk-link--no-visited-state govuk-body">Add a proposed address</a>
+          <a
+            href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}"
+            class="govuk-link govuk-link--no-visited-state govuk-body"
+            >Add a proposed address</a
+          >
         </header>
 
         {% if proposedAddresses | length %}

@@ -99,6 +99,7 @@ export default class CasesController {
         return res.render('pages/show', {
           caseData,
           assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+          nextActions: eligibility.caseActions,
           nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
           currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
           referralHistoryRows: referralHistoryRows(referralHistory),

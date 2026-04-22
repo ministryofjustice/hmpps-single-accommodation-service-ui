@@ -82,3 +82,11 @@ export const summaryListRowHtml = (
   ...summaryListRowText(label, value, actions),
   value: htmlContent(value),
 })
+
+const noValueHtml = (text: string): string => `<span class="govuk-hint govuk-!-font-size-16">${text}</span>`
+
+export const summaryListRowOptional = (
+  label: string,
+  value: string | undefined,
+  noValueText: string,
+): SummaryListRow => (value ? summaryListRowText(label, value) : summaryListRowHtml(label, noValueHtml(noValueText)))

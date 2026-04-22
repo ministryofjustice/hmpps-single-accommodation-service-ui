@@ -27,19 +27,12 @@ describe('eligibilityToEligibilityCards', () => {
 
     expect(cards).toHaveLength(2)
     expect(cards[0].heading).toContain('Approved premises (CAS1)')
-    // TODO add back cas2 assertions when needed
-    // expect(cards[1].heading).toContain('CAS2 for HDC')
-    // expect(cards[2].heading).toContain('CAS2 for court bail')
-    // expect(cards[3].heading).toContain('CAS2 for prison bail')
     expect(cards[1].heading).toContain('CAS3 (transitional accommodation)')
   })
 
   it('returns an array of eligibility card objects', () => {
     const eligibility = eligibilityFactory.build({
       cas1: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),
-      cas2Hdc: serviceResultFactory.build({ serviceStatus: 'UPCOMING' }),
-      cas2CourtBail: serviceResultFactory.build({ serviceStatus: 'NOT_ELIGIBLE' }),
-      cas2PrisonBail: serviceResultFactory.build({ serviceStatus: 'SUBMITTED' }),
       cas3: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }),
     })
 

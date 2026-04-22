@@ -5,16 +5,6 @@
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "SUBMITTED",
-      "actions": ["see"]
-    },
-    "cas2PrisonBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
     }
@@ -25,16 +15,6 @@
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2PrisonBail": {
-      "serviceStatus": "UPCOMING",
-      "actions": ["biodegrade"]
-    },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
     }
@@ -43,15 +23,6 @@
     "crn": "T274481",
     "caseActions": ["Add proposed address", "Consider home visit", "Add DTR outcome"],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2PrisonBail": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
     "cas3": {
@@ -65,15 +36,6 @@
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2PrisonBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
     "cas3": {
       "serviceStatus": "CONFIRMED",
       "actions": ["cripple"]
@@ -85,16 +47,6 @@
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2PrisonBail": {
-      "serviceStatus": "CONFIRMED",
-      "actions": ["amount"]
-    },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
     }
@@ -105,16 +57,6 @@
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2PrisonBail": {
-      "serviceStatus": "CONFIRMED",
-      "actions": ["intrigue"]
-    },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
     }
@@ -123,15 +65,6 @@
     "crn": "U934069",
     "caseActions": ["Consider home visit", "Add proposed address"],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2Hdc": {
-      "serviceStatus": "REJECTED"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2PrisonBail": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
     "cas3": {
@@ -144,15 +77,6 @@
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "CONFIRMED"
-    },
-    "cas2PrisonBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
     }
@@ -163,15 +87,6 @@
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
-    "cas2Hdc": {
-      "serviceStatus": "UPCOMING"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2PrisonBail": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
     "cas3": {
       "serviceStatus": "NOT_ELIGIBLE"
     }
@@ -180,15 +95,6 @@
     "crn": "F608163",
     "caseActions": ["Consider home visit"],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2Hdc": {
-      "serviceStatus": "NOT_ELIGIBLE"
-    },
-    "cas2CourtBail": {
-      "serviceStatus": "REJECTED"
-    },
-    "cas2PrisonBail": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
     "cas3": {

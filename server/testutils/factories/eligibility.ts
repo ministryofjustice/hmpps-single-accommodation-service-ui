@@ -16,9 +16,6 @@ const caseActions = [
 export default Factory.define<EligibilityDto>(() => {
   const allServiceResults = {
     cas1: serviceResultFactory.notEligible().build(),
-    cas2Hdc: serviceResultFactory.notEligible().build(),
-    cas2CourtBail: serviceResultFactory.notEligible().build(),
-    cas2PrisonBail: serviceResultFactory.notEligible().build(),
     cas3: serviceResultFactory.notEligible().build(),
   }
 

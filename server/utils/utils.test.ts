@@ -197,7 +197,7 @@ describe('summaryListRowOptional', () => {
   it('returns a row for summary list when value is undefined', () => {
     expect(summaryListRowOptional('Reference', undefined, 'No reference added')).toEqual({
       key: { text: 'Reference' },
-      value: { html: '<span class="govuk-hint govuk-!-font-size-16">No reference added</span>' },
+      value: { html: '<span class="sas-colour--dark-grey">No reference added</span>' },
     })
   })
 })

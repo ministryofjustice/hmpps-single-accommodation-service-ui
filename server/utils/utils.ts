@@ -83,7 +83,8 @@ export const summaryListRowHtml = (
   value: htmlContent(value),
 })
 
-const noValueHtml = (text: string): string => `<span class="govuk-hint govuk-!-font-size-16">${text}</span>`
+export const noValueHtml = (text: string, classes: string = 'sas-colour--dark-grey'): string =>
+  `<span class="${classes}">${text}</span>`
 
 export const summaryListRowOptional = (
   label: string,

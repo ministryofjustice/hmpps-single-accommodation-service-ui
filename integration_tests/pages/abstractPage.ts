@@ -101,7 +101,7 @@ export default class AbstractPage {
       })
       .locator('.govuk-summary-list__value')
 
-    const values = Array.isArray(value) ? value.filter(Boolean) : [value]
+    const values = (Array.isArray(value) ? value : [value]).filter(Boolean)
     for await (const item of values) {
       await expect(summaryItem).toContainText(item)
     }
@@ -130,7 +130,8 @@ export default class AbstractPage {
     }
 
     for await (const detail of cardData.details || []) {
-      await this.shouldShowSummaryItem(detail.key.text, detail.value.text, card)
+      const value = detail.value.text || detail.value.html?.replace(/<[^>]*>/g, '')
+      await this.shouldShowSummaryItem(detail.key.text, value, card)
     }
 
     for await (const link of cardData.links || []) {

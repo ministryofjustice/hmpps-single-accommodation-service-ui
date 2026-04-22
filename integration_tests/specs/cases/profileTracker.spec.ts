@@ -45,7 +45,6 @@ test.describe('Profile Tracker Page', () => {
     const dutyToRefer = dutyToReferFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
       cas1: serviceResultFactory.build(),
-      cas2Hdc: serviceResultFactory.build(),
       cas3: serviceResultFactory.build(),
     })
     const referrals = referralFactory.buildList(3)

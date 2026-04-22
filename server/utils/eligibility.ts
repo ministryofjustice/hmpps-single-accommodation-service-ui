@@ -51,10 +51,6 @@ export const eligibilityStatusCard = (title: string, service?: ServiceResult): S
 export const eligibilityToEligibilityCards = (eligibility: EligibilityDto): StatusCard[] => {
   const cardConfigs = [
     { title: 'Approved premises (CAS1)', eligibility: eligibility.cas1 },
-    // TODO add back cas2 when needed
-    // { title: 'CAS2 for HDC', eligibility: eligibility.cas2Hdc },
-    // { title: 'CAS2 for court bail', eligibility: eligibility.cas2CourtBail },
-    // { title: 'CAS2 for prison bail', eligibility: eligibility.cas2PrisonBail },
     { title: 'CAS3 (transitional accommodation)', eligibility: eligibility.cas3 },
   ]
 

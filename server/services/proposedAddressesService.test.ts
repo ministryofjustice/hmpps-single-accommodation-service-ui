@@ -1,5 +1,5 @@
 import ProposedAddressesClient from '../data/proposedAddressesClient'
-import { accommodationFactory, auditRecordFactory, proposedAddressFormFactory } from '../testutils/factories'
+import { accommodationFactory, apiResponseFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
 import { formDataToRequestBody } from '../utils/proposedAddresses'
 
@@ -28,33 +28,38 @@ describe('ProposedAddressesService', () => {
       const notCheckedAddress = accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecksAddress = accommodationFactory.proposed().build({ verificationStatus: 'FAILED' })
 
-      proposedAddressesClient.getProposedAddresses.mockResolvedValue([
-        passedChecksAddress,
-        failedChecksAddress,
-        notCheckedAddress,
-        confirmedAddress,
-      ])
+      proposedAddressesClient.getProposedAddresses.mockResolvedValue(
+        apiResponseFactory.proposedAddresses([
+          passedChecksAddress,
+          failedChecksAddress,
+          notCheckedAddress,
+          confirmedAddress,
+        ]),
+      )
 
       const result = await proposedAddressesService.getProposedAddresses(token, crn)
 
       expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn)
       expect(result).toEqual({
-        proposed: [passedChecksAddress, notCheckedAddress, confirmedAddress],
-        failedChecks: [failedChecksAddress],
+        upstreamFailures: [],
+        data: {
+          proposed: [passedChecksAddress, notCheckedAddress, confirmedAddress],
+          failedChecks: [failedChecksAddress],
+        },
       })
     })
   })
 
   describe('getProposedAddress', () => {
     it('should call getProposedAddress on the api client and return the proposed address', async () => {
-      const proposedAddress = accommodationFactory.proposed().build({ id })
+      const response = apiResponseFactory.proposedAddress()
 
-      proposedAddressesClient.getProposedAddress.mockResolvedValue(proposedAddress)
+      proposedAddressesClient.getProposedAddress.mockResolvedValue(response)
 
       const result = await proposedAddressesService.getProposedAddress(token, crn, id)
 
       expect(proposedAddressesClient.getProposedAddress).toHaveBeenCalledWith(token, crn, id)
-      expect(result).toEqual(proposedAddress)
+      expect(result).toEqual(response)
     })
   })
 
@@ -84,14 +89,14 @@ describe('ProposedAddressesService', () => {
 
   describe('getTimeline', () => {
     it('should call getTimeline on the api client and return the proposed address timeline', async () => {
-      const auditRecords = auditRecordFactory.buildList(3)
+      const response = apiResponseFactory.auditRecords()
 
-      proposedAddressesClient.getTimeline.mockResolvedValue(auditRecords)
+      proposedAddressesClient.getTimeline.mockResolvedValue(response)
 
       const result = await proposedAddressesService.getTimeline(token, crn, id)
 
       expect(proposedAddressesClient.getTimeline).toHaveBeenCalledWith(token, crn, id)
-      expect(result).toEqual(auditRecords)
+      expect(result).toEqual(response)
     })
   })
 

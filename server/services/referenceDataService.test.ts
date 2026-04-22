@@ -1,6 +1,6 @@
 import ReferenceDataService from './referenceDataService'
 import ReferenceDataClient from '../data/referenceDataClient'
-import { referenceDataFactory } from '../testutils/factories'
+import { apiResponseFactory } from '../testutils/factories'
 
 jest.mock('../data/referenceDataClient')
 
@@ -14,12 +14,12 @@ describe('ReferenceDataService', () => {
   })
 
   it('should call getLocalAuthorities on the api client and return its result', async () => {
-    const referenceData = referenceDataFactory.buildList(3)
-    referenceDataClient.getReferenceData.mockResolvedValue(referenceData)
+    const response = apiResponseFactory.referenceData()
+    referenceDataClient.getReferenceData.mockResolvedValue(response)
 
     const result = await referenceDataService.getLocalAuthorities(token)
 
     expect(referenceDataClient.getReferenceData).toHaveBeenCalledWith(token, 'LOCAL_AUTHORITY_AREAS')
-    expect(result).toEqual(referenceData)
+    expect(result).toEqual(response)
   })
 })

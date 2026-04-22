@@ -1,9 +1,8 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import describeClient from '../testutils/describeClient'
 import EligibilityClient from './eligibilityClient'
-import { eligibilityFactory } from '../testutils/factories'
+import { apiResponseFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
-import crnFactory from '../testutils/crn'
 
 describeClient('EligibilityClient', provider => {
   let eligibilityClient: EligibilityClient
@@ -14,8 +13,10 @@ describeClient('EligibilityClient', provider => {
   })
 
   it('should make a GET request to /cases/:crn/eligibility using user token and return the response body', async () => {
-    const eligibility = eligibilityFactory.build()
-    const crn = crnFactory()
+    const body = apiResponseFactory.eligibility()
+    const {
+      data: { crn },
+    } = body
 
     await provider.addInteraction({
       state: `Eligibility exists for case with CRN ${crn}`,
@@ -29,11 +30,11 @@ describeClient('EligibilityClient', provider => {
       },
       willRespondWith: {
         status: 200,
-        body: eligibility,
+        body,
       },
     })
 
     const response = await eligibilityClient.getEligibility('test-user-token', crn)
-    expect(response).toEqual(eligibility)
+    expect(response).toEqual(body)
   })
 })

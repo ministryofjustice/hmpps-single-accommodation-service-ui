@@ -9,7 +9,7 @@ import uiPaths from '../paths/ui'
 import * as dutyToReferUtils from '../utils/dutyToRefer'
 import { detailsSummaryListRows, outcomeDetailsSummaryListRows, summaryListRows } from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
-import { caseFactory, dutyToReferFactory, referenceDataFactory } from '../testutils/factories'
+import { apiResponseFactory, caseFactory, dutyToReferFactory, referenceDataFactory } from '../testutils/factories'
 import { caseAssignedTo } from '../utils/cases'
 import * as backlinksUtils from '../utils/backlinks'
 
@@ -31,8 +31,8 @@ describe('dutyToReferController', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    casesService.getCase.mockResolvedValue(caseData)
-    referenceDataService.getLocalAuthorities.mockResolvedValue(localAuthorities)
+    casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
+    referenceDataService.getLocalAuthorities.mockResolvedValue(apiResponseFactory.referenceData(localAuthorities))
 
     request = mock<Request>({
       id: 'request-id',
@@ -209,7 +209,7 @@ describe('dutyToReferController', () => {
     it('renders the outcome page', async () => {
       jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123')
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dtr)
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
 
       await controller.outcome()(request, response, next)
 
@@ -237,7 +237,7 @@ describe('dutyToReferController', () => {
     it('renders the outcome page when editing an outcome', async () => {
       jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123/dtr/existing-submission-id/details')
       const dtr = dutyToReferFactory.accepted().build({ crn: 'CRN123' })
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dtr)
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
 
       await controller.outcome()(request, response, next)
 
@@ -329,7 +329,7 @@ describe('dutyToReferController', () => {
 
       request.params.id = 'submission-id'
 
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       await controller.show()(request, response, next)
 

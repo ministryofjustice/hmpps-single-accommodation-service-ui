@@ -20,7 +20,13 @@ import {
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
-import { accommodationFactory, addressFactory, auditRecordFactory, caseFactory } from '../testutils/factories'
+import {
+  accommodationFactory,
+  addressFactory,
+  apiResponseFactory,
+  auditRecordFactory,
+  caseFactory,
+} from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
@@ -81,7 +87,7 @@ describe('proposedAddressesController', () => {
     jest.restoreAllMocks()
     jest.clearAllMocks()
 
-    casesService.getCase.mockResolvedValue({ name: 'James Smith', actions: [] })
+    casesService.getCase.mockResolvedValue(apiResponseFactory.case({ name: 'James Smith', actions: [] }))
 
     request = mock<Request>({
       id: 'request-id',
@@ -113,9 +119,9 @@ describe('proposedAddressesController', () => {
     const auditRecords = auditRecordFactory.buildList(2)
 
     beforeEach(() => {
-      casesService.getCase.mockResolvedValue(caseData)
-      proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
-      proposedAddressesService.getTimeline.mockResolvedValue(auditRecords)
+      casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
+      proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
+      proposedAddressesService.getTimeline.mockResolvedValue(apiResponseFactory.auditRecords(auditRecords))
     })
 
     it('renders the address details page', async () => {
@@ -836,7 +842,7 @@ describe('proposedAddressesController', () => {
       request.params.page = page
       request.params.id = 'address-id'
       const proposedAddress = accommodationFactory.build({ crn: 'CRN123', id: 'address-id' })
-      proposedAddressesService.getProposedAddress.mockResolvedValue(proposedAddress)
+      proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
 
       jest.spyOn(controller.formData, 'update')
 
@@ -847,7 +853,7 @@ describe('proposedAddressesController', () => {
       expect(controller.formData.update).toHaveBeenCalledWith(
         'CRN123',
         request.session,
-        expect.objectContaining({ redirect: '/referrer' }),
+        expect.objectContaining({ redirect: '/referrer', ...proposedAddress }),
       )
       expect(response.redirect).toHaveBeenCalledWith(redirect({ crn: 'CRN123' }))
     })

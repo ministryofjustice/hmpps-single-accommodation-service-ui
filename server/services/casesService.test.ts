@@ -1,7 +1,7 @@
 import { GetCasesQuery } from '@sas/ui'
 import CasesClient from '../data/casesClient'
 import CasesService from './casesService'
-import { caseFactory } from '../testutils/factories'
+import { apiResponseFactory } from '../testutils/factories'
 
 jest.mock('../data/casesClient')
 
@@ -16,15 +16,15 @@ describe('CasesService', () => {
   })
 
   it('should call getCases on the api client with the correct parameters and return cases', async () => {
-    const cases = caseFactory.buildList(3)
+    const response = apiResponseFactory.caseList()
 
-    casesClient.getCases.mockResolvedValue(cases)
+    casesClient.getCases.mockResolvedValue(response)
 
     const query: GetCasesQuery = { searchTerm: 'foo', assignedTo: 'user-id-1' }
 
     const result = await casesService.getCases(token, query)
 
     expect(casesClient.getCases).toHaveBeenCalledWith(token, query)
-    expect(result).toEqual(cases)
+    expect(result).toEqual(response)
   })
 })

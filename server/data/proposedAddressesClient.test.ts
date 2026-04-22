@@ -3,7 +3,7 @@ import describeClient from '../testutils/describeClient'
 import ProposedAddressesClient from './proposedAddressesClient'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
-import { accommodationDetailCommandFactory, accommodationFactory, auditRecordFactory } from '../testutils/factories'
+import { accommodationDetailCommandFactory, accommodationFactory, apiResponseFactory } from '../testutils/factories'
 
 describeClient('ProposedAddressesClient', provider => {
   let proposedAddressesClient: ProposedAddressesClient
@@ -16,7 +16,7 @@ describeClient('ProposedAddressesClient', provider => {
 
   it('should make a GET request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
-    const proposedAddressesResponse = accommodationFactory.proposed().buildList(3)
+    const body = apiResponseFactory.proposedAddresses()
 
     await provider.addInteraction({
       state: `Proposed addresses exist for case with CRN ${crn}`,
@@ -30,34 +30,38 @@ describeClient('ProposedAddressesClient', provider => {
       },
       willRespondWith: {
         status: 200,
-        body: proposedAddressesResponse,
+        body,
       },
     })
 
-    await proposedAddressesClient.getProposedAddresses(token, crn)
+    const response = await proposedAddressesClient.getProposedAddresses(token, crn)
+    expect(response).toEqual(body)
   })
 
   it('should make a GET request to /cases/:crn/proposed-accommodations/:id', async () => {
-    const crn = crnFactory()
-    const proposedAddress = accommodationFactory.proposed().build()
+    const body = apiResponseFactory.proposedAddress()
+    const {
+      data: { id, crn },
+    } = body
 
     await provider.addInteraction({
       state: `A proposed address exists for case with CRN ${crn}`,
       uponReceiving: 'a request to get a proposed address for a case by CRN and address ID',
       withRequest: {
         method: 'GET',
-        path: apiPaths.cases.proposedAddresses.show({ crn, id: proposedAddress.id }),
+        path: apiPaths.cases.proposedAddresses.show({ crn, id }),
         headers: {
           authorization: 'Bearer test-user-token',
         },
       },
       willRespondWith: {
         status: 200,
-        body: proposedAddress,
+        body,
       },
     })
 
-    await proposedAddressesClient.getProposedAddress(token, crn, proposedAddress.id)
+    const response = await proposedAddressesClient.getProposedAddress(token, crn, id)
+    expect(response).toEqual(body)
   })
 
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
@@ -108,27 +112,27 @@ describeClient('ProposedAddressesClient', provider => {
   })
 
   it('should make a GET request to /cases/:crn/proposed-accommodations/:id/timeline', async () => {
-    const crn = crnFactory()
-    const proposedAddress = accommodationFactory.proposed().build()
-    const auditRecords = auditRecordFactory.buildList(3)
+    const body = apiResponseFactory.auditRecords()
+    const { id, crn } = accommodationFactory.proposed().build()
 
     await provider.addInteraction({
       state: `A proposed address timeline exists for case with CRN ${crn}`,
       uponReceiving: 'a request to get a proposed address timeline for a case by CRN and address ID',
       withRequest: {
         method: 'GET',
-        path: apiPaths.cases.proposedAddresses.timeline({ crn, id: proposedAddress.id }),
+        path: apiPaths.cases.proposedAddresses.timeline({ crn, id }),
         headers: {
           authorization: 'Bearer test-user-token',
         },
       },
       willRespondWith: {
         status: 200,
-        body: auditRecords,
+        body,
       },
     })
 
-    await proposedAddressesClient.getTimeline(token, crn, proposedAddress.id)
+    const response = await proposedAddressesClient.getTimeline(token, crn, id)
+    expect(response).toEqual(body)
   })
 
   it('should make a POST request to /cases/:crn/proposed-accommodations/:id/notes', async () => {

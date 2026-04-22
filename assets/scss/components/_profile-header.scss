@@ -5,7 +5,7 @@
 }
 
 .sas-profile-header {
-    border-bottom: 1px solid govuk-colour("mid-grey");
+    border-bottom: 1px solid govuk-colour("black", $variant: "tint-80");
     background: none;
     padding: 0 0 govuk-spacing(2) 0;
     margin: govuk-spacing(4) 0;
@@ -22,7 +22,7 @@
     & dt {
         float: left;
         margin-right: govuk-spacing(1);
-        color: govuk-colour('dark-grey');
+        color: govuk-colour("black", $variant: "tint-25");
 
         &:after {
             content: ":";
@@ -34,7 +34,7 @@
         float: left;
         margin-right: govuk-spacing(2);
         padding-right: govuk-spacing(2);
-        border-right: 1px solid govuk-colour("mid-grey");
+        border-right: 1px solid govuk-colour("black", $variant: "tint-80");
 
         &:last-of-type {
             border: 0;

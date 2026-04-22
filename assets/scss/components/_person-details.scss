@@ -13,7 +13,7 @@
 
   & dt {
     margin-right: govuk-spacing(1);
-    color: govuk-colour('dark-grey');
+    color: govuk-colour("black", $variant: "tint-25");
 
     &:after {
       content: ":"

@@ -1,19 +1,19 @@
 @use "govuk-frontend/dist/govuk" as *;
 
 .sas-card {
-  border: 1px solid govuk-colour("mid-grey");
+  border: 1px solid govuk-colour("black", $variant: "tint-80");
   padding: govuk-spacing(4);
   margin-bottom: govuk-spacing(3);
 }
 
 .sas-card--inactive h3 {
-  color: govuk-colour("dark-grey");
+  color: govuk-colour("black", $variant: "tint-25");
   @include govuk-font($size: 19, $weight: 'regular');
 }
 
 .sas-card--block {
   border-width: 0;
-  background: govuk-colour("light-grey");
+  background: govuk-colour("black", $variant: "tint-95");
 }
 
 .sas-card__head {
@@ -41,7 +41,7 @@
 .sas-card__links a:not(:first-child) {
   margin-left: govuk-spacing(2);
   padding-left: govuk-spacing(2);
-  border-left: 1px solid govuk-colour("mid-grey");
+  border-left: 1px solid govuk-colour("black", $variant: "tint-80");
 }
 
 .sas-card-summary-list {
@@ -57,7 +57,7 @@
   }
 
   .govuk-summary-list__key {
-    color: govuk-colour("dark-grey");
+    color: govuk-colour("black", $variant: "tint-25");
     font-weight: normal;
     width: max-content;
   }

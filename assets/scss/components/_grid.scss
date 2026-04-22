@@ -3,3 +3,9 @@
 .govuk-grid-column-right {
   float: right;
 }
+
+.govuk-grid-column-right-from-desktop {
+  @include govuk-media-query($from: desktop) {
+    float: right;
+  }
+}

@@ -19,7 +19,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.referenceData(localAuthorities || localAuthoritiesJson),
+        jsonBody: apiResponseFactory.referenceData(localAuthorities || (localAuthoritiesJson as ReferenceDataDto[])),
       },
     }),
 }

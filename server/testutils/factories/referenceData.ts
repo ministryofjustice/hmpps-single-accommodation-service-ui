@@ -1,16 +1,12 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
 import { Factory } from 'fishery'
 
+import { ReferenceDataDto } from '@sas/api'
 import localAuthoritiesJson from '../../../wiremock/fixtures/referenceData/localAuthorities.json'
 
-type ReferenceData = {
-  id: string
-  name: string
-}
-
-class ReferenceDataFactory extends Factory<ReferenceData> {
-  localAuthority(): Factory<ReferenceData> {
-    return Factory.define<ReferenceData>(() => faker.helpers.arrayElement(localAuthoritiesJson))
+class ReferenceDataFactory extends Factory<ReferenceDataDto> {
+  localAuthority(): Factory<ReferenceDataDto> {
+    return Factory.define<ReferenceDataDto>(() => faker.helpers.arrayElement(localAuthoritiesJson) as ReferenceDataDto)
   }
 }
 

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`cases utilities accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS1 accommodation 1`] = `
 "<span class="sas-case-list__cell-header" aria-hidden="true">Current accommodation</span>

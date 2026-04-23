@@ -13,3 +13,4 @@ export { default as accommodationDetailCommandFactory } from './accommodationDet
 export { default as referenceDataFactory } from './referenceData'
 export { default as auditRecordFactory } from './auditRecord'
 export { default as apiResponseFactory } from './apiResponse'
+export { default as accommodationSummaryFactory } from './accommodationSummary'

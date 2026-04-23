@@ -2,7 +2,9 @@ import { DeepPartial, Factory } from 'fishery'
 import {
   AccommodationDetail,
   AccommodationReferralDto,
+  AccommodationSummaryDto,
   ApiResponseDtoAccommodationDetail,
+  ApiResponseDtoAccommodationSummaryDto,
   ApiResponseDtoCaseDto,
   ApiResponseDtoDutyToReferDto,
   ApiResponseDtoEligibilityDto,
@@ -25,8 +27,10 @@ import accommodationFactory from './accommodation'
 import auditRecordFactory from './auditRecord'
 import referenceDataFactory from './referenceData'
 import referralFactory from './referral'
+import accommodationSummaryFactory from './accommodationSummary'
 
 export type ApiResponse =
+  | ApiResponseDtoAccommodationSummaryDto
   | ApiResponseDtoListCaseDto
   | ApiResponseDtoCaseDto
   | ApiResponseDtoDutyToReferDto
@@ -40,6 +44,12 @@ export type ApiResponse =
 class ApiResponseFactory extends Factory<ApiResponse> {
   buildResponse<T extends ApiResponse>(data: T['data']) {
     return this.params({ data } as DeepPartial<T>).build() as T
+  }
+
+  accommodationSummary(accommodationSummary?: AccommodationSummaryDto) {
+    return this.buildResponse<ApiResponseDtoAccommodationSummaryDto>(
+      accommodationSummary || accommodationSummaryFactory.build(),
+    )
   }
 
   caseList(cases?: CaseDto[]) {

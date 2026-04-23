@@ -80,7 +80,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1030.0",
+    "@aws-sdk/client-sqs": "^3.1031.0",
     "@faker-js/faker": "^9.9.0",
     "@ministryofjustice/frontend": "^7.1.1",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
@@ -127,7 +127,7 @@
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
     "@types/connect-flash": "0.0.40",
-    "@types/express-session": "^1.18.2",
+    "@types/express-session": "^1.19.0",
     "@types/http-errors": "^2.0.5",
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",

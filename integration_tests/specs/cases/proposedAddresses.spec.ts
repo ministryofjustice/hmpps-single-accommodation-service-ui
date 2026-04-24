@@ -1,6 +1,7 @@
 import { test } from '@playwright/test'
 import { AccommodationDetail, AuditRecordDto, CaseDto } from '@sas/api'
 import { ProposedAddressFormData } from '@sas/ui'
+import accommodationsApi from '../../mockApis/accommodations'
 import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
@@ -31,6 +32,8 @@ const setupCase = async () => {
   await dutyToReferApi.stubGetCurrentDtr(crn, undefined)
   await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
   await casesApi.stubGetReferralHistory(crn, [])
+  await accommodationsApi.stubGetCurrentAccommodation(crn, undefined)
+  await accommodationsApi.stubGetNextAccommodation(crn, undefined)
 
   return caseData
 }

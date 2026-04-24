@@ -5,6 +5,7 @@ import {
   EligibilityDto as Eligibility,
   AccommodationReferralDto as Referral,
   AccommodationDetail,
+  AccommodationSummaryDto,
 } from '@sas/api'
 import { formatDate } from '../../../server/utils/dates'
 import { eligibilityStatusCard } from '../../../server/utils/eligibility'
@@ -56,20 +57,23 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
   }
 
-  async shouldShowAddress(accommodation: AccommodationDetail, card: Locator, type: 'current' | 'next') {
+  async shouldShowAddress(accommodation: AccommodationSummaryDto, card: Locator) {
     const addressParts = addressLines(accommodation.address)
 
-    await expect(card).toContainText(accommodationType(accommodation, type))
+    await expect(card).toContainText(accommodationType(accommodation))
 
     for await (const addressPart of addressParts) {
       await expect(card).toContainText(addressPart)
     }
   }
 
-  async shouldShowNextAccommodationCard(accommodation: AccommodationDetail) {
+  async shouldShowNextAccommodationCard(accommodation: AccommodationSummaryDto) {
     const card = this.page.locator('.sas-card', { hasText: 'Next accommodation' })
 
-    await this.shouldShowAddress(accommodation, card, 'next')
+    const tag = settledTag(accommodation.type)
+    if (tag) await this.shouldShowStatusTag(tag, card)
+
+    await this.shouldShowAddress(accommodation, card)
 
     await expect(card).toContainText(`From ${formatDate(accommodation.startDate, 'long')}`)
     await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
@@ -82,14 +86,17 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(card).toContainText(`(${formatDate(startDate, 'days for/in')})`)
   }
 
-  async shouldShowCurrentAccommodationCard(accommodation: AccommodationDetail) {
+  async shouldNotShowNextAccommodationCard() {
+    await expect(this.page.locator('.sas-card', { hasText: 'Next accommodation' })).toHaveCount(0)
+  }
+
+  async shouldShowCurrentAccommodationCard(accommodation: AccommodationSummaryDto) {
     const card = this.page.locator('.sas-card', { hasText: 'Current accommodation' })
 
-    if (accommodation.settledType) {
-      await this.shouldShowStatusTag(settledTag(accommodation.settledType), card)
-    }
+    const tag = settledTag(accommodation.type)
+    if (tag) await this.shouldShowStatusTag(tag, card)
 
-    await this.shouldShowAddress(accommodation, card, 'current')
+    await this.shouldShowAddress(accommodation, card)
 
     await expect(card).toContainText(`Until ${formatDate(accommodation.endDate, 'long')}`)
     await expect(card).toContainText(`(${formatDate(accommodation.endDate, 'days for/in')})`)

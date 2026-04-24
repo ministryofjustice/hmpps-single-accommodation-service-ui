@@ -33,14 +33,6 @@ export default class CasesListPage extends AbstractPage {
         await expect(row).toContainText(person.prisonNumber as string)
       }
 
-      if (headers.includes('Current accommodation') && person.currentAccommodation) {
-        await expect(row).toContainText(accommodationType(person.currentAccommodation, 'current'))
-      }
-
-      if (headers.includes('Next accommodation') && person.nextAccommodation) {
-        await expect(row).toContainText(accommodationType(person.nextAccommodation, 'next'))
-      }
-
       if (headers.includes('Status') && person.status) {
         await this.shouldShowStatusCell(caseStatusCell(person), row)
       }

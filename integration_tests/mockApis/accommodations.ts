@@ -14,7 +14,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.accommodationSummary(currentAccommodation),
+        jsonBody: currentAccommodation ? apiResponseFactory.accommodationSummary(currentAccommodation) : { data: null },
       },
     }),
   stubGetNextAccommodation: (crn: string, nextAccommodation?: AccommodationSummaryDto): SuperAgentRequest =>
@@ -26,7 +26,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.accommodationSummary(nextAccommodation),
+        jsonBody: nextAccommodation ? apiResponseFactory.accommodationSummary(nextAccommodation) : { data: null },
       },
     }),
 }

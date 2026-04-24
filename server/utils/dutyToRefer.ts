@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { AuditRecordDto, CaseDto, DutyToReferDto, FieldChange } from '@sas/api'
+import { AuditRecordDto, CaseDto, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard, StatusTag } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
@@ -174,7 +174,7 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
   const filterChanges = (predicate: (change: FieldChange) => boolean) =>
     Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
 
-  const submission = filterChanges(change => submissionFields.includes(change.field))
+  const submission = filterChanges(change => submissionFields.includes(change.field)) as Partial<DtrSubmissionDto>
   const { localAuthorityAreaName } = auditRecord.extraInformation || {}
 
   if (localAuthorityAreaName) {
@@ -184,13 +184,12 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
   return {
     ...filterChanges(change => !submissionFields.includes(change.field)),
     submission,
-  } as Partial<DutyToReferDto>
+  } as DutyToReferDto
 }
 
 export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
   const { type } = auditRecord
 
-  // @ts-expect-error requires updated API types
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
 
   const dtr = auditRecordChangesToDutyToRefer(auditRecord)

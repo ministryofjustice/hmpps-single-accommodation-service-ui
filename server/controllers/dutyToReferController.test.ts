@@ -14,7 +14,13 @@ import {
   summaryListRows,
 } from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
-import { apiResponseFactory, auditRecordFactory, caseFactory, dutyToReferFactory, referenceDataFactory } from '../testutils/factories'
+import {
+  apiResponseFactory,
+  auditRecordFactory,
+  caseFactory,
+  dutyToReferFactory,
+  referenceDataFactory,
+} from '../testutils/factories'
 import { caseAssignedTo } from '../utils/cases'
 import * as backlinksUtils from '../utils/backlinks'
 
@@ -369,14 +375,9 @@ describe('dutyToReferController', () => {
     })
 
     it('shows errors', async () => {
-      const crn = 'CRN123'
-      const dutyToRefer = dutyToReferFactory.notStarted().build({ crn })
-
       const userInput = { note: '' }
       const errors = { note: 'Enter a note' }
       const errorSummary = [{ href: '#note', text: 'Enter a note' }]
-
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
 
       jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput })
 
@@ -422,13 +423,6 @@ describe('dutyToReferController', () => {
     })
 
     it('saves the note and redirects to the duty to refer details page with a success message', async () => {
-      const dutyToRefer = dutyToReferFactory.submitted().build({
-        crn: 'CRN123',
-        submission: {
-          id: 'submission-id',
-        },
-      })
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(dutyToRefer)
       dutyToReferService.submitTimelineNote.mockResolvedValue()
 
       request.body = { note: 'Some valid note' }

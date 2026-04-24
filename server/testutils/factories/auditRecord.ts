@@ -40,14 +40,25 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
   }
 
   dutyToReferSubmissionAdded(dtrData: DtrSubmissionDto) {
-    return this.dutyToReferAdded([
+    const changes: FieldChange[] = [
       { field: 'status', value: 'SUBMITTED' },
-      ...Object.entries(dtrData).map(([field, value]) => ({ field, value })),
-    ])
+      ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
+    ]
+
+    return this.dutyToReferAdded(changes, {
+      localAuthorityAreaName: dtrData.localAuthority.localAuthorityAreaName,
+    })
   }
 
   dutyToReferSubmissionUpdated(dtrData: DtrSubmissionDto) {
-    return this.dutyToReferUpdated(Object.entries(dtrData).map(([field, value]) => ({ field, value })))
+    const changes: FieldChange[] = Object.entries(dtrData).map(([field, value]) => ({
+      field,
+      value: value as string,
+    }))
+
+    return this.dutyToReferUpdated(changes, {
+      localAuthorityAreaName: dtrData.localAuthority.localAuthorityAreaName,
+    })
   }
 
   dutyToReferAdded(changes: FieldChange[], extraInformation: Record<string, string> = {}) {

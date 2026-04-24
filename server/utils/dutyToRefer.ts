@@ -174,9 +174,16 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
   const filterChanges = (predicate: (change: FieldChange) => boolean) =>
     Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
 
+  const submission = filterChanges(change => submissionFields.includes(change.field))
+  const { localAuthorityAreaName } = auditRecord.extraInformation || {}
+
+  if (localAuthorityAreaName) {
+    submission.localAuthority = { ...submission.localAuthority, localAuthorityAreaName }
+  }
+
   return {
     ...filterChanges(change => !submissionFields.includes(change.field)),
-    submission: filterChanges(change => submissionFields.includes(change.field)),
+    submission,
   } as Partial<DutyToReferDto>
 }
 

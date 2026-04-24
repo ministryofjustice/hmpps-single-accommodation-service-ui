@@ -361,8 +361,7 @@ describe('duty to refer utils', () => {
       const auditRecord = auditRecordFactory
         .dutyToReferAdded([
           { field: 'status', value: 'ACCEPTED' },
-          { field: 'localAuthority', value: { localAuthorityAreaName: 'Cherwell District Council' } },
-        ])
+        ], { localAuthorityAreaName: 'Cherwell District Council' })
         .build({
           commitDate: '2025-04-15T15:38:00.000Z',
           author: 'Jane Doe',
@@ -375,8 +374,7 @@ describe('duty to refer utils', () => {
       const auditRecord = auditRecordFactory
         .dutyToReferUpdated([
           { field: 'status', value: 'NOT_ACCEPTED' },
-          { field: 'localAuthority', value: { localAuthorityAreaName: 'Oxford City Council' } },
-        ])
+        ], { localAuthorityAreaName: 'Oxford City Council' })
         .build({
           commitDate: '2025-04-16T09:00:00.000Z',
           author: 'Jane Doe',

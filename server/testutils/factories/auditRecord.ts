@@ -50,17 +50,19 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     return this.dutyToReferUpdated(Object.entries(dtrData).map(([field, value]) => ({ field, value })))
   }
 
-  dutyToReferAdded(changes: FieldChange[]) {
+  dutyToReferAdded(changes: FieldChange[], extraInformation: Record<string, string> = {}) {
     return this.params({
       type: 'CREATE',
       changes,
+      extraInformation,
     })
   }
 
-  dutyToReferUpdated(changes: FieldChange[]) {
+  dutyToReferUpdated(changes: FieldChange[], extraInformation: Record<string, string> = {}) {
     return this.params({
       type: 'UPDATE',
       changes,
+      extraInformation,
     })
   }
 

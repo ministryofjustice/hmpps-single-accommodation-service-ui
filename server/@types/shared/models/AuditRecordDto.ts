@@ -8,5 +8,6 @@ export type AuditRecordDto = {
     author: string;
     commitDate: string;
     changes: Array<FieldChange>;
+    extraInformation?: Record<string, string>;
 };
 

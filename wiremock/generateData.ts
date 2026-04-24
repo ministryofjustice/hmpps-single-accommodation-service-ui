@@ -92,7 +92,13 @@ if (generate.dutyToRefer) {
           records.push(auditRecordFactory.dutyToReferSubmissionAdded(dtr.submission).build())
         }
         if (dtr.status === 'ACCEPTED' || dtr.status === 'NOT_ACCEPTED') {
-          records.push(auditRecordFactory.dutyToReferAdded([{ field: 'status', value: dtr.status }]).build())
+          records.push(
+            auditRecordFactory
+              .dutyToReferAdded([{ field: 'status', value: dtr.status }], {
+                localAuthorityAreaName: dtr.submission?.localAuthority?.localAuthorityAreaName,
+              })
+              .build(),
+          )
         }
         return [dtr.submission.id, records.reverse()]
       }),

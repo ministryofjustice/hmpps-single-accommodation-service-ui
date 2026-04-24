@@ -9,7 +9,10 @@
           "field": "status",
           "value": "NOT_ACCEPTED"
         }
-      ]
+      ],
+      "extraInformation": {
+        "localAuthorityAreaName": "North Warwickshire"
+      }
     },
     {
       "type": "CREATE",
@@ -71,7 +74,10 @@
           "field": "status",
           "value": "ACCEPTED"
         }
-      ]
+      ],
+      "extraInformation": {
+        "localAuthorityAreaName": "Ards and North Down"
+      }
     },
     {
       "type": "CREATE",
@@ -235,7 +241,10 @@
           "field": "status",
           "value": "NOT_ACCEPTED"
         }
-      ]
+      ],
+      "extraInformation": {
+        "localAuthorityAreaName": "Moray"
+      }
     },
     {
       "type": "CREATE",
@@ -297,7 +306,10 @@
           "field": "status",
           "value": "NOT_ACCEPTED"
         }
-      ]
+      ],
+      "extraInformation": {
+        "localAuthorityAreaName": "Lancashire"
+      }
     },
     {
       "type": "CREATE",
@@ -359,7 +371,10 @@
           "field": "status",
           "value": "ACCEPTED"
         }
-      ]
+      ],
+      "extraInformation": {
+        "localAuthorityAreaName": "West Midlands"
+      }
     },
     {
       "type": "CREATE",
@@ -472,7 +487,10 @@
           "field": "status",
           "value": "NOT_ACCEPTED"
         }
-      ]
+      ],
+      "extraInformation": {
+        "localAuthorityAreaName": "Tees Valley"
+      }
     },
     {
       "type": "CREATE",

@@ -144,9 +144,9 @@ test.describe('duty to refer', () => {
       .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
       .build()
     const outcomeAddedDutyToReferRecord = auditRecordFactory
-      .dutyToReferAdded([
-        { field: 'status', value: notAcceptedDutyToRefer.status },
-      ], { localAuthorityAreaName: notAcceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName })
+      .dutyToReferAdded([{ field: 'status', value: notAcceptedDutyToRefer.status }], {
+        localAuthorityAreaName: notAcceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
+      })
       .build()
     const noteDutyToReferRecord = auditRecordFactory.note('This is a note\n\nWith line breaks').build()
 
@@ -310,9 +310,9 @@ test.describe('duty to refer', () => {
     const caseData = await setupStubs(acceptedDutyToRefer)
     const createdDutyToReferRecord = auditRecordFactory.dutyToReferCreated().build()
     const updatedDutyReferRecord = auditRecordFactory
-      .dutyToReferUpdated([
-        { field: 'status', value: updatedDutyToRefer.status },
-      ], { localAuthorityAreaName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName })
+      .dutyToReferUpdated([{ field: 'status', value: updatedDutyToRefer.status }], {
+        localAuthorityAreaName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
+      })
       .build()
     const timelineRecords: AuditRecordDto[] = [createdDutyToReferRecord]
     await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)

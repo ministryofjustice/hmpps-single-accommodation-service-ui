@@ -359,9 +359,9 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for an outcome added record', () => {
       const auditRecord = auditRecordFactory
-        .dutyToReferAdded([
-          { field: 'status', value: 'ACCEPTED' },
-        ], { localAuthorityAreaName: 'Cherwell District Council' })
+        .dutyToReferAdded([{ field: 'status', value: 'ACCEPTED' }], {
+          localAuthorityAreaName: 'Cherwell District Council',
+        })
         .build({
           commitDate: '2025-04-15T15:38:00.000Z',
           author: 'Jane Doe',
@@ -372,9 +372,9 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for an outcome updated record', () => {
       const auditRecord = auditRecordFactory
-        .dutyToReferUpdated([
-          { field: 'status', value: 'NOT_ACCEPTED' },
-        ], { localAuthorityAreaName: 'Oxford City Council' })
+        .dutyToReferUpdated([{ field: 'status', value: 'NOT_ACCEPTED' }], {
+          localAuthorityAreaName: 'Oxford City Council',
+        })
         .build({
           commitDate: '2025-04-16T09:00:00.000Z',
           author: 'Jane Doe',

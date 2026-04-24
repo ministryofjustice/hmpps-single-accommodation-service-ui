@@ -1,5 +1,12 @@
 import { test } from '@playwright/test'
-import { AccommodationDetail, AccommodationReferralDto, AccommodationSummaryDto, CaseDto, DutyToReferDto, EligibilityDto } from '@sas/api'
+import {
+  AccommodationDetail,
+  AccommodationReferralDto,
+  AccommodationSummaryDto,
+  CaseDto,
+  DutyToReferDto,
+  EligibilityDto,
+} from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import dutyToReferApi from '../../mockApis/dutyToRefer'

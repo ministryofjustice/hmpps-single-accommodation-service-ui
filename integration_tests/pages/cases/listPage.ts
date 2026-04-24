@@ -3,7 +3,7 @@ import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
-import { accommodationType, caseStatusCell } from '../../../server/utils/cases'
+import { caseStatusCell } from '../../../server/utils/cases'
 
 export default class CasesListPage extends AbstractPage {
   readonly casesRows: Locator

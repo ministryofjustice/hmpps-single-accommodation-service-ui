@@ -22,6 +22,7 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
+import AccommodationsService from '../services/accommodationsService'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -35,6 +36,7 @@ export default class CasesController {
     private readonly eligibilityService: EligibilityService,
     private readonly dutyToReferService: DutyToReferService,
     private readonly proposedAddressesService: ProposedAddressesService,
+    private readonly accommodationsService: AccommodationsService,
   ) {}
 
   index(): RequestHandler {
@@ -94,20 +96,24 @@ export default class CasesController {
           { data: eligibility },
           { data: dutyToRefer },
           { data: proposedAddresses },
+          { data: currentAccommodation },
+          { data: nextAccommodation },
         ] = await Promise.all([
           this.casesService.getCase(token, crn),
           this.referralsService.getReferralHistory(token, crn),
           this.eligibilityService.getEligibility(token, crn),
           this.dutyToReferService.getCurrentDtr(token, crn),
           this.proposedAddressesService.getProposedAddresses(token, crn),
+          this.accommodationsService.getCurrentAccommodation(token, crn),
+          this.accommodationsService.getNextAccommodation(token, crn),
         ])
 
         return res.render('pages/show', {
           caseData,
           assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
           nextActions: eligibility.caseActions,
-          nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
-          currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
+          nextAccommodationCard: accommodationCard('next', nextAccommodation),
+          currentAccommodationCard: accommodationCard('current', currentAccommodation),
           referralHistoryRows: referralHistoryRows(referralHistory),
           eligibilityCards: eligibilityToEligibilityCards(eligibility),
           dutyToReferCard: dutyToReferStatusCard(dutyToRefer),

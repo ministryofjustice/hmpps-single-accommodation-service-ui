@@ -1,7 +1,4 @@
-import { faker } from '@faker-js/faker'
-import DutyToReferService from './dutyToReferService'
-import DutyToReferClient from '../data/dutyToReferClient'
-import { accommodationFactory, apiResponseFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
+import { accommodationFactory, apiResponseFactory } from '../testutils/factories'
 import crnFactory from '../testutils/crn'
 import AccommodationsClient from '../data/accommodationsClient'
 import AccommodationsService from './accommodationsService'

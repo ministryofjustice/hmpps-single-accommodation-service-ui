@@ -28,6 +28,7 @@ import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
+import AccommodationsService from '../services/accommodationsService'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -44,6 +45,7 @@ describe('casesController', () => {
   const eligibilityService = mock<EligibilityService>()
   const dutyToReferService = mock<DutyToReferService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
+  const accommodationsService = mock<AccommodationsService>()
 
   const casesController = new CasesController(
     auditService,
@@ -52,6 +54,7 @@ describe('casesController', () => {
     eligibilityService,
     dutyToReferService,
     proposedAddressesService,
+    accommodationsService,
   )
 
   beforeEach(() => {
@@ -139,12 +142,20 @@ describe('casesController', () => {
       const dutyToRefer = dutyToReferFactory.build({ crn })
       const proposed = accommodationFactory.proposed().buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
+      const currentAccommodation = accommodationFactory.current().build()
+      const nextAccommodation = accommodationFactory.next().build()
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility(eligibility))
       dutyToReferService.getCurrentDtr.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed, failedChecks } })
+      accommodationsService.getCurrentAccommodation.mockResolvedValue(
+        apiResponseFactory.accommodationSummary(currentAccommodation),
+      )
+      accommodationsService.getNextAccommodation.mockResolvedValue(
+        apiResponseFactory.accommodationSummary(nextAccommodation),
+      )
 
       await casesController.show()(request, response, next)
 
@@ -162,8 +173,8 @@ describe('casesController', () => {
         caseData,
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: eligibility.caseActions,
-        nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
-        currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
+        nextAccommodationCard: accommodationCard('next', nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility),
         dutyToReferCard: dutyToReferStatusCard(dutyToRefer),

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import DutyToReferService from './dutyToReferService'
 import DutyToReferClient from '../data/dutyToReferClient'
-import { apiResponseFactory, auditRecordFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
+import { apiResponseFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import crnFactory from '../testutils/crn'
 
 jest.mock('../data/dutyToReferClient')
@@ -58,14 +58,14 @@ describe('DutyToReferService', () => {
 
   describe('getTimeline', () => {
     it('should call getTimeline on the api client and return the duty to refer timeline', async () => {
-      const auditRecords = auditRecordFactory.buildList(3)
+      const response = apiResponseFactory.auditRecords()
 
-      dutyToReferClient.getTimeline.mockResolvedValue(auditRecords)
+      dutyToReferClient.getTimeline.mockResolvedValue(response)
 
       const result = await dutyToReferService.getTimeline(token, crn, id)
 
       expect(dutyToReferClient.getTimeline).toHaveBeenCalledWith(token, crn, id)
-      expect(result).toEqual(auditRecords)
+      expect(result).toEqual(response)
     })
   })
 

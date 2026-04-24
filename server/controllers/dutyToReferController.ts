@@ -42,7 +42,7 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [{ data: caseData }, { data: dutyToRefer }, auditRecords] = await Promise.all([
+      const [{ data: caseData }, { data: dutyToRefer }, { data: auditRecords }] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
         this.dutyToReferService.getTimeline(token, crn, id),

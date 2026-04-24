@@ -338,21 +338,17 @@ describe('dutyToReferController', () => {
   })
 
   describe('show', () => {
+    const crn = 'CRN123'
     const auditRecords = auditRecordFactory.buildList(2)
+    const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
 
     beforeEach(() => {
       request.params.id = 'submission-id'
-      dutyToReferService.getTimeline.mockResolvedValue(auditRecords)
+      dutyToReferService.getTimeline.mockResolvedValue(apiResponseFactory.auditRecords(auditRecords))
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
     })
 
     it('renders the duty to refer details page', async () => {
-      const crn = 'CRN123'
-      const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
-
-      request.params.id = 'submission-id'
-
-      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
-
       await controller.show()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.DUTY_TO_REFER_DETAILS, {

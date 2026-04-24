@@ -2,7 +2,7 @@ import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { faker } from '@faker-js/faker/locale/en'
 import describeClient from '../testutils/describeClient'
 import DutyToReferClient from './dutyToReferClient'
-import { apiResponseFactory, auditRecordFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
+import { apiResponseFactory, dtrCommandFactory, dutyToReferFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
 
@@ -117,27 +117,26 @@ describeClient('DutyToReferClient', provider => {
 
   // TODO: Enable test when API endpoint exists
   it.skip('should make a GET request to /cases/:crn/dtr/:id/timeline', async () => {
-    const crn = crnFactory()
-    const dtr = dutyToReferFactory.submitted().build()
-    const auditRecords = auditRecordFactory.buildList(3)
+    const body = apiResponseFactory.auditRecords()
+    const { crn, submission } = dutyToReferFactory.submitted().build()
 
     await provider.addInteraction({
       state: `A duty to refer timeline exists for case with CRN ${crn}`,
       uponReceiving: 'a request to get a duty to refer timeline for a case by CRN and dtr ID',
       withRequest: {
         method: 'GET',
-        path: apiPaths.cases.dutyToRefer.timeline({ crn, id: dtr.submission.id }),
+        path: apiPaths.cases.dutyToRefer.timeline({ crn, id: submission.id }),
         headers: {
           authorization: 'Bearer test-user-token',
         },
       },
       willRespondWith: {
         status: 200,
-        body: auditRecords,
+        body,
       },
     })
 
-    await dutyToReferClient.getTimeline('test-user-token', crn, dtr.submission.id)
+    await dutyToReferClient.getTimeline('test-user-token', crn, submission.id)
   })
 
   it('should make a POST request to /cases/:crn/dtr/:id/notes', async () => {

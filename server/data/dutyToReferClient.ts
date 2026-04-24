@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { DtrCommand, ApiResponseDtoDutyToReferDto, AuditRecordDto, NoteCommand } from '@sas/api'
+import { DtrCommand, ApiResponseDtoDutyToReferDto, NoteCommand, ApiResponseDtoListAuditRecordDto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -39,7 +39,10 @@ export default class DutyToReferClient extends RestClient {
   }
 
   async getTimeline(token: string, crn: string, id: string) {
-    return this.get<AuditRecordDto[]>({ path: apiPaths.cases.dutyToRefer.timeline({ crn, id }) }, asUser(token))
+    return this.get<ApiResponseDtoListAuditRecordDto>(
+      { path: apiPaths.cases.dutyToRefer.timeline({ crn, id }) },
+      asUser(token),
+    )
   }
 
   async submitTimelineNote(token: string, crn: string, id: string, note: NoteCommand) {

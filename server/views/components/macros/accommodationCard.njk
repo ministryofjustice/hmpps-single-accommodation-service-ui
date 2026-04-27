@@ -23,33 +23,22 @@
       {% endif %}
     {%- endset -%}
 
-    {%- if context.arrangementType === 'NO_FIXED_ABODE' -%}
-      {{
-        mojAlert({
-          variant: "warning",
-          title: "No fixed abode" if context.cardType === 'current' else "Risk of no fixed abode",
-          showTitleAsHeading: true,
-          dismissible: false,
-          html: startDateHtml
-        })
-      }}
-    {%- else -%}
-      <div class="sas-card govuk-!-margin-bottom-4">
-        <h3 class="govuk-heading-m">{{ 'Current' if context.cardType === 'current' else 'Next' }} accommodation</h3>
+    <div class="sas-card govuk-!-margin-bottom-4">
+      <h3 class="govuk-heading-m">{{ 'Current' if context.cardType === 'current' else 'Next' }} accommodation</h3>
 
-        {% if context.settledTag -%}
-          <div class="govuk-!-margin-bottom-4">{{ statusTag(context.settledTag) }}</div>
-        {%- endif %}
+      {% if context.settledTag -%}
+        <div class="govuk-!-margin-bottom-4">{{ statusTag(context.settledTag) }}</div>
+      {%- endif %}
 
-        <p>
-          {{ context.name }}<br />
-          <span class="govuk-hint">{{ context.address | safe }}</span>
-        </p>
-
+      <p>
+        {{ context.name }}<br />
+        <span class="govuk-hint">{{ context.address | safe }}</span>
+      </p>
+      {% if context.cardType === 'next' %}
         {{ startDateHtml | safe }}
+      {% endif %}
 
-        {{ endDateHtml | safe }}
-      </div>
-    {%- endif -%}
+      {{ endDateHtml | safe }}
+    </div>
   {% endif %}
 {%- endmacro -%}

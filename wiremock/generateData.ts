@@ -32,7 +32,9 @@ const generate = {
 }
 
 if (Object.values(generate).filter(Boolean).length === 0) {
-  console.log('No data selected. Specify --all, --eligibility, --referrals, --dtr, --proposed-addresses or --accommodations')
+  console.log(
+    'No data selected. Specify --all, --eligibility, --referrals, --dtr, --proposed-addresses or --accommodations',
+  )
   process.exit(1)
 }
 

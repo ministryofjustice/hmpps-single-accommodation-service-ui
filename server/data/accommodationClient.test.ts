@@ -62,4 +62,28 @@ describeClient('AccommodationClient', provider => {
     const response = await accommodationClient.getNextAccommodation(token, crn)
     expect(response).toEqual(body)
   })
+
+  it('should make a GET request to /cases/{crn}/accommodation-history using user token and return the response body', async () => {
+    const body = apiResponseFactory.accommodationHistory()
+    const crn = 'X456123'
+
+    await provider.addInteraction({
+      state: `Accommodation history exists for crn ${crn}`,
+      uponReceiving: 'a request to get accommodation history',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.accommodationHistory({ crn }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+
+    const response = await accommodationClient.getAccommodationHistory('test-user-token', 'X456123')
+    expect(response).toEqual(body)
+  })
 })

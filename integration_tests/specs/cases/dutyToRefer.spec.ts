@@ -139,11 +139,9 @@ test.describe('duty to refer', () => {
       ...submittedDutyToRefer,
       status: 'NOT_ACCEPTED',
     })
-    const submissionAddedDutyReferRecord = auditRecordFactory
-      .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
-      .build()
+    const submissionAddedDutyReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
     const outcomeAddedDutyToReferRecord = auditRecordFactory
-      .dutyToReferAdded([{ field: 'status', value: notAcceptedDutyToRefer.status }], {
+      .dutyToReferAdded(notAcceptedDutyToRefer.submission, notAcceptedDutyToRefer.status, {
         localAuthorityAreaName: notAcceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
       })
       .build()
@@ -233,12 +231,8 @@ test.describe('duty to refer', () => {
       ...submittedDutyToRefer,
       submission: dtrSubmissionFactory.build({ id: submissionId }),
     })
-    const submittedDutyToReferRecord = auditRecordFactory
-      .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
-      .build()
-    const updatedDutyToReferRecord = auditRecordFactory
-      .dutyToReferSubmissionUpdated(submittedDutyToRefer.submission)
-      .build()
+    const submittedDutyToReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
+    const updatedDutyToReferRecord = auditRecordFactory.dutyToReferUpdated(submittedDutyToRefer.submission).build()
     const timelineRecords: AuditRecordDto[] = [submittedDutyToReferRecord]
 
     // Given I have stubbed the API responses
@@ -309,11 +303,9 @@ test.describe('duty to refer', () => {
 
     // Given I have stubbed the API responses
     const caseData = await setupStubs(acceptedDutyToRefer)
-    const submittedDutyToReferRecord = auditRecordFactory
-      .dutyToReferSubmissionAdded(acceptedDutyToRefer.submission)
-      .build()
+    const submittedDutyToReferRecord = auditRecordFactory.dutyToReferAdded(acceptedDutyToRefer.submission).build()
     const updatedDutyToReferRecord = auditRecordFactory
-      .dutyToReferUpdated([{ field: 'status', value: updatedDutyToRefer.status }], {
+      .dutyToReferUpdated(acceptedDutyToRefer.submission, updatedDutyToRefer.status, {
         localAuthorityAreaName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
       })
       .build()

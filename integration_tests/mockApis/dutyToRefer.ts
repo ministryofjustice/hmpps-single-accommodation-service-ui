@@ -65,7 +65,7 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: apiResponseFactory.auditRecords(
-          records || auditRecordFactory.dutyToReferSubmissionAdded(dtrSubmissionFactory.build()).buildList(1),
+          records || auditRecordFactory.dutyToReferAdded(dtrSubmissionFactory.build()).buildList(1),
         ),
       },
     }),

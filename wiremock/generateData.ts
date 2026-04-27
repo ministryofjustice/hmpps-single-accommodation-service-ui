@@ -89,12 +89,12 @@ if (generate.dutyToRefer) {
       .map((dtr: DutyToReferDto) => {
         const records = []
         if (dtr.status === 'SUBMITTED' || dtr.status === 'ACCEPTED' || dtr.status === 'NOT_ACCEPTED') {
-          records.push(auditRecordFactory.dutyToReferSubmissionAdded(dtr.submission).build())
+          records.push(auditRecordFactory.dutyToReferAdded(dtr.submission).build())
         }
         if (dtr.status === 'ACCEPTED' || dtr.status === 'NOT_ACCEPTED') {
           records.push(
             auditRecordFactory
-              .dutyToReferAdded([{ field: 'status', value: dtr.status }], {
+              .dutyToReferAdded(dtr.submission, dtr.status, {
                 localAuthorityAreaName: dtr.submission?.localAuthority?.localAuthorityAreaName,
               })
               .build(),

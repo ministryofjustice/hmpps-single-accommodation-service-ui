@@ -162,14 +162,7 @@ export const formatDutyToReferStatus = (status: DutyToReferDto['status']): strin
   })[status]
 
 const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<DutyToReferDto> => {
-  const submissionFields = [
-    'submissionDate',
-    'referenceNumber',
-    'localAuthority',
-    'id',
-    'createdBy',
-    'createdAt',
-  ]
+  const submissionFields = ['submissionDate', 'referenceNumber', 'localAuthority', 'id', 'createdBy', 'createdAt']
   const filterChanges = (predicate: (change: FieldChange) => boolean) =>
     Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
 

@@ -326,7 +326,7 @@ describe('duty to refer utils', () => {
         localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
         referenceNumber: 'REF123',
       })
-      const auditRecord = auditRecordFactory.dutyToReferSubmissionAdded(submission).build({
+      const auditRecord = auditRecordFactory.dutyToReferAdded(submission).build({
         commitDate: '2025-04-12T17:07:00.000Z',
         author: 'Jane Doe',
       })
@@ -340,7 +340,7 @@ describe('duty to refer utils', () => {
         localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
         referenceNumber: 'REF456',
       })
-      const auditRecord = auditRecordFactory.dutyToReferSubmissionUpdated(submission).build({
+      const auditRecord = auditRecordFactory.dutyToReferUpdated(submission).build({
         commitDate: '2025-04-15T10:00:00.000Z',
         author: 'Jane Doe',
       })
@@ -350,9 +350,13 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for an outcome added record', () => {
       const auditRecord = auditRecordFactory
-        .dutyToReferAdded([{ field: 'status', value: 'ACCEPTED' }], {
-          localAuthorityAreaName: 'Cherwell District Council',
-        })
+        .dutyToReferAdded(
+          dtrSubmissionFactory.build({
+            localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
+          }),
+          'ACCEPTED',
+          { localAuthorityAreaName: 'Cherwell District Council' },
+        )
         .build({
           commitDate: '2025-04-15T15:38:00.000Z',
           author: 'Jane Doe',
@@ -363,9 +367,13 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for an outcome updated record', () => {
       const auditRecord = auditRecordFactory
-        .dutyToReferUpdated([{ field: 'status', value: 'NOT_ACCEPTED' }], {
-          localAuthorityAreaName: 'Oxford City Council',
-        })
+        .dutyToReferUpdated(
+          dtrSubmissionFactory.build({
+            localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
+          }),
+          'NOT_ACCEPTED',
+          { localAuthorityAreaName: 'Oxford City Council' },
+        )
         .build({
           commitDate: '2025-04-16T09:00:00.000Z',
           author: 'Jane Doe',

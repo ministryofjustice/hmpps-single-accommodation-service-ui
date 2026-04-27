@@ -1,5 +1,5 @@
 import { Factory } from 'fishery'
-import { AccommodationDetail, AuditRecordDto, DtrSubmissionDto, FieldChange } from '@sas/api'
+import { AccommodationDetail, AuditRecordDto, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { faker } from '@faker-js/faker'
 import accommodationFactory from './accommodation'
 
@@ -32,25 +32,16 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     })
   }
 
-  dutyToReferSubmissionAdded(dtrData: DtrSubmissionDto) {
+  dutyToReferAdded(
+    dtrData: DtrSubmissionDto,
+    status: DutyToReferDto['status'] = 'SUBMITTED',
+    extraInformation?: Record<string, string>,
+  ) {
     const changes: FieldChange[] = [
-      { field: 'status', value: 'SUBMITTED' },
+      { field: 'status', value: status },
       ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
     ]
 
-    return this.dutyToReferAdded(changes)
-  }
-
-  dutyToReferSubmissionUpdated(dtrData: DtrSubmissionDto) {
-    const changes: FieldChange[] = Object.entries(dtrData).map(([field, value]) => ({
-      field,
-      value: value as string,
-    }))
-
-    return this.dutyToReferUpdated(changes)
-  }
-
-  dutyToReferAdded(changes: FieldChange[], extraInformation?: Record<string, string>) {
     return this.params({
       type: 'CREATE',
       changes,
@@ -58,7 +49,16 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     })
   }
 
-  dutyToReferUpdated(changes: FieldChange[], extraInformation?: Record<string, string>) {
+  dutyToReferUpdated(
+    dtrData: DtrSubmissionDto,
+    status?: DutyToReferDto['status'],
+    extraInformation?: Record<string, string>,
+  ) {
+    const changes: FieldChange[] = [
+      ...(status ? [{ field: 'status', value: status as string }] : []),
+      ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
+    ]
+
     return this.params({
       type: 'UPDATE',
       changes,

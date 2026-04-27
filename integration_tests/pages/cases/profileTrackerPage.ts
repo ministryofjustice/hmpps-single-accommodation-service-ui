@@ -150,4 +150,26 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
     }
   }
+
+  async shouldShowAccommodationHistory(accommodations: AccommodationSummaryDto[]) {
+    const accommodationHistorySection = this.page.locator('section', {
+      has: this.page.getByRole('heading', { name: 'Accommodation history' }),
+    })
+
+    await this.shouldShowTableHeaders(['Start date', 'End date', 'Address', 'Status'], accommodationHistorySection)
+
+    for await (const accommodation of accommodations) {
+      await expect(accommodationHistorySection).toContainText(formatDate(accommodation.startDate))
+      if (!accommodation.endDate) {
+        await expect(accommodationHistorySection).toContainText('Current')
+      } else {
+        await expect(accommodationHistorySection).toContainText(formatDate(accommodation.endDate))
+      }
+      // await expect(accommodationHistorySection).toContainText(accommodationType(accommodation, 'current'))
+      for await (const addressPart of addressLines(accommodation.address)) {
+        await expect(accommodationHistorySection).toContainText(addressPart)
+      }
+      await expect(accommodationHistorySection).toContainText(accommodation.status.description)
+    }
+  }
 }

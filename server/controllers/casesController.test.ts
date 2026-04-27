@@ -7,6 +7,7 @@ import ReferralsService from '../services/referralsService'
 import { user } from '../routes/testutils/appSetup'
 import {
   accommodationFactory,
+  accommodationSummaryFactory,
   apiResponseFactory,
   caseFactory,
   dutyToReferFactory,
@@ -22,7 +23,7 @@ import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import AccommodationService from '../services/accommodationService'
-import { accommodationCard } from '../utils/accommodationSummary'
+import { accommodationCard, accommodationHistoryRows } from '../utils/accommodationSummary'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -138,6 +139,7 @@ describe('casesController', () => {
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
       const currentAccommodation = accommodationFactory.current().build()
       const nextAccommodation = accommodationFactory.next().build()
+      const accommodationHistory = accommodationSummaryFactory.buildList(2)
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
@@ -149,6 +151,9 @@ describe('casesController', () => {
       )
       accommodationService.getNextAccommodation.mockResolvedValue(
         apiResponseFactory.accommodationSummary(nextAccommodation),
+      )
+      accommodationService.getAccommodationHistory.mockResolvedValue(
+        apiResponseFactory.accommodationHistory(accommodationHistory),
       )
 
       await casesController.show()(request, response, next)
@@ -162,6 +167,7 @@ describe('casesController', () => {
       expect(eligibilityService.getEligibility).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(dutyToReferService.getCurrentDtr).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(proposedAddressesService.getProposedAddresses).toHaveBeenCalledWith(TEST_TOKEN, crn)
+      expect(accommodationService.getAccommodationHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
         caseData,
@@ -173,6 +179,7 @@ describe('casesController', () => {
         eligibilityCards: eligibilityToEligibilityCards(eligibility),
         dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
         proposedAddresses: proposed.map(proposedAddressStatusCard),
+        accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
         failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),
       })
     })

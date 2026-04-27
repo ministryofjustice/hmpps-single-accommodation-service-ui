@@ -34,6 +34,7 @@ test.describe('Profile Tracker Page', () => {
     proposedAddresses,
     currentAccommodation,
     nextAccommodation,
+    accommodationHistory,
   }: {
     crn: string
     caseData: CaseDto
@@ -43,6 +44,7 @@ test.describe('Profile Tracker Page', () => {
     proposedAddresses?: AccommodationDetail[]
     currentAccommodation?: AccommodationSummaryDto
     nextAccommodation?: AccommodationSummaryDto
+    accommodationHistory?: AccommodationSummaryDto[]
   }) => {
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
@@ -52,6 +54,7 @@ test.describe('Profile Tracker Page', () => {
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
     await accommodationApi.stubGetCurrentAccommodation(crn, currentAccommodation)
     await accommodationApi.stubGetNextAccommodation(crn, nextAccommodation)
+    await accommodationApi.stubGetAccommodationHistory(crn, accommodationHistory)
   }
 
   test('Should display profile tracker for a specific case', async ({ page }) => {
@@ -68,8 +71,9 @@ test.describe('Profile Tracker Page', () => {
       accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' }),
       accommodationFactory.proposed().build({ verificationStatus: 'FAILED' }),
     ]
+    const accommodationHistory = accommodationSummaryFactory.buildList(5)
 
-    await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses })
+    await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses, accommodationHistory })
     await login(page)
 
     await page.getByRole('link', { name: caseData.name }).click()
@@ -82,6 +86,7 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowNextActions(eligibility.caseActions)
     await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
     await profileTrackerPage.shouldShowReferralHistory(referrals)
+    await profileTrackerPage.shouldShowAccommodationHistory(accommodationHistory)
   })
 
   test.describe('accommodation cards', () => {

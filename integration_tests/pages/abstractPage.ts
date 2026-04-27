@@ -88,9 +88,9 @@ export default class AbstractPage {
     await this.completeInputByLabel(label, '')
   }
 
-  async shouldShowTableHeaders(headers: string[]) {
+  async shouldShowTableHeaders(headers: string[], locator?: Locator) {
     for await (const header of headers) {
-      await expect(this.page.getByRole('columnheader', { name: header })).toBeVisible()
+      await expect((locator || this.page).getByRole('columnheader', { name: header })).toBeVisible()
     }
   }
 

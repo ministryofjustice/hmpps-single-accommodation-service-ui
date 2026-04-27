@@ -1,7 +1,10 @@
-import { AccommodationDetail, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationDetail, AccommodationStatusDto, AccommodationSummaryDto } from '@sas/api'
+import { TableRow } from '@govuk/ui'
 import { StatusTag } from '@sas/ui'
+import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
-import { renderMacro } from './macros'
+import { formatDate } from './dates'
+import { renderMacro, statusTag } from './macros'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
   const { type } = accommodation
@@ -93,3 +96,25 @@ export const accommodationCell = (cellType: 'current' | 'next', accommodation?: 
         ...accommodation,
       })
     : ''
+
+const accommodationSummaryStatusTag = (status: AccommodationStatusDto): StatusTag => ({
+  text: status.description,
+  colour: status.code === 'M' ? 'green' : 'grey',
+})
+
+export const accommodationSummaryAddress = (accommodation: AccommodationSummaryDto): string => `
+  <strong>${accommodation.type.description}</strong><br />
+  ${formatAddress(accommodation.address, '<br />')}
+`
+
+export const accommodationHistoryRows = (history: AccommodationSummaryDto[]): TableRow[] => {
+  return history.map(accommodation => [
+    textContent(formatDate(accommodation.startDate)),
+    textContent(accommodation.endDate ? formatDate(accommodation.endDate) : 'Current'),
+    htmlContent(accommodationSummaryAddress(accommodation)),
+    htmlContent(statusTag(accommodationSummaryStatusTag(accommodation.status))),
+  ])
+}
+
+export const accommodationHistoryTable = (history: AccommodationSummaryDto[]): string =>
+  renderMacro('accommodationHistoryTable', { rows: accommodationHistoryRows(history) })

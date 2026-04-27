@@ -1,4 +1,154 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`accommodationSummary accommodation history accommodationHistoryRows returns a row for each accommodation 1`] = `
+[
+  [
+    {
+      "text": "27 April 2026",
+    },
+    {
+      "text": "Current",
+    },
+    {
+      "html": "
+  <strong>Approved Premises</strong><br />
+  London<br />SW1A 1AA
+",
+    },
+    {
+      "html": "<strong class="govuk-tag govuk-tag--green">Main</strong>",
+    },
+  ],
+  [
+    {
+      "text": "3 January 2025",
+    },
+    {
+      "text": "27 April 2026",
+    },
+    {
+      "html": "
+  <strong>Friends/Family (transient)</strong><br />
+  Not Quite London<br />SW1A 2EE
+",
+    },
+    {
+      "html": "<strong class="govuk-tag govuk-tag--grey">Previous</strong>",
+    },
+  ],
+]
+`;
+
+exports[`accommodationSummary accommodation history accommodationHistoryTable macro renders a message and no table when there are no addresses 1`] = `
+"<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+            Accommodation history
+        </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        
+            <p class="govuk-body">No previous addresses</p>
+        
+    </div>
+</div>"
+`;
+
+exports[`accommodationSummary accommodation history accommodationHistoryTable macro renders the accommodation history table for a given list of accommodations 1`] = `
+"<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+            Accommodation history
+        </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        
+            <div class="govuk-summary-list">
+                <table class="govuk-table">
+
+
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+    
+      <th scope="col" class="govuk-table__header">Start date</th>
+    
+      <th scope="col" class="govuk-table__header">End date</th>
+    
+      <th scope="col" class="govuk-table__header">Address</th>
+    
+      <th scope="col" class="govuk-table__header">Status</th>
+    
+    </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <td class="govuk-table__cell">27 April 2026</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">Current</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+  <strong>Approved Premises</strong><br />
+  London<br />SW1A 1AA
+</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--green">Main</strong></td>
+      
+    
+    </tr>
+  
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <td class="govuk-table__cell">3 January 2025</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">27 April 2026</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+  <strong>Friends/Family (transient)</strong><br />
+  Not Quite London<br />SW1A 2EE
+</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--grey">Previous</strong></td>
+      
+    
+    </tr>
+  
+
+  </tbody>
+</table>
+
+            </div>
+        
+    </div>
+</div>"
+`;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {
@@ -109,3 +259,10 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 `;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Undefined accommodation 1`] = `undefined`;
+
+exports[`accommodationSummary accommodationSummaryAddress renders the HTML for an accommodation summary 1`] = `
+"
+  <strong>Householder (Owner - freehold or leasehold)</strong><br />
+  London<br />SW1A 1AA
+"
+`;

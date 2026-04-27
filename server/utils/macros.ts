@@ -8,6 +8,7 @@ type Macro =
   | 'riskLevelTag'
   | 'statusCard'
   | 'referralHistoryTable'
+  | 'accommodationHistoryTable'
   | 'personCell'
   | 'accommodationCard'
   | 'linksCell'

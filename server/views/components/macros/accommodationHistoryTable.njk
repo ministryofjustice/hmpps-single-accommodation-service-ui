@@ -1,0 +1,29 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{%- macro accommodationHistoryTable(context) -%}
+<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+            Accommodation history
+        </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        {% if (context.rows | length > 0) %}
+            <div class="govuk-summary-list">
+                {{ govukTable({
+                    head: [
+                        { text: "Start date" },
+                        { text: "End date" },
+                        { text: "Address" },
+                        { text: "Status" }
+                    ],
+                    rows: context.rows
+                }) }}
+            </div>
+        {% else %}
+            <p class="govuk-body">No previous addresses</p>
+        {% endif %}
+    </div>
+</div>
+{%- endmacro -%}

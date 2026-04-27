@@ -1,6 +1,12 @@
 import { AccommodationAddressDetails, AccommodationDetail, AccommodationSummaryDto } from '@sas/api'
-import { accommodationCard, accommodationCell } from './accommodationSummary'
 import { accommodationSummaryFactory, addressFactory } from '../testutils/factories'
+import {
+  accommodationCard,
+  accommodationCell,
+  accommodationHistoryRows,
+  accommodationHistoryTable,
+  accommodationSummaryAddress,
+} from './accommodationSummary'
 
 describe('accommodationSummary', () => {
   describe('accommodationCell and accommodationCard macros', () => {
@@ -50,6 +56,60 @@ describe('accommodationSummary', () => {
 
       it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {
         expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
+      })
+    })
+  })
+
+  describe('accommodationSummaryAddress', () => {
+    it('renders the HTML for an accommodation summary', () => {
+      const accommodationSummary = accommodationSummaryFactory.build({
+        type: { code: 'A01A', description: 'Householder (Owner - freehold or leasehold)' },
+        address: addressFactory.minimal().build({
+          postTown: 'London',
+          postcode: 'SW1A 1AA',
+        }),
+      })
+
+      expect(accommodationSummaryAddress(accommodationSummary)).toMatchSnapshot()
+    })
+  })
+
+  describe('accommodation history', () => {
+    const accommodationHistory = [
+      accommodationSummaryFactory.build({
+        startDate: '2026-04-27',
+        status: { code: 'M', description: 'Main' },
+        type: { code: 'A02', description: 'Approved Premises' },
+        address: addressFactory.minimal().build({
+          postTown: 'London',
+          postcode: 'SW1A 1AA',
+        }),
+      }),
+      accommodationSummaryFactory.build({
+        startDate: '2025-01-03',
+        endDate: '2026-04-27',
+        status: { code: 'P', description: 'Previous' },
+        type: { code: 'A07A', description: 'Friends/Family (transient)' },
+        address: addressFactory.minimal().build({
+          postTown: 'Not Quite London',
+          postcode: 'SW1A 2EE',
+        }),
+      }),
+    ]
+
+    describe('accommodationHistoryRows', () => {
+      it('returns a row for each accommodation', () => {
+        expect(accommodationHistoryRows(accommodationHistory)).toMatchSnapshot()
+      })
+    })
+
+    describe('accommodationHistoryTable macro', () => {
+      it('renders the accommodation history table for a given list of accommodations', () => {
+        expect(accommodationHistoryTable(accommodationHistory)).toMatchSnapshot()
+      })
+
+      it('renders a message and no table when there are no addresses', () => {
+        expect(accommodationHistoryTable([])).toMatchSnapshot()
       })
     })
   })

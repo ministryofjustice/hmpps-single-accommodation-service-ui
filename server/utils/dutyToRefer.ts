@@ -164,7 +164,6 @@ export const formatDutyToReferStatus = (status: DutyToReferDto['status']): strin
 const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<DutyToReferDto> => {
   const submissionFields = [
     'submissionDate',
-    'localAuthorityAreaId',
     'referenceNumber',
     'localAuthority',
     'id',
@@ -199,8 +198,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   let label: string
   if (type === 'CREATE') {
     if (isOutcome) label = 'Outcome details added'
-    else if (status === 'SUBMITTED') label = 'Submission details added'
-    else label = 'Duty to Refer required'
+    else label = 'Submission details added'
   } else if (isOutcome) {
     label = 'Outcome details updated'
   } else {

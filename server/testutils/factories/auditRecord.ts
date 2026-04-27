@@ -38,9 +38,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
       ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
     ]
 
-    return this.dutyToReferAdded(changes, {
-      localAuthorityAreaName: dtrData.localAuthority.localAuthorityAreaName,
-    })
+    return this.dutyToReferAdded(changes)
   }
 
   dutyToReferSubmissionUpdated(dtrData: DtrSubmissionDto) {
@@ -49,12 +47,10 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
       value: value as string,
     }))
 
-    return this.dutyToReferUpdated(changes, {
-      localAuthorityAreaName: dtrData.localAuthority.localAuthorityAreaName,
-    })
+    return this.dutyToReferUpdated(changes)
   }
 
-  dutyToReferAdded(changes: FieldChange[], extraInformation: Record<string, string> = {}) {
+  dutyToReferAdded(changes: FieldChange[], extraInformation?: Record<string, string>) {
     return this.params({
       type: 'CREATE',
       changes,
@@ -62,7 +58,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     })
   }
 
-  dutyToReferUpdated(changes: FieldChange[], extraInformation: Record<string, string> = {}) {
+  dutyToReferUpdated(changes: FieldChange[], extraInformation?: Record<string, string>) {
     return this.params({
       type: 'UPDATE',
       changes,

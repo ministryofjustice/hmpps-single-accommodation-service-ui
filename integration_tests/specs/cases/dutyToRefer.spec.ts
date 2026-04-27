@@ -139,9 +139,6 @@ test.describe('duty to refer', () => {
       ...submittedDutyToRefer,
       status: 'NOT_ACCEPTED',
     })
-    const createdDutyToReferRecord = auditRecordFactory
-      .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
-      .build()
     const submissionAddedDutyReferRecord = auditRecordFactory
       .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
       .build()
@@ -156,7 +153,7 @@ test.describe('duty to refer', () => {
 
     // Given I have stubbed the API responses
     const caseData = await setupStubs(submittedDutyToRefer)
-    const timelineRecords: AuditRecordDto[] = [submissionAddedDutyReferRecord, createdDutyToReferRecord]
+    const timelineRecords: AuditRecordDto[] = [submissionAddedDutyReferRecord]
     await setupDutyToReferTimeline(editId, timelineRecords)
 
     // Given I am logged in
@@ -236,13 +233,13 @@ test.describe('duty to refer', () => {
       ...submittedDutyToRefer,
       submission: dtrSubmissionFactory.build({ id: submissionId }),
     })
-    const createdDutyToReferRecord = auditRecordFactory
+    const submittedDutyToReferRecord = auditRecordFactory
       .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
       .build()
-    const updatedDutyReferRecord = auditRecordFactory
+    const updatedDutyToReferRecord = auditRecordFactory
       .dutyToReferSubmissionUpdated(submittedDutyToRefer.submission)
       .build()
-    const timelineRecords: AuditRecordDto[] = [createdDutyToReferRecord]
+    const timelineRecords: AuditRecordDto[] = [submittedDutyToReferRecord]
 
     // Given I have stubbed the API responses
     const caseData = await setupStubs(submittedDutyToRefer)
@@ -285,7 +282,7 @@ test.describe('duty to refer', () => {
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
-    timelineRecords.unshift(updatedDutyReferRecord)
+    timelineRecords.unshift(updatedDutyToReferRecord)
     await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
 
     await dutyToReferPage.completeSubmissionForm(updatedDutyToRefer)
@@ -302,7 +299,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
 
     // And I should see a timeline entry showing the submission details were updated
-    await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyReferRecord))
+    await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
   })
 
   test('should allow the user to edit outcome details', async ({ page }) => {
@@ -312,15 +309,15 @@ test.describe('duty to refer', () => {
 
     // Given I have stubbed the API responses
     const caseData = await setupStubs(acceptedDutyToRefer)
-    const createdDutyToReferRecord = auditRecordFactory
+    const submittedDutyToReferRecord = auditRecordFactory
       .dutyToReferSubmissionAdded(acceptedDutyToRefer.submission)
       .build()
-    const updatedDutyReferRecord = auditRecordFactory
+    const updatedDutyToReferRecord = auditRecordFactory
       .dutyToReferUpdated([{ field: 'status', value: updatedDutyToRefer.status }], {
         localAuthorityAreaName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
       })
       .build()
-    const timelineRecords: AuditRecordDto[] = [createdDutyToReferRecord]
+    const timelineRecords: AuditRecordDto[] = [submittedDutyToReferRecord]
     await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
 
     // Given I am logged in
@@ -359,7 +356,7 @@ test.describe('duty to refer', () => {
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
-    timelineRecords.unshift(updatedDutyReferRecord)
+    timelineRecords.unshift(updatedDutyToReferRecord)
     await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
 
     await dutyToReferPage.completeOutcomeForm(updatedDutyToRefer)
@@ -376,6 +373,6 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowBanner('Outcome details updated')
 
     // And I should see a timeline entry showing the outcome details were updated
-    await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyReferRecord))
+    await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
   })
 })

@@ -87,7 +87,7 @@ if (generate.dutyToRefer) {
       .flat()
       .filter((dtr: DutyToReferDto) => dtr.submission?.id)
       .map((dtr: DutyToReferDto) => {
-        const records = [auditRecordFactory.dutyToReferCreated().build()]
+        const records = []
         if (dtr.status === 'SUBMITTED' || dtr.status === 'ACCEPTED' || dtr.status === 'NOT_ACCEPTED') {
           records.push(auditRecordFactory.dutyToReferSubmissionAdded(dtr.submission).build())
         }

@@ -115,8 +115,7 @@ describeClient('DutyToReferClient', provider => {
     await dutyToReferClient.update('test-user-token', crn, id, command)
   })
 
-  // TODO: Enable test when API endpoint exists
-  it.skip('should make a GET request to /cases/:crn/dtr/:id/timeline', async () => {
+  it('should make a GET request to /cases/:crn/dtr/:id/timeline', async () => {
     const body = apiResponseFactory.auditRecords()
     const { crn, submission } = dutyToReferFactory.submitted().build()
 

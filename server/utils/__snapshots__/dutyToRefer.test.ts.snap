@@ -185,26 +185,6 @@ exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refe
 }
 `;
 
-exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a created record 1`] = `
-{
-  "byline": {
-    "text": "System",
-  },
-  "datetime": {
-    "timestamp": "2025-04-12T13:15:00.000Z",
-    "type": "datetime",
-  },
-  "html": "
-    <p><strong class="govuk-tag govuk-tag--orange">Not started</strong></p>
-  
-
-  ",
-  "label": {
-    "text": "Duty to Refer required",
-  },
-}
-`;
-
 exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a note 1`] = `
 {
   "byline": {

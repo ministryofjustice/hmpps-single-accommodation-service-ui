@@ -139,7 +139,9 @@ test.describe('duty to refer', () => {
       ...submittedDutyToRefer,
       status: 'NOT_ACCEPTED',
     })
-    const createdDutyToReferRecord = auditRecordFactory.dutyToReferCreated().build()
+    const createdDutyToReferRecord = auditRecordFactory
+      .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
+      .build()
     const submissionAddedDutyReferRecord = auditRecordFactory
       .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
       .build()
@@ -234,7 +236,9 @@ test.describe('duty to refer', () => {
       ...submittedDutyToRefer,
       submission: dtrSubmissionFactory.build({ id: submissionId }),
     })
-    const createdDutyToReferRecord = auditRecordFactory.dutyToReferCreated().build()
+    const createdDutyToReferRecord = auditRecordFactory
+      .dutyToReferSubmissionAdded(submittedDutyToRefer.submission)
+      .build()
     const updatedDutyReferRecord = auditRecordFactory
       .dutyToReferSubmissionUpdated(submittedDutyToRefer.submission)
       .build()
@@ -308,7 +312,9 @@ test.describe('duty to refer', () => {
 
     // Given I have stubbed the API responses
     const caseData = await setupStubs(acceptedDutyToRefer)
-    const createdDutyToReferRecord = auditRecordFactory.dutyToReferCreated().build()
+    const createdDutyToReferRecord = auditRecordFactory
+      .dutyToReferSubmissionAdded(acceptedDutyToRefer.submission)
+      .build()
     const updatedDutyReferRecord = auditRecordFactory
       .dutyToReferUpdated([{ field: 'status', value: updatedDutyToRefer.status }], {
         localAuthorityAreaName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,

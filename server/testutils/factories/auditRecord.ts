@@ -32,13 +32,6 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     })
   }
 
-  dutyToReferCreated() {
-    return this.params({
-      type: 'CREATE',
-      changes: [{ field: 'status', value: 'NOT_STARTED' }],
-    })
-  }
-
   dutyToReferSubmissionAdded(dtrData: DtrSubmissionDto) {
     const changes: FieldChange[] = [
       { field: 'status', value: 'SUBMITTED' },

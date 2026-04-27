@@ -1,7 +1,12 @@
 import type { SuperAgentRequest } from 'superagent'
 import { AuditRecordDto, DutyToReferDto } from '@sas/api'
 import { stubFor, stubApiError } from './wiremock'
-import { apiResponseFactory, auditRecordFactory, dutyToReferFactory } from '../../server/testutils/factories'
+import {
+  apiResponseFactory,
+  auditRecordFactory,
+  dutyToReferFactory,
+  dtrSubmissionFactory,
+} from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
 export default {
@@ -59,7 +64,9 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.auditRecords(records || auditRecordFactory.dutyToReferCreated().buildList(1)),
+        jsonBody: apiResponseFactory.auditRecords(
+          records || auditRecordFactory.dutyToReferSubmissionAdded(dtrSubmissionFactory.build()).buildList(1),
+        ),
       },
     }),
   stubSubmitDutyToReferTimelineNote: (crn: string, id: string): SuperAgentRequest =>

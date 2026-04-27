@@ -320,15 +320,6 @@ describe('duty to refer utils', () => {
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
-    it('returns a timeline entry for a created record', () => {
-      const auditRecord = auditRecordFactory.dutyToReferCreated().build({
-        commitDate: '2025-04-12T13:15:00.000Z',
-        author: 'System',
-      })
-
-      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
-    })
-
     it('returns a timeline entry for a submission added record', () => {
       const submission = dtrSubmissionFactory.build({
         submissionDate: '2025-04-12',

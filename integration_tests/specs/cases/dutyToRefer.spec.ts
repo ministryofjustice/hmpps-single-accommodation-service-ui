@@ -155,7 +155,7 @@ test.describe('duty to refer', () => {
     // Given I have stubbed the API responses
     const caseData = await setupStubs(submittedDutyToRefer)
     const timelineRecords: AuditRecordDto[] = [submissionAddedDutyReferRecord, createdDutyToReferRecord]
-    await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
+    await setupDutyToReferTimeline(editId, timelineRecords)
 
     // Given I am logged in
     await login(page)

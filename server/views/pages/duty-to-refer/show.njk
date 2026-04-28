@@ -1,7 +1,11 @@
 {% extends "partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/timeline/macro.njk" import mojTimeline %}
+{% from "components/macros/errorSummary.njk" import showErrorSummary %}
 {% from "components/macros/caseDetails.njk" import caseDetails %}
 
 {% set pageTitle = "Duty to Refer (DTR) " + applicationName %}
@@ -26,56 +30,107 @@
 {% endblock %}
 
 {% block content %}
-    {{ caseDetails(caseData, assignedTo) }}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds-from-desktop">
-            <h1 class="govuk-heading-l govuk-!-margin-top-4">Duty to Refer (DTR)</h1>
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <section class="govuk-grid-column-two-thirds-from-desktop">
-            {% if outcomeDetailRows.length %}
-                <h2 class="govuk-heading-m">Outcome details</h2>
-                {{
-                    govukSummaryList({
-                    rows: outcomeDetailRows
-                    })
-                }}
-                {{ govukButton({
-                    text: "Edit outcome details",
-                    classes: "govuk-button--secondary",
-                    href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
-                    preventDoubleClick: true
-                }) }}
-            {% endif %}
+  {{ showErrorSummary(errorSummary) }}
 
-            <h2 class="govuk-heading-m">Submission details</h2>
-            {{ govukSummaryList({
-                rows: submissionDetailRows
-            }) }}
-            {% if status == "NOT_STARTED" %}
-                {{ govukButton({
-                    text: "Add submission details",
-                    href: paths.dutyToRefer.guidance({ crn: crn }),
-                    preventDoubleClick: true
-                }) }}
-            {% else %}
-                {{ govukButton({
-                    text: "Edit submission details",
-                    classes: "govuk-button--secondary",
-                    href: paths.dutyToRefer.edit({ crn: crn, id: dtrId }),
-                    preventDoubleClick: true
-                }) }}
-                {% if not outcomeDetailRows.length %}
-                    <h2 class="govuk-heading-m">Outcome details</h2>
-                    <p>No details about the outcome have been added.</p>
-                    {{ govukButton({
-                        text: "Add outcome",
-                        href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
-                        preventDoubleClick: true
-                    }) }}
-                {% endif %}
-            {% endif %}
-        </section>
+  {{ caseDetails(caseData, assignedTo) }}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l govuk-!-margin-top-4">Duty to Refer (DTR)</h1>
     </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <section>
+        {% if outcomeDetailRows.length %}
+          <h2 class="govuk-heading-m">Outcome details</h2>
+          {{
+            govukSummaryList({
+            rows: outcomeDetailRows
+            })
+          }}
+          {{
+            govukButton({
+                text: "Edit outcome details",
+                classes: "govuk-button--secondary",
+                href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                preventDoubleClick: true
+            })
+          }}
+        {% endif %}
+
+        <h2 class="govuk-heading-m">Submission details</h2>
+        {{
+          govukSummaryList({
+              rows: submissionDetailRows
+          })
+        }}
+        {% if status == "NOT_STARTED" %}
+          {{
+            govukButton({
+                text: "Add submission details",
+                href: paths.dutyToRefer.guidance({ crn: crn }),
+                preventDoubleClick: true
+            })
+          }}
+        {% else %}
+          {{
+            govukButton({
+                text: "Edit submission details",
+                classes: "govuk-button--secondary",
+                href: paths.dutyToRefer.edit({ crn: crn, id: dtrId }),
+                preventDoubleClick: true
+            })
+          }}
+          {% if not outcomeDetailRows.length %}
+            <h2 class="govuk-heading-m">Outcome details</h2>
+            <p>No details about the outcome have been added.</p>
+            {{
+              govukButton({
+                  text: "Add outcome",
+                  href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                  preventDoubleClick: true
+              })
+            }}
+          {% endif %}
+        {% endif %}
+      </section>
+      <section class="govuk-!-margin-top-4 govuk-!-margin-bottom-4">
+        <form action="{{ currentUrl }}" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {{
+            govukTextarea({
+            name: "note",
+            label: {
+                text: "Add note",
+                classes: "govuk-label--s"
+            },
+            classes: "govuk-!-width-two-thirds",
+            value: note,
+            errorMessage: errors.note
+            })
+          }}
+
+          {{
+            govukButton({
+            text: "Add note",
+            preventDoubleClick: true,
+            classes: "govuk-button--secondary"
+            })
+          }}
+        </form>
+      </section>
+    </div>
+
+    <section class="govuk-grid-column-one-third-from-desktop">
+      <h2 class="govuk-heading-m">Events and notes timeline</h2>
+
+      {{
+        mojTimeline({
+            headingLevel: 3,
+            items: timeline
+        })
+      }}
+    </section>
+  </div>
 {% endblock %}

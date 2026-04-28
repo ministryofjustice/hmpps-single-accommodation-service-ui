@@ -8,6 +8,7 @@ import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
 import referrals from './fixtures/referrals.json'
 import dutyToRefer from './fixtures/dutyToRefer.json'
+import dutyToReferAuditRecords from './fixtures/dutyToReferAuditRecords.json'
 import proposedAddresses from './fixtures/proposedAddresses.json'
 import proposedAddressesAuditRecords from './fixtures/proposedAddressesAuditRecords.json'
 import {
@@ -55,6 +56,12 @@ async function stubDutyToRefer() {
     if (dtr?.submission?.id) {
       await dutyToReferApi.stubGetDtrBySubmissionId(caseDto.crn, dtr.submission.id, dtr)
       await dutyToReferApi.stubUpdateDutyToRefer(caseDto.crn, dtr.submission.id)
+      await dutyToReferApi.stubSubmitDutyToReferTimelineNote(caseDto.crn, dtr.submission.id)
+      await dutyToReferApi.stubGetDutyToReferTimeline(
+        caseDto.crn,
+        dtr.submission.id,
+        (dutyToReferAuditRecords as Record<string, AuditRecordDto[]>)[dtr.submission.id] ?? [],
+      )
     }
     await dutyToReferApi.stubSubmitDutyToRefer(caseDto.crn)
   }

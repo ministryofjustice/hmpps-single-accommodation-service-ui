@@ -6,11 +6,17 @@ import {
   validateOutcome,
   detailsSummaryListRows,
   outcomeDetailsSummaryListRows,
+  dutyToReferTimelineEntry,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
-import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import {
+  addGenericErrorToFlash,
+  addUserInputToFlash,
+  fetchErrorsAndUserInput,
+  validateAndFlashErrors,
+} from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
@@ -36,13 +42,16 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [{ data: caseData }, { data: dutyToRefer }] = await Promise.all([
+      const [{ data: caseData }, { data: dutyToRefer }, { data: auditRecords }] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
+        this.dutyToReferService.getTimeline(token, crn, id),
       ])
 
       const submissionDetailRows = detailsSummaryListRows(dutyToRefer)
       const outcomeDetailRows = outcomeDetailsSummaryListRows(dutyToRefer)
+
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/duty-to-refer/show', {
         crn,
@@ -51,7 +60,11 @@ export default class DutyToReferController {
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
         submissionDetailRows,
         outcomeDetailRows,
+        timeline: auditRecords.map(dutyToReferTimelineEntry),
         status: dutyToRefer?.status,
+        ...userInput,
+        errors,
+        errorSummary,
       })
     }
   }
@@ -199,6 +212,33 @@ export default class DutyToReferController {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
         return res.redirect(errorRedirect)
       }
+    }
+  }
+
+  saveNote(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_DETAILS_ADD_NOTE, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+      const { note } = req.body
+
+      if (!note) {
+        validateAndFlashErrors(req, { note: 'Enter a note' })
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
+      }
+
+      try {
+        await this.dutyToReferService.submitTimelineNote(token, crn, id, { note })
+        req.flash('success', 'Note added')
+      } catch (error) {
+        addGenericErrorToFlash(req, error.message)
+        addUserInputToFlash(req)
+      }
+      return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
     }
   }
 

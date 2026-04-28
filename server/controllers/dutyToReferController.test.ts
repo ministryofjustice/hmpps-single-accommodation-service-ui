@@ -7,9 +7,20 @@ import CasesService from '../services/casesService'
 import ReferenceDataService from '../services/referenceDataService'
 import uiPaths from '../paths/ui'
 import * as dutyToReferUtils from '../utils/dutyToRefer'
-import { detailsSummaryListRows, outcomeDetailsSummaryListRows, summaryListRows } from '../utils/dutyToRefer'
+import {
+  detailsSummaryListRows,
+  dutyToReferTimelineEntry,
+  outcomeDetailsSummaryListRows,
+  summaryListRows,
+} from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
-import { apiResponseFactory, caseFactory, dutyToReferFactory, referenceDataFactory } from '../testutils/factories'
+import {
+  apiResponseFactory,
+  auditRecordFactory,
+  caseFactory,
+  dutyToReferFactory,
+  referenceDataFactory,
+} from '../testutils/factories'
 import { caseAssignedTo } from '../utils/cases'
 import * as backlinksUtils from '../utils/backlinks'
 
@@ -45,6 +56,10 @@ describe('dutyToReferController', () => {
     jest
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
+
+    jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    jest.spyOn(validationUtils, 'addGenericErrorToFlash')
+    jest.spyOn(validationUtils, 'addUserInputToFlash')
   })
 
   describe('guidance', () => {
@@ -323,14 +338,17 @@ describe('dutyToReferController', () => {
   })
 
   describe('show', () => {
-    it('renders the duty to refer details page', async () => {
-      const crn = 'CRN123'
-      const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
+    const crn = 'CRN123'
+    const auditRecords = auditRecordFactory.buildList(2)
+    const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
 
+    beforeEach(() => {
       request.params.id = 'submission-id'
-
+      dutyToReferService.getTimeline.mockResolvedValue(apiResponseFactory.auditRecords(auditRecords))
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
+    })
 
+    it('renders the duty to refer details page', async () => {
       await controller.show()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.DUTY_TO_REFER_DETAILS, {
@@ -342,10 +360,75 @@ describe('dutyToReferController', () => {
         crn,
         dtrId: 'submission-id',
         caseData,
+        timeline: auditRecords.map(dutyToReferTimelineEntry),
         assignedTo: caseAssignedTo(caseData, 'user-id'),
         submissionDetailRows: detailsSummaryListRows(dutyToRefer),
         outcomeDetailRows: outcomeDetailsSummaryListRows(dutyToRefer),
         status: dutyToRefer?.status,
+        errors: {},
+        errorSummary: [],
+      })
+    })
+
+    it('shows errors', async () => {
+      const userInput = { note: '' }
+      const errors = { note: 'Enter a note' }
+      const errorSummary = [{ href: '#note', text: 'Enter a note' }]
+
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput })
+
+      await controller.show()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/duty-to-refer/show',
+        expect.objectContaining({
+          errors,
+          errorSummary,
+          note: userInput.note,
+        }),
+      )
+    })
+  })
+
+  describe('saveNote', () => {
+    beforeEach(() => {
+      request.params.id = 'submission-id'
+    })
+
+    it('redirects with an error if the note is empty', async () => {
+      request.body = { note: '' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        note: 'Enter a note',
+      })
+    })
+
+    it('redirects with an error if the API returns an error', async () => {
+      dutyToReferService.submitTimelineNote.mockRejectedValue(new Error('API error'))
+
+      request.body = { note: 'Some valid note' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'API error')
+      expect(validationUtils.addUserInputToFlash).toHaveBeenCalledWith(request)
+    })
+
+    it('saves the note and redirects to the duty to refer details page with a success message', async () => {
+      dutyToReferService.submitTimelineNote.mockResolvedValue()
+
+      request.body = { note: 'Some valid note' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
+      expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
+      expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
+        note: 'Some valid note',
       })
     })
   })

@@ -114,4 +114,51 @@ describeClient('DutyToReferClient', provider => {
 
     await dutyToReferClient.update('test-user-token', crn, id, command)
   })
+
+  it('should make a GET request to /cases/:crn/dtr/:id/timeline', async () => {
+    const body = apiResponseFactory.auditRecords()
+    const { crn, submission } = dutyToReferFactory.submitted().build()
+
+    await provider.addInteraction({
+      state: `A duty to refer timeline exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to get a duty to refer timeline for a case by CRN and dtr ID',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.dutyToRefer.timeline({ crn, id: submission.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+
+    await dutyToReferClient.getTimeline('test-user-token', crn, submission.id)
+  })
+
+  it('should make a POST request to /cases/:crn/dtr/:id/notes', async () => {
+    const crn = crnFactory()
+    const dtr = dutyToReferFactory.submitted().build()
+    const note = { note: 'This is a note\n\nWith multiple lines' }
+
+    await provider.addInteraction({
+      state: `A duty to refer note can be added to the timeline for case with CRN ${crn}`,
+      uponReceiving: 'a request to post a duty to refer timeline note for a case by CRN and dtr ID',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.dutyToRefer.notes({ crn, id: dtr.submission.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: note,
+      },
+      willRespondWith: {
+        status: 201,
+      },
+    })
+
+    await dutyToReferClient.submitTimelineNote('test-user-token', crn, dtr.submission.id, note)
+  })
 })

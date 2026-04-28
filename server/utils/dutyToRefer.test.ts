@@ -4,6 +4,7 @@ import {
   detailsForStatus,
   detailsSummaryListRows,
   dutyToReferStatusCard,
+  dutyToReferTimelineEntry,
   linksForStatus,
   outcomeDetailsSummaryListRows,
   outcomeSupportText,
@@ -12,7 +13,7 @@ import {
   validateSubmission,
 } from './dutyToRefer'
 import * as validationUtils from './validation'
-import { dutyToReferFactory } from '../testutils/factories'
+import { auditRecordFactory, dtrSubmissionFactory, dutyToReferFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
 
 describe('duty to refer utils', () => {
@@ -225,11 +226,10 @@ describe('duty to refer utils', () => {
     ] as const)('returns %s text for %s status', (status, expectedText) => {
       const dutyToRefer = dutyToReferFactory.build({
         status,
-        submission: {
-          localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'Some Council' },
-        },
+        submission: dtrSubmissionFactory.build({
+          localAuthority: { localAuthorityAreaId: '1', localAuthorityAreaName: 'Some Council' },
+        }),
       })
-
       expect(outcomeSupportText(dutyToRefer)).toBe(expectedText)
     })
   })
@@ -299,6 +299,87 @@ describe('duty to refer utils', () => {
       const result = validateOutcome(req)
 
       expect(result).toBe(true)
+    })
+  })
+
+  describe('dutyToReferTimelineEntry', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it('returns a timeline entry for a note', () => {
+      const auditRecord = auditRecordFactory.note('Some note\nline 2').build({
+        commitDate: '2025-04-15T14:30:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a submission added record', () => {
+      const submission = dtrSubmissionFactory.build({
+        submissionDate: '2025-04-12',
+        localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
+        referenceNumber: 'REF123',
+      })
+      const auditRecord = auditRecordFactory.dutyToReferAdded(submission).build({
+        commitDate: '2025-04-12T17:07:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a submission updated record', () => {
+      const submission = dtrSubmissionFactory.build({
+        submissionDate: '2025-04-14',
+        localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
+        referenceNumber: 'REF456',
+      })
+      const auditRecord = auditRecordFactory.dutyToReferUpdated(submission).build({
+        commitDate: '2025-04-15T10:00:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for an outcome added record', () => {
+      const auditRecord = auditRecordFactory
+        .dutyToReferAdded(
+          dtrSubmissionFactory.build({
+            localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
+          }),
+          'ACCEPTED',
+          { localAuthorityAreaName: 'Cherwell District Council' },
+        )
+        .build({
+          commitDate: '2025-04-15T15:38:00.000Z',
+          author: 'Jane Doe',
+        })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for an outcome updated record', () => {
+      const auditRecord = auditRecordFactory
+        .dutyToReferUpdated(
+          dtrSubmissionFactory.build({
+            localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
+          }),
+          'NOT_ACCEPTED',
+          { localAuthorityAreaName: 'Oxford City Council' },
+        )
+        .build({
+          commitDate: '2025-04-16T09:00:00.000Z',
+          author: 'Jane Doe',
+        })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
   })
 })

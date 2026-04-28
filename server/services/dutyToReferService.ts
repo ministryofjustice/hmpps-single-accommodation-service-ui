@@ -1,4 +1,4 @@
-import { DtrCommand } from '@sas/api'
+import { DtrCommand, NoteCommand } from '@sas/api'
 import { DutyToReferClient } from '../data'
 
 export default class DutyToReferService {
@@ -18,5 +18,13 @@ export default class DutyToReferService {
 
   submit(token: string, crn: string, dutyToReferData: DtrCommand) {
     return this.dutyToReferClient.submit(token, crn, dutyToReferData)
+  }
+
+  async getTimeline(token: string, crn: string, id: string) {
+    return this.dutyToReferClient.getTimeline(token, crn, id)
+  }
+
+  async submitTimelineNote(token: string, crn: string, id: string, note: NoteCommand) {
+    return this.dutyToReferClient.submitTimelineNote(token, crn, id, note)
   }
 }

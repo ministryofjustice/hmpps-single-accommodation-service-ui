@@ -1,12 +1,13 @@
 import { Request } from 'express'
-import { CaseDto, DutyToReferDto } from '@sas/api'
-import { SummaryListRow } from '@govuk/ui'
+import { AuditRecordDto, CaseDto, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard, StatusTag } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
-import { statusTag } from './macros'
+import { renderMacro, statusTag } from './macros'
 import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
+import { noteTimelineEntry, timelineEntry } from './timeline'
 
 const dutyToReferStatusTag = (status?: DutyToReferDto['status']): StatusTag =>
   ({
@@ -103,12 +104,10 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
   return rows
 }
 
-export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string => {
-  const localAuthority = dutyToRefer.submission.localAuthority.localAuthorityAreaName
-  return dutyToRefer.status === 'NOT_ACCEPTED'
-    ? `${localAuthority} will not support this person with housing`
-    : `${localAuthority} agreed to support this person with housing`
-}
+export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string =>
+  dutyToRefer.status === 'NOT_ACCEPTED'
+    ? `${dutyToRefer.submission?.localAuthority?.localAuthorityAreaName} will not support this person with housing`
+    : `${dutyToRefer.submission?.localAuthority?.localAuthorityAreaName} agreed to support this person with housing`
 
 export const detailsForStatus = (dutyToRefer: DutyToReferDto): SummaryListRow[] => {
   const { status } = dutyToRefer ?? {}
@@ -161,3 +160,63 @@ export const formatDutyToReferStatus = (status: DutyToReferDto['status']): strin
     NOT_STARTED: 'Not started',
     SUBMITTED: 'Submitted',
   })[status]
+
+const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<DutyToReferDto> => {
+  const submissionFields = ['submissionDate', 'referenceNumber', 'localAuthority', 'id', 'createdBy', 'createdAt']
+  const filterChanges = (predicate: (change: FieldChange) => boolean) =>
+    Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
+
+  const submission = filterChanges(change => submissionFields.includes(change.field)) as Partial<DtrSubmissionDto>
+  const { localAuthorityAreaName } = auditRecord.extraInformation || {}
+
+  if (localAuthorityAreaName) {
+    submission.localAuthority = { ...submission.localAuthority, localAuthorityAreaName }
+  }
+
+  return {
+    ...filterChanges(change => !submissionFields.includes(change.field)),
+    submission,
+  } as DutyToReferDto
+}
+
+export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
+  const { type } = auditRecord
+
+  if (type === 'NOTE') return noteTimelineEntry(auditRecord)
+
+  const dtr = auditRecordChangesToDutyToRefer(auditRecord)
+  const { status } = dtr
+  const isOutcome = status === 'ACCEPTED' || status === 'NOT_ACCEPTED'
+
+  let label: string
+  if (type === 'CREATE') {
+    if (isOutcome) label = 'Outcome details added'
+    else label = 'Submission details added'
+  } else if (isOutcome) {
+    label = 'Outcome details updated'
+  } else {
+    label = 'Submission details updated'
+  }
+
+  const { submissionDate, localAuthority, referenceNumber } = dtr.submission || {}
+  const localAuthorityName = localAuthority?.localAuthorityAreaName
+  const outcomeText = isOutcome && localAuthorityName ? outcomeSupportText(dtr as DutyToReferDto) : undefined
+
+  const submissionValues =
+    status !== 'NOT_STARTED' && (submissionDate || localAuthorityName || referenceNumber)
+      ? {
+          'Date submitted': formatDateAndDaysAgo(submissionDate),
+          'Local authority': localAuthorityName,
+          Reference: referenceNumber,
+        }
+      : undefined
+
+  const html = renderMacro('timelineDutyToRefer', {
+    type,
+    isOutcome,
+    status: status ? dutyToReferStatusTag(status) : undefined,
+    values: isOutcome ? { Outcome: outcomeText } : submissionValues,
+  })
+
+  return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+}

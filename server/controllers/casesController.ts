@@ -3,7 +3,6 @@ import { GetCasesQuery } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import {
-  accommodationCard,
   casesResultsSummary,
   casesToRows,
   caseAssignedTo,
@@ -22,6 +21,8 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
+import AccommodationService from '../services/accommodationService'
+import { accommodationCard } from '../utils/accommodationSummary'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -35,6 +36,7 @@ export default class CasesController {
     private readonly eligibilityService: EligibilityService,
     private readonly dutyToReferService: DutyToReferService,
     private readonly proposedAddressesService: ProposedAddressesService,
+    private readonly accommodationService: AccommodationService,
   ) {}
 
   index(): RequestHandler {
@@ -94,20 +96,24 @@ export default class CasesController {
           { data: eligibility },
           { data: dutyToRefer },
           { data: proposedAddresses },
+          { data: currentAccommodation },
+          { data: nextAccommodation },
         ] = await Promise.all([
           this.casesService.getCase(token, crn),
           this.referralsService.getReferralHistory(token, crn),
           this.eligibilityService.getEligibility(token, crn),
           this.dutyToReferService.getCurrentDtr(token, crn),
           this.proposedAddressesService.getProposedAddresses(token, crn),
+          this.accommodationService.getCurrentAccommodation(token, crn),
+          this.accommodationService.getNextAccommodation(token, crn),
         ])
 
         return res.render('pages/show', {
           caseData,
           assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
           nextActions: eligibility.caseActions,
-          nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
-          currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
+          nextAccommodationCard: accommodationCard('next', nextAccommodation),
+          currentAccommodationCard: accommodationCard('current', currentAccommodation),
           referralHistoryRows: referralHistoryRows(referralHistory),
           eligibilityCards: eligibilityToEligibilityCards(eligibility),
           dutyToReferCard: dutyToReferStatusCard(dutyToRefer),

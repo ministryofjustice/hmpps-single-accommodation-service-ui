@@ -1,5 +1,6 @@
 import { test } from '@playwright/test'
 import { AuditRecordDto, DutyToReferDto } from '@sas/api'
+import accommodationApi from '../../mockApis/accommodation'
 import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
@@ -30,6 +31,8 @@ const setupStubs = async (initialDutyToRefer: DutyToReferDto) => {
   await casesApi.stubGetReferralHistory(crn, [])
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
   await referenceDataApi.stubGetLocalAuthorities()
+  await accommodationApi.stubGetCurrentAccommodation(crn, undefined)
+  await accommodationApi.stubGetNextAccommodation(crn, undefined)
   return caseData
 }
 

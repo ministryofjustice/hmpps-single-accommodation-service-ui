@@ -1,0 +1,118 @@
+{
+  "S511935": null,
+  "P712106": {
+    "crn": "P712106",
+    "startDate": "2026-05-16",
+    "address": {
+      "postcode": "MD3 4WV",
+      "buildingName": "Frami End",
+      "thoroughfareName": "Hillside Close",
+      "dependentLocality": "Paucek-le-Cronin",
+      "postTown": "North Glover",
+      "county": "Leicestershire",
+      "country": "Armenia",
+      "uprn": "h5D3vNXSfWCl"
+    },
+    "status": {
+      "code": "P",
+      "description": "muddy bicycle"
+    },
+    "type": {
+      "code": "A12",
+      "description": "but so"
+    }
+  },
+  "T274481": {
+    "crn": "T274481",
+    "startDate": "2026-05-11",
+    "address": {
+      "postcode": "HG37 0DX",
+      "buildingNumber": "8",
+      "thoroughfareName": "Cronin Croft",
+      "dependentLocality": "Denesik Hill",
+      "postTown": "Beier-under-Tillman",
+      "county": "Wiltshire",
+      "country": "Botswana",
+      "uprn": "XUlZwamKBFwK"
+    },
+    "status": {
+      "code": "RT",
+      "description": "hm leading"
+    },
+    "type": {
+      "code": "A08A",
+      "description": "pish about ample"
+    }
+  },
+  "V938951": null,
+  "T229440": {
+    "crn": "T229440",
+    "startDate": "2026-05-27",
+    "address": {
+      "postcode": "KO3 0XT",
+      "buildingNumber": "124",
+      "thoroughfareName": "Nedra Square",
+      "dependentLocality": "Long Lind",
+      "postTown": "Castle Ernserworth",
+      "county": "Shropshire",
+      "country": "United States of America",
+      "uprn": "X7IST4seX9YL"
+    },
+    "status": {
+      "code": "PR",
+      "description": "remorseful abseil"
+    },
+    "type": {
+      "code": "A03",
+      "description": "blank pish nor"
+    }
+  },
+  "H271226": null,
+  "U934069": null,
+  "I322559": null,
+  "L247269": {
+    "crn": "L247269",
+    "startDate": "2026-06-18",
+    "address": {
+      "postcode": "SY93 5TU",
+      "subBuildingName": "Apt. 469",
+      "buildingName": "Priory Close",
+      "thoroughfareName": "Savion Mount",
+      "dependentLocality": "Towne-le-Romaguera",
+      "postTown": "Schummington",
+      "county": "Central",
+      "country": "Svalbard & Jan Mayen Islands",
+      "uprn": "yrruGIrjGHaJ"
+    },
+    "status": {
+      "code": "PR1",
+      "description": "elegantly quit"
+    },
+    "type": {
+      "code": "A17",
+      "description": "key scornful attend"
+    }
+  },
+  "F608163": {
+    "crn": "F608163",
+    "startDate": "2026-05-16",
+    "address": {
+      "postcode": "TV3 5RH",
+      "buildingName": "Union Street",
+      "thoroughfareName": "Hamill Place",
+      "dependentLocality": "High Corkery",
+      "postTown": "Long Champlinwick",
+      "county": "Berkshire",
+      "country": "Estonia",
+      "uprn": "d3GwlZgRy1Ip"
+    },
+    "status": {
+      "code": "P",
+      "description": "what eek"
+    },
+    "type": {
+      "code": "A11",
+      "description": "by of camouflage"
+    }
+  }
+}

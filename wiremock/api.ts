@@ -4,6 +4,7 @@ import eligibilityApi from '../integration_tests/mockApis/eligibility'
 import dutyToReferApi from '../integration_tests/mockApis/dutyToRefer'
 import referenceDataApi from '../integration_tests/mockApis/referenceData'
 import proposedAddressesApi from '../integration_tests/mockApis/proposedAddresses'
+import accommodationApi from '../integration_tests/mockApis/accommodation'
 import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
 import referrals from './fixtures/referrals.json'
@@ -11,9 +12,12 @@ import dutyToRefer from './fixtures/dutyToRefer.json'
 import dutyToReferAuditRecords from './fixtures/dutyToReferAuditRecords.json'
 import proposedAddresses from './fixtures/proposedAddresses.json'
 import proposedAddressesAuditRecords from './fixtures/proposedAddressesAuditRecords.json'
+import currentAccommodation from './fixtures/currentAccommodation.json'
+import nextAccommodation from './fixtures/nextAccommodation.json'
 import {
   AccommodationDetail,
   AccommodationReferralDto,
+  AccommodationSummaryDto,
   AuditRecordDto,
   CaseDto,
   DutyToReferDto,
@@ -83,6 +87,19 @@ async function stubProposedAddresses() {
   }
 }
 
+async function stubAccommodation() {
+  for await (const caseDto of cases) {
+    await accommodationApi.stubGetCurrentAccommodation(
+      caseDto.crn,
+      (currentAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],
+    )
+    await accommodationApi.stubGetNextAccommodation(
+      caseDto.crn,
+      (nextAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],
+    )
+  }
+}
+
 async function stubReferenceData() {
   await referenceDataApi.stubGetLocalAuthorities()
 }
@@ -99,6 +116,7 @@ async function stubReferenceData() {
     stubReferrals(),
     stubDutyToRefer(),
     stubProposedAddresses(),
+    stubAccommodation(),
   ])
   console.log('Done!')
 })()

@@ -5,6 +5,7 @@ import { faker } from '@faker-js/faker'
 import { AccommodationDetail, CaseDto, DutyToReferDto } from '@sas/api'
 import {
   accommodationFactory,
+  accommodationSummaryFactory,
   auditRecordFactory,
   caseFactory,
   dutyToReferFactory,
@@ -27,10 +28,13 @@ const generate = {
   referrals: generateCases || process.argv.includes('--referrals'),
   dutyToRefer: generateCases || process.argv.includes('--dtr'),
   proposedAddresses: generateCases || process.argv.includes('--proposed-addresses'),
+  accommodation: generateCases || process.argv.includes('--accommodation'),
 }
 
 if (Object.values(generate).filter(Boolean).length === 0) {
-  console.log('No data selected. Specify --all, --eligibility, --referrals, --dtr or --proposed-addresses')
+  console.log(
+    'No data selected. Specify --all, --eligibility, --referrals, --dtr, --proposed-addresses or --accommodation',
+  )
   process.exit(1)
 }
 
@@ -123,4 +127,24 @@ if (generate.proposedAddresses) {
       .map((address: AccommodationDetail) => [address.id, auditRecordFactory.proposedAddressCreated(address).build()]),
   )
   saveToFixture('proposedAddressesAuditRecords', auditRecords)
+}
+
+if (generate.accommodation) {
+  const currentAccommodation = cases.reduce(
+    (responses, c) => ({
+      ...responses,
+      [c.crn]: accommodationSummaryFactory.current().build({ crn: c.crn }),
+    }),
+    {},
+  )
+  saveToFixture('currentAccommodation', currentAccommodation)
+
+  const nextAccommodation = cases.reduce(
+    (responses, c) => ({
+      ...responses,
+      [c.crn]: faker.datatype.boolean() ? accommodationSummaryFactory.next().build({ crn: c.crn }) : null,
+    }),
+    {},
+  )
+  saveToFixture('nextAccommodation', nextAccommodation)
 }

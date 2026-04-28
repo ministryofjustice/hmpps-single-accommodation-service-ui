@@ -8,6 +8,7 @@ import EligibilityService from './eligibilityService'
 import DutyToReferService from './dutyToReferService'
 import ProposedAddressesService from './proposedAddressesService'
 import OsDataHubService from './osDataHubService'
+import AccommodationService from './accommodationService'
 
 export const services = () => {
   const {
@@ -20,6 +21,7 @@ export const services = () => {
     dutyToReferClient,
     proposedAddressesClient,
     osDataHubClient,
+    accommodationClient,
   } = dataAccess()
 
   return {
@@ -32,6 +34,7 @@ export const services = () => {
     dutyToReferService: new DutyToReferService(dutyToReferClient),
     proposedAddressesService: new ProposedAddressesService(proposedAddressesClient),
     osDataHubService: new OsDataHubService(osDataHubClient),
+    accommodationService: new AccommodationService(accommodationClient),
   }
 }
 

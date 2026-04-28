@@ -81,5 +81,9 @@ describe('addresses utilities', () => {
 
       expect(formatAddress(address)).toEqual(expected)
     })
+
+    it('returns an empty string for an undefined address', () => {
+      expect(formatAddress(undefined)).toEqual('')
+    })
   })
 })

@@ -1,10 +1,18 @@
 import { test } from '@playwright/test'
-import { AccommodationDetail, AccommodationReferralDto, CaseDto, DutyToReferDto, EligibilityDto } from '@sas/api'
+import {
+  AccommodationDetail,
+  AccommodationReferralDto,
+  AccommodationSummaryDto,
+  CaseDto,
+  DutyToReferDto,
+  EligibilityDto,
+} from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
+import accommodationApi from '../../mockApis/accommodation'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import {
   caseFactory,
@@ -13,6 +21,7 @@ import {
   eligibilityFactory,
   serviceResultFactory,
   accommodationFactory,
+  accommodationSummaryFactory,
 } from '../../../server/testutils/factories'
 
 test.describe('Profile Tracker Page', () => {
@@ -23,6 +32,8 @@ test.describe('Profile Tracker Page', () => {
     eligibility,
     referrals,
     proposedAddresses,
+    currentAccommodation,
+    nextAccommodation,
   }: {
     crn: string
     caseData: CaseDto
@@ -30,6 +41,8 @@ test.describe('Profile Tracker Page', () => {
     eligibility?: EligibilityDto
     referrals?: AccommodationReferralDto[]
     proposedAddresses?: AccommodationDetail[]
+    currentAccommodation?: AccommodationSummaryDto
+    nextAccommodation?: AccommodationSummaryDto
   }) => {
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
@@ -37,6 +50,8 @@ test.describe('Profile Tracker Page', () => {
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
     await casesApi.stubGetReferralHistory(crn, referrals)
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
+    await accommodationApi.stubGetCurrentAccommodation(crn, currentAccommodation)
+    await accommodationApi.stubGetNextAccommodation(crn, nextAccommodation)
   }
 
   test('Should display profile tracker for a specific case', async ({ page }) => {
@@ -74,34 +89,27 @@ test.describe('Profile Tracker Page', () => {
 
     test(`should render next and current cards for a confirmed case`, async ({ page }) => {
       const caseData = caseFactory.confirmed().build({ crn })
-      await setupStubs({ crn, caseData })
+      const currentAccommodation = accommodationSummaryFactory.current().build()
+      const nextAccommodation = accommodationSummaryFactory.next().build()
+      await setupStubs({ crn, caseData, currentAccommodation, nextAccommodation })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-      await profileTrackerPage.shouldShowNextAccommodationCard(caseData.nextAccommodation)
-      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation)
+      await profileTrackerPage.shouldShowNextAccommodationCard(nextAccommodation)
+      await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
     })
 
-    test(`should render next as alert and current as card for a NFA case`, async ({ page }) => {
+    test(`should render only current accommodation for a NFA next case`, async ({ page }) => {
       const caseData = caseFactory.noFixedAbodeNext().build({ crn })
-      await setupStubs({ crn, caseData })
+      const currentAccommodation = accommodationSummaryFactory.current().build()
+      await setupStubs({ crn, caseData, currentAccommodation })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-      await profileTrackerPage.shouldShowNextAccommodationAlert(caseData.nextAccommodation)
-      await profileTrackerPage.shouldShowCurrentAccommodationCard(caseData.currentAccommodation)
-    })
-
-    test(`should render only current alert for a currently NFA case`, async ({ page }) => {
-      const caseData = caseFactory.noFixedAbodeCurrent().build({ crn })
-      await setupStubs({ crn, caseData })
-      await login(page)
-
-      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
-
-      await profileTrackerPage.shouldShowCurrentAccommodationAlert(caseData.currentAccommodation)
+      await profileTrackerPage.shouldNotShowNextAccommodationCard()
+      await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
     })
   })
 

@@ -13,14 +13,7 @@ import {
   eligibilityFactory,
   referralFactory,
 } from '../testutils/factories'
-import {
-  accommodationCard,
-  caseAssignedTo,
-  casesResultsSummary,
-  casesTableColumns,
-  casesToRows,
-  queryToFilters,
-} from '../utils/cases'
+import { caseAssignedTo, casesResultsSummary, casesTableColumns, casesToRows, queryToFilters } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -28,6 +21,8 @@ import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
+import AccommodationService from '../services/accommodationService'
+import { accommodationCard } from '../utils/accommodationSummary'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -44,6 +39,7 @@ describe('casesController', () => {
   const eligibilityService = mock<EligibilityService>()
   const dutyToReferService = mock<DutyToReferService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
+  const accommodationService = mock<AccommodationService>()
 
   const casesController = new CasesController(
     auditService,
@@ -52,6 +48,7 @@ describe('casesController', () => {
     eligibilityService,
     dutyToReferService,
     proposedAddressesService,
+    accommodationService,
   )
 
   beforeEach(() => {
@@ -139,12 +136,20 @@ describe('casesController', () => {
       const dutyToRefer = dutyToReferFactory.build({ crn })
       const proposed = accommodationFactory.proposed().buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
+      const currentAccommodation = accommodationFactory.current().build()
+      const nextAccommodation = accommodationFactory.next().build()
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility(eligibility))
       dutyToReferService.getCurrentDtr.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed, failedChecks } })
+      accommodationService.getCurrentAccommodation.mockResolvedValue(
+        apiResponseFactory.accommodationSummary(currentAccommodation),
+      )
+      accommodationService.getNextAccommodation.mockResolvedValue(
+        apiResponseFactory.accommodationSummary(nextAccommodation),
+      )
 
       await casesController.show()(request, response, next)
 
@@ -162,8 +167,8 @@ describe('casesController', () => {
         caseData,
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: eligibility.caseActions,
-        nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
-        currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),
+        nextAccommodationCard: accommodationCard('next', nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility),
         dutyToReferCard: dutyToReferStatusCard(dutyToRefer),

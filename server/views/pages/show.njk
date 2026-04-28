@@ -32,10 +32,6 @@
   <div class="govuk-grid-row">
     <section class="govuk-grid-column-one-third-from-desktop govuk-grid-column-right-from-desktop">
       <h2 class="govuk-visually-hidden">Current situation</h2>
-      {% if caseData.nextAccommodation and caseData.nextAccommodation.arrangementType === 'NO_FIXED_ABODE' %}
-        {{ accommodationCard(nextAccommodationCard) }}
-      {% endif %}
-
       {% if nextActions | length %}
         <div class="sas-card sas-card--block">
           <h3 class="govuk-heading-m">Next actions</h3>
@@ -49,10 +45,7 @@
       {% endif %}
 
       {{ accommodationCard(currentAccommodationCard) }}
-
-      {% if caseData.nextAccommodation and caseData.nextAccommodation.arrangementType !== 'NO_FIXED_ABODE' %}
-        {{ accommodationCard(nextAccommodationCard) }}
-      {% endif %}
+      {{ accommodationCard(nextAccommodationCard) }}
     </section>
 
     <div class="govuk-grid-column-two-thirds-from-desktop">

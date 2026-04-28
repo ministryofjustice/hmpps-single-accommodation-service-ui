@@ -1,10 +1,10 @@
 import { AccommodationDetail, CaseDto as Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, StatusCell, StatusTag } from '@sas/ui'
+import { GetCasesQuery, StatusCell } from '@sas/ui'
 import { htmlContent } from './utils'
-import { addressLines } from './addresses'
 import { renderMacro, statusCell } from './macros'
 import config from '../config'
+import { accommodationCell } from './accommodationSummary'
 
 export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
   FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
@@ -55,82 +55,6 @@ const removeQueryParam = (url: string, param: string): string => {
 export const personCell = (c: Case): string => renderMacro('personCell', c)
 
 export const actionsCell = (actions: Case['actions']): string => renderMacro('actionsCell', { actions })
-
-export const accommodationType = (accommodation: AccommodationDetail, type: 'current' | 'next'): string => {
-  const { arrangementType, arrangementSubType, arrangementSubTypeDescription, name } = accommodation
-
-  switch (arrangementType) {
-    case 'PRISON':
-      return name
-    case 'PRIVATE':
-      if (arrangementSubType === 'OTHER') return `Other: ${arrangementSubTypeDescription}`
-      return arrangementSubTypes[arrangementSubType]
-    case 'NO_FIXED_ABODE':
-      return type === 'current' ? 'No accommodation' : 'None'
-    case 'CAS1':
-      return 'Approved Premises (CAS1)'
-    case 'CAS2':
-      return 'CAS2 for HDC'
-    case 'CAS2V2':
-      return 'CAS2 Bail'
-    case 'CAS3':
-      return 'CAS3'
-    default:
-      return ''
-  }
-}
-
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
-  accommodation
-    ? renderMacro('accommodationCell', {
-        cellType,
-        accommodationType: accommodationType(accommodation, cellType),
-        addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
-        ...accommodation,
-      })
-    : ''
-
-type AccommodationCardContext = {
-  cardType: 'current' | 'next'
-  arrangementType: AccommodationDetail['arrangementType']
-  settledTag?: StatusTag
-  name?: string
-  address?: string
-  startDate?: string
-  endDate?: string
-  link?: string
-}
-
-export const settledTag = (settledType?: AccommodationDetail['settledType']): StatusTag =>
-  ({
-    SETTLED: { text: 'Settled', colour: 'green' },
-    TRANSIENT: { text: 'Transient', colour: 'purple' },
-  })[settledType]
-
-export const accommodationCard = (
-  cardType: 'current' | 'next',
-  accommodation?: AccommodationDetail,
-): AccommodationCardContext => {
-  if (!accommodation) return undefined
-
-  const { arrangementType, settledType, startDate, endDate } = accommodation
-
-  const context: AccommodationCardContext = {
-    cardType,
-    arrangementType,
-    startDate,
-    endDate,
-  }
-
-  if (arrangementType === 'NO_FIXED_ABODE') return context
-
-  return {
-    ...context,
-    settledTag: settledTag(settledType),
-    name: accommodationType(accommodation, cardType),
-    address: addressLines(accommodation.address).join('<br />'),
-  }
-}
 
 export const casesToRows = (cases: Case[]): TableRow[] =>
   cases.map(c => {

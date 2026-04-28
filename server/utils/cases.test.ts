@@ -1,19 +1,17 @@
-import { AccommodationDetail, AccommodationAddressDetails } from '@sas/api'
 import {
-  accommodationCell,
   caseAssignedTo,
   casesResultsSummary,
   casesToRows,
   personCell,
-  accommodationCard,
   mapGetCasesQuery,
   queryToFilters,
   actionsCell,
   caseStatusCell,
 } from './cases'
-import { accommodationFactory, addressFactory, caseFactory } from '../testutils/factories'
+import { accommodationFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
 import config from '../config'
+import { accommodationCell } from './accommodationSummary'
 
 describe('cases utilities', () => {
   describe('casesResultsSummary', () => {
@@ -40,70 +38,6 @@ describe('cases utilities', () => {
       })
 
       expect(personCell(person)).toMatchSnapshot()
-    })
-  })
-
-  describe('accommodationCell and accommodationCard macros', () => {
-    beforeEach(() => {
-      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
-    })
-
-    afterEach(() => {
-      jest.useRealTimers()
-    })
-
-    describe.each(['current', 'next'])('for %s accommodation', (cellType: 'current' | 'next') => {
-      const factory = (date: string) =>
-        cellType === 'current' ? accommodationFactory.current(date, '2025-12-01') : accommodationFactory.next(date)
-
-      const address: AccommodationAddressDetails = addressFactory.minimal().build({
-        buildingNumber: '9',
-        thoroughfareName: 'Foo Bar',
-        postTown: 'Foocity',
-        postcode: 'FO0 1BA',
-      })
-
-      const prison = factory('2026-01-01')
-        .prison()
-        .build({ name: 'HMP Foobar', offenderReleaseType: 'LICENCE', address })
-      const prisonNoQualifier = factory('2025-12-11')
-        .prison()
-        .build({ name: 'HMP Foobar', offenderReleaseType: undefined, address })
-      const cas1Accommodation = factory('2026-02-03').cas('CAS1').build({ address })
-      const cas2Accommodation = factory('2026-03-12').cas('CAS2').build({ address })
-      const cas2v2Accommodation = factory('2026-05-23').cas('CAS2V2').build({ address })
-      const cas3Accommodation = factory('2026-07-31').cas('CAS3').build({ address })
-      const privateAccommodation = factory('2026-09-10')
-        .privateAddress()
-        .build({ settledType: 'SETTLED', arrangementSubType: 'FRIENDS_OR_FAMILY', address })
-      const transientPrivateAccommodation = factory('2026-09-10').privateAddress().build({
-        settledType: 'TRANSIENT',
-        arrangementSubType: 'OTHER',
-        arrangementSubTypeDescription: 'Some place',
-        address,
-      })
-      const noFixedAbode = factory('2026-09-10').noFixedAbode().build()
-
-      const testCases: [string, AccommodationDetail][] = [
-        ['Prison', prison],
-        ['Prison (no qualifier)', prisonNoQualifier],
-        ['CAS1', cas1Accommodation],
-        ['CAS2', cas2Accommodation],
-        ['CAS2v2', cas2v2Accommodation],
-        ['CAS3', cas3Accommodation],
-        ['Settled Private address', privateAccommodation],
-        ['Transient Private address', transientPrivateAccommodation],
-        ['No fixed abode', noFixedAbode],
-        ['Undefined', undefined],
-      ]
-
-      it.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
-        expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
-      })
-
-      it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {
-        expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
-      })
     })
   })
 

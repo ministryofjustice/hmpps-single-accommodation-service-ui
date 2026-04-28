@@ -15,3 +15,13 @@
 .sas-colour--dark-grey {
   color: govuk-colour("dark-grey");
 }
+
+/**
+ * Yellow tag uses `tint-50` from v6.1.0 of GOVUK Frontend [1], which we consider too vivid for our purpose.
+ * We therefore revert the yellow tag to the default tint of 80%.
+ *
+ * [1] https://github.com/alphagov/govuk-frontend/blob/main/packages/govuk-frontend/src/govuk/components/tag/_mixin.scss#L112-L116
+ */
+.govuk-tag--yellow {
+  background-color: govuk-colour("yellow", $variant: "tint-80");
+}

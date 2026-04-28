@@ -92,7 +92,7 @@
     "@pactflow/openapi-pact-comparator": "^1.14.0",
     "@playwright/test": "^1.59.1",
     "accessible-autocomplete": "3.0.1",
-    "applicationinsights": "^2.9.8",
+    "applicationinsights": "^3.14.0",
     "body-parser": "^2.2.2",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",

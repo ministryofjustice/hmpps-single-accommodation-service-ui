@@ -16,6 +16,10 @@ class ServiceResultFactory extends Factory<ServiceResult> {
   notEligible() {
     return this.params({ serviceStatus: 'NOT_ELIGIBLE', action: undefined, suitableApplicationId: undefined })
   }
+
+  notStarted() {
+    return this.params({ serviceStatus: 'NOT_STARTED', action: undefined, suitableApplicationId: undefined })
+  }
 }
 
 export default ServiceResultFactory.define(() => ({

@@ -17,6 +17,7 @@ export default Factory.define<EligibilityDto>(() => {
   const allServiceResults = {
     cas1: serviceResultFactory.notEligible().build(),
     cas3: serviceResultFactory.notEligible().build(),
+    dtr: serviceResultFactory.notStarted().build(),
   }
 
   const eligibleService = faker.helpers.arrayElement(Object.keys(allServiceResults)) as keyof typeof allServiceResults

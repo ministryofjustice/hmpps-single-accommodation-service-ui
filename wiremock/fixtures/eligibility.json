@@ -2,6 +2,7 @@
   "S511935": {
     "crn": "S511935",
     "caseActions": ["Add DTR outcome"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -12,6 +13,7 @@
   "P712106": {
     "crn": "P712106",
     "caseActions": ["Start CAS3 referral"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -22,6 +24,7 @@
   "T274481": {
     "crn": "T274481",
     "caseActions": ["Add proposed address", "Consider home visit", "Add DTR outcome"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -33,6 +36,7 @@
   "V938951": {
     "crn": "V938951",
     "caseActions": ["Add DTR outcome"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -44,6 +48,7 @@
   "T229440": {
     "crn": "T229440",
     "caseActions": ["Consider home visit"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -54,6 +59,7 @@
   "H271226": {
     "crn": "H271226",
     "caseActions": ["Submit a CRS referral", "Start CAS3 referral"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -64,6 +70,7 @@
   "U934069": {
     "crn": "U934069",
     "caseActions": ["Consider home visit", "Add proposed address"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -74,6 +81,7 @@
   "I322559": {
     "crn": "I322559",
     "caseActions": ["Add DTR outcome", "Submit a CRS referral"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -84,6 +92,7 @@
   "L247269": {
     "crn": "L247269",
     "caseActions": ["Confirm next address", "Consider home visit", "Add proposed address"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },
@@ -94,6 +103,7 @@
   "F608163": {
     "crn": "F608163",
     "caseActions": ["Consider home visit"],
+    "dtr": { "serviceStatus": "NOT_STARTED" },
     "cas1": {
       "serviceStatus": "NOT_ELIGIBLE"
     },

@@ -28,12 +28,12 @@ const generate = {
   referrals: generateCases || process.argv.includes('--referrals'),
   dutyToRefer: generateCases || process.argv.includes('--dtr'),
   proposedAddresses: generateCases || process.argv.includes('--proposed-addresses'),
-  accommodations: generateCases || process.argv.includes('--accommodations'),
+  accommodation: generateCases || process.argv.includes('--accommodation'),
 }
 
 if (Object.values(generate).filter(Boolean).length === 0) {
   console.log(
-    'No data selected. Specify --all, --eligibility, --referrals, --dtr, --proposed-addresses or --accommodations',
+    'No data selected. Specify --all, --eligibility, --referrals, --dtr, --proposed-addresses or --accommodation',
   )
   process.exit(1)
 }
@@ -129,22 +129,22 @@ if (generate.proposedAddresses) {
   saveToFixture('proposedAddressesAuditRecords', auditRecords)
 }
 
-if (generate.accommodations) {
-  const currentAccommodations = cases.reduce(
+if (generate.accommodation) {
+  const currentAccommodation = cases.reduce(
     (responses, c) => ({
       ...responses,
       [c.crn]: accommodationSummaryFactory.current().build({ crn: c.crn }),
     }),
     {},
   )
-  saveToFixture('currentAccommodations', currentAccommodations)
+  saveToFixture('currentAccommodation', currentAccommodation)
 
-  const nextAccommodations = cases.reduce(
+  const nextAccommodation = cases.reduce(
     (responses, c) => ({
       ...responses,
       [c.crn]: faker.datatype.boolean() ? accommodationSummaryFactory.next().build({ crn: c.crn }) : null,
     }),
     {},
   )
-  saveToFixture('nextAccommodations', nextAccommodations)
+  saveToFixture('nextAccommodation', nextAccommodation)
 }

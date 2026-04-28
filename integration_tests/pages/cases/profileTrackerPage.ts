@@ -10,12 +10,12 @@ import {
 import { formatDate } from '../../../server/utils/dates'
 import { eligibilityStatusCard } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
-import { accommodationType, settledTag } from '../../../server/utils/cases'
 import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
 import { referralStatusTag, referralStatusType } from '../../../server/utils/referrals'
 import { addressLines, formatAddress } from '../../../server/utils/addresses'
 import PageWithCaseDetails from './pageWithCaseDetails'
+import { accommodationType, settledTag } from '../../../server/utils/accommodationSummary'
 
 export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(

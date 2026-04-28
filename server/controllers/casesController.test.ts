@@ -21,7 +21,7 @@ import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
-import AccommodationsService from '../services/accommodationsService'
+import AccommodationService from '../services/accommodationService'
 import { accommodationCard } from '../utils/accommodationSummary'
 
 describe('casesController', () => {
@@ -39,7 +39,7 @@ describe('casesController', () => {
   const eligibilityService = mock<EligibilityService>()
   const dutyToReferService = mock<DutyToReferService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
-  const accommodationsService = mock<AccommodationsService>()
+  const accommodationService = mock<AccommodationService>()
 
   const casesController = new CasesController(
     auditService,
@@ -48,7 +48,7 @@ describe('casesController', () => {
     eligibilityService,
     dutyToReferService,
     proposedAddressesService,
-    accommodationsService,
+    accommodationService,
   )
 
   beforeEach(() => {
@@ -144,10 +144,10 @@ describe('casesController', () => {
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility(eligibility))
       dutyToReferService.getCurrentDtr.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed, failedChecks } })
-      accommodationsService.getCurrentAccommodation.mockResolvedValue(
+      accommodationService.getCurrentAccommodation.mockResolvedValue(
         apiResponseFactory.accommodationSummary(currentAccommodation),
       )
-      accommodationsService.getNextAccommodation.mockResolvedValue(
+      accommodationService.getNextAccommodation.mockResolvedValue(
         apiResponseFactory.accommodationSummary(nextAccommodation),
       )
 

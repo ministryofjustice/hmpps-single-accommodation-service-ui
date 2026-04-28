@@ -9,7 +9,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.accommodations.current({ crn }),
+        urlPattern: apiPaths.cases.accommodation.current({ crn }),
       },
       response: {
         status: 200,
@@ -23,7 +23,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.accommodations.next({ crn }),
+        urlPattern: apiPaths.cases.accommodation.next({ crn }),
       },
       response: {
         status: 200,

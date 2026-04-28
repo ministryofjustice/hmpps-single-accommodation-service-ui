@@ -21,7 +21,7 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
-import AccommodationsService from '../services/accommodationsService'
+import AccommodationService from '../services/accommodationService'
 import { accommodationCard } from '../utils/accommodationSummary'
 
 interface IndexRequest extends Request {
@@ -36,7 +36,7 @@ export default class CasesController {
     private readonly eligibilityService: EligibilityService,
     private readonly dutyToReferService: DutyToReferService,
     private readonly proposedAddressesService: ProposedAddressesService,
-    private readonly accommodationsService: AccommodationsService,
+    private readonly accommodationService: AccommodationService,
   ) {}
 
   index(): RequestHandler {
@@ -104,8 +104,8 @@ export default class CasesController {
           this.eligibilityService.getEligibility(token, crn),
           this.dutyToReferService.getCurrentDtr(token, crn),
           this.proposedAddressesService.getProposedAddresses(token, crn),
-          this.accommodationsService.getCurrentAccommodation(token, crn),
-          this.accommodationsService.getNextAccommodation(token, crn),
+          this.accommodationService.getCurrentAccommodation(token, crn),
+          this.accommodationService.getNextAccommodation(token, crn),
         ])
 
         return res.render('pages/show', {

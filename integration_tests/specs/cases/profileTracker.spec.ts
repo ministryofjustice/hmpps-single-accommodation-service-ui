@@ -12,7 +12,7 @@ import casesApi from '../../mockApis/cases'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
-import accommodationsApi from '../../mockApis/accommodations'
+import accommodationApi from '../../mockApis/accommodation'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import {
   caseFactory,
@@ -50,8 +50,8 @@ test.describe('Profile Tracker Page', () => {
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
     await casesApi.stubGetReferralHistory(crn, referrals)
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
-    await accommodationsApi.stubGetCurrentAccommodation(crn, currentAccommodation)
-    await accommodationsApi.stubGetNextAccommodation(crn, nextAccommodation)
+    await accommodationApi.stubGetCurrentAccommodation(crn, currentAccommodation)
+    await accommodationApi.stubGetNextAccommodation(crn, nextAccommodation)
   }
 
   test('Should display profile tracker for a specific case', async ({ page }) => {

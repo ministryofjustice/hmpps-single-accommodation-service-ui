@@ -40,10 +40,13 @@
   "jest": {
     "preset": "ts-jest",
     "transform": {
-      "^.+\\.tsx?$": [
+      "^.+\\.(tsx|js)?$": [
         "ts-jest"
       ]
     },
+    "transformIgnorePatterns": [
+      "node_modules/(?!@faker-js).+"
+    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}",

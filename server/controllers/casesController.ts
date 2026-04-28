@@ -3,7 +3,6 @@ import { GetCasesQuery } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import {
-  accommodationCard,
   casesResultsSummary,
   casesToRows,
   caseAssignedTo,
@@ -23,6 +22,7 @@ import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
 import AccommodationsService from '../services/accommodationsService'
+import { accommodationCard } from '../utils/accommodationSummary'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery

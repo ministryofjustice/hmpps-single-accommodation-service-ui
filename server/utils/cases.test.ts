@@ -1,19 +1,17 @@
-import { AccommodationAddressDetails, AccommodationSummaryDto } from '@sas/api'
 import {
-  accommodationCell,
   caseAssignedTo,
   casesResultsSummary,
   casesToRows,
   personCell,
-  accommodationCard,
   mapGetCasesQuery,
   queryToFilters,
   actionsCell,
   caseStatusCell,
 } from './cases'
-import { accommodationFactory, accommodationSummaryFactory, addressFactory, caseFactory } from '../testutils/factories'
+import { accommodationFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
 import config from '../config'
+import { accommodationCell } from './accommodationSummary'
 
 describe('cases utilities', () => {
   describe('casesResultsSummary', () => {
@@ -40,58 +38,6 @@ describe('cases utilities', () => {
       })
 
       expect(personCell(person)).toMatchSnapshot()
-    })
-  })
-
-  describe('accommodationCell and accommodationCard macros', () => {
-    beforeEach(() => {
-      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
-    })
-
-    afterEach(() => {
-      jest.useRealTimers()
-    })
-
-    describe.each(['current', 'next'])('for %s accommodation', (cellType: 'current' | 'next') => {
-      const summaryFactory = (date: string) =>
-        cellType === 'current'
-          ? accommodationSummaryFactory.current(date, '2025-12-01')
-          : accommodationSummaryFactory.next(date)
-
-      const address: AccommodationAddressDetails = addressFactory.minimal().build({
-        buildingNumber: '9',
-        thoroughfareName: 'Foo Bar',
-        postTown: 'Foocity',
-        postcode: 'FO0 1BA',
-      })
-
-      const cas2Summary = summaryFactory('2026-02-03').build({
-        address,
-        type: { code: 'A10' },
-      })
-      const cas3Summary = summaryFactory('2026-07-31').build({ address, type: { code: 'A17' } })
-      const privateSummary = summaryFactory('2026-09-10').build({
-        address,
-        type: { code: 'A07B' },
-      })
-      const noTypeSummary = summaryFactory('2026-05-23').build({ address, type: null })
-
-      const testCases: [string, AccommodationSummaryDto][] = [
-        ['CAS2', cas2Summary],
-        ['CAS3', cas3Summary],
-        ['Private address', privateSummary],
-        ['No type', noTypeSummary],
-        ['Undefined', undefined],
-      ]
-
-      // TODO uncomment when accommodationCell is updated to use AccommodationSummaryDto
-      // it.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
-      //   expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
-      // })
-
-      it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {
-        expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
-      })
     })
   })
 

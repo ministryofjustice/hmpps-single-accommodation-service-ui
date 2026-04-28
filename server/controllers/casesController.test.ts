@@ -13,14 +13,7 @@ import {
   eligibilityFactory,
   referralFactory,
 } from '../testutils/factories'
-import {
-  accommodationCard,
-  caseAssignedTo,
-  casesResultsSummary,
-  casesTableColumns,
-  casesToRows,
-  queryToFilters,
-} from '../utils/cases'
+import { caseAssignedTo, casesResultsSummary, casesTableColumns, casesToRows, queryToFilters } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -29,6 +22,7 @@ import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import AccommodationsService from '../services/accommodationsService'
+import { accommodationCard } from '../utils/accommodationSummary'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'

@@ -104,7 +104,7 @@ export default class CasesController {
 
         return res.render('pages/show', {
           caseData,
-          assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+          assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
           nextActions: eligibility.caseActions,
           nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
           currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),

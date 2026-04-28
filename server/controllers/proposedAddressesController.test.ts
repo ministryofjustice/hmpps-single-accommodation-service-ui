@@ -133,7 +133,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/show', {
         caseData,
-        assignedTo: caseAssignedTo(caseData, 'user-id'),
+        assignedTo: caseAssignedTo(caseData, user.username),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),

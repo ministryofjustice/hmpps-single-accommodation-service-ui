@@ -10,8 +10,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2021/1351925",
     "assignedTo": {
-      "id": 2722669012751003,
-      "name": "Barbara Batz V"
+      "name": "Barbara Batz V",
+      "username": "barbara.batz"
     },
     "currentAccommodation": {
       "id": "89dcf8c1-5d67-44d7-abe3-8fdfdcb8f9dc",
@@ -59,8 +59,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2025/5639232",
     "assignedTo": {
-      "id": 3556260876754863,
-      "name": "Carolyn Schumm PhD"
+      "name": "Carolyn Schumm PhD",
+      "username": "carolyn.schumm"
     },
     "currentAccommodation": {
       "id": "8cd2eba5-42de-4375-ba05-0b8c552c9a2b",
@@ -106,8 +106,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2018/1889273",
     "assignedTo": {
-      "id": 8721148585916645,
-      "name": "Dr. Dawn Treutel"
+      "name": "Dr. Dawn Treutel",
+      "username": "dawn.treutel"
     },
     "currentAccommodation": {
       "id": "c94d4e08-3e27-4085-9b6b-3997071e7ab0",
@@ -158,8 +158,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2021/3453174",
     "assignedTo": {
-      "id": 878293681170104,
-      "name": "Charlie Casper"
+      "name": "Charlie Casper",
+      "username": "charlie.casper"
     },
     "currentAccommodation": {
       "id": "f1cc2a09-c6b9-4e4a-9dfd-720d60418836",
@@ -205,8 +205,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2025/4038931",
     "assignedTo": {
-      "id": 8841903188814697,
-      "name": "Pauline Botsford MD"
+      "name": "Pauline Botsford MD",
+      "username": "pauline.botsford"
     },
     "currentAccommodation": {
       "id": "7e1a2333-5cb7-44fb-b45c-0b6b9b82b055",
@@ -253,8 +253,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2021/8044772",
     "assignedTo": {
-      "id": 1395867800370343,
-      "name": "Jackie Stokes II"
+      "name": "Jackie Stokes II",
+      "username": "jackie.stokes"
     },
     "currentAccommodation": {
       "id": "538241a3-afae-4c6a-b27e-822f307d247e",
@@ -302,8 +302,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2026/1099539",
     "assignedTo": {
-      "id": 6749705973409437,
-      "name": "Nathaniel Kling"
+      "name": "Nathaniel Kling",
+      "username": "nathaniel.kling"
     },
     "currentAccommodation": {
       "id": "6c1ce9fb-94d6-494f-850f-8b594eacd92b",
@@ -353,8 +353,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2020/9690517",
     "assignedTo": {
-      "id": 6477712527934526,
-      "name": "Louise Davis"
+      "name": "Louise Davis",
+      "username": "louise.davis"
     },
     "currentAccommodation": {
       "id": "7ff44a5a-99b1-474f-8213-117f0022da46",
@@ -404,8 +404,8 @@
     "riskLevel": "HIGH",
     "pncReference": "2026/1181049",
     "assignedTo": {
-      "id": 3673702944207468,
-      "name": "Erika Mueller"
+      "name": "Erika Mueller",
+      "username": "erika.mueller"
     },
     "currentAccommodation": {
       "id": "65bef7da-003e-4e75-8c05-02bc5b4fa846",
@@ -452,8 +452,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2022/5650552",
     "assignedTo": {
-      "id": 3128697573541797,
-      "name": "Beverly Lindgren III"
+      "name": "Beverly Lindgren III",
+      "username": "beverly.lindgren"
     },
     "currentAccommodation": {
       "id": "18711398-3dfd-4491-9760-c7f1d683a0f3",

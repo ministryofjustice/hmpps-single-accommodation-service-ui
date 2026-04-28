@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`referrals utilities referralHistoryRows returns formatted rows for a given list of referrals 1`] = `
 [

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Proposed addresses utilities addressDetailRows returns the correct rows for an address that failed checks 1`] = `
 [

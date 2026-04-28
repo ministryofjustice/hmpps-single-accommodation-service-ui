@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`duty to refer utils detailsSummaryListRows returns correct rows for status ACCEPTED 1`] = `
 [

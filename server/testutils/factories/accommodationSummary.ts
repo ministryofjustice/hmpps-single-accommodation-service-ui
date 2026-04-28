@@ -29,6 +29,7 @@ class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
     return this.params({
       startDate: startDate.toISOString().split('T')[0],
       endDate: endDate?.toISOString().split('T')[0],
+      status: endDate ? { code: 'P', description: 'Previous' } : { code: 'M', description: 'Main' },
     })
   }
 

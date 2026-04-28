@@ -18,7 +18,7 @@ import casesFixture from './fixtures/cases.json'
 /**
  * Generate data for wiremock fixtures.
  *
- * Usage: npx ts-node wiremock/generateData.ts [--all] [--eligibility] [--referrals] [--dtr] [--proposed-addresses]
+ * Usage: npx ts-node wiremock/generateData.ts [--all] [--eligibility] [--referrals] [--dtr] [--proposed-addresses] [--accommodation-history]
  */
 
 const generateCases = process.argv.includes('--all')
@@ -147,4 +147,13 @@ if (generate.accommodation) {
     {},
   )
   saveToFixture('nextAccommodation', nextAccommodation)
+
+  const accommodationHistory = cases.reduce((responses, c) => {
+    accommodationSummaryFactory.lastStartDate = undefined
+    return {
+      ...responses,
+      [c.crn]: accommodationSummaryFactory.buildList(faker.number.int({ min: 0, max: 7 })),
+    }
+  }, {})
+  saveToFixture('accommodationHistory', accommodationHistory)
 }

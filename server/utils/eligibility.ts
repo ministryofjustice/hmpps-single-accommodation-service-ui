@@ -24,6 +24,8 @@ const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): StatusTa
     BEDSPACE_OFFERED: { text: 'Bedspace offered' },
     BOOKING_CONFIRMED: { text: 'Booking confirmed' },
     BOOKING_CANCELLED: { text: 'Booking cancelled' },
+    ACCEPTED: { text: 'Accepted', colour: 'yellow' },
+    NOT_ACCEPTED: { text: 'Not accepted', colour: 'grey' },
   })[status] || { text: 'Unknown' }
 
 export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) => {

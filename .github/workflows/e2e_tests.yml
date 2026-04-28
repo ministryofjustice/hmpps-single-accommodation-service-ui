@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack notification
-        uses: ministryofjustice/hmpps-approved-premises-ui/.github/actions/slack_failure_notification@e4c0dfad94348a856e9a0370166b48963b96e38f # main
+        uses: ministryofjustice/hmpps-approved-premises-ui/.github/actions/slack_failure_notification@a8219977b4a65119bd8b098c9dd2f8cb79f235cc # main
         with:
           title: "SAS E2E Tests"
           job: "e2e_test"

@@ -1,6 +1,6 @@
 import { AccommodationDetail, AccommodationSummaryDto } from '@sas/api'
 import { StatusTag } from '@sas/ui'
-import { addressLines } from './addresses'
+import { addressLines, formatAddress } from './addresses'
 import { renderMacro } from './macros'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
@@ -78,7 +78,7 @@ export const accommodationCard = (
     cardType,
     settledTag: settledTag(type),
     name: accommodationType(accommodation),
-    address: accommodation.address ? addressLines(accommodation.address).join('<br />') : undefined,
+    address: formatAddress(accommodation.address, '<br />') || undefined,
     startDate,
     endDate,
   }

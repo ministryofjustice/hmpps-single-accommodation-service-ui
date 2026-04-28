@@ -77,7 +77,7 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/show', {
         caseData,
-        assignedTo: caseAssignedTo(caseData, res.locals?.user?.userId),
+        assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
         timeline: auditRecords.map(addressTimelineEntry),

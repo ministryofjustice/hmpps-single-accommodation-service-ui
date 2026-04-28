@@ -160,7 +160,7 @@ describe('casesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
         caseData,
-        assignedTo: caseAssignedTo(caseData, response.locals.user.userId),
+        assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: eligibility.caseActions,
         nextAccommodationCard: accommodationCard('next', caseData.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', caseData.currentAccommodation),

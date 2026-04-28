@@ -161,8 +161,8 @@ export const casesTableColumns = () => {
   ]
 }
 
-export const caseAssignedTo = (c: Case, id: string): string => {
-  return String(c.assignedTo?.id) === id ? `You (${c.assignedTo.name})` : c.assignedTo?.name
+export const caseAssignedTo = (c: Case, username: string): string => {
+  return String(c.assignedTo?.username) === username ? `You (${c.assignedTo.name})` : c.assignedTo?.name
 }
 
 export const mapGetCasesQuery = (query: GetCasesQuery, userId: string): GetCasesQuery => {

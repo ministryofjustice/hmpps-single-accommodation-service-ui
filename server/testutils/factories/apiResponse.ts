@@ -27,7 +27,6 @@ import accommodationFactory from './accommodation'
 import auditRecordFactory from './auditRecord'
 import referenceDataFactory from './referenceData'
 import referralFactory from './referral'
-import accommodationSummaryFactory from './accommodationSummary'
 
 export type ApiResponse =
   | ApiResponseDtoAccommodationSummaryDto
@@ -47,9 +46,7 @@ class ApiResponseFactory extends Factory<ApiResponse> {
   }
 
   accommodationSummary(accommodationSummary?: AccommodationSummaryDto) {
-    return this.buildResponse<ApiResponseDtoAccommodationSummaryDto>(
-      accommodationSummary || accommodationSummaryFactory.build(),
-    )
+    return this.buildResponse<ApiResponseDtoAccommodationSummaryDto>(accommodationSummary ?? null)
   }
 
   caseList(cases?: CaseDto[]) {

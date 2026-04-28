@@ -4,6 +4,7 @@ import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
 import { apiResponseFactory } from '../testutils/factories'
 import AccommodationClient from './accommodationClient'
+import accommodationSummary from '../testutils/factories/accommodationSummary'
 
 describeClient('AccommodationClient', provider => {
   let accommodationClient: AccommodationClient
@@ -16,7 +17,7 @@ describeClient('AccommodationClient', provider => {
 
   it('should make a GET request to /cases/:crn/accommodation/current', async () => {
     const crn = crnFactory()
-    const body = apiResponseFactory.accommodationSummary()
+    const body = apiResponseFactory.accommodationSummary(accommodationSummary.build())
 
     await provider.addInteraction({
       state: `Current accommodation exist for case with CRN ${crn}`,
@@ -40,7 +41,7 @@ describeClient('AccommodationClient', provider => {
 
   it('should make a GET request to /cases/:crn/accommodation/next', async () => {
     const crn = crnFactory()
-    const body = apiResponseFactory.accommodationSummary()
+    const body = apiResponseFactory.accommodationSummary(accommodationSummary.build())
 
     await provider.addInteraction({
       state: `Next accommodation exist for case with CRN ${crn}`,

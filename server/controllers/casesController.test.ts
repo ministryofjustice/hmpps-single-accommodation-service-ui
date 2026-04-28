@@ -139,7 +139,7 @@ describe('casesController', () => {
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
       const currentAccommodation = accommodationFactory.current().build()
       const nextAccommodation = accommodationFactory.next().build()
-      const accommodationHistory = accommodationSummaryFactory.buildList(2)
+      const accommodationHistory = accommodationSummaryFactory.buildListSequential(2)
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))

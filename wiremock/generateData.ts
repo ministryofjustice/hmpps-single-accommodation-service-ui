@@ -152,7 +152,7 @@ if (generate.accommodation) {
     accommodationSummaryFactory.lastStartDate = undefined
     return {
       ...responses,
-      [c.crn]: accommodationSummaryFactory.buildList(faker.number.int({ min: 0, max: 7 })),
+      [c.crn]: accommodationSummaryFactory.buildListSequential(faker.number.int({ min: 0, max: 7 })),
     }
   }, {})
   saveToFixture('accommodationHistory', accommodationHistory)

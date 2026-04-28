@@ -48,7 +48,7 @@ exports[`accommodationSummary accommodation history accommodationHistoryTable ma
     </div>
     <div class="govuk-summary-card__content">
         
-            <p class="govuk-body">No previous addresses</p>
+            <p class="govuk-body">No previous accommodation</p>
         
     </div>
 </div>"

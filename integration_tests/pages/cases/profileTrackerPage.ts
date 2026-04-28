@@ -152,24 +152,27 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   }
 
   async shouldShowAccommodationHistory(accommodations: AccommodationSummaryDto[]) {
-    const accommodationHistorySection = this.page.locator('section', {
+    const card = this.page.locator('.govuk-summary-card').filter({
       has: this.page.getByRole('heading', { name: 'Accommodation history' }),
     })
+    const table = card.locator('table.govuk-table')
 
-    await this.shouldShowTableHeaders(['Start date', 'End date', 'Address', 'Status'], accommodationHistorySection)
+    await this.shouldShowTableHeaders(['Start date', 'End date', 'Address', 'Status'], table)
 
     for await (const accommodation of accommodations) {
-      await expect(accommodationHistorySection).toContainText(formatDate(accommodation.startDate))
+      const i = accommodations.indexOf(accommodation)
+      const row = table.locator('tbody tr').nth(i)
+
+      await expect(row).toContainText(formatDate(accommodation.startDate))
       if (!accommodation.endDate) {
-        await expect(accommodationHistorySection).toContainText('Current')
+        await expect(row).toContainText('Current')
       } else {
-        await expect(accommodationHistorySection).toContainText(formatDate(accommodation.endDate))
+        await expect(row).toContainText(formatDate(accommodation.endDate))
       }
-      // await expect(accommodationHistorySection).toContainText(accommodationType(accommodation, 'current'))
       for await (const addressPart of addressLines(accommodation.address)) {
-        await expect(accommodationHistorySection).toContainText(addressPart)
+        await expect(row).toContainText(addressPart)
       }
-      await expect(accommodationHistorySection).toContainText(accommodation.status.description)
+      await expect(row).toContainText(accommodation.status.description)
     }
   }
 }

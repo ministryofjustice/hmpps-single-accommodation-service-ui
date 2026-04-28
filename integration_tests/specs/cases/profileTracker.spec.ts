@@ -71,7 +71,7 @@ test.describe('Profile Tracker Page', () => {
       accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' }),
       accommodationFactory.proposed().build({ verificationStatus: 'FAILED' }),
     ]
-    const accommodationHistory = accommodationSummaryFactory.buildList(5)
+    const accommodationHistory = accommodationSummaryFactory.buildListSequential(5)
 
     await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses, accommodationHistory })
     await login(page)

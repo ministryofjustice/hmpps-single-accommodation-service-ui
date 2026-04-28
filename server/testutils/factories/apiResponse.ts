@@ -84,7 +84,7 @@ class ApiResponseFactory extends Factory<ApiResponse> {
 
   accommodationHistory(accommodationHistory?: AccommodationSummaryDto[]) {
     return this.buildResponse<ApiResponseDtoListAccommodationSummaryDto>(
-      accommodationHistory || accommodationSummaryFactory.buildList(2),
+      accommodationHistory || accommodationSummaryFactory.buildListSequential(2),
     )
   }
 

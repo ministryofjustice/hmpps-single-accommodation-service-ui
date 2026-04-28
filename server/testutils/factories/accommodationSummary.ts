@@ -33,7 +33,7 @@ class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
     })
   }
 
-  buildList(count: number) {
+  buildListSequential(count: number) {
     return Array.from({ length: count }, () => this.sequential().build())
   }
 }

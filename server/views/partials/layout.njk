@@ -9,7 +9,7 @@
 
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
 
-{% block header %}
+{% block govukHeader %}
   {{ feComponents.header | safe }}
   <section aria-label="Service information" class="govuk-service-navigation"
     data-module="govuk-service-navigation">
@@ -27,11 +27,11 @@
 
 {% block bodyStart %}{% endblock %}
 
-{% block beforeContent %}
+{% block containerStart %}
   {% include "components/_messages.njk" %}
 {% endblock %}
 
-{% block footer %}
+{% block govukFooter %}
   {{ feComponents.footer | safe }}
 {% endblock %}
 

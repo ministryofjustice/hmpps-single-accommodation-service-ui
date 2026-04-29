@@ -22,5 +22,5 @@
 .sas-filters__summary {
   padding: govuk-spacing(4);
   margin-bottom: govuk-spacing(4);
-  background-color: govuk-colour('light-grey');
+  background-color: govuk-colour("black", $variant: "tint-95");
 }

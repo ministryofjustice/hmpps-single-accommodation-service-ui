@@ -72,6 +72,18 @@ describe('accommodationSummary', () => {
 
       expect(accommodationSummaryAddress(accommodationSummary)).toMatchSnapshot()
     })
+
+    it('renders without the accommodation type', () => {
+      const accommodationSummary = accommodationSummaryFactory.build({
+        type: null,
+        address: addressFactory.minimal().build({
+          postTown: 'London',
+          postcode: 'SW1A 1AA',
+        }),
+      })
+
+      expect(accommodationSummaryAddress(accommodationSummary)).toMatchSnapshot()
+    })
   })
 
   describe('accommodation history', () => {
@@ -88,7 +100,7 @@ describe('accommodationSummary', () => {
       accommodationSummaryFactory.build({
         startDate: '2025-01-03',
         endDate: '2026-04-27',
-        status: { code: 'P', description: 'Previous' },
+        status: null,
         type: { code: 'A07A', description: 'Friends/Family (transient)' },
         address: addressFactory.minimal().build({
           postTown: 'Not Quite London',

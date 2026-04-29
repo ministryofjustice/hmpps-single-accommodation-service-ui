@@ -102,17 +102,20 @@ const accommodationSummaryStatusTag = (status: AccommodationStatusDto): StatusTa
   colour: status.code === 'M' ? 'green' : 'grey',
 })
 
-export const accommodationSummaryAddress = (accommodation: AccommodationSummaryDto): string => `
-  <strong>${accommodation.type.description}</strong><br />
-  ${formatAddress(accommodation.address, '<br />')}
-`
+export const accommodationSummaryAddress = (accommodation: AccommodationSummaryDto): string =>
+  [
+    accommodation.type && `<strong>${accommodation.type?.description}</strong>`,
+    formatAddress(accommodation.address, '<br />'),
+  ]
+    .filter(Boolean)
+    .join('<br />')
 
 export const accommodationHistoryRows = (history: AccommodationSummaryDto[]): TableRow[] => {
   return history.map(accommodation => [
     textContent(formatDate(accommodation.startDate)),
     textContent(accommodation.endDate ? formatDate(accommodation.endDate) : 'Current'),
     htmlContent(accommodationSummaryAddress(accommodation)),
-    htmlContent(statusTag(accommodationSummaryStatusTag(accommodation.status))),
+    htmlContent(accommodation.status ? statusTag(accommodationSummaryStatusTag(accommodation.status)) : ''),
   ])
 }
 

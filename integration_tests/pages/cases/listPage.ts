@@ -46,9 +46,9 @@ export default class CasesListPage extends AbstractPage {
   }
 
   async applyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
-    await this.completeInputByLabel('Search by name, CRN or prison number', searchTerm)
-    await this.selectOptionByLabel('Assigned to', assignedTo)
-    await this.selectOptionByLabel('RoSH', riskLevel)
+    if (searchTerm) await this.completeInputByLabel('Search by name, CRN or prison number', searchTerm)
+    if (assignedTo) await this.selectOptionByLabel('Assigned to', assignedTo)
+    if (riskLevel) await this.selectOptionByLabel('RoSH', riskLevel)
     await this.clickButton('Apply filters')
   }
 

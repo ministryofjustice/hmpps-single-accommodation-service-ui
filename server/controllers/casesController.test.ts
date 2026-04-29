@@ -59,10 +59,7 @@ describe('casesController', () => {
 
   describe('index', () => {
     const baseContext = {
-      assignedToOptions: [
-        { value: 'you', text: 'You (J. Doe)' },
-        { value: 'anyone', text: 'Anyone' },
-      ],
+      assignedToOptions: [{ value: 'you', text: 'You (J. Doe)' }],
       riskLevelOptions: [
         { value: '', text: 'All' },
         { value: 'VERY_HIGH', text: 'Very high' },
@@ -84,7 +81,7 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { assignedTo: 'user-id-1' })
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {})
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
         resultsSummary: casesResultsSummary(cases),
@@ -103,16 +100,14 @@ describe('casesController', () => {
 
       request.query = {
         searchTerm: 'some-crn',
-        assignedTo: 'anyone',
         riskLevel: 'HIGH',
       }
-      request.url = '/?searchTerm=some-crn&assignedTo=anyone&riskLevel=HIGH'
+      request.url = '/?searchTerm=some-crn&riskLevel=HIGH'
 
       await casesController.index()(request, response, next)
 
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {
         searchTerm: 'some-crn',
-        assignedTo: '',
         riskLevel: 'HIGH',
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {

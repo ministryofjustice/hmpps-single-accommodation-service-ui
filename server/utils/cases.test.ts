@@ -121,12 +121,11 @@ describe('cases utilities', () => {
   })
 
   describe('mapGetCasesQuery', () => {
-    it('maps a UI query for the assigned user to the correct API query', () => {
-      expect(mapGetCasesQuery({ assignedTo: 'you' }, '123')).toEqual({ assignedTo: '123' })
-    })
-
-    it('maps a UI query for anyone to the correct API query', () => {
-      expect(mapGetCasesQuery({ assignedTo: 'anyone' }, '123')).toEqual({ assignedTo: '' })
+    it('maps the search query to the API query', () => {
+      expect(mapGetCasesQuery({ searchTerm: 'CRN123', riskLevel: 'LOW', assignedTo: 'you' })).toEqual({
+        searchTerm: 'CRN123',
+        riskLevel: 'LOW',
+      })
     })
   })
 

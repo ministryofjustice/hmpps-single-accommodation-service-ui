@@ -41,12 +41,12 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      const { token, userId, username, displayName } = res.locals.user
+      const { token, username, displayName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
 
       if (query.assignedTo === undefined) query.assignedTo = 'you'
-      const { data: cases } = await this.casesService.getCases(token, mapGetCasesQuery(query, userId))
+      const { data: cases } = await this.casesService.getCases(token, mapGetCasesQuery(query))
       const filters = queryToFilters(query, req.url)
 
       return res.render('pages/index', {
@@ -55,10 +55,7 @@ export default class CasesController {
         casesRows: casesToRows(cases),
         query,
         filters,
-        assignedToOptions: [
-          { value: 'you', text: `You (${initialiseName(displayName)})` },
-          { value: 'anyone', text: 'Anyone' },
-        ],
+        assignedToOptions: [{ value: 'you', text: `You (${initialiseName(displayName)})` }],
         riskLevelOptions: [
           { value: '', text: 'All' },
           { value: 'VERY_HIGH', text: 'Very high' },

@@ -83,54 +83,46 @@ export default class CasesController {
 
   show(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const { crn } = req.params
       await this.auditService.logPageView(Page.CASE_PROFILE_TRACKER, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
+      const { crn } = req.params
       const { token } = res.locals.user
-      try {
-        const [
-          { data: caseData },
-          { data: referralHistory },
-          { data: eligibility },
-          { data: dutyToRefer },
-          { data: proposedAddresses },
-          { data: currentAccommodation },
-          { data: nextAccommodation },
-          { data: accommodationHistory },
-        ] = await Promise.all([
-          this.casesService.getCase(token, crn),
-          this.referralsService.getReferralHistory(token, crn),
-          this.eligibilityService.getEligibility(token, crn),
-          this.dutyToReferService.getCurrentDtr(token, crn),
-          this.proposedAddressesService.getProposedAddresses(token, crn),
-          this.accommodationService.getCurrentAccommodation(token, crn),
-          this.accommodationService.getNextAccommodation(token, crn),
-          this.accommodationService.getAccommodationHistory(token, crn),
-        ])
 
-        return res.render('pages/show', {
-          caseData,
-          assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
-          nextActions: eligibility.caseActions,
-          nextAccommodationCard: accommodationCard('next', nextAccommodation),
-          currentAccommodationCard: accommodationCard('current', currentAccommodation),
-          referralHistoryRows: referralHistoryRows(referralHistory),
-          eligibilityCards: eligibilityToEligibilityCards(eligibility),
-          dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
-          proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
-          accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
-          failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),
-        })
-      } catch (error) {
-        if (error.responseStatus === 404) {
-          addErrorToFlash(req, 'crn', 'This CRN does not exist or cannot be shown')
-          return res.redirect(`${uiPaths.cases.index({})}?crn=${encodeURIComponent(crn)}`)
-        }
+      const [
+        { data: caseData },
+        { data: referralHistory },
+        { data: eligibility },
+        { data: dutyToRefer },
+        { data: proposedAddresses },
+        { data: currentAccommodation },
+        { data: nextAccommodation },
+        { data: accommodationHistory },
+      ] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.referralsService.getReferralHistory(token, crn),
+        this.eligibilityService.getEligibility(token, crn),
+        this.dutyToReferService.getCurrentDtr(token, crn),
+        this.proposedAddressesService.getProposedAddresses(token, crn),
+        this.accommodationService.getCurrentAccommodation(token, crn),
+        this.accommodationService.getNextAccommodation(token, crn),
+        this.accommodationService.getAccommodationHistory(token, crn),
+      ])
 
-        throw error
-      }
+      return res.render('pages/show', {
+        caseData,
+        assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
+        nextActions: eligibility.caseActions,
+        nextAccommodationCard: accommodationCard('next', nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', currentAccommodation),
+        referralHistoryRows: referralHistoryRows(referralHistory),
+        eligibilityCards: eligibilityToEligibilityCards(eligibility),
+        dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
+        proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
+        accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
+        failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),
+      })
     }
   }
 }

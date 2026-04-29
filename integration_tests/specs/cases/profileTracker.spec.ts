@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import {
   AccommodationDetail,
   AccommodationReferralDto,
@@ -87,6 +87,18 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
     await profileTrackerPage.shouldShowReferralHistory(referrals)
     await profileTrackerPage.shouldShowAccommodationHistory(accommodationHistory)
+  })
+
+  test('Shows a 404 if the CRN is not found', async ({ page }) => {
+    const crn = 'X123456'
+    const caseData = caseFactory.build({ crn })
+    await setupStubs({ crn, caseData })
+
+    await login(page)
+
+    await page.goto('/cases/X999999')
+
+    await expect(page.locator('h1', { hasText: 'Not found' })).toBeVisible()
   })
 
   test.describe('accommodation cards', () => {

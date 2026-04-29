@@ -1,0 +1,640 @@
+{
+  "S511935": [
+    {
+      "crn": "R724276",
+      "address": {
+        "postcode": "EK4 4XP",
+        "buildingNumber": "104",
+        "thoroughfareName": "Reynolds Vale",
+        "dependentLocality": "Upper Windler Court",
+        "postTown": "North Kundeley",
+        "county": "Berkshire",
+        "country": "Sudan",
+        "uprn": "jMciYoRqn8cY"
+      },
+      "startDate": "2025-09-25",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A07B",
+        "description": "Friends/Family (settled)"
+      }
+    },
+    {
+      "crn": "K267472",
+      "address": {
+        "postcode": "YB5 7XH",
+        "subBuildingName": "Apt. 613",
+        "buildingName": "Diana Way",
+        "thoroughfareName": "Cromwell Road",
+        "dependentLocality": "Newton Gerlach",
+        "postTown": "Rowe-le-Lubowitz",
+        "county": "Somerset",
+        "country": "Eswatini",
+        "uprn": "hm4Rexm05wsP"
+      },
+      "startDate": "2024-11-13",
+      "endDate": "2025-09-25",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A14",
+        "description": "HOIE Section 10"
+      }
+    },
+    {
+      "crn": "E021267",
+      "address": {
+        "postcode": "IS20 6DV",
+        "subBuildingName": "Suite 354",
+        "buildingName": "Mittie Crescent",
+        "thoroughfareName": "Chapel Road",
+        "dependentLocality": "Howe-under-Rath",
+        "postTown": "Daniel-le-Doyle",
+        "county": "County Londonderry",
+        "country": "North Macedonia",
+        "uprn": "Br7oYwGAnnpj"
+      },
+      "startDate": "2023-12-08",
+      "endDate": "2024-11-13",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A01C",
+        "description": "Rental accommodation - private rental"
+      }
+    },
+    {
+      "crn": "U935428",
+      "address": {
+        "postcode": "PI7 5JA",
+        "buildingNumber": "4",
+        "thoroughfareName": "Vada Way",
+        "dependentLocality": "Kuvalis-le-Kreiger",
+        "postTown": "Old Lubowitz Common",
+        "county": "Lincolnshire",
+        "country": "Afghanistan",
+        "uprn": "Y3J5sP17FZne"
+      },
+      "startDate": "2023-04-09",
+      "endDate": "2023-12-08",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A10",
+        "description": "CAS2/BASS accommodation 13 weeks or more"
+      }
+    }
+  ],
+  "P712106": [
+    {
+      "crn": "Q854927",
+      "address": {
+        "postcode": "CQ90 6PV",
+        "buildingNumber": "715",
+        "thoroughfareName": "Fourth Avenue",
+        "dependentLocality": "Long Balistreriton",
+        "postTown": "Jacobi Green",
+        "county": "County Fermanagh",
+        "country": "Mozambique",
+        "uprn": "9Ytqs1sSItG2"
+      },
+      "startDate": "2025-10-17",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A08C",
+        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
+      }
+    },
+    {
+      "crn": "Q149154",
+      "address": {
+        "postcode": "TE70 7OJ",
+        "subBuildingName": "Suite 584",
+        "buildingName": "Hawthorn Avenue",
+        "thoroughfareName": "Quarry Lane",
+        "dependentLocality": "Moore-upon-Considine",
+        "postTown": "South Kerluke",
+        "county": "Cheshire",
+        "country": "Saint Barthelemy",
+        "uprn": "SwOKh2vNNfDL"
+      },
+      "startDate": "2025-09-11",
+      "endDate": "2025-10-17",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A08C",
+        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
+      }
+    },
+    {
+      "crn": "U818127",
+      "address": {
+        "postcode": "AH2 0DK",
+        "buildingNumber": "84",
+        "thoroughfareName": "Leuschke Garth",
+        "dependentLocality": "Mante Place",
+        "postTown": "Great Harveybury",
+        "county": "Grampian",
+        "country": "Lebanon",
+        "uprn": "cVbTDky9sVyM"
+      },
+      "startDate": "2025-02-04",
+      "endDate": "2025-09-11",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A15",
+        "description": "Immigration Detention"
+      }
+    },
+    {
+      "crn": "D123132",
+      "address": {
+        "postcode": "TD0 5KJ",
+        "buildingNumber": "34",
+        "thoroughfareName": "Cromwell Road",
+        "dependentLocality": "Hettingerbury",
+        "postTown": "Gerlach-under-Crist",
+        "county": "South Glamorgan",
+        "country": "Nigeria",
+        "uprn": "oSnF3FNXQKks"
+      },
+      "startDate": "2024-07-22",
+      "endDate": "2025-02-04",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A04",
+        "description": "Supported Housing"
+      }
+    }
+  ],
+  "T274481": [
+    {
+      "crn": "G894528",
+      "address": {
+        "postcode": "GC9 0JP",
+        "buildingNumber": "712",
+        "thoroughfareName": "Abigayle Road",
+        "dependentLocality": "Zulauf-over-Keeling",
+        "postTown": "Koelpin-under-Cole",
+        "county": "Leicestershire",
+        "country": "Antarctica",
+        "uprn": "Vf049Ro4aLfM"
+      },
+      "startDate": "2025-12-30",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A08C",
+        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
+      }
+    },
+    {
+      "crn": "U845550",
+      "address": {
+        "postcode": "NG5 8KS",
+        "buildingNumber": "754",
+        "thoroughfareName": "Cow Lane",
+        "dependentLocality": "Greenfelder-le-Ernser",
+        "postTown": "Vandervort-under-Okuneva",
+        "county": "Cumbria",
+        "country": "United States Minor Outlying Islands",
+        "uprn": "Of4MJjKbMZPz"
+      },
+      "startDate": "2025-05-28",
+      "endDate": "2025-12-30",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A11",
+        "description": "CAS2/BASS accommodation less than 13 weeks"
+      }
+    }
+  ],
+  "V938951": [],
+  "T229440": [
+    {
+      "crn": "Q337671",
+      "address": {
+        "postcode": "LI53 7LC",
+        "buildingNumber": "9",
+        "thoroughfareName": "Western Road",
+        "dependentLocality": "Roberts Heath",
+        "postTown": "Lower Donnelly Bridge",
+        "county": "Greater Manchester",
+        "country": "Germany",
+        "uprn": "J0YCMgNVGIHs"
+      },
+      "startDate": "2025-09-23",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A07A",
+        "description": "Friends/Family (transient)"
+      }
+    },
+    {
+      "crn": "L208599",
+      "address": {
+        "postcode": "GF23 3RZ",
+        "buildingName": "Amaya Corner",
+        "thoroughfareName": "Fadel Brae",
+        "dependentLocality": "Friesen-on-Harber",
+        "postTown": "Jerde-upon-Hilll",
+        "county": "Borders",
+        "country": "Reunion",
+        "uprn": "xncxKJXHvXtX"
+      },
+      "startDate": "2024-12-25",
+      "endDate": "2025-09-23",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A08A",
+        "description": "Homeless - Rough Sleeping"
+      }
+    },
+    {
+      "crn": "N226081",
+      "address": {
+        "postcode": "DN3 4SS",
+        "buildingNumber": "903",
+        "thoroughfareName": "Parker Path",
+        "dependentLocality": "Upton Lowehill",
+        "postTown": "Breitenbergingham",
+        "county": "Herefordshire",
+        "country": "Armenia",
+        "uprn": "RNuSDcwjwKm0"
+      },
+      "startDate": "2024-05-11",
+      "endDate": "2024-12-25",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A14",
+        "description": "HOIE Section 10"
+      }
+    }
+  ],
+  "H271226": [
+    {
+      "crn": "R770482",
+      "address": {
+        "postcode": "WI85 7MB",
+        "subBuildingName": "Apt. 313",
+        "buildingName": "Stehr Copse",
+        "thoroughfareName": "The Drive",
+        "dependentLocality": "Newton Hesselwell",
+        "postTown": "St. Lind",
+        "county": "Buckinghamshire",
+        "country": "Peru",
+        "uprn": "yA0TcozGN6QJ"
+      },
+      "startDate": "2025-12-04",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A11",
+        "description": "CAS2/BASS accommodation less than 13 weeks"
+      }
+    },
+    {
+      "crn": "J022300",
+      "address": {
+        "postcode": "XC10 1DN",
+        "subBuildingName": "Suite 949",
+        "buildingName": "Johns Gardens",
+        "thoroughfareName": "Prospect Road",
+        "dependentLocality": "Lower Weissnatworth",
+        "postTown": "Newton Gerhold",
+        "county": "Essex",
+        "country": "Malaysia",
+        "uprn": "ly8mlLXCdayB"
+      },
+      "startDate": "2025-05-21",
+      "endDate": "2025-12-04",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A16",
+        "description": "Awaiting Assessment"
+      }
+    },
+    {
+      "crn": "Q622506",
+      "address": {
+        "postcode": "PH33 1PT",
+        "buildingNumber": "851",
+        "thoroughfareName": "Howe Hill",
+        "dependentLocality": "Lower Douglas",
+        "postTown": "East Casper Cross",
+        "county": "Gwynedd County",
+        "country": "Pakistan",
+        "uprn": "ESOYAYIbhvUB"
+      },
+      "startDate": "2024-07-03",
+      "endDate": "2025-05-21",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A10",
+        "description": "CAS2/BASS accommodation 13 weeks or more"
+      }
+    }
+  ],
+  "U934069": [],
+  "I322559": [
+    {
+      "crn": "B952369",
+      "address": {
+        "postcode": "YW22 6IH",
+        "buildingNumber": "3",
+        "thoroughfareName": "Old Military Road",
+        "dependentLocality": "Rosenbaum End",
+        "postTown": "Becker-le-Stokes",
+        "county": "Tayside",
+        "country": "Denmark",
+        "uprn": "mStovlyyvRXL"
+      },
+      "startDate": "2025-08-01",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A16",
+        "description": "Awaiting Assessment"
+      }
+    },
+    {
+      "crn": "D820484",
+      "address": {
+        "postcode": "IE6 9IM",
+        "subBuildingName": "Apt. 157",
+        "buildingName": "St George's Road",
+        "thoroughfareName": "Oak Lane",
+        "dependentLocality": "Ziemann-under-McGlynn",
+        "postTown": "Goodwiningham",
+        "county": "County Down",
+        "country": "Ghana",
+        "uprn": "1bDAFvWU1Jmd"
+      },
+      "startDate": "2025-02-15",
+      "endDate": "2025-08-01",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A10",
+        "description": "CAS2/BASS accommodation 13 weeks or more"
+      }
+    },
+    {
+      "crn": "D528018",
+      "address": {
+        "postcode": "YP3 4OD",
+        "buildingNumber": "7",
+        "thoroughfareName": "Oxford Road",
+        "dependentLocality": "Kunze-upon-Jones",
+        "postTown": "Bednar Bridge",
+        "county": "Warwickshire",
+        "country": "Niger",
+        "uprn": "3hL4a6xbBOCL"
+      },
+      "startDate": "2025-01-20",
+      "endDate": "2025-02-15",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A14",
+        "description": "HOIE Section 10"
+      }
+    },
+    {
+      "crn": "F013855",
+      "address": {
+        "postcode": "TO5 0DJ",
+        "buildingName": "Skiles Croft",
+        "thoroughfareName": "Franecki Path",
+        "dependentLocality": "South Stiedemann Park",
+        "postTown": "Old Conn",
+        "county": "Warwickshire",
+        "country": "Canada",
+        "uprn": "J8cNmm7pliVK"
+      },
+      "startDate": "2024-10-06",
+      "endDate": "2025-01-20",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A01D",
+        "description": "Rental accommodation - social rental (LA or other)"
+      }
+    },
+    {
+      "crn": "M879043",
+      "address": {
+        "postcode": "GD67 4YM",
+        "subBuildingName": "Apt. 268",
+        "buildingName": "Dickinson Meadows",
+        "thoroughfareName": "Lexus Fields",
+        "dependentLocality": "Old Senger",
+        "postTown": "Simonis-le-Auer",
+        "county": "County Fermanagh",
+        "country": "Guernsey",
+        "uprn": "RdLBruYoVhv8"
+      },
+      "startDate": "2023-12-02",
+      "endDate": "2024-10-06",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A15",
+        "description": "Immigration Detention"
+      }
+    },
+    {
+      "crn": "Z581809",
+      "address": {
+        "postcode": "LH31 3SI",
+        "buildingNumber": "539",
+        "thoroughfareName": "Larch Close",
+        "dependentLocality": "Lower Reinger Heath",
+        "postTown": "Blandaton",
+        "county": "County Tyrone",
+        "country": "Sweden",
+        "uprn": "6MoX3m8KNzC9"
+      },
+      "startDate": "2023-08-12",
+      "endDate": "2023-12-02",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A08",
+        "description": "Homeless - Squat"
+      }
+    }
+  ],
+  "L247269": [
+    {
+      "crn": "J218185",
+      "address": {
+        "postcode": "UH59 2PK",
+        "buildingNumber": "6",
+        "thoroughfareName": "Quitzon Field",
+        "dependentLocality": "Wyman-upon-Beatty",
+        "postTown": "Long Mohrhill",
+        "county": "Devon",
+        "country": "Iran",
+        "uprn": "ay1dcQ1rh8t6"
+      },
+      "startDate": "2025-09-01",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A01D",
+        "description": "Rental accommodation - social rental (LA or other)"
+      }
+    },
+    {
+      "crn": "F556765",
+      "address": {
+        "postcode": "JU5 4RT",
+        "buildingNumber": "6",
+        "thoroughfareName": "Tristian Grange",
+        "dependentLocality": "East Reichelthorpe",
+        "postTown": "Castle Sanfordridge",
+        "county": "Humberside",
+        "country": "Jersey",
+        "uprn": "gmLkn2T6SI8D"
+      },
+      "startDate": "2025-08-28",
+      "endDate": "2025-09-01",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A04",
+        "description": "Supported Housing"
+      }
+    }
+  ],
+  "F608163": [
+    {
+      "crn": "E786980",
+      "address": {
+        "postcode": "ST8 9VC",
+        "buildingNumber": "86",
+        "thoroughfareName": "Franey Mead",
+        "dependentLocality": "Mann Green",
+        "postTown": "Long Donnelly",
+        "county": "Hertfordshire",
+        "country": "Ireland",
+        "uprn": "u3UGYrbBkkpI"
+      },
+      "startDate": "2025-11-03",
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A14",
+        "description": "HOIE Section 10"
+      }
+    },
+    {
+      "crn": "F873162",
+      "address": {
+        "postcode": "TS4 5YD",
+        "buildingNumber": "74",
+        "thoroughfareName": "Marlborough Road",
+        "dependentLocality": "Upton Wyman",
+        "postTown": "Old Rempel End",
+        "county": "Clwyd",
+        "country": "Latvia",
+        "uprn": "1fsB4PKJsXTf"
+      },
+      "startDate": "2025-04-29",
+      "endDate": "2025-11-03",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A08C",
+        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
+      }
+    },
+    {
+      "crn": "C926152",
+      "address": {
+        "postcode": "OV2 2XT",
+        "buildingNumber": "63",
+        "thoroughfareName": "Grange Avenue",
+        "dependentLocality": "Funk-le-Windler",
+        "postTown": "Upper Dach",
+        "county": "Hampshire",
+        "country": "Heard Island and McDonald Islands",
+        "uprn": "qM7fBeh93mcF"
+      },
+      "startDate": "2024-06-13",
+      "endDate": "2025-04-29",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A14",
+        "description": "HOIE Section 10"
+      }
+    }
+  ]
+}

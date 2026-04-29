@@ -10,6 +10,7 @@ class AccommodationAddressDetailsFactory extends Factory<AccommodationAddressDet
       buildingNumber: undefined,
       thoroughfareName: undefined,
       dependentLocality: undefined,
+      postTown: undefined,
       county: undefined,
       country: undefined,
       uprn: undefined,

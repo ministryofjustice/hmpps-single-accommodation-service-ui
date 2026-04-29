@@ -29,4 +29,16 @@ export default {
         jsonBody: apiResponseFactory.accommodationSummary(nextAccommodation),
       },
     }),
+  stubGetAccommodationHistory: (crn: string, accommodations?: AccommodationSummaryDto[]): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: apiPaths.cases.accommodationHistory({ crn }),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: apiResponseFactory.accommodationHistory(accommodations || []),
+      },
+    }),
 }

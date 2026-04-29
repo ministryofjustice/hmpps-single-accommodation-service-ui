@@ -32,6 +32,7 @@ export default {
       timeline: proposedAddressPath.path('timeline'),
       notes: proposedAddressPath.path('notes'),
     },
+    accommodationHistory: casePath.path('accommodation-history'),
   },
   referenceData: path('/reference-data'),
 }

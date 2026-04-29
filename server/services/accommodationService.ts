@@ -10,4 +10,8 @@ export default class AccommodationService {
   async getNextAccommodation(token: string, crn: string) {
     return this.accommodationClient.getNextAccommodation(token, crn)
   }
+
+  async getAccommodationHistory(token: string, crn: string) {
+    return this.accommodationClient.getAccommodationHistory(token, crn)
+  }
 }

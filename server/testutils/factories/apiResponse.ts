@@ -10,6 +10,7 @@ import {
   ApiResponseDtoEligibilityDto,
   ApiResponseDtoListAccommodationDetail,
   ApiResponseDtoListAccommodationReferralDto,
+  ApiResponseDtoListAccommodationSummaryDto,
   ApiResponseDtoListAuditRecordDto,
   ApiResponseDtoListCaseDto,
   ApiResponseDtoListReferenceDataDto,
@@ -27,6 +28,7 @@ import accommodationFactory from './accommodation'
 import auditRecordFactory from './auditRecord'
 import referenceDataFactory from './referenceData'
 import referralFactory from './referral'
+import accommodationSummaryFactory from './accommodationSummary'
 
 export type ApiResponse =
   | ApiResponseDtoAccommodationSummaryDto
@@ -39,6 +41,7 @@ export type ApiResponse =
   | ApiResponseDtoListAuditRecordDto
   | ApiResponseDtoListAccommodationReferralDto
   | ApiResponseDtoListReferenceDataDto
+  | ApiResponseDtoListAccommodationSummaryDto
 
 class ApiResponseFactory extends Factory<ApiResponse> {
   buildResponse<T extends ApiResponse>(data: T['data']) {
@@ -77,6 +80,12 @@ class ApiResponseFactory extends Factory<ApiResponse> {
 
   referralHistory(referrals?: AccommodationReferralDto[]) {
     return this.buildResponse<ApiResponseDtoListAccommodationReferralDto>(referrals || referralFactory.buildList(2))
+  }
+
+  accommodationHistory(accommodationHistory?: AccommodationSummaryDto[]) {
+    return this.buildResponse<ApiResponseDtoListAccommodationSummaryDto>(
+      accommodationHistory || accommodationSummaryFactory.buildListSequential(2),
+    )
   }
 
   auditRecords(auditRecords?: AuditRecordDto[]) {

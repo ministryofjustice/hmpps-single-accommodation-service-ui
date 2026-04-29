@@ -22,7 +22,7 @@ import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
 import AccommodationService from '../services/accommodationService'
-import { accommodationCard } from '../utils/accommodationSummary'
+import { accommodationCard, accommodationHistoryRows } from '../utils/accommodationSummary'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -98,6 +98,7 @@ export default class CasesController {
           { data: proposedAddresses },
           { data: currentAccommodation },
           { data: nextAccommodation },
+          { data: accommodationHistory },
         ] = await Promise.all([
           this.casesService.getCase(token, crn),
           this.referralsService.getReferralHistory(token, crn),
@@ -106,6 +107,7 @@ export default class CasesController {
           this.proposedAddressesService.getProposedAddresses(token, crn),
           this.accommodationService.getCurrentAccommodation(token, crn),
           this.accommodationService.getNextAccommodation(token, crn),
+          this.accommodationService.getAccommodationHistory(token, crn),
         ])
 
         return res.render('pages/show', {
@@ -118,6 +120,7 @@ export default class CasesController {
           eligibilityCards: eligibilityToEligibilityCards(eligibility),
           dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
           proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
+          accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
           failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),
         })
       } catch (error) {

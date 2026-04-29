@@ -3,6 +3,7 @@
 {% from "components/macros/statusCard.njk" import statusCard %}
 {% from "components/macros/accommodationCard.njk" import accommodationCard %}
 {% from "components/macros/referralHistoryTable.njk" import referralHistoryTable %}
+{% from "components/macros/accommodationHistoryTable.njk" import accommodationHistoryTable %}
 {% extends "partials/layout.njk" %}
 
 {% set pageTitle = applicationName + " - Profile" %}
@@ -88,5 +89,8 @@
   </div>
 
   <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
-  {{ referralHistoryTable({ rows: referralHistoryRows }) }}
+
+  <section>{{ referralHistoryTable({ rows: referralHistoryRows }) }}</section>
+
+  <section>{{ accommodationHistoryTable({ rows: accommodationHistoryRows }) }}</section>
 {% endblock %}

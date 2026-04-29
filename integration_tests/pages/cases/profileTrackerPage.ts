@@ -150,4 +150,29 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
     }
   }
+
+  async shouldShowAccommodationHistory(accommodations: AccommodationSummaryDto[]) {
+    const card = this.page.locator('.govuk-summary-card').filter({
+      has: this.page.getByRole('heading', { name: 'Accommodation history' }),
+    })
+    const table = card.locator('table.govuk-table')
+
+    await this.shouldShowTableHeaders(['Start date', 'End date', 'Address', 'Status'], table)
+
+    for await (const accommodation of accommodations) {
+      const i = accommodations.indexOf(accommodation)
+      const row = table.locator('tbody tr').nth(i)
+
+      await expect(row).toContainText(formatDate(accommodation.startDate))
+      if (!accommodation.endDate) {
+        await expect(row).toContainText('Current')
+      } else {
+        await expect(row).toContainText(formatDate(accommodation.endDate))
+      }
+      for await (const addressPart of addressLines(accommodation.address)) {
+        await expect(row).toContainText(addressPart)
+      }
+      await expect(row).toContainText(accommodation.status.description)
+    }
+  }
 }

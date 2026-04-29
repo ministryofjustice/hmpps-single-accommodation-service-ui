@@ -14,6 +14,7 @@ import proposedAddresses from './fixtures/proposedAddresses.json'
 import proposedAddressesAuditRecords from './fixtures/proposedAddressesAuditRecords.json'
 import currentAccommodation from './fixtures/currentAccommodation.json'
 import nextAccommodation from './fixtures/nextAccommodation.json'
+import accommodationHistory from './fixtures/accommodationHistory.json'
 import {
   AccommodationDetail,
   AccommodationReferralDto,
@@ -97,6 +98,8 @@ async function stubAccommodation() {
       caseDto.crn,
       (nextAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],
     )
+    const history = (accommodationHistory as Record<string, AccommodationSummaryDto[]>)[caseDto.crn]
+    await accommodationApi.stubGetAccommodationHistory(caseDto.crn, history)
   }
 }
 

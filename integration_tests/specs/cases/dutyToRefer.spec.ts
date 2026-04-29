@@ -30,6 +30,7 @@ const setupStubs = async (initialDutyToRefer: DutyToReferDto) => {
   await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
   await casesApi.stubGetReferralHistory(crn, [])
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
+  await accommodationApi.stubGetAccommodationHistory(crn, [])
   await referenceDataApi.stubGetLocalAuthorities()
   await accommodationApi.stubGetCurrentAccommodation(crn, undefined)
   await accommodationApi.stubGetNextAccommodation(crn, undefined)

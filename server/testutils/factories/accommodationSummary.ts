@@ -1,8 +1,8 @@
 import { Factory } from 'fishery'
+import { AccommodationStatusDto, AccommodationSummaryDto, AccommodationTypeDto } from '@sas/api'
 import { faker } from '@faker-js/faker'
-import { AccommodationSummaryDto } from '@sas/api'
 import addressFactory from './accommodationAddressDetails'
-import crn from '../crn'
+import crnFactory from '../crn'
 
 class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
   current(endDate?: string, startDate?: string) {
@@ -18,20 +18,29 @@ class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
       endDate: undefined,
     })
   }
+
+  lastStartDate: Date
+
+  sequential() {
+    const endDate = this.lastStartDate
+    const startDate = faker.date.past({ refDate: endDate })
+    this.lastStartDate = startDate
+
+    return this.params({
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: endDate?.toISOString().split('T')[0],
+      status: endDate ? { code: 'P', description: 'Previous' } : { code: 'M', description: 'Main' },
+    })
+  }
+
+  buildListSequential(count: number) {
+    return Array.from({ length: count }, () => this.sequential().build())
+  }
 }
 
-const statuses: Readonly<AccommodationSummaryDto['status']['code'][]> = [
-  'B',
-  'M',
-  'MA',
-  'P',
-  'PR',
-  'PR1',
-  'RJ',
-  'RT',
-  'S',
-]
-const types: Readonly<AccommodationSummaryDto['type']['code'][]> = [
+const statuses: Readonly<AccommodationStatusDto['code'][]> = ['B', 'M', 'MA', 'P', 'PR', 'PR1', 'RJ', 'RT', 'S']
+
+const types: Readonly<AccommodationTypeDto['code'][]> = [
   'A02',
   'A16',
   'A10',
@@ -55,9 +64,9 @@ const types: Readonly<AccommodationSummaryDto['type']['code'][]> = [
 
 export default AccommodationSummaryFactory.define((): AccommodationSummaryDto => {
   return {
-    crn: crn(),
+    crn: crnFactory(),
     startDate: faker.date.past().toISOString().substring(0, 10),
-    endDate: faker.date.future().toISOString().substring(0, 10),
+    endDate: undefined,
     address: addressFactory.build(),
     status: {
       code: faker.helpers.arrayElement(statuses),

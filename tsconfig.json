@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
+    "rootDir": ".",
     "types": ["jest", "node"],
     "typeRoots": ["./server/@types", "./node_modules/@types"],
     "paths": {

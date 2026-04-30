@@ -10,10 +10,6 @@ export default class DutyToReferClient extends RestClient {
     super('Duty to Refer client', config.apis.sasApi, logger, authenticationClient)
   }
 
-  getCurrentDtr(token: string, crn: string) {
-    return this.get<ApiResponseDtoDutyToReferDto>({ path: apiPaths.cases.dutyToRefer.current({ crn }) }, asUser(token))
-  }
-
   getDtrBySubmissionId(token: string, crn: string, id: string) {
     return this.get<ApiResponseDtoDutyToReferDto>({ path: apiPaths.cases.dutyToRefer.show({ crn, id }) }, asUser(token))
   }

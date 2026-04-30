@@ -18,17 +18,6 @@ describe('DutyToReferService', () => {
     dutyToReferService = new DutyToReferService(dutyToReferClient)
   })
 
-  it('should call getCurrentDtr on the api client and return its result', async () => {
-    const dutyToRefer = dutyToReferFactory.build({ crn })
-    const response = apiResponseFactory.dutyToRefer(dutyToRefer)
-    dutyToReferClient.getCurrentDtr.mockResolvedValue(response)
-
-    const result = await dutyToReferService.getCurrentDtr(token, crn)
-
-    expect(dutyToReferClient.getCurrentDtr).toHaveBeenCalledWith(token, crn)
-    expect(result).toEqual(response)
-  })
-
   it('should call getDtrBySubmissionId on the api client and return its result', async () => {
     const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
     const response = apiResponseFactory.dutyToRefer(dutyToRefer)

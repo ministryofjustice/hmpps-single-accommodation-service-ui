@@ -57,10 +57,8 @@ export default class CasesClient extends RestClient {
    * ```
    */
 
-  // TODO: Reinstate query when new case list endpoint accepts parameters
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getCases(token: string, query?: GetCasesQuery) {
-    return this.get<ApiResponseDtoListCaseDto>({ path: apiPaths.cases.index({}) }, asUser(token))
+    return this.get<ApiResponseDtoListCaseDto>({ path: apiPaths.cases.index({}), query }, asUser(token))
   }
 
   getCase(token: string, crn: string) {

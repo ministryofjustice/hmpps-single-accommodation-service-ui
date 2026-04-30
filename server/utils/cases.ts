@@ -89,30 +89,12 @@ export const caseAssignedTo = (c: Case, username: string): string => {
   return String(c.assignedTo?.username) === username ? `You (${c.assignedTo.name})` : c.assignedTo?.name
 }
 
-export const mapGetCasesQuery = (query: GetCasesQuery, userId: string): GetCasesQuery => {
-  let { assignedTo, searchTerm, crns } = query
-
-  if (query.assignedTo === 'you') assignedTo = userId
-  if (query.assignedTo === 'anyone') assignedTo = ''
-
-  // FIXME -- Experimental Easter Egg: allows loading a list of CRNs directly from the address bar for demo purposes,
-  //  by visiting e.g. `/?crns=X371199,X960658`.
-  if (crns) {
-    crns = String(crns).split(',')
-  }
-  // FIXME -- Experimental Easter Egg: allows searching for one of the 'test' CRNs the API
-  //  is able to provide mock data for.
-  const findCrns = searchTerm?.match(/[A-Za-z]\d{6}/g)
-  if (findCrns?.length > 0) {
-    searchTerm = ''
-    crns = findCrns
-  }
+export const mapGetCasesQuery = (query: GetCasesQuery): GetCasesQuery => {
+  const { searchTerm, riskLevel } = query
 
   return {
-    ...query,
-    assignedTo,
-    crns,
     searchTerm,
+    riskLevel,
   }
 }
 

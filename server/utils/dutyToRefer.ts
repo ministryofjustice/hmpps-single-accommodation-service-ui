@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { AuditRecordDto, CaseDto, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard, StatusTag } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
@@ -16,6 +16,19 @@ const dutyToReferStatusTag = (status?: DutyToReferDto['status']): StatusTag =>
     NOT_STARTED: { text: 'Not started', colour: 'orange' },
     SUBMITTED: { text: 'Submitted', colour: 'yellow' },
   })[status] || { text: 'Unknown' }
+
+export const dtrServiceResultToDutyToRefer = (crn: string, dtr: DtrServiceResult): DutyToReferDto => ({
+  crn,
+  caseId: dtr.caseId,
+  status: dtr.serviceResult.serviceStatus as DutyToReferDto['status'],
+  submission: dtr.submission,
+})
+
+export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceResult => ({
+  caseId: dtr.caseId,
+  serviceResult: { serviceStatus: dtr.status },
+  submission: dtr.submission,
+})
 
 export const dutyToReferStatusCard = (dutyToRefer?: DutyToReferDto): StatusCard => {
   const { status } = dutyToRefer || {}

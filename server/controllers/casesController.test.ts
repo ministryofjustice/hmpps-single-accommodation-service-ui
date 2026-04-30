@@ -10,7 +10,6 @@ import {
   accommodationSummaryFactory,
   apiResponseFactory,
   caseFactory,
-  dutyToReferFactory,
   eligibilityFactory,
   referralFactory,
 } from '../testutils/factories'
@@ -19,7 +18,7 @@ import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
-import { dutyToReferStatusCard } from '../utils/dutyToRefer'
+import { dtrServiceResultToDutyToRefer, dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import AccommodationService from '../services/accommodationService'
@@ -129,7 +128,6 @@ describe('casesController', () => {
       const caseData = caseFactory.build({ crn })
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
-      const dutyToRefer = dutyToReferFactory.build({ crn })
       const proposed = accommodationFactory.proposed().buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
       const currentAccommodation = accommodationFactory.current().build()
@@ -139,7 +137,6 @@ describe('casesController', () => {
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility(eligibility))
-      dutyToReferService.getCurrentDtr.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed, failedChecks } })
       accommodationService.getCurrentAccommodation.mockResolvedValue(
         apiResponseFactory.accommodationSummary(currentAccommodation),
@@ -160,7 +157,6 @@ describe('casesController', () => {
       expect(casesService.getCase).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(referralsService.getReferralHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(eligibilityService.getEligibility).toHaveBeenCalledWith(TEST_TOKEN, crn)
-      expect(dutyToReferService.getCurrentDtr).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(proposedAddressesService.getProposedAddresses).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(accommodationService.getAccommodationHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
 
@@ -172,7 +168,7 @@ describe('casesController', () => {
         currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility),
-        dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
+        dutyToReferCard: dutyToReferStatusCard(dtrServiceResultToDutyToRefer(crn, eligibility.dtr)),
         proposedAddresses: proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
         failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),

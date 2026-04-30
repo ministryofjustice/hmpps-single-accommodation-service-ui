@@ -23,6 +23,7 @@ import {
   accommodationFactory,
   accommodationSummaryFactory,
 } from '../../../server/testutils/factories'
+import { dtrServiceResultToDutyToRefer } from '../../../server/utils/dutyToRefer'
 
 test.describe('Profile Tracker Page', () => {
   const setupStubs = async ({
@@ -81,7 +82,7 @@ test.describe('Profile Tracker Page', () => {
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
-    await profileTrackerPage.shouldShowDutyToRefer(dutyToRefer)
+    await profileTrackerPage.shouldShowDutyToRefer(dtrServiceResultToDutyToRefer(crn, eligibility.dtr))
     await profileTrackerPage.shouldShowEligibility(eligibility)
     await profileTrackerPage.shouldShowNextActions(eligibility.caseActions)
     await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)

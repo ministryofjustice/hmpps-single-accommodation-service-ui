@@ -10,7 +10,7 @@ import {
   casesTableColumns,
   queryToFilters,
 } from '../utils/cases'
-import { dutyToReferStatusCard } from '../utils/dutyToRefer'
+import { dutyToReferStatusCard, dtrServiceResultToDutyToRefer } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
@@ -91,7 +91,6 @@ export default class CasesController {
         { data: caseData },
         { data: referralHistory },
         { data: eligibility },
-        { data: dutyToRefer },
         { data: proposedAddresses },
         { data: currentAccommodation },
         { data: nextAccommodation },
@@ -100,7 +99,6 @@ export default class CasesController {
         this.casesService.getCase(token, crn),
         this.referralsService.getReferralHistory(token, crn),
         this.eligibilityService.getEligibility(token, crn),
-        this.dutyToReferService.getCurrentDtr(token, crn),
         this.proposedAddressesService.getProposedAddresses(token, crn),
         this.accommodationService.getCurrentAccommodation(token, crn),
         this.accommodationService.getNextAccommodation(token, crn),
@@ -114,8 +112,7 @@ export default class CasesController {
         nextAccommodationCard: accommodationCard('next', nextAccommodation),
         currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
-        eligibilityCards: eligibilityToEligibilityCards(eligibility),
-        dutyToReferCard: dutyToReferStatusCard(dutyToRefer),
+        eligibilityCards: eligibilityToEligibilityCards(eligibility, crn),
         proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
         failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),

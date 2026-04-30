@@ -23,9 +23,14 @@ export type { ApiResponseDtoListCaseDto } from './models/ApiResponseDtoListCaseD
 export type { ApiResponseDtoListReferenceDataDto } from './models/ApiResponseDtoListReferenceDataDto';
 export type { AssignedToDto } from './models/AssignedToDto';
 export type { AuditRecordDto } from './models/AuditRecordDto';
+export type { Cas1ApplicationDto } from './models/Cas1ApplicationDto';
+export type { Cas1ServiceResult } from './models/Cas1ServiceResult';
+export type { Cas3ApplicationDto } from './models/Cas3ApplicationDto';
+export type { Cas3ServiceResult } from './models/Cas3ServiceResult';
 export type { CaseDto } from './models/CaseDto';
 export type { DlqMessage } from './models/DlqMessage';
 export type { DtrCommand } from './models/DtrCommand';
+export type { DtrServiceResult } from './models/DtrServiceResult';
 export type { DtrSubmissionDto } from './models/DtrSubmissionDto';
 export type { DutyToReferDto } from './models/DutyToReferDto';
 export type { EligibilityDto } from './models/EligibilityDto';

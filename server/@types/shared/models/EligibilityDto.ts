@@ -2,14 +2,14 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { DutyToReferDto } from './DutyToReferDto';
-import type { ServiceResult } from './ServiceResult';
+import type { Cas1ServiceResult } from './Cas1ServiceResult';
+import type { Cas3ServiceResult } from './Cas3ServiceResult';
+import type { DtrServiceResult } from './DtrServiceResult';
 export type EligibilityDto = {
     crn: string;
-    cas1: ServiceResult;
-    cas3: ServiceResult;
-    dtr: ServiceResult;
+    cas1: Cas1ServiceResult;
+    cas3: Cas3ServiceResult;
+    dtr: DtrServiceResult;
     caseActions: Array<string>;
-    dutyToRefer?: (DutyToReferDto | null);
 };
 

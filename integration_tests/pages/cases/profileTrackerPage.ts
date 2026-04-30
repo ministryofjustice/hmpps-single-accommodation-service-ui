@@ -37,8 +37,8 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
 
   async shouldShowEligibility(eligibility: Eligibility) {
     const cardConfigs = [
-      { title: 'Approved premises (CAS1)', service: eligibility.cas1 },
-      { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3 },
+      { title: 'Approved premises (CAS1)', service: eligibility.cas1.serviceResult },
+      { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3.serviceResult },
     ]
 
     // TODO remove filter once the API always returns eligibility for all services

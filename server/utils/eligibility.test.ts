@@ -32,8 +32,8 @@ describe('eligibilityToEligibilityCards', () => {
 
   it('returns an array of eligibility card objects', () => {
     const eligibility = eligibilityFactory.build({
-      cas1: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),
-      cas3: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }),
+      cas1: { serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }) },
+      cas3: { serviceResult: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }) },
     })
 
     const cards = eligibilityToEligibilityCards(eligibility)

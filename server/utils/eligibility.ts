@@ -52,8 +52,8 @@ export const eligibilityStatusCard = (title: string, service?: ServiceResult): S
 
 export const eligibilityToEligibilityCards = (eligibility: EligibilityDto): StatusCard[] => {
   const cardConfigs = [
-    { title: 'Approved premises (CAS1)', eligibility: eligibility.cas1 },
-    { title: 'CAS3 (transitional accommodation)', eligibility: eligibility.cas3 },
+    { title: 'Approved premises (CAS1)', eligibility: eligibility.cas1.serviceResult },
+    { title: 'CAS3 (transitional accommodation)', eligibility: eligibility.cas3.serviceResult },
   ]
 
   // TODO remove filter once the API always returns eligibility for all services

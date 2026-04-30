@@ -4,6 +4,7 @@
     "noEmit": true,
     "lib": ["es5", "dom", "es2015.promise"],
     "typeRoots": ["../server/@types", "../node_modules/@types"],
+    "types": ["jest", "node", "express", "express-session", "connect-flash"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": false,

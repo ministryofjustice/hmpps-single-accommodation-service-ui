@@ -103,7 +103,10 @@ test.describe('duty to refer', () => {
 
     // Then I should see the profile tracker page with the new duty to refer details
     await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await profileTrackerPage.shouldShowDutyToRefer(submittedDutyToRefer)
+    await profileTrackerPage.shouldShowEligibility({
+      ...eligibility,
+      dtr: dutyToReferToDtrServiceResult(submittedDutyToRefer),
+    })
 
     // When I click the add outcome link
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
@@ -136,7 +139,10 @@ test.describe('duty to refer', () => {
 
     // And I should see the profile tracker page with the updated duty to refer details
     await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await profileTrackerPage.shouldShowDutyToRefer(acceptedDutyToRefer)
+    await profileTrackerPage.shouldShowEligibility({
+      ...eligibility,
+      dtr: dutyToReferToDtrServiceResult(acceptedDutyToRefer),
+    })
 
     // And I should see a success banner confirming outcome details were added
     await profileTrackerPage.shouldShowBanner('Outcome details added')

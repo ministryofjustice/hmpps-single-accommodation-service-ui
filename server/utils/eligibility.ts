@@ -1,5 +1,6 @@
 import { EligibilityDto, ServiceResult } from '@sas/api'
 import { StatusCard, StatusTag } from '@sas/ui'
+import { dtrServiceResultToDutyToRefer, dutyToReferStatusCard } from './dutyToRefer'
 
 const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): StatusTag =>
   ({
@@ -50,14 +51,8 @@ export const eligibilityStatusCard = (title: string, service?: ServiceResult): S
   links: linksForStatus(service?.serviceStatus),
 })
 
-export const eligibilityToEligibilityCards = (eligibility: EligibilityDto): StatusCard[] => {
-  const cardConfigs = [
-    { title: 'Approved premises (CAS1)', eligibility: eligibility.cas1.serviceResult },
-    { title: 'CAS3 (transitional accommodation)', eligibility: eligibility.cas3.serviceResult },
-  ]
-
-  // TODO remove filter once the API always returns eligibility for all services
-  return cardConfigs
-    .filter(config => config.eligibility)
-    .map(config => eligibilityStatusCard(config.title, config.eligibility))
-}
+export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] => [
+  dutyToReferStatusCard(dtrServiceResultToDutyToRefer(crn, eligibility.dtr)),
+  eligibilityStatusCard('Approved premises (CAS1)', eligibility.cas1.serviceResult),
+  eligibilityStatusCard('CAS3 (transitional accommodation)', eligibility.cas3.serviceResult),
+]

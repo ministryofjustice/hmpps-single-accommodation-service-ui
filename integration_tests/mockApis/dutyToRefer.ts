@@ -1,6 +1,6 @@
 import type { SuperAgentRequest } from 'superagent'
 import { AuditRecordDto, DutyToReferDto } from '@sas/api'
-import { stubFor, stubApiError } from './wiremock'
+import { stubFor } from './wiremock'
 import {
   apiResponseFactory,
   auditRecordFactory,

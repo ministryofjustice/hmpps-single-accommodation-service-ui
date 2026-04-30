@@ -3,6 +3,21 @@
 exports[`eligibilityToEligibilityCards returns an array of eligibility card objects 1`] = `
 [
   {
+    "details": [],
+    "heading": "Duty to Refer (DTR)",
+    "inactive": false,
+    "links": [
+      {
+        "href": "/cases/X123456/dtr/some-id/details",
+        "text": "View referral and notes",
+      },
+    ],
+    "status": {
+      "colour": "yellow",
+      "text": "Accepted",
+    },
+  },
+  {
     "heading": "Approved premises (CAS1)",
     "inactive": false,
     "links": [

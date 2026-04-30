@@ -10,7 +10,6 @@ import {
   casesTableColumns,
   queryToFilters,
 } from '../utils/cases'
-import { dutyToReferStatusCard, dtrServiceResultToDutyToRefer } from '../utils/dutyToRefer'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'

@@ -1,16 +1,14 @@
 import { expect, Locator, Page } from '@playwright/test'
 import {
   CaseDto as Case,
-  DutyToReferDto,
   EligibilityDto as Eligibility,
   AccommodationReferralDto as Referral,
   AccommodationDetail,
   AccommodationSummaryDto,
 } from '@sas/api'
 import { formatDate } from '../../../server/utils/dates'
-import { eligibilityStatusCard } from '../../../server/utils/eligibility'
+import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
-import { dutyToReferStatusCard } from '../../../server/utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
 import { referralStatusTag, referralStatusType } from '../../../server/utils/referrals'
 import { addressLines, formatAddress } from '../../../server/utils/addresses'
@@ -31,21 +29,9 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     return ProfileTrackerPage.verifyOnPage(page, caseData)
   }
 
-  async shouldShowDutyToRefer(dutyToRefer: DutyToReferDto) {
-    await this.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(dutyToRefer))
-  }
-
   async shouldShowEligibility(eligibility: Eligibility) {
-    const cardConfigs = [
-      { title: 'Approved premises (CAS1)', service: eligibility.cas1.serviceResult },
-      { title: 'CAS3 (transitional accommodation)', service: eligibility.cas3.serviceResult },
-    ]
-
-    // TODO remove filter once the API always returns eligibility for all services
-    const expectedCards = cardConfigs.filter(card => !!card.service)
-
-    for await (const { title, service } of expectedCards) {
-      await this.shouldShowCard(title, eligibilityStatusCard(title, service))
+    for await (const card of eligibilityToEligibilityCards(eligibility, this.caseData.crn)) {
+      await this.shouldShowCard(card.heading, card)
     }
   }
 

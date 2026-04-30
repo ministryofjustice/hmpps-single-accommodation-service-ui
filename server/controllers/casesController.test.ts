@@ -18,7 +18,6 @@ import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
-import { dtrServiceResultToDutyToRefer, dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import AccommodationService from '../services/accommodationService'
@@ -167,8 +166,7 @@ describe('casesController', () => {
         nextAccommodationCard: accommodationCard('next', nextAccommodation),
         currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
-        eligibilityCards: eligibilityToEligibilityCards(eligibility),
-        dutyToReferCard: dutyToReferStatusCard(dtrServiceResultToDutyToRefer(crn, eligibility.dtr)),
+        eligibilityCards: eligibilityToEligibilityCards(eligibility, crn),
         proposedAddresses: proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
         failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),

@@ -22,6 +22,7 @@ class CaseFactory extends Factory<Case> {
         accommodationFactory.next(currentEndDate).privateAddress().build(),
         accommodationFactory.next(currentEndDate).cas().build(),
       ]),
+      status: 'SETTLED',
     })
   }
 
@@ -34,6 +35,7 @@ class CaseFactory extends Factory<Case> {
         accommodationFactory.current(currentEndDate).prison().build(),
       ]),
       nextAccommodation: accommodationFactory.next(currentEndDate).noFixedAbode().build(),
+      status: 'NO_FIXED_ABODE'
     })
   }
 
@@ -41,6 +43,7 @@ class CaseFactory extends Factory<Case> {
     return this.params({
       currentAccommodation: accommodationFactory.current().noFixedAbode().build(),
       nextAccommodation: undefined,
+      status: 'RISK_OF_NO_FIXED_ABODE'
     })
   }
 }

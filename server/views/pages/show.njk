@@ -2,6 +2,7 @@
 {% from "components/macros/caseDetails.njk" import caseDetails %}
 {% from "components/macros/statusCard.njk" import statusCard %}
 {% from "components/macros/accommodationCard.njk" import accommodationCard %}
+{% from "components/macros/noFixedAbodeBox.njk" import noFixedAbodeBox %}
 {% from "components/macros/referralHistoryTable.njk" import referralHistoryTable %}
 {% from "components/macros/accommodationHistoryTable.njk" import accommodationHistoryTable %}
 {% extends "partials/layout.njk" %}
@@ -33,6 +34,8 @@
   <div class="govuk-grid-row">
     <section class="govuk-grid-column-one-third-from-desktop govuk-grid-column-right-from-desktop">
       <h2 class="govuk-visually-hidden">Current situation</h2>
+      {{ noFixedAbodeBox(noFixedAbode) }}
+
       {% if nextActions | length %}
         <div class="sas-card sas-card--block">
           <h3 class="govuk-heading-m">Next actions</h3>

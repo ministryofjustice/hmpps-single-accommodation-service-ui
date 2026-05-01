@@ -111,18 +111,33 @@ test.describe('Profile Tracker Page', () => {
 
       await profileTrackerPage.shouldShowNextAccommodationCard(nextAccommodation)
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
+      await profileTrackerPage.shouldNotShowNoFixedAbodeBox()
     })
 
     test(`should render only current accommodation for a NFA next case`, async ({ page }) => {
       const caseData = caseFactory.noFixedAbodeNext().build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
-      await setupStubs({ crn, caseData, currentAccommodation })
+      const accommodationHistory = [accommodationSummaryFactory.current().build()]
+      await setupStubs({ crn, caseData, currentAccommodation, accommodationHistory })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
+      await profileTrackerPage.shouldShowNoFixedAbodeBox(caseData, accommodationHistory[0])
+    })
+
+    test(`should render no accommodation cards for a NFA current case`, async ({ page }) => {
+      const caseData = caseFactory.noFixedAbodeCurrent().build({ crn, status: 'NO_FIXED_ABODE' })
+      const accommodationHistory = [accommodationSummaryFactory.build({ endDate: undefined })]
+      await setupStubs({ crn, caseData, accommodationHistory })
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldNotShowNextAccommodationCard()
+      await profileTrackerPage.shouldShowNoFixedAbodeBox(caseData, accommodationHistory[0])
     })
   })
 

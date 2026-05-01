@@ -21,7 +21,7 @@ import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import AccommodationService from '../services/accommodationService'
-import { accommodationCard, accommodationHistoryRows } from '../utils/accommodationSummary'
+import { accommodationCard, accommodationHistoryRows, noFixedAbodeBox } from '../utils/accommodationSummary'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -163,6 +163,7 @@ describe('casesController', () => {
         caseData,
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: eligibility.caseActions,
+        noFixedAbode: noFixedAbodeBox(caseData, accommodationHistory[0]),
         nextAccommodationCard: accommodationCard('next', nextAccommodation),
         currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),

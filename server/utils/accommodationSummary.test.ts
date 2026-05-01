@@ -3,6 +3,7 @@ import { accommodationSummaryFactory, addressFactory } from '../testutils/factor
 import {
   accommodationCard,
   accommodationCell,
+  accommodationHistoryEndDate,
   accommodationHistoryRows,
   accommodationHistoryTable,
   accommodationSummaryAddress,
@@ -112,6 +113,36 @@ describe('accommodationSummary', () => {
     describe('accommodationHistoryRows', () => {
       it('returns a row for each accommodation', () => {
         expect(accommodationHistoryRows(accommodationHistory)).toMatchSnapshot()
+      })
+    })
+
+    describe('accommodationHistoryEndDate', () => {
+      beforeEach(() => {
+        jest.useFakeTimers().setSystemTime(new Date('2026-05-01'))
+      })
+
+      afterEach(() => {
+        jest.useRealTimers()
+      })
+
+      it('returns "Current" for the latest accommodation with a past startDate', () => {
+        const accommodation = accommodationSummaryFactory.build({ startDate: '2026-04-27', endDate: undefined })
+        expect(accommodationHistoryEndDate(accommodation, true)).toEqual('Current')
+      })
+
+      it('returns "Current" for the latest accommodation with endDate set', () => {
+        const accommodation = accommodationSummaryFactory.build({ startDate: '2026-04-27', endDate: '2026-09-01' })
+        expect(accommodationHistoryEndDate(accommodation, true)).toEqual('Current')
+      })
+
+      it('returns the formatted endDate for previous accommodations', () => {
+        const accommodation = accommodationSummaryFactory.build({ startDate: '2025-01-03', endDate: '2026-04-27' })
+        expect(accommodationHistoryEndDate(accommodation, false)).toEqual('27 April 2026')
+      })
+
+      it('returns an empty string for a previous accommodation with no endDate', () => {
+        const accommodation = accommodationSummaryFactory.build({ startDate: '2025-01-03', endDate: undefined })
+        expect(accommodationHistoryEndDate(accommodation, false)).toEqual('')
       })
     })
 

@@ -21,7 +21,7 @@ import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
 import AccommodationService from '../services/accommodationService'
-import { accommodationCard, accommodationHistoryRows, noFixedAbodeBox } from '../utils/accommodationSummary'
+import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -108,7 +108,7 @@ export default class CasesController {
         caseData,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: eligibility.caseActions,
-        noFixedAbode: noFixedAbodeBox(caseData, accommodationHistory[0]),
+        noFixedAbode: noFixedAbodeAlert(caseData, accommodationHistory[0]),
         nextAccommodationCard: accommodationCard('next', nextAccommodation),
         currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),

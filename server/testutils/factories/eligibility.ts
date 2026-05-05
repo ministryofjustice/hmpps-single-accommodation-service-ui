@@ -1,4 +1,4 @@
-import { EligibilityDto, Cas1ServiceResult, Cas3ServiceResult, DtrServiceResult } from '@sas/api'
+import { EligibilityDto, Cas1ServiceResult, Cas3ServiceResult, DtrServiceResult, CrsServiceResult } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import crn from '../crn'
@@ -15,9 +15,15 @@ const caseActions = [
 ]
 
 export default Factory.define<EligibilityDto>(() => {
-  const allServiceResults: { cas1: Cas1ServiceResult; cas3: Cas3ServiceResult; dtr: DtrServiceResult } = {
+  const allServiceResults: {
+    cas1: Cas1ServiceResult
+    cas3: Cas3ServiceResult
+    crs: CrsServiceResult
+    dtr: DtrServiceResult
+  } = {
     cas1: { serviceResult: serviceResultFactory.notEligible().build() },
     cas3: { serviceResult: serviceResultFactory.notEligible().build() },
+    crs: { serviceResult: serviceResultFactory.notEligible().build() },
     dtr: { serviceResult: serviceResultFactory.notStarted().build() },
   }
 

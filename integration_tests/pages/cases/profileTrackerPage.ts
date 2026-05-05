@@ -76,7 +76,11 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(this.page.locator('.sas-card', { hasText: 'Next accommodation' })).toHaveCount(0)
   }
 
-  async shouldShowNoFixedAbodeAlert(caseData: Case, accommodation?: AccommodationSummaryDto) {
+  async shouldNotShowCurrentAccommodationCard() {
+    await expect(this.page.locator('.sas-card', { hasText: 'Current accommodation' })).toHaveCount(0)
+  }
+
+  async shouldShowNoFixedAbodeAlert(caseData: Case, accommodation: AccommodationSummaryDto) {
     if (caseData.status === 'NO_FIXED_ABODE') {
       const card = this.page.locator('.moj-alert', { hasText: 'No fixed abode' })
       const { startDate } = accommodation

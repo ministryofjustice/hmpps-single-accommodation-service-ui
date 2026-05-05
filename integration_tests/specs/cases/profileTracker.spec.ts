@@ -111,7 +111,7 @@ test.describe('Profile Tracker Page', () => {
 
       await profileTrackerPage.shouldShowNextAccommodationCard(nextAccommodation)
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
-      await profileTrackerPage.shouldNotShowNoFixedAbodeBox()
+      await profileTrackerPage.shouldNotShowNoFixedAbodeAlert()
     })
 
     test(`should render only current accommodation for a NFA next case`, async ({ page }) => {
@@ -125,7 +125,7 @@ test.describe('Profile Tracker Page', () => {
 
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
-      await profileTrackerPage.shouldShowNoFixedAbodeBox(caseData, accommodationHistory[0])
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, accommodationHistory[0])
     })
 
     test(`should render no accommodation cards for a NFA current case`, async ({ page }) => {
@@ -137,7 +137,7 @@ test.describe('Profile Tracker Page', () => {
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
-      await profileTrackerPage.shouldShowNoFixedAbodeBox(caseData, accommodationHistory[0])
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, accommodationHistory[0])
     })
   })
 

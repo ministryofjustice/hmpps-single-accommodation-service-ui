@@ -1,8 +1,8 @@
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
-{%- macro noFixedAbodeBox(context) -%}
+{%- macro noFixedAbodeAlert(context) -%}
   {% if context %}
-    {%- set startDateHtml -%}
+    {%- set dateHtml -%}
       {% if context.date %}
         <p class="govuk-!-margin-top-2">
           {{ 'Since' if (context.date | date('days') < 0) else 'From' }} {{ context.date | date('long') }}<br />
@@ -17,8 +17,9 @@
         title: "No fixed abode" if context.status === 'NO_FIXED_ABODE' else "Risk of no fixed abode",
         showTitleAsHeading: true,
         dismissible: false,
-        html: startDateHtml
+        html: dateHtml
       })
     }}
   {% endif %}
 {%- endmacro -%}
+

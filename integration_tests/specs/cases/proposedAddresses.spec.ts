@@ -4,7 +4,6 @@ import { ProposedAddressFormData } from '@sas/ui'
 import accommodationApi from '../../mockApis/accommodation'
 import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
-import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import osDataHubApi from '../../mockApis/osDataHubApi'
 import { login } from '../../testUtils'
@@ -29,7 +28,6 @@ const setupCase = async () => {
 
   await casesApi.stubGetCases([caseData])
   await casesApi.stubGetCaseByCrn(crn, caseData)
-  await dutyToReferApi.stubGetCurrentDtr(crn, undefined)
   await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
   await casesApi.stubGetReferralHistory(crn, [])
   await accommodationApi.stubGetCurrentAccommodation(crn, undefined)

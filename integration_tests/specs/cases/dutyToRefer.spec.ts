@@ -11,30 +11,31 @@ import {
   caseFactory,
   dtrSubmissionFactory,
   dutyToReferFactory,
+  eligibilityFactory,
 } from '../../../server/testutils/factories'
 import { login } from '../../testUtils'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import DutyToReferPage from '../../pages/cases/dutyToReferPage'
 import DutyToReferDetailsPage from '../../pages/cases/dutyToReferDetailsPage'
-import { dutyToReferTimelineEntry } from '../../../server/utils/dutyToRefer'
+import { dutyToReferTimelineEntry, dutyToReferToDtrServiceResult } from '../../../server/utils/dutyToRefer'
 
 const crn = 'X123456'
 const setupStubs = async (initialDutyToRefer: DutyToReferDto) => {
   const caseData = caseFactory.build({ crn })
   await casesApi.stubGetCases([caseData])
   await casesApi.stubGetCaseByCrn(crn, caseData)
-  await dutyToReferApi.stubGetCurrentDtr(crn, initialDutyToRefer)
   if (initialDutyToRefer.submission?.id) {
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, initialDutyToRefer.submission.id, initialDutyToRefer)
   }
-  await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
+  const eligibility = eligibilityFactory.build({ crn, dtr: dutyToReferToDtrServiceResult(initialDutyToRefer) })
+  await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
   await casesApi.stubGetReferralHistory(crn, [])
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
   await accommodationApi.stubGetAccommodationHistory(crn, [])
   await referenceDataApi.stubGetLocalAuthorities()
   await accommodationApi.stubGetCurrentAccommodation(crn, undefined)
   await accommodationApi.stubGetNextAccommodation(crn, undefined)
-  return caseData
+  return { caseData, eligibility }
 }
 
 const setupDutyToReferTimeline = async (submissionId: string, records: AuditRecordDto[]) => {
@@ -57,7 +58,7 @@ test.describe('duty to refer', () => {
     const editId = submittedDutyToRefer.submission.id
 
     // Given I have stubbed the API responses
-    const caseData = await setupStubs(notStartedDutyToRefer)
+    const { caseData, eligibility } = await setupStubs(notStartedDutyToRefer)
 
     // And I am logged in
     await login(page)
@@ -89,7 +90,10 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubSubmitDutyToRefer(crn)
-    await dutyToReferApi.stubGetCurrentDtr(crn, submittedDutyToRefer)
+    await eligibilityApi.stubGetEligibilityByCrn(crn, {
+      ...eligibility,
+      dtr: dutyToReferToDtrServiceResult(submittedDutyToRefer),
+    })
 
     await dutyToReferPage.completeSubmissionForm(submittedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')
@@ -99,7 +103,10 @@ test.describe('duty to refer', () => {
 
     // Then I should see the profile tracker page with the new duty to refer details
     await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await profileTrackerPage.shouldShowDutyToRefer(submittedDutyToRefer)
+    await profileTrackerPage.shouldShowEligibility({
+      ...eligibility,
+      dtr: dutyToReferToDtrServiceResult(submittedDutyToRefer),
+    })
 
     // When I click the add outcome link
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
@@ -119,7 +126,10 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
-    await dutyToReferApi.stubGetCurrentDtr(crn, acceptedDutyToRefer)
+    await eligibilityApi.stubGetEligibilityByCrn(crn, {
+      ...eligibility,
+      dtr: dutyToReferToDtrServiceResult(acceptedDutyToRefer),
+    })
 
     await outcomePage.completeOutcomeForm(acceptedDutyToRefer)
     await outcomePage.clickButton('Save and continue')
@@ -129,7 +139,10 @@ test.describe('duty to refer', () => {
 
     // And I should see the profile tracker page with the updated duty to refer details
     await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await profileTrackerPage.shouldShowDutyToRefer(acceptedDutyToRefer)
+    await profileTrackerPage.shouldShowEligibility({
+      ...eligibility,
+      dtr: dutyToReferToDtrServiceResult(acceptedDutyToRefer),
+    })
 
     // And I should see a success banner confirming outcome details were added
     await profileTrackerPage.shouldShowBanner('Outcome details added')
@@ -154,7 +167,7 @@ test.describe('duty to refer', () => {
     const editId = submittedDutyToRefer.submission.id
 
     // Given I have stubbed the API responses
-    const caseData = await setupStubs(submittedDutyToRefer)
+    const { caseData } = await setupStubs(submittedDutyToRefer)
     const timelineRecords: AuditRecordDto[] = [submissionAddedDutyReferRecord]
     await setupDutyToReferTimeline(editId, timelineRecords)
 
@@ -240,7 +253,7 @@ test.describe('duty to refer', () => {
     const timelineRecords: AuditRecordDto[] = [submittedDutyToReferRecord]
 
     // Given I have stubbed the API responses
-    const caseData = await setupStubs(submittedDutyToRefer)
+    const { caseData } = await setupStubs(submittedDutyToRefer)
     await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
 
     // Given I am logged in
@@ -306,7 +319,7 @@ test.describe('duty to refer', () => {
     const updatedDutyToRefer = dutyToReferFactory.build({ ...acceptedDutyToRefer, status: 'NOT_ACCEPTED' })
 
     // Given I have stubbed the API responses
-    const caseData = await setupStubs(acceptedDutyToRefer)
+    const { caseData } = await setupStubs(acceptedDutyToRefer)
     const submittedDutyToReferRecord = auditRecordFactory.dutyToReferAdded(acceptedDutyToRefer.submission).build()
     const updatedDutyToReferRecord = auditRecordFactory
       .dutyToReferUpdated(acceptedDutyToRefer.submission, updatedDutyToRefer.status, {

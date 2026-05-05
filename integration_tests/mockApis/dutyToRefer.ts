@@ -1,6 +1,6 @@
 import type { SuperAgentRequest } from 'superagent'
 import { AuditRecordDto, DutyToReferDto } from '@sas/api'
-import { stubFor, stubApiError } from './wiremock'
+import { stubFor } from './wiremock'
 import {
   apiResponseFactory,
   auditRecordFactory,
@@ -10,19 +10,6 @@ import {
 import apiPaths from '../../server/paths/api'
 
 export default {
-  stubGetCurrentDtr: (crn: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: apiPaths.cases.dutyToRefer.current({ crn }),
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.dutyToRefer(dutyToReferData),
-      },
-    }),
-  stubGetCurrentDtr500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.dutyToRefer.current({ crn })),
   stubGetDtrBySubmissionId: (crn: string, submissionId: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
     stubFor({
       request: {

@@ -4,12 +4,10 @@ import {
   AccommodationReferralDto,
   AccommodationSummaryDto,
   CaseDto,
-  DutyToReferDto,
   EligibilityDto,
 } from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
-import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import accommodationApi from '../../mockApis/accommodation'
@@ -28,7 +26,6 @@ test.describe('Profile Tracker Page', () => {
   const setupStubs = async ({
     crn,
     caseData,
-    dutyToRefer,
     eligibility,
     referrals,
     proposedAddresses,
@@ -38,7 +35,6 @@ test.describe('Profile Tracker Page', () => {
   }: {
     crn: string
     caseData: CaseDto
-    dutyToRefer?: DutyToReferDto
     eligibility?: EligibilityDto
     referrals?: AccommodationReferralDto[]
     proposedAddresses?: AccommodationDetail[]
@@ -48,7 +44,6 @@ test.describe('Profile Tracker Page', () => {
   }) => {
     await casesApi.stubGetCases([caseData])
     await casesApi.stubGetCaseByCrn(crn, caseData)
-    await dutyToReferApi.stubGetCurrentDtr(crn, dutyToRefer || undefined)
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
     await casesApi.stubGetReferralHistory(crn, referrals)
     await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
@@ -62,8 +57,10 @@ test.describe('Profile Tracker Page', () => {
     const caseData = caseFactory.build({ crn })
     const dutyToRefer = dutyToReferFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
-      cas1: serviceResultFactory.build(),
-      cas3: serviceResultFactory.build(),
+      crn,
+      dtr: { serviceResult: serviceResultFactory.build(), submission: dutyToRefer.submission },
+      cas1: { serviceResult: serviceResultFactory.build() },
+      cas3: { serviceResult: serviceResultFactory.build() },
     })
     const referrals = referralFactory.buildList(3)
     const proposedAddresses = [
@@ -73,7 +70,7 @@ test.describe('Profile Tracker Page', () => {
     ]
     const accommodationHistory = accommodationSummaryFactory.buildListSequential(5)
 
-    await setupStubs({ crn, caseData, dutyToRefer, eligibility, referrals, proposedAddresses, accommodationHistory })
+    await setupStubs({ crn, caseData, eligibility, referrals, proposedAddresses, accommodationHistory })
     await login(page)
 
     await page.getByRole('link', { name: caseData.name }).click()
@@ -81,7 +78,6 @@ test.describe('Profile Tracker Page', () => {
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
-    await profileTrackerPage.shouldShowDutyToRefer(dutyToRefer)
     await profileTrackerPage.shouldShowEligibility(eligibility)
     await profileTrackerPage.shouldShowNextActions(eligibility.caseActions)
     await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)

@@ -57,7 +57,6 @@ async function stubReferrals() {
 async function stubDutyToRefer() {
   for await (const caseDto of cases) {
     const dtr = (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn]
-    await dutyToReferApi.stubGetCurrentDtr(caseDto.crn, dtr)
     if (dtr?.submission?.id) {
       await dutyToReferApi.stubGetDtrBySubmissionId(caseDto.crn, dtr.submission.id, dtr)
       await dutyToReferApi.stubUpdateDutyToRefer(caseDto.crn, dtr.submission.id)

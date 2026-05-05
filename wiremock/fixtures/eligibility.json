@@ -1,114 +1,266 @@
 {
   "S511935": {
     "crn": "S511935",
-    "caseActions": ["Add DTR outcome"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Add proposed address",
+      "Consider home visit",
+      "Confirm next address"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ACCEPTED",
+        "action": "volo strenuus vulariter beatus summopere"
+      },
+      "submission": {
+        "id": "0f35c1b1-d4cb-49cd-9e0f-a9f0da6183cb",
+        "localAuthority": {
+          "localAuthorityAreaId": "a90e42ef-48fc-4ba4-85a4-010c5d287be1",
+          "localAuthorityAreaName": "Tower Hamlets"
+        },
+        "referenceNumber": "NF2KCYM5QA",
+        "submissionDate": "2026-04-05",
+        "createdBy": "Andre Rutherford",
+        "createdAt": "2026-02-22T15:59:20.931Z"
+      }
     }
   },
   "P712106": {
     "crn": "P712106",
-    "caseActions": ["Start CAS3 referral"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Consider home visit",
+      "Start CAS3 referral",
+      "Add proposed address"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "REJECTED"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED"
+      }
     }
   },
   "T274481": {
     "crn": "T274481",
-    "caseActions": ["Add proposed address", "Consider home visit", "Add DTR outcome"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Start CAS3 referral",
+      "Submit a CRS referral",
+      "Add proposed address"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "action": "amo cohibeo adstringo alveus tyrannus"
+      }
     },
     "cas3": {
-      "serviceStatus": "UPCOMING",
-      "actions": ["perspire"]
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED"
+      }
     }
   },
   "V938951": {
     "crn": "V938951",
-    "caseActions": ["Add DTR outcome"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Add proposed address"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
     },
     "cas3": {
-      "serviceStatus": "CONFIRMED",
-      "actions": ["cripple"]
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "action": "ipsam voveo canonicus spero velit"
+      },
+      "submission": {
+        "id": "c3ed6644-0c62-4f65-a29f-e23e9804113f",
+        "localAuthority": {
+          "localAuthorityAreaId": "97872e49-d43c-4049-8a27-5fc1f0a33a60",
+          "localAuthorityAreaName": "Ryedale"
+        },
+        "referenceNumber": "QCBDV7P67D",
+        "submissionDate": "2025-11-26",
+        "createdBy": "Dr. Carl Hand",
+        "createdAt": "2025-07-17T16:04:59.249Z"
+      }
     }
   },
   "T229440": {
     "crn": "T229440",
-    "caseActions": ["Consider home visit"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Consider home visit",
+      "Submit a CRS referral"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "UPCOMING",
+        "action": "sufficio tero crux cavus tero"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED"
+      }
     }
   },
   "H271226": {
     "crn": "H271226",
-    "caseActions": ["Submit a CRS referral", "Start CAS3 referral"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Add proposed address",
+      "Consider home visit",
+      "Add DTR outcome"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "UPCOMING",
+        "action": "cervus adflicto acies amissio territo"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED"
+      }
     }
   },
   "U934069": {
     "crn": "U934069",
-    "caseActions": ["Consider home visit", "Add proposed address"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Start CAS3 referral"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "action": "cuius testimonium conitor accommodo caritas"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED"
+      }
     }
   },
   "I322559": {
     "crn": "I322559",
-    "caseActions": ["Add DTR outcome", "Submit a CRS referral"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Consider home visit",
+      "Add proposed address",
+      "Add DTR outcome"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED"
+      }
     }
   },
   "L247269": {
     "crn": "L247269",
-    "caseActions": ["Confirm next address", "Consider home visit", "Add proposed address"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Add proposed address",
+      "Consider home visit"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "action": "pectus consequatur subvenio adiuvo suadeo"
+      },
+      "submission": {
+        "id": "680cc11c-20bc-4e7d-8520-2f37f581c094",
+        "localAuthority": {
+          "localAuthorityAreaId": "b90affc3-7639-4d4a-9328-10699d72dd8a",
+          "localAuthorityAreaName": "East Dunbartonshire"
+        },
+        "referenceNumber": "HSO0FXSUR0",
+        "submissionDate": "2025-12-07",
+        "createdBy": "Bernadette Casper",
+        "createdAt": "2025-09-26T03:15:17.328Z"
+      }
     }
   },
   "F608163": {
     "crn": "F608163",
-    "caseActions": ["Consider home visit"],
-    "dtr": { "serviceStatus": "NOT_STARTED" },
+    "caseActions": [
+      "Add proposed address",
+      "Add DTR outcome",
+      "Consider home visit"
+    ],
     "cas1": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
     },
     "cas3": {
-      "serviceStatus": "NOT_ELIGIBLE"
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED"
+      }
     }
   }
 }

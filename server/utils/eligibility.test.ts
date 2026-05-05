@@ -20,23 +20,28 @@ describe('eligibility utilities', () => {
 })
 
 describe('eligibilityToEligibilityCards', () => {
+  const crn = 'X123456'
+
   it('returns eligibility cards for each service', () => {
-    const eligibility = eligibilityFactory.build()
+    const eligibility = eligibilityFactory.build({ crn })
 
-    const cards = eligibilityToEligibilityCards(eligibility)
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
 
-    expect(cards).toHaveLength(2)
-    expect(cards[0].heading).toContain('Approved premises (CAS1)')
-    expect(cards[1].heading).toContain('CAS3 (transitional accommodation)')
+    expect(cards).toHaveLength(3)
+    expect(cards[0].heading).toContain('Duty to Refer (DTR)')
+    expect(cards[1].heading).toContain('Approved premises (CAS1)')
+    expect(cards[2].heading).toContain('CAS3 (transitional accommodation)')
   })
 
   it('returns an array of eligibility card objects', () => {
     const eligibility = eligibilityFactory.build({
-      cas1: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),
-      cas3: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }),
+      crn,
+      cas1: { serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }) },
+      cas3: { serviceResult: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }) },
+      dtr: { serviceResult: serviceResultFactory.build({ serviceStatus: 'ACCEPTED' }), submission: { id: 'some-id' } },
     })
 
-    const cards = eligibilityToEligibilityCards(eligibility)
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
 
     expect(cards).toMatchSnapshot()
   })

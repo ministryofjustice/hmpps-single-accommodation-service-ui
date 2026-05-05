@@ -12,13 +12,19 @@ const serviceStatuses: Array<ServiceResult['serviceStatus']> = [
   'CONFIRMED',
 ]
 
+const dtrStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_STARTED', 'SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED']
+
 class ServiceResultFactory extends Factory<ServiceResult> {
   notEligible() {
-    return this.params({ serviceStatus: 'NOT_ELIGIBLE', action: undefined, suitableApplicationId: undefined })
+    return this.params({ serviceStatus: 'NOT_ELIGIBLE', action: undefined })
   }
 
   notStarted() {
-    return this.params({ serviceStatus: 'NOT_STARTED', action: undefined, suitableApplicationId: undefined })
+    return this.params({ serviceStatus: 'NOT_STARTED', action: undefined })
+  }
+
+  dtr() {
+    return this.params({ serviceStatus: faker.helpers.arrayElement(dtrStatuses) })
   }
 }
 

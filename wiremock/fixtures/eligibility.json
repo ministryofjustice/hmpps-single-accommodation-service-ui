@@ -16,6 +16,11 @@
         "serviceStatus": "NOT_ELIGIBLE"
       }
     },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_ACCEPTED",
@@ -51,6 +56,11 @@
         "serviceStatus": "NOT_ELIGIBLE"
       }
     },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED"
@@ -75,6 +85,11 @@
         "serviceStatus": "NOT_ELIGIBLE"
       }
     },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED"
@@ -92,6 +107,11 @@
       }
     },
     "cas3": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE"
       }
@@ -131,6 +151,11 @@
         "serviceStatus": "NOT_ELIGIBLE"
       }
     },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED"
@@ -151,6 +176,11 @@
       }
     },
     "cas3": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE"
       }
@@ -177,6 +207,11 @@
         "action": "cuius testimonium conitor accommodo caritas"
       }
     },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED"
@@ -200,6 +235,11 @@
         "serviceStatus": "NOT_ELIGIBLE"
       }
     },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED"
@@ -218,6 +258,11 @@
       }
     },
     "cas3": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
+      }
+    },
+    "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE"
       }
@@ -255,6 +300,11 @@
     "cas3": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE"
       }
     },
     "dtr": {

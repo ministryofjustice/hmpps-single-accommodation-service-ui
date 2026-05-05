@@ -28,6 +28,8 @@ export type { Cas1ServiceResult } from './models/Cas1ServiceResult';
 export type { Cas3ApplicationDto } from './models/Cas3ApplicationDto';
 export type { Cas3ServiceResult } from './models/Cas3ServiceResult';
 export type { CaseDto } from './models/CaseDto';
+export type { CommissionedRehabilitativeServicesDto } from './models/CommissionedRehabilitativeServicesDto';
+export type { CrsServiceResult } from './models/CrsServiceResult';
 export type { DlqMessage } from './models/DlqMessage';
 export type { DtrCommand } from './models/DtrCommand';
 export type { DtrServiceResult } from './models/DtrServiceResult';

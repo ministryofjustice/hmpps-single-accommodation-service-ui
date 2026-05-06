@@ -73,7 +73,7 @@ export const casesToRows = (cases: Case[]): TableRow[] =>
 
 export const casesTableColumns = () => {
   if (!config.flags.v10CasesList) {
-    return [{ text: 'Person' }]
+    return []
   }
 
   return [

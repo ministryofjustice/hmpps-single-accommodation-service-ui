@@ -1,644 +1,991 @@
 {
   "S511935": [
     {
-      "crn": "R724276",
+      "crn": "S511935",
+      "startDate": "2025-09-18",
+      "endDate": "2026-05-21",
       "address": {
-        "postcode": "EK4 4XP",
-        "buildingNumber": "104",
-        "thoroughfareName": "Reynolds Vale",
-        "dependentLocality": "Upper Windler Court",
-        "postTown": "North Kundeley",
-        "county": "Berkshire",
-        "country": "Sudan",
-        "uprn": "jMciYoRqn8cY"
+        "postcode": "TF2 7XF",
+        "buildingNumber": "492",
+        "thoroughfareName": "Moore Drove",
+        "dependentLocality": "Ryan-le-Morar",
+        "postTown": "Upper Oberbrunnerridge",
+        "county": "Gwynedd County",
+        "country": "Bangladesh",
+        "uprn": "AqjYPG20TC2m"
       },
-      "startDate": "2025-09-25",
-      "endDate": "2026-08-12",
       "status": {
         "code": "M",
-        "description": "Main"
+        "description": "forenenst broken where"
       },
       "type": {
-        "code": "A07B",
-        "description": "Friends/Family (settled)"
+        "code": "A08",
+        "description": "optimistically during"
       }
     },
     {
-      "crn": "K267472",
+      "crn": "I655394",
+      "startDate": "2026-04-14",
+      "endDate": "2026-06-20",
       "address": {
-        "postcode": "YB5 7XH",
-        "subBuildingName": "Apt. 613",
-        "buildingName": "Diana Way",
-        "thoroughfareName": "Cromwell Road",
-        "dependentLocality": "Newton Gerlach",
-        "postTown": "Rowe-le-Lubowitz",
-        "county": "Somerset",
-        "country": "Eswatini",
-        "uprn": "hm4Rexm05wsP"
+        "postcode": "WE94 8UP",
+        "subBuildingName": "Suite 167",
+        "buildingName": "Terry-Morar Heights",
+        "thoroughfareName": "Christop Meadows",
+        "dependentLocality": "McDermott Gardens",
+        "postTown": "Castle Cronaridge",
+        "county": "Essex",
+        "country": "Hungary",
+        "uprn": "6oKQnMMbaNRd"
       },
-      "startDate": "2024-11-13",
-      "endDate": "2025-09-25",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A14",
-        "description": "HOIE Section 10"
-      }
-    },
-    {
-      "crn": "E021267",
-      "address": {
-        "postcode": "IS20 6DV",
-        "subBuildingName": "Suite 354",
-        "buildingName": "Mittie Crescent",
-        "thoroughfareName": "Chapel Road",
-        "dependentLocality": "Howe-under-Rath",
-        "postTown": "Daniel-le-Doyle",
-        "county": "County Londonderry",
-        "country": "North Macedonia",
-        "uprn": "Br7oYwGAnnpj"
-      },
-      "startDate": "2023-12-08",
-      "endDate": "2024-11-13",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A01C",
-        "description": "Rental accommodation - private rental"
-      }
-    },
-    {
-      "crn": "U935428",
-      "address": {
-        "postcode": "PI7 5JA",
-        "buildingNumber": "4",
-        "thoroughfareName": "Vada Way",
-        "dependentLocality": "Kuvalis-le-Kreiger",
-        "postTown": "Old Lubowitz Common",
-        "county": "Lincolnshire",
-        "country": "Afghanistan",
-        "uprn": "Y3J5sP17FZne"
-      },
-      "startDate": "2023-04-09",
-      "endDate": "2023-12-08",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A10",
-        "description": "CAS2/BASS accommodation 13 weeks or more"
-      }
-    }
-  ],
-  "P712106": [
-    {
-      "crn": "Q854927",
-      "address": {
-        "postcode": "CQ90 6PV",
-        "buildingNumber": "715",
-        "thoroughfareName": "Fourth Avenue",
-        "dependentLocality": "Long Balistreriton",
-        "postTown": "Jacobi Green",
-        "county": "County Fermanagh",
-        "country": "Mozambique",
-        "uprn": "9Ytqs1sSItG2"
-      },
-      "startDate": "2025-10-17",
-      "endDate": "2026-05-16",
-      "status": {
-        "code": "M",
-        "description": "Main"
-      },
-      "type": {
-        "code": "A08C",
-        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
-      }
-    },
-    {
-      "crn": "Q149154",
-      "address": {
-        "postcode": "TE70 7OJ",
-        "subBuildingName": "Suite 584",
-        "buildingName": "Hawthorn Avenue",
-        "thoroughfareName": "Quarry Lane",
-        "dependentLocality": "Moore-upon-Considine",
-        "postTown": "South Kerluke",
-        "county": "Cheshire",
-        "country": "Saint Barthelemy",
-        "uprn": "SwOKh2vNNfDL"
-      },
-      "startDate": "2025-09-11",
-      "endDate": "2025-10-17",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A08C",
-        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
-      }
-    },
-    {
-      "crn": "U818127",
-      "address": {
-        "postcode": "AH2 0DK",
-        "buildingNumber": "84",
-        "thoroughfareName": "Leuschke Garth",
-        "dependentLocality": "Mante Place",
-        "postTown": "Great Harveybury",
-        "county": "Grampian",
-        "country": "Lebanon",
-        "uprn": "cVbTDky9sVyM"
-      },
-      "startDate": "2025-02-04",
-      "endDate": "2025-09-11",
       "status": {
         "code": "P",
         "description": "Previous"
       },
       "type": {
         "code": "A15",
-        "description": "Immigration Detention"
+        "description": "adviser anenst"
       }
     },
     {
-      "crn": "D123132",
+      "crn": "L641445",
+      "startDate": "2025-10-05",
+      "endDate": "2026-04-14",
       "address": {
-        "postcode": "TD0 5KJ",
+        "postcode": "FN2 6IX",
         "buildingNumber": "34",
-        "thoroughfareName": "Cromwell Road",
-        "dependentLocality": "Hettingerbury",
-        "postTown": "Gerlach-under-Crist",
-        "county": "South Glamorgan",
-        "country": "Nigeria",
-        "uprn": "oSnF3FNXQKks"
+        "thoroughfareName": "Shanelle Terrace",
+        "dependentLocality": "Kirlin-upon-Stehr",
+        "postTown": "Boehm-under-Greenfelder",
+        "county": "Gloucestershire",
+        "country": "Benin",
+        "uprn": "U2N4qBCrgSu3"
       },
-      "startDate": "2024-07-22",
-      "endDate": "2025-02-04",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A04",
-        "description": "Supported Housing"
-      }
-    }
-  ],
-  "T274481": [
-    {
-      "crn": "G894528",
-      "address": {
-        "postcode": "GC9 0JP",
-        "buildingNumber": "712",
-        "thoroughfareName": "Abigayle Road",
-        "dependentLocality": "Zulauf-over-Keeling",
-        "postTown": "Koelpin-under-Cole",
-        "county": "Leicestershire",
-        "country": "Antarctica",
-        "uprn": "Vf049Ro4aLfM"
-      },
-      "startDate": "2025-12-30",
-      "status": {
-        "code": "M",
-        "description": "Main"
-      },
-      "type": {
-        "code": "A08C",
-        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
-      }
-    },
-    {
-      "crn": "U845550",
-      "address": {
-        "postcode": "NG5 8KS",
-        "buildingNumber": "754",
-        "thoroughfareName": "Cow Lane",
-        "dependentLocality": "Greenfelder-le-Ernser",
-        "postTown": "Vandervort-under-Okuneva",
-        "county": "Cumbria",
-        "country": "United States Minor Outlying Islands",
-        "uprn": "Of4MJjKbMZPz"
-      },
-      "startDate": "2025-05-28",
-      "endDate": "2025-12-30",
       "status": {
         "code": "P",
         "description": "Previous"
       },
       "type": {
         "code": "A11",
-        "description": "CAS2/BASS accommodation less than 13 weeks"
-      }
-    }
-  ],
-  "V938951": [],
-  "T229440": [
-    {
-      "crn": "Q337671",
-      "address": {
-        "postcode": "LI53 7LC",
-        "buildingNumber": "9",
-        "thoroughfareName": "Western Road",
-        "dependentLocality": "Roberts Heath",
-        "postTown": "Lower Donnelly Bridge",
-        "county": "Greater Manchester",
-        "country": "Germany",
-        "uprn": "J0YCMgNVGIHs"
-      },
-      "startDate": "2025-09-23",
-      "endDate": "2026-06-30",
-      "status": {
-        "code": "M",
-        "description": "Main"
-      },
-      "type": {
-        "code": "A07A",
-        "description": "Friends/Family (transient)"
+        "description": "blah between"
       }
     },
     {
-      "crn": "L208599",
+      "crn": "F268847",
+      "startDate": "2025-05-11",
+      "endDate": "2025-10-05",
       "address": {
-        "postcode": "GF23 3RZ",
-        "buildingName": "Amaya Corner",
-        "thoroughfareName": "Fadel Brae",
-        "dependentLocality": "Friesen-on-Harber",
-        "postTown": "Jerde-upon-Hilll",
-        "county": "Borders",
-        "country": "Reunion",
-        "uprn": "xncxKJXHvXtX"
+        "postcode": "ZP9 3RV",
+        "buildingNumber": "289",
+        "thoroughfareName": "Ward Yard",
+        "dependentLocality": "Quitzonridge",
+        "postTown": "Halvorson End",
+        "county": "Fife",
+        "country": "Bhutan",
+        "uprn": "O6pMIx9KrZIy"
       },
-      "startDate": "2024-12-25",
-      "endDate": "2025-09-23",
       "status": {
         "code": "P",
         "description": "Previous"
       },
       "type": {
         "code": "A08A",
-        "description": "Homeless - Rough Sleeping"
-      }
-    },
-    {
-      "crn": "N226081",
-      "address": {
-        "postcode": "DN3 4SS",
-        "buildingNumber": "903",
-        "thoroughfareName": "Parker Path",
-        "dependentLocality": "Upton Lowehill",
-        "postTown": "Breitenbergingham",
-        "county": "Herefordshire",
-        "country": "Armenia",
-        "uprn": "RNuSDcwjwKm0"
-      },
-      "startDate": "2024-05-11",
-      "endDate": "2024-12-25",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A14",
-        "description": "HOIE Section 10"
+        "description": "ignorance down"
       }
     }
   ],
-  "H271226": [
+  "P712106": [
     {
-      "crn": "R770482",
+      "crn": "P712106",
+      "startDate": "2025-12-01",
+      "endDate": "2026-06-28",
       "address": {
-        "postcode": "WI85 7MB",
-        "subBuildingName": "Apt. 313",
-        "buildingName": "Stehr Copse",
-        "thoroughfareName": "The Drive",
-        "dependentLocality": "Newton Hesselwell",
-        "postTown": "St. Lind",
-        "county": "Buckinghamshire",
-        "country": "Peru",
-        "uprn": "yA0TcozGN6QJ"
+        "postcode": "BT57 0RG",
+        "buildingNumber": "677",
+        "thoroughfareName": "Hall Lane",
+        "dependentLocality": "West Hettinger",
+        "postTown": "Kuphaldon",
+        "county": "Cambridgeshire",
+        "country": "Ireland",
+        "uprn": "BNBfaIucEZm0"
       },
-      "startDate": "2025-12-04",
-      "endDate": "2026-09-04",
       "status": {
-        "code": "M",
-        "description": "Main"
+        "code": "B",
+        "description": "except forenenst"
       },
       "type": {
-        "code": "A11",
-        "description": "CAS2/BASS accommodation less than 13 weeks"
+        "code": "A04",
+        "description": "consequently how courtroom"
       }
     },
     {
-      "crn": "J022300",
+      "crn": "Z868823",
+      "startDate": "2025-09-12",
+      "endDate": "2026-05-31",
       "address": {
-        "postcode": "XC10 1DN",
-        "subBuildingName": "Suite 949",
-        "buildingName": "Johns Gardens",
-        "thoroughfareName": "Prospect Road",
-        "dependentLocality": "Lower Weissnatworth",
-        "postTown": "Newton Gerhold",
-        "county": "Essex",
-        "country": "Malaysia",
-        "uprn": "ly8mlLXCdayB"
+        "postcode": "KO04 3DA",
+        "buildingNumber": "120",
+        "thoroughfareName": "Breanna Chase",
+        "dependentLocality": "Muller-under-Gleason",
+        "postTown": "Stoltenberg-over-Klocko",
+        "county": "Tyne and Wear",
+        "country": "Saudi Arabia",
+        "uprn": "1BoiHAPriQjE"
       },
-      "startDate": "2025-05-21",
-      "endDate": "2025-12-04",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A16",
-        "description": "Awaiting Assessment"
-      }
-    },
-    {
-      "crn": "Q622506",
-      "address": {
-        "postcode": "PH33 1PT",
-        "buildingNumber": "851",
-        "thoroughfareName": "Howe Hill",
-        "dependentLocality": "Lower Douglas",
-        "postTown": "East Casper Cross",
-        "county": "Gwynedd County",
-        "country": "Pakistan",
-        "uprn": "ESOYAYIbhvUB"
-      },
-      "startDate": "2024-07-03",
-      "endDate": "2025-05-21",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A10",
-        "description": "CAS2/BASS accommodation 13 weeks or more"
-      }
-    }
-  ],
-  "U934069": [],
-  "I322559": [
-    {
-      "crn": "B952369",
-      "address": {
-        "postcode": "YW22 6IH",
-        "buildingNumber": "3",
-        "thoroughfareName": "Old Military Road",
-        "dependentLocality": "Rosenbaum End",
-        "postTown": "Becker-le-Stokes",
-        "county": "Tayside",
-        "country": "Denmark",
-        "uprn": "mStovlyyvRXL"
-      },
-      "startDate": "2025-08-01",
-      "status": {
-        "code": "M",
-        "description": "Main"
-      },
-      "type": {
-        "code": "A16",
-        "description": "Awaiting Assessment"
-      }
-    },
-    {
-      "crn": "D820484",
-      "address": {
-        "postcode": "IE6 9IM",
-        "subBuildingName": "Apt. 157",
-        "buildingName": "St George's Road",
-        "thoroughfareName": "Oak Lane",
-        "dependentLocality": "Ziemann-under-McGlynn",
-        "postTown": "Goodwiningham",
-        "county": "County Down",
-        "country": "Ghana",
-        "uprn": "1bDAFvWU1Jmd"
-      },
-      "startDate": "2025-02-15",
-      "endDate": "2025-08-01",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A10",
-        "description": "CAS2/BASS accommodation 13 weeks or more"
-      }
-    },
-    {
-      "crn": "D528018",
-      "address": {
-        "postcode": "YP3 4OD",
-        "buildingNumber": "7",
-        "thoroughfareName": "Oxford Road",
-        "dependentLocality": "Kunze-upon-Jones",
-        "postTown": "Bednar Bridge",
-        "county": "Warwickshire",
-        "country": "Niger",
-        "uprn": "3hL4a6xbBOCL"
-      },
-      "startDate": "2025-01-20",
-      "endDate": "2025-02-15",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A14",
-        "description": "HOIE Section 10"
-      }
-    },
-    {
-      "crn": "F013855",
-      "address": {
-        "postcode": "TO5 0DJ",
-        "buildingName": "Skiles Croft",
-        "thoroughfareName": "Franecki Path",
-        "dependentLocality": "South Stiedemann Park",
-        "postTown": "Old Conn",
-        "county": "Warwickshire",
-        "country": "Canada",
-        "uprn": "J8cNmm7pliVK"
-      },
-      "startDate": "2024-10-06",
-      "endDate": "2025-01-20",
       "status": {
         "code": "P",
         "description": "Previous"
       },
       "type": {
         "code": "A01D",
-        "description": "Rental accommodation - social rental (LA or other)"
+        "description": "yahoo how"
       }
     },
     {
-      "crn": "M879043",
+      "crn": "V911078",
+      "startDate": "2025-03-21",
+      "endDate": "2025-09-12",
       "address": {
-        "postcode": "GD67 4YM",
-        "subBuildingName": "Apt. 268",
-        "buildingName": "Dickinson Meadows",
-        "thoroughfareName": "Lexus Fields",
-        "dependentLocality": "Old Senger",
-        "postTown": "Simonis-le-Auer",
-        "county": "County Fermanagh",
-        "country": "Guernsey",
-        "uprn": "RdLBruYoVhv8"
+        "postcode": "RM85 2JW",
+        "buildingNumber": "450",
+        "thoroughfareName": "Lebsack Gardens",
+        "dependentLocality": "Wisozkstone",
+        "postTown": "Castle Spinkaborough",
+        "county": "West Midlands",
+        "country": "Iran",
+        "uprn": "FL6cZqZEkJng"
       },
-      "startDate": "2023-12-02",
-      "endDate": "2024-10-06",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A01A",
+        "description": "mid department why"
+      }
+    }
+  ],
+  "T274481": [
+    {
+      "crn": "T274481",
+      "startDate": "2026-04-29",
+      "endDate": "2026-06-18",
+      "address": {
+        "postcode": "WX39 6RL",
+        "buildingNumber": "617",
+        "thoroughfareName": "Elvera Corner",
+        "dependentLocality": "Newton Prosacco",
+        "postTown": "Uptoningham",
+        "county": "Herefordshire",
+        "country": "Guatemala",
+        "uprn": "4xRvc9bHDVrI"
+      },
+      "status": {
+        "code": "B",
+        "description": "ridge asset wombat"
+      },
+      "type": {
+        "code": "A01C",
+        "description": "deliberately co-producer"
+      }
+    }
+  ],
+  "V938951": [
+    {
+      "crn": "S463754",
+      "startDate": "2025-12-12",
+      "address": {
+        "postcode": "KR1 2ZT",
+        "buildingNumber": "744",
+        "thoroughfareName": "Wren Close",
+        "dependentLocality": "East Lueilwitzhill",
+        "postTown": "Bradtke-le-Oberbrunner",
+        "county": "Central",
+        "country": "Guernsey",
+        "uprn": "5SZYHCAFsgx1"
+      },
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A14",
+        "description": "closely frightfully broadly"
+      }
+    },
+    {
+      "crn": "V701905",
+      "startDate": "2025-03-02",
+      "endDate": "2025-12-12",
+      "address": {
+        "postcode": "NB39 3JX",
+        "buildingNumber": "540",
+        "thoroughfareName": "Marvin Side",
+        "dependentLocality": "Schroederford",
+        "postTown": "High Williamson",
+        "county": "West Sussex",
+        "country": "Cocos (Keeling) Islands",
+        "uprn": "Ef7vH2Yj1v2T"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A13",
+        "description": "plumber"
+      }
+    }
+  ],
+  "T229440": [
+    {
+      "crn": "T229440",
+      "startDate": "2025-05-08",
+      "endDate": "2026-06-12",
+      "address": {
+        "postcode": "NN7 2XD",
+        "buildingNumber": "4",
+        "thoroughfareName": "Cartwright-Schiller Bank",
+        "dependentLocality": "Hickle Court",
+        "postTown": "Lind Green",
+        "county": "Humberside",
+        "country": "Falkland Islands (Malvinas)",
+        "uprn": "3RaFkGrGZfOF"
+      },
+      "status": {
+        "code": "M",
+        "description": "dramatize co-producer"
+      },
+      "type": {
+        "code": "A13",
+        "description": "flu"
+      }
+    },
+    {
+      "crn": "X388891",
+      "startDate": "2025-12-04",
+      "endDate": "2026-07-01",
+      "address": {
+        "postcode": "SA8 7UR",
+        "subBuildingName": "Suite 606",
+        "buildingNumber": "162",
+        "thoroughfareName": "Cleveland Grove",
+        "dependentLocality": "Koelpinridge",
+        "postTown": "East Stammfield",
+        "county": "Cheshire",
+        "country": "Guam",
+        "uprn": "YzeAPuy0qXa2"
+      },
       "status": {
         "code": "P",
         "description": "Previous"
       },
       "type": {
         "code": "A15",
-        "description": "Immigration Detention"
+        "description": "brr along under"
       }
     },
     {
-      "crn": "Z581809",
+      "crn": "O993786",
+      "startDate": "2025-03-11",
+      "endDate": "2025-12-04",
       "address": {
-        "postcode": "LH31 3SI",
-        "buildingNumber": "539",
-        "thoroughfareName": "Larch Close",
-        "dependentLocality": "Lower Reinger Heath",
-        "postTown": "Blandaton",
-        "county": "County Tyrone",
-        "country": "Sweden",
-        "uprn": "6MoX3m8KNzC9"
+        "postcode": "JM5 9KV",
+        "buildingNumber": "94",
+        "thoroughfareName": "Morar Approach",
+        "dependentLocality": "Torp-on-Kutch",
+        "postTown": "North Casper",
+        "county": "Northamptonshire",
+        "country": "Palestine",
+        "uprn": "pEudjbidomJR"
       },
-      "startDate": "2023-08-12",
-      "endDate": "2023-12-02",
       "status": {
         "code": "P",
         "description": "Previous"
+      },
+      "type": {
+        "code": "A03",
+        "description": "what"
+      }
+    },
+    {
+      "crn": "P751824",
+      "startDate": "2024-03-30",
+      "endDate": "2025-03-11",
+      "address": {
+        "postcode": "WY89 6VB",
+        "buildingNumber": "71",
+        "thoroughfareName": "Abagail Street",
+        "dependentLocality": "West Kshlerin",
+        "postTown": "Bogisich-le-Stoltenberg",
+        "county": "Lincolnshire",
+        "country": "Bosnia and Herzegovina",
+        "uprn": "7iBQMEBtELta"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A17",
+        "description": "instantly"
+      }
+    },
+    {
+      "crn": "R154807",
+      "startDate": "2024-02-17",
+      "endDate": "2024-03-30",
+      "address": {
+        "postcode": "AQ04 8VZ",
+        "subBuildingName": "Suite 329",
+        "buildingName": "McCullough Row",
+        "thoroughfareName": "Tre Square",
+        "dependentLocality": "Old Donnelly",
+        "postTown": "Conroy-upon-Emard",
+        "county": "Nottinghamshire",
+        "country": "Guinea",
+        "uprn": "YhUl7grfOaz3"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A17",
+        "description": "mortise astride"
+      }
+    },
+    {
+      "crn": "A649728",
+      "startDate": "2024-01-29",
+      "endDate": "2024-02-17",
+      "address": {
+        "postcode": "LF28 9OG",
+        "buildingNumber": "350",
+        "thoroughfareName": "Claudine Place",
+        "dependentLocality": "South Aufderhar Cross",
+        "postTown": "Upper Medhurststone",
+        "county": "Staffordshire",
+        "country": "Vanuatu",
+        "uprn": "osAEWseDlprg"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A03",
+        "description": "recklessly almost"
+      }
+    },
+    {
+      "crn": "K624544",
+      "startDate": "2023-10-20",
+      "endDate": "2024-01-29",
+      "address": {
+        "postcode": "XR2 5BD",
+        "buildingNumber": "9",
+        "thoroughfareName": "Western Road",
+        "dependentLocality": "Conn-on-Reichel",
+        "postTown": "Lower Ratkeley",
+        "county": "Grampian",
+        "country": "Tokelau",
+        "uprn": "PX193jpoVulZ"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A15",
+        "description": "sneak garrote"
+      }
+    }
+  ],
+  "H271226": [
+    {
+      "crn": "H271226",
+      "startDate": "2026-04-18",
+      "endDate": "2026-05-11",
+      "address": {
+        "postcode": "BH83 0SW",
+        "buildingNumber": "280",
+        "thoroughfareName": "Gusikowski-Cormier Hill",
+        "dependentLocality": "Lefflerdon",
+        "postTown": "Block-on-Fay",
+        "county": "East Sussex",
+        "country": "Argentina",
+        "uprn": "nmre4DthOz1k"
+      },
+      "status": {
+        "code": "S",
+        "description": "excitable gah atop"
       },
       "type": {
         "code": "A08",
-        "description": "Homeless - Squat"
-      }
-    }
-  ],
-  "L247269": [
-    {
-      "crn": "J218185",
-      "address": {
-        "postcode": "UH59 2PK",
-        "buildingNumber": "6",
-        "thoroughfareName": "Quitzon Field",
-        "dependentLocality": "Wyman-upon-Beatty",
-        "postTown": "Long Mohrhill",
-        "county": "Devon",
-        "country": "Iran",
-        "uprn": "ay1dcQ1rh8t6"
-      },
-      "startDate": "2025-09-01",
-      "endDate": "2026-07-15",
-      "status": {
-        "code": "M",
-        "description": "Main"
-      },
-      "type": {
-        "code": "A01D",
-        "description": "Rental accommodation - social rental (LA or other)"
+        "description": "intensely intrigue splay"
       }
     },
     {
-      "crn": "F556765",
+      "crn": "B374049",
+      "startDate": "2025-06-06",
+      "endDate": "2026-05-07",
       "address": {
-        "postcode": "JU5 4RT",
-        "buildingNumber": "6",
-        "thoroughfareName": "Tristian Grange",
-        "dependentLocality": "East Reichelthorpe",
-        "postTown": "Castle Sanfordridge",
-        "county": "Humberside",
-        "country": "Jersey",
-        "uprn": "gmLkn2T6SI8D"
+        "postcode": "TL1 9GQ",
+        "buildingNumber": "49",
+        "thoroughfareName": "Runolfsdottir Brow",
+        "dependentLocality": "South Mante",
+        "postTown": "Heidenreich-over-Cartwright",
+        "county": "Bedfordshire",
+        "country": "Trinidad and Tobago",
+        "uprn": "iZ1sPFwWozWR"
       },
-      "startDate": "2025-08-28",
-      "endDate": "2025-09-01",
-      "status": {
-        "code": "P",
-        "description": "Previous"
-      },
-      "type": {
-        "code": "A04",
-        "description": "Supported Housing"
-      }
-    }
-  ],
-  "F608163": [
-    {
-      "crn": "E786980",
-      "address": {
-        "postcode": "ST8 9VC",
-        "buildingNumber": "86",
-        "thoroughfareName": "Franey Mead",
-        "dependentLocality": "Mann Green",
-        "postTown": "Long Donnelly",
-        "county": "Hertfordshire",
-        "country": "Ireland",
-        "uprn": "u3UGYrbBkkpI"
-      },
-      "startDate": "2025-11-03",
-      "status": {
-        "code": "M",
-        "description": "Main"
-      },
-      "type": {
-        "code": "A14",
-        "description": "HOIE Section 10"
-      }
-    },
-    {
-      "crn": "F873162",
-      "address": {
-        "postcode": "TS4 5YD",
-        "buildingNumber": "74",
-        "thoroughfareName": "Marlborough Road",
-        "dependentLocality": "Upton Wyman",
-        "postTown": "Old Rempel End",
-        "county": "Clwyd",
-        "country": "Latvia",
-        "uprn": "1fsB4PKJsXTf"
-      },
-      "startDate": "2025-04-29",
-      "endDate": "2025-11-03",
       "status": {
         "code": "P",
         "description": "Previous"
       },
       "type": {
         "code": "A08C",
-        "description": "Homeless - Shelter/Emergency Hostel/Campsite"
+        "description": "ack behind scaly"
       }
     },
     {
-      "crn": "C926152",
+      "crn": "S123311",
+      "startDate": "2025-05-23",
+      "endDate": "2025-06-06",
       "address": {
-        "postcode": "OV2 2XT",
-        "buildingNumber": "63",
-        "thoroughfareName": "Grange Avenue",
-        "dependentLocality": "Funk-le-Windler",
-        "postTown": "Upper Dach",
-        "county": "Hampshire",
-        "country": "Heard Island and McDonald Islands",
-        "uprn": "qM7fBeh93mcF"
+        "postcode": "IH84 4LA",
+        "buildingNumber": "60",
+        "thoroughfareName": "Deborah Fold",
+        "dependentLocality": "Little Watsicaworth",
+        "postTown": "Greenholt-le-Graham",
+        "county": "Wiltshire",
+        "country": "Fiji",
+        "uprn": "htHu37KJd2Z2"
       },
-      "startDate": "2024-06-13",
-      "endDate": "2025-04-29",
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A07B",
+        "description": "rightfully pinion"
+      }
+    },
+    {
+      "crn": "D624911",
+      "startDate": "2024-06-01",
+      "endDate": "2025-05-23",
+      "address": {
+        "postcode": "UQ6 2PZ",
+        "buildingNumber": "10",
+        "thoroughfareName": "Adams Bank",
+        "dependentLocality": "East Raynor",
+        "postTown": "Purdy-under-Rohan",
+        "county": "Northumberland",
+        "country": "Jersey",
+        "uprn": "5LzogRWvCaxx"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A08",
+        "description": "tedious vacantly oh"
+      }
+    },
+    {
+      "crn": "P343033",
+      "startDate": "2023-10-31",
+      "endDate": "2024-06-01",
+      "address": {
+        "postcode": "TP2 3SQ",
+        "buildingNumber": "294",
+        "thoroughfareName": "Felicita Drive",
+        "dependentLocality": "Abbottborough",
+        "postTown": "Boylehampton",
+        "county": "Powys",
+        "country": "Cayman Islands",
+        "uprn": "CdjqJzZDpz8L"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A07A",
+        "description": "neatly"
+      }
+    },
+    {
+      "crn": "X313052",
+      "startDate": "2023-03-20",
+      "endDate": "2023-10-31",
+      "address": {
+        "postcode": "PX5 0OQ",
+        "buildingNumber": "64",
+        "thoroughfareName": "Bosco Way",
+        "dependentLocality": "Little Streichington",
+        "postTown": "North Bruen",
+        "county": "Grampian",
+        "country": "North Macedonia",
+        "uprn": "HLNnE40uCMFv"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A08",
+        "description": "whoa knife apropos"
+      }
+    },
+    {
+      "crn": "E503302",
+      "startDate": "2022-04-02",
+      "endDate": "2023-03-20",
+      "address": {
+        "postcode": "ZR22 1MM",
+        "buildingNumber": "3",
+        "thoroughfareName": "Kasandra Lane",
+        "dependentLocality": "St. Ferrywick",
+        "postTown": "Old Schusterham",
+        "county": "Nottinghamshire",
+        "country": "Anguilla",
+        "uprn": "boWLY3LU8bLX"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A02",
+        "description": "beside"
+      }
+    }
+  ],
+  "U934069": [
+    {
+      "crn": "U934069",
+      "startDate": "2026-04-01",
+      "endDate": "2026-06-25",
+      "address": {
+        "postcode": "RQ5 8KX",
+        "buildingName": "Devonshire Road",
+        "thoroughfareName": "Justine Croft",
+        "dependentLocality": "Turcotte-le-Graham",
+        "postTown": "North Morissette",
+        "county": "Merseyside",
+        "country": "Mali",
+        "uprn": "Qns7v9nHDCVZ"
+      },
+      "status": {
+        "code": "PR1",
+        "description": "till energetically untried"
+      },
+      "type": {
+        "code": "A01D",
+        "description": "around"
+      }
+    },
+    {
+      "crn": "U144041",
+      "startDate": "2025-09-17",
+      "address": {
+        "postcode": "TA1 0DO",
+        "buildingNumber": "1",
+        "thoroughfareName": "Donny Yard",
+        "dependentLocality": "Upton-upon-Rohan",
+        "postTown": "Kochbury",
+        "county": "Borders",
+        "country": "Botswana",
+        "uprn": "vL82lvSQPIlr"
+      },
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A17",
+        "description": "ew softly boastfully"
+      }
+    },
+    {
+      "crn": "W303606",
+      "startDate": "2025-01-26",
+      "endDate": "2025-09-17",
+      "address": {
+        "postcode": "RI2 7XC",
+        "buildingNumber": "721",
+        "thoroughfareName": "Well Lane",
+        "dependentLocality": "Great Monahan Place",
+        "postTown": "Kuphal-on-Zulauf",
+        "county": "Shropshire",
+        "country": "Estonia",
+        "uprn": "NQkJZ9EFykKU"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A12",
+        "description": "an eek hm"
+      }
+    },
+    {
+      "crn": "X438572",
+      "startDate": "2025-01-18",
+      "endDate": "2025-01-26",
+      "address": {
+        "postcode": "MD29 1DY",
+        "buildingNumber": "587",
+        "thoroughfareName": "Senger Gate",
+        "dependentLocality": "Beckerstone",
+        "postTown": "Kautzer Hill",
+        "county": "South Yorkshire",
+        "country": "Finland",
+        "uprn": "c9K1NJVcWMc9"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A11",
+        "description": "nougat"
+      }
+    },
+    {
+      "crn": "S330638",
+      "startDate": "2024-11-21",
+      "endDate": "2025-01-18",
+      "address": {
+        "postcode": "CL14 0UA",
+        "subBuildingName": "Apt. 608",
+        "buildingName": "Birch Avenue",
+        "thoroughfareName": "Elm Road",
+        "dependentLocality": "High Crooks Hill",
+        "postTown": "St. Treutel Common",
+        "county": "Grampian",
+        "country": "Zambia",
+        "uprn": "CLRnyO1FxPg7"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A02",
+        "description": "off"
+      }
+    },
+    {
+      "crn": "C049112",
+      "startDate": "2024-08-30",
+      "endDate": "2024-11-21",
+      "address": {
+        "postcode": "DL8 7KD",
+        "buildingNumber": "1",
+        "thoroughfareName": "Schamberger Meadows",
+        "dependentLocality": "Langosh-le-Dicki",
+        "postTown": "Nether Volkman",
+        "county": "Fife",
+        "country": "Suriname",
+        "uprn": "o5TktbLiqdFk"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A01D",
+        "description": "quickly"
+      }
+    }
+  ],
+  "I322559": [
+    {
+      "crn": "I322559",
+      "startDate": "2025-11-27",
+      "endDate": "2026-06-24",
+      "address": {
+        "postcode": "YR37 6VG",
+        "buildingName": "Deangelo Avenue",
+        "thoroughfareName": "Cruz Mews",
+        "dependentLocality": "Grady-over-Grimes",
+        "postTown": "Ernserstone",
+        "county": "Staffordshire",
+        "country": "Gibraltar",
+        "uprn": "9L9zOkY1RuBc"
+      },
+      "status": {
+        "code": "S",
+        "description": "upon"
+      },
+      "type": {
+        "code": "A12",
+        "description": "meaty warmly readies"
+      }
+    },
+    {
+      "crn": "T761551",
+      "startDate": "2025-07-30",
+      "endDate": "2026-06-16",
+      "address": {
+        "postcode": "HX5 9YP",
+        "subBuildingName": "Suite 896",
+        "buildingName": "Myah Glade",
+        "thoroughfareName": "Cliff Road",
+        "dependentLocality": "McLaughlin Cross",
+        "postTown": "Braun Common",
+        "county": "Central",
+        "country": "Aruba",
+        "uprn": "nnvWQOKklCfi"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A07A",
+        "description": "ugh"
+      }
+    },
+    {
+      "crn": "I580198",
+      "startDate": "2025-06-10",
+      "endDate": "2025-07-30",
+      "address": {
+        "postcode": "XO66 0YL",
+        "buildingNumber": "51",
+        "thoroughfareName": "The Mews",
+        "dependentLocality": "Kertzmann-under-Block",
+        "postTown": "Upper Stammridge",
+        "county": "West Midlands",
+        "country": "Maldives",
+        "uprn": "7xzPxp7LJgz1"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A12",
+        "description": "penalise so"
+      }
+    }
+  ],
+  "L247269": [
+    {
+      "crn": "N020923",
+      "startDate": "2025-11-06",
+      "address": {
+        "postcode": "MX7 5QA",
+        "subBuildingName": "Apt. 627",
+        "buildingName": "Jayme Chase",
+        "thoroughfareName": "Cassin Street",
+        "dependentLocality": "Nether Walker",
+        "postTown": "Newton Waters Place",
+        "county": "Highlands and Islands",
+        "country": "Guatemala",
+        "uprn": "8gywGgax9uwN"
+      },
+      "status": {
+        "code": "M",
+        "description": "Main"
+      },
+      "type": {
+        "code": "A02",
+        "description": "fondly powerful"
+      }
+    },
+    {
+      "crn": "D524440",
+      "startDate": "2025-05-11",
+      "endDate": "2025-11-06",
+      "address": {
+        "postcode": "WD87 6RS",
+        "buildingNumber": "281",
+        "thoroughfareName": "Prohaska Gate",
+        "dependentLocality": "O'Connell-on-Marquardt",
+        "postTown": "Great Lang",
+        "county": "Humberside",
+        "country": "Bahrain",
+        "uprn": "TobwCxkdzOvb"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A16",
+        "description": "the communicate"
+      }
+    },
+    {
+      "crn": "P058568",
+      "startDate": "2024-11-30",
+      "endDate": "2025-05-11",
+      "address": {
+        "postcode": "RC88 1NT",
+        "buildingName": "Daugherty Grange",
+        "thoroughfareName": "Narciso Brow",
+        "dependentLocality": "Kosshill",
+        "postTown": "McCullough-on-Marvin",
+        "county": "Rutland",
+        "country": "Virgin Islands, U.S.",
+        "uprn": "8Ih0xRGqVVMO"
+      },
       "status": {
         "code": "P",
         "description": "Previous"
       },
       "type": {
         "code": "A14",
-        "description": "HOIE Section 10"
+        "description": "doubter"
+      }
+    },
+    {
+      "crn": "X704664",
+      "startDate": "2023-12-05",
+      "endDate": "2024-11-30",
+      "address": {
+        "postcode": "CG26 9ZP",
+        "buildingNumber": "810",
+        "thoroughfareName": "Russell Street",
+        "dependentLocality": "Kreiger Heath",
+        "postTown": "Lower Hackett",
+        "county": "County Fermanagh",
+        "country": "Brazil",
+        "uprn": "xf5k53LEq4ld"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A01A",
+        "description": "uh-huh reporter ack"
+      }
+    },
+    {
+      "crn": "R783865",
+      "startDate": "2023-10-11",
+      "endDate": "2023-12-05",
+      "address": {
+        "postcode": "IO61 4VV",
+        "buildingName": "Ash Grove",
+        "thoroughfareName": "Lacy Croft",
+        "dependentLocality": "West Grant",
+        "postTown": "Runolfsson-over-Dickens",
+        "county": "Surrey",
+        "country": "Afghanistan",
+        "uprn": "6LPDlc2STom2"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A08",
+        "description": "consequently"
+      }
+    },
+    {
+      "crn": "E977878",
+      "startDate": "2023-05-30",
+      "endDate": "2023-10-11",
+      "address": {
+        "postcode": "OO85 8XB",
+        "buildingName": "Alexandra Road",
+        "thoroughfareName": "Mayert Park",
+        "dependentLocality": "Nicolas-upon-Emard",
+        "postTown": "Schambergerley",
+        "county": "County Armagh",
+        "country": "Hong Kong",
+        "uprn": "T8v6cz1jn7Yy"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A17",
+        "description": "eventually dally"
+      }
+    }
+  ],
+  "F608163": [
+    {
+      "crn": "F608163",
+      "startDate": "2026-01-07",
+      "endDate": "2026-06-16",
+      "address": {
+        "postcode": "BY06 7GH",
+        "buildingName": "Commercial Street",
+        "thoroughfareName": "Manuel Bank",
+        "dependentLocality": "Jacobi-upon-Bailey",
+        "postTown": "Herzog-upon-Feil",
+        "county": "Herefordshire",
+        "country": "Cote d'Ivoire",
+        "uprn": "t5Hv5eaneK9j"
+      },
+      "status": {
+        "code": "PR1",
+        "description": "regarding before why"
+      },
+      "type": {
+        "code": "A10",
+        "description": "in-joke"
+      }
+    },
+    {
+      "crn": "S008739",
+      "startDate": "2025-12-12",
+      "endDate": "2026-06-09",
+      "address": {
+        "postcode": "XQ77 1QO",
+        "buildingNumber": "54",
+        "thoroughfareName": "Roselyn Way",
+        "dependentLocality": "Kris-upon-Dickinson",
+        "postTown": "Little McGlynn Heath",
+        "county": "Essex",
+        "country": "Mayotte",
+        "uprn": "MI5lfTeX7xSh"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A01C",
+        "description": "till"
+      }
+    },
+    {
+      "crn": "Y590278",
+      "startDate": "2025-06-25",
+      "endDate": "2025-12-12",
+      "address": {
+        "postcode": "EO54 1AX",
+        "subBuildingName": "Apt. 160",
+        "buildingName": "Mosciski Way",
+        "thoroughfareName": "Claire Lea",
+        "dependentLocality": "Long Frami",
+        "postTown": "Shanahan Park",
+        "county": "Dyfed",
+        "country": "India",
+        "uprn": "CrFspIKaEWa0"
+      },
+      "status": {
+        "code": "P",
+        "description": "Previous"
+      },
+      "type": {
+        "code": "A01C",
+        "description": "provided"
       }
     }
   ]

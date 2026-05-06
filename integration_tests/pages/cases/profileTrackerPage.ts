@@ -6,7 +6,7 @@ import {
   AccommodationDetail,
   AccommodationSummaryDto,
 } from '@sas/api'
-import { formatDate } from '../../../server/utils/dates'
+import { formatDate, isPastDate } from '../../../server/utils/dates'
 import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
@@ -168,11 +168,10 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
 
     await this.shouldShowTableHeaders(['Start date', 'End date', 'Address', 'Status'], table)
 
-    for await (const accommodation of accommodations) {
-      const i = accommodations.indexOf(accommodation)
+    for await (const [i, accommodation] of accommodations.entries()) {
       const row = table.locator('tbody tr').nth(i)
       const isLatest = i === 0
-      const startInPast = accommodation.startDate && new Date(accommodation.startDate).getTime() <= Date.now()
+      const startInPast = isPastDate(accommodation.startDate)
 
       await expect(row).toContainText(formatDate(accommodation.startDate))
       if (isLatest && startInPast) {

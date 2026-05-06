@@ -1,34 +1,34 @@
 import { DeepPartial, Factory } from 'fishery'
 import {
-  AccommodationDetail,
   AccommodationReferralDto,
   AccommodationSummaryDto,
-  ApiResponseDtoAccommodationDetail,
   ApiResponseDtoAccommodationSummaryDto,
   ApiResponseDtoCaseDto,
   ApiResponseDtoDutyToReferDto,
   ApiResponseDtoEligibilityDto,
-  ApiResponseDtoListAccommodationDetail,
   ApiResponseDtoListAccommodationReferralDto,
   ApiResponseDtoListAccommodationSummaryDto,
   ApiResponseDtoListAuditRecordDto,
   ApiResponseDtoListCaseDto,
+  ApiResponseDtoListProposedAccommodationDto,
   ApiResponseDtoListReferenceDataDto,
+  ApiResponseDtoProposedAccommodationDto,
   AuditRecordDto,
   CaseDto,
   DutyToReferDto,
   EligibilityDto,
+  ProposedAccommodationDto,
   ReferenceDataDto,
   UpstreamFailureDto,
 } from '@sas/api'
 import dutyToReferFactory from './dutyToRefer'
 import caseFactory from './case'
 import eligibilityFactory from './eligibility'
-import accommodationFactory from './accommodation'
 import auditRecordFactory from './auditRecord'
 import referenceDataFactory from './referenceData'
 import referralFactory from './referral'
 import accommodationSummaryFactory from './accommodationSummary'
+import proposedAccommodationFactory from './proposedAccommodation'
 
 export type ApiResponse =
   | ApiResponseDtoAccommodationSummaryDto
@@ -36,8 +36,8 @@ export type ApiResponse =
   | ApiResponseDtoCaseDto
   | ApiResponseDtoDutyToReferDto
   | ApiResponseDtoEligibilityDto
-  | ApiResponseDtoListAccommodationDetail
-  | ApiResponseDtoAccommodationDetail
+  | ApiResponseDtoListProposedAccommodationDto
+  | ApiResponseDtoProposedAccommodationDto
   | ApiResponseDtoListAuditRecordDto
   | ApiResponseDtoListAccommodationReferralDto
   | ApiResponseDtoListReferenceDataDto
@@ -68,14 +68,16 @@ class ApiResponseFactory extends Factory<ApiResponse> {
     return this.buildResponse<ApiResponseDtoEligibilityDto>(eligibility || eligibilityFactory.build())
   }
 
-  proposedAddresses(proposedAddresses?: AccommodationDetail[]) {
-    return this.buildResponse<ApiResponseDtoListAccommodationDetail>(
-      proposedAddresses || accommodationFactory.buildList(2),
+  proposedAddresses(proposedAddresses?: ProposedAccommodationDto[]) {
+    return this.buildResponse<ApiResponseDtoListProposedAccommodationDto>(
+      proposedAddresses || proposedAccommodationFactory.buildList(2),
     )
   }
 
-  proposedAddress(proposedAddress?: AccommodationDetail) {
-    return this.buildResponse<ApiResponseDtoAccommodationDetail>(proposedAddress || accommodationFactory.build())
+  proposedAddress(proposedAddress?: ProposedAccommodationDto) {
+    return this.buildResponse<ApiResponseDtoProposedAccommodationDto>(
+      proposedAddress || proposedAccommodationFactory.build(),
+    )
   }
 
   referralHistory(referrals?: AccommodationReferralDto[]) {

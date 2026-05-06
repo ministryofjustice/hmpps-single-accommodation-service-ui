@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { Factory } from 'fishery'
 import { ProposedAddressFormData } from '@sas/ui'
-import accommodationDetailCommandFactory from './accommodationDetailCommand'
+import proposedAccommodationDetailCommandFactory from './proposedAccommodationDetailCommand'
 
 class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
   manualAddress() {
@@ -23,7 +23,7 @@ class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
 }
 
 export default ProposedAddressFormFactory.define(({ params }) => {
-  const accommodationDetailCommand = accommodationDetailCommandFactory.build(params)
+  const accommodationDetailCommand = proposedAccommodationDetailCommandFactory.build(params)
 
   return {
     nameOrNumber: accommodationDetailCommand.address.buildingName || accommodationDetailCommand.address.buildingNumber,

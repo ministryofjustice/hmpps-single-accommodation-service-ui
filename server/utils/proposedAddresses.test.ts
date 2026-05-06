@@ -1,14 +1,14 @@
-import { AccommodationDetail } from '@sas/api'
 import { Request } from 'express'
 import { ProposedAddressFormData } from '@sas/ui'
 import { mock } from 'jest-mock-extended'
+import { ProposedAccommodationDto, ReferenceDataDto } from '@sas/api'
 import {
   proposedAddressStatusCard,
   checkYourAnswersRows,
   updateAddressFromRequest,
   updateTypeFromRequest,
   updateStatusFromRequest,
-  arrangementSubTypeItems,
+  accommodationTypeItems,
   nextAccommodationStatusItems,
   verificationStatusItems,
   validateUpToNextAccommodation,
@@ -24,9 +24,9 @@ import {
   nextActionButton,
 } from './proposedAddresses'
 import {
-  accommodationFactory,
   addressFactory,
   auditRecordFactory,
+  proposedAccommodationFactory,
   proposedAddressFormFactory,
 } from '../testutils/factories'
 import * as validationUtils from './validation'
@@ -37,6 +37,11 @@ import { formatAddress } from './addresses'
 const crn = 'CRN123'
 const formDataManager = mock<MultiPageFormManager<'proposedAddress'>>()
 let req: Request
+
+const accommodationTypesReferenceData: ReferenceDataDto[] = [
+  { id: '', code: 'A333', name: 'Some type' },
+  { id: '', code: 'A444', name: 'Other accommodation type' },
+]
 
 describe('Proposed addresses utilities', () => {
   beforeEach(() => {
@@ -49,15 +54,16 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('proposedAddressStatusCard', () => {
-    const baseAccommodationDetails = accommodationFactory.build({
+    const baseAccommodationDetails = proposedAccommodationFactory.build({
       id: 'some-id',
       crn: 'CRN123',
       verificationStatus: 'PASSED',
+      nextAccommodationStatus: 'YES',
       createdAt: '2026-01-20T11:00:00.000Z',
-      arrangementType: 'PRIVATE',
-      arrangementSubType: 'FRIENDS_OR_FAMILY',
-      arrangementSubTypeDescription: undefined,
-      settledType: 'SETTLED',
+      accommodationType: {
+        code: 'A444',
+        description: 'Other accommodation type',
+      },
       address: addressFactory.minimal().build({
         buildingNumber: '345',
         thoroughfareName: 'Foo Drive',
@@ -77,12 +83,10 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('returns a "checks failed" proposed address status card object', () => {
-      const proposedAddress = accommodationFactory.build({
+      const proposedAddress = proposedAccommodationFactory.build({
         ...baseAccommodationDetails,
         verificationStatus: 'FAILED',
-        arrangementSubType: 'OTHER',
-        arrangementSubTypeDescription: "Somebody's attic",
-        settledType: 'TRANSIENT',
+        nextAccommodationStatus: undefined,
         createdAt: '2026-01-05T10:45:00.000Z',
       })
 
@@ -90,10 +94,10 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('returns a "not checked yet" proposed address status card object', () => {
-      const proposedAddress = accommodationFactory.build({
+      const proposedAddress = proposedAccommodationFactory.build({
         ...baseAccommodationDetails,
         verificationStatus: 'NOT_CHECKED_YET',
-        arrangementSubType: 'OWNED',
+        nextAccommodationStatus: undefined,
         createdAt: '2026-01-20T09:30:00.000Z',
       })
 
@@ -102,13 +106,11 @@ describe('Proposed addresses utilities', () => {
 
     it.each(['NO', 'TO_BE_DECIDED', undefined])(
       'returns a "checks passed" proposed address status card object if the nextAccommodationStatus is %s',
-      (nextAccommodationStatus: AccommodationDetail['nextAccommodationStatus']) => {
-        const proposedAddress = accommodationFactory.build({
+      (nextAccommodationStatus: ProposedAccommodationDto['nextAccommodationStatus']) => {
+        const proposedAddress = proposedAccommodationFactory.build({
           ...baseAccommodationDetails,
           verificationStatus: 'PASSED',
           nextAccommodationStatus,
-          arrangementSubType: 'PRIVATE_RENTED_ROOM',
-          settledType: undefined,
           createdAt: '2026-01-20T09:30:00.000Z',
         })
         expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
@@ -116,12 +118,10 @@ describe('Proposed addresses utilities', () => {
     )
 
     it('returns a "confirmed" proposed address status card object', () => {
-      const proposedAddress = accommodationFactory.build({
+      const proposedAddress = proposedAccommodationFactory.build({
         ...baseAccommodationDetails,
         verificationStatus: 'PASSED',
         nextAccommodationStatus: 'YES',
-        arrangementSubType: 'PRIVATE_RENTED_ROOM',
-        settledType: undefined,
         createdAt: '2026-01-20T09:30:00.000Z',
       })
 
@@ -130,69 +130,60 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('summaryListRows', () => {
-    const fullSessionData = {
+    const baseSessionData = proposedAddressFormFactory.build({
       nameOrNumber: '123',
       postcode: 'AB1 2CD',
       lookupResults: addressFactory.buildList(2),
-      address: {
+      address: addressFactory.minimal().build({
         buildingName: '10 Moonlight Road',
         subBuildingName: '',
         postTown: 'London',
         county: 'Greater London',
         postcode: 'NW1 6XE',
         country: 'UK',
-      },
-      arrangementSubType: 'FRIENDS_OR_FAMILY',
-      settledType: 'SETTLED',
-      verificationStatus: 'PASSED',
-    } as ProposedAddressFormData
+      }),
+      accommodationTypeCode: 'A444',
+    })
 
     it('formats address, arrangement and status', () => {
-      const rows = checkYourAnswersRows(fullSessionData, 'CRN123', 'James Taylor')
+      const rows = checkYourAnswersRows(baseSessionData, 'CRN123', 'James Taylor', accommodationTypesReferenceData)
 
       const addressHtml = rows[0].value.html ?? rows[0].value
       const arrangementHtml = rows[1].value.html ?? rows[1].value
 
       expect(addressHtml).toBe('10 Moonlight Road<br />London<br />Greater London<br />NW1 6XE<br />UK')
-      expect(arrangementHtml).toBe('Friends or family (not tenant or owner)')
+      expect(arrangementHtml).toBe('Other accommodation type')
       expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/lookup')
       expect(rows[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
-      expect(rows[2].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
-      expect(rows[3].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
-    })
-
-    it('formats arrangement when other type selected', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({
-        arrangementSubType: 'OTHER',
-        arrangementSubTypeDescription: 'Hostel',
-      })
-      const rows = checkYourAnswersRows(sessionData, 'CRN123', 'James Taylor')
-
-      const arrangementHtml = rows[1].value.html ?? rows[1].value
-
-      expect(arrangementHtml).toMatchSnapshot()
+      expect(rows[2].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
     })
 
     it('formats status when checks failed with reason', () => {
-      const sessionData = proposedAddressFormFactory.manualAddress().build({
+      const sessionData = proposedAddressFormFactory.build({
+        ...baseSessionData,
         verificationStatus: 'FAILED',
       })
-      const rows = checkYourAnswersRows(sessionData, 'CRN123', 'James Taylor')
+      const rows = checkYourAnswersRows(sessionData, 'CRN123', 'James Taylor', accommodationTypesReferenceData)
 
-      const statusHtml = rows[3].value.html ?? rows[3].value
+      const statusHtml = rows[2].value.html ?? rows[2].value
 
       expect(statusHtml).toMatchSnapshot()
     })
 
     it('links the address change link to the details if the address was entered manually', () => {
-      const fullSessionDataManualAddressEntry = {
-        ...fullSessionData,
+      const fullSessionDataManualAddressEntry = proposedAddressFormFactory.build({
+        ...baseSessionData,
         nameOrNumber: undefined,
         postcode: undefined,
         lookupResults: null,
-      } as ProposedAddressFormData
+      })
 
-      const rows = checkYourAnswersRows(fullSessionDataManualAddressEntry, 'CRN123', 'James Taylor')
+      const rows = checkYourAnswersRows(
+        fullSessionDataManualAddressEntry,
+        'CRN123',
+        'James Taylor',
+        accommodationTypesReferenceData,
+      )
 
       expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
     })
@@ -243,30 +234,23 @@ describe('Proposed addresses utilities', () => {
   describe('updateTypeFromRequest', () => {
     it('updates form data when type exists', async () => {
       req.body = {
-        arrangementSubType: 'OTHER',
-        arrangementSubTypeDescription: 'Some description',
-        settledType: 'TRANSIENT',
+        accommodationTypeCode: 'A333',
       }
 
       await updateTypeFromRequest(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
-        arrangementSubType: 'OTHER',
-        arrangementSubTypeDescription: 'Some description',
-        settledType: 'TRANSIENT',
+        accommodationTypeCode: 'A333',
       })
     })
 
     it('updates arrangement with empty default values for missing fields', async () => {
       req.body = {
-        arrangementSubType: 'FAILED',
-        settledType: '',
+        accommodationTypeCode: '',
       }
       await updateTypeFromRequest(req, formDataManager)
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
-        arrangementSubType: 'FAILED',
-        arrangementSubTypeDescription: undefined,
-        settledType: '',
+        accommodationTypeCode: '',
       })
     })
   })
@@ -291,19 +275,18 @@ describe('Proposed addresses utilities', () => {
     })
   })
 
-  describe('arrangementSubTypeItems', () => {
-    it('marks the selected arrangement subtype as checked', () => {
-      const items = arrangementSubTypeItems('FRIENDS_OR_FAMILY')
+  describe('accommodationTypeItems', () => {
+    it('marks the selected accommodation type as checked', () => {
+      const items = accommodationTypeItems(accommodationTypesReferenceData, 'A333')
 
-      const selected = items.find(item => item.value === 'FRIENDS_OR_FAMILY')
-      const unselected = items.find(item => item.value !== 'FRIENDS_OR_FAMILY')
-
-      expect(selected?.checked).toBe(true)
-      expect(unselected?.checked).toBe(false)
+      expect(items).toEqual([
+        { text: 'Some type', value: 'A333', checked: true },
+        { text: 'Other accommodation type', value: 'A444', checked: false },
+      ])
     })
 
     it('marks none as checked when no selection provided', () => {
-      const items = arrangementSubTypeItems()
+      const items = accommodationTypeItems(accommodationTypesReferenceData)
 
       expect(items.every(item => item.checked === false)).toBe(true)
     })
@@ -361,9 +344,7 @@ describe('Proposed addresses utilities', () => {
 
     const validUpToType = (): ProposedAddressFormData => ({
       ...validUpToAddress(),
-      arrangementSubType: 'FRIENDS_OR_FAMILY',
-      arrangementSubTypeDescription: undefined,
-      settledType: 'SETTLED',
+      accommodationTypeCode: 'A333',
     })
 
     const validUpToStatusNotPassed = (): ProposedAddressFormData => ({
@@ -498,34 +479,15 @@ describe('Proposed addresses utilities', () => {
         expect(validateUpToType(req, data)).toBe(expected)
       })
 
-      it('flashes errors when arrangement type and settled type are missing', () => {
+      it('flashes errors when accommodation type is missing', () => {
         const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
 
-        validateUpToType(req, { ...validUpToAddress(), arrangementSubType: undefined, settledType: undefined })
+        validateUpToType(req, { ...validUpToAddress(), accommodationTypeCode: undefined })
 
         expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
           req,
           expect.objectContaining({
-            arrangementSubType: 'Select an arrangement type',
-            settledType: 'Select a settled type',
-          }),
-        )
-      })
-
-      it('flashes errors when OTHER arrangement type selected without description', () => {
-        const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
-
-        validateUpToType(req, {
-          ...validUpToAddress(),
-          arrangementSubType: 'OTHER',
-          settledType: 'SETTLED',
-          arrangementSubTypeDescription: undefined,
-        })
-
-        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
-          req,
-          expect.objectContaining({
-            arrangementSubTypeDescription: 'Enter the other arrangement type',
+            accommodationTypeCode: 'Select an accommodation type',
           }),
         )
       })
@@ -648,10 +610,7 @@ describe('Proposed addresses utilities', () => {
 
         expect(requestBody).toEqual({
           address: proposedAddressFormData.address,
-          arrangementType: proposedAddressFormData.arrangementType,
-          arrangementSubType: proposedAddressFormData.arrangementSubType,
-          arrangementSubTypeDescription: proposedAddressFormData.arrangementSubTypeDescription,
-          settledType: proposedAddressFormData.settledType,
+          accommodationTypeCode: proposedAddressFormData.accommodationTypeCode,
           verificationStatus: proposedAddressFormData.verificationStatus,
           nextAccommodationStatus: expected,
         })
@@ -697,13 +656,15 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('addressDetailRows', () => {
-    const baseProposedAddress = accommodationFactory.proposed().build({
+    const baseProposedAddress = proposedAccommodationFactory.build({
       id: 'address-id',
       crn: 'X651925',
-      arrangementSubType: 'FRIENDS_OR_FAMILY',
-      settledType: 'SETTLED',
-      verificationStatus: 'NOT_CHECKED_YET',
+      verificationStatus: 'NOT_CHECKED_YET' as const,
       nextAccommodationStatus: undefined,
+      accommodationType: {
+        code: 'A444',
+        description: 'Other accommodation type',
+      },
       address: addressFactory.minimal().build({
         buildingNumber: '1',
         thoroughfareName: 'Street',
@@ -723,22 +684,21 @@ describe('Proposed addresses utilities', () => {
         title: 'that is confirmed',
         params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const },
       },
-      {
-        title: 'with an arrangement type of "Other"',
-        params: { arrangementSubType: 'OTHER' as const, arrangementSubTypeDescription: 'Some description' },
-      },
-    ])('returns the correct rows for an address $title', ({ params }: { params: Partial<AccommodationDetail> }) => {
-      const proposedAddress = accommodationFactory.build({
-        ...baseProposedAddress,
-        ...params,
-      })
+    ])(
+      'returns the correct rows for an address $title',
+      ({ params }: { params: Partial<ProposedAccommodationDto> }) => {
+        const proposedAddress = proposedAccommodationFactory.build({
+          ...baseProposedAddress,
+          ...params,
+        })
 
-      expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
-    })
+        expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
+      },
+    )
   })
 
   describe('nextActionButton', () => {
-    const proposedAddress = accommodationFactory.proposed().build({
+    const proposedAddress = proposedAccommodationFactory.build({
       crn,
       verificationStatus: 'NOT_CHECKED_YET',
       nextAccommodationStatus: undefined,
@@ -753,7 +713,10 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('returns a button to confirm as next address when checks have passed', () => {
-      const checksPassedAddress = accommodationFactory.build({ ...proposedAddress, verificationStatus: 'PASSED' })
+      const checksPassedAddress = proposedAccommodationFactory.build({
+        ...proposedAddress,
+        verificationStatus: 'PASSED',
+      })
 
       expect(nextActionButton(checksPassedAddress)).toEqual({
         text: 'Confirm as next address',
@@ -764,11 +727,14 @@ describe('Proposed addresses utilities', () => {
     it.each([
       ['has failed checks', { verificationStatus: 'FAILED' as const }],
       ['has been confirmed', { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const }],
-    ])('returns nothing when the proposed address %s', (_, proposedAddressParams: Partial<AccommodationDetail>) => {
-      const noButtonAddress = accommodationFactory.build({ ...proposedAddress, ...proposedAddressParams })
+    ])(
+      'returns nothing when the proposed address %s',
+      (_, proposedAddressParams: Partial<ProposedAccommodationDto>) => {
+        const noButtonAddress = proposedAccommodationFactory.build({ ...proposedAddress, ...proposedAddressParams })
 
-      expect(nextActionButton(noButtonAddress)).toBeUndefined()
-    })
+        expect(nextActionButton(noButtonAddress)).toBeUndefined()
+      },
+    )
   })
 
   describe('addressTimelineEntry', () => {
@@ -782,18 +748,19 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('returns a timeline entry for an address created record', () => {
-      const proposedAddress = accommodationFactory.proposed().build({
+      const proposedAddress = proposedAccommodationFactory.build({
         address: addressFactory.minimal().build({
           buildingNumber: '1',
           thoroughfareName: 'Street',
           postTown: 'Town',
           postcode: 'P0 5TC',
         }),
+        accommodationType: {
+          code: 'A444',
+          description: 'Other accommodation type',
+        },
         verificationStatus: 'PASSED',
         nextAccommodationStatus: 'YES',
-        arrangementSubType: 'OTHER',
-        arrangementSubTypeDescription: 'Some reason',
-        settledType: 'SETTLED',
         createdBy: 'Dr. Kay Towne',
         createdAt: '2026-03-06T21:37:21.666Z',
       })

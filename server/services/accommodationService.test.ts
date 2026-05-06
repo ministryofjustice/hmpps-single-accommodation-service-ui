@@ -1,4 +1,4 @@
-import { accommodationFactory, apiResponseFactory } from '../testutils/factories'
+import { accommodationSummaryFactory, apiResponseFactory } from '../testutils/factories'
 import crnFactory from '../testutils/crn'
 import AccommodationClient from '../data/accommodationClient'
 import AccommodationService from './accommodationService'
@@ -17,7 +17,7 @@ describe('AccommodationService', () => {
 
   it('should call getCurrentAccommodation on the api client and return its result', async () => {
     const crn = crnFactory()
-    const accommodation = accommodationFactory.build({ crn })
+    const accommodation = accommodationSummaryFactory.build({ crn })
     const response = apiResponseFactory.accommodationSummary(accommodation)
     accommodationClient.getCurrentAccommodation.mockResolvedValue(response)
 
@@ -29,7 +29,7 @@ describe('AccommodationService', () => {
 
   it('should call getNextAccommodation on the api client and return its result', async () => {
     const crn = crnFactory()
-    const accommodation = accommodationFactory.build({ crn })
+    const accommodation = accommodationSummaryFactory.build({ crn })
     const response = apiResponseFactory.accommodationSummary(accommodation)
     accommodationClient.getNextAccommodation.mockResolvedValue(response)
 

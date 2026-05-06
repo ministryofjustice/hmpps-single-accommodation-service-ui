@@ -10,7 +10,7 @@ import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import {
   addressDetailRows,
   addressTimelineEntry,
-  arrangementSubTypeItems,
+  accommodationTypeItems,
   checkYourAnswersRows,
   lookupResultsItems,
   nextAccommodationStatusItems,
@@ -21,15 +21,18 @@ import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
 import CasesService from '../services/casesService'
 import {
-  accommodationFactory,
   addressFactory,
   apiResponseFactory,
   auditRecordFactory,
   caseFactory,
+  proposedAccommodationFactory,
+  proposedAddressFormFactory,
+  referenceDataFactory,
 } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
+import ReferenceDataService from '../services/referenceDataService'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -40,6 +43,12 @@ describe('proposedAddressesController', () => {
   const proposedAddressesService = mock<ProposedAddressesService>()
   const casesService = mock<CasesService>()
   const osDataHubService = mock<OsDataHubService>()
+  const referenceDataService = mock<ReferenceDataService>()
+
+  const accommodationTypes = [
+    referenceDataFactory.build({ code: 'A40', name: 'A40 - Apartment' }),
+    referenceDataFactory.build({ code: 'A45', name: 'A45 - Hostel' }),
+  ]
 
   const nameOrNumber = '123'
   const postcode = 'AB12CD'
@@ -53,25 +62,19 @@ describe('proposedAddressesController', () => {
     postcode: 'AB1 2CD',
     country: 'UK',
   }
-  const arrangementType = 'PRIVATE' as const
-  const arrangementSubType = 'FRIENDS_OR_FAMILY' as const
-  const arrangementSubTypeDescription = ''
-  const settledType = 'SETTLED' as const
+  const accommodationTypeCode = 'A45'
   const verificationStatus = 'PASSED' as const
   const nextAccommodationStatus = 'YES' as const
 
-  const fullSessionData: ProposedAddressFormData = {
+  const fullSessionData = proposedAddressFormFactory.build({
     nameOrNumber,
     postcode,
     lookupResults,
     address,
-    arrangementType,
-    arrangementSubType,
-    arrangementSubTypeDescription,
-    settledType,
+    accommodationTypeCode,
     verificationStatus,
     nextAccommodationStatus,
-  }
+  })
 
   let controller: ProposedAddressesController
 
@@ -88,6 +91,7 @@ describe('proposedAddressesController', () => {
     jest.clearAllMocks()
 
     casesService.getCase.mockResolvedValue(apiResponseFactory.case({ name: 'James Smith', actions: [] }))
+    referenceDataService.getAccommodationTypes.mockResolvedValue(apiResponseFactory.referenceData(accommodationTypes))
 
     request = mock<Request>({
       id: 'request-id',
@@ -97,7 +101,13 @@ describe('proposedAddressesController', () => {
       },
     })
 
-    controller = new ProposedAddressesController(auditService, proposedAddressesService, casesService, osDataHubService)
+    controller = new ProposedAddressesController(
+      auditService,
+      proposedAddressesService,
+      casesService,
+      osDataHubService,
+      referenceDataService,
+    )
     jest
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
@@ -113,7 +123,7 @@ describe('proposedAddressesController', () => {
 
   describe('show', () => {
     const caseData = caseFactory.build()
-    const proposedAddress = accommodationFactory.build({
+    const proposedAddress = proposedAccommodationFactory.build({
       verificationStatus: 'PASSED',
     })
     const auditRecords = auditRecordFactory.buildList(2)
@@ -520,7 +530,7 @@ describe('proposedAddressesController', () => {
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: arrangementSubTypeItems(),
+        arrangementSubTypeItems: accommodationTypeItems(accommodationTypes),
       })
     })
 
@@ -528,21 +538,17 @@ describe('proposedAddressesController', () => {
       setSessionData({
         lookupResults,
         address,
-        arrangementSubType,
-        arrangementSubTypeDescription,
-        settledType,
+        accommodationTypeCode,
       })
       await controller.type()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
-        arrangementSubTypeDescription,
-        settledType,
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: arrangementSubTypeItems(arrangementSubType),
+        arrangementSubTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
       })
     })
 
@@ -580,8 +586,7 @@ describe('proposedAddressesController', () => {
 
     it('redirects to status when arrangement type valid', async () => {
       request.body = {
-        arrangementSubType: 'FRIENDS_OR_FAMILY',
-        settledType: 'SETTLED',
+        accommodationTypeCode,
       }
 
       await controller.saveType()(request, response, next)
@@ -605,8 +610,7 @@ describe('proposedAddressesController', () => {
     it('renders status page', async () => {
       setSessionData({
         address,
-        arrangementSubType,
-        settledType,
+        accommodationTypeCode,
       })
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
 
@@ -628,8 +632,7 @@ describe('proposedAddressesController', () => {
     it('renders status page with session data', async () => {
       setSessionData({
         address,
-        arrangementSubType,
-        settledType,
+        accommodationTypeCode,
         verificationStatus: 'NOT_CHECKED_YET',
       })
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
@@ -688,8 +691,7 @@ describe('proposedAddressesController', () => {
     it('renders next accommodation page', async () => {
       setSessionData({
         address,
-        arrangementSubType,
-        settledType,
+        accommodationTypeCode,
         verificationStatus: 'PASSED',
       })
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
@@ -713,8 +715,7 @@ describe('proposedAddressesController', () => {
     it('renders next accommodation page with session data', async () => {
       setSessionData({
         address,
-        arrangementSubType,
-        settledType,
+        accommodationTypeCode,
         verificationStatus: 'PASSED',
         nextAccommodationStatus: 'NO',
       })
@@ -780,7 +781,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
-        tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', 'James Smith'),
+        tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', 'James Smith', accommodationTypes),
         backLinkHref: uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }),
         errors: {},
         errorSummary: [],
@@ -841,7 +842,7 @@ describe('proposedAddressesController', () => {
       request.headers.referer = '/referrer'
       request.params.page = page
       request.params.id = 'address-id'
-      const proposedAddress = accommodationFactory.build({ crn: 'CRN123', id: 'address-id' })
+      const proposedAddress = proposedAccommodationFactory.build({ crn: 'CRN123', id: 'address-id' })
       proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
 
       jest.spyOn(controller.formData, 'update')
@@ -913,7 +914,7 @@ describe('proposedAddressesController', () => {
         handler: 'saveDetails',
         body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4', addressCountry: 'Wales' },
       },
-      { handler: 'saveType', body: { arrangementSubType: 'FRIENDS_AND_FAMILY', settledType: 'SETTLED' } },
+      { handler: 'saveType', body: { accommodationTypeCode: 'A44' } },
       { handler: 'saveStatus', body: { verificationStatus: 'NOT_CHECKED_YET' } },
       { handler: 'saveNextAccommodation', body: { nextAccommodationStatus: 'YES' } },
     ])('saves the $handler data in session and redirects to the Check your answers page', async ({ handler, body }) => {
@@ -972,7 +973,7 @@ describe('proposedAddressesController', () => {
         handler: 'saveDetails',
         body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4', addressCountry: 'Wales' },
       },
-      { handler: 'saveType', body: { arrangementSubType: 'FRIENDS_AND_FAMILY', settledType: 'SETTLED' } },
+      { handler: 'saveType', body: { accommodationTypeCode: 'A44' } },
       { handler: 'saveStatus', body: { verificationStatus: 'NOT_CHECKED_YET' } },
       { handler: 'saveNextAccommodation', body: { nextAccommodationStatus: 'YES' } },
     ])('saves the $handler data in session and redirects to the address details page', async ({ handler, body }) => {

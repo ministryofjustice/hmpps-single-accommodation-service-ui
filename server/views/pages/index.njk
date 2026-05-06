@@ -53,37 +53,39 @@
     </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <div class="sas-filters__actions">
-          {{ govukButton({ text: 'Apply filters' }) }}
-        </div>
+        <div class="sas-filters__actions">{{ govukButton({ text: 'Apply filters' }) }}</div>
       </div>
     </div>
   </form>
-  {% if filters and filters.length %}
-    <div class="sas-filters__summary">
-      <h2 id="case-list-summary" class="govuk-heading-m">
-        Showing {{ resultsSummary }}
-      </h2>
-      <p class="govuk-!-margin-bottom-1">Filters applied:</p>
-      <ul class="moj-filter-tags">
-        {% for filter in filters %}
-          <li><a class="moj-filter__tag" href="{{ filter.href }}"><span class="govuk-visually-hidden">Remove this filter</span> {{ filter.text }}</a></li>
-        {% endfor %}
-      </ul>
-      <p class="govuk-!-margin-bottom-1"><a class="govuk-link govuk-link--no-visited-state" href="/">Clear filters</a></p>
-    </div>
-  {% else %}
-    <h2 id="case-list-summary" class="govuk-heading-m">{{ resultsSummary }}</h2>
-  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      {% if filters and filters.length %}
+        <div class="sas-filters__summary">
+          <h2 id="case-list-summary" class="govuk-heading-m">Showing {{ resultsSummary }}</h2>
+          <p class="govuk-!-margin-bottom-1">Filters applied:</p>
+          <ul class="moj-filter-tags">
+            {% for filter in filters %}
+              <li><a class="moj-filter__tag" href="{{ filter.href }}"><span class="govuk-visually-hidden">Remove this filter</span> {{ filter.text }}</a></li>
+            {% endfor %}
+          </ul>
+          <p class="govuk-!-margin-bottom-1">
+            <a class="govuk-link govuk-link--no-visited-state" href="/">Clear filters</a>
+          </p>
+        </div>
+      {% else %}
+        <h2 id="case-list-summary" class="govuk-heading-m">{{ resultsSummary }}</h2>
+      {% endif %}
 
-  {{
-    govukTable({
-      classes: 'sas-case-list',
-      attributes: {
-        'aria-labelledby': 'case-list-summary'
-      },
-      head: casesTableColumns,
-      rows: casesRows
-    })
-  }}
+      {{
+        govukTable({
+          classes: 'sas-case-list',
+          attributes: {
+            'aria-labelledby': 'case-list-summary'
+          },
+          head: casesTableColumns,
+          rows: casesRows
+        })
+      }}
+    </div>
+  </div>
 {% endblock %}

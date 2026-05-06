@@ -25,13 +25,11 @@ export default class CasesListPage extends AbstractPage {
     for await (const person of cases) {
       const row = this.page.getByRole('row', { name: person.name })
 
-      if (headers.includes('Person')) {
-        await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
-        await expect(row).toContainText(person.tierScore as string)
-        await expect(row).toContainText(formatDate(person.dateOfBirth as string))
-        await expect(row).toContainText(person.crn as string)
-        await expect(row).toContainText(person.prisonNumber as string)
-      }
+      await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
+      await expect(row).toContainText(person.tierScore as string)
+      await expect(row).toContainText(formatDate(person.dateOfBirth as string))
+      await expect(row).toContainText(person.crn as string)
+      await expect(row).toContainText(person.prisonNumber as string)
 
       if (headers.includes('Status') && person.status) {
         await this.shouldShowStatusCell(caseStatusCell(person), row)

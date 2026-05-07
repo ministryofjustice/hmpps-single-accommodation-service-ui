@@ -19,6 +19,7 @@ generic-service:
     OS_DATAHUB_API_URL: "https://api.os.uk"
     SAS_ALLOWED_ROLES: "ROLE_PROBATION"
     V10_CASES_LIST: "false"
+    LOG_LEVEL: 'debug'
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

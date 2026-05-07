@@ -39,7 +39,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
+      "text": "Other accommodation type",
     },
   },
   {
@@ -100,7 +100,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
+      "text": "Other accommodation type",
     },
   },
   {
@@ -161,7 +161,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
+      "text": "Other accommodation type",
     },
   },
   {
@@ -238,7 +238,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Housing arrangement",
     },
     "value": {
-      "html": "<p>Friends or family (not tenant or owner)</p><p>Settled</p>",
+      "text": "Other accommodation type",
     },
   },
   {
@@ -271,67 +271,6 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
     },
     "value": {
       "text": "Still to be decided",
-    },
-  },
-]
-`;
-
-exports[`Proposed addresses utilities addressDetailRows returns the correct rows for an address with an arrangement type of "Other" 1`] = `
-[
-  {
-    "key": {
-      "text": "Status",
-    },
-    "value": {
-      "html": "<strong class="govuk-tag govuk-tag--orange">Not checked</strong>",
-    },
-  },
-  {
-    "actions": {
-      "items": [
-        {
-          "href": "/cases/X651925/proposed-addresses/address-id/edit/lookup",
-          "text": "Change",
-        },
-      ],
-    },
-    "key": {
-      "text": "Address",
-    },
-    "value": {
-      "html": "1 Street<br />Town<br />P0 5TC",
-    },
-  },
-  {
-    "actions": {
-      "items": [
-        {
-          "href": "/cases/X651925/proposed-addresses/address-id/edit/type",
-          "text": "Change",
-        },
-      ],
-    },
-    "key": {
-      "text": "Housing arrangement",
-    },
-    "value": {
-      "html": "<p>Other, Some description</p><p>Settled</p>",
-    },
-  },
-  {
-    "actions": {
-      "items": [
-        {
-          "href": "/cases/X651925/proposed-addresses/address-id/edit/status",
-          "text": "Change",
-        },
-      ],
-    },
-    "key": {
-      "text": "Address checks",
-    },
-    "value": {
-      "text": "Not checked",
     },
   },
 ]
@@ -374,7 +313,7 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
     
   
     
-      <p class="govuk-!-margin-bottom-1">Housing arrangement: Other, Some reason. Settled. </p>
+      <p class="govuk-!-margin-bottom-1">Housing arrangement: Other accommodation type</p>
     
   
     
@@ -431,7 +370,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "Other: Somebody's attic. Transient.",
+        "text": "Other accommodation type",
       },
     },
     {
@@ -474,7 +413,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "Private rent, room/share (tenant). ",
+        "text": "Other accommodation type",
       },
     },
     {
@@ -521,7 +460,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "Private rent, room/share (tenant). ",
+        "text": "Other accommodation type",
       },
     },
     {
@@ -568,7 +507,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "Private rent, room/share (tenant). ",
+        "text": "Other accommodation type",
       },
     },
     {
@@ -615,7 +554,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confi
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "Private rent, room/share (tenant). ",
+        "text": "Other accommodation type",
       },
     },
     {
@@ -658,7 +597,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
         "text": "Housing arrangement",
       },
       "value": {
-        "text": "Owned (named on deeds/mortgage). Settled.",
+        "text": "Other accommodation type",
       },
     },
     {
@@ -696,7 +635,5 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
   },
 }
 `;
-
-exports[`Proposed addresses utilities summaryListRows formats arrangement when other type selected 1`] = `"<p>Other</p><p>Hostel</p>"`;
 
 exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p>Failed</p><p>Not suitable</p>"`;

@@ -1,11 +1,11 @@
 import { Factory } from 'fishery'
-import { AccommodationDetail, AuditRecordDto, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import { AuditRecordDto, DtrSubmissionDto, DutyToReferDto, FieldChange, ProposedAccommodationDto } from '@sas/api'
 import { faker } from '@faker-js/faker'
-import accommodationFactory from './accommodation'
+import proposedAccommodationFactory from './proposedAccommodation'
 
 class AuditRecordFactory extends Factory<AuditRecordDto> {
-  proposedAddressCreated(proposedAddress?: AccommodationDetail) {
-    const addressDetails = proposedAddress || accommodationFactory.proposed().build()
+  proposedAddressCreated(proposedAddress?: ProposedAccommodationDto) {
+    const addressDetails = proposedAddress || proposedAccommodationFactory.build()
 
     const changes: FieldChange[] = Object.entries(addressDetails).flatMap(([property, value]) => {
       if (property === 'address') {
@@ -13,6 +13,12 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
           field: addressProperty,
           value: addressValue,
         }))
+      }
+      if (property === 'accommodationType') {
+        return {
+          field: 'accommodationTypeDescription',
+          value: (value as ProposedAccommodationDto['accommodationType']).description,
+        }
       }
       return { field: property, value: value as string }
     })

@@ -8,7 +8,7 @@ import {
   actionsCell,
   caseStatusCell,
 } from './cases'
-import { accommodationFactory, caseFactory } from '../testutils/factories'
+import { accommodationSummaryFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
 import config from '../config'
 import { accommodationCell } from './accommodationSummary'
@@ -65,7 +65,7 @@ describe('cases utilities', () => {
     it('includes the date for RISK_OF_NO_FIXED_ABODE status', () => {
       const person = caseFactory.build({
         status: 'RISK_OF_NO_FIXED_ABODE',
-        currentAccommodation: accommodationFactory.current('2026-06-01', '2025-12-01').prison().build(),
+        currentAccommodation: accommodationSummaryFactory.current('2026-06-01', '2025-12-01').build(),
       })
       expect(caseStatusCell(person)).toEqual(expect.objectContaining({ date: '2026-06-01' }))
     })

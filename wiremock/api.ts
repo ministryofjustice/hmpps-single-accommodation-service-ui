@@ -16,13 +16,13 @@ import currentAccommodation from './fixtures/currentAccommodation.json'
 import nextAccommodation from './fixtures/nextAccommodation.json'
 import accommodationHistory from './fixtures/accommodationHistory.json'
 import {
-  AccommodationDetail,
   AccommodationReferralDto,
   AccommodationSummaryDto,
   AuditRecordDto,
   CaseDto,
   DutyToReferDto,
   EligibilityDto,
+  ProposedAccommodationDto,
 } from '@sas/api'
 import { resetStubs } from '../integration_tests/mockApis/wiremock'
 
@@ -73,7 +73,7 @@ async function stubDutyToRefer() {
 
 async function stubProposedAddresses() {
   for await (const caseDto of cases) {
-    const proposedAddress = (proposedAddresses as Record<string, AccommodationDetail[]>)[caseDto.crn]
+    const proposedAddress = (proposedAddresses as Record<string, ProposedAccommodationDto[]>)[caseDto.crn]
     await proposedAddressesApi.stubGetProposedAddressesByCrn(caseDto.crn, proposedAddress)
 
     for await (const address of proposedAddress.filter(a => a.id)) {

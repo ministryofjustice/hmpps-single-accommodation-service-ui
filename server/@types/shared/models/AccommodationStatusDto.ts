@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type AccommodationStatusDto = {
-    code: 'B' | 'M' | 'MA' | 'P' | 'PR' | 'PR1' | 'RJ' | 'RT' | 'S';
+    code: string;
     description: string;
 };
 

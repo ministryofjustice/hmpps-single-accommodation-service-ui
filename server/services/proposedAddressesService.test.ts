@@ -1,5 +1,5 @@
 import ProposedAddressesClient from '../data/proposedAddressesClient'
-import { accommodationFactory, apiResponseFactory, proposedAddressFormFactory } from '../testutils/factories'
+import { apiResponseFactory, proposedAccommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
 import { formDataToRequestBody } from '../utils/proposedAddresses'
 
@@ -19,14 +19,16 @@ describe('ProposedAddressesService', () => {
 
   describe('getProposedAddresses', () => {
     it('should call getProposedAddresses on the api client and return sorted addresses', async () => {
-      const passedChecksAddress = accommodationFactory
-        .proposed()
-        .build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'NO' })
-      const confirmedAddress = accommodationFactory
-        .proposed()
-        .build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' })
-      const notCheckedAddress = accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' })
-      const failedChecksAddress = accommodationFactory.proposed().build({ verificationStatus: 'FAILED' })
+      const passedChecksAddress = proposedAccommodationFactory.build({
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'NO',
+      })
+      const confirmedAddress = proposedAccommodationFactory.build({
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+      })
+      const notCheckedAddress = proposedAccommodationFactory.build({ verificationStatus: 'NOT_CHECKED_YET' })
+      const failedChecksAddress = proposedAccommodationFactory.build({ verificationStatus: 'FAILED' })
 
       proposedAddressesClient.getProposedAddresses.mockResolvedValue(
         apiResponseFactory.proposedAddresses([

@@ -1,17 +1,19 @@
 import { test } from '@playwright/test'
-import { AccommodationDetail, AuditRecordDto, CaseDto } from '@sas/api'
+import { AuditRecordDto, CaseDto, ProposedAccommodationDto } from '@sas/api'
 import { ProposedAddressFormData } from '@sas/ui'
+import { faker } from '@faker-js/faker'
 import accommodationApi from '../../mockApis/accommodation'
 import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import eligibilityApi from '../../mockApis/eligibility'
 import osDataHubApi from '../../mockApis/osDataHubApi'
+import referenceDataApi from '../../mockApis/referenceData'
 import { login } from '../../testUtils'
 import {
-  accommodationFactory,
   addressFactory,
   auditRecordFactory,
   caseFactory,
+  proposedAccommodationFactory,
   proposedAddressFormFactory,
 } from '../../../server/testutils/factories'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
@@ -21,6 +23,7 @@ import { resultToAddressDetails } from '../../../server/utils/osDataHub'
 import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
 import { addressTimelineEntry } from '../../../server/utils/proposedAddresses'
+import { accommodationTypes } from '../../../server/testutils/factories/proposedAccommodation'
 
 const setupCase = async () => {
   const caseData = caseFactory.build()
@@ -33,11 +36,12 @@ const setupCase = async () => {
   await accommodationApi.stubGetCurrentAccommodation(crn, undefined)
   await accommodationApi.stubGetNextAccommodation(crn, undefined)
   await accommodationApi.stubGetAccommodationHistory(crn, [])
+  await referenceDataApi.stubGetAccommodationTypes()
 
   return caseData
 }
 
-const setupProposedAddresses = async (crn: string, proposedAddresses: AccommodationDetail[] = []) => {
+const setupProposedAddresses = async (crn: string, proposedAddresses: ProposedAccommodationDto[] = []) => {
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
   await proposedAddressesApi.stubSubmitProposedAddress(crn)
 
@@ -57,9 +61,10 @@ const setupProposedAddressTimeline = async (crn: string, addressId: string, reco
 test.describe('view proposed address details', () => {
   test('should allow user to view the details of a proposed address', async ({ page }) => {
     const caseData = await setupCase()
-    const proposedAddress = accommodationFactory
-      .proposed()
-      .build({ crn: caseData.crn, verificationStatus: 'NOT_CHECKED_YET' })
+    const proposedAddress = proposedAccommodationFactory.build({
+      crn: caseData.crn,
+      verificationStatus: 'NOT_CHECKED_YET',
+    })
     const createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
     await setupProposedAddresses(caseData.crn, [proposedAddress])
     const noteAddressRecord = auditRecordFactory.note('This is a note\n\nWith line breaks').build()
@@ -130,12 +135,12 @@ test.describe('add proposed address', () => {
       .manualAddress()
       .build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' })
 
-    const newProposedAddress = accommodationFactory.proposed().build({
+    const newProposedAddress = proposedAccommodationFactory.build({
       ...updatedProposedAddressData,
       crn,
       // address: addressFactory.minimal().build(updatedProposedAddressData.address),
     })
-    const proposedAddresses: AccommodationDetail[] = [newProposedAddress]
+    const proposedAddresses: ProposedAccommodationDto[] = [newProposedAddress]
 
     // Given I am logged in
     await login(page)
@@ -177,20 +182,9 @@ test.describe('add proposed address', () => {
     // When I submit the form empty
     await addProposedAddressPage.clickButton('Continue')
 
-    // Then I should see errors
+    // Then I should see an error
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      arrangementSubType: 'Select an arrangement type',
-      settledType: 'Select a settled type',
-    })
-
-    // When I select 'Other' for arrangement type and submit without description
-    await addProposedAddressPage.selectRadioByLabel('Other')
-    await addProposedAddressPage.clickButton('Continue')
-
-    // Then I should see an error for the missing description
-    await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      arrangementSubTypeDescription: 'Enter the other arrangement type',
-      settledType: 'Select a settled type',
+      accommodationTypeCode: 'Select an accommodation type',
     })
 
     // Then I complete the type form
@@ -245,7 +239,9 @@ test.describe('add proposed address', () => {
     )
 
     // When I click to change the type
-    await addProposedAddressPage.clickChangeLink(`What will be ${caseData.name}'s housing arrangement at this address?`)
+    await addProposedAddressPage.clickChangeLink(
+      `Which best describes the living arrangement for ${caseData.name} at this address?`,
+    )
     await addProposedAddressPage.completeTypeForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
@@ -253,9 +249,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.verifyCheckYourAnswersPage(
       {
         ...initialProposedAddressData,
-        arrangementSubType: updatedProposedAddressData.arrangementSubType,
-        arrangementSubTypeDescription: updatedProposedAddressData.arrangementSubTypeDescription,
-        settledType: updatedProposedAddressData.settledType,
+        accommodationTypeCode: updatedProposedAddressData.accommodationTypeCode,
         address: updatedProposedAddressData.address,
       },
       caseData.name,
@@ -392,7 +386,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.verifyCheckYourAnswersPage(submittedAddress, caseData.name)
 
     // When I submit the proposed address
-    const newProposedAddress = accommodationFactory.proposed().build(submittedAddress)
+    const newProposedAddress = proposedAccommodationFactory.build(submittedAddress)
     await setupProposedAddresses(crn, [newProposedAddress])
     await addProposedAddressPage.clickButton('Save')
 
@@ -413,7 +407,7 @@ test.describe('edit proposed address', () => {
   let crn: string
   let caseData: CaseDto
   let initialProposedAddressData: ProposedAddressFormData
-  let proposedAddress: AccommodationDetail
+  let proposedAddress: ProposedAccommodationDto
   let createdAddressRecord: AuditRecordDto
 
   test.beforeEach(async () => {
@@ -422,7 +416,7 @@ test.describe('edit proposed address', () => {
     initialProposedAddressData = proposedAddressFormFactory
       .manualAddress()
       .build({ id, verificationStatus: 'NOT_CHECKED_YET', nextAccommodationStatus: 'TO_BE_DECIDED' })
-    proposedAddress = accommodationFactory.proposed().build({ id, crn, ...initialProposedAddressData })
+    proposedAddress = proposedAccommodationFactory.build({ id, crn, ...initialProposedAddressData })
     createdAddressRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
 
     await setupProposedAddresses(crn, [proposedAddress])
@@ -484,7 +478,7 @@ test.describe('edit proposed address', () => {
     const confirmedFormData = proposedAddressFormFactory
       .manualAddress()
       .build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' })
-    const updatedProposedAddress = accommodationFactory.proposed().build({
+    const updatedProposedAddress = proposedAccommodationFactory.build({
       ...confirmedFormData,
       id,
       crn,
@@ -556,13 +550,13 @@ test.describe('edit proposed address', () => {
   })
 
   test('should allow the user to change details of an existing proposed address', async ({ page }) => {
-    const updatedProposedAddress = accommodationFactory.build({
+    const updatedProposedAddress = proposedAccommodationFactory.build({
       ...proposedAddress,
-      arrangementSubType: 'OTHER',
-      arrangementSubTypeDescription: 'Other',
-      settledType: 'SETTLED',
+      accommodationType: faker.helpers.arrayElement(
+        accommodationTypes.filter(type => type.code !== proposedAddress.accommodationType.code),
+      ),
     })
-    const checksPassedProposedAddress = accommodationFactory.build({
+    const checksPassedProposedAddress = proposedAccommodationFactory.build({
       ...updatedProposedAddress,
       verificationStatus: 'PASSED',
       nextAccommodationStatus: 'TO_BE_DECIDED',
@@ -587,26 +581,28 @@ test.describe('edit proposed address', () => {
     const editProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
       page,
       crn,
-      `What will be ${caseData.name}'s housing arrangement at this address?`,
+      `Which best describes the living arrangement for ${caseData.name} at this address?`,
     )
-    await editProposedAddressPage.shouldShowPopulatedTypeForm(proposedAddress)
+    await editProposedAddressPage.shouldShowPopulatedTypeForm({
+      ...proposedAddress,
+      accommodationTypeCode: proposedAddress.accommodationType.code,
+    })
 
     // When I update the arrangement type
     const updatedAddressRecord = auditRecordFactory
       .proposedAddressUpdated([
         {
-          field: 'arrangementSubType',
-          value: updatedProposedAddress.arrangementSubType,
-        },
-        {
-          field: 'settledType',
-          value: updatedProposedAddress.settledType,
+          field: 'accommodationTypeDescription',
+          value: updatedProposedAddress.accommodationType.description,
         },
       ])
       .build()
     await setupProposedAddresses(crn, [updatedProposedAddress])
     await setupProposedAddressTimeline(crn, updatedProposedAddress.id, [updatedAddressRecord, createdAddressRecord])
-    await editProposedAddressPage.completeTypeForm(updatedProposedAddress)
+    await editProposedAddressPage.completeTypeForm({
+      ...updatedProposedAddress,
+      accommodationTypeCode: updatedProposedAddress.accommodationType.code,
+    })
     await editProposedAddressPage.clickButton('Continue')
 
     // Then I should see the address details page

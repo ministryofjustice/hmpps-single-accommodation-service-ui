@@ -7,50 +7,32 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
-import accommodationFactory from './accommodation'
+import accommodationSummaryFactory from './accommodationSummary'
 
 class CaseFactory extends Factory<Case> {
   confirmed() {
     const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
     return this.params({
-      currentAccommodation: faker.helpers.arrayElement([
-        accommodationFactory.current(currentEndDate).cas().build(),
-        accommodationFactory.current(currentEndDate).privateAddress().build(),
-        accommodationFactory.current(currentEndDate).prison().build(),
-      ]),
-      nextAccommodation: faker.helpers.arrayElement([
-        accommodationFactory.next(currentEndDate).privateAddress().build(),
-        accommodationFactory.next(currentEndDate).cas().build(),
-      ]),
+      currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
+      nextAccommodation: accommodationSummaryFactory.next(currentEndDate).build(),
+      status: faker.helpers.arrayElement(['SETTLED', 'TRANSIENT']),
     })
   }
 
-  noFixedAbodeNext() {
+  riskOfNfa() {
     const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
     return this.params({
-      currentAccommodation: faker.helpers.arrayElement([
-        accommodationFactory.current(currentEndDate).cas().build(),
-        accommodationFactory.current(currentEndDate).privateAddress().build(),
-        accommodationFactory.current(currentEndDate).prison().build(),
-      ]),
-      nextAccommodation: accommodationFactory.next(currentEndDate).noFixedAbode().build(),
-    })
-  }
-
-  noFixedAbodeCurrent() {
-    return this.params({
-      currentAccommodation: accommodationFactory.current().noFixedAbode().build(),
-      nextAccommodation: undefined,
+      currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
+      nextAccommodation: null,
+      status: 'RISK_OF_NO_FIXED_ABODE',
     })
   }
 }
 
 export default CaseFactory.define(() => {
-  const currentAccommodation = accommodationFactory.current().build()
-  const nextAccommodation =
-    currentAccommodation.arrangementType === 'NO_FIXED_ABODE'
-      ? undefined
-      : accommodationFactory.next(currentAccommodation.endDate).build()
+  const status = faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE', 'TRANSIENT', 'SETTLED'])
+  const currentAccommodation = status === 'NO_FIXED_ABODE' ? null : accommodationSummaryFactory.current().build()
+  const nextAccommodation = status === 'RISK_OF_NO_FIXED_ABODE' ? null : accommodationSummaryFactory.next().build()
 
   return {
     name: faker.person.fullName(),
@@ -63,7 +45,7 @@ export default CaseFactory.define(() => {
     assignedTo: assignedUserFactory.build(),
     currentAccommodation,
     nextAccommodation,
-    status: faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE', 'TRANSIENT', 'SETTLED']),
+    status,
     actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(3), faker.lorem.words(3)]) ?? [],
   }
 })

@@ -3,13 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AccommodationAddressDetails } from './AccommodationAddressDetails';
-export type AccommodationDetailCommand = {
+export type ProposedAccommodationDetailCommand = {
     name?: string | null;
-    arrangementType: 'PRISON' | 'CAS1' | 'CAS2' | 'CAS2V2' | 'CAS3' | 'PRIVATE' | 'NO_FIXED_ABODE';
-    arrangementSubType?: 'FRIENDS_OR_FAMILY' | 'SOCIAL_RENTED' | 'PRIVATE_RENTED_WHOLE_PROPERTY' | 'PRIVATE_RENTED_ROOM' | 'OWNED' | 'OTHER';
-    arrangementSubTypeDescription?: string | null;
-    settledType: 'SETTLED' | 'TRANSIENT';
-    offenderReleaseType?: 'REMAND' | 'LICENCE' | 'BAIL';
+    accommodationTypeCode: string;
     verificationStatus: 'NOT_CHECKED_YET' | 'FAILED' | 'PASSED';
     nextAccommodationStatus: 'YES' | 'NO' | 'TO_BE_DECIDED';
     address: AccommodationAddressDetails;

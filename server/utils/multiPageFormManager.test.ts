@@ -31,11 +31,11 @@ describe('multiPageFormManager', () => {
   })
 
   it('updates the data provided against the correct id and forces a session save', async () => {
-    const updated = await formData.update(crn, mockSession, { arrangementSubType: 'FRIENDS_OR_FAMILY' })
+    const updated = await formData.update(crn, mockSession, { accommodationTypeCode: 'A567' })
 
-    expect(updated).toEqual(expect.objectContaining({ arrangementSubType: 'FRIENDS_OR_FAMILY' }))
+    expect(updated).toEqual(expect.objectContaining({ accommodationTypeCode: 'A567' }))
     expect(mockSession.save).toHaveBeenCalled()
-    expect(formData.get(crn, mockSession)).toEqual(expect.objectContaining({ arrangementSubType: 'FRIENDS_OR_FAMILY' }))
+    expect(formData.get(crn, mockSession)).toEqual(expect.objectContaining({ accommodationTypeCode: 'A567' }))
   })
 
   it('removes the data for the provided id only and forces a session save', async () => {

@@ -3,55 +3,19 @@
 
 {% extends "pages/proposed-address/layout.njk" %}
 
-{% set pageTitle = "What will be the person's housing arrangement at this address? " + applicationName %}
+{% set pageTitle = "Which best describes the living arrangement for the person at this address?  " + applicationName %}
 {% set formAction = paths.proposedAddresses.type({crn: crn}) %}
-
-{% set conditionalHtml %}
-    {{ govukInput(
-        {
-            label: {
-                text: 'What is the other housing arrangement?'
-            },
-            name: 'arrangementSubTypeDescription',
-            id: 'arrangementSubTypeDescription',
-            value: arrangementSubTypeDescription,
-            errorMessage: errors.arrangementSubTypeDescription
-        }
-    ) }}
-{% endset %}
 
 {% block formContent %}
   {{ govukRadios({
-      name: "arrangementSubType",
+      name: "accommodationTypeCode",
       fieldset: {
           legend: {
-              text: "What will be " + name + "'s housing arrangement at this address?",
+              text: "Which best describes the living arrangement for " + name + " at this address?",
               classes: "govuk-fieldset__legend--l"
           }
       },
-      items: injectConditionals(arrangementSubTypeItems, { OTHER: conditionalHtml }),
-      errorMessage: errors.arrangementSubType
-  }) }}
-{{ govukRadios({
-      name: "settledType",
-      fieldset: {
-          legend: {
-              text: "Will it be settled or transient?",
-              classes: "govuk-fieldset__legend--m"
-          }
-      },
-      items: [
-          {
-              value: "SETTLED",
-              text: "Settled",
-              checked: settledType == "SETTLED"
-          },
-          {
-              value: "TRANSIENT",
-              text: "Transient",
-              checked: settledType == "TRANSIENT"
-          }
-      ],
-      errorMessage: errors.settledType
+      items: accommodationTypeItems,
+      errorMessage: errors.accommodationTypeCode
   }) }}
 {% endblock %}

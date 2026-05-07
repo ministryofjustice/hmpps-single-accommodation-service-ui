@@ -111,18 +111,36 @@ test.describe('Profile Tracker Page', () => {
 
       await profileTrackerPage.shouldShowNextAccommodationCard(nextAccommodation)
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
+      await profileTrackerPage.shouldNotShowNoFixedAbodeAlert()
     })
 
-    test(`should render only current accommodation for a NFA next case`, async ({ page }) => {
+    test(`should render current accommodation card and NFA alert for a case with risk of no fixed abode`, async ({
+      page,
+    }) => {
       const caseData = caseFactory.noFixedAbodeNext().build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
-      await setupStubs({ crn, caseData, currentAccommodation })
+      const accommodationHistory = [accommodationSummaryFactory.current().build()]
+      await setupStubs({ crn, caseData, currentAccommodation, accommodationHistory })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, accommodationHistory[0])
+    })
+
+    test(`should render no accommodation cards and NFA alert for a case with no fixed abode`, async ({ page }) => {
+      const caseData = caseFactory.noFixedAbodeCurrent().build({ crn, status: 'NO_FIXED_ABODE' })
+      const accommodationHistory = [accommodationSummaryFactory.build({ endDate: undefined })]
+      await setupStubs({ crn, caseData, accommodationHistory })
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldNotShowCurrentAccommodationCard()
+      await profileTrackerPage.shouldNotShowNextAccommodationCard()
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, accommodationHistory[0])
     })
   })
 

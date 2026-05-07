@@ -1,5 +1,7 @@
 const isValidDate = (date?: string) => date && !Number.isNaN(new Date(date).getTime())
 
+export const isPastDate = (date?: string): boolean => !!isValidDate(date) && new Date(date).getTime() <= Date.now()
+
 export const calculateAge = (dateOfBirth: string) => {
   const birthDate = new Date(dateOfBirth)
   const today = new Date()

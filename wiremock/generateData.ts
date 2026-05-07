@@ -130,30 +130,27 @@ if (generate.proposedAddresses) {
 }
 
 if (generate.accommodation) {
-  const currentAccommodation = cases.reduce(
-    (responses, c) => ({
-      ...responses,
-      [c.crn]: accommodationSummaryFactory.current().build({ crn: c.crn }),
-    }),
-    {},
-  )
+  const currentAccommodation: Record<string, unknown> = {}
+  const nextAccommodation: Record<string, unknown> = {}
+  const accommodationHistory: Record<string, unknown> = {}
+
+  cases.forEach(c => {
+    const isNoFixedAbode = c.status === 'NO_FIXED_ABODE'
+    const isRiskOfNoFixedAbode = c.status === 'RISK_OF_NO_FIXED_ABODE'
+
+    const current = isNoFixedAbode ? null : accommodationSummaryFactory.current().build({ crn: c.crn })
+    const next =
+      !isNoFixedAbode && !isRiskOfNoFixedAbode ? accommodationSummaryFactory.next().build({ crn: c.crn }) : null
+
+    currentAccommodation[c.crn] = current
+    nextAccommodation[c.crn] = next
+
+    accommodationSummaryFactory.lastStartDate = current ? new Date(current.startDate) : undefined
+    const previous = accommodationSummaryFactory.buildListSequential(faker.number.int({ min: 0, max: 6 }))
+    accommodationHistory[c.crn] = current ? [current, ...previous] : previous
+  })
+
   saveToFixture('currentAccommodation', currentAccommodation)
-
-  const nextAccommodation = cases.reduce(
-    (responses, c) => ({
-      ...responses,
-      [c.crn]: faker.datatype.boolean() ? accommodationSummaryFactory.next().build({ crn: c.crn }) : null,
-    }),
-    {},
-  )
   saveToFixture('nextAccommodation', nextAccommodation)
-
-  const accommodationHistory = cases.reduce((responses, c) => {
-    accommodationSummaryFactory.lastStartDate = undefined
-    return {
-      ...responses,
-      [c.crn]: accommodationSummaryFactory.buildListSequential(faker.number.int({ min: 0, max: 7 })),
-    }
-  }, {})
   saveToFixture('accommodationHistory', accommodationHistory)
 }

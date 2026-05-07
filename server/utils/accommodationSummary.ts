@@ -1,9 +1,9 @@
-import { AccommodationDetail, AccommodationStatusDto, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationDetail, AccommodationStatusDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
-import { formatDate } from './dates'
+import { formatDate, isPastDate } from './dates'
 import { renderMacro, statusTag } from './macros'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
@@ -87,6 +87,15 @@ export const accommodationCard = (
   }
 }
 
+export const noFixedAbodeAlert = (caseData: CaseDto, accommodation?: AccommodationSummaryDto) => {
+  if (caseData.status !== 'NO_FIXED_ABODE' && caseData.status !== 'RISK_OF_NO_FIXED_ABODE') return undefined
+
+  return {
+    date: caseData.status === 'NO_FIXED_ABODE' ? accommodation?.startDate : accommodation?.endDate,
+    status: caseData.status,
+  }
+}
+
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
   accommodation
     ? renderMacro('accommodationCell', {
@@ -110,10 +119,16 @@ export const accommodationSummaryAddress = (accommodation: AccommodationSummaryD
     .filter(Boolean)
     .join('<br />')
 
+export const accommodationHistoryEndDate = (accommodation: AccommodationSummaryDto, isLatest: boolean): string => {
+  if (isLatest && isPastDate(accommodation.startDate)) return 'Current'
+  if (accommodation.endDate) return formatDate(accommodation.endDate)
+  return ''
+}
+
 export const accommodationHistoryRows = (history: AccommodationSummaryDto[]): TableRow[] => {
-  return history.map(accommodation => [
+  return history.map((accommodation, index) => [
     textContent(formatDate(accommodation.startDate)),
-    textContent(accommodation.endDate ? formatDate(accommodation.endDate) : 'Current'),
+    textContent(accommodationHistoryEndDate(accommodation, index === 0)),
     htmlContent(accommodationSummaryAddress(accommodation)),
     htmlContent(accommodation.status ? statusTag(accommodationSummaryStatusTag(accommodation.status)) : ''),
   ])

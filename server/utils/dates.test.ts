@@ -1,5 +1,12 @@
 import { DateFieldValues } from '@sas/ui'
-import { calculateAge, dateInputToIsoDate, formatDate, formatDateAndAge, formatDateAndDaysAgo } from './dates'
+import {
+  calculateAge,
+  dateInputToIsoDate,
+  formatDate,
+  formatDateAndAge,
+  formatDateAndDaysAgo,
+  isPastDate,
+} from './dates'
 
 describe('date utilities', () => {
   beforeEach(() => {
@@ -112,6 +119,18 @@ describe('date utilities', () => {
       [undefined, 'Invalid Date'],
     ])('formats %s as the date and age %s', (date, expected) => {
       expect(formatDateAndAge(date)).toEqual(expected)
+    })
+  })
+
+  describe('isPastDate', () => {
+    it.each([
+      ['2025-12-09', true],
+      ['2025-12-10', true],
+      ['2025-12-11', false],
+      ['not a date', false],
+      [undefined, false],
+    ])('returns %s for date %s', (date, expected) => {
+      expect(isPastDate(date)).toEqual(expected)
     })
   })
 

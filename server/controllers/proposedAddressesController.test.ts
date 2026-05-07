@@ -847,12 +847,18 @@ describe('proposedAddressesController', () => {
 
       await controller.edit()(request, response, next)
 
+      const { accommodationType, ...proposedAddressWithoutAccommodationType } = proposedAddress
+
       expect(controller.formData.remove).toHaveBeenCalled()
       expect(proposedAddressesService.getProposedAddress).toHaveBeenCalledWith('token-1', 'CRN123', 'address-id')
       expect(controller.formData.update).toHaveBeenCalledWith(
         'CRN123',
         request.session,
-        expect.objectContaining({ redirect: '/referrer', ...proposedAddress }),
+        expect.objectContaining({
+          redirect: '/referrer',
+          ...proposedAddressWithoutAccommodationType,
+          accommodationTypeCode: accommodationType.code,
+        }),
       )
       expect(response.redirect).toHaveBeenCalledWith(redirect({ crn: 'CRN123' }))
     })

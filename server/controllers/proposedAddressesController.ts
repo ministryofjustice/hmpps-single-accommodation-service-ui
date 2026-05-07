@@ -138,8 +138,14 @@ export default class ProposedAddressesController {
 
       await this.formData.remove(crn, req.session)
 
-      const { data: proposedAddress } = await this.proposedAddressesService.getProposedAddress(token, crn, id)
-      await this.formData.update(crn, req.session, { ...proposedAddress, redirect })
+      const {
+        data: { accommodationType, ...proposedAddress },
+      } = await this.proposedAddressesService.getProposedAddress(token, crn, id)
+      await this.formData.update(crn, req.session, {
+        ...proposedAddress,
+        accommodationTypeCode: accommodationType.code,
+        redirect,
+      })
 
       return res.redirect(flowRedirects[page]({ crn }))
     }

@@ -18,6 +18,7 @@ export const controllers = (services: Services) => ({
     services.proposedAddressesService,
     services.casesService,
     services.osDataHubService,
+    services.referenceDataService,
   ),
   dutyToReferController: new DutyToReferController(
     services.auditService,

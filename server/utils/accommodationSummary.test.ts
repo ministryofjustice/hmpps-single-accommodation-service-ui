@@ -1,4 +1,4 @@
-import { AccommodationAddressDetails, AccommodationDetail, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationAddressDetails, AccommodationSummaryDto } from '@sas/api'
 import { accommodationSummaryFactory, addressFactory } from '../testutils/factories'
 import {
   accommodationCard,
@@ -51,7 +51,7 @@ describe('accommodationSummary', () => {
       ]
 
       it.skip.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
-        expect(accommodationCell(cellType, accommodation as AccommodationDetail)).toMatchSnapshot()
+        expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
       })
 
       it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {

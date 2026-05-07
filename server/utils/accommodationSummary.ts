@@ -1,4 +1,4 @@
-import { AccommodationDetail, AccommodationStatusDto, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationStatusDto, AccommodationSummaryDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
@@ -87,7 +87,7 @@ export const accommodationCard = (
   }
 }
 
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationDetail): string =>
+export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationSummaryDto): string =>
   accommodation
     ? renderMacro('accommodationCell', {
         cellType,

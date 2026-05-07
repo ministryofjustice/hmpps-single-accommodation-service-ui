@@ -320,7 +320,7 @@ export default class ProposedAddressesController {
           ? uiPaths.proposedAddresses.selectAddress({ crn })
           : uiPaths.proposedAddresses.details({ crn }),
         name: caseData.name,
-        arrangementSubTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
+        accommodationTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
         errors,
         errorSummary,
       })

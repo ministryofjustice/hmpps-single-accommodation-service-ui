@@ -1,6 +1,7 @@
 import { test } from '@playwright/test'
 import { AuditRecordDto, CaseDto, ProposedAccommodationDto } from '@sas/api'
 import { ProposedAddressFormData } from '@sas/ui'
+import { faker } from '@faker-js/faker'
 import accommodationApi from '../../mockApis/accommodation'
 import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
@@ -22,6 +23,7 @@ import { resultToAddressDetails } from '../../../server/utils/osDataHub'
 import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
 import { addressTimelineEntry } from '../../../server/utils/proposedAddresses'
+import { accommodationTypes } from '../../../server/testutils/factories/proposedAccommodation'
 
 const setupCase = async () => {
   const caseData = caseFactory.build()
@@ -182,7 +184,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see an error
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      type: 'Select an arrangement type',
+      accommodationTypeCode: 'Select an accommodation type',
     })
 
     // Then I complete the type form
@@ -237,7 +239,9 @@ test.describe('add proposed address', () => {
     )
 
     // When I click to change the type
-    await addProposedAddressPage.clickChangeLink(`What will be ${caseData.name}'s housing arrangement at this address?`)
+    await addProposedAddressPage.clickChangeLink(
+      `Which best describes the living arrangement for ${caseData.name} at this address?`,
+    )
     await addProposedAddressPage.completeTypeForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
@@ -245,9 +249,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.verifyCheckYourAnswersPage(
       {
         ...initialProposedAddressData,
-        arrangementSubType: updatedProposedAddressData.arrangementSubType,
-        arrangementSubTypeDescription: updatedProposedAddressData.arrangementSubTypeDescription,
-        settledType: updatedProposedAddressData.settledType,
+        accommodationTypeCode: updatedProposedAddressData.accommodationTypeCode,
         address: updatedProposedAddressData.address,
       },
       caseData.name,
@@ -550,9 +552,9 @@ test.describe('edit proposed address', () => {
   test('should allow the user to change details of an existing proposed address', async ({ page }) => {
     const updatedProposedAddress = proposedAccommodationFactory.build({
       ...proposedAddress,
-      accommodationType: {
-        code: 'A4',
-      },
+      accommodationType: faker.helpers.arrayElement(
+        accommodationTypes.filter(type => type.code !== proposedAddress.accommodationType.code),
+      ),
     })
     const checksPassedProposedAddress = proposedAccommodationFactory.build({
       ...updatedProposedAddress,
@@ -579,7 +581,7 @@ test.describe('edit proposed address', () => {
     const editProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
       page,
       crn,
-      `What will be ${caseData.name}'s housing arrangement at this address?`,
+      `Which best describes the living arrangement for ${caseData.name} at this address?`,
     )
     await editProposedAddressPage.shouldShowPopulatedTypeForm({
       ...proposedAddress,

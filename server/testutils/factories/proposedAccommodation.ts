@@ -3,6 +3,7 @@ import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import crn from '../crn'
 import addressFactory from './accommodationAddressDetails'
+import accommodationTypesJson from '../../../wiremock/fixtures/referenceData/accommodationTypes.json'
 
 const verificationStatuses: Readonly<ProposedAccommodationDto['verificationStatus'][]> = [
   'NOT_CHECKED_YET',
@@ -15,27 +16,14 @@ const nextAccommodationStatuses: Readonly<ProposedAccommodationDto['nextAccommod
   'TO_BE_DECIDED',
 ]
 
-export const accommodationTypes: Readonly<AccommodationTypeDto['code'][]> = [
-  'A02',
-  'A16',
-  'A10',
-  'A11',
-  'A17',
-  'A07B',
-  'A07A',
-  'A14',
-  'A13',
-  'A08A',
-  'A08C',
-  'A08',
-  'A01A',
-  'A15',
-  'A12',
-  'A01C',
-  'A01D',
-  'A04',
-  'A03',
-]
+export const accommodationTypes: Readonly<AccommodationTypeDto[]> = accommodationTypesJson.map(type => ({
+  code: type.code,
+  description: type.name,
+}))
+
+export const accommodationTypesMap: Readonly<
+  Record<AccommodationTypeDto['code'], AccommodationTypeDto['description']>
+> = Object.fromEntries(accommodationTypes.map(type => [type.code, type.description]))
 
 export default Factory.define<ProposedAccommodationDto>(() => {
   const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
@@ -44,10 +32,7 @@ export default Factory.define<ProposedAccommodationDto>(() => {
   return {
     id: faker.string.uuid(),
     crn: crn(),
-    accommodationType: {
-      code: faker.helpers.arrayElement(accommodationTypes),
-      description: faker.word.words(),
-    },
+    accommodationType: faker.helpers.arrayElement(accommodationTypes),
     verificationStatus,
     nextAccommodationStatus,
     startDate: faker.date.past().toISOString().substring(0, 10),

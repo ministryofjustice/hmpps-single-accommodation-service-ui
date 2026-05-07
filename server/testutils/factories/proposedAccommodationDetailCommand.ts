@@ -16,7 +16,7 @@ const nextAccommodationStatuses: Readonly<ProposedAccommodationDetailCommand['ne
 ]
 
 export default Factory.define<ProposedAccommodationDetailCommand>(() => ({
-  accommodationTypeCode: faker.helpers.arrayElement(accommodationTypes),
+  accommodationTypeCode: faker.helpers.arrayElement(accommodationTypes).code,
   verificationStatus: faker.helpers.arrayElement(verificationStatuses),
   address: addressFactory.build(),
   nextAccommodationStatus: faker.helpers.arrayElement(nextAccommodationStatuses),

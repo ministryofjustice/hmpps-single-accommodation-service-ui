@@ -525,12 +525,10 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
-        arrangementSubTypeDescription: undefined,
-        settledType: undefined,
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: accommodationTypeItems(accommodationTypes),
+        accommodationTypeItems: accommodationTypeItems(accommodationTypes),
       })
     })
 
@@ -548,7 +546,7 @@ describe('proposedAddressesController', () => {
         name: 'James Smith',
         errors: {},
         errorSummary: [],
-        arrangementSubTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
+        accommodationTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
       })
     })
 

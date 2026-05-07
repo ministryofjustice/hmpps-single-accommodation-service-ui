@@ -6,12 +6,11 @@ import paths from '../../../server/paths/ui'
 import { verifyPost } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import {
-  formatProposedAddressArrangement,
   formatProposedAddressNextAccommodation,
-  formatProposedAddressSettledType,
   formatProposedAddressStatus,
   formDataToRequestBody,
 } from '../../../server/utils/proposedAddresses'
+import { accommodationTypesMap } from '../../../server/testutils/factories/proposedAccommodation'
 
 export default class AddProposedAddressPage extends AbstractPage {
   constructor(
@@ -92,16 +91,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async completeTypeForm(proposedAddressData: ProposedAddressFormData) {
-    const arrangementLabel = formatProposedAddressArrangement(proposedAddressData.arrangementSubType)
-    await this.selectRadioByLabel(arrangementLabel)
-    if (proposedAddressData.arrangementSubType === 'OTHER') {
-      await this.completeInputByLabel(
-        'What is the other housing arrangement?',
-        proposedAddressData.arrangementSubTypeDescription || '',
-      )
-    }
-    const settledTypeLabel = formatProposedAddressSettledType(proposedAddressData.settledType)
-    await this.selectRadioByLabel(settledTypeLabel)
+    await this.selectRadioByLabel(accommodationTypesMap[proposedAddressData.accommodationTypeCode])
   }
 
   async completeStatusForm(proposedAddressData: ProposedAddressFormData) {
@@ -128,19 +118,9 @@ export default class AddProposedAddressPage extends AbstractPage {
     ].filter(Boolean)
 
     await this.shouldShowSummaryItem('Address', addressLines)
-
-    const arrangementValue = [
-      formatProposedAddressArrangement(proposedAddressData.arrangementSubType),
-      proposedAddressData.arrangementSubTypeDescription,
-    ].filter(Boolean)
-
     await this.shouldShowSummaryItem(
-      `What will be ${caseName}'s housing arrangement at this address?`,
-      arrangementValue,
-    )
-    await this.shouldShowSummaryItem(
-      'Will it be settled or transient?',
-      formatProposedAddressSettledType(proposedAddressData.settledType),
+      `Which best describes the living arrangement for ${caseName} at this address?`,
+      accommodationTypesMap[proposedAddressData.accommodationTypeCode],
     )
     await this.shouldShowSummaryItem(
       'What is the status of the address checks?',
@@ -157,7 +137,9 @@ export default class AddProposedAddressPage extends AbstractPage {
 
   async shouldShowTypeForm(name: string) {
     await expect(
-      this.page.getByRole('group', { name: `What will be ${name}'s housing arrangement at this address?` }),
+      this.page.getByRole('group', {
+        name: `Which best describes the living arrangement for ${name} at this address?`,
+      }),
     ).toBeVisible()
   }
 
@@ -182,13 +164,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async shouldShowPopulatedTypeForm(addressData: ProposedAddressFormData) {
-    const arrangementLabel = formatProposedAddressArrangement(addressData.arrangementSubType)
-    await this.verifyRadioInput(arrangementLabel)
-    if (addressData.arrangementSubType === 'OTHER' && addressData.arrangementSubTypeDescription) {
-      await this.verifyTextInput('What is the other housing arrangement?', addressData.arrangementSubTypeDescription)
-    }
-    const settledTypeLabel = formatProposedAddressSettledType(addressData.settledType)
-    await this.verifyRadioInput(settledTypeLabel)
+    await this.verifyRadioInput(accommodationTypesMap[addressData.accommodationTypeCode])
   }
 
   async shouldShowPopulatedStatusForm(addressData: ProposedAddressFormData) {

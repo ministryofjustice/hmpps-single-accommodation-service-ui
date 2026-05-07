@@ -111,7 +111,7 @@ export const checkYourAnswersRows = (
   const rows = [
     summaryListRowHtml('Address', addressParts.join('<br />'), [{ text: 'Change', href: changeAddressLink }]),
     summaryListRowHtml(
-      `What will be ${name}'s housing arrangement at this address?`,
+      `Which best describes the living arrangement for ${name} at this address?`,
       accommodationTypes.find(type => type.code === sessionData.accommodationTypeCode).name,
       [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
     ),

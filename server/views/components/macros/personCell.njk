@@ -4,27 +4,31 @@
   <span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
 
   <div class="sas-person-cell">
-    <div class="govuk-!-margin-bottom-2">
-      <a
-        class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold"
-        href="{{ paths.cases.show({ crn: person.crn }) }}"
-        >{{ person.name }}</a
-      >
+    <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
+      <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.cases.show({ crn: person.crn }) }}">
+        {{ person.name }}
+      </a>
+      {% if person.caseAccess === 'RESTRICTED' %}(LAO){% endif %}
     </div>
 
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
       {{ riskLevelTag(person.riskLevel) }}
-      <div class="sas-risk-tag sas-risk-tag--tier">
-        <dt>Tier</dt>
-        <dd>{{ person.tierScore }}</dd>
-      </div>
+
+      {% if person.tierScore %}
+        <div class="sas-risk-tag sas-risk-tag--tier">
+          <dt>Tier</dt>
+          <dd>{{ person.tierScore }}</dd>
+        </div>
+      {% endif %}
     </dl>
 
     <dl class="sas-person-details govuk-!-margin-0">
-      <div>
-        <dt>Date of birth</dt>
-        <dd>{{ person.dateOfBirth | date }} ({{ person.dateOfBirth | date('age') }})</dd>
-      </div>
+      {% if person.dateOfBirth -%}
+        <div>
+          <dt>Date of birth</dt>
+          <dd>{{ person.dateOfBirth | date }} ({{ person.dateOfBirth | date('age') }})</dd>
+        </div>
+      {%- endif %}
       <div>
         <dt>CRN</dt>
         <dd>{{ person.crn }}</dd>

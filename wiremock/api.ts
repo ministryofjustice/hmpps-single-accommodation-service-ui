@@ -26,6 +26,8 @@ import {
 } from '@sas/api'
 import { resetStubs } from '../integration_tests/mockApis/wiremock'
 
+const fullCases = cases.filter(c => c.caseAccess === 'FULL' || c.caseAccess === 'RESTRICTED')
+
 async function stubCaseList() {
   await casesApi.stubGetCases(cases as CaseDto[])
 }
@@ -37,7 +39,7 @@ async function stubCases() {
 }
 
 async function stubEligibility() {
-  for await (const caseDto of cases) {
+  for await (const caseDto of fullCases) {
     await eligibilityApi.stubGetEligibilityByCrn(
       caseDto.crn,
       (eligibility as Record<string, EligibilityDto>)[caseDto.crn],
@@ -46,7 +48,7 @@ async function stubEligibility() {
 }
 
 async function stubReferrals() {
-  for await (const caseDto of cases) {
+  for await (const caseDto of fullCases) {
     await casesApi.stubGetReferralHistory(
       caseDto.crn,
       (referrals as Record<string, AccommodationReferralDto[]>)[caseDto.crn],
@@ -55,7 +57,7 @@ async function stubReferrals() {
 }
 
 async function stubDutyToRefer() {
-  for await (const caseDto of cases) {
+  for await (const caseDto of fullCases) {
     const dtr = (dutyToRefer as Record<string, DutyToReferDto>)[caseDto.crn]
     if (dtr?.submission?.id) {
       await dutyToReferApi.stubGetDtrBySubmissionId(caseDto.crn, dtr.submission.id, dtr)
@@ -72,7 +74,7 @@ async function stubDutyToRefer() {
 }
 
 async function stubProposedAddresses() {
-  for await (const caseDto of cases) {
+  for await (const caseDto of fullCases) {
     const proposedAddress = (proposedAddresses as Record<string, ProposedAccommodationDto[]>)[caseDto.crn]
     await proposedAddressesApi.stubGetProposedAddressesByCrn(caseDto.crn, proposedAddress)
 
@@ -88,7 +90,7 @@ async function stubProposedAddresses() {
 }
 
 async function stubAccommodation() {
-  for await (const caseDto of cases) {
+  for await (const caseDto of fullCases) {
     await accommodationApi.stubGetCurrentAccommodation(
       caseDto.crn,
       (currentAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],

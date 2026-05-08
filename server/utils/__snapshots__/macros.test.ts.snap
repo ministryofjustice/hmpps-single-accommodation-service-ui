@@ -94,35 +94,34 @@ exports[`Macros Status Tag renders a status tag with the default colour 1`] = `"
 
 exports[`Macros riskLevelTag renders a risk level tag for risk level HIGH 1`] = `
 "<div class="sas-risk-tag sas-risk-tag--high">
-    <dt>RoSH</dt>
-    <dd>High</dd>
-  </div>"
+      <dt>RoSH</dt>
+      <dd>High</dd>
+    </div>
+  "
 `;
 
 exports[`Macros riskLevelTag renders a risk level tag for risk level LOW 1`] = `
 "<div class="sas-risk-tag sas-risk-tag--low">
-    <dt>RoSH</dt>
-    <dd>Low</dd>
-  </div>"
+      <dt>RoSH</dt>
+      <dd>Low</dd>
+    </div>
+  "
 `;
 
 exports[`Macros riskLevelTag renders a risk level tag for risk level MEDIUM 1`] = `
 "<div class="sas-risk-tag sas-risk-tag--medium">
-    <dt>RoSH</dt>
-    <dd>Medium</dd>
-  </div>"
+      <dt>RoSH</dt>
+      <dd>Medium</dd>
+    </div>
+  "
 `;
 
 exports[`Macros riskLevelTag renders a risk level tag for risk level VERY_HIGH 1`] = `
 "<div class="sas-risk-tag sas-risk-tag--very-high">
-    <dt>RoSH</dt>
-    <dd>Very high</dd>
-  </div>"
+      <dt>RoSH</dt>
+      <dd>Very high</dd>
+    </div>
+  "
 `;
 
-exports[`Macros riskLevelTag renders an unknown risk level tag 1`] = `
-"<div class="sas-risk-tag sas-risk-tag--">
-    <dt>RoSH</dt>
-    <dd>Unknown</dd>
-  </div>"
-`;
+exports[`Macros riskLevelTag renders an unknown risk level tag 1`] = `""`;

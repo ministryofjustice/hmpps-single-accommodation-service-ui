@@ -17,30 +17,33 @@ exports[`cases utilities personCell macro renders a formatted cell for a given p
 "<span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
 
   <div class="sas-person-cell">
-    <div class="govuk-!-margin-bottom-2">
-      <a
-        class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-bold"
-        href="/cases/C321654"
-        >Dave Foo</a
-      >
+    <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
+      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321654">
+        Dave Foo
+      </a>
+      
     </div>
 
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
       <div class="sas-risk-tag sas-risk-tag--very-high">
-    <dt>RoSH</dt>
-    <dd>Very high</dd>
-  </div>
-      <div class="sas-risk-tag sas-risk-tag--tier">
-        <dt>Tier</dt>
-        <dd>B2</dd>
-      </div>
+      <dt>RoSH</dt>
+      <dd>Very high</dd>
+    </div>
+  
+
+      
+        <div class="sas-risk-tag sas-risk-tag--tier">
+          <dt>Tier</dt>
+          <dd>B2</dd>
+        </div>
+      
     </dl>
 
     <dl class="sas-person-details govuk-!-margin-0">
       <div>
-        <dt>Date of birth</dt>
-        <dd>9 October 1980 (45)</dd>
-      </div>
+          <dt>Date of birth</dt>
+          <dd>9 October 1980 (45)</dd>
+        </div>
       <div>
         <dt>CRN</dt>
         <dd>C321654</dd>
@@ -48,6 +51,111 @@ exports[`cases utilities personCell macro renders a formatted cell for a given p
       <div>
         <dt>Prison number</dt>
         <dd>A1234BC</dd>
+      </div>
+    </dl>
+  </div>"
+`;
+
+exports[`cases utilities personCell macro renders a formatted cell for an access EXCLUDED person 1`] = `
+"<span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
+
+  <div class="sas-person-cell">
+    <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
+      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321666">
+        Limited access offender
+      </a>
+      
+    </div>
+
+    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
+      
+
+      
+    </dl>
+
+    <dl class="sas-person-details govuk-!-margin-0">
+      
+      <div>
+        <dt>CRN</dt>
+        <dd>C321666</dd>
+      </div>
+      <div>
+        <dt>Prison number</dt>
+        <dd>Z4567HG</dd>
+      </div>
+    </dl>
+  </div>"
+`;
+
+exports[`cases utilities personCell macro renders a formatted cell for an access RESTRICTED person 1`] = `
+"<span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
+
+  <div class="sas-person-cell">
+    <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
+      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321654">
+        Dave Foo
+      </a>
+      (LAO)
+    </div>
+
+    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
+      <div class="sas-risk-tag sas-risk-tag--very-high">
+      <dt>RoSH</dt>
+      <dd>Very high</dd>
+    </div>
+  
+
+      
+        <div class="sas-risk-tag sas-risk-tag--tier">
+          <dt>Tier</dt>
+          <dd>B2</dd>
+        </div>
+      
+    </dl>
+
+    <dl class="sas-person-details govuk-!-margin-0">
+      <div>
+          <dt>Date of birth</dt>
+          <dd>9 October 1980 (45)</dd>
+        </div>
+      <div>
+        <dt>CRN</dt>
+        <dd>C321654</dd>
+      </div>
+      <div>
+        <dt>Prison number</dt>
+        <dd>A1234BC</dd>
+      </div>
+    </dl>
+  </div>"
+`;
+
+exports[`cases utilities personCell macro renders a formatted cell for an access UNKNOWN person 1`] = `
+"<span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
+
+  <div class="sas-person-cell">
+    <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
+      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321669">
+        Unknown
+      </a>
+      
+    </div>
+
+    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
+      
+
+      
+    </dl>
+
+    <dl class="sas-person-details govuk-!-margin-0">
+      
+      <div>
+        <dt>CRN</dt>
+        <dd>C321669</dd>
+      </div>
+      <div>
+        <dt>Prison number</dt>
+        <dd>C4567HG</dd>
       </div>
     </dl>
   </div>"

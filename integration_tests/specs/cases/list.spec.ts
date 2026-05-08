@@ -55,4 +55,17 @@ test.describe('List of cases', () => {
       RoSH: formatRiskLevel(riskLevel),
     })
   })
+
+  test('should show LAO cases', async ({ page }) => {
+    // GIVEN there are LAO cases to show
+    const cases = caseFactory.excludedAccess().buildList(3)
+    await casesApi.stubGetCases(cases)
+
+    // WHEN I sign in
+    await login(page)
+
+    // THEN I should see the Case list
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+    await casesListPage.shouldShowCases(cases, [])
+  })
 })

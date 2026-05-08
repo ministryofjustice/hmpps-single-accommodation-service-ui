@@ -106,7 +106,7 @@ describe('cases utilities', () => {
   describe('caseAssignedTo', () => {
     it('returns "You (name)" when the assignedTo username matches the given username', () => {
       const person = caseFactory.build({
-        assignedTo: { username: 'alice_smith', name: 'Alice Smith' },
+        assignedTo: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' },
       })
 
       expect(caseAssignedTo(person, 'alice_smith')).toEqual('You (Alice Smith)')
@@ -114,7 +114,7 @@ describe('cases utilities', () => {
 
     it('returns the assignedTo name when the assignedTo username does not match the given username', () => {
       const person = caseFactory.build({
-        assignedTo: { username: 'bob_johnson', name: 'Bob Johnson' },
+        assignedTo: { username: 'bob_johnson', forename: 'Bob', surname: 'Johnson' },
       })
       expect(caseAssignedTo(person, 'alice_smith')).toEqual('Bob Johnson')
     })

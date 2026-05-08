@@ -3,6 +3,8 @@ import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 
 export default Factory.define<AssignedToDto>(() => ({
-  name: faker.person.fullName(),
+  forename: faker.person.firstName(),
+  surname: faker.person.lastName(),
   username: faker.internet.username(),
+  staffCode: faker.string.numeric(6),
 }))

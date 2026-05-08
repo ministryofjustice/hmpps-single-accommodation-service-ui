@@ -47,13 +47,14 @@ const saveToFixture = (fixtureName: string, data: unknown) => {
   }
 }
 
-let cases: CaseDto[]
+let allCases: CaseDto[]
 if (generate.cases) {
-  cases = caseFactory.buildList(10)
-  saveToFixture('cases', cases)
+  allCases = caseFactory.buildList(20)
+  saveToFixture('cases', allCases)
 } else {
-  cases = casesFixture as unknown as CaseDto[]
+  allCases = casesFixture as CaseDto[]
 }
+const cases = allCases.filter(c => c.caseAccess === 'FULL' || c.caseAccess === 'RESTRICTED')
 
 if (generate.eligibility) {
   const eligibility = cases.reduce(

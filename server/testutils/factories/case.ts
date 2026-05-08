@@ -55,5 +55,6 @@ export default CaseFactory.define(() => {
     nextAccommodation,
     status,
     actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(3), faker.lorem.words(3)]) ?? [],
+    caseAccess: faker.helpers.arrayElement(['FULL', 'RESTRICTED']),
   }
 })

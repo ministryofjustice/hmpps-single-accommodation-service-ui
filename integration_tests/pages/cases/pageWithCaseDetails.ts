@@ -13,7 +13,7 @@ export default class PageWithCaseDetails extends AbstractPage {
       { label: 'Prison number', value: caseData.prisonNumber },
       { label: 'PNC reference', value: caseData.pncReference },
       { label: 'Date of birth', value: formatDate(caseData.dateOfBirth) },
-      { label: 'Assigned to', value: caseData.assignedTo?.name },
+      { label: 'Assigned to', value: `${caseData.assignedTo?.forename} ${caseData.assignedTo?.surname}` },
     ]
 
     for await (const detail of details) {

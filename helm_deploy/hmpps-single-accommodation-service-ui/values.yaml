@@ -34,6 +34,7 @@ generic-service:
     AUDIT_SQS_REGION: 'eu-west-2'
     AUDIT_SERVICE_NAME: 'HMPPS554' # Your audit service name
     V10_CASES_LIST: 'false'
+    LOG_LEVEL: 'info'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:

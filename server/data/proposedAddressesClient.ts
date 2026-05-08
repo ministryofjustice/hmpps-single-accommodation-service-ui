@@ -1,10 +1,10 @@
 import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import {
-  AccommodationDetailCommand,
-  ApiResponseDtoAccommodationDetail,
-  ApiResponseDtoListAccommodationDetail,
   ApiResponseDtoListAuditRecordDto,
+  ApiResponseDtoListProposedAccommodationDto,
+  ApiResponseDtoProposedAccommodationDto,
   NoteCommand,
+  ProposedAccommodationDetailCommand,
 } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
@@ -16,7 +16,7 @@ export default class ProposedAddressesClient extends RestClient {
   }
 
   async getProposedAddresses(token: string, crn: string) {
-    return this.get<ApiResponseDtoListAccommodationDetail>(
+    return this.get<ApiResponseDtoListProposedAccommodationDto>(
       {
         path: apiPaths.cases.proposedAddresses.index({ crn }),
       },
@@ -25,7 +25,7 @@ export default class ProposedAddressesClient extends RestClient {
   }
 
   async getProposedAddress(token: string, crn: string, id: string) {
-    return this.get<ApiResponseDtoAccommodationDetail>(
+    return this.get<ApiResponseDtoProposedAccommodationDto>(
       {
         path: apiPaths.cases.proposedAddresses.show({ crn, id }),
       },
@@ -33,7 +33,7 @@ export default class ProposedAddressesClient extends RestClient {
     )
   }
 
-  async submit(token: string, crn: string, proposedAddressDetail: AccommodationDetailCommand) {
+  async submit(token: string, crn: string, proposedAddressDetail: ProposedAccommodationDetailCommand) {
     return this.post<void>(
       {
         path: apiPaths.cases.proposedAddresses.submit({ crn }),
@@ -43,7 +43,7 @@ export default class ProposedAddressesClient extends RestClient {
     )
   }
 
-  async update(token: string, crn: string, id: string, proposedAddressDetail: AccommodationDetailCommand) {
+  async update(token: string, crn: string, id: string, proposedAddressDetail: ProposedAccommodationDetailCommand) {
     return this.put<void>(
       {
         path: apiPaths.cases.proposedAddresses.update({ crn, id }),

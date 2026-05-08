@@ -1,0 +1,67 @@
+[
+  {
+    "id": "fb205214-be84-4693-a47f-bcf3de47e398",
+    "name": "CAS2 accommodation of 13 weeks or more",
+    "code": "A10"
+  },
+  {
+    "id": "d65a42d0-4306-48f3-8263-5f0fa819eca7",
+    "name": "CAS2 accommodation of less than 13 weeks",
+    "code": "A11"
+  },
+  {
+    "id": "9c89a125-11b8-4283-8f7e-18e9e2dfbf12",
+    "name": "HOIE Section 10: staying in a Home Office specified residence",
+    "code": "A14"
+  },
+  {
+    "id": "3f8d7ebe-8260-4bdb-8106-36801ea6175c",
+    "name": "HOIE Section 4: staying in Home Office accommodation support",
+    "code": "A13"
+  },
+  {
+    "id": "e79cc691-8343-4f6a-9a68-a9b2556ebf09",
+    "name": "Immigration Detention",
+    "code": "A15"
+  },
+  {
+    "id": "64930f38-25d1-43fe-b7e0-ef36c42d0dbd",
+    "name": "Living in a care home or nursing home",
+    "code": "A12"
+  },
+  {
+    "id": "421a3925-79c8-422a-a215-ae1eb9ba6d23",
+    "name": "Living in the home of a friend, family member or partner: settled",
+    "code": "A07B"
+  },
+  {
+    "id": "1d0a2c78-cc8f-4d72-ae56-64c88aed614f",
+    "name": "Living in the home of a friend, family member or partner: transient",
+    "code": "A07A"
+  },
+  {
+    "id": "8ec70352-56e1-48ed-a6d0-ab44050858b0",
+    "name": "Owner of the property",
+    "code": "A01A"
+  },
+  {
+    "id": "3771f7ab-0436-4da3-b2cb-ccc4c8ba26f9",
+    "name": "Renting from a council or housing association (social housing)",
+    "code": "A01D"
+  },
+  {
+    "id": "7342d924-01d5-42ef-8d8a-9cd52a3fa2ab",
+    "name": "Renting from a private landlord or letting agent",
+    "code": "A01C"
+  },
+  {
+    "id": "e2a0aacf-d318-4723-bf3f-b2a6fbda155f",
+    "name": "Supported housing (with support services)",
+    "code": "A04"
+  },
+  {
+    "id": "62c300d5-9dae-45a4-9bdc-127a7fc4c69e",
+    "name": "Transient or short-term accommodation",
+    "code": "A03"
+  }
+]

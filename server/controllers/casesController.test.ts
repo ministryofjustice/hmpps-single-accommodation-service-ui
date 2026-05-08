@@ -6,11 +6,11 @@ import CasesService from '../services/casesService'
 import ReferralsService from '../services/referralsService'
 import { user } from '../routes/testutils/appSetup'
 import {
-  accommodationFactory,
   accommodationSummaryFactory,
   apiResponseFactory,
   caseFactory,
   eligibilityFactory,
+  proposedAccommodationFactory,
   referralFactory,
 } from '../testutils/factories'
 import { caseAssignedTo, casesResultsSummary, casesTableColumns, casesToRows, queryToFilters } from '../utils/cases'
@@ -127,10 +127,10 @@ describe('casesController', () => {
       const caseData = caseFactory.build({ crn })
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
-      const proposed = accommodationFactory.proposed().buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
-      const failedChecks = accommodationFactory.proposed().buildList(1, { verificationStatus: 'FAILED' })
-      const currentAccommodation = accommodationFactory.current().build()
-      const nextAccommodation = accommodationFactory.next().build()
+      const proposed = proposedAccommodationFactory.buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
+      const failedChecks = proposedAccommodationFactory.buildList(1, { verificationStatus: 'FAILED' })
+      const currentAccommodation = accommodationSummaryFactory.current().build()
+      const nextAccommodation = accommodationSummaryFactory.next().build()
       const accommodationHistory = accommodationSummaryFactory.buildListSequential(2)
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))

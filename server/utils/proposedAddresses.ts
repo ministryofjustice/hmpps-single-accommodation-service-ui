@@ -8,15 +8,15 @@ import {
 } from '@sas/ui'
 import {
   AccommodationAddressDetails,
-  AccommodationDetail,
-  AccommodationDetailCommand,
   AuditRecordDto,
   FieldChange,
+  ProposedAccommodationDetailCommand,
+  ProposedAccommodationDto,
+  ReferenceDataDto,
 } from '@sas/api'
 import { Request } from 'express'
 import { Button, SummaryListActionItem, SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
-import { arrangementSubTypes } from './cases'
 import { summaryListRowText, summaryListRowHtml, toParagraphs } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
@@ -33,7 +33,7 @@ export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): 
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
   })[status]
 
-export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail): StatusCard => {
+export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodationDto): StatusCard => {
   const status = displayStatus(proposedAddress)
 
   return {
@@ -41,7 +41,7 @@ export const proposedAddressStatusCard = (proposedAddress: AccommodationDetail):
     inactive: proposedAddress.verificationStatus === 'FAILED',
     status: proposedAddressStatusTag(status),
     details: [
-      summaryListRowText('Housing arrangement', arrangementLabel(proposedAddress)),
+      summaryListRowText('Housing arrangement', proposedAddress.accommodationType.description),
       summaryListRowText('Added by', ''),
       summaryListRowText('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
     ],
@@ -71,11 +71,6 @@ const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: s
   }
 }
 
-const settledTypes: Record<AccommodationDetail['settledType'], string> = {
-  SETTLED: 'Settled',
-  TRANSIENT: 'Transient',
-}
-
 export const flowRedirects: Record<ProposedAddressFormPage, (params: { crn: string }) => string> = {
   lookup: uiPaths.proposedAddresses.lookup,
   status: uiPaths.proposedAddresses.status,
@@ -84,19 +79,7 @@ export const flowRedirects: Record<ProposedAddressFormPage, (params: { crn: stri
   details: uiPaths.proposedAddresses.details,
 }
 
-const arrangementLabel = (proposedAddress: AccommodationDetail) => {
-  const { arrangementSubType, arrangementSubTypeDescription, settledType } = proposedAddress
-  const settledLabel = settledType ? `${settledTypes[settledType]}.` : ''
-
-  switch (arrangementSubType) {
-    case 'OTHER':
-      return `Other: ${arrangementSubTypeDescription}. ${settledLabel}`
-    default:
-      return `${arrangementSubTypes[arrangementSubType]}. ${settledLabel}`
-  }
-}
-
-export const displayStatus = (proposedAddress: AccommodationDetail): ProposedAddressDisplayStatus =>
+export const displayStatus = (proposedAddress: ProposedAccommodationDto): ProposedAddressDisplayStatus =>
   proposedAddress.nextAccommodationStatus === 'YES' ? 'CONFIRMED' : proposedAddress.verificationStatus
 
 export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatus): string =>
@@ -107,33 +90,18 @@ export const formatProposedAddressStatus = (status?: ProposedAddressDisplayStatu
     CONFIRMED: 'Confirmed',
   })[status]
 
-export const formatProposedAddressNextAccommodation = (status: AccommodationDetail['nextAccommodationStatus']) =>
+export const formatProposedAddressNextAccommodation = (status: ProposedAccommodationDto['nextAccommodationStatus']) =>
   ({
     YES: 'Yes',
     NO: 'No',
     TO_BE_DECIDED: 'Still to be decided',
   })[status]
 
-export const formatProposedAddressSettledType = (type?: AccommodationDetail['settledType']): string =>
-  ({
-    SETTLED: 'Settled',
-    TRANSIENT: 'Transient',
-  })[type]
-
-export const formatProposedAddressArrangement = (type?: AccommodationDetail['arrangementSubType']): string =>
-  ({
-    FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
-    SOCIAL_RENTED: 'Social rent (tenant)',
-    PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
-    PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
-    OWNED: 'Owned (named on deeds/mortgage)',
-    OTHER: 'Other',
-  })[type]
-
 export const checkYourAnswersRows = (
   sessionData: ProposedAddressFormData,
   crn: string,
   name: string,
+  accommodationTypes: ReferenceDataDto[],
 ): SummaryListRow[] => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
   const changeAddressLink = sessionData.lookupResults
@@ -143,13 +111,10 @@ export const checkYourAnswersRows = (
   const rows = [
     summaryListRowHtml('Address', addressParts.join('<br />'), [{ text: 'Change', href: changeAddressLink }]),
     summaryListRowHtml(
-      `What will be ${name}'s housing arrangement at this address?`,
-      formatArrangementWithDescription(sessionData),
+      `Which best describes the living arrangement for ${name} at this address?`,
+      accommodationTypes.find(type => type.code === sessionData.accommodationTypeCode).name,
       [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
     ),
-    summaryListRowText('Will it be settled or transient?', formatProposedAddressSettledType(sessionData.settledType), [
-      { text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) },
-    ]),
     summaryListRowHtml('What is the status of the address checks?', formatStatusWithReason(sessionData), [
       { text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) },
     ]),
@@ -164,14 +129,6 @@ export const checkYourAnswersRows = (
     )
   }
   return rows
-}
-
-const formatArrangementWithDescription = (data: ProposedAddressFormData | AccommodationDetail) => {
-  const type = formatProposedAddressArrangement(data.arrangementSubType)
-  if (type === 'Other') {
-    return toParagraphs([type, data.arrangementSubTypeDescription])
-  }
-  return type
 }
 
 const formatStatusWithReason = (data: ProposedAddressFormData) => {
@@ -254,25 +211,17 @@ const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFo
 }
 
 export const updateTypeFromRequest = async (req: Request, formDataManager: MultiPageFormManager<'proposedAddress'>) => {
-  const { arrangementSubType, arrangementSubTypeDescription, settledType } = req.body || {}
+  const { accommodationTypeCode } = req.body || {}
 
   return formDataManager.update(req.params.crn, req.session, {
-    arrangementSubType: arrangementSubType as ProposedAddressFormData['arrangementSubType'],
-    arrangementSubTypeDescription:
-      arrangementSubType === 'OTHER' ? arrangementSubTypeDescription || undefined : undefined,
-    settledType: settledType as ProposedAddressFormData['settledType'],
+    accommodationTypeCode,
   })
 }
 
 const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
-  if (!sessionData?.arrangementSubType) {
-    errors.arrangementSubType = 'Select an arrangement type'
-  } else if (sessionData.arrangementSubType === 'OTHER' && !sessionData.arrangementSubTypeDescription) {
-    errors.arrangementSubTypeDescription = 'Enter the other arrangement type'
-  }
-  if (!sessionData?.settledType) {
-    errors.settledType = 'Select a settled type'
+  if (!sessionData?.accommodationTypeCode) {
+    errors.accommodationTypeCode = 'Select an accommodation type'
   }
 
   return validateAndFlashErrors(req, errors)
@@ -356,14 +305,17 @@ export const validateUpToNextAccommodation = (req: Request, sessionData: Propose
     : undefined
 }
 
-export const arrangementSubTypeItems = (arrangementSubType?: AccommodationDetail['arrangementSubType']) =>
-  Object.entries(arrangementSubTypes).map(([value, text]) => ({
-    value,
-    text,
-    checked: arrangementSubType === value,
+export const accommodationTypeItems = (
+  accommodationTypes: ReferenceDataDto[],
+  selectedType?: ProposedAccommodationDto['accommodationType']['code'],
+) =>
+  accommodationTypes.map(({ code, name }) => ({
+    value: code,
+    text: name,
+    checked: selectedType === code,
   }))
 
-export const verificationStatusItems = (verificationStatus?: AccommodationDetail['verificationStatus']) => [
+export const verificationStatusItems = (verificationStatus?: ProposedAccommodationDto['verificationStatus']) => [
   {
     value: 'NOT_CHECKED_YET',
     text: 'Not checked',
@@ -382,7 +334,7 @@ export const verificationStatusItems = (verificationStatus?: AccommodationDetail
 ]
 
 export const nextAccommodationStatusItems = (
-  nextAccommodationStatus?: AccommodationDetail['nextAccommodationStatus'],
+  nextAccommodationStatus?: ProposedAccommodationDto['nextAccommodationStatus'],
 ) => [
   {
     value: 'YES',
@@ -402,17 +354,12 @@ export const nextAccommodationStatusItems = (
 ]
 
 export const formDataToRequestBody = ({
-  arrangementSubType,
-  arrangementSubTypeDescription,
-  settledType,
+  accommodationTypeCode,
   address,
   verificationStatus,
   nextAccommodationStatus,
-}: ProposedAddressFormData): AccommodationDetailCommand => ({
-  arrangementType: 'PRIVATE',
-  arrangementSubType,
-  arrangementSubTypeDescription,
-  settledType,
+}: ProposedAddressFormData): ProposedAccommodationDetailCommand => ({
+  accommodationTypeCode,
   address,
   verificationStatus,
   nextAccommodationStatus: nextAccommodationStatus ?? 'TO_BE_DECIDED',
@@ -425,13 +372,7 @@ export const lookupResultsItems = (results: AccommodationAddressDetails[], selec
     checked: selectedUprn === result.uprn,
   }))
 
-export const housingArrangementParts = (proposedAddress: AccommodationDetail): string[] => {
-  const type = formatProposedAddressArrangement(proposedAddress.arrangementSubType)
-  const description = proposedAddress.arrangementSubType === 'OTHER' && proposedAddress.arrangementSubTypeDescription
-  return [type, description].filter(Boolean)
-}
-
-export const addressDetailRows = (proposedAddress: AccommodationDetail): SummaryListRow[] => {
+export const addressDetailRows = (proposedAddress: ProposedAccommodationDto): SummaryListRow[] => {
   const editLink = (page: ProposedAddressFormPage): SummaryListActionItem => ({
     text: 'Change',
     href: uiPaths.proposedAddresses.edit({ crn: proposedAddress.crn, id: proposedAddress.id, page }),
@@ -440,14 +381,7 @@ export const addressDetailRows = (proposedAddress: AccommodationDetail): Summary
   return [
     summaryListRowHtml('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress)))),
     summaryListRowHtml('Address', formatAddress(proposedAddress.address, '<br />'), [editLink('lookup')]),
-    summaryListRowHtml(
-      'Housing arrangement',
-      toParagraphs([
-        housingArrangementParts(proposedAddress).join(', '),
-        formatProposedAddressSettledType(proposedAddress.settledType),
-      ]),
-      [editLink('type')],
-    ),
+    summaryListRowText('Housing arrangement', proposedAddress.accommodationType.description, [editLink('type')]),
     summaryListRowText('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus), [
       editLink('status'),
     ]),
@@ -460,7 +394,7 @@ export const addressDetailRows = (proposedAddress: AccommodationDetail): Summary
   ].filter(Boolean)
 }
 
-export const nextActionButton = (proposedAddress: AccommodationDetail): Button => {
+export const nextActionButton = (proposedAddress: ProposedAccommodationDto): Button => {
   const { crn, id, verificationStatus, nextAccommodationStatus } = proposedAddress
 
   if (verificationStatus === 'NOT_CHECKED_YET') {
@@ -479,7 +413,7 @@ export const nextActionButton = (proposedAddress: AccommodationDetail): Button =
   return undefined
 }
 
-const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): AccommodationDetail => {
+const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): ProposedAccommodationDto => {
   const addressFields = [
     'buildingNumber',
     'buildingName',
@@ -499,7 +433,11 @@ const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): Accom
   return {
     ...filterChanges(change => !addressFields.includes(change.field)),
     address: filterChanges(change => addressFields.includes(change.field)),
-  } as AccommodationDetail
+    accommodationType: {
+      code: '',
+      description: auditRecord.changes.find(change => change.field === 'accommodationTypeDescription')?.value,
+    },
+  } as ProposedAccommodationDto
 }
 
 export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
@@ -509,13 +447,7 @@ export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry
 
   const proposedAddress = auditRecordChangesToProposedAddress(auditRecord)
 
-  const housingArrangement = [
-    housingArrangementParts(proposedAddress).join(', '),
-    formatProposedAddressSettledType(proposedAddress.settledType),
-  ]
-    .filter(Boolean)
-    .map(text => `${text}. `)
-    .join('')
+  const housingArrangement = proposedAddress.accommodationType?.description
 
   const addressChecks = formatProposedAddressStatus(proposedAddress.verificationStatus)
 

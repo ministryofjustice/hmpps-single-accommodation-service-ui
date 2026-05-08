@@ -2,6 +2,7 @@ import { SuperAgentRequest } from 'superagent'
 import { ReferenceDataDto } from '@sas/api'
 import { stubFor } from './wiremock'
 import localAuthoritiesJson from '../../wiremock/fixtures/referenceData/localAuthorities.json'
+import accommodationTypesJson from '../../wiremock/fixtures/referenceData/accommodationTypes.json'
 import { apiResponseFactory } from '../../server/testutils/factories'
 
 export default {
@@ -20,6 +21,25 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: apiResponseFactory.referenceData(localAuthorities || (localAuthoritiesJson as ReferenceDataDto[])),
+      },
+    }),
+  stubGetAccommodationTypes: (accommodationTypes?: ReferenceDataDto[]): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/reference-data',
+        queryParameters: {
+          type: {
+            equalTo: 'ACCOMMODATION_TYPES',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: apiResponseFactory.referenceData(
+          accommodationTypes || (accommodationTypesJson as ReferenceDataDto[]),
+        ),
       },
     }),
 }

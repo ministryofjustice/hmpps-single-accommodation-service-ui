@@ -1,19 +1,10 @@
-import { AccommodationDetail, CaseDto as Case } from '@sas/api'
+import { CaseDto as Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, StatusCell } from '@sas/ui'
 import { htmlContent } from './utils'
 import { renderMacro, statusCell } from './macros'
 import config from '../config'
 import { accommodationCell } from './accommodationSummary'
-
-export const arrangementSubTypes: Record<AccommodationDetail['arrangementSubType'], string> = {
-  FRIENDS_OR_FAMILY: 'Friends or family (not tenant or owner)',
-  SOCIAL_RENTED: 'Social rent (tenant)',
-  PRIVATE_RENTED_WHOLE_PROPERTY: 'Private rent, whole property (tenant)',
-  PRIVATE_RENTED_ROOM: 'Private rent, room/share (tenant)',
-  OWNED: 'Owned (named on deeds/mortgage)',
-  OTHER: 'Other',
-}
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (

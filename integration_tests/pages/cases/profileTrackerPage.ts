@@ -3,8 +3,8 @@ import {
   CaseDto as Case,
   EligibilityDto as Eligibility,
   AccommodationReferralDto as Referral,
-  AccommodationDetail,
   AccommodationSummaryDto,
+  ProposedAccommodationDto,
 } from '@sas/api'
 import { formatDate } from '../../../server/utils/dates'
 import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
@@ -65,7 +65,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
   }
 
-  async shouldShowNextAccommodationAlert(accommodation: AccommodationDetail) {
+  async shouldShowNextAccommodationAlert(accommodation: AccommodationSummaryDto) {
     const card = this.page.locator('.moj-alert', { hasText: /Risk of no fixed abode/ })
     const { startDate } = accommodation
     await expect(card).toContainText(`From ${formatDate(startDate, 'long')}`)
@@ -88,7 +88,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(card).toContainText(`(${formatDate(accommodation.endDate, 'days for/in')})`)
   }
 
-  async shouldShowCurrentAccommodationAlert(accommodation: AccommodationDetail) {
+  async shouldShowCurrentAccommodationAlert(accommodation: AccommodationSummaryDto) {
     const card = this.page.locator('.moj-alert', { hasText: 'No fixed abode' })
     const { startDate } = accommodation
     await expect(card).toContainText(`Since ${formatDate(startDate, 'long')}`)
@@ -111,7 +111,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
   }
 
-  async shouldShowProposedAddresses(proposedAddresses: AccommodationDetail[] = []) {
+  async shouldShowProposedAddresses(proposedAddresses: ProposedAccommodationDto[] = []) {
     const proposedAddressesSection = this.page.locator('section', {
       has: this.page.getByRole('heading', { name: 'Proposed addresses' }),
     })

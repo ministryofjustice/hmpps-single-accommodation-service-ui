@@ -2,14 +2,14 @@
 import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
-import { AccommodationDetail, CaseDto, DutyToReferDto } from '@sas/api'
+import { CaseDto, DutyToReferDto, ProposedAccommodationDto } from '@sas/api'
 import {
-  accommodationFactory,
   accommodationSummaryFactory,
   auditRecordFactory,
   caseFactory,
   dutyToReferFactory,
   eligibilityFactory,
+  proposedAccommodationFactory,
   referralFactory,
 } from '../server/testutils/factories'
 
@@ -115,7 +115,7 @@ if (generate.proposedAddresses) {
     (responses, c) => ({
       ...responses,
       [c.crn]: [...Array(faker.number.int({ min: 0, max: 3 }))].map(() =>
-        accommodationFactory.proposed().build({ crn: c.crn }),
+        proposedAccommodationFactory.build({ crn: c.crn }),
       ),
     }),
     {},
@@ -124,7 +124,10 @@ if (generate.proposedAddresses) {
   const auditRecords = Object.fromEntries(
     Object.values(proposedAddresses)
       .flat()
-      .map((address: AccommodationDetail) => [address.id, auditRecordFactory.proposedAddressCreated(address).build()]),
+      .map((address: ProposedAccommodationDto) => [
+        address.id,
+        auditRecordFactory.proposedAddressCreated(address).build(),
+      ]),
   )
   saveToFixture('proposedAddressesAuditRecords', auditRecords)
 }

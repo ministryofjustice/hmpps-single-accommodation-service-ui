@@ -1,4 +1,4 @@
-import { AccommodationAddressDetails, AccommodationDetail, AccommodationDetailCommand } from '@sas/api'
+import { AccommodationAddressDetails, ProposedAccommodationDetailCommand, ProposedAccommodationDto } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 
 export interface ErrorSummary {
@@ -16,7 +16,7 @@ export interface ErrorMessages {
 
 export type ProposedAddressFormPage = 'lookup' | 'details' | 'type' | 'status' | 'nextAccommodation'
 
-export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
+export type ProposedAddressFormData = Partial<ProposedAccommodationDetailCommand> & {
   redirect?: string
   id?: string
   nameOrNumber?: string
@@ -24,7 +24,7 @@ export type ProposedAddressFormData = Partial<AccommodationDetailCommand> & {
   lookupResults?: AccommodationAddressDetails[] | null
 }
 
-export type ProposedAddressDisplayStatus = 'CONFIRMED' | AccommodationDetail['verificationStatus']
+export type ProposedAddressDisplayStatus = 'CONFIRMED' | ProposedAccommodationDto['verificationStatus']
 
 export interface StatusTag {
   text: string

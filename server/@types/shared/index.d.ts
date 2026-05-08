@@ -4,23 +4,21 @@
 /* eslint-disable */
 
 export type { AccommodationAddressDetails } from './models/AccommodationAddressDetails';
-export type { AccommodationDetail } from './models/AccommodationDetail';
-export type { AccommodationDetailCommand } from './models/AccommodationDetailCommand';
 export type { AccommodationReferralDto } from './models/AccommodationReferralDto';
 export type { AccommodationStatusDto } from './models/AccommodationStatusDto';
 export type { AccommodationSummaryDto } from './models/AccommodationSummaryDto';
 export type { AccommodationTypeDto } from './models/AccommodationTypeDto';
-export type { ApiResponseDtoAccommodationDetail } from './models/ApiResponseDtoAccommodationDetail';
 export type { ApiResponseDtoAccommodationSummaryDto } from './models/ApiResponseDtoAccommodationSummaryDto';
 export type { ApiResponseDtoCaseDto } from './models/ApiResponseDtoCaseDto';
 export type { ApiResponseDtoDutyToReferDto } from './models/ApiResponseDtoDutyToReferDto';
 export type { ApiResponseDtoEligibilityDto } from './models/ApiResponseDtoEligibilityDto';
-export type { ApiResponseDtoListAccommodationDetail } from './models/ApiResponseDtoListAccommodationDetail';
 export type { ApiResponseDtoListAccommodationReferralDto } from './models/ApiResponseDtoListAccommodationReferralDto';
 export type { ApiResponseDtoListAccommodationSummaryDto } from './models/ApiResponseDtoListAccommodationSummaryDto';
 export type { ApiResponseDtoListAuditRecordDto } from './models/ApiResponseDtoListAuditRecordDto';
 export type { ApiResponseDtoListCaseDto } from './models/ApiResponseDtoListCaseDto';
+export type { ApiResponseDtoListProposedAccommodationDto } from './models/ApiResponseDtoListProposedAccommodationDto';
 export type { ApiResponseDtoListReferenceDataDto } from './models/ApiResponseDtoListReferenceDataDto';
+export type { ApiResponseDtoProposedAccommodationDto } from './models/ApiResponseDtoProposedAccommodationDto';
 export type { AssignedToDto } from './models/AssignedToDto';
 export type { AuditRecordDto } from './models/AuditRecordDto';
 export type { Cas1ApplicationDto } from './models/Cas1ApplicationDto';
@@ -41,6 +39,8 @@ export type { FieldChange } from './models/FieldChange';
 export type { GetDlqResult } from './models/GetDlqResult';
 export type { LocalAuthorityDto } from './models/LocalAuthorityDto';
 export type { NoteCommand } from './models/NoteCommand';
+export type { ProposedAccommodationDetailCommand } from './models/ProposedAccommodationDetailCommand';
+export type { ProposedAccommodationDto } from './models/ProposedAccommodationDto';
 export type { PurgeQueueResult } from './models/PurgeQueueResult';
 export type { ReferenceDataDto } from './models/ReferenceDataDto';
 export type { RetryDlqResult } from './models/RetryDlqResult';

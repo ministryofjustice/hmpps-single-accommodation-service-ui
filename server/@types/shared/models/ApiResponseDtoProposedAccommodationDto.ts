@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AccommodationDetail } from './AccommodationDetail';
+import type { ProposedAccommodationDto } from './ProposedAccommodationDto';
 import type { UpstreamFailureDto } from './UpstreamFailureDto';
-export type ApiResponseDtoListAccommodationDetail = {
-    data: Array<AccommodationDetail>;
+export type ApiResponseDtoProposedAccommodationDto = {
+    data: ProposedAccommodationDto;
     upstreamFailures: Array<UpstreamFailureDto>;
 };
 

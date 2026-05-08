@@ -1,12 +1,10 @@
 import { expect, Page } from '@playwright/test'
-import { AccommodationDetail } from '@sas/api'
+import { ProposedAccommodationDto } from '@sas/api'
 import { addressLines, formatAddress } from '../../../server/utils/addresses'
 import PageWithCaseDetails from './pageWithCaseDetails'
 import {
   displayStatus,
-  formatProposedAddressArrangement,
   formatProposedAddressNextAccommodation,
-  formatProposedAddressSettledType,
   formatProposedAddressStatus,
   proposedAddressStatusTag,
 } from '../../../server/utils/proposedAddresses'
@@ -17,7 +15,7 @@ export default class ProposedAddressDetailsPage extends PageWithCaseDetails {
 
   constructor(
     page: Page,
-    private readonly proposedAddress: AccommodationDetail,
+    private readonly proposedAddress: ProposedAccommodationDto,
   ) {
     super(page)
 
@@ -30,13 +28,7 @@ export default class ProposedAddressDetailsPage extends PageWithCaseDetails {
 
     await this.shouldShowSummaryItem('Status', proposedAddressStatusTag(displayStatus(this.proposedAddress)).text)
     await this.shouldShowSummaryItem('Address', addressLines(this.proposedAddress.address))
-
-    const expectedArrangementLines = [
-      formatProposedAddressArrangement(this.proposedAddress.arrangementSubType),
-      this.proposedAddress.arrangementSubTypeDescription,
-      formatProposedAddressSettledType(this.proposedAddress.settledType),
-    ]
-    await this.shouldShowSummaryItem('Housing arrangement', expectedArrangementLines)
+    await this.shouldShowSummaryItem('Housing arrangement', this.proposedAddress.accommodationType.description)
 
     await this.shouldShowSummaryItem(
       'Address checks',

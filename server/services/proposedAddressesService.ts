@@ -1,5 +1,5 @@
 import { ProposedAddressFormData } from '@sas/ui'
-import { AccommodationDetail, NoteCommand, UpstreamFailureDto } from '@sas/api'
+import { NoteCommand, ProposedAccommodationDto, UpstreamFailureDto } from '@sas/api'
 import { ProposedAddressesClient } from '../data'
 import { formDataToRequestBody } from '../utils/proposedAddresses'
 
@@ -12,8 +12,8 @@ export default class ProposedAddressesService {
   ): Promise<{
     upstreamFailures?: UpstreamFailureDto[]
     data: {
-      proposed: AccommodationDetail[]
-      failedChecks: AccommodationDetail[]
+      proposed: ProposedAccommodationDto[]
+      failedChecks: ProposedAccommodationDto[]
     }
   }> {
     const { data, upstreamFailures } = await this.proposedAddressesClient.getProposedAddresses(token, crn)

@@ -1,11 +1,11 @@
 import type { SuperAgentRequest } from 'superagent'
-import { AccommodationDetail, AuditRecordDto } from '@sas/api'
+import { AuditRecordDto, ProposedAccommodationDto } from '@sas/api'
 import { stubApiError, stubFor } from './wiremock'
 import apiPaths from '../../server/paths/api'
 import { apiResponseFactory, auditRecordFactory } from '../../server/testutils/factories'
 
 export default {
-  stubGetProposedAddressesByCrn: (crn: string, proposedAddresses?: AccommodationDetail[]): SuperAgentRequest =>
+  stubGetProposedAddressesByCrn: (crn: string, proposedAddresses?: ProposedAccommodationDto[]): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
@@ -17,7 +17,7 @@ export default {
         jsonBody: apiResponseFactory.proposedAddresses(proposedAddresses || []),
       },
     }),
-  stubGetProposedAddress: (crn: string, id: string, proposedAddress: AccommodationDetail): SuperAgentRequest =>
+  stubGetProposedAddress: (crn: string, id: string, proposedAddress: ProposedAccommodationDto): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',

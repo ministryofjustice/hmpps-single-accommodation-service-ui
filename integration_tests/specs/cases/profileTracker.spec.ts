@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test'
 import {
-  AccommodationDetail,
   AccommodationReferralDto,
   AccommodationSummaryDto,
   CaseDto,
   EligibilityDto,
+  ProposedAccommodationDto,
 } from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
@@ -18,8 +18,8 @@ import {
   dutyToReferFactory,
   eligibilityFactory,
   serviceResultFactory,
-  accommodationFactory,
   accommodationSummaryFactory,
+  proposedAccommodationFactory,
 } from '../../../server/testutils/factories'
 
 test.describe('Profile Tracker Page', () => {
@@ -37,7 +37,7 @@ test.describe('Profile Tracker Page', () => {
     caseData: CaseDto
     eligibility?: EligibilityDto
     referrals?: AccommodationReferralDto[]
-    proposedAddresses?: AccommodationDetail[]
+    proposedAddresses?: ProposedAccommodationDto[]
     currentAccommodation?: AccommodationSummaryDto
     nextAccommodation?: AccommodationSummaryDto
     accommodationHistory?: AccommodationSummaryDto[]
@@ -64,9 +64,9 @@ test.describe('Profile Tracker Page', () => {
     })
     const referrals = referralFactory.buildList(3)
     const proposedAddresses = [
-      accommodationFactory.proposed().build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' }),
-      accommodationFactory.proposed().build({ verificationStatus: 'NOT_CHECKED_YET' }),
-      accommodationFactory.proposed().build({ verificationStatus: 'FAILED' }),
+      proposedAccommodationFactory.build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' }),
+      proposedAccommodationFactory.build({ verificationStatus: 'NOT_CHECKED_YET' }),
+      proposedAccommodationFactory.build({ verificationStatus: 'FAILED' }),
     ]
     const accommodationHistory = accommodationSummaryFactory.buildListSequential(5)
 
@@ -114,7 +114,7 @@ test.describe('Profile Tracker Page', () => {
     })
 
     test(`should render only current accommodation for a NFA next case`, async ({ page }) => {
-      const caseData = caseFactory.noFixedAbodeNext().build({ crn })
+      const caseData = caseFactory.riskOfNfa().build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
       await setupStubs({ crn, caseData, currentAccommodation })
       await login(page)
@@ -143,7 +143,7 @@ test.describe('Profile Tracker Page', () => {
     }) => {
       const crn = 'X123456'
       const caseData = caseFactory.build({ crn })
-      const proposedAddresses = [accommodationFactory.proposed().build({ verificationStatus: 'FAILED' })]
+      const proposedAddresses = [proposedAccommodationFactory.build({ verificationStatus: 'FAILED' })]
       await setupStubs({ crn, caseData, proposedAddresses })
       await login(page)
 

@@ -1,326 +1,354 @@
 {
-  "S511935": [],
-  "P712106": [
+  "S511935": [
     {
-      "id": "e8409d49-494e-48db-8fef-2d84fade80d3",
-      "caseId": "",
-      "crn": "P712106",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "OTHER",
-      "arrangementSubTypeDescription": "behind",
-      "name": "Family",
-      "settledType": "SETTLED",
-      "verificationStatus": "NOT_CHECKED_YET",
-      "startDate": "2025-09-13",
-      "endDate": "2026-10-20",
-      "address": {
-        "postcode": "XZ4 7LI",
-        "buildingNumber": "362",
-        "thoroughfareName": "Marcella Avenue",
-        "dependentLocality": "Purdy-on-Gutkowski",
-        "postTown": "High Boderidge",
-        "county": "Borders",
-        "country": "Heard Island and McDonald Islands",
-        "uprn": "h1FwmLcn3Wb9"
+      "id": "88bada9a-6e51-4ea8-a68a-7671ab7efdac",
+      "crn": "S511935",
+      "accommodationType": {
+        "code": "A15",
+        "description": "viciously well-worn"
       },
-      "createdAt": "2026-03-12T19:54:03.296Z",
-      "createdBy": "Nora Lebsack"
+      "verificationStatus": "FAILED",
+      "startDate": "2025-10-09",
+      "endDate": "2026-09-20",
+      "address": {
+        "postcode": "JF77 5FZ",
+        "subBuildingName": "Suite 612",
+        "buildingName": "Remington Park",
+        "thoroughfareName": "Vicarage Close",
+        "dependentLocality": "Old Langworthhampton",
+        "postTown": "Upton Cummings",
+        "county": "Berkshire",
+        "country": "Svalbard & Jan Mayen Islands",
+        "uprn": "bmWBp54izQEx"
+      },
+      "createdAt": "2026-05-05T05:25:24.013Z",
+      "createdBy": "Ms. Shemar Thiel"
+    },
+    {
+      "id": "4523dc16-3a8f-425c-80bb-41a23466eca7",
+      "crn": "S511935",
+      "accommodationType": {
+        "code": "A11",
+        "description": "phooey kissingly what"
+      },
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES",
+      "startDate": "2026-02-12",
+      "endDate": "2026-12-16",
+      "address": {
+        "postcode": "KY0 2GX",
+        "buildingNumber": "8",
+        "thoroughfareName": "Fritsch-Mueller Avenue",
+        "dependentLocality": "West Berge",
+        "postTown": "Great Klocko",
+        "county": "Cumbria",
+        "country": "Trinidad and Tobago",
+        "uprn": "b6bATl50mBfB"
+      },
+      "createdAt": "2026-05-01T12:35:13.104Z",
+      "createdBy": "Mrs. Nicole MacGyver V"
     }
   ],
+  "P712106": [],
   "T274481": [
     {
-      "id": "18772d92-ea60-45e6-8c6f-a27b0583ca3c",
-      "caseId": "",
+      "id": "f1b8a841-e96a-43ee-87e3-8ee9a5c01d74",
       "crn": "T274481",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "SOCIAL_RENTED",
-      "arrangementSubTypeDescription": "",
-      "name": "Family",
-      "settledType": "SETTLED",
-      "verificationStatus": "NOT_CHECKED_YET",
-      "startDate": "2025-10-14",
-      "endDate": "2026-08-06",
-      "address": {
-        "postcode": "TC94 9YG",
-        "subBuildingName": "Apt. 411",
-        "buildingName": "Mill Road",
-        "thoroughfareName": "Wyman Fold",
-        "dependentLocality": "Little Beckerhill",
-        "postTown": "Howewood",
-        "county": "Kent",
-        "country": "Haiti",
-        "uprn": "n94ciyQWtl0y"
+      "accommodationType": {
+        "code": "A15",
+        "description": "meanwhile tenderly"
       },
-      "createdAt": "2026-03-17T07:39:09.166Z",
-      "createdBy": "Claudia Rogahn"
-    },
-    {
-      "id": "fb6cde60-0e23-40ea-890e-93c2614ed791",
-      "caseId": "",
-      "crn": "T274481",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "FRIENDS_OR_FAMILY",
-      "arrangementSubTypeDescription": "",
-      "name": "Family",
-      "settledType": "TRANSIENT",
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "NO",
-      "startDate": "2025-09-22",
-      "endDate": "2026-09-08",
+      "startDate": "2026-01-08",
+      "endDate": "2026-06-22",
       "address": {
-        "postcode": "GJ8 4YK",
-        "buildingNumber": "16",
-        "thoroughfareName": "Kent Road",
-        "dependentLocality": "Reillydon",
-        "postTown": "Gutmann-le-Davis",
-        "county": "Essex",
-        "country": "Taiwan",
-        "uprn": "moonLFnzo0TS"
+        "postcode": "DG4 4JY",
+        "buildingNumber": "6",
+        "thoroughfareName": "Ferry Road",
+        "dependentLocality": "Ratke Cross",
+        "postTown": "Cruickshankridge",
+        "county": "Cumbria",
+        "country": "Poland",
+        "uprn": "yUQjvgAya2Pp"
       },
-      "createdAt": "2026-03-09T21:12:20.551Z",
-      "createdBy": "Brad Nitzsche"
-    },
-    {
-      "id": "f524ec39-df9f-4e22-9a81-dd1b8f88c5c8",
-      "caseId": "",
-      "crn": "T274481",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "OTHER",
-      "arrangementSubTypeDescription": "carefully",
-      "name": "Family",
-      "settledType": "TRANSIENT",
-      "verificationStatus": "PASSED",
-      "nextAccommodationStatus": "NO",
-      "startDate": "2025-08-08",
-      "endDate": "2026-12-14",
-      "address": {
-        "postcode": "VK7 5DZ",
-        "buildingNumber": "944",
-        "thoroughfareName": "Norfolk Road",
-        "dependentLocality": "Newton Swift",
-        "postTown": "Long Pfannerstill",
-        "county": "Central",
-        "country": "Austria",
-        "uprn": "loE0S0txolIy"
-      },
-      "createdAt": "2026-03-18T23:10:53.419Z",
-      "createdBy": "Dianna Weissnat"
+      "createdAt": "2026-04-27T18:46:50.194Z",
+      "createdBy": "Bernard Goldner V"
     }
   ],
   "V938951": [],
-  "T229440": [],
+  "T229440": [
+    {
+      "id": "0dc143d0-2f47-4b67-b907-c7578ece67a2",
+      "crn": "T229440",
+      "accommodationType": {
+        "code": "A08",
+        "description": "among"
+      },
+      "verificationStatus": "FAILED",
+      "startDate": "2026-03-22",
+      "endDate": "2027-04-13",
+      "address": {
+        "postcode": "KU37 3SE",
+        "buildingNumber": "65",
+        "thoroughfareName": "Borer Lane",
+        "dependentLocality": "Old Pouros",
+        "postTown": "Boscoridge",
+        "county": "Fife",
+        "country": "Eritrea",
+        "uprn": "rRITZr7M81pX"
+      },
+      "createdAt": "2026-05-05T16:59:32.556Z",
+      "createdBy": "Dennis Fadel"
+    },
+    {
+      "id": "49956fd1-fe56-4a4e-8bd4-400748e588f3",
+      "crn": "T229440",
+      "accommodationType": {
+        "code": "A01A",
+        "description": "rectangular oh abaft"
+      },
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "NO",
+      "startDate": "2026-03-16",
+      "endDate": "2026-11-10",
+      "address": {
+        "postcode": "RX8 8UQ",
+        "buildingNumber": "96",
+        "thoroughfareName": "Malcolm Mead",
+        "dependentLocality": "West Mueller",
+        "postTown": "Newton Ebert",
+        "county": "County Antrim",
+        "country": "Cape Verde",
+        "uprn": "5fmxCurJTOT6"
+      },
+      "createdAt": "2026-05-07T07:44:45.065Z",
+      "createdBy": "Mike Bergstrom"
+    },
+    {
+      "id": "4e84eb22-3e1d-491e-88f9-71bb2f4be188",
+      "crn": "T229440",
+      "accommodationType": {
+        "code": "A12",
+        "description": "limply obnoxiously"
+      },
+      "verificationStatus": "FAILED",
+      "startDate": "2025-10-31",
+      "endDate": "2026-06-27",
+      "address": {
+        "postcode": "LT57 8NY",
+        "subBuildingName": "Apt. 288",
+        "buildingName": "Hickle Close",
+        "thoroughfareName": "Oak Drive",
+        "dependentLocality": "Upper Deckow Park",
+        "postTown": "McCullough-on-Baumbach",
+        "county": "Avon",
+        "country": "French Guiana",
+        "uprn": "fYj5x3GMS2Gj"
+      },
+      "createdAt": "2026-05-01T14:30:26.764Z",
+      "createdBy": "Adell Satterfield"
+    }
+  ],
   "H271226": [],
   "U934069": [
     {
-      "id": "521bedd9-9ee3-4741-b804-a910b7b1a7c7",
-      "caseId": "",
+      "id": "9b34d997-910a-440f-8c47-9c55833b2920",
       "crn": "U934069",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "FRIENDS_OR_FAMILY",
-      "arrangementSubTypeDescription": "",
-      "name": "Friends",
-      "settledType": "TRANSIENT",
+      "accommodationType": {
+        "code": "A01C",
+        "description": "sunbathe"
+      },
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "NO",
+      "startDate": "2025-08-06",
+      "endDate": "2026-10-15",
+      "address": {
+        "postcode": "II08 8TF",
+        "buildingNumber": "341",
+        "thoroughfareName": "Hessel Ridge",
+        "dependentLocality": "Buckridge-le-Rohan",
+        "postTown": "Great Cummings",
+        "county": "West Sussex",
+        "country": "India",
+        "uprn": "xvxjlEzmeqwp"
+      },
+      "createdAt": "2026-05-07T02:57:28.563Z",
+      "createdBy": "Genevieve Collier"
+    },
+    {
+      "id": "de60c3fa-bc2c-4f1e-ab4c-3922a9e7a0ef",
+      "crn": "U934069",
+      "accommodationType": {
+        "code": "A04",
+        "description": "mid carefully"
+      },
+      "verificationStatus": "NOT_CHECKED_YET",
+      "startDate": "2026-05-04",
+      "endDate": "2026-09-22",
+      "address": {
+        "postcode": "HV0 3QH",
+        "buildingNumber": "58",
+        "thoroughfareName": "Grady Meadows",
+        "dependentLocality": "South Batz",
+        "postTown": "New Quigley",
+        "county": "Shropshire",
+        "country": "Brunei Darussalam",
+        "uprn": "lrmUcXdm4mzD"
+      },
+      "createdAt": "2026-05-05T23:00:23.615Z",
+      "createdBy": "Luke Ryan"
+    },
+    {
+      "id": "e73e10fc-4ae2-47eb-a406-cb4d782dba03",
+      "crn": "U934069",
+      "accommodationType": {
+        "code": "A12",
+        "description": "on uniform sheathe"
+      },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "TO_BE_DECIDED",
-      "startDate": "2025-12-26",
-      "endDate": "2026-11-23",
+      "startDate": "2025-10-13",
+      "endDate": "2027-02-21",
       "address": {
-        "postcode": "WE4 5TO",
-        "subBuildingName": "Apt. 294",
-        "buildingName": "Dach Mews",
-        "thoroughfareName": "Kautzer Drove",
-        "dependentLocality": "East Reinger",
-        "postTown": "Heaney Gardens",
-        "county": "Oxfordshire",
-        "country": "Lithuania",
-        "uprn": "bYlCQxQImBTs"
+        "postcode": "MF03 1DO",
+        "buildingNumber": "810",
+        "thoroughfareName": "Kertzmann Corner",
+        "dependentLocality": "Long Boyle Bridge",
+        "postTown": "Deckow-on-Kassulke",
+        "county": "Lancashire",
+        "country": "Uruguay",
+        "uprn": "GuUI5NT2n9Xq"
       },
-      "createdAt": "2026-03-10T10:43:05.551Z",
-      "createdBy": "Andrea Kertzmann II"
-    },
-    {
-      "id": "0e2d356e-e05f-40ef-b611-39d6df1e0f9b",
-      "caseId": "",
-      "crn": "U934069",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "SOCIAL_RENTED",
-      "arrangementSubTypeDescription": "",
-      "name": "Relatives",
-      "settledType": "TRANSIENT",
-      "verificationStatus": "FAILED",
-      "startDate": "2025-04-14",
-      "endDate": "2027-01-11",
-      "address": {
-        "postcode": "EL9 1QA",
-        "buildingNumber": "20",
-        "thoroughfareName": "Toy Side",
-        "dependentLocality": "Goyette-over-Pouros",
-        "postTown": "Huel-over-Hoppe",
-        "county": "Berkshire",
-        "country": "Finland",
-        "uprn": "L38QgJHNIzNf"
-      },
-      "createdAt": "2026-03-18T05:11:06.120Z",
-      "createdBy": "Angel Corwin Jr."
-    },
-    {
-      "id": "e48dfb23-fd32-4225-9e7b-68806b53263d",
-      "caseId": "",
-      "crn": "U934069",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "OTHER",
-      "arrangementSubTypeDescription": "dearest",
-      "name": "Friends",
-      "settledType": "TRANSIENT",
-      "verificationStatus": "FAILED",
-      "startDate": "2025-08-10",
-      "endDate": "2026-12-27",
-      "address": {
-        "postcode": "BY6 2RZ",
-        "buildingNumber": "716",
-        "thoroughfareName": "Duncan Chase",
-        "dependentLocality": "Long Auerdon",
-        "postTown": "Long Rowe",
-        "county": "County Londonderry",
-        "country": "South Georgia and the South Sandwich Islands",
-        "uprn": "BYQcvwzgi1qn"
-      },
-      "createdAt": "2026-03-16T12:24:01.892Z",
-      "createdBy": "Andres Wunsch"
+      "createdAt": "2026-04-30T14:34:23.446Z",
+      "createdBy": "Antonietta Conn"
     }
   ],
   "I322559": [
     {
-      "id": "3e957118-f3d3-4d8a-b12c-f816f33b7d05",
-      "caseId": "",
+      "id": "bf3a76cf-a692-4742-bb4a-9cf4bb2cbd84",
       "crn": "I322559",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "SOCIAL_RENTED",
-      "arrangementSubTypeDescription": "",
-      "name": "Relatives",
-      "settledType": "TRANSIENT",
-      "verificationStatus": "NOT_CHECKED_YET",
-      "startDate": "2025-09-23",
-      "endDate": "2026-07-22",
-      "address": {
-        "postcode": "AH2 5SB",
-        "buildingNumber": "7",
-        "thoroughfareName": "Beech Drive",
-        "dependentLocality": "Botsford-upon-Zboncak",
-        "postTown": "Howeborough",
-        "county": "Fife",
-        "country": "Germany",
-        "uprn": "B8drfGZJri7S"
+      "accommodationType": {
+        "code": "A04",
+        "description": "gigantic excepting blaspheme"
       },
-      "createdAt": "2026-03-16T17:33:30.751Z",
-      "createdBy": "Miss Theresa Schmidt-Price"
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES",
+      "startDate": "2025-08-22",
+      "endDate": "2026-07-09",
+      "address": {
+        "postcode": "IM27 6CM",
+        "subBuildingName": "Suite 382",
+        "buildingName": "Kaya Glade",
+        "thoroughfareName": "Prosacco Croft",
+        "dependentLocality": "Little Klein",
+        "postTown": "Cronin-Bailey-under-Schulist",
+        "county": "West Yorkshire",
+        "country": "Solomon Islands",
+        "uprn": "o1Vyrs7vZNIk"
+      },
+      "createdAt": "2026-05-04T10:08:18.504Z",
+      "createdBy": "Jacob Hudson"
+    },
+    {
+      "id": "da462a08-0061-4c32-8163-45fd73d7164a",
+      "crn": "I322559",
+      "accommodationType": {
+        "code": "A01C",
+        "description": "since"
+      },
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES",
+      "startDate": "2026-02-20",
+      "endDate": "2026-12-29",
+      "address": {
+        "postcode": "MF55 7NV",
+        "buildingNumber": "64",
+        "thoroughfareName": "Olivia Square",
+        "dependentLocality": "High Hayes",
+        "postTown": "Rohan-Schinner Common",
+        "county": "Somerset",
+        "country": "Burkina Faso",
+        "uprn": "AR3v1a4YHeJO"
+      },
+      "createdAt": "2026-05-02T22:56:45.207Z",
+      "createdBy": "Lamont Purdy"
+    },
+    {
+      "id": "97b9c51c-1d26-4fcf-9df7-04644aa316b0",
+      "crn": "I322559",
+      "accommodationType": {
+        "code": "A07B",
+        "description": "ack"
+      },
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "YES",
+      "startDate": "2025-10-31",
+      "endDate": "2026-08-20",
+      "address": {
+        "postcode": "BY55 1KD",
+        "subBuildingName": "Suite 793",
+        "buildingNumber": "6",
+        "thoroughfareName": "Greenway",
+        "dependentLocality": "Long Carterstone",
+        "postTown": "Hickle-on-Block",
+        "county": "Cornwall",
+        "country": "United Arab Emirates",
+        "uprn": "b4fkQVNLj2Ph"
+      },
+      "createdAt": "2026-05-01T18:54:08.075Z",
+      "createdBy": "Mr. Carter Strosin"
     }
   ],
   "L247269": [
     {
-      "id": "b794e36b-9e10-44da-b549-53dc0c80b5a1",
-      "caseId": "",
+      "id": "40daf68c-5acf-4c64-b34e-0a66ecd69142",
       "crn": "L247269",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "OTHER",
-      "arrangementSubTypeDescription": "straw along jeopardise",
-      "name": "Family",
-      "settledType": "SETTLED",
-      "verificationStatus": "NOT_CHECKED_YET",
-      "startDate": "2026-01-11",
-      "endDate": "2026-09-13",
-      "address": {
-        "postcode": "FK2 8OY",
-        "buildingName": "Renner Field",
-        "thoroughfareName": "Stracke Approach",
-        "dependentLocality": "New Zemlak",
-        "postTown": "Nether Stokes",
-        "county": "Surrey",
-        "country": "Uzbekistan",
-        "uprn": "1DzMX6OI9tet"
+      "accommodationType": {
+        "code": "A11",
+        "description": "slight yearningly"
       },
-      "createdAt": "2026-03-13T14:41:30.350Z",
-      "createdBy": "Jaime DuBuque"
-    },
-    {
-      "id": "e524ca1f-86f8-4a72-aa76-4fdd44e379bd",
-      "caseId": "",
-      "crn": "L247269",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "PRIVATE_RENTED_ROOM",
-      "arrangementSubTypeDescription": "",
-      "name": "Friends",
-      "settledType": "TRANSIENT",
-      "verificationStatus": "NOT_CHECKED_YET",
-      "startDate": "2025-07-21",
-      "endDate": "2027-01-29",
-      "address": {
-        "postcode": "ET5 4PJ",
-        "buildingName": "Luettgen Grange",
-        "thoroughfareName": "Bluebell Close",
-        "dependentLocality": "Veumhampton",
-        "postTown": "Vandervort-under-Russel",
-        "county": "Fife",
-        "country": "Mexico",
-        "uprn": "5go51iXN2MwR"
-      },
-      "createdAt": "2026-03-11T08:24:28.096Z",
-      "createdBy": "Miguel Schumm Sr."
-    }
-  ],
-  "F608163": [
-    {
-      "id": "14a5e9af-4b31-46e6-9c9b-6ccccf179b9e",
-      "caseId": "",
-      "crn": "F608163",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "OTHER",
-      "arrangementSubTypeDescription": "which tenant yowza",
-      "name": "Family",
-      "settledType": "TRANSIENT",
-      "verificationStatus": "NOT_CHECKED_YET",
-      "startDate": "2025-05-15",
-      "endDate": "2026-11-17",
-      "address": {
-        "postcode": "XK7 7HW",
-        "subBuildingName": "Suite 167",
-        "buildingName": "Donnelly Drive",
-        "thoroughfareName": "Rectory Lane",
-        "dependentLocality": "Kunze-upon-Nicolas",
-        "postTown": "New Boyle",
-        "county": "Rutland",
-        "country": "Germany",
-        "uprn": "YK4XTgf5sLAy"
-      },
-      "createdAt": "2026-03-12T18:25:15.099Z",
-      "createdBy": "Leigh Block"
-    },
-    {
-      "id": "a4e54424-88cf-4330-99cc-719341de9202",
-      "caseId": "",
-      "crn": "F608163",
-      "arrangementType": "PRIVATE",
-      "arrangementSubType": "PRIVATE_RENTED_WHOLE_PROPERTY",
-      "arrangementSubTypeDescription": "",
-      "name": "Relatives",
-      "settledType": "TRANSIENT",
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "YES",
-      "startDate": "2025-04-23",
-      "endDate": "2027-01-14",
+      "startDate": "2025-11-25",
+      "endDate": "2026-09-10",
       "address": {
-        "postcode": "LI79 7SL",
-        "subBuildingName": "Apt. 517",
-        "buildingName": "Hildegard Mews",
-        "thoroughfareName": "Schuppe Croft",
-        "dependentLocality": "Prohaska-on-Hickle",
-        "postTown": "Long Ferry",
-        "county": "Northamptonshire",
+        "postcode": "KF7 1KG",
+        "buildingNumber": "13",
+        "thoroughfareName": "Carroll Lane",
+        "dependentLocality": "Parisianborough",
+        "postTown": "Franecki Common",
+        "county": "Gloucestershire",
         "country": "Montserrat",
-        "uprn": "9nwRCCcbt8Fz"
+        "uprn": "qyT0GYXvaRRo"
       },
-      "createdAt": "2026-03-17T03:01:41.215Z",
-      "createdBy": "Holly Heathcote"
+      "createdAt": "2026-05-05T04:05:26.123Z",
+      "createdBy": "Laurence Cormier"
+    },
+    {
+      "id": "a5e44e4d-7aa9-4339-94bf-8484b72c7e35",
+      "crn": "L247269",
+      "accommodationType": {
+        "code": "A15",
+        "description": "pushy"
+      },
+      "verificationStatus": "PASSED",
+      "nextAccommodationStatus": "NO",
+      "startDate": "2025-05-23",
+      "endDate": "2026-11-15",
+      "address": {
+        "postcode": "QK59 7PW",
+        "buildingName": "Dickinson Meadow",
+        "thoroughfareName": "Orn Copse",
+        "dependentLocality": "Metz-upon-Kulas-Altenwerth",
+        "postTown": "Great Fadel Common",
+        "county": "County Londonderry",
+        "country": "Peru",
+        "uprn": "2CV6mccr9SGc"
+      },
+      "createdAt": "2026-05-04T02:09:56.162Z",
+      "createdBy": "Carl Prosacco"
     }
-  ]
+  ],
+  "F608163": []
 }

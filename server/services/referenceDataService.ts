@@ -6,4 +6,8 @@ export default class ReferenceDataService {
   getLocalAuthorities(token: string) {
     return this.referenceDataClient.getReferenceData(token, 'LOCAL_AUTHORITY_AREAS')
   }
+
+  getAccommodationTypes(token: string) {
+    return this.referenceDataClient.getReferenceData(token, 'ACCOMMODATION_TYPES')
+  }
 }

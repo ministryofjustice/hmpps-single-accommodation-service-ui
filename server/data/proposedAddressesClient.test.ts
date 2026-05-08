@@ -3,7 +3,11 @@ import describeClient from '../testutils/describeClient'
 import ProposedAddressesClient from './proposedAddressesClient'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
-import { accommodationDetailCommandFactory, accommodationFactory, apiResponseFactory } from '../testutils/factories'
+import {
+  proposedAccommodationDetailCommandFactory,
+  apiResponseFactory,
+  proposedAccommodationFactory,
+} from '../testutils/factories'
 
 describeClient('ProposedAddressesClient', provider => {
   let proposedAddressesClient: ProposedAddressesClient
@@ -66,7 +70,7 @@ describeClient('ProposedAddressesClient', provider => {
 
   it('should make a POST request to /cases/:crn/proposed-accommodations', async () => {
     const crn = crnFactory()
-    const proposedAddressData = accommodationDetailCommandFactory.build()
+    const proposedAddressData = proposedAccommodationDetailCommandFactory.build()
 
     await provider.addInteraction({
       state: `Proposed address can be submitted for case with CRN ${crn}`,
@@ -90,7 +94,7 @@ describeClient('ProposedAddressesClient', provider => {
   it('should make a PUT request to /cases/:crn/proposed-accommodations/:id', async () => {
     const crn = crnFactory()
     const id = 'c1b1d9f8-6f3a-4b52-9c5c-6a0c5a9d8f1f'
-    const proposedAddressData = accommodationDetailCommandFactory.build()
+    const proposedAddressData = proposedAccommodationDetailCommandFactory.build()
 
     await provider.addInteraction({
       state: `Proposed address can be updated for case with CRN ${crn}`,
@@ -113,7 +117,7 @@ describeClient('ProposedAddressesClient', provider => {
 
   it('should make a GET request to /cases/:crn/proposed-accommodations/:id/timeline', async () => {
     const body = apiResponseFactory.auditRecords()
-    const { id, crn } = accommodationFactory.proposed().build()
+    const { id, crn } = proposedAccommodationFactory.build()
 
     await provider.addInteraction({
       state: `A proposed address timeline exists for case with CRN ${crn}`,
@@ -137,7 +141,7 @@ describeClient('ProposedAddressesClient', provider => {
 
   it('should make a POST request to /cases/:crn/proposed-accommodations/:id/notes', async () => {
     const crn = crnFactory()
-    const proposedAddress = accommodationFactory.proposed().build()
+    const proposedAddress = proposedAccommodationFactory.build()
     const note = { note: 'This is a note\n\nWith multiple lines' }
 
     await provider.addInteraction({

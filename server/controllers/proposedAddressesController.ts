@@ -9,7 +9,7 @@ import {
   updateTypeFromRequest,
   updateStatusFromRequest,
   updateNextAccommodationFromRequest,
-  arrangementSubTypeItems,
+  accommodationTypeItems,
   verificationStatusItems,
   nextAccommodationStatusItems,
   validateUpToAddress,
@@ -36,6 +36,7 @@ import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
+import ReferenceDataService from '../services/referenceDataService'
 
 interface EditRequest extends Request {
   params: {
@@ -53,6 +54,7 @@ export default class ProposedAddressesController {
     private readonly proposedAddressesService: ProposedAddressesService,
     private readonly casesService: CasesService,
     private readonly osDataHubService: OsDataHubService,
+    private readonly referenceDataService: ReferenceDataService,
   ) {
     this.formData = new MultiPageFormManager('proposedAddress')
   }
@@ -136,8 +138,14 @@ export default class ProposedAddressesController {
 
       await this.formData.remove(crn, req.session)
 
-      const { data: proposedAddress } = await this.proposedAddressesService.getProposedAddress(token, crn, id)
-      await this.formData.update(crn, req.session, { ...proposedAddress, redirect })
+      const {
+        data: { accommodationType, ...proposedAddress },
+      } = await this.proposedAddressesService.getProposedAddress(token, crn, id)
+      await this.formData.update(crn, req.session, {
+        ...proposedAddress,
+        accommodationTypeCode: accommodationType.code,
+        redirect,
+      })
 
       return res.redirect(flowRedirects[page]({ crn }))
     }
@@ -305,9 +313,12 @@ export default class ProposedAddressesController {
       const redirect = validateUpToAddress(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
-      const { arrangementSubTypeDescription, settledType } = proposedAddressFormSessionData
+      const { accommodationTypeCode } = proposedAddressFormSessionData
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
-      const { data: caseData } = await this.casesService.getCase(token, crn)
+      const [{ data: caseData }, { data: accommodationTypes }] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.referenceDataService.getAccommodationTypes(token),
+      ])
 
       return res.render('pages/proposed-address/type', {
         crn,
@@ -315,9 +326,7 @@ export default class ProposedAddressesController {
           ? uiPaths.proposedAddresses.selectAddress({ crn })
           : uiPaths.proposedAddresses.details({ crn }),
         name: caseData.name,
-        arrangementSubTypeItems: arrangementSubTypeItems(proposedAddressFormSessionData?.arrangementSubType),
-        arrangementSubTypeDescription,
-        settledType,
+        accommodationTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
         errors,
         errorSummary,
       })
@@ -439,9 +448,12 @@ export default class ProposedAddressesController {
       await this.formData.update(crn, req.session, { redirect: uiPaths.proposedAddresses.checkYourAnswers({ crn }) })
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
-      const { data: caseData } = await this.casesService.getCase(token, crn)
+      const [{ data: caseData }, { data: accommodationTypes }] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.referenceDataService.getAccommodationTypes(token),
+      ])
 
-      const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, caseData.name)
+      const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, caseData.name, accommodationTypes)
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.checkYourAnswers.pattern, req, [
         uiPaths.proposedAddresses.status.pattern,
         uiPaths.proposedAddresses.nextAccommodation.pattern,

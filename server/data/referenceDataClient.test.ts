@@ -13,25 +13,27 @@ describeClient('ReferenceDataClient', provider => {
     referenceDataClient = new ReferenceDataClient(mockAuthenticationClient)
   })
 
-  it('should make a GET request to /reference-data?type=LOCAL_AUTHORITY_AREAS and return the response body', async () => {
-    const body = apiResponseFactory.referenceData()
-    const objectType = 'LOCAL_AUTHORITY_AREAS'
+  it.each(['LOCAL_AUTHORITY_AREAS', 'ACCOMMODATION_TYPES'])(
+    'should make a GET request to /reference-data?type=%s and return the response body',
+    async objectType => {
+      const body = apiResponseFactory.referenceData()
 
-    await provider.addInteraction({
-      state: `Reference data exists for type ${objectType}`,
-      uponReceiving: 'a request to get reference data for a specific type',
-      withRequest: {
-        method: 'GET',
-        path: apiPaths.referenceData({}),
-        query: { type: objectType },
-      },
-      willRespondWith: {
-        status: 200,
-        body,
-      },
-    })
+      await provider.addInteraction({
+        state: `Reference data exists for type ${objectType}`,
+        uponReceiving: 'a request to get reference data for a specific type',
+        withRequest: {
+          method: 'GET',
+          path: apiPaths.referenceData({}),
+          query: { type: objectType },
+        },
+        willRespondWith: {
+          status: 200,
+          body,
+        },
+      })
 
-    const response = await referenceDataClient.getReferenceData(token, objectType)
-    expect(response).toEqual(body)
-  })
+      const response = await referenceDataClient.getReferenceData(token, objectType)
+      expect(response).toEqual(body)
+    },
+  )
 })

@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AccommodationDetail } from './AccommodationDetail';
+import type { AccommodationSummaryDto } from './AccommodationSummaryDto';
 import type { AssignedToDto } from './AssignedToDto';
 export type CaseDto = {
     name?: string | null;
@@ -14,8 +14,8 @@ export type CaseDto = {
     riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH';
     pncReference?: string | null;
     assignedTo?: (AssignedToDto | null);
-    currentAccommodation?: (AccommodationDetail | null);
-    nextAccommodation?: (AccommodationDetail | null);
+    currentAccommodation?: (AccommodationSummaryDto | null);
+    nextAccommodation?: (AccommodationSummaryDto | null);
     status?: 'RISK_OF_NO_FIXED_ABODE' | 'NO_FIXED_ABODE' | 'TRANSIENT' | 'SETTLED';
     actions: Array<string>;
 };

@@ -7,7 +7,7 @@ exports[`accommodationSummary accommodation history accommodationHistoryRows ret
       "text": "27 April 2026",
     },
     {
-      "text": "Current",
+      "text": "",
     },
     {
       "html": "<strong>Approved Premises</strong><br />London<br />SW1A 1AA",
@@ -87,7 +87,7 @@ exports[`accommodationSummary accommodation history accommodationHistoryTable ma
     
       
       
-      <td class="govuk-table__cell">Current</td>
+      <td class="govuk-table__cell"></td>
       
     
       

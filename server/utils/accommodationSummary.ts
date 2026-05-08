@@ -3,7 +3,7 @@ import { TableRow } from '@govuk/ui'
 import { StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
-import { formatDate, isPastDate } from './dates'
+import { formatDate } from './dates'
 import { renderMacro, statusTag } from './macros'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
@@ -91,7 +91,7 @@ export const noFixedAbodeAlert = (caseData: CaseDto, accommodation?: Accommodati
   if (caseData.status !== 'NO_FIXED_ABODE' && caseData.status !== 'RISK_OF_NO_FIXED_ABODE') return undefined
 
   return {
-    date: caseData.status === 'NO_FIXED_ABODE' ? accommodation?.startDate : accommodation?.endDate,
+    date: caseData.status === 'RISK_OF_NO_FIXED_ABODE' ?  accommodation?.endDate : null,
     status: caseData.status,
   }
 }
@@ -119,16 +119,10 @@ export const accommodationSummaryAddress = (accommodation: AccommodationSummaryD
     .filter(Boolean)
     .join('<br />')
 
-export const accommodationHistoryEndDate = (accommodation: AccommodationSummaryDto, isLatest: boolean): string => {
-  if (isLatest && isPastDate(accommodation.startDate)) return 'Current'
-  if (accommodation.endDate) return formatDate(accommodation.endDate)
-  return ''
-}
-
 export const accommodationHistoryRows = (history: AccommodationSummaryDto[]): TableRow[] => {
-  return history.map((accommodation, index) => [
+  return history.map((accommodation) => [
     textContent(formatDate(accommodation.startDate)),
-    textContent(accommodationHistoryEndDate(accommodation, index === 0)),
+    textContent(accommodation.endDate ? formatDate(accommodation.endDate) : ''),
     htmlContent(accommodationSummaryAddress(accommodation)),
     htmlContent(accommodation.status ? statusTag(accommodationSummaryStatusTag(accommodation.status)) : ''),
   ])

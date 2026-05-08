@@ -594,8 +594,7 @@ describe('proposedAddressesController', () => {
 
     it('redirects to arrangement type when arrangement type invalid', async () => {
       request.body = {
-        arrangementSubType: undefined,
-        settledType: undefined,
+        accommodationTypeCode: undefined,
       }
 
       await controller.saveType()(request, response, next)

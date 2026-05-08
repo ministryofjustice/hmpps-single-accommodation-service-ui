@@ -14,8 +14,8 @@ describe('multiPageFormManager', () => {
     mockSession.multiPageFormData = {
       proposedAddress: {
         [crn]: {
-          arrangementSubType: 'FRIENDS_OR_FAMILY',
-          settledType: 'SETTLED',
+          postcode: 'SW1A 1AA',
+          nameOrNumber: '1',
         },
       },
     }

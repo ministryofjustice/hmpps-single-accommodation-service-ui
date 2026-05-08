@@ -456,21 +456,6 @@ describe('Proposed addresses utilities', () => {
           expected: uiPaths.proposedAddresses.type({ crn }),
         },
         {
-          name: 'redirects to type when settledType missing',
-          data: { ...validUpToAddress(), arrangementSubType: 'FRIENDS_OR_FAMILY' } as ProposedAddressFormData,
-          expected: uiPaths.proposedAddresses.type({ crn }),
-        },
-        {
-          name: 'redirects to type when OTHER selected without description',
-          data: {
-            ...validUpToAddress(),
-            arrangementSubType: 'OTHER',
-            settledType: 'SETTLED',
-            arrangementSubTypeDescription: undefined,
-          } as ProposedAddressFormData,
-          expected: uiPaths.proposedAddresses.type({ crn }),
-        },
-        {
           name: 'returns undefined when address + type valid',
           data: validUpToType(),
           expected: undefined,

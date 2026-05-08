@@ -163,7 +163,7 @@ describe('casesController', () => {
         caseData,
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: eligibility.caseActions,
-        noFixedAbode: noFixedAbodeAlert(caseData, accommodationHistory[0]),
+        noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),
         nextAccommodationCard: accommodationCard('next', nextAccommodation),
         currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),

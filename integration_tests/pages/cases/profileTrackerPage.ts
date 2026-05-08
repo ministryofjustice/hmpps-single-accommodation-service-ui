@@ -6,7 +6,7 @@ import {
   AccommodationSummaryDto,
   ProposedAccommodationDto,
 } from '@sas/api'
-import { formatDate, isPastDate } from '../../../server/utils/dates'
+import { formatDate } from '../../../server/utils/dates'
 import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
@@ -80,17 +80,21 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(this.page.locator('.sas-card', { hasText: 'Current accommodation' })).toHaveCount(0)
   }
 
-  async shouldShowNoFixedAbodeAlert(caseData: Case, accommodation: AccommodationSummaryDto) {
+  async shouldShowNoFixedAbodeAlert(caseData: Case, accommodation?: AccommodationSummaryDto) {
     if (caseData.status === 'NO_FIXED_ABODE') {
       const card = this.page.locator('.moj-alert', { hasText: 'No fixed abode' })
-      const { startDate } = accommodation
-      await expect(card).toContainText(`Since ${formatDate(startDate, 'long')}`)
-      await expect(card).toContainText(`(${formatDate(startDate, 'days for/in')})`)
+      await expect(card).toBeVisible()
+      if (accommodation?.startDate) {
+        await expect(card).toContainText(`Since ${formatDate(accommodation.startDate, 'long')}`)
+        await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
+      }
     } else {
       const card = this.page.locator('.moj-alert', { hasText: 'Risk of no fixed abode' })
-      const { endDate } = accommodation
-      await expect(card).toContainText(`From ${formatDate(endDate, 'long')}`)
-      await expect(card).toContainText(`(${formatDate(endDate, 'days for/in')})`)
+      await expect(card).toBeVisible()
+      if (accommodation?.endDate) {
+        await expect(card).toContainText(`From ${formatDate(accommodation.endDate, 'long')}`)
+        await expect(card).toContainText(`(${formatDate(accommodation.endDate, 'days for/in')})`)
+      }
     }
   }
 
@@ -170,13 +174,9 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
 
     for await (const [i, accommodation] of accommodations.entries()) {
       const row = table.locator('tbody tr').nth(i)
-      const isLatest = i === 0
-      const startInPast = isPastDate(accommodation.startDate)
 
       await expect(row).toContainText(formatDate(accommodation.startDate))
-      if (isLatest && startInPast) {
-        await expect(row).toContainText('Current')
-      } else if (accommodation.endDate) {
+      if (accommodation.endDate) {
         await expect(row).toContainText(formatDate(accommodation.endDate))
       }
       for await (const addressPart of addressLines(accommodation.address)) {

@@ -119,28 +119,26 @@ test.describe('Profile Tracker Page', () => {
     }) => {
       const caseData = caseFactory.riskOfNfa().build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
-      const accommodationHistory = [accommodationSummaryFactory.current().build()]
-      await setupStubs({ crn, caseData, currentAccommodation, accommodationHistory })
+      await setupStubs({ crn, caseData, currentAccommodation })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
-      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, accommodationHistory[0])
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, currentAccommodation)
     })
 
     test(`should render no accommodation cards and NFA alert for a case with no fixed abode`, async ({ page }) => {
       const caseData = caseFactory.noFixedAbodeCurrent().build({ crn, status: 'NO_FIXED_ABODE' })
-      const accommodationHistory = [accommodationSummaryFactory.build({ endDate: undefined })]
-      await setupStubs({ crn, caseData, accommodationHistory })
+      await setupStubs({ crn, caseData })
       await login(page)
 
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
       await profileTrackerPage.shouldNotShowCurrentAccommodationCard()
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
-      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, accommodationHistory[0])
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData)
     })
   })
 

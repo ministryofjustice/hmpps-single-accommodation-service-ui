@@ -251,3 +251,19 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 exports[`accommodationSummary accommodationSummaryAddress renders the HTML for an accommodation summary 1`] = `"<strong>Householder (Owner - freehold or leasehold)</strong><br />London<br />SW1A 1AA"`;
 
 exports[`accommodationSummary accommodationSummaryAddress renders without the accommodation type 1`] = `"London<br />SW1A 1AA"`;
+
+exports[`accommodationSummary noFixedAbodeAlert returns no fixed abode alert for NO_FIXED_ABODE status 1`] = `
+{
+  "date": null,
+  "status": "NO_FIXED_ABODE",
+}
+`;
+
+exports[`accommodationSummary noFixedAbodeAlert returns risk of no fixed abode alert for RISK_OF_NO_FIXED_ABODE status 1`] = `
+{
+  "date": "2026-06-01",
+  "status": "RISK_OF_NO_FIXED_ABODE",
+}
+`;
+
+exports[`accommodationSummary noFixedAbodeAlert returns undefined if the case status is not NO_FIXED_ABODE or RISK_OF_NO_FIXED_ABODE 1`] = `undefined`;

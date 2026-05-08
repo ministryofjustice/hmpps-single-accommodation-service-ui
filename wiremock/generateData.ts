@@ -143,7 +143,7 @@ if (generate.accommodation) {
 
     const current = isNoFixedAbode ? null : accommodationSummaryFactory.current().build({ crn: c.crn })
     const next =
-      !isNoFixedAbode && !isRiskOfNoFixedAbode ? accommodationSummaryFactory.next().build({ crn: c.crn }) : null
+      isNoFixedAbode || isRiskOfNoFixedAbode ? null : accommodationSummaryFactory.next().build({ crn: c.crn })
 
     currentAccommodation[c.crn] = current
     nextAccommodation[c.crn] = next

@@ -91,7 +91,7 @@ export const noFixedAbodeAlert = (caseData: CaseDto, accommodation?: Accommodati
   if (caseData.status !== 'NO_FIXED_ABODE' && caseData.status !== 'RISK_OF_NO_FIXED_ABODE') return undefined
 
   return {
-    date: caseData.status === 'RISK_OF_NO_FIXED_ABODE' ?  accommodation?.endDate : null,
+    date: caseData.status === 'RISK_OF_NO_FIXED_ABODE' ? accommodation?.endDate : null,
     status: caseData.status,
   }
 }
@@ -120,7 +120,7 @@ export const accommodationSummaryAddress = (accommodation: AccommodationSummaryD
     .join('<br />')
 
 export const accommodationHistoryRows = (history: AccommodationSummaryDto[]): TableRow[] => {
-  return history.map((accommodation) => [
+  return history.map(accommodation => [
     textContent(formatDate(accommodation.startDate)),
     textContent(accommodation.endDate ? formatDate(accommodation.endDate) : ''),
     htmlContent(accommodationSummaryAddress(accommodation)),

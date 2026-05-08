@@ -1,11 +1,5 @@
 import { DateFieldValues } from '@sas/ui'
-import {
-  calculateAge,
-  dateInputToIsoDate,
-  formatDate,
-  formatDateAndAge,
-  formatDateAndDaysAgo,
-} from './dates'
+import { calculateAge, dateInputToIsoDate, formatDate, formatDateAndAge, formatDateAndDaysAgo } from './dates'
 
 describe('date utilities', () => {
   beforeEach(() => {

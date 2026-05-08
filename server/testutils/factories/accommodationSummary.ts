@@ -34,7 +34,6 @@ class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
   }
 
   buildListSequential(count: number) {
-    this.lastStartDate = faker.datatype.boolean() ? faker.date.soon({ days: 60 }) : undefined
     return Array.from({ length: count }, () => this.sequential().build())
   }
 }

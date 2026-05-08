@@ -104,6 +104,7 @@ async function stubAccommodation() {
 
 async function stubReferenceData() {
   await referenceDataApi.stubGetLocalAuthorities()
+  await referenceDataApi.stubGetAccommodationTypes()
 }
 
 ;(async function () {

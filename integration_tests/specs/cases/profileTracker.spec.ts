@@ -130,7 +130,7 @@ test.describe('Profile Tracker Page', () => {
     })
 
     test(`should render no accommodation cards and NFA alert for a case with no fixed abode`, async ({ page }) => {
-      const caseData = caseFactory.noFixedAbodeCurrent().build({ crn, status: 'NO_FIXED_ABODE' })
+      const caseData = caseFactory.nfa().build({ crn })
       await setupStubs({ crn, caseData })
       await login(page)
 

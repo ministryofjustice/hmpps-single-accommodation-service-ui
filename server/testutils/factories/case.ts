@@ -27,6 +27,14 @@ class CaseFactory extends Factory<Case> {
       status: 'RISK_OF_NO_FIXED_ABODE',
     })
   }
+
+  nfa() {
+    return this.params({
+      currentAccommodation: null,
+      nextAccommodation: null,
+      status: 'NO_FIXED_ABODE',
+    })
+  }
 }
 
 export default CaseFactory.define(() => {

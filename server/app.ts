@@ -21,6 +21,7 @@ import setUpWebSession from './middleware/setUpWebSession'
 import routes from './routes'
 import type { Services } from './services'
 import config from './config'
+import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedirect'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -39,6 +40,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpAuthentication())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(setUpMaintenancePageRedirect())
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')
     next()

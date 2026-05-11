@@ -116,5 +116,6 @@ export default {
     .filter(Boolean),
   flags: {
     v10CasesList: get('V10_CASES_LIST', 'false') === 'true',
+    maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
   },
 }

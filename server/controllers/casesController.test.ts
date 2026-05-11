@@ -190,7 +190,7 @@ describe('casesController', () => {
       expect(proposedAddressesService.getProposedAddresses).not.toHaveBeenCalled()
       expect(accommodationService.getAccommodationHistory).not.toHaveBeenCalled()
 
-      expect(response.render).toHaveBeenCalledWith('pages/showExcluded', {
+      expect(response.render).toHaveBeenCalledWith('pages/show-excluded', {
         caseData,
       })
     })

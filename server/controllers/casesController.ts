@@ -89,7 +89,7 @@ export default class CasesController {
       const { data: caseData } = await this.casesService.getCase(token, crn)
 
       if (caseData.caseAccess === 'EXCLUDED') {
-        return res.render('pages/showExcluded', { caseData })
+        return res.render('pages/show-excluded', { caseData })
       }
 
       const [

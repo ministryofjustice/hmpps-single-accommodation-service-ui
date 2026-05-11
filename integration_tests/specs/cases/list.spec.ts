@@ -59,9 +59,13 @@ test.describe('List of cases', () => {
 
   test('should show LAO cases', async ({ page }) => {
     // GIVEN there are LAO cases to show
-    const cases = [caseFactory.excludedAccess().build()]
+    const cases = [
+      caseFactory.build(),
+      caseFactory.build({ caseAccess: 'RESTRICTED' }),
+      caseFactory.excludedAccess().build(),
+    ]
     await casesApi.stubGetCases(cases)
-    await casesApi.stubGetCaseByCrn(cases[0].crn, cases[0])
+    await casesApi.stubGetCaseByCrn(cases[2].crn, cases[2])
 
     // WHEN I sign in
     await login(page)
@@ -74,7 +78,7 @@ test.describe('List of cases', () => {
     await casesListPage.clickLink('Limited access offender')
 
     // THEN I should see the LAO access page
-    const laoAccessPage = await LaoAccessPage.verifyOnPage(page, cases[0])
+    const laoAccessPage = await LaoAccessPage.verifyOnPage(page, cases[2])
 
     // AND it should have content
     await laoAccessPage.shouldHaveContent()

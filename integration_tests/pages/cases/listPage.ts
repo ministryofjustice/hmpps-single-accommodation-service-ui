@@ -26,7 +26,7 @@ export default class CasesListPage extends AbstractPage {
       const row =
         person.caseAccess !== 'EXCLUDED'
           ? this.page.getByRole('row', { name: person.name })
-          : this.page.getByRole('row', { name: 'Limited access offender' }).nth(index)
+          : this.page.locator('tbody').getByRole('row').nth(index)
 
       await expect(row).toContainText(person.crn as string)
       await expect(row).toContainText(person.prisonNumber as string)

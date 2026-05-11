@@ -12,7 +12,7 @@ export default class LaoAccessPage extends AbstractPage {
   }
 
   async shouldHaveContent() {
-    await expect(this.page.locator('.sas-definition-list', { hasText: 'CRN:' })).toContainText(this.caseData.crn)
+    await expect(this.page.locator(`dt:has-text("CRN") + dd`)).toContainText(this.caseData.crn)
     await expect(
       this.page.getByRole('link', { name: 'Raise a request for access through ServiceNow (opens in new tab)' }),
     ).toHaveAttribute(

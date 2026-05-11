@@ -30,7 +30,7 @@ export default {
         urlPathPattern: '/reference-data',
         queryParameters: {
           type: {
-            equalTo: 'ACCOMMODATION_TYPES',
+            equalTo: 'PROPOSED_ACCOMMODATION_TYPES',
           },
         },
       },

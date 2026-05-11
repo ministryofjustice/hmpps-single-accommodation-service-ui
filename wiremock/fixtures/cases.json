@@ -308,16 +308,6 @@
     "caseAccess": "FULL"
   },
   {
-    "crn": "A643094",
-    "prisonNumber": "B1222CJ",
-    "assignedTo": {
-      "forename": "Jessica",
-      "surname": "Hansen",
-      "username": "jessica.hansen"
-    },
-    "caseAccess": "EXCLUDED"
-  },
-  {
     "name": "Jim Anderson",
     "crn": "H271226",
     "status": "RISK_OF_NO_FIXED_ABODE",
@@ -579,5 +569,15 @@
       }
     },
     "caseAccess": "FULL"
+  },
+  {
+    "crn": "A643094",
+    "prisonNumber": "B1222CJ",
+    "assignedTo": {
+      "forename": "Jessica",
+      "surname": "Hansen",
+      "username": "jessica.hansen"
+    },
+    "caseAccess": "EXCLUDED"
   }
 ]

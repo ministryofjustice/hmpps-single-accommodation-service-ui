@@ -49,7 +49,7 @@ const saveToFixture = (fixtureName: string, data: unknown) => {
 
 let allCases: CaseDto[]
 if (generate.cases) {
-  allCases = caseFactory.buildList(20)
+  allCases = [...caseFactory.buildList(10), caseFactory.excludedAccess().build()]
   saveToFixture('cases', allCases)
 } else {
   allCases = casesFixture as CaseDto[]

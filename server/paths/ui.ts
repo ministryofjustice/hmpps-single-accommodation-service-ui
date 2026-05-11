@@ -32,4 +32,9 @@ export default {
     update: proposedAddressesPath.path('update'),
     cancel: proposedAddressesPath.path('cancel'),
   },
+  static: {
+    notAuthorised: path('/not-authorised'),
+    notFound: path('/not-found'),
+    maintenance: path('/maintenance'),
+  }
 }

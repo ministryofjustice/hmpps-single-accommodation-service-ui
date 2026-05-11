@@ -42,7 +42,7 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodation
     status: proposedAddressStatusTag(status),
     details: [
       summaryListRowText('Housing arrangement', proposedAddress.accommodationType.description),
-      summaryListRowText('Added by', ''),
+      summaryListRowText('Added by', proposedAddress.createdBy),
       summaryListRowText('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
     ],
     links: linksForStatus(status, proposedAddress.crn, proposedAddress.id),

@@ -378,7 +378,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Added by",
       },
       "value": {
-        "text": "",
+        "text": "John Smith",
       },
     },
     {
@@ -421,7 +421,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Added by",
       },
       "value": {
-        "text": "",
+        "text": "John Smith",
       },
     },
     {
@@ -468,7 +468,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Added by",
       },
       "value": {
-        "text": "",
+        "text": "John Smith",
       },
     },
     {
@@ -515,7 +515,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
         "text": "Added by",
       },
       "value": {
-        "text": "",
+        "text": "John Smith",
       },
     },
     {
@@ -562,7 +562,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confi
         "text": "Added by",
       },
       "value": {
-        "text": "",
+        "text": "John Smith",
       },
     },
     {
@@ -605,7 +605,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
         "text": "Added by",
       },
       "value": {
-        "text": "",
+        "text": "John Smith",
       },
     },
     {

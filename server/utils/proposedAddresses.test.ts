@@ -60,6 +60,7 @@ describe('Proposed addresses utilities', () => {
       verificationStatus: 'PASSED',
       nextAccommodationStatus: 'YES',
       createdAt: '2026-01-20T11:00:00.000Z',
+      createdBy: 'John Smith',
       accommodationType: {
         code: 'A444',
         description: 'Other accommodation type',

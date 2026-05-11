@@ -83,7 +83,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1040.0",
+    "@aws-sdk/client-sqs": "^3.1041.0",
     "@faker-js/faker": "^10.4.0",
     "@ministryofjustice/frontend": "9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
@@ -156,7 +156,7 @@
     "lint-staged": "^16.4.0",
     "nock": "^14.0.14",
     "prettier": "^3.8.3",
-    "prettier-plugin-jinja-template": "^2.1.0",
+    "prettier-plugin-jinja-template": "^2.2.0",
     "start-server-and-test": "^3.0.2",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",

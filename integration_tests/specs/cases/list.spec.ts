@@ -4,6 +4,7 @@ import casesApi from '../../mockApis/cases'
 import CasesListPage from '../../pages/cases/listPage'
 import { caseFactory } from '../../../server/testutils/factories'
 import { formatRiskLevel } from '../../../server/utils/cases'
+import LaoAccessPage from '../../pages/cases/laoAccessPage'
 
 test.describe('List of cases', () => {
   test('Should list all cases for the user and allow filtering', async ({ page }) => {
@@ -58,8 +59,9 @@ test.describe('List of cases', () => {
 
   test('should show LAO cases', async ({ page }) => {
     // GIVEN there are LAO cases to show
-    const cases = caseFactory.excludedAccess().buildList(3)
+    const cases = [caseFactory.excludedAccess().build()]
     await casesApi.stubGetCases(cases)
+    await casesApi.stubGetCaseByCrn(cases[0].crn, cases[0])
 
     // WHEN I sign in
     await login(page)
@@ -67,5 +69,14 @@ test.describe('List of cases', () => {
     // THEN I should see the Case list
     const casesListPage = await CasesListPage.verifyOnPage(page)
     await casesListPage.shouldShowCases(cases, [])
+
+    // WHEN I click on a Limited access offender link
+    await casesListPage.clickLink('Limited access offender')
+
+    // THEN I should see the LAO access page
+    const laoAccessPage = await LaoAccessPage.verifyOnPage(page, cases[0])
+
+    // AND it should have content
+    await laoAccessPage.shouldHaveContent()
   })
 })

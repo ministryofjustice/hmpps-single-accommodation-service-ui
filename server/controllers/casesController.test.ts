@@ -173,5 +173,26 @@ describe('casesController', () => {
         failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),
       })
     })
+
+    it('renders a separate template for an LAO case and does not call the API for extra info', async () => {
+      const crn = 'X666667'
+      request.params.crn = crn
+
+      const caseData = caseFactory.excludedAccess().build({ crn })
+      casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
+
+      await casesController.show()(request, response, next)
+
+      expect(casesService.getCase).toHaveBeenCalledWith(TEST_TOKEN, crn)
+
+      expect(referralsService.getReferralHistory).not.toHaveBeenCalled()
+      expect(eligibilityService.getEligibility).not.toHaveBeenCalled()
+      expect(proposedAddressesService.getProposedAddresses).not.toHaveBeenCalled()
+      expect(accommodationService.getAccommodationHistory).not.toHaveBeenCalled()
+
+      expect(response.render).toHaveBeenCalledWith('pages/showExcluded', {
+        caseData,
+      })
+    })
   })
 })

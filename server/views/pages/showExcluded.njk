@@ -1,0 +1,51 @@
+{% extends "partials/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Limited access offender" %}
+
+{% block containerStart %}
+  {{
+    govukBackLink({
+      text: "Back",
+      href: "/"
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">Limited access offender</h1>
+
+      <dl class="sas-definition-list">
+        <div>
+          <dd>CRN:</dd>
+          <dt>{{ caseData.crn }}</dt>
+        </div>
+      </dl>
+
+      <p>This person is a limited access offender (LAO). Ask a senior probation officer (SPO) for access.</p>
+
+      <p>You can also:</p>
+
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+        <li>Ask your line manager about access settings</li>
+        <li>
+          <a
+            href="https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=711e47b91bfe195025dc6351f54bcb7b&searchTerm=limited%20access%20offender%20permission"
+            target="_blank"
+          >
+            Raise a request for access through ServiceNow (opens in new tab)
+          </a>
+        </li>
+      </ul>
+
+      {{ govukButton({
+        text: "Go to case list",
+        href: "/"
+      }) }}
+    </div>
+  </div>
+{% endblock %}

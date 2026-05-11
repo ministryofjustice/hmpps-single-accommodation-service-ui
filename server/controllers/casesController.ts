@@ -86,8 +86,13 @@ export default class CasesController {
       const { crn } = req.params
       const { token } = res.locals.user
 
+      const { data: caseData } = await this.casesService.getCase(token, crn)
+
+      if (caseData.caseAccess === 'EXCLUDED') {
+        return res.render('pages/showExcluded', { caseData })
+      }
+
       const [
-        { data: caseData },
         { data: referralHistory },
         { data: eligibility },
         { data: proposedAddresses },
@@ -95,7 +100,6 @@ export default class CasesController {
         { data: nextAccommodation },
         { data: accommodationHistory },
       ] = await Promise.all([
-        this.casesService.getCase(token, crn),
         this.referralsService.getReferralHistory(token, crn),
         this.eligibilityService.getEligibility(token, crn),
         this.proposedAddressesService.getProposedAddresses(token, crn),

@@ -24,10 +24,7 @@ describe('GET 500', () => {
       .expect(res => {
         expect(res.text).toContain('Cannot read properties of undefined')
         expect(res.text).not.toContain('Sorry, there is a problem with the service.')
-        expect(logger.error).toHaveBeenCalledWith(
-          "Error handling request for '/', user 'user1'",
-          expect.any(Error),
-        )
+        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
       })
   })
 
@@ -39,10 +36,7 @@ describe('GET 500', () => {
       .expect(res => {
         expect(res.text).toContain('Sorry, there is a problem with the service.')
         expect(res.text).not.toContain('Cannot read properties of undefined')
-        expect(logger.error).toHaveBeenCalledWith(
-          "Error handling request for '/', user 'user1'",
-          expect.any(Error),
-        )
+        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
       })
   })
 })

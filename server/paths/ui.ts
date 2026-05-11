@@ -36,5 +36,5 @@ export default {
     notAuthorised: path('/not-authorised'),
     notFound: path('/not-found'),
     maintenance: path('/maintenance'),
-  }
+  },
 }

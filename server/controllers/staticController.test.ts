@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 
-import StaticController from './staticController'
 import { mock } from 'jest-mock-extended'
+import StaticController from './staticController'
 
 describe('StaticController', () => {
   const request = mock<Request>()

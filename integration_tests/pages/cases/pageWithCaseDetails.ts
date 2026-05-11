@@ -6,6 +6,11 @@ import { formatDate } from '../../../server/utils/dates'
 
 export default class PageWithCaseDetails extends AbstractPage {
   async shouldShowCaseDetails(caseData: CaseDto) {
+    let heading = caseData.name
+    if (caseData.caseAccess === 'RESTRICTED') heading += ' (limited access offender)'
+
+    await expect(this.page.getByRole('heading', { name: heading, level: 1 })).toBeVisible()
+
     const details = [
       { label: 'RoSH', value: riskLevelStatusTag(caseData.riskLevel).text },
       { label: 'Tier', value: caseData.tierScore },

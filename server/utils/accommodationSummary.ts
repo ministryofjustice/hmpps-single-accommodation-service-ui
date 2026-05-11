@@ -1,4 +1,4 @@
-import { AccommodationStatusDto, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationStatusDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
@@ -87,6 +87,15 @@ export const accommodationCard = (
   }
 }
 
+export const noFixedAbodeAlert = (caseData: CaseDto, accommodation?: AccommodationSummaryDto) => {
+  if (caseData.status !== 'NO_FIXED_ABODE' && caseData.status !== 'RISK_OF_NO_FIXED_ABODE') return undefined
+
+  return {
+    date: caseData.status === 'RISK_OF_NO_FIXED_ABODE' ? accommodation?.endDate : null,
+    status: caseData.status,
+  }
+}
+
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationSummaryDto): string =>
   accommodation
     ? renderMacro('accommodationCell', {
@@ -113,7 +122,7 @@ export const accommodationSummaryAddress = (accommodation: AccommodationSummaryD
 export const accommodationHistoryRows = (history: AccommodationSummaryDto[]): TableRow[] => {
   return history.map(accommodation => [
     textContent(formatDate(accommodation.startDate)),
-    textContent(accommodation.endDate ? formatDate(accommodation.endDate) : 'Current'),
+    textContent(accommodation.endDate ? formatDate(accommodation.endDate) : ''),
     htmlContent(accommodationSummaryAddress(accommodation)),
     htmlContent(accommodation.status ? statusTag(accommodationSummaryStatusTag(accommodation.status)) : ''),
   ])

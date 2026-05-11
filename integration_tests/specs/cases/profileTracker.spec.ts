@@ -111,9 +111,12 @@ test.describe('Profile Tracker Page', () => {
 
       await profileTrackerPage.shouldShowNextAccommodationCard(nextAccommodation)
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
+      await profileTrackerPage.shouldNotShowNoFixedAbodeAlert()
     })
 
-    test(`should render only current accommodation for a NFA next case`, async ({ page }) => {
+    test(`should render current accommodation card and NFA alert for a case with risk of no fixed abode`, async ({
+      page,
+    }) => {
       const caseData = caseFactory.riskOfNfa().build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
       await setupStubs({ crn, caseData, currentAccommodation })
@@ -123,6 +126,19 @@ test.describe('Profile Tracker Page', () => {
 
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, currentAccommodation)
+    })
+
+    test(`should render no accommodation cards and NFA alert for a case with no fixed abode`, async ({ page }) => {
+      const caseData = caseFactory.nfa().build({ crn })
+      await setupStubs({ crn, caseData })
+      await login(page)
+
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+      await profileTrackerPage.shouldNotShowCurrentAccommodationCard()
+      await profileTrackerPage.shouldNotShowNextAccommodationCard()
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData)
     })
   })
 

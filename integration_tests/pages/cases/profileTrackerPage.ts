@@ -76,6 +76,33 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(this.page.locator('.sas-card', { hasText: 'Next accommodation' })).toHaveCount(0)
   }
 
+  async shouldNotShowCurrentAccommodationCard() {
+    await expect(this.page.locator('.sas-card', { hasText: 'Current accommodation' })).toHaveCount(0)
+  }
+
+  async shouldShowNoFixedAbodeAlert(caseData: Case, accommodation?: AccommodationSummaryDto) {
+    if (caseData.status === 'NO_FIXED_ABODE') {
+      const card = this.page.locator('.moj-alert', { hasText: 'No fixed abode' })
+      await expect(card).toBeVisible()
+      if (accommodation?.startDate) {
+        await expect(card).toContainText(`Since ${formatDate(accommodation.startDate, 'long')}`)
+        await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
+      }
+    } else {
+      const card = this.page.locator('.moj-alert', { hasText: 'Risk of no fixed abode' })
+      await expect(card).toBeVisible()
+      if (accommodation?.endDate) {
+        await expect(card).toContainText(`From ${formatDate(accommodation.endDate, 'long')}`)
+        await expect(card).toContainText(`(${formatDate(accommodation.endDate, 'days for/in')})`)
+      }
+    }
+  }
+
+  async shouldNotShowNoFixedAbodeAlert() {
+    await expect(this.page.locator('.moj-alert', { hasText: 'No fixed abode' })).toHaveCount(0)
+    await expect(this.page.locator('.moj-alert', { hasText: 'Risk of no fixed abode' })).toHaveCount(0)
+  }
+
   async shouldShowCurrentAccommodationCard(accommodation: AccommodationSummaryDto) {
     const card = this.page.locator('.sas-card', { hasText: 'Current accommodation' })
 
@@ -145,14 +172,11 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
 
     await this.shouldShowTableHeaders(['Start date', 'End date', 'Address', 'Status'], table)
 
-    for await (const accommodation of accommodations) {
-      const i = accommodations.indexOf(accommodation)
+    for await (const [i, accommodation] of accommodations.entries()) {
       const row = table.locator('tbody tr').nth(i)
 
       await expect(row).toContainText(formatDate(accommodation.startDate))
-      if (!accommodation.endDate) {
-        await expect(row).toContainText('Current')
-      } else {
+      if (accommodation.endDate) {
         await expect(row).toContainText(formatDate(accommodation.endDate))
       }
       for await (const addressPart of addressLines(accommodation.address)) {

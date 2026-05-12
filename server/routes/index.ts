@@ -7,7 +7,8 @@ import dutyToReferRoutes from './dutyToRefer'
 
 export default function routes(services: Services): Router {
   const router = Router()
-  const { casesController, proposedAddressesController, dutyToReferController } = controllers(services)
+  const { casesController, proposedAddressesController, dutyToReferController, staticController } =
+    controllers(services)
 
   router.get(uiPaths.cases.index.pattern, casesController.index())
   router.get(uiPaths.cases.search.pattern, casesController.search())
@@ -15,6 +16,9 @@ export default function routes(services: Services): Router {
 
   proposedAddressesRoutes(router, proposedAddressesController)
   dutyToReferRoutes(router, dutyToReferController)
+
+  router.get(uiPaths.static.notAuthorised.pattern, staticController.notAuthorised())
+  router.get(uiPaths.static.maintenance.pattern, staticController.maintenance())
 
   return router
 }

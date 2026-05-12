@@ -20,6 +20,7 @@ generic-service:
     SAS_ALLOWED_ROLES: "ROLE_PROBATION"
     V10_CASES_LIST: "false"
     LOG_LEVEL: 'debug'
+    MAINTENANCE_MODE: "false"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

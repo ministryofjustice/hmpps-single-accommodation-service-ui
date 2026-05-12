@@ -6,6 +6,7 @@ import logger from '../../logger'
 import CasesController from '../controllers/casesController'
 import ProposedAddressesController from '../controllers/proposedAddressesController'
 import DutyToReferController from '../controllers/dutyToReferController'
+import StaticController from '../controllers/staticController'
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -47,11 +48,17 @@ const dutyToReferController = mock<DutyToReferController>({
   saveNote: mockHandler,
 })
 
+const staticController = mock<StaticController>({
+  notAuthorised: mockHandler,
+  maintenance: mockHandler,
+})
+
 jest.mock('../controllers', () => ({
   controllers: () => ({
     casesController,
     proposedAddressesController,
     dutyToReferController,
+    staticController,
   }),
 }))
 

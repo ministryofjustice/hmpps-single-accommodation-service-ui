@@ -2,6 +2,7 @@ import { Services } from '../services'
 import CasesController from './casesController'
 import DutyToReferController from './dutyToReferController'
 import ProposedAddressesController from './proposedAddressesController'
+import StaticController from './staticController'
 
 export const controllers = (services: Services) => ({
   casesController: new CasesController(
@@ -26,6 +27,7 @@ export const controllers = (services: Services) => ({
     services.casesService,
     services.referenceDataService,
   ),
+  staticController: new StaticController(),
 })
 
 export type Controllers = ReturnType<typeof controllers>

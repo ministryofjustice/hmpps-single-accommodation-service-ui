@@ -13,7 +13,7 @@ describeClient('ReferenceDataClient', provider => {
     referenceDataClient = new ReferenceDataClient(mockAuthenticationClient)
   })
 
-  it.each(['LOCAL_AUTHORITY_AREAS', 'ACCOMMODATION_TYPES'])(
+  it.each(['LOCAL_AUTHORITY_AREAS', 'PROPOSED_ACCOMMODATION_TYPES'])(
     'should make a GET request to /reference-data?type=%s and return the response body',
     async objectType => {
       const body = apiResponseFactory.referenceData()

@@ -8,6 +8,6 @@ export default class ReferenceDataService {
   }
 
   getAccommodationTypes(token: string) {
-    return this.referenceDataClient.getReferenceData(token, 'ACCOMMODATION_TYPES')
+    return this.referenceDataClient.getReferenceData(token, 'PROPOSED_ACCOMMODATION_TYPES')
   }
 }

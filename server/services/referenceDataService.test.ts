@@ -29,7 +29,7 @@ describe('ReferenceDataService', () => {
 
     const result = await referenceDataService.getAccommodationTypes(token)
 
-    expect(referenceDataClient.getReferenceData).toHaveBeenCalledWith(token, 'ACCOMMODATION_TYPES')
+    expect(referenceDataClient.getReferenceData).toHaveBeenCalledWith(token, 'PROPOSED_ACCOMMODATION_TYPES')
     expect(result).toEqual(response)
   })
 })

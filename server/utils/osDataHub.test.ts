@@ -14,6 +14,10 @@ describe('OS DataHub utils', () => {
       { DPA: { SUB_BUILDING_NAME: 'SOMETHING 333' } },
     ] as OsDataHubResult[]
 
+    it('returns no results if results are undefined', () => {
+      expect(filterResultsByNameOrNumber(undefined, '19')).toEqual([])
+    })
+
     it.each([
       ['19', [results[0], results[1], results[2], results[3], results[4], results[5]]],
       ['219', [results[1], results[3], results[5]]],

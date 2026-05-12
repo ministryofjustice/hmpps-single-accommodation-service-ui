@@ -1,15 +1,11 @@
 import express, { Express } from 'express'
-import type { Request, Response, NextFunction } from 'express'
+import type { Request, Response } from 'express'
 import request from 'supertest'
 import config from '../config'
 import setUpMaintenancePageRedirect from './setUpMaintenancePageRedirect'
 
 const setupApp = (): Express => {
   const app = express()
-
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    next()
-  })
 
   app.use(setUpMaintenancePageRedirect())
 
@@ -31,7 +27,7 @@ describe('setUpMaintenancePageRedirect', () => {
     jest.resetAllMocks()
   })
 
-  describe('when the IN_MAINTENANCE_MODE environment variable is set to false', () => {
+  describe('when the MAINTENANCE_MODE environment variable is set to false', () => {
     beforeEach(() => {
       config.flags.maintenanceMode = false
       app = setupApp()
@@ -47,7 +43,7 @@ describe('setUpMaintenancePageRedirect', () => {
     })
   })
 
-  describe('when the IN_MAINTENANCE_MODE environment variable is set to true', () => {
+  describe('when the MAINTENANCE_MODE environment variable is set to true', () => {
     beforeEach(() => {
       config.flags.maintenanceMode = true
       app = setupApp()

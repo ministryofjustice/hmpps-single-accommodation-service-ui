@@ -34,7 +34,7 @@ describe('GET 500', () => {
       .expect(500)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Sorry, there is a problem with the service.')
+        expect(res.text).toContain('Sorry, there is a problem with the service')
         expect(res.text).not.toContain('Cannot read properties of undefined')
         expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
       })

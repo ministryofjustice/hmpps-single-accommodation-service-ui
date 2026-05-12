@@ -18,7 +18,7 @@ export default function createErrorHandler(production: boolean) {
       return res.render('pages/static/not-found')
     }
 
-    res.locals.message = production ? 'Sorry, there is a problem with the service.' : error.message
+    res.locals.message = production ? 'Sorry, there is a problem with the service' : error.message
     res.locals.status = production ? null : error.status
     res.locals.stack = production ? 'Try again later.' : error.stack
 

@@ -16,8 +16,7 @@ describe('StaticController', () => {
 
   describe('notAuthorised', () => {
     it('should render the not authorise page', () => {
-      const requestHandler = staticController.notAuthorised()
-      requestHandler(request, response, next)
+      staticController.notAuthorised()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/static/not-authorised')
     })
@@ -25,8 +24,7 @@ describe('StaticController', () => {
 
   describe('maintenance', () => {
     it('should render the maintenance page', () => {
-      const requestHandler = staticController.maintenance()
-      requestHandler(request, response, next)
+      staticController.maintenance()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/static/maintenance')
     })
@@ -34,8 +32,7 @@ describe('StaticController', () => {
 
   describe('notFound', () => {
     it('should render the not found page', () => {
-      const requestHandler = staticController.notFound()
-      requestHandler(request, response, next)
+      staticController.notFound()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/static/not-found')
     })

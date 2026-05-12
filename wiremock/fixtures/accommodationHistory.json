@@ -16,11 +16,11 @@
       },
       "status": {
         "code": "M",
-        "description": "forenenst broken where"
+        "description": "Main"
       },
       "type": {
-        "code": "A08",
-        "description": "optimistically during"
+        "code": "A01C",
+        "description": "Renting from a private landlord or letting agent"
       }
     },
     {
@@ -44,7 +44,7 @@
       },
       "type": {
         "code": "A15",
-        "description": "adviser anenst"
+        "description": "Immigration Detention"
       }
     },
     {
@@ -67,7 +67,7 @@
       },
       "type": {
         "code": "A11",
-        "description": "blah between"
+        "description": "CAS2 accommodation of less than 13 weeks"
       }
     },
     {
@@ -89,8 +89,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A08A",
-        "description": "ignorance down"
+        "code": "A07A",
+        "description": "Living in the home of a friend, family member or partner: transient"
       }
     }
   ],
@@ -110,12 +110,12 @@
         "uprn": "BNBfaIucEZm0"
       },
       "status": {
-        "code": "B",
-        "description": "except forenenst"
+        "code": "M",
+        "description": "Main"
       },
       "type": {
         "code": "A04",
-        "description": "consequently how courtroom"
+        "description": "Supported housing (with support services)"
       }
     },
     {
@@ -138,7 +138,7 @@
       },
       "type": {
         "code": "A01D",
-        "description": "yahoo how"
+        "description": "Renting from a council or housing association (social housing)"
       }
     },
     {
@@ -161,7 +161,7 @@
       },
       "type": {
         "code": "A01A",
-        "description": "mid department why"
+        "description": "Owner of the property"
       }
     }
   ],
@@ -181,12 +181,12 @@
         "uprn": "4xRvc9bHDVrI"
       },
       "status": {
-        "code": "B",
-        "description": "ridge asset wombat"
+        "code": "M",
+        "description": "Main"
       },
       "type": {
         "code": "A01C",
-        "description": "deliberately co-producer"
+        "description": "Renting from a private landlord or letting agent"
       }
     }
   ],
@@ -210,7 +210,7 @@
       },
       "type": {
         "code": "A14",
-        "description": "closely frightfully broadly"
+        "description": "HOIE Section 10: staying in a Home Office specified residence"
       }
     },
     {
@@ -233,7 +233,7 @@
       },
       "type": {
         "code": "A13",
-        "description": "plumber"
+        "description": "HOIE Section 4: staying in Home Office accommodation support"
       }
     }
   ],
@@ -254,11 +254,11 @@
       },
       "status": {
         "code": "M",
-        "description": "dramatize co-producer"
+        "description": "Main"
       },
       "type": {
         "code": "A13",
-        "description": "flu"
+        "description": "HOIE Section 4: staying in Home Office accommodation support"
       }
     },
     {
@@ -282,7 +282,7 @@
       },
       "type": {
         "code": "A15",
-        "description": "brr along under"
+        "description": "Immigration Detention"
       }
     },
     {
@@ -305,7 +305,7 @@
       },
       "type": {
         "code": "A03",
-        "description": "what"
+        "description": "Transient or short-term accommodation"
       }
     },
     {
@@ -327,8 +327,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A17",
-        "description": "instantly"
+        "code": "A04",
+        "description": "Supported housing (with support services)"
       }
     },
     {
@@ -351,8 +351,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A17",
-        "description": "mortise astride"
+        "code": "A04",
+        "description": "Supported housing (with support services)"
       }
     },
     {
@@ -375,7 +375,7 @@
       },
       "type": {
         "code": "A03",
-        "description": "recklessly almost"
+        "description": "Transient or short-term accommodation"
       }
     },
     {
@@ -398,7 +398,7 @@
       },
       "type": {
         "code": "A15",
-        "description": "sneak garrote"
+        "description": "Immigration Detention"
       }
     }
   ],
@@ -418,12 +418,12 @@
         "uprn": "nmre4DthOz1k"
       },
       "status": {
-        "code": "S",
-        "description": "excitable gah atop"
+        "code": "M",
+        "description": "Main"
       },
       "type": {
-        "code": "A08",
-        "description": "intensely intrigue splay"
+        "code": "A01D",
+        "description": "Renting from a council or housing association (social housing)"
       }
     },
     {
@@ -445,8 +445,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A08C",
-        "description": "ack behind scaly"
+        "code": "A12",
+        "description": "Living in a care home or nursing home"
       }
     },
     {
@@ -469,7 +469,7 @@
       },
       "type": {
         "code": "A07B",
-        "description": "rightfully pinion"
+        "description": "Living in the home of a friend, family member or partner: settled"
       }
     },
     {
@@ -491,8 +491,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A08",
-        "description": "tedious vacantly oh"
+        "code": "A11",
+        "description": "CAS2 accommodation of less than 13 weeks"
       }
     },
     {
@@ -515,7 +515,7 @@
       },
       "type": {
         "code": "A07A",
-        "description": "neatly"
+        "description": "Living in the home of a friend, family member or partner: transient"
       }
     },
     {
@@ -537,8 +537,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A08",
-        "description": "whoa knife apropos"
+        "code": "A13",
+        "description": "HOIE Section 4: staying in Home Office accommodation support"
       }
     },
     {
@@ -560,8 +560,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A02",
-        "description": "beside"
+        "code": "A01D",
+        "description": "Renting from a council or housing association (social housing)"
       }
     }
   ],
@@ -581,12 +581,12 @@
         "uprn": "Qns7v9nHDCVZ"
       },
       "status": {
-        "code": "PR1",
-        "description": "till energetically untried"
+        "code": "M",
+        "description": "Main"
       },
       "type": {
         "code": "A01D",
-        "description": "around"
+        "description": "Renting from a council or housing association (social housing)"
       }
     },
     {
@@ -607,8 +607,8 @@
         "description": "Main"
       },
       "type": {
-        "code": "A17",
-        "description": "ew softly boastfully"
+        "code": "A12",
+        "description": "Living in a care home or nursing home"
       }
     },
     {
@@ -631,7 +631,7 @@
       },
       "type": {
         "code": "A12",
-        "description": "an eek hm"
+        "description": "Living in a care home or nursing home"
       }
     },
     {
@@ -654,7 +654,7 @@
       },
       "type": {
         "code": "A11",
-        "description": "nougat"
+        "description": "CAS2 accommodation of less than 13 weeks"
       }
     },
     {
@@ -677,8 +677,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A02",
-        "description": "off"
+        "code": "A07A",
+        "description": "Living in the home of a friend, family member or partner: transient"
       }
     },
     {
@@ -701,7 +701,7 @@
       },
       "type": {
         "code": "A01D",
-        "description": "quickly"
+        "description": "Renting from a council or housing association (social housing)"
       }
     }
   ],
@@ -721,12 +721,12 @@
         "uprn": "9L9zOkY1RuBc"
       },
       "status": {
-        "code": "S",
-        "description": "upon"
+        "code": "M",
+        "description": "Main"
       },
       "type": {
         "code": "A12",
-        "description": "meaty warmly readies"
+        "description": "Living in a care home or nursing home"
       }
     },
     {
@@ -750,7 +750,7 @@
       },
       "type": {
         "code": "A07A",
-        "description": "ugh"
+        "description": "Living in the home of a friend, family member or partner: transient"
       }
     },
     {
@@ -773,7 +773,7 @@
       },
       "type": {
         "code": "A12",
-        "description": "penalise so"
+        "description": "Living in a care home or nursing home"
       }
     }
   ],
@@ -797,8 +797,8 @@
         "description": "Main"
       },
       "type": {
-        "code": "A02",
-        "description": "fondly powerful"
+        "code": "A10",
+        "description": "CAS2 accommodation of 13 weeks or more"
       }
     },
     {
@@ -820,8 +820,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A16",
-        "description": "the communicate"
+        "code": "A14",
+        "description": "HOIE Section 10: staying in a Home Office specified residence"
       }
     },
     {
@@ -844,7 +844,7 @@
       },
       "type": {
         "code": "A14",
-        "description": "doubter"
+        "description": "HOIE Section 10: staying in a Home Office specified residence"
       }
     },
     {
@@ -867,7 +867,7 @@
       },
       "type": {
         "code": "A01A",
-        "description": "uh-huh reporter ack"
+        "description": "Owner of the property"
       }
     },
     {
@@ -889,8 +889,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A08",
-        "description": "consequently"
+        "code": "A01D",
+        "description": "Renting from a council or housing association (social housing)"
       }
     },
     {
@@ -912,8 +912,8 @@
         "description": "Previous"
       },
       "type": {
-        "code": "A17",
-        "description": "eventually dally"
+        "code": "A15",
+        "description": "Immigration Detention"
       }
     }
   ],
@@ -933,12 +933,12 @@
         "uprn": "t5Hv5eaneK9j"
       },
       "status": {
-        "code": "PR1",
-        "description": "regarding before why"
+        "code": "M",
+        "description": "Main"
       },
       "type": {
         "code": "A10",
-        "description": "in-joke"
+        "description": "CAS2 accommodation of 13 weeks or more"
       }
     },
     {
@@ -961,7 +961,7 @@
       },
       "type": {
         "code": "A01C",
-        "description": "till"
+        "description": "Renting from a private landlord or letting agent"
       }
     },
     {
@@ -985,7 +985,7 @@
       },
       "type": {
         "code": "A01C",
-        "description": "provided"
+        "description": "Renting from a private landlord or letting agent"
       }
     }
   ]

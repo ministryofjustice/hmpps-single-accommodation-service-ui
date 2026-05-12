@@ -27,4 +27,16 @@ describe('CasesService', () => {
     expect(casesClient.getCases).toHaveBeenCalledWith(token, query)
     expect(result).toEqual(response)
   })
+
+  it('should call getCase on the api client with the correct parameters and return the case', async () => {
+    const response = apiResponseFactory.case()
+    const { crn } = response.data
+
+    casesClient.getCase.mockResolvedValue(response)
+
+    const result = await casesService.getCase(token, crn)
+
+    expect(casesClient.getCase).toHaveBeenCalledWith(token, crn)
+    expect(result).toEqual(response)
+  })
 })

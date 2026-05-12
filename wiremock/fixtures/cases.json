@@ -10,7 +10,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2021/1351925",
     "assignedTo": {
-      "name": "Barbara Batz V",
+      "forename": "Barbara",
+      "surname": "Batz",
       "username": "barbara.batz"
     },
     "currentAccommodation": {
@@ -58,7 +59,8 @@
         "code": "A10",
         "description": "yippee simplistic"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Blanca Schoen",
@@ -70,7 +72,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2025/5639232",
     "assignedTo": {
-      "name": "Carolyn Schumm PhD",
+      "forename": "Carolyn",
+      "surname": "Schumm",
       "username": "carolyn.schumm"
     },
     "currentAccommodation": {
@@ -117,7 +120,8 @@
         "code": "A02",
         "description": "destock"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Christian Keebler Jr.",
@@ -129,7 +133,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2018/1889273",
     "assignedTo": {
-      "name": "Dr. Dawn Treutel",
+      "forename": "Dawn",
+      "surname": "Treutel",
       "username": "dawn.treutel"
     },
     "currentAccommodation": {
@@ -176,7 +181,8 @@
         "code": "A04",
         "description": "range"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Noel Raynor",
@@ -189,7 +195,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2021/3453174",
     "assignedTo": {
-      "name": "Charlie Casper",
+      "forename": "Charlie",
+      "surname": "Casper",
       "username": "charlie.casper"
     },
     "currentAccommodation": {
@@ -236,7 +243,8 @@
         "code": "A02",
         "description": "once waterlogged"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Carol VonRueden",
@@ -248,7 +256,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2025/4038931",
     "assignedTo": {
-      "name": "Pauline Botsford MD",
+      "forename": "Pauline",
+      "surname": "Botsford",
       "username": "pauline.botsford"
     },
     "currentAccommodation": {
@@ -295,7 +304,8 @@
         "code": "A02",
         "description": "oblong"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Jim Anderson",
@@ -308,7 +318,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2021/8044772",
     "assignedTo": {
-      "name": "Jackie Stokes II",
+      "forename": "Jackie",
+      "surname": "Stokes",
       "username": "jackie.stokes"
     },
     "currentAccommodation": {
@@ -333,7 +344,8 @@
         "code": "A12",
         "description": "freezing"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Martin Farrell",
@@ -345,7 +357,8 @@
     "riskLevel": "VERY_HIGH",
     "pncReference": "2026/1099539",
     "assignedTo": {
-      "name": "Nathaniel Kling",
+      "forename": "Nathaniel",
+      "surname": "Kling",
       "username": "nathaniel.kling"
     },
     "currentAccommodation": {
@@ -392,7 +405,8 @@
         "code": "A01D",
         "description": "kookily boastfully freely"
       }
-    }
+    },
+    "caseAccess": "RESTRICTED"
   },
   {
     "name": "Ervin Ratke",
@@ -404,7 +418,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2020/9690517",
     "assignedTo": {
-      "name": "Louise Davis",
+      "forename": "Louise",
+      "surname": "Davis",
       "username": "louise.davis"
     },
     "currentAccommodation": {
@@ -451,7 +466,8 @@
         "code": "A14",
         "description": "out fibre"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Bert Morissette",
@@ -464,7 +480,8 @@
     "riskLevel": "HIGH",
     "pncReference": "2026/1181049",
     "assignedTo": {
-      "name": "Erika Mueller",
+      "forename": "Erika",
+      "surname": "Mueller",
       "username": "erika.mueller"
     },
     "currentAccommodation": {
@@ -489,7 +506,8 @@
         "code": "A07B",
         "description": "including"
       }
-    }
+    },
+    "caseAccess": "FULL"
   },
   {
     "name": "Ms. Ethel Hudson",
@@ -501,7 +519,8 @@
     "riskLevel": "MEDIUM",
     "pncReference": "2022/5650552",
     "assignedTo": {
-      "name": "Beverly Lindgren III",
+      "forename": "Beverly",
+      "surname": "Lindgren",
       "username": "beverly.lindgren"
     },
     "currentAccommodation": {
@@ -548,6 +567,17 @@
         "code": "A01C",
         "description": "rarely among"
       }
-    }
+    },
+    "caseAccess": "FULL"
+  },
+  {
+    "crn": "A643094",
+    "prisonNumber": "B1222CJ",
+    "assignedTo": {
+      "forename": "Jessica",
+      "surname": "Hansen",
+      "username": "jessica.hansen"
+    },
+    "caseAccess": "EXCLUDED"
   }
 ]

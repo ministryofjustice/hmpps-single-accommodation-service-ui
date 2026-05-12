@@ -1,3 +1,4 @@
+import { CaseDto } from '@sas/api'
 import {
   caseAssignedTo,
   casesResultsSummary,
@@ -7,6 +8,7 @@ import {
   queryToFilters,
   actionsCell,
   caseStatusCell,
+  displayName,
 } from './cases'
 import { accommodationSummaryFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
@@ -27,17 +29,45 @@ describe('cases utilities', () => {
   })
 
   describe('personCell macro', () => {
+    const personFullAccess = caseFactory.build({
+      name: 'Dave Foo',
+      crn: 'C321654',
+      prisonNumber: 'A1234BC',
+      dateOfBirth: '1980-10-09',
+      tierScore: 'B2',
+      riskLevel: 'VERY_HIGH',
+      caseAccess: 'FULL',
+    })
+
     it('renders a formatted cell for a given person', () => {
-      const person = caseFactory.build({
-        name: 'Dave Foo',
-        crn: 'C321654',
-        prisonNumber: 'A1234BC',
-        dateOfBirth: '1980-10-09',
-        tierScore: 'B2',
-        riskLevel: 'VERY_HIGH',
+      expect(personCell(personFullAccess)).toMatchSnapshot()
+    })
+
+    it('renders a formatted cell for an access RESTRICTED person', () => {
+      const personRestrictedAccess = caseFactory.build({
+        ...personFullAccess,
+        caseAccess: 'RESTRICTED',
       })
 
-      expect(personCell(person)).toMatchSnapshot()
+      expect(personCell(personRestrictedAccess)).toMatchSnapshot()
+    })
+
+    it('renders a formatted cell for an access EXCLUDED person', () => {
+      const personExcludedAccess = caseFactory.excludedAccess().build({
+        crn: 'C321666',
+        prisonNumber: 'Z4567HG',
+      })
+
+      expect(personCell(personExcludedAccess)).toMatchSnapshot()
+    })
+
+    it('renders a formatted cell for an access UNKNOWN person', () => {
+      const personUnknownAccess = caseFactory.unknownAccess().build({
+        crn: 'C321669',
+        prisonNumber: 'C4567HG',
+      })
+
+      expect(personCell(personUnknownAccess)).toMatchSnapshot()
     })
   })
 
@@ -106,7 +136,7 @@ describe('cases utilities', () => {
   describe('caseAssignedTo', () => {
     it('returns "You (name)" when the assignedTo username matches the given username', () => {
       const person = caseFactory.build({
-        assignedTo: { username: 'alice_smith', name: 'Alice Smith' },
+        assignedTo: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' },
       })
 
       expect(caseAssignedTo(person, 'alice_smith')).toEqual('You (Alice Smith)')
@@ -114,7 +144,7 @@ describe('cases utilities', () => {
 
     it('returns the assignedTo name when the assignedTo username does not match the given username', () => {
       const person = caseFactory.build({
-        assignedTo: { username: 'bob_johnson', name: 'Bob Johnson' },
+        assignedTo: { username: 'bob_johnson', forename: 'Bob', surname: 'Johnson' },
       })
       expect(caseAssignedTo(person, 'alice_smith')).toEqual('Bob Johnson')
     })
@@ -168,6 +198,32 @@ describe('cases utilities', () => {
       ],
     ])('includes a filter tag when %s is set', (_, query, url, expected) => {
       expect(queryToFilters(query, url)).toEqual(expected)
+    })
+  })
+
+  describe('displayName', () => {
+    it.each(['FULL', 'RESTRICTED'])(
+      "return the person's name for a case with access %s",
+      (access: CaseDto['caseAccess']) => {
+        const person = caseFactory.build({
+          name: 'Dave Foo',
+          caseAccess: access,
+        })
+
+        expect(displayName(person)).toEqual('Dave Foo')
+      },
+    )
+
+    it('returns "Limited access offender" for a case with a case access EXCLUDED', () => {
+      const person = caseFactory.excludedAccess().build()
+
+      expect(displayName(person)).toEqual('Limited access offender')
+    })
+
+    it('returns "Unknown" for a case with a case access UNKNOWN', () => {
+      const person = caseFactory.unknownAccess().build()
+
+      expect(displayName(person)).toEqual('Unknown')
     })
   })
 })

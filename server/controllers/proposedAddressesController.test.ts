@@ -90,7 +90,9 @@ describe('proposedAddressesController', () => {
     jest.restoreAllMocks()
     jest.clearAllMocks()
 
-    casesService.getCase.mockResolvedValue(apiResponseFactory.case({ name: 'James Smith', actions: [] }))
+    casesService.getCase.mockResolvedValue(
+      apiResponseFactory.case(caseFactory.build({ name: 'James Smith', actions: [] })),
+    )
     referenceDataService.getAccommodationTypes.mockResolvedValue(apiResponseFactory.referenceData(accommodationTypes))
 
     request = mock<Request>({

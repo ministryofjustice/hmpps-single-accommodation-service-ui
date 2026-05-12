@@ -35,6 +35,30 @@ class CaseFactory extends Factory<Case> {
       status: 'NO_FIXED_ABODE',
     })
   }
+
+  excludedAccess() {
+    return this.params({
+      name: null,
+      crn: crn(),
+      dateOfBirth: null,
+      prisonNumber: prisonNumber(),
+      tierScore: null,
+      riskLevel: null,
+      pncReference: null,
+      assignedTo: assignedUserFactory.build(),
+      currentAccommodation: null,
+      nextAccommodation: null,
+      status: null,
+      actions: [],
+      caseAccess: 'EXCLUDED',
+    })
+  }
+
+  unknownAccess() {
+    return this.excludedAccess().params({
+      caseAccess: 'UNKNOWN',
+    })
+  }
 }
 
 export default CaseFactory.define(() => {
@@ -55,5 +79,6 @@ export default CaseFactory.define(() => {
     nextAccommodation,
     status,
     actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(3), faker.lorem.words(3)]) ?? [],
+    caseAccess: faker.helpers.arrayElement(['FULL', 'RESTRICTED']),
   }
 })

@@ -13,7 +13,7 @@ import {
   validateSubmission,
 } from './dutyToRefer'
 import * as validationUtils from './validation'
-import { auditRecordFactory, dtrSubmissionFactory, dutyToReferFactory } from '../testutils/factories'
+import { auditRecordFactory, caseFactory, dtrSubmissionFactory, dutyToReferFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
 
 describe('duty to refer utils', () => {
@@ -134,13 +134,13 @@ describe('duty to refer utils', () => {
   })
 
   describe('summaryListRows', () => {
-    const caseData = {
+    const caseData = caseFactory.build({
       crn: 'CRN123',
       name: 'John Smith',
       dateOfBirth: '1990-01-15',
       prisonNumber: 'A1234BC',
       actions: ['action1', 'action2'],
-    }
+    })
 
     it('formats case data without duty to refer', () => {
       const rows = summaryListRows(caseData)

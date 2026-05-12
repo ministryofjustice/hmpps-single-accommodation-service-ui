@@ -43,7 +43,8 @@ const removeQueryParam = (url: string, param: string): string => {
   return queryString ? `${path}?${queryString}` : path
 }
 
-export const personCell = (c: Case): string => renderMacro('personCell', c)
+export const personCell = (caseData: Case): string =>
+  renderMacro('personCell', { ...caseData, name: displayName(caseData) })
 
 export const actionsCell = (actions: Case['actions']): string => renderMacro('actionsCell', { actions })
 
@@ -77,7 +78,8 @@ export const casesTableColumns = () => {
 }
 
 export const caseAssignedTo = (c: Case, username: string): string => {
-  return String(c.assignedTo?.username) === username ? `You (${c.assignedTo.name})` : c.assignedTo?.name
+  const fullName = `${c.assignedTo.forename} ${c.assignedTo.surname}`
+  return String(c.assignedTo?.username) === username ? `You (${fullName})` : fullName
 }
 
 export const mapGetCasesQuery = (query: GetCasesQuery): GetCasesQuery => {
@@ -99,4 +101,15 @@ export const caseStatusCell = (c: Case): StatusCell => {
       SETTLED: { status: { text: 'Settled', colour: 'green' } },
     }[c.status] || { status: { text: 'Unknown' } }
   )
+}
+
+export const displayName = (caseData: Case): string => {
+  switch (caseData.caseAccess) {
+    case 'EXCLUDED':
+      return 'Limited access offender'
+    case 'UNKNOWN':
+      return 'Unknown'
+    default:
+      return caseData.name
+  }
 }

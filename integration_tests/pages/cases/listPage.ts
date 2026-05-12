@@ -22,14 +22,24 @@ export default class CasesListPage extends AbstractPage {
   async shouldShowCases(cases: Case[], headers: string[]) {
     await this.shouldShowTableHeaders(headers)
 
-    for await (const person of cases) {
-      const row = this.page.getByRole('row', { name: person.name })
+    for await (const [index, person] of cases.entries()) {
+      const row =
+        person.caseAccess !== 'EXCLUDED'
+          ? this.page.getByRole('row', { name: person.name })
+          : this.page.locator('tbody').getByRole('row').nth(index)
 
-      await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
-      await expect(row).toContainText(person.tierScore as string)
-      await expect(row).toContainText(formatDate(person.dateOfBirth as string))
       await expect(row).toContainText(person.crn as string)
       await expect(row).toContainText(person.prisonNumber as string)
+
+      if (person.caseAccess !== 'EXCLUDED') {
+        await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
+        await expect(row).toContainText(person.tierScore as string)
+        await expect(row).toContainText(formatDate(person.dateOfBirth as string))
+      } else {
+        await expect(row).not.toContainText('RoSH')
+        await expect(row).not.toContainText('Tier')
+        await expect(row).not.toContainText('Date of birth')
+      }
 
       if (headers.includes('Status') && person.status) {
         await this.shouldShowStatusCell(caseStatusCell(person), row)

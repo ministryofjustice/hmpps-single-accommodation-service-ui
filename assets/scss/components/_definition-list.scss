@@ -1,0 +1,19 @@
+@use "govuk-frontend/dist/govuk" as *;
+
+.sas-definition-list {
+  @include govuk-font($size: 19);
+
+  margin-top: 0;
+  margin-bottom: govuk-spacing(4);
+
+  & > div {
+    display: flex;
+    flex-direction: row;
+    gap: govuk-spacing(1);
+  }
+
+  & dt {
+    @include govuk-typography-weight-bold();
+    margin: 0;
+  }
+}

@@ -29,12 +29,4 @@ describe('StaticController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/static/maintenance')
     })
   })
-
-  describe('notFound', () => {
-    it('should render the not found page', () => {
-      staticController.notFound()(request, response, next)
-
-      expect(response.render).toHaveBeenCalledWith('pages/static/not-found')
-    })
-  })
 })

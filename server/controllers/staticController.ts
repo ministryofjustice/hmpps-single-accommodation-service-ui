@@ -12,10 +12,4 @@ export default class StaticController {
       res.render('pages/static/maintenance')
     }
   }
-
-  notFound(): RequestHandler {
-    return (_req: Request, res: Response) => {
-      res.render('pages/static/not-found')
-    }
-  }
 }

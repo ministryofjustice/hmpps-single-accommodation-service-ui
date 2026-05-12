@@ -19,7 +19,6 @@ export default function routes(services: Services): Router {
 
   router.get(uiPaths.static.notAuthorised.pattern, staticController.notAuthorised())
   router.get(uiPaths.static.maintenance.pattern, staticController.maintenance())
-  router.get(uiPaths.static.notFound.pattern, staticController.notFound())
 
   return router
 }

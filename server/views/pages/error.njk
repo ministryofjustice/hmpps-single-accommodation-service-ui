@@ -6,5 +6,10 @@
 {% block staticContent %}
   <h1>{{ message }}</h1>
   <h2>{{ status }}</h2>
-  <p>{{ stack }}</p>
+  {% if hint %}
+    <p>{{ hint }}</p>
+  {% endif %}
+  {% if stack %}
+    <pre>{{ stack }}</pre>
+  {% endif %}
 {% endblock %}

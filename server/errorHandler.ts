@@ -19,8 +19,9 @@ export default function createErrorHandler(production: boolean) {
     }
 
     res.locals.message = production ? 'Sorry, there is a problem with the service' : error.message
+    res.locals.hint = production ? 'Try again later.' : null
     res.locals.status = production ? null : error.status
-    res.locals.stack = production ? 'Try again later.' : error.stack
+    res.locals.stack = production ? null : error.stack
 
     res.status(error.status || 500)
 

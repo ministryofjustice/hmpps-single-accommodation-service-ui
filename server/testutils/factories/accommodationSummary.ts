@@ -3,6 +3,18 @@ import { AccommodationStatusDto, AccommodationSummaryDto, AccommodationTypeDto }
 import { faker } from '@faker-js/faker'
 import addressFactory from './accommodationAddressDetails'
 import crnFactory from '../crn'
+import accommodationTypesJson from '../../../wiremock/fixtures/referenceData/accommodationTypes.json'
+
+const accommodationStatusFactory = Factory.define<AccommodationTypeDto>(() =>
+  faker.helpers.arrayElement([
+    { code: 'M', description: 'Main' },
+    { code: 'P', description: 'Previous' },
+  ]),
+)
+
+const accommodationTypesFactory = Factory.define<AccommodationStatusDto>(() =>
+  faker.helpers.arrayElement(accommodationTypesJson.map(type => ({ code: type.code, description: type.name }))),
+)
 
 class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
   current(endDate?: string, startDate?: string) {
@@ -38,43 +50,13 @@ class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
   }
 }
 
-const statuses: Readonly<AccommodationStatusDto['code'][]> = ['B', 'M', 'MA', 'P', 'PR', 'PR1', 'RJ', 'RT', 'S']
-
-const types: Readonly<AccommodationTypeDto['code'][]> = [
-  'A02',
-  'A16',
-  'A10',
-  'A11',
-  'A17',
-  'A07B',
-  'A07A',
-  'A14',
-  'A13',
-  'A08A',
-  'A08C',
-  'A08',
-  'A01A',
-  'A15',
-  'A12',
-  'A01C',
-  'A01D',
-  'A04',
-  'A03',
-]
-
 export default AccommodationSummaryFactory.define((): AccommodationSummaryDto => {
   return {
     crn: crnFactory(),
     startDate: faker.date.past().toISOString().substring(0, 10),
     endDate: undefined,
     address: addressFactory.build(),
-    status: {
-      code: faker.helpers.arrayElement(statuses),
-      description: faker.word.words(),
-    },
-    type: {
-      code: faker.helpers.arrayElement(types),
-      description: faker.word.words(),
-    },
+    status: accommodationStatusFactory.build(),
+    type: accommodationTypesFactory.build(),
   }
 })

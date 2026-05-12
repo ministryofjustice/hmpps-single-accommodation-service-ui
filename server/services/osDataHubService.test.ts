@@ -38,5 +38,17 @@ describe('osDataHubService', () => {
 
       expect(addresses).toEqual(expectedResult)
     })
+
+    it('returns an empty array if no results are found', async () => {
+      const apiResponse: OsDataHubResponse = {
+        header: {},
+      }
+
+      osDataHubClient.getByPostcode.mockResolvedValue(apiResponse)
+
+      const addresses = await osDataHubService.getByNameOrNumberAndPostcode('19', 'M210BP')
+
+      expect(addresses).toEqual([])
+    })
   })
 })

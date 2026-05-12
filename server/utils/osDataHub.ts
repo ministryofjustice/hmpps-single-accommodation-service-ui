@@ -25,10 +25,10 @@ export type OsDataHubResult = {
 
 export type OsDataHubResponse = {
   header: unknown
-  results: OsDataHubResult[]
+  results?: OsDataHubResult[]
 }
 
-export const filterResultsByNameOrNumber = (results: OsDataHubResult[], nameOrNumber?: string) => {
+export const filterResultsByNameOrNumber = (results: OsDataHubResult[] = [], nameOrNumber?: string) => {
   if (!nameOrNumber) return results
 
   const sanitisedNameOrNumber = nameOrNumber.toUpperCase()

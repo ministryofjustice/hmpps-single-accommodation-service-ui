@@ -98,6 +98,7 @@ test.describe('Profile Tracker Page', () => {
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
   })
+
   test('Shows a 404 if the CRN is not found', async ({ page }) => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
@@ -108,6 +109,24 @@ test.describe('Profile Tracker Page', () => {
     await page.goto('/cases/X999999')
 
     await expect(page.locator('h1', { hasText: 'Not found' })).toBeVisible()
+  })
+
+  test('Shows warnings if the API had upstream failures', async ({ page }) => {
+    const crn = 'X123456'
+    const caseData = caseFactory.build({ crn, caseAccess: 'FULL' })
+
+    await setupStubs({ crn, caseData })
+
+    await accommodationApi.stubGetAccommodationHistoryUpstreamFailure(crn)
+    await casesApi.stubGetReferralHistoryUpstreamFailure(crn)
+
+    await login(page)
+
+    await page.getByRole('link', { name: caseData.name }).click()
+
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    await profileTrackerPage.shouldShowApiErrors(['Referral history', 'Accommodation history'])
   })
 
   test.describe('accommodation cards', () => {

@@ -2,28 +2,32 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {%- macro accommodationHistoryTable(context) -%}
-<div class="govuk-summary-card">
+  <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Accommodation history
-        </h2>
+      <h2 class="govuk-summary-card__title">Accommodation history</h2>
     </div>
     <div class="govuk-summary-card__content">
+      {% if context.apiError %}
+        <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+      {% else %}
         {% if (context.rows | length > 0) %}
-            <div class="govuk-summary-list">
-                {{ govukTable({
-                    head: [
-                        { text: "Start date" },
-                        { text: "End date" },
-                        { text: "Address" },
-                        { text: "Status" }
-                    ],
-                    rows: context.rows
-                }) }}
-            </div>
+          <div class="govuk-summary-list">
+            {{
+              govukTable({
+                  head: [
+                      { text: "Start date" },
+                      { text: "End date" },
+                      { text: "Address" },
+                      { text: "Status" }
+                  ],
+                  rows: context.rows
+              })
+            }}
+          </div>
         {% else %}
-            <p class="govuk-body">No previous accommodation</p>
+          <p class="govuk-body">No previous accommodation</p>
         {% endif %}
+      {% endif %}
     </div>
-</div>
+  </div>
 {%- endmacro -%}

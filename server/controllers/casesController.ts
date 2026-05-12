@@ -93,14 +93,16 @@ export default class CasesController {
         return res.render('pages/show-excluded', { caseData })
       }
 
-      const [
-        { data: referralHistory },
-        { data: eligibility },
-        { data: proposedAddresses },
-        { data: currentAccommodation },
-        { data: nextAccommodation },
-        { data: accommodationHistory },
-      ] = await Promise.all([
+      const apiCalls: Readonly<string[]> = [
+        'referralHistory',
+        'eligibility',
+        'proposedAddresses',
+        'currentAccommodation',
+        'nextAccommodation',
+        'accommodationHistory',
+      ]
+
+      const apiResponses = await Promise.all([
         this.referralsService.getReferralHistory(token, crn),
         this.eligibilityService.getEligibility(token, crn),
         this.proposedAddressesService.getProposedAddresses(token, crn),
@@ -109,8 +111,22 @@ export default class CasesController {
         this.accommodationService.getAccommodationHistory(token, crn),
       ])
 
+      const [
+        { data: referralHistory },
+        { data: eligibility },
+        { data: proposedAddresses },
+        { data: currentAccommodation },
+        { data: nextAccommodation },
+        { data: accommodationHistory },
+      ] = apiResponses
+
+      const upstreamFailures = apiCalls
+        .map((key, index) => (apiResponses[index].upstreamFailures?.length ? key : undefined))
+        .filter(Boolean)
+
       return res.render('pages/show', {
         caseData: { ...caseData, name: displayName(caseData) },
+        upstreamFailures,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: eligibility.caseActions,
         noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),

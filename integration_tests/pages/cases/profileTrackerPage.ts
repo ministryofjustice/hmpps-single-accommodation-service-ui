@@ -185,4 +185,18 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       await expect(row).toContainText(accommodation.status.description)
     }
   }
+
+  async shouldShowApiErrors(errorSectionTitles: string[]) {
+    const mainApiErrorAlert = this.page.locator('.moj-api-error')
+    await expect(mainApiErrorAlert).toBeVisible()
+    await expect(mainApiErrorAlert).toContainText('Some information on this service is currently unavailable')
+
+    for await (const title of errorSectionTitles) {
+      const section = this.page.locator('section', { has: this.page.getByRole('heading', { name: title }) })
+
+      await expect(section.locator('.moj-inset-api-error')).toHaveText(
+        'This information is currently unavailable. Try again later.',
+      )
+    }
+  }
 }

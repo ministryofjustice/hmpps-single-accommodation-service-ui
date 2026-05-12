@@ -112,29 +112,41 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
 exports[`referrals utilities referralHistoryTable macro renders a message and no table when there are no referrals 1`] = `
 "<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Referral history
-        </h2>
+      <h2 class="govuk-summary-card__title">Referral history</h2>
     </div>
     <div class="govuk-summary-card__content">
+      
         
-            <p class="govuk-body">No previous referrals</p>
+          <p class="govuk-body">No previous referrals</p>
         
+      
     </div>
-</div>"
+  </div>"
+`;
+
+exports[`referrals utilities referralHistoryTable macro renders a message when there is an API error 1`] = `
+"<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">Referral history</h2>
+    </div>
+    <div class="govuk-summary-card__content">
+      
+        <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+      
+    </div>
+  </div>"
 `;
 
 exports[`referrals utilities referralHistoryTable macro renders the referral history table for a given list of referrals 1`] = `
 "<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Referral history
-        </h2>
+      <h2 class="govuk-summary-card__title">Referral history</h2>
     </div>
     <div class="govuk-summary-card__content">
+      
         
-            <div class="govuk-summary-list">
-                <table class="govuk-table">
+          <div class="govuk-summary-list">
+            <table class="govuk-table">
 
 
   <thead class="govuk-table__head">
@@ -308,8 +320,9 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
   </tbody>
 </table>
 
-            </div>
+          </div>
         
+      
     </div>
-</div>"
+  </div>"
 `;

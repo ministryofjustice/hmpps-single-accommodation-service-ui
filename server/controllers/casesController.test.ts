@@ -161,6 +161,7 @@ describe('casesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
         caseData: { ...caseData, name: 'John Smith (limited access offender)' },
+        upstreamFailures: [],
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: eligibility.caseActions,
         noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),
@@ -193,6 +194,31 @@ describe('casesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/show-excluded', {
         caseData,
       })
+    })
+
+    it('renders the case details page with upstream failures', async () => {
+      const crn = 'X666667'
+      request.params.crn = crn
+
+      const caseData = caseFactory.build({ crn })
+
+      casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
+      eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility())
+      proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed: [], failedChecks: [] } })
+      accommodationService.getCurrentAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
+      accommodationService.getNextAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
+
+      referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.withUpstreamFailures())
+      accommodationService.getAccommodationHistory.mockResolvedValue(apiResponseFactory.withUpstreamFailures())
+
+      await casesController.show()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/show',
+        expect.objectContaining({
+          upstreamFailures: ['referralHistory', 'accommodationHistory'],
+        }),
+      )
     })
   })
 })

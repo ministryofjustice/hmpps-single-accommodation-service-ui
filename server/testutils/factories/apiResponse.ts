@@ -29,6 +29,7 @@ import referenceDataFactory from './referenceData'
 import referralFactory from './referral'
 import accommodationSummaryFactory from './accommodationSummary'
 import proposedAccommodationFactory from './proposedAccommodation'
+import upstreamFailureFactory from './upstreamFailure'
 
 export type ApiResponse =
   | ApiResponseDtoAccommodationSummaryDto
@@ -96,6 +97,13 @@ class ApiResponseFactory extends Factory<ApiResponse> {
 
   referenceData(data?: ReferenceDataDto[]) {
     return this.buildResponse<ApiResponseDtoListReferenceDataDto>(data || referenceDataFactory.buildList(2))
+  }
+
+  withUpstreamFailures<T>(upstreamFailures?: UpstreamFailureDto[]) {
+    return this.params({
+      data: null,
+      upstreamFailures: upstreamFailures || upstreamFailureFactory.buildList(2),
+    }).build() as T
   }
 }
 

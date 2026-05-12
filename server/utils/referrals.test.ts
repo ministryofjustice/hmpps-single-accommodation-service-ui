@@ -42,5 +42,9 @@ describe('referrals utilities', () => {
     it('renders a message and no table when there are no referrals', () => {
       expect(referralHistoryTable([])).toMatchSnapshot()
     })
+
+    it('renders a message when there is an API error', () => {
+      expect(referralHistoryTable(null, true)).toMatchSnapshot()
+    })
   })
 })

@@ -25,12 +25,21 @@
 {% endblock %}
 
 {% block content %}
+  {% if upstreamFailures | length %}
+    <div class="moj-api-error">
+      <p>Some information on this service is currently unavailable</p>
+      <p>You may need to try again later.</p>
+    </div>
+  {% endif %}
+
   {{ caseDetails(caseData, assignedTo) }}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h2 class="govuk-heading-l govuk-!-margin-top-2">Arrange next accommodation</h2>
     </div>
   </div>
+
   <div class="govuk-grid-row">
     <section class="govuk-grid-column-one-third-from-desktop govuk-grid-column-right-from-desktop">
       <h2 class="govuk-visually-hidden">Current situation</h2>
@@ -90,7 +99,11 @@
 
   <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
 
-  <section>{{ referralHistoryTable({ rows: referralHistoryRows }) }}</section>
+  <section>
+    {{ referralHistoryTable({ rows: referralHistoryRows, apiError: 'referralHistory' in upstreamFailures }) }}
+  </section>
 
-  <section>{{ accommodationHistoryTable({ rows: accommodationHistoryRows }) }}</section>
+  <section>
+    {{ accommodationHistoryTable({ rows: accommodationHistoryRows, apiError: 'accommodationHistory' in upstreamFailures }) }}
+  </section>
 {% endblock %}

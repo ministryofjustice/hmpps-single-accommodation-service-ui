@@ -21,6 +21,7 @@ generic-service:
     V10_CASES_LIST: "false"
     LOG_LEVEL: 'debug'
     MAINTENANCE_MODE: "false"
+    HIDE_MANUAL_ADDRESS_ENTRY: "true"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

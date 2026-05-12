@@ -17,6 +17,7 @@ generic-service:
     SAS_ALLOWED_ROLES: "ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER"
     V10_CASES_LIST: "false"
     MAINTENANCE_MODE: "false"
+    HIDE_MANUAL_ADDRESS_ENTRY: "true"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

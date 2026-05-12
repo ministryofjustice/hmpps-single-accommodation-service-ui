@@ -117,5 +117,6 @@ export default {
   flags: {
     v10CasesList: get('V10_CASES_LIST', 'false') === 'true',
     maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
+    hideManualAddressEntry: get('HIDE_MANUAL_ADDRESS_ENTRY', 'true') === 'true',
   },
 }

@@ -36,6 +36,7 @@ generic-service:
     V10_CASES_LIST: 'false'
     LOG_LEVEL: 'info'
     MAINTENANCE_MODE: 'false'
+    HIDE_MANUAL_ADDRESS_ENTRY: 'true'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:

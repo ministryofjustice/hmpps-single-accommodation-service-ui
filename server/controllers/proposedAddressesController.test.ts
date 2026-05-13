@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { ProposedAddressFormData } from '@sas/ui'
 import ProposedAddressesController from './proposedAddressesController'
+import config from '../config'
 import AuditService, { Page } from '../services/auditService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
@@ -553,6 +554,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders a back link to address details if there are no lookup results in the session', async () => {
+      config.flags.hideManualAddressEntry = false
       setSessionData({
         address,
       })
@@ -563,6 +565,22 @@ describe('proposedAddressesController', () => {
         'pages/proposed-address/type',
         expect.objectContaining({
           backLinkHref: uiPaths.proposedAddresses.details({ crn: 'CRN123' }),
+        }),
+      )
+    })
+
+    it('renders a back link to select address if manual entry is hidden', async () => {
+      config.flags.hideManualAddressEntry = true
+      setSessionData({
+        address,
+      })
+
+      await controller.type()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/proposed-address/type',
+        expect.objectContaining({
+          backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         }),
       )
     })

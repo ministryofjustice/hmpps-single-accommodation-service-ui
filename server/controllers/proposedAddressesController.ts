@@ -37,6 +37,7 @@ import { getPageBackLink } from '../utils/backlinks'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
+import config from '../config'
 
 interface EditRequest extends Request {
   params: {
@@ -322,9 +323,10 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/type', {
         crn,
-        backLinkHref: proposedAddressFormSessionData.lookupResults?.length
-          ? uiPaths.proposedAddresses.selectAddress({ crn })
-          : uiPaths.proposedAddresses.details({ crn }),
+        backLinkHref:
+          proposedAddressFormSessionData.lookupResults?.length || config.flags.hideManualAddressEntry
+            ? uiPaths.proposedAddresses.selectAddress({ crn })
+            : uiPaths.proposedAddresses.details({ crn }),
         name: caseData.name,
         accommodationTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
         errors,

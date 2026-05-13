@@ -83,14 +83,14 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1042.0",
+    "@aws-sdk/client-sqs": "^3.1043.0",
     "@faker-js/faker": "^10.4.0",
     "@ministryofjustice/frontend": "9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
-    "@ministryofjustice/hmpps-monitoring": "^1.0.2",
+    "@ministryofjustice/hmpps-monitoring": "^1.1.0",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.4",
     "@ministryofjustice/hmpps-probation-frontend-components": "1.0.2",
-    "@ministryofjustice/hmpps-rest-client": "^1.2.0",
+    "@ministryofjustice/hmpps-rest-client": "^1.2.1",
     "@pact-foundation/pact": "^16.4.0",
     "@pactflow/openapi-pact-comparator": "^1.14.0",
     "@playwright/test": "^1.59.1",

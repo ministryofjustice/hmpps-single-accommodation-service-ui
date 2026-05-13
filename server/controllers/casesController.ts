@@ -23,6 +23,7 @@ import { referralHistoryRows } from '../utils/referrals'
 import { initialiseName } from '../utils/utils'
 import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
+import { collectApiResponses } from '../utils/apiResponses'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -93,50 +94,28 @@ export default class CasesController {
         return res.render('pages/show-excluded', { caseData })
       }
 
-      const apiCalls: Readonly<string[]> = [
-        'referralHistory',
-        'eligibility',
-        'proposedAddresses',
-        'currentAccommodation',
-        'nextAccommodation',
-        'accommodationHistory',
-      ]
-
-      const apiResponses = await Promise.all([
-        this.referralsService.getReferralHistory(token, crn),
-        this.eligibilityService.getEligibility(token, crn),
-        this.proposedAddressesService.getProposedAddresses(token, crn),
-        this.accommodationService.getCurrentAccommodation(token, crn),
-        this.accommodationService.getNextAccommodation(token, crn),
-        this.accommodationService.getAccommodationHistory(token, crn),
-      ])
-
-      const [
-        { data: referralHistory },
-        { data: eligibility },
-        { data: proposedAddresses },
-        { data: currentAccommodation },
-        { data: nextAccommodation },
-        { data: accommodationHistory },
-      ] = apiResponses
-
-      const upstreamFailures = apiCalls
-        .map((key, index) => (apiResponses[index].upstreamFailures?.length ? key : undefined))
-        .filter(Boolean)
+      const { data, upstreamFailures } = await collectApiResponses({
+        referralHistory: this.referralsService.getReferralHistory(token, crn),
+        eligibility: this.eligibilityService.getEligibility(token, crn),
+        proposedAddresses: this.proposedAddressesService.getProposedAddresses(token, crn),
+        currentAccommodation: this.accommodationService.getCurrentAccommodation(token, crn),
+        nextAccommodation: this.accommodationService.getNextAccommodation(token, crn),
+        accommodationHistory: this.accommodationService.getAccommodationHistory(token, crn),
+      })
 
       return res.render('pages/show', {
         caseData: { ...caseData, name: displayName(caseData) },
         upstreamFailures,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
-        nextActions: eligibility.caseActions,
-        noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),
-        nextAccommodationCard: accommodationCard('next', nextAccommodation),
-        currentAccommodationCard: accommodationCard('current', currentAccommodation),
-        referralHistoryRows: referralHistoryRows(referralHistory),
-        eligibilityCards: eligibilityToEligibilityCards(eligibility, crn),
-        proposedAddresses: proposedAddresses.proposed.map(proposedAddressStatusCard),
-        accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
-        failedChecksAddresses: proposedAddresses.failedChecks.map(proposedAddressStatusCard),
+        nextActions: data.eligibility.caseActions,
+        noFixedAbode: noFixedAbodeAlert(caseData, data.currentAccommodation),
+        nextAccommodationCard: accommodationCard('next', data.nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', data.currentAccommodation),
+        referralHistoryRows: referralHistoryRows(data.referralHistory),
+        eligibilityCards: eligibilityToEligibilityCards(data.eligibility, crn),
+        proposedAddresses: data.proposedAddresses.proposed.map(proposedAddressStatusCard),
+        accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),
+        failedChecksAddresses: data.proposedAddresses.failedChecks.map(proposedAddressStatusCard),
       })
     }
   }

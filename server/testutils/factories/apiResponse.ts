@@ -1,4 +1,4 @@
-import { DeepPartial, Factory } from 'fishery'
+import { Factory } from 'fishery'
 import {
   AccommodationReferralDto,
   AccommodationSummaryDto,
@@ -21,6 +21,7 @@ import {
   ReferenceDataDto,
   UpstreamFailureDto,
 } from '@sas/api'
+import { ApiResponse } from '@sas/ui'
 import dutyToReferFactory from './dutyToRefer'
 import caseFactory from './case'
 import eligibilityFactory from './eligibility'
@@ -31,22 +32,9 @@ import accommodationSummaryFactory from './accommodationSummary'
 import proposedAccommodationFactory from './proposedAccommodation'
 import upstreamFailureFactory from './upstreamFailure'
 
-export type ApiResponse =
-  | ApiResponseDtoAccommodationSummaryDto
-  | ApiResponseDtoListCaseDto
-  | ApiResponseDtoCaseDto
-  | ApiResponseDtoDutyToReferDto
-  | ApiResponseDtoEligibilityDto
-  | ApiResponseDtoListProposedAccommodationDto
-  | ApiResponseDtoProposedAccommodationDto
-  | ApiResponseDtoListAuditRecordDto
-  | ApiResponseDtoListAccommodationReferralDto
-  | ApiResponseDtoListReferenceDataDto
-  | ApiResponseDtoListAccommodationSummaryDto
-
 class ApiResponseFactory extends Factory<ApiResponse> {
   buildResponse<T extends ApiResponse>(data: T['data']) {
-    return this.params({ data } as DeepPartial<T>).build() as T
+    return this.params({ data }).build() as T
   }
 
   accommodationSummary(accommodationSummary?: AccommodationSummaryDto) {

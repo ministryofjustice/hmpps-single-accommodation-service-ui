@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import type ProposedAddressesController from '../controllers/proposedAddressesController'
 import uiPaths from '../paths/ui'
+import config from '../config'
 
 export default function proposedAddressesRoutes(
   router: Router,
@@ -18,8 +19,10 @@ export default function proposedAddressesRoutes(
   router.get(uiPaths.proposedAddresses.selectAddress.pattern, proposedAddressesController.selectAddress())
   router.post(uiPaths.proposedAddresses.selectAddress.pattern, proposedAddressesController.saveSelectAddress())
 
-  router.get(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.details())
-  router.post(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.saveDetails())
+  if (!config.flags.hideManualAddressEntry) {
+    router.get(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.details())
+    router.post(uiPaths.proposedAddresses.details.pattern, proposedAddressesController.saveDetails())
+  }
 
   router.get(uiPaths.proposedAddresses.type.pattern, proposedAddressesController.type())
   router.post(uiPaths.proposedAddresses.type.pattern, proposedAddressesController.saveType())

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { ProposedAddressFormData } from '@sas/ui'
 import ProposedAddressesController from './proposedAddressesController'
+import config from '../config'
 import AuditService, { Page } from '../services/auditService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
@@ -574,6 +575,24 @@ describe('proposedAddressesController', () => {
 
       expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
       expect(auditService.logPageView).toHaveBeenCalled()
+    })
+  })
+
+  describe('When the HIDE_MANUAL_ADDRESS_ENTRY flag is enabled', () => {
+    it('renders a back link to select address if manual entry is hidden', async () => {
+      config.flags.hideManualAddressEntry = true
+      setSessionData({
+        address,
+      })
+
+      await controller.type()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/proposed-address/type',
+        expect.objectContaining({
+          backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
+        }),
+      )
     })
   })
 

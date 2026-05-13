@@ -5,13 +5,16 @@
 {% set backLinkHref = paths.cases.show({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.lookup({crn: crn}) %}
 {% set buttonText = 'Find address' %}
+{% set hideManualAddressEntry = featureFlags.hideManualAddressEntry %}
 
 {% block extraAction %}
-  <p>
-    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.details({ crn: crn }) }}">
-      Enter address manually
-    </a>
-  </p>
+  {% if not hideManualAddressEntry %}
+    <p>
+      <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.details({ crn: crn }) }}">
+        Enter address manually
+      </a>
+    </p>
+  {% endif %}
 {% endblock %}
 
 {% block formContent %}
@@ -19,7 +22,9 @@
     <h1 class="govuk-fieldset__heading">What is the address?</h1>
   </legend>
 
-  <p>If it does not have a UK postcode, select 'Enter address manually'.</p>
+  {% if not hideManualAddressEntry %}
+    <p>If it does not have a UK postcode, select 'Enter address manually'.</p>
+  {% endif %}
 
   {{
     govukInput({

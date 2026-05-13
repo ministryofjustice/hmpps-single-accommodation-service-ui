@@ -5,6 +5,7 @@
 {% set pageTitle = "Select an address " + applicationName %}
 {% set backLinkHref = paths.proposedAddresses.lookup({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.selectAddress({crn: crn}) %}
+{% set hideManualAddressEntry = featureFlags.hideManualAddressEntry %}
 
 {% block extraAction %}
   {% if not hideManualAddressEntry %}

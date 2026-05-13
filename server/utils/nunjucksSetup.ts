@@ -35,7 +35,7 @@ const addGlobals = (env: nunjucks.Environment) => {
   env.addGlobal('riskLevel', riskLevelStatusTag)
   env.addGlobal('injectConditionals', injectConditionals)
 
-  env.addGlobal('hideManualAddressEntry', config.flags.hideManualAddressEntry)
+  env.addGlobal('featureFlags', config.flags)
 }
 
 export default function nunjucksSetup(app: express.Express): void {

@@ -7,12 +7,20 @@
 {% set formAction = paths.proposedAddresses.selectAddress({crn: crn}) %}
 
 {% block extraAction %}
-  <p>
-    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.details({ crn: crn }) }}">
-      Enter address manually
-    </a>
-  </p>
+  {% if not hideManualAddressEntry %}
+    <p>
+      <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.details({ crn: crn }) }}">
+        Enter address manually
+      </a>
+    </p>
+  {% endif %}
 {% endblock %}
+
+{% if hideManualAddressEntry %}
+  {% set addressHint = undefined %}
+{% else %}
+  {% set addressHint = { text: "If your address is not listed, select 'Enter address manually'." } %}
+{% endif %}
 
 {% block formContent %}
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-0">
@@ -39,9 +47,7 @@
           classes: "govuk-fieldset__legend--m"
         }
       },
-      hint: {
-        text: "If your address is not listed, select 'Enter address manually'."
-      },
+      hint: addressHint,
       items: addresses,
       errorMessage: errors.addressUprn
     })

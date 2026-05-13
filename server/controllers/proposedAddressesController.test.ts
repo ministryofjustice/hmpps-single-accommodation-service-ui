@@ -554,7 +554,6 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders a back link to address details if there are no lookup results in the session', async () => {
-      config.flags.hideManualAddressEntry = false
       setSessionData({
         address,
       })

@@ -569,6 +569,17 @@ describe('proposedAddressesController', () => {
       )
     })
 
+    it('redirects when the session data is invalid', async () => {
+      jest.spyOn(proposedAddressesUtils, 'validateUpToAddress').mockReturnValue('/redirect-url')
+
+      await controller.type()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
+      expect(auditService.logPageView).toHaveBeenCalled()
+    })
+  })
+
+  describe('When the HIDE_MANUAL_ADDRESS_ENTRY flag is enabled', () => {
     it('renders a back link to select address if manual entry is hidden', async () => {
       config.flags.hideManualAddressEntry = true
       setSessionData({
@@ -583,15 +594,6 @@ describe('proposedAddressesController', () => {
           backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         }),
       )
-    })
-
-    it('redirects when the session data is invalid', async () => {
-      jest.spyOn(proposedAddressesUtils, 'validateUpToAddress').mockReturnValue('/redirect-url')
-
-      await controller.type()(request, response, next)
-
-      expect(response.redirect).toHaveBeenCalledWith('/redirect-url')
-      expect(auditService.logPageView).toHaveBeenCalled()
     })
   })
 

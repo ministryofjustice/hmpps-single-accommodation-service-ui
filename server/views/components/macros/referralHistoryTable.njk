@@ -7,7 +7,7 @@
       <h2 class="govuk-summary-card__title">Referral history</h2>
     </div>
     <div class="govuk-summary-card__content">
-      {% if context.apiError %}
+      {% if context.hasApiError %}
         <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
       {% else %}
         {% if (context.rows | length > 0) %}

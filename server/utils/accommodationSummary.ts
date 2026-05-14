@@ -120,7 +120,7 @@ export const accommodationSummaryAddress = (accommodation: AccommodationSummaryD
     .join('<br />')
 
 export const accommodationHistoryRows = (history?: AccommodationSummaryDto[]): TableRow[] => {
-  return history?.map(accommodation => [
+  return (history ?? []).map(accommodation => [
     textContent(formatDate(accommodation.startDate)),
     textContent(accommodation.endDate ? formatDate(accommodation.endDate) : ''),
     htmlContent(accommodationSummaryAddress(accommodation)),
@@ -128,5 +128,5 @@ export const accommodationHistoryRows = (history?: AccommodationSummaryDto[]): T
   ])
 }
 
-export const accommodationHistoryTable = (history: AccommodationSummaryDto[], apiError?: boolean): string =>
-  renderMacro('accommodationHistoryTable', { rows: accommodationHistoryRows(history), apiError })
+export const accommodationHistoryTable = (history: AccommodationSummaryDto[], hasApiError?: boolean): string =>
+  renderMacro('accommodationHistoryTable', { rows: accommodationHistoryRows(history), hasApiError })

@@ -21,7 +21,7 @@ export const referralStatusTag = (status?: Referral['status']): StatusTag =>
   })[status] || { text: 'Unknown' }
 
 export const referralHistoryRows = (referrals?: Referral[]): TableRow[] => {
-  return referrals?.map(referral => [
+  return (referrals ?? []).map(referral => [
     textContent(referralStatusType(referral.type)),
     htmlContent(statusTag(referralStatusTag(referral.status))),
     dateCell(referral.date),
@@ -29,5 +29,5 @@ export const referralHistoryRows = (referrals?: Referral[]): TableRow[] => {
   ])
 }
 
-export const referralHistoryTable = (referrals: Referral[], apiError?: boolean): string =>
-  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals), apiError })
+export const referralHistoryTable = (referrals: Referral[], hasApiError?: boolean): string =>
+  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals), hasApiError })

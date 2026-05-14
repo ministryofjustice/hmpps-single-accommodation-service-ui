@@ -8,7 +8,7 @@
       <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.cases.show({ crn: person.crn }) }}">
         {{ person.name }}
       </a>
-      {% if person.userAccess === 'FULL' and person.isLimitedAccess %}(LAO){% endif %}
+      {% if person.userAccess === 'FULL' and person.limitedAccess %}(LAO){% endif %}
     </div>
 
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">

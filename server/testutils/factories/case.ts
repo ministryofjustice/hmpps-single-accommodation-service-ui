@@ -51,7 +51,7 @@ class CaseFactory extends Factory<Case> {
       status: null,
       actions: [],
       userAccess: 'LIMITED',
-      isLimitedAccess: null,
+      limitedAccess: null,
     })
   }
 
@@ -81,6 +81,6 @@ export default CaseFactory.define(() => {
     status,
     actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(3), faker.lorem.words(3)]) ?? [],
     userAccess: 'FULL' as const,
-    isLimitedAccess: false,
+    limitedAccess: false,
   }
 })

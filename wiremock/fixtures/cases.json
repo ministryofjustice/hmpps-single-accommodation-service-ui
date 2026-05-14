@@ -61,7 +61,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "name": "Blanca Schoen",
@@ -123,7 +123,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "name": "Christian Keebler Jr.",
@@ -185,7 +185,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "name": "Noel Raynor",
@@ -248,7 +248,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": true
+    "limitedAccess": true
   },
   {
     "name": "Carol VonRueden",
@@ -310,7 +310,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "name": "Jim Anderson",
@@ -351,7 +351,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "name": "Martin Farrell",
@@ -413,7 +413,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": true
+    "limitedAccess": true
   },
   {
     "name": "Ervin Ratke",
@@ -475,7 +475,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "name": "Bert Morissette",
@@ -516,7 +516,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "name": "Ms. Ethel Hudson",
@@ -578,7 +578,7 @@
       }
     },
     "userAccess": "FULL",
-    "isLimitedAccess": false
+    "limitedAccess": false
   },
   {
     "crn": "A643094",
@@ -589,6 +589,6 @@
       "username": "jessica.hansen"
     },
     "userAccess": "LIMITED",
-    "isLimitedAccess": true
+    "limitedAccess": true
   }
 ]

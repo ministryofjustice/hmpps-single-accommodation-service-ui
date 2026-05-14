@@ -87,7 +87,7 @@ test.describe('Profile Tracker Page', () => {
 
   test('should display the profile tracker for a case with LAO flag', async ({ page }) => {
     const crn = 'X123456'
-    const caseData = caseFactory.build({ crn, isLimitedAccess: true })
+    const caseData = caseFactory.build({ crn, limitedAccess: true })
 
     await setupStubs({ crn, caseData })
     await login(page)

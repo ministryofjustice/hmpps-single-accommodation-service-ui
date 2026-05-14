@@ -44,7 +44,7 @@ describe('cases utilities', () => {
     it('renders a formatted cell for a case with full access with LAO flag', () => {
       const personRestrictedAccess = caseFactory.build({
         ...personFullAccess,
-        isLimitedAccess: true,
+        limitedAccess: true,
       })
 
       expect(personCell(personRestrictedAccess)).toMatchSnapshot()
@@ -203,7 +203,7 @@ describe('cases utilities', () => {
     it("returns the person's name for a case with full access with no LAO flag", () => {
       const person = caseFactory.build({
         name: 'Dave Foo',
-        isLimitedAccess: false,
+        limitedAccess: false,
       })
 
       expect(displayName(person)).toEqual('Dave Foo')
@@ -212,7 +212,7 @@ describe('cases utilities', () => {
     it("returns the person's name followed by LAO for a case with full access with LAO flag", () => {
       const person = caseFactory.build({
         name: 'Dave Foo',
-        isLimitedAccess: true,
+        limitedAccess: true,
       })
 
       expect(displayName(person)).toEqual('Dave Foo (limited access offender)')
@@ -221,7 +221,7 @@ describe('cases utilities', () => {
     it("returns the person's name followed by a custom LAO flag for a case with full access with LAO flag", () => {
       const person = caseFactory.build({
         name: 'Dave Foo',
-        isLimitedAccess: true,
+        limitedAccess: true,
       })
 
       expect(displayName(person, '[foo]')).toEqual('Dave Foo [foo]')

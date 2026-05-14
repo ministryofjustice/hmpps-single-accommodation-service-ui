@@ -110,6 +110,6 @@ export const displayName = (caseData: Case, laoFlag = '(limited access offender)
     case 'UNKNOWN':
       return 'Unknown'
     default:
-      return `${caseData.name} ${caseData.isLimitedAccess ? laoFlag : ''}`.trim()
+      return `${caseData.name} ${caseData.limitedAccess ? laoFlag : ''}`.trim()
   }
 }

@@ -124,7 +124,7 @@ describe('casesController', () => {
       const crn = 'X123456'
       request.params.crn = crn
 
-      const caseData = caseFactory.build({ crn, name: 'John Smith', isLimitedAccess: true })
+      const caseData = caseFactory.build({ crn, name: 'John Smith', limitedAccess: true })
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
       const proposed = proposedAccommodationFactory.buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })

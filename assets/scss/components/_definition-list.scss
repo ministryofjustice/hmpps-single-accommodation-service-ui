@@ -14,6 +14,9 @@
 
   & dt {
     @include govuk-typography-weight-bold();
+  }
+
+  & dd {
     margin: 0;
   }
 }

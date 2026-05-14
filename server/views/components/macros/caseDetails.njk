@@ -5,7 +5,7 @@
     {# <img class="sas-profile-image" alt="Photo of {{ caseData.name }}" src=""> #}
     <div>
       <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-        {{ caseData.name }}{% if caseData.caseAccess === 'RESTRICTED' %} (limited access offender){% endif %}
+        {{ caseData.name }}
       </h1>
       <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-2">
         {{ riskLevelTag(caseData.riskLevel) }}

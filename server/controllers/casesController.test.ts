@@ -124,7 +124,7 @@ describe('casesController', () => {
       const crn = 'X123456'
       request.params.crn = crn
 
-      const caseData = caseFactory.build({ crn })
+      const caseData = caseFactory.build({ crn, name: 'John Smith', isLimitedAccess: true })
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
       const proposed = proposedAccommodationFactory.buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
@@ -160,7 +160,7 @@ describe('casesController', () => {
       expect(accommodationService.getAccommodationHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
-        caseData,
+        caseData: { ...caseData, name: 'John Smith (limited access offender)' },
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: eligibility.caseActions,
         noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),
@@ -178,7 +178,7 @@ describe('casesController', () => {
       const crn = 'X666667'
       request.params.crn = crn
 
-      const caseData = caseFactory.excludedAccess().build({ crn })
+      const caseData = caseFactory.limitedAccess().build({ crn })
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
 
       await casesController.show()(request, response, next)

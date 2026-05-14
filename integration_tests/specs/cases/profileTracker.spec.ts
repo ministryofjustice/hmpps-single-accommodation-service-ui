@@ -54,7 +54,7 @@ test.describe('Profile Tracker Page', () => {
 
   test('Should display profile tracker for a specific case', async ({ page }) => {
     const crn = 'X123456'
-    const caseData = caseFactory.build({ crn, caseAccess: 'FULL' })
+    const caseData = caseFactory.build({ crn })
     const dutyToRefer = dutyToReferFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
       crn,
@@ -85,9 +85,9 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowAccommodationHistory(accommodationHistory)
   })
 
-  test('should display the profile tracker for a restricted case', async ({ page }) => {
+  test('should display the profile tracker for a case with LAO flag', async ({ page }) => {
     const crn = 'X123456'
-    const caseData = caseFactory.build({ crn, caseAccess: 'RESTRICTED' })
+    const caseData = caseFactory.build({ crn, isLimitedAccess: true })
 
     await setupStubs({ crn, caseData })
     await login(page)

@@ -3,11 +3,11 @@ import { CaseDto } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
 import { formatDate } from '../../../server/utils/dates'
+import { displayName } from '../../../server/utils/cases'
 
 export default class PageWithCaseDetails extends AbstractPage {
   async shouldShowCaseDetails(caseData: CaseDto) {
-    let heading = caseData.name
-    if (caseData.caseAccess === 'RESTRICTED') heading += ' (limited access offender)'
+    const heading = displayName(caseData)
 
     await expect(this.page.getByRole('heading', { name: heading, level: 1 })).toBeVisible()
 

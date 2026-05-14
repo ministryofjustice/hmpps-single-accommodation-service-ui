@@ -1,4 +1,3 @@
-import { CaseDto } from '@sas/api'
 import {
   caseAssignedTo,
   casesResultsSummary,
@@ -36,24 +35,23 @@ describe('cases utilities', () => {
       dateOfBirth: '1980-10-09',
       tierScore: 'B2',
       riskLevel: 'VERY_HIGH',
-      caseAccess: 'FULL',
     })
 
-    it('renders a formatted cell for a given person', () => {
+    it('renders a formatted cell for a case with full access', () => {
       expect(personCell(personFullAccess)).toMatchSnapshot()
     })
 
-    it('renders a formatted cell for an access RESTRICTED person', () => {
+    it('renders a formatted cell for a case with full access with LAO flag', () => {
       const personRestrictedAccess = caseFactory.build({
         ...personFullAccess,
-        caseAccess: 'RESTRICTED',
+        isLimitedAccess: true,
       })
 
       expect(personCell(personRestrictedAccess)).toMatchSnapshot()
     })
 
-    it('renders a formatted cell for an access EXCLUDED person', () => {
-      const personExcludedAccess = caseFactory.excludedAccess().build({
+    it('renders a formatted cell for a case with limited access', () => {
+      const personExcludedAccess = caseFactory.limitedAccess().build({
         crn: 'C321666',
         prisonNumber: 'Z4567HG',
       })
@@ -61,7 +59,7 @@ describe('cases utilities', () => {
       expect(personCell(personExcludedAccess)).toMatchSnapshot()
     })
 
-    it('renders a formatted cell for an access UNKNOWN person', () => {
+    it('renders a formatted cell for a case with unknown access', () => {
       const personUnknownAccess = caseFactory.unknownAccess().build({
         crn: 'C321669',
         prisonNumber: 'C4567HG',
@@ -202,25 +200,40 @@ describe('cases utilities', () => {
   })
 
   describe('displayName', () => {
-    it.each(['FULL', 'RESTRICTED'])(
-      "return the person's name for a case with access %s",
-      (access: CaseDto['caseAccess']) => {
-        const person = caseFactory.build({
-          name: 'Dave Foo',
-          caseAccess: access,
-        })
+    it("returns the person's name for a case with full access with no LAO flag", () => {
+      const person = caseFactory.build({
+        name: 'Dave Foo',
+        isLimitedAccess: false,
+      })
 
-        expect(displayName(person)).toEqual('Dave Foo')
-      },
-    )
+      expect(displayName(person)).toEqual('Dave Foo')
+    })
 
-    it('returns "Limited access offender" for a case with a case access EXCLUDED', () => {
-      const person = caseFactory.excludedAccess().build()
+    it("returns the person's name followed by LAO for a case with full access with LAO flag", () => {
+      const person = caseFactory.build({
+        name: 'Dave Foo',
+        isLimitedAccess: true,
+      })
+
+      expect(displayName(person)).toEqual('Dave Foo (limited access offender)')
+    })
+
+    it("returns the person's name followed by a custom LAO flag for a case with full access with LAO flag", () => {
+      const person = caseFactory.build({
+        name: 'Dave Foo',
+        isLimitedAccess: true,
+      })
+
+      expect(displayName(person, '[foo]')).toEqual('Dave Foo [foo]')
+    })
+
+    it('returns "Limited access offender" for a case with a case with limited access', () => {
+      const person = caseFactory.limitedAccess().build()
 
       expect(displayName(person)).toEqual('Limited access offender')
     })
 
-    it('returns "Unknown" for a case with a case access UNKNOWN', () => {
+    it('returns "Unknown" for a case with a case with unknown access', () => {
       const person = caseFactory.unknownAccess().build()
 
       expect(displayName(person)).toEqual('Unknown')

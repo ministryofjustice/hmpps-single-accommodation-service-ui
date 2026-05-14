@@ -60,7 +60,8 @@
         "description": "yippee simplistic"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "name": "Blanca Schoen",
@@ -121,7 +122,8 @@
         "description": "destock"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "name": "Christian Keebler Jr.",
@@ -182,7 +184,8 @@
         "description": "range"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "name": "Noel Raynor",
@@ -244,7 +247,8 @@
         "description": "once waterlogged"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": true
   },
   {
     "name": "Carol VonRueden",
@@ -305,7 +309,8 @@
         "description": "oblong"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "name": "Jim Anderson",
@@ -345,7 +350,8 @@
         "description": "freezing"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "name": "Martin Farrell",
@@ -406,7 +412,8 @@
         "description": "kookily boastfully freely"
       }
     },
-    "caseAccess": "RESTRICTED"
+    "userAccess": "FULL",
+    "isLimitedAccess": true
   },
   {
     "name": "Ervin Ratke",
@@ -467,7 +474,8 @@
         "description": "out fibre"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "name": "Bert Morissette",
@@ -507,7 +515,8 @@
         "description": "including"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "name": "Ms. Ethel Hudson",
@@ -568,7 +577,8 @@
         "description": "rarely among"
       }
     },
-    "caseAccess": "FULL"
+    "userAccess": "FULL",
+    "isLimitedAccess": false
   },
   {
     "crn": "A643094",
@@ -578,6 +588,7 @@
       "surname": "Hansen",
       "username": "jessica.hansen"
     },
-    "caseAccess": "EXCLUDED"
+    "userAccess": "LIMITED",
+    "isLimitedAccess": true
   }
 ]

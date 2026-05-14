@@ -124,6 +124,10 @@ describe('accommodationSummary', () => {
       it('renders a message and no table when there are no addresses', () => {
         expect(accommodationHistoryTable([])).toMatchSnapshot()
       })
+
+      it('renders a message when there is an API error', () => {
+        expect(accommodationHistoryTable(null, true)).toMatchSnapshot()
+      })
     })
   })
 

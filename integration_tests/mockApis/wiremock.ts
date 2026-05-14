@@ -1,5 +1,6 @@
 import superagent, { Response, SuperAgentRequest } from 'superagent'
 import { ParsedUrlQuery } from 'node:querystring'
+import { apiResponseFactory } from '../../server/testutils/factories'
 
 const url = 'http://localhost:9091/__admin'
 
@@ -22,6 +23,19 @@ const stubApiError = (urlPattern: string, method: 'GET' | 'POST' = 'GET', status
     },
   })
 
+const stubApiUpstreamFailure = (urlPattern: string): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: apiResponseFactory.withUpstreamFailures(),
+    },
+  })
+
 const verifyRequest = async (method: 'POST' | 'PUT', path: string): Promise<Record<string, unknown>> => {
   const response: Response = await getMatchingRequests({
     method,
@@ -39,4 +53,13 @@ const verifyPut = (path: string) => verifyRequest('PUT', path)
 const queryParameters = (query?: ParsedUrlQuery) =>
   query ? Object.fromEntries(Object.entries(query).map(([key, value]) => [key, { equalTo: value }])) : undefined
 
-export { stubFor, getMatchingRequests, resetStubs, stubApiError, verifyPost, verifyPut, queryParameters }
+export {
+  stubFor,
+  getMatchingRequests,
+  resetStubs,
+  stubApiError,
+  stubApiUpstreamFailure,
+  verifyPost,
+  verifyPut,
+  queryParameters,
+}

@@ -36,29 +36,41 @@ exports[`accommodationSummary accommodation history accommodationHistoryRows ret
 exports[`accommodationSummary accommodation history accommodationHistoryTable macro renders a message and no table when there are no addresses 1`] = `
 "<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Accommodation history
-        </h2>
+      <h2 class="govuk-summary-card__title">Accommodation history</h2>
     </div>
     <div class="govuk-summary-card__content">
+      
         
-            <p class="govuk-body">No previous accommodation</p>
+          <p class="govuk-body">No previous accommodation</p>
         
+      
     </div>
-</div>"
+  </div>"
+`;
+
+exports[`accommodationSummary accommodation history accommodationHistoryTable macro renders a message when there is an API error 1`] = `
+"<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">Accommodation history</h2>
+    </div>
+    <div class="govuk-summary-card__content">
+      
+        <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+      
+    </div>
+  </div>"
 `;
 
 exports[`accommodationSummary accommodation history accommodationHistoryTable macro renders the accommodation history table for a given list of accommodations 1`] = `
 "<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Accommodation history
-        </h2>
+      <h2 class="govuk-summary-card__title">Accommodation history</h2>
     </div>
     <div class="govuk-summary-card__content">
+      
         
-            <div class="govuk-summary-list">
-                <table class="govuk-table">
+          <div class="govuk-summary-list">
+            <table class="govuk-table">
 
 
   <thead class="govuk-table__head">
@@ -132,10 +144,11 @@ exports[`accommodationSummary accommodation history accommodationHistoryTable ma
   </tbody>
 </table>
 
-            </div>
+          </div>
         
+      
     </div>
-</div>"
+  </div>"
 `;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS2 accommodation 1`] = `

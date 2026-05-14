@@ -1,7 +1,7 @@
 import type { SuperAgentRequest } from 'superagent'
 import { CaseDto as Case, AccommodationReferralDto as Referral } from '@sas/api'
 import { GetCasesQuery } from '@sas/ui'
-import { queryParameters, stubApiError, stubFor } from './wiremock'
+import { queryParameters, stubApiError, stubApiUpstreamFailure, stubFor } from './wiremock'
 import { apiResponseFactory, caseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
@@ -46,4 +46,6 @@ export default {
       },
     }),
   stubGetReferralHistory500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.referrals({ crn })),
+  stubGetReferralHistoryUpstreamFailure: (crn: string): SuperAgentRequest =>
+    stubApiUpstreamFailure(apiPaths.cases.referrals({ crn })),
 }

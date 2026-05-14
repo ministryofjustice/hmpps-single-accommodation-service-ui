@@ -28,6 +28,13 @@ import { resetStubs } from '../integration_tests/mockApis/wiremock'
 
 const fullCases = cases.filter(c => c.userAccess === 'FULL')
 
+// Defines upstream failures for given CRNs
+const upstreamFailures: Record<CaseDto['crn'], string[]> = {
+  I322559: ['referralHistory'], // Ervin Ratke
+  L247269: ['accommodationHistory'], // Bert Morissette
+  F608163: ['referralHistory', 'accommodationHistory'], // Ms. Ethel Hudson
+}
+
 async function stubCaseList() {
   await casesApi.stubGetCases(cases as CaseDto[])
 }
@@ -53,6 +60,10 @@ async function stubReferrals() {
       caseDto.crn,
       (referrals as Record<string, AccommodationReferralDto[]>)[caseDto.crn],
     )
+
+    if (upstreamFailures[caseDto.crn]?.includes('referralHistory')) {
+      await casesApi.stubGetReferralHistoryUpstreamFailure(caseDto.crn)
+    }
   }
 }
 
@@ -101,6 +112,10 @@ async function stubAccommodation() {
     )
     const history = (accommodationHistory as Record<string, AccommodationSummaryDto[]>)[caseDto.crn]
     await accommodationApi.stubGetAccommodationHistory(caseDto.crn, history)
+
+    if (upstreamFailures[caseDto.crn]?.includes('accommodationHistory')) {
+      await accommodationApi.stubGetAccommodationHistoryUpstreamFailure(caseDto.crn)
+    }
   }
 }
 

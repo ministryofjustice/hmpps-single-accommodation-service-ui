@@ -2,29 +2,33 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {%- macro referralHistoryTable(context) -%}
-<div class="govuk-summary-card">
+  <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">
-            Referral history
-        </h2>
+      <h2 class="govuk-summary-card__title">Referral history</h2>
     </div>
     <div class="govuk-summary-card__content">
+      {% if context.hasApiError %}
+        <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+      {% else %}
         {% if (context.rows | length > 0) %}
-            <div class="govuk-summary-list">
-                {{ govukTable({
-                    firstCellIsHeader: true,
-                    head: [
-                        { text: "Type" },
-                        { text: "Status" },
-                        { text: "Date" },
-                        { text: "" }
-                    ],
-                    rows: context.rows
-                }) }}
-            </div>
+          <div class="govuk-summary-list">
+            {{
+              govukTable({
+                firstCellIsHeader: true,
+                head: [
+                  { text: "Type" },
+                  { text: "Status" },
+                  { text: "Date" },
+                  { text: "" }
+                ],
+                rows: context.rows
+              })
+            }}
+          </div>
         {% else %}
-            <p class="govuk-body">No previous referrals</p>
+          <p class="govuk-body">No previous referrals</p>
         {% endif %}
+      {% endif %}
     </div>
-</div>
+  </div>
 {%- endmacro -%}

@@ -1,4 +1,9 @@
-import { AccommodationAddressDetails, ProposedAccommodationDetailCommand, ProposedAccommodationDto } from '@sas/api'
+import {
+  AccommodationAddressDetails,
+  ProposedAccommodationDetailCommand,
+  ProposedAccommodationDto,
+  UpstreamFailureDto,
+} from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
 
 export interface ErrorSummary {
@@ -83,3 +88,8 @@ export interface SelectOption {
 }
 
 export type DateFieldValues<K extends string> = { [P in `${K}-${'year' | 'month' | 'day'}`]?: string }
+
+export type ApiResponse = {
+  data?: unknown
+  upstreamFailures?: UpstreamFailureDto[]
+}

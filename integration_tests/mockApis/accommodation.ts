@@ -1,6 +1,6 @@
 import type { SuperAgentRequest } from 'superagent'
 import { AccommodationSummaryDto } from '@sas/api'
-import { stubFor } from './wiremock'
+import { stubApiUpstreamFailure, stubFor } from './wiremock'
 import apiPaths from '../../server/paths/api'
 import { apiResponseFactory } from '../../server/testutils/factories'
 
@@ -41,4 +41,6 @@ export default {
         jsonBody: apiResponseFactory.accommodationHistory(accommodations || []),
       },
     }),
+  stubGetAccommodationHistoryUpstreamFailure: (crn: string): SuperAgentRequest =>
+    stubApiUpstreamFailure(apiPaths.cases.accommodationHistory({ crn })),
 }

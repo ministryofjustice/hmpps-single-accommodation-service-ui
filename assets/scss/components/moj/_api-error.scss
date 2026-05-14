@@ -1,0 +1,28 @@
+// TODO: use component when no longer flagged as Experimental in MoJ Frontend
+// https://design-patterns.service.justice.gov.uk/components/api-error/#code-tab
+
+@use "govuk-frontend/dist/govuk" as *;
+
+.moj-api-error {
+  padding: 16px 22px;
+  background-color: govuk-colour("black", $variant: "tint-95");
+  border-left: 8px solid govuk-colour('red');
+
+  p {
+    @include govuk-font($size: 19, $weight: 'bold');
+    color: govuk-colour('black');
+    margin: 5px 0;
+  }
+
+  p + p {
+    @include govuk-font($size: 19);
+    margin-top: 0;
+  }
+}
+
+.moj-inset-api-error {
+  @include govuk-font($size: 19);
+  padding: 4px 8px;
+  border-left: $govuk-border-width solid govuk-colour('red');
+  margin-bottom: 4px;
+}

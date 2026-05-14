@@ -43,5 +43,6 @@ export type CaseDto = {
   nextAccommodation?: AccommodationSummaryDto | null
   status?: 'RISK_OF_NO_FIXED_ABODE' | 'NO_FIXED_ABODE' | 'TRANSIENT' | 'SETTLED'
   actions: Array<string>
-  caseAccess: 'RESTRICTED' | 'EXCLUDED' | 'FULL' | 'UNKNOWN'
+  userAccess: 'LIMITED' | 'FULL' | 'UNKNOWN'
+  limitedAccess?: boolean | null
 }

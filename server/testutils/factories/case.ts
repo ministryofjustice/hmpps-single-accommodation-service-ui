@@ -36,7 +36,7 @@ class CaseFactory extends Factory<Case> {
     })
   }
 
-  excludedAccess() {
+  limitedAccess() {
     return this.params({
       name: null,
       crn: crn(),
@@ -50,13 +50,14 @@ class CaseFactory extends Factory<Case> {
       nextAccommodation: null,
       status: null,
       actions: [],
-      caseAccess: 'EXCLUDED',
+      userAccess: 'LIMITED',
+      limitedAccess: null,
     })
   }
 
   unknownAccess() {
-    return this.excludedAccess().params({
-      caseAccess: 'UNKNOWN',
+    return this.limitedAccess().params({
+      userAccess: 'UNKNOWN',
     })
   }
 }
@@ -79,6 +80,7 @@ export default CaseFactory.define(() => {
     nextAccommodation,
     status,
     actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(3), faker.lorem.words(3)]) ?? [],
-    caseAccess: faker.helpers.arrayElement(['FULL', 'RESTRICTED']),
+    userAccess: 'FULL' as const,
+    limitedAccess: false,
   }
 })

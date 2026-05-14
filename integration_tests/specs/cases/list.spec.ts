@@ -59,11 +59,7 @@ test.describe('List of cases', () => {
 
   test('should show LAO cases', async ({ page }) => {
     // GIVEN there are LAO cases to show
-    const cases = [
-      caseFactory.build(),
-      caseFactory.build({ caseAccess: 'RESTRICTED' }),
-      caseFactory.excludedAccess().build(),
-    ]
+    const cases = [caseFactory.build(), caseFactory.build({ limitedAccess: true }), caseFactory.limitedAccess().build()]
     await casesApi.stubGetCases(cases)
     await casesApi.stubGetCaseByCrn(cases[2].crn, cases[2])
 

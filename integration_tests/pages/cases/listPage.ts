@@ -24,14 +24,14 @@ export default class CasesListPage extends AbstractPage {
 
     for await (const [index, person] of cases.entries()) {
       const row =
-        person.caseAccess !== 'EXCLUDED'
+        person.userAccess !== 'LIMITED'
           ? this.page.getByRole('row', { name: person.name })
           : this.page.locator('tbody').getByRole('row').nth(index)
 
       await expect(row).toContainText(person.crn as string)
       await expect(row).toContainText(person.prisonNumber as string)
 
-      if (person.caseAccess !== 'EXCLUDED') {
+      if (person.userAccess !== 'LIMITED') {
         await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
         await expect(row).toContainText(person.tierScore as string)
         await expect(row).toContainText(formatDate(person.dateOfBirth as string))

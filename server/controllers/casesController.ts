@@ -9,6 +9,7 @@ import {
   mapGetCasesQuery,
   casesTableColumns,
   queryToFilters,
+  displayName,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -40,7 +41,7 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      const { token, username, displayName } = res.locals.user
+      const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
 
@@ -54,7 +55,7 @@ export default class CasesController {
         casesRows: casesToRows(cases),
         query,
         filters,
-        assignedToOptions: [{ value: 'you', text: `You (${initialiseName(displayName)})` }],
+        assignedToOptions: [{ value: 'you', text: `You (${initialiseName(userFullName)})` }],
         riskLevelOptions: [
           { value: '', text: 'All' },
           { value: 'VERY_HIGH', text: 'Very high' },
@@ -88,7 +89,7 @@ export default class CasesController {
 
       const { data: caseData } = await this.casesService.getCase(token, crn)
 
-      if (caseData.caseAccess === 'EXCLUDED') {
+      if (caseData.userAccess === 'LIMITED') {
         return res.render('pages/show-excluded', { caseData })
       }
 
@@ -109,7 +110,7 @@ export default class CasesController {
       ])
 
       return res.render('pages/show', {
-        caseData,
+        caseData: { ...caseData, name: displayName(caseData) },
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: eligibility.caseActions,
         noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),

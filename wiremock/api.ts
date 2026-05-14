@@ -26,7 +26,7 @@ import {
 } from '@sas/api'
 import { resetStubs } from '../integration_tests/mockApis/wiremock'
 
-const fullCases = cases.filter(c => c.caseAccess === 'FULL' || c.caseAccess === 'RESTRICTED')
+const fullCases = cases.filter(c => c.userAccess === 'FULL')
 
 async function stubCaseList() {
   await casesApi.stubGetCases(cases as CaseDto[])

@@ -4,10 +4,15 @@
   <span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
   {{ statusTag(context.status) }}
   {%- if context.date %}
-    <p class="govuk-hint govuk-!-margin-top-2">
-      From {{ context.date | date }}
-      <br/>
-      ({{ context.date | date('days for/in') }})
-    </p>
+    <p class="sas-status__date">{{ context.date | date }}</p>
+  {%- endif %}
+  {%- if context.details %}
+    {% for detail in context.details %}
+      {% if detail.html %}
+        {{ detail.html | safe }}
+      {% else %}
+        <p class="govuk-!-margin-bottom-1">{{ detail.text }}</p>
+      {% endif %}
+    {% endfor %}
   {%- endif %}
 {%- endmacro -%}

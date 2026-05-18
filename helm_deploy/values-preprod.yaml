@@ -23,4 +23,4 @@ generic-service:
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps-approved-premises
+  alertSeverity: hmpps-approved-premises-nonprod

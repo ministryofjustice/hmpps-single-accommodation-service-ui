@@ -1,0 +1,7 @@
+@use "govuk-frontend/dist/govuk" as *;
+
+.sas-status__date {
+  margin-top: 7px;
+  margin-bottom: govuk-spacing(1);
+  color: govuk-colour("black", $variant: "tint-25");
+}

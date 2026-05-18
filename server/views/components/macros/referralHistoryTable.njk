@@ -15,11 +15,12 @@
           <div class="govuk-summary-list">
             {{
               govukTable({
+                    classes: 'sas-case-list',
                 firstCellIsHeader: true,
                 head: [
-                  { text: "Type" },
-                  { text: "Status" },
-                  { text: "Date" },
+                  { text: "Referral type" },
+                  { text: "Referred by" },
+                  { text: "Status and details" },
                   { text: "" }
                 ],
                 rows: context.rows

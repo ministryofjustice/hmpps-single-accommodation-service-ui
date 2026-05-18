@@ -19,4 +19,5 @@
 @use './components/filters';
 @use './components/previous-answers';
 @use './components/moj/api-error';
+@use './components/status-cell';
 @use './overrides/local';

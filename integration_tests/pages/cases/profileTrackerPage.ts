@@ -10,7 +10,7 @@ import { formatDate } from '../../../server/utils/dates'
 import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
 import paths from '../../../server/paths/ui'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
-import { referralStatusTag, referralStatusType } from '../../../server/utils/referrals'
+import { referralLinksForType, referralStatusCell, referralStatusTag, referralStatusType } from '../../../server/utils/referrals'
 import { addressLines, formatAddress } from '../../../server/utils/addresses'
 import PageWithCaseDetails from './pageWithCaseDetails'
 import { accommodationType, settledTag } from '../../../server/utils/accommodationSummary'
@@ -131,10 +131,13 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       const i = referrals.indexOf(referral)
       const row = table.locator('tbody tr').nth(i)
 
-      await expect(row).toContainText(referralStatusType(referral.type))
-      await expect(row).toContainText(referralStatusTag(referral.status).text)
-      await expect(row).toContainText(formatDate(referral.date))
-      await expect(row).toContainText('View')
+      await expect(row).toContainText(referralStatusType(referral.type, referral.status))
+      await expect(row).toContainText(referralStatusTag(referral.status, referral.type).text)
+      await this.shouldShowStatusCell(referralStatusCell(referral), row)
+      
+      for await (const link of referralLinksForType(referral.type)) {
+        await expect(row.getByRole('link', { name: link.text })).toHaveAttribute('href', link.href)
+      }
     }
   }
 

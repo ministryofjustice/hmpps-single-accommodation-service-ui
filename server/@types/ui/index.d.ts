@@ -39,7 +39,7 @@ export interface StatusTag {
 export interface StatusCell {
   status: StatusTag
   date?: string
-  details?: Array<TextContent | HtmlContent>
+  details?: Array<TextOrHtmlContent>
 }
 
 export interface StatusCard {

@@ -1,10 +1,10 @@
 import { EligibilityDto, ServiceResult } from '@sas/api'
 import { StatusCard, StatusTag } from '@sas/ui'
-import { dtrServiceResultToDutyToRefer, dutyToReferStatusCard } from './dutyToRefer'
+import { dutyToReferStatusCard } from './dutyToRefer'
 
-const eligibilityStatusTag = (status?: ServiceResult['serviceStatus']): StatusTag =>
+export const eligibilityStatusTag = (status?: ServiceResult['serviceStatus'], isDtr?: boolean): StatusTag =>
   ({
-    NOT_ELIGIBLE: { text: 'Not eligible', colour: 'grey' },
+    NOT_ELIGIBLE: { text: isDtr ? 'Not required' : 'Not eligible', colour: 'grey' },
     UPCOMING: { text: 'Upcoming', colour: 'yellow' },
     NOT_STARTED: { text: 'Not started', colour: 'orange' },
     NOT_SUBMITTED: { text: 'Not submitted', colour: 'red' },
@@ -52,7 +52,7 @@ export const eligibilityStatusCard = (title: string, service?: ServiceResult): S
 })
 
 export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] => [
-  dutyToReferStatusCard(dtrServiceResultToDutyToRefer(crn, eligibility.dtr)),
+  dutyToReferStatusCard(crn, eligibility.dtr),
   eligibilityStatusCard('Approved premises (CAS1)', eligibility.cas1.serviceResult),
   eligibilityStatusCard('CAS3 (transitional accommodation)', eligibility.cas3.serviceResult),
 ]

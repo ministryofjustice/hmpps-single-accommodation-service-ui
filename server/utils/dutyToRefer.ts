@@ -1,12 +1,5 @@
 import { Request } from 'express'
-import {
-  AuditRecordDto,
-  CaseDto,
-  DtrServiceResult,
-  DtrSubmissionDto,
-  DutyToReferDto,
-  FieldChange,
-} from '@sas/api'
+import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
@@ -15,7 +8,7 @@ import { validateAndFlashErrors } from './validation'
 import { renderMacro, statusTag } from './macros'
 import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
 import { noteTimelineEntry, timelineEntry } from './timeline'
-import { eligibilityStatusTag } from './eligibility'
+import { serviceStatusTag } from './statusTag'
 
 export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceResult => ({
   caseId: dtr.caseId,
@@ -30,7 +23,7 @@ export const dutyToReferStatusCard = (crn: string, dutyToRefer?: DtrServiceResul
   return {
     heading: 'Duty to Refer (DTR)',
     inactive: serviceStatus === 'NOT_ELIGIBLE',
-    status: eligibilityStatusTag(serviceStatus, true),
+    status: serviceStatusTag(serviceStatus, true),
     details: detailsForStatus(dutyToRefer),
     links: linksForStatus(dutyToRefer, crn),
   }
@@ -83,7 +76,7 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
   const rows = []
 
   if (dutyToRefer?.status === 'NOT_STARTED' || dutyToRefer?.status === 'SUBMITTED') {
-    rows.push(summaryListRowHtml('Status', statusTag(eligibilityStatusTag(dutyToRefer.status, true))))
+    rows.push(summaryListRowHtml('Status', statusTag(serviceStatusTag(dutyToRefer.status, true))))
   }
   if (dutyToRefer?.status !== 'NOT_STARTED') {
     rows.push(
@@ -105,7 +98,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
     rows.push(
       summaryListRowHtml(
         'Status',
-        `${statusTag(eligibilityStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
+        `${statusTag(serviceStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
       ),
     )
   }
@@ -224,7 +217,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   const html = renderMacro('timelineDutyToRefer', {
     type,
     isOutcome,
-    status: status ? eligibilityStatusTag(status, true) : undefined,
+    status: status ? serviceStatusTag(status, true) : undefined,
     values: isOutcome ? { Outcome: outcomeText } : submissionValues,
   })
 

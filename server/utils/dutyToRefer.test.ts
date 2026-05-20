@@ -132,17 +132,17 @@ describe('duty to refer utils', () => {
       },
       {
         status: 'submitted',
-        expectedLinks: ['Add outcome', 'View referral and notes'],
+        expectedLinks: ['Add outcome', 'View referral'],
         dtr: dtrServiceResultFactory.submitted().build(),
       },
       {
         status: 'not accepted',
-        expectedLinks: ['View referral and notes'],
+        expectedLinks: ['View referral'],
         dtr: dtrServiceResultFactory.notAccepted().build(),
       },
       {
         status: 'accepted',
-        expectedLinks: ['View referral and notes'],
+        expectedLinks: ['View referral'],
         dtr: dtrServiceResultFactory.accepted().build(),
       },
       { status: 'not eligible', expectedLinks: [], dtr: dtrServiceResultFactory.notEligible().build() },

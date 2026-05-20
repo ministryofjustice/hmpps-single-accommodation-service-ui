@@ -163,7 +163,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
     },
     {
       "href": "/cases/CRN123/dtr/submission-id/details",
-      "text": "View referral and notes",
+      "text": "View referral",
     },
   ],
   "status": {

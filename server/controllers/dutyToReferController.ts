@@ -124,12 +124,11 @@ export default class DutyToReferController {
           await this.dutyToReferService.update(token, crn, id, submission)
           req.flash('success', 'Submission details updated')
           return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
-        } else {
-          await this.dutyToReferService.submit(token, crn, submission)
-          const { data: dtr } = await this.dutyToReferService.getCurrentDtr(token, crn)
-          req.flash('success', 'New DTR referral details added')
-          return res.redirect(uiPaths.dutyToRefer.show({ crn, id: dtr.submission?.id }))
         }
+        await this.dutyToReferService.submit(token, crn, submission)
+        const { data: dtr } = await this.dutyToReferService.getCurrentDtr(token, crn)
+        req.flash('success', 'New DTR referral details added')
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id: dtr.submission?.id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
         return res.redirect(errorRedirect)

@@ -34,7 +34,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string) => {
   const submission = dtr?.submission
 
   const notes = submission?.id && {
-    text: 'View referral and notes',
+    text: 'View referral',
     href: uiPaths.dutyToRefer.show({ crn, id: submission.id }),
   }
 

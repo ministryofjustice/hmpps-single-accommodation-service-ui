@@ -16,7 +16,7 @@ export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceRe
   submission: dtr.submission,
 })
 
-export const dutyToReferStatusCard = (crn: string, dutyToRefer?: DtrServiceResult): StatusCard => {
+export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResult): StatusCard => {
   const { serviceResult } = dutyToRefer || {}
   const { serviceStatus } = serviceResult || {}
 

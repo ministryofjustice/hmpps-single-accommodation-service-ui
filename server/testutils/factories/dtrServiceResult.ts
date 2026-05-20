@@ -61,6 +61,6 @@ export default DtrServiceResultFactory.define(() => {
   ])
   return {
     serviceResult: serviceResultFactory.build({ serviceStatus: status }),
-    submission: noSubmissionStatuses.includes(status) ? undefined : dtrSubmissionFactory.build(),
+    submission: noSubmissionStatuses.includes(status) ? null : dtrSubmissionFactory.build(),
   }
 })

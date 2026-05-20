@@ -69,31 +69,14 @@ export default class DutyToReferController {
     }
   }
 
-  guidance(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      const { crn } = req.params
-
-      setFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, FLOW_ENTRY_POINTS)
-
-      await this.auditService.logPageView(Page.DUTY_TO_REFER_GUIDANCE, {
-        who: res.locals.user.username,
-        correlationId: req.id,
-      })
-
-      return res.render('pages/duty-to-refer/guidance', {
-        crn,
-      })
-    }
-  }
-
   submission(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { token } = res.locals.user
       const { crn, id } = req.params
 
       const backLinkHref = id
-        ? setFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, FLOW_ENTRY_POINTS)
-        : uiPaths.dutyToRefer.guidance({ crn })
+        ? setFlowRedirect(uiPaths.cases.show.pattern, req, FLOW_ENTRY_POINTS)
+        : uiPaths.cases.show({ crn })
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
         who: res.locals.user.username,
@@ -122,7 +105,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = id ? uiPaths.dutyToRefer.edit({ crn, id }) : uiPaths.dutyToRefer.submission({ crn })
-      const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, uiPaths.cases.show({ crn }))
+      const successRedirect = getFlowRedirect(uiPaths.cases.show.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateSubmission(req)) {
         return res.redirect(errorRedirect)

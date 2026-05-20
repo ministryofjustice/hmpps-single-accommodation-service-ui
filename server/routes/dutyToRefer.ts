@@ -6,7 +6,6 @@ export default function dutyToReferRoutes(router: Router, dutyToReferController:
   router.get(uiPaths.dutyToRefer.show.pattern, dutyToReferController.show())
   router.post(uiPaths.dutyToRefer.show.pattern, dutyToReferController.saveNote())
 
-  router.get(uiPaths.dutyToRefer.guidance.pattern, dutyToReferController.guidance())
   router.get(uiPaths.dutyToRefer.submission.pattern, dutyToReferController.submission())
   router.get(uiPaths.dutyToRefer.edit.pattern, dutyToReferController.submission())
   router.post(uiPaths.dutyToRefer.submission.pattern, dutyToReferController.saveSubmission())

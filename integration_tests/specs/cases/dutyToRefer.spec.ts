@@ -70,14 +70,8 @@ test.describe('duty to refer', () => {
     // And I click the add referral details link
     await profileTrackerPage.clickLink('Add referral details')
 
-    // Then I should see the duty to refer guidance page
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Submit a duty to refer (DTR)')
-
-    // Then I click the add submission details button
-    await dutyToReferPage.clickButton('Add submission details')
-
     // Then I should see the duty to refer submission form
-    await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) submission details')
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) submission details')
     await dutyToReferPage.shouldShowSubmissionForm(caseData)
 
     // When I submit the form with missing fields

@@ -12,7 +12,6 @@ export default {
   },
   dutyToRefer: {
     show: dutyToReferPath.path(':id/details'),
-    guidance: dutyToReferPath.path('guidance'),
     submission: dutyToReferPath.path('submission'),
     edit: dutyToReferPath.path(':id/edit'),
     outcome: dutyToReferPath.path(':id/outcome'),

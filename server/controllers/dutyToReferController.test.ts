@@ -62,20 +62,6 @@ describe('dutyToReferController', () => {
     jest.spyOn(validationUtils, 'addUserInputToFlash')
   })
 
-  describe('guidance', () => {
-    it('renders the guidance page', async () => {
-      await controller.guidance()(request, response, next)
-
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.DUTY_TO_REFER_GUIDANCE, {
-        who: 'user1',
-        correlationId: 'request-id',
-      })
-      expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/guidance', {
-        crn: 'CRN123',
-      })
-    })
-  })
-
   describe('submission', () => {
     it('renders the submission page', async () => {
       await controller.submission()(request, response, next)
@@ -88,7 +74,7 @@ describe('dutyToReferController', () => {
       expect(referenceDataService.getLocalAuthorities).toHaveBeenCalledWith('token-1')
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
         pageTitle: 'Add Duty to Refer (DTR) submission details',
-        backLinkHref: '/cases/CRN123/dtr/guidance',
+        backLinkHref: '/cases/CRN123',
         crn: 'CRN123',
         tableRows: summaryListRows(caseData),
         localAuthorities,

@@ -87,7 +87,7 @@ export default class DutyToReferController {
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/duty-to-refer/submission', {
-        pageTitle: `${id ? 'Edit' : 'Add'} Duty to Refer (DTR) submission details`,
+        pageTitle: `${id ? 'Edit' : 'Add new'} Duty to Refer (DTR) referral details`,
         backLinkHref,
         crn,
         tableRows,
@@ -105,7 +105,6 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = id ? uiPaths.dutyToRefer.edit({ crn, id }) : uiPaths.dutyToRefer.submission({ crn })
-      const successRedirect = getFlowRedirect(uiPaths.cases.show.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateSubmission(req)) {
         return res.redirect(errorRedirect)
@@ -124,11 +123,13 @@ export default class DutyToReferController {
         if (id) {
           await this.dutyToReferService.update(token, crn, id, submission)
           req.flash('success', 'Submission details updated')
+          return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         } else {
           await this.dutyToReferService.submit(token, crn, submission)
-          req.flash('success', 'Submission details added')
+          const { data: dtr } = await this.dutyToReferService.getCurrentDtr(token, crn)
+          req.flash('success', 'New DTR referral details added')
+          return res.redirect(uiPaths.dutyToRefer.show({ crn, id: dtr.submission?.id }))
         }
-        return res.redirect(successRedirect)
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
         return res.redirect(errorRedirect)

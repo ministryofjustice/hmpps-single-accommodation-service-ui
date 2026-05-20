@@ -115,7 +115,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
   "inactive": false,
   "links": [
     {
-      "href": "/cases/CRN123",
+      "href": "/cases/CRN123/dtr/submission",
       "text": "Add referral details",
     },
   ],

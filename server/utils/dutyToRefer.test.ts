@@ -127,7 +127,7 @@ describe('duty to refer utils', () => {
     it.each([
       {
         status: 'not started',
-        expectedLinks: ['Add submission details'],
+        expectedLinks: ['Add referral details'],
         dtr: dtrServiceResultFactory.notStarted().build(),
       },
       {

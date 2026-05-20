@@ -43,7 +43,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string) => {
     case 'ACCEPTED':
       return [notes]
     case 'NOT_STARTED':
-      return [{ text: 'Add submission details', href: uiPaths.dutyToRefer.guidance({ crn }) }]
+      return [{ text: 'Add referral details', href: uiPaths.dutyToRefer.guidance({ crn }) }]
     case 'SUBMITTED':
       return [{ text: 'Add outcome', href: uiPaths.dutyToRefer.outcome({ crn, id: submission?.id }) }, notes]
     default:

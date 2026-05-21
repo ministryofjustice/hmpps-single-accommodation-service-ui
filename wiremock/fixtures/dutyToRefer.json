@@ -4,95 +4,52 @@
     "crn": "S511935",
     "status": "NOT_ACCEPTED",
     "submission": {
-      "id": "def7cd80-0258-4a5b-aa28-0e8eee3f0147",
+      "id": "0f35c1b1-d4cb-49cd-9e0f-a9f0da6183cb",
       "localAuthority": {
-        "localAuthorityAreaId": "82464972-cf99-4fc4-9541-153b427f2430",
-        "localAuthorityAreaName": "North Warwickshire"
+        "localAuthorityAreaId": "a90e42ef-48fc-4ba4-85a4-010c5d287be1",
+        "localAuthorityAreaName": "Tower Hamlets"
       },
-      "submissionDate": "2025-07-29",
-      "createdBy": "Jacob O'Connell-Gusikowski",
-      "createdAt": "2025-12-19T14:12:25.172Z"
+      "referenceNumber": "NF2KCYM5QA",
+      "submissionDate": "2026-04-05",
+      "createdBy": "Andre Rutherford",
+      "createdAt": "2026-02-22T15:59:20.931Z"
     }
   },
   "P712106": {
     "caseId": "8fd2e5e5-4b92-434b-8403-d6d114ca85d4",
     "crn": "P712106",
-    "status": "ACCEPTED",
-    "submission": {
-      "id": "de7cca02-ff51-4b69-ba89-6e4f3526d922",
-      "localAuthority": {
-        "localAuthorityAreaId": "52ecbfff-c361-4138-9d70-655e708734e4",
-        "localAuthorityAreaName": "Ards and North Down"
-      },
-      "referenceNumber": "VF2JEZBR1K",
-      "submissionDate": "2025-05-17",
-      "createdBy": "Barbara Schimmel",
-      "createdAt": "2025-05-07T08:53:50.675Z"
-    }
+    "status": "NOT_STARTED"
   },
   "T274481": {
     "caseId": "47adb9ec-4c9d-403b-ac31-678d81598eb1",
     "crn": "T274481",
-    "status": "SUBMITTED",
-    "submission": {
-      "id": "fae70f91-1b80-4520-8fc2-fe518abfc519",
-      "localAuthority": {
-        "localAuthorityAreaId": "4e15e31a-d863-4e10-9fed-c25128888102",
-        "localAuthorityAreaName": "Fermanagh and Omagh"
-      },
-      "referenceNumber": "9EM2JFZGYL",
-      "submissionDate": "2025-05-06",
-      "createdBy": "Dr. Noah Kling",
-      "createdAt": "2026-01-31T05:30:30.991Z"
-    }
+    "status": "NOT_STARTED"
   },
   "V938951": {
     "caseId": "f3d230ae-1812-46ae-856a-9a34ead9b968",
     "crn": "V938951",
     "status": "SUBMITTED",
     "submission": {
-      "id": "e0b70402-2206-4004-b5b5-3b6c2111745d",
+      "id": "c3ed6644-0c62-4f65-a29f-e23e9804113f",
       "localAuthority": {
-        "localAuthorityAreaId": "f33dafb8-4c65-46b2-a976-f5e62baac812",
-        "localAuthorityAreaName": "Wrexham"
+        "localAuthorityAreaId": "97872e49-d43c-4049-8a27-5fc1f0a33a60",
+        "localAuthorityAreaName": "Ryedale"
       },
-      "referenceNumber": "1INZRS7AD2",
-      "submissionDate": "2025-04-30",
-      "createdBy": "Willis Hartmann",
-      "createdAt": "2025-12-29T04:08:00.882Z"
+      "referenceNumber": "QCBDV7P67D",
+      "submissionDate": "2025-11-26",
+      "createdBy": "Dr. Carl Hand",
+      "createdAt": "2025-07-17T16:04:59.249Z"
     }
   },
   "T229440": {
     "caseId": "127e3f2f-cec2-4186-a958-d63db3692f7a",
     "crn": "T229440",
-    "status": "NOT_ACCEPTED",
-    "submission": {
-      "id": "018583e0-7cb8-43f3-a748-797b42046d80",
-      "localAuthority": {
-        "localAuthorityAreaId": "4f1e21c6-ec5f-4da5-9154-e166d4f98057",
-        "localAuthorityAreaName": "Moray"
-      },
-      "referenceNumber": "HSNGKTFAZY",
-      "submissionDate": "2025-06-07",
-      "createdBy": "Mattie Berge",
-      "createdAt": "2025-10-21T14:22:05.277Z"
-    }
+    "status": "NOT_STARTED"
   },
   "H271226": {
     "caseId": "916525a0-b7b5-498f-94a7-cbf28d69a723",
     "crn": "H271226",
-    "status": "NOT_ACCEPTED",
-    "submission": {
-      "id": "2dd0e325-e48f-48eb-9983-8b89411be9d0",
-      "localAuthority": {
-        "localAuthorityAreaId": "5ec1bc45-9891-421c-aaca-a092d8bb4f1a",
-        "localAuthorityAreaName": "Lancashire"
-      },
-      "referenceNumber": "ZN4A1TN24M",
-      "submissionDate": "2025-11-03",
-      "createdBy": "Lester Waelchi",
-      "createdAt": "2026-01-29T20:27:58.912Z"
-    }
+    "status": "NOT_STARTED"
   },
   "U934069": {
     "caseId": "9b7d50b6-bc25-49d5-b97a-857ae300a7bf",
@@ -102,49 +59,27 @@
   "I322559": {
     "caseId": "ed36d7c8-6745-45dc-9dac-8bf5c869baee",
     "crn": "I322559",
-    "status": "ACCEPTED",
-    "submission": {
-      "id": "7ebb8a53-ab24-48e1-ab76-8568c3f9753c",
-      "localAuthority": {
-        "localAuthorityAreaId": "e5faac5d-b227-44dd-a31e-0f0b7254eb0f",
-        "localAuthorityAreaName": "West Midlands"
-      },
-      "referenceNumber": "ZYBVXCTIFV",
-      "submissionDate": "2025-09-29",
-      "createdBy": "Alexis Stroman",
-      "createdAt": "2025-06-23T11:29:38.270Z"
-    }
+    "status": "NOT_STARTED"
   },
   "L247269": {
     "caseId": "1135c4d8-ab7d-4749-b309-68643b462bed",
     "crn": "L247269",
     "status": "SUBMITTED",
     "submission": {
-      "id": "e0330fc5-bb50-49fc-a035-1e1380d8b724",
+      "id": "680cc11c-20bc-4e7d-8520-2f37f581c094",
       "localAuthority": {
-        "localAuthorityAreaId": "bb91cbdb-c4a4-4471-834d-e2a3d954a700",
-        "localAuthorityAreaName": "Wiltshire"
+        "localAuthorityAreaId": "b90affc3-7639-4d4a-9328-10699d72dd8a",
+        "localAuthorityAreaName": "East Dunbartonshire"
       },
-      "referenceNumber": "S6JDBOOIBD",
-      "submissionDate": "2025-09-10",
-      "createdBy": "Samantha Morissette",
-      "createdAt": "2025-11-11T19:07:09.653Z"
+      "referenceNumber": "HSO0FXSUR0",
+      "submissionDate": "2025-12-07",
+      "createdBy": "Bernadette Casper",
+      "createdAt": "2025-09-26T03:15:17.328Z"
     }
   },
   "F608163": {
     "caseId": "917e5545-b40a-4f97-b3fe-251e72fcfbab",
     "crn": "F608163",
-    "status": "NOT_ACCEPTED",
-    "submission": {
-      "id": "d24329e2-a352-495a-839d-8467ceadf62b",
-      "localAuthority": {
-        "localAuthorityAreaId": "ac364104-06af-4b29-8127-113f490f252f",
-        "localAuthorityAreaName": "Tees Valley"
-      },
-      "referenceNumber": "SD74EUCJ0W",
-      "submissionDate": "2025-06-16",
-      "createdBy": "Kimberly Welch",
-      "createdAt": "2025-07-25T13:01:23.580Z"
-    }
+    "status": "NOT_STARTED"
   }
 }

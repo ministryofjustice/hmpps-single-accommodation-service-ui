@@ -68,18 +68,44 @@
             })
           }}
         </div>
-        <h2 class="govuk-heading-m">Submission details</h2>
+        {% if outcomeDetailRows.length > 0 %}
+          {{
+            govukSummaryList({
+                card: {
+                  title: {
+                    text: "Outcome details"
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                        classes: "govuk-!-font-weight-regular",
+                        text: "Change"
+                      }
+                    ]
+                  }
+                },
+                rows: outcomeDetailRows
+            })
+          }}
+        {% endif %}
         {{
           govukSummaryList({
+              card: {
+                title: {
+                  text: "Referral details"
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.dutyToRefer.edit({ crn: crn, id: dtrId }),
+                      classes: "govuk-!-font-weight-regular",
+                      text: "Change"
+                    }
+                  ]
+                }
+              },
               rows: submissionDetailRows
-          })
-        }}
-        {{
-          govukButton({
-              text: "Edit submission details",
-              classes: "govuk-button--secondary",
-              href: paths.dutyToRefer.edit({ crn: crn, id: dtrId }),
-              preventDoubleClick: true
           })
         }}
       </section>

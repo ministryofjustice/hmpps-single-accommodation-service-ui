@@ -113,6 +113,12 @@ export default class AbstractPage {
     })
   }
 
+  getSummaryCard(title: string) {
+    return this.page.locator('.govuk-summary-card', {
+      has: this.page.getByRole('heading', { name: title }),
+    })
+  }
+
   async shouldShowCard(title: string, cardData: StatusCard) {
     const card = this.getCard(title)
 

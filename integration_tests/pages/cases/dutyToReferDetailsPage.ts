@@ -12,7 +12,7 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   }
 
   async shouldShowSubmissionDetails(dutyToRefer: DutyToReferDto) {
-    await expect(this.page.getByRole('heading', { name: 'Submission details', exact: true })).toBeVisible()
+    await expect(this.page.getByRole('heading', { name: 'Referral details', exact: true })).toBeVisible()
 
     if (dutyToRefer.status === 'SUBMITTED') {
       await this.shouldShowSummaryItem('Status', formatDutyToReferStatus(dutyToRefer.status))
@@ -28,5 +28,12 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
 
   async shouldNotShowAddOutcomeButton() {
     await expect(this.page.getByRole('button', { name: 'Add outcome' })).not.toBeVisible()
+  }
+
+  async shouldShowOutcomeDetails(dutyToRefer: DutyToReferDto) {
+    await expect(this.page.getByRole('heading', { name: 'Outcome details', exact: true })).toBeVisible()
+
+    const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${outcomeSupportText(dutyToRefer)}`
+    await this.shouldShowSummaryItem('Status', statusText)
   }
 }

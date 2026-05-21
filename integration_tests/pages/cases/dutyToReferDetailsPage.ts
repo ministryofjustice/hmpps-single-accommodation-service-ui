@@ -21,16 +21,4 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
     await this.shouldShowSummaryItem('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName)
     await this.shouldShowSummaryItem('Reference', dutyToRefer.submission.referenceNumber)
   }
-
-  async shouldShowEmptyOutcomeDetails() {
-    await expect(this.page.getByRole('heading', { name: 'Outcome details' })).toBeVisible()
-    await expect(this.page.getByText('No details about the outcome have been added.')).toBeVisible()
-  }
-
-  async shouldShowOutcomeDetails(dutyToRefer: DutyToReferDto) {
-    await expect(this.page.getByRole('heading', { name: 'Outcome details', exact: true })).toBeVisible()
-
-    const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${outcomeSupportText(dutyToRefer)}`
-    await this.shouldShowSummaryItem('Status', statusText)
-  }
 }

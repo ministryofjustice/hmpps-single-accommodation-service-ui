@@ -21,4 +21,12 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
     await this.shouldShowSummaryItem('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName)
     await this.shouldShowSummaryItem('Reference', dutyToRefer.submission.referenceNumber)
   }
+
+  async shouldShowAddOutcomeButton() {
+    await expect(this.page.getByRole('button', { name: 'Add outcome' })).toBeVisible()
+  }
+
+  async shouldNotShowAddOutcomeButton() {
+    await expect(this.page.getByRole('button', { name: 'Add outcome' })).not.toBeVisible()
+  }
 }

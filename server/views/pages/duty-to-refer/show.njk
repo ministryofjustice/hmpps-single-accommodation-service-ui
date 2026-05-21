@@ -42,10 +42,28 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <section>
         <div class="govuk-button-group">
+          {% if outcomeDetailRows.length == 0 %}
+            {{
+              govukButton({
+                  text: "Add outcome",
+                  href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                  preventDoubleClick: true
+              })
+            }}
+          {% endif %}
           {{
             govukButton({
-                text: "Add outcome",
-                href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                text: "Withdraw this referral",
+                classes: "govuk-button--secondary",
+                href: '#',
+                preventDoubleClick: true
+            })
+          }}
+          {{
+            govukButton({
+                text: "Add new referral",
+                classes: "govuk-button--secondary",
+                href: '#',
                 preventDoubleClick: true
             })
           }}

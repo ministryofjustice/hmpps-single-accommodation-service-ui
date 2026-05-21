@@ -102,6 +102,7 @@ test.describe('duty to refer', () => {
     // Then I should see the duty to refer details page
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(submittedDutyToRefer)
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
 
     // And I should see a success banner confirming referral details were added
     await dutyToReferDetailsPage.shouldShowBanner('New DTR referral details added')
@@ -190,6 +191,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
 
     // And I should see a timeline entry showing the duty to refer was submitted
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(submissionAddedDutyReferRecord))
@@ -215,7 +217,8 @@ test.describe('duty to refer', () => {
     // And I should see the duty to refer details page with updated outcome details
     await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(notAcceptedDutyToRefer)
-
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
+    
     // And I should see a success banner confirming outcome details were added
     await dutyToReferDetailsPage.shouldShowBanner('Outcome details added')
 
@@ -271,6 +274,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
 
     // And the person's profile should be shown
     await dutyToReferDetailsPage.shouldShowCaseDetails(caseData)
@@ -308,6 +312,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page with updated submission details
     await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming submission details were updated
@@ -344,6 +349,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
 
     // And the person's profile should be shown
     await dutyToReferDetailsPage.shouldShowCaseDetails(caseData)
@@ -377,6 +383,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page with updated outcome details
     await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
 
     // And I should see a success banner confirming outcome details were updated
     await dutyToReferDetailsPage.shouldShowBanner('Outcome details updated')

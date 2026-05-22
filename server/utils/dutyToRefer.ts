@@ -63,7 +63,7 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
     rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
     rows.push(
       summaryListRowText(
-        'Submission date',
+        'Date submitted',
         dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
       ),
     )

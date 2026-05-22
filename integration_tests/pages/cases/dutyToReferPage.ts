@@ -36,7 +36,7 @@ export default class DutyToReferPage extends AbstractPage {
     await this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
 
     await this.shouldShowSummaryItem('Local authority', dtr.submission.localAuthority.localAuthorityAreaName)
-    await this.shouldShowSummaryItem('Submission date', formatDateAndDaysAgo(dtr.submission.submissionDate))
+    await this.shouldShowSummaryItem('Date submitted', formatDateAndDaysAgo(dtr.submission.submissionDate))
   }
 
   async completeOutcomeForm(dutyToRefer: DutyToReferDto) {

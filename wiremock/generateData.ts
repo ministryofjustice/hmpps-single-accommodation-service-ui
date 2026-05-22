@@ -7,7 +7,6 @@ import {
   accommodationSummaryFactory,
   auditRecordFactory,
   caseFactory,
-  dutyToReferFactory,
   eligibilityFactory,
   proposedAccommodationFactory,
   referralFactory,

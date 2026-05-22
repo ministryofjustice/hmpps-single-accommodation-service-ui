@@ -189,7 +189,7 @@ describe('duty to refer utils', () => {
       expect(rows).toHaveLength(6)
       expect(rows[4].key.text).toBe('Local authority')
       expect(rows[4].value.text).toBe('Some Council')
-      expect(rows[5].key.text).toBe('Submission date')
+      expect(rows[5].key.text).toBe('Date submitted')
       expect(rows[5].value.text).toBe(formatDateAndDaysAgo('2025-01-10'))
     })
   })

@@ -25,6 +25,9 @@ describeClient('ReferenceDataClient', provider => {
           method: 'GET',
           path: apiPaths.referenceData({}),
           query: { type: objectType },
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         },
         willRespondWith: {
           status: 200,

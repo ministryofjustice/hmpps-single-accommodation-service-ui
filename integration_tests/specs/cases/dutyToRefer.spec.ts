@@ -122,7 +122,7 @@ test.describe('duty to refer', () => {
     await profileTrackerPage.clickLink('Add outcome')
 
     // Then I should see the duty to refer outcome form
-    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome details')
+    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome')
     await outcomePage.shouldShowOutcomePage(caseData, submittedDutyToRefer)
 
     // When I submit the form with missing fields
@@ -200,7 +200,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.clickButton('Add outcome')
 
     // Then I should see the duty to refer outcome form
-    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome details')
+    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome')
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
@@ -219,7 +219,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(notAcceptedDutyToRefer)
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(notAcceptedDutyToRefer)
-    
+
     // And I should see a success banner confirming outcome details were added
     await dutyToReferDetailsPage.shouldShowBanner('Outcome details added')
 
@@ -362,7 +362,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Outcome details'))
 
     // Then I should see the duty to refer edit outcome form
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) outcome details')
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) outcome')
     await dutyToReferPage.shouldShowOutcomePage(caseData, acceptedDutyToRefer)
 
     // When I submit the form with missing fields

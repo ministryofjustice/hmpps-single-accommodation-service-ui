@@ -158,7 +158,7 @@ export default class DutyToReferController {
       const backLinkHref = setFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, FLOW_ENTRY_POINTS)
 
       return res.render('pages/duty-to-refer/outcome', {
-        pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome details`,
+        pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome`,
         backLinkHref,
         crn,
         dtr,

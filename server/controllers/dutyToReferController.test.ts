@@ -228,7 +228,7 @@ describe('dutyToReferController', () => {
         'existing-submission-id',
       )
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/outcome', {
-        pageTitle: 'Add Duty to Refer (DTR) outcome details',
+        pageTitle: 'Add Duty to Refer (DTR) outcome',
         backLinkHref: '/cases/CRN123',
         crn: 'CRN123',
         dtr,
@@ -248,7 +248,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith(
         'pages/duty-to-refer/outcome',
         expect.objectContaining({
-          pageTitle: 'Edit Duty to Refer (DTR) outcome details',
+          pageTitle: 'Edit Duty to Refer (DTR) outcome',
           backLinkHref: '/cases/CRN123/dtr/existing-submission-id/details',
         }),
       )

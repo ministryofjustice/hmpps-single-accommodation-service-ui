@@ -13,7 +13,14 @@ import {
   validateSubmission,
 } from './dutyToRefer'
 import * as validationUtils from './validation'
-import { auditRecordFactory, caseFactory, dtrSubmissionFactory, dutyToReferFactory } from '../testutils/factories'
+import {
+  auditRecordFactory,
+  caseFactory,
+  dtrServiceResultFactory,
+  dtrSubmissionFactory,
+  dutyToReferFactory,
+  serviceResultFactory,
+} from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
 
 describe('duty to refer utils', () => {
@@ -29,24 +36,23 @@ describe('duty to refer utils', () => {
     })
 
     it('returns a duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory.build()
+      const dutyToRefer = dtrServiceResultFactory.build()
 
-      const card = dutyToReferStatusCard(dutyToRefer)
+      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
 
       expect(card.heading).toEqual('Duty to Refer (DTR)')
     })
 
     it('returns a NOT_STARTED duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory.notStarted().build({ crn: 'CRN123' })
+      const dutyToRefer = dtrServiceResultFactory.notStarted().build()
 
-      const card = dutyToReferStatusCard(dutyToRefer)
+      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
 
       expect(card).toMatchSnapshot()
     })
 
     it('returns a SUBMITTED duty to refer status card object', () => {
-      const dutyToRefer = dutyToReferFactory.submitted().build({
-        crn: 'CRN123',
+      const dutyToRefer = dtrServiceResultFactory.submitted().build({
         submission: {
           id: 'submission-id',
           submissionDate: '2025-12-01',
@@ -55,13 +61,21 @@ describe('duty to refer utils', () => {
         },
       })
 
-      const card = dutyToReferStatusCard(dutyToRefer)
+      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
+
+      expect(card).toMatchSnapshot()
+    })
+
+    it('returns a NOT_ELIGIBLE duty to refer status card object', () => {
+      const dutyToRefer = dtrServiceResultFactory.notEligible().build()
+
+      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
 
       expect(card).toMatchSnapshot()
     })
 
     it('returns an empty duty to refer card for undefined duty to refer', () => {
-      const card = dutyToReferStatusCard(undefined)
+      const card = dutyToReferStatusCard('CRN123', undefined)
 
       expect(card).toMatchSnapshot()
     })
@@ -89,8 +103,11 @@ describe('duty to refer utils', () => {
       ],
       ['NOT_ACCEPTED' as const, []],
       ['ACCEPTED' as const, []],
+      ['NOT_ELIGIBLE' as const, []],
+      [undefined, []],
     ])('returns details for status %s', (status, expectedDetails) => {
-      const dutyToRefer = dutyToReferFactory.build({ status, submission })
+      const serviceResult = serviceResultFactory.build({ serviceStatus: status })
+      const dutyToRefer = dtrServiceResultFactory.build({ serviceResult, submission })
 
       const details = detailsForStatus(dutyToRefer)
 
@@ -111,22 +128,28 @@ describe('duty to refer utils', () => {
       {
         status: 'not started',
         expectedLinks: ['Add submission details'],
-        dtr: dutyToReferFactory.notStarted().build(),
+        dtr: dtrServiceResultFactory.notStarted().build(),
       },
       {
         status: 'submitted',
         expectedLinks: ['Add outcome', 'View referral and notes'],
-        dtr: dutyToReferFactory.submitted().build(),
+        dtr: dtrServiceResultFactory.submitted().build(),
       },
       {
         status: 'not accepted',
         expectedLinks: ['View referral and notes'],
-        dtr: dutyToReferFactory.notAccepted().build(),
+        dtr: dtrServiceResultFactory.notAccepted().build(),
       },
-      { status: 'accepted', expectedLinks: ['View referral and notes'], dtr: dutyToReferFactory.accepted().build() },
+      {
+        status: 'accepted',
+        expectedLinks: ['View referral and notes'],
+        dtr: dtrServiceResultFactory.accepted().build(),
+      },
+      { status: 'not eligible', expectedLinks: [], dtr: dtrServiceResultFactory.notEligible().build() },
+      { status: 'upcoming', expectedLinks: [], dtr: dtrServiceResultFactory.upcoming().build() },
       { status: 'undefined', expectedLinks: [], dtr: undefined },
     ])('returns links $links for status $status', ({ expectedLinks, dtr }) => {
-      const links = linksForStatus(dtr).map(link => link.text)
+      const links = linksForStatus(dtr, 'CRN123').map(link => link.text)
 
       expect(links).toEqual(expect.arrayContaining(expectedLinks))
       expect(links).toHaveLength(expectedLinks.length)

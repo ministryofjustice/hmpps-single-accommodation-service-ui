@@ -3,7 +3,7 @@ import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import crn from '../crn'
 import serviceResultFactory from './serviceResult'
-import dtrSubmissionFactory from './dutyToReferSubmission'
+import dtrServiceResultFactory from './dtrServiceResult'
 
 const caseActions = [
   'Confirm next address',
@@ -24,17 +24,13 @@ export default Factory.define<EligibilityDto>(() => {
     cas1: { serviceResult: serviceResultFactory.notEligible().build() },
     cas3: { serviceResult: serviceResultFactory.notEligible().build() },
     crs: { serviceResult: serviceResultFactory.notEligible().build() },
-    dtr: { serviceResult: serviceResultFactory.notStarted().build() },
+    dtr: dtrServiceResultFactory.notStarted().build(),
   }
 
   const eligibleService = faker.helpers.arrayElement(Object.keys(allServiceResults)) as keyof typeof allServiceResults
 
   if (eligibleService === 'dtr') {
-    const serviceResult = serviceResultFactory.dtr().build()
-    allServiceResults.dtr = {
-      serviceResult,
-      ...(serviceResult.serviceStatus !== 'NOT_STARTED' && { submission: dtrSubmissionFactory.build() }),
-    }
+    allServiceResults.dtr = dtrServiceResultFactory.build()
   } else {
     allServiceResults[eligibleService] = { serviceResult: serviceResultFactory.build() }
   }

@@ -1,9 +1,10 @@
 import { expect, Page } from '@playwright/test'
-import { DutyToReferDto, CaseDto as Case } from '@sas/api'
+import { DutyToReferDto, CaseDto as Case, DtrCommand } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
+import { outcomeReasonLabel } from '../../../server/utils/dutyToRefer'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -40,21 +41,29 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async completeOutcomeForm(dutyToRefer: DutyToReferDto) {
-    const outcome = dutyToRefer.status === 'ACCEPTED' ? 'Yes' : 'No'
-    await this.selectRadioByLabel(outcome)
+    const reason = outcomeReasonLabel[dutyToRefer.submission.outcomeReason]
+    await this.selectRadioByLabel(reason)
   }
 
   async checkApiCalled(crn: string, dutyToRefer: DutyToReferDto, method: 'submit' | 'update' = 'submit') {
+    const { submission } = dutyToRefer
     const requestBody =
       method === 'submit'
         ? await verifyPost(apiPaths.cases.dutyToRefer.submit({ crn }))
-        : await verifyPut(apiPaths.cases.dutyToRefer.update({ crn, id: dutyToRefer.submission.id }))
+        : await verifyPut(apiPaths.cases.dutyToRefer.update({ crn, id: submission.id }))
 
-    expect(requestBody).toEqual({
-      localAuthorityAreaId: dutyToRefer.submission.localAuthority.localAuthorityAreaId,
-      submissionDate: dutyToRefer.submission.submissionDate,
-      referenceNumber: dutyToRefer.submission.referenceNumber,
+    // TODO unsure how BE will be handling dtr command with optional outcome reason
+    const expectedBody: DtrCommand = {
+      localAuthorityAreaId: submission.localAuthority.localAuthorityAreaId,
+      submissionDate: submission.submissionDate,
+      referenceNumber: submission.referenceNumber,
       status: dutyToRefer.status,
-    })
+    }
+
+    if (submission.outcomeReason != null) {
+      expectedBody.outcomeReason = submission.outcomeReason
+    }
+
+    expect(requestBody).toEqual(expectedBody)
   }
 }

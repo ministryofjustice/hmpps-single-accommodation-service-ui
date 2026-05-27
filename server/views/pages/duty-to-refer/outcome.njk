@@ -3,6 +3,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% set skipLinkText = 'Skip this for now' %}
+
 {% block formContent %}
   <input type="hidden" name="currentStatus" value="{{ dtr.status }}" />
   <input type="hidden" name="submissionDate" value="{{ dtr.submission.submissionDate }}" />
@@ -11,25 +13,16 @@
 
   {{
     govukRadios({
-        id: "outcomeStatus",
-        name: "outcomeStatus",
+        id: "outcomeReason",
+        name: "outcomeReason",
         fieldset: {
             legend: {
                 text: "Did the local authority agreed to support this request for housing?",
                 classes: "govuk-fieldset__legend--s"
             }
         },
-        items: [
-            {
-                value: "ACCEPTED",
-                text: "Yes"
-            },
-            {
-                value: "NOT_ACCEPTED",
-                text: "No"
-            }
-        ],
-        errorMessage: errors.outcomeStatus
+        items: outcomeItems,
+        errorMessage: errors.outcomeReason
     })
   }}
 {% endblock %}

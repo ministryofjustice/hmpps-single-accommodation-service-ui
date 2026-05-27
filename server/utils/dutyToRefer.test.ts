@@ -132,7 +132,7 @@ describe('duty to refer utils', () => {
       },
       {
         status: 'submitted',
-        expectedLinks: ['Add outcome', 'View referral'],
+        expectedLinks: ['View referral'],
         dtr: dtrServiceResultFactory.submitted().build(),
       },
       {
@@ -303,14 +303,14 @@ describe('duty to refer utils', () => {
       const result = validateOutcome(req)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-        outcomeStatus: 'Select duty to refer outcome',
+        outcomeReason: 'Select duty to refer outcome',
       })
       expect(result).toBe(false)
     })
 
-    it('returns true when outcome status is valid', () => {
+    it('returns true when outcome reason is valid', () => {
       req.body = {
-        outcomeStatus: 'ACCEPTED',
+        outcomeReason: 'HOMELESS',
       }
 
       const result = validateOutcome(req)

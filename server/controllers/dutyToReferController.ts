@@ -7,6 +7,8 @@ import {
   detailsSummaryListRows,
   outcomeDetailsSummaryListRows,
   dutyToReferTimelineEntry,
+  outcomeItems,
+  outcomeReasonToStatus,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -163,6 +165,7 @@ export default class DutyToReferController {
         crn,
         dtr,
         tableRows,
+        outcomeItems: outcomeItems(dtr.submission?.outcomeReason),
         errors,
         errorSummary,
       })
@@ -173,7 +176,7 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { outcomeStatus, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
+      const { outcomeReason, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
       const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
 
@@ -182,11 +185,13 @@ export default class DutyToReferController {
       }
 
       try {
+        const outcomeStatus = outcomeReasonToStatus(outcomeReason)
         await this.dutyToReferService.update(token, crn, id, {
           status: outcomeStatus,
           submissionDate,
           localAuthorityAreaId,
           referenceNumber,
+          outcomeReason,
         })
 
         req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')

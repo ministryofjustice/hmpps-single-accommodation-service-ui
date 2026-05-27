@@ -1,5 +1,12 @@
 import { Request } from 'express'
-import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import {
+  AuditRecordDto,
+  CaseDto,
+  DtrServiceResult,
+  DtrSubmissionDto,
+  DutyToReferDto,
+  FieldChange,
+} from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
@@ -45,7 +52,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string) => {
     case 'NOT_STARTED':
       return [{ text: 'Add referral details', href: uiPaths.dutyToRefer.submission({ crn }) }]
     case 'SUBMITTED':
-      return [{ text: 'Add outcome', href: uiPaths.dutyToRefer.outcome({ crn, id: submission?.id }) }, notes]
+      return [notes]
     default:
       return []
   }
@@ -145,10 +152,10 @@ export const validateSubmission = (req: Request) => {
 
 export const validateOutcome = (req: Request) => {
   const errors: Record<string, string> = {}
-  const { outcomeStatus } = req.body
+  const { outcomeReason } = req.body
 
-  if (!outcomeStatus) {
-    errors.outcomeStatus = 'Select duty to refer outcome'
+  if (!outcomeReason) {
+    errors.outcomeReason = 'Select duty to refer outcome'
   }
 
   return validateAndFlashErrors(req, errors)
@@ -220,4 +227,54 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+}
+
+export const outcomeItems = (outcomeReason?: DtrSubmissionDto['outcomeReason']) => [
+  {
+    value: 'PREVENTION',
+    text: 'Yes, it was accepted on prevention and relief duty',
+    checked: outcomeReason === 'PREVENTION',
+  },
+  {
+    value: 'PRIORITY',
+    text: 'Yes, it was accepted on a priority need',
+    checked: outcomeReason === 'PRIORITY',
+  },
+  {
+    value: 'NO_LOCAL_CONNECTION',
+    text: "No, it was rejected as there's no local connection",
+    checked: outcomeReason === 'NO_LOCAL_CONNECTION',
+  },
+  {
+    value: 'HOMELESS',
+    text: "No, it was rejected as they're considered intentionally homeless",
+    checked: outcomeReason === 'HOMELESS',
+  },
+  {
+    value: 'OTHER',
+    text: 'No, it was rejected for another reason',
+    checked: outcomeReason === 'OTHER',
+  },
+]
+
+export const outcomeReasonToStatus = (outcomeReason: DtrSubmissionDto['outcomeReason']): DutyToReferDto['status'] => {
+  if (!outcomeReason) return 'SUBMITTED'
+
+  if (outcomeReason === 'PREVENTION' || outcomeReason === 'PRIORITY') {
+    return 'ACCEPTED'
+  }
+
+  if (outcomeReason === 'NO_LOCAL_CONNECTION' || outcomeReason === 'HOMELESS' || outcomeReason === 'OTHER') {
+    return 'NOT_ACCEPTED'
+  }
+
+  return 'SUBMITTED'
+}
+
+export const outcomeReasonLabel: Record<DtrSubmissionDto['outcomeReason'], string> = {
+  PREVENTION: 'Yes, it was accepted on prevention and relief duty',
+  PRIORITY: 'Yes, it was accepted on a priority need',
+  NO_LOCAL_CONNECTION: "No, it was rejected as there's no local connection",
+  HOMELESS: "No, it was rejected as they're considered intentionally homeless",
+  OTHER: 'No, it was rejected for another reason',
 }

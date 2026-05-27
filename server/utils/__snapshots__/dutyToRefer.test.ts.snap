@@ -158,10 +158,6 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
   "inactive": false,
   "links": [
     {
-      "href": "/cases/CRN123/dtr/submission-id/outcome",
-      "text": "Add outcome",
-    },
-    {
       "href": "/cases/CRN123/dtr/submission-id/details",
       "text": "View referral",
     },

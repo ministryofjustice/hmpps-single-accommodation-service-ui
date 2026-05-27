@@ -11,6 +11,7 @@ import {
   detailsSummaryListRows,
   dutyToReferTimelineEntry,
   outcomeDetailsSummaryListRows,
+  outcomeItems,
   summaryListRows,
 } from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
@@ -233,6 +234,7 @@ describe('dutyToReferController', () => {
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
+        outcomeItems: outcomeItems(dtr.submission?.outcomeReason),
         errors: {},
         errorSummary: [],
       })
@@ -261,7 +263,7 @@ describe('dutyToReferController', () => {
       request = mock<Request>({
         params: { crn: 'CRN123', id: 'submission-id' },
         body: {
-          outcomeStatus: 'ACCEPTED',
+          outcomeReason: 'PREVENTION',
           submissionDate: '2025-06-15',
           localAuthorityAreaId: 'la-id',
           referenceNumber: 'REF123',
@@ -278,6 +280,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         status: 'ACCEPTED',
+        outcomeReason: 'PREVENTION',
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
@@ -295,6 +298,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         status: 'ACCEPTED',
+        outcomeReason: 'PREVENTION',
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',

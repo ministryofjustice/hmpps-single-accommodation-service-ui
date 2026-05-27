@@ -45,17 +45,21 @@
       <h2 class="govuk-visually-hidden">Current situation</h2>
       {{ noFixedAbodeAlert(noFixedAbode) }}
 
-      {% if nextActions | length %}
-        <div class="sas-card sas-card--block">
-          <h3 class="govuk-heading-m">Next actions</h3>
+      <section class="sas-card sas-card--block">
+        <h3 class="govuk-heading-m">Next actions</h3>
 
-          <ul class="govuk-list govuk-list--bullet">
-            {% for action in nextActions %}
-              <li>{{ action }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
+        {% if 'eligibility' in upstreamFailures %}
+          <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+        {% else %}
+          {% if nextActions | length %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for action in nextActions %}
+                <li>{{ action }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endif %}
+      </section>
 
       {{ accommodationCard(currentAccommodationCard) }}
       {{ accommodationCard(nextAccommodationCard) }}
@@ -64,9 +68,13 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <section>
         <h2 class="govuk-visually-hidden">Accommodation referrals</h2>
-        {% for card in eligibilityCards %}
-          {{ statusCard(card) }}
-        {% endfor %}
+        {% if 'eligibility' in upstreamFailures %}
+          <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+        {% else %}
+          {% for card in eligibilityCards %}
+            {{ statusCard(card) }}
+          {% endfor %}
+        {% endif %}
       </section>
 
       <section class="govuk-!-margin-top-8">

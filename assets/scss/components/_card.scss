@@ -7,7 +7,6 @@
 }
 
 .sas-card--inactive h3 {
-  color: govuk-colour("black", $variant: "tint-25");
   @include govuk-font($size: 19, $weight: 'regular');
 }
 
@@ -30,10 +29,18 @@
   gap: govuk-spacing(3);
 }
 
+.sas-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: govuk-spacing(2);
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
+}
+
 .sas-card__links {
-  margin-top: govuk-spacing(4);
   margin-left: auto;
-  margin-bottom: 0;
   flex: 0 0 auto;
   white-space: nowrap;
 }
@@ -46,8 +53,6 @@
 
 .sas-card-summary-list {
   @include govuk-font($size: 16);
-  margin-top: govuk-spacing(4);
-  margin-bottom: 0;
   display: grid;
   grid-template-columns: fit-content(50%) 1fr;
   column-gap: govuk-spacing(3);

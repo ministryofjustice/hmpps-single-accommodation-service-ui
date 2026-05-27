@@ -3,12 +3,16 @@
 exports[`Macros Status Card renders a basic status card 1`] = `
 "<article class="sas-card">
     <header class="sas-card__head">
-      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">Foo</h3>
+      <h3 class="govuk-heading-m">Foo</h3>
       
     </header>
 
     <div class="sas-card__footer">
-      
+      <div class="sas-card__content">
+        
+
+        
+      </div>
 
       
     </div>
@@ -18,13 +22,18 @@ exports[`Macros Status Card renders a basic status card 1`] = `
 exports[`Macros Status Card renders a status card with full information 1`] = `
 "<article class="sas-card">
     <header class="sas-card__head">
-      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">Foo</h3>
+      <h3 class="govuk-heading-m">Foo</h3>
       <strong class="govuk-tag govuk-tag--red govuk-tag--no-wrap">Bar</strong>
     </header>
 
     <div class="sas-card__footer">
-      
+      <div class="sas-card__content">
         
+          <p class="govuk-hint">Some hint text</p>
+        
+
+        
+          
 
   
 <dl class="govuk-summary-list sas-card-summary-list govuk-summary-list--no-border">
@@ -43,7 +52,8 @@ exports[`Macros Status Card renders a status card with full information 1`] = `
 
 </dl>
 
-      
+        
+      </div>
 
       
         <div class="sas-card__links">
@@ -59,12 +69,16 @@ exports[`Macros Status Card renders a status card with full information 1`] = `
 exports[`Macros Status Card renders an inactive status card 1`] = `
 "<article class="sas-card sas-card--inactive">
     <header class="sas-card__head">
-      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">Foo</h3>
+      <h3 class="govuk-heading-m">Foo</h3>
       
     </header>
 
     <div class="sas-card__footer">
-      
+      <div class="sas-card__content">
+        
+
+        
+      </div>
 
       
     </div>

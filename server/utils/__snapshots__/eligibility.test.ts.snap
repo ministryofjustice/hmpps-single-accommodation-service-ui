@@ -19,6 +19,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
   },
   {
     "heading": "Approved premises (CAS1)",
+    "hint": undefined,
     "inactive": false,
     "links": [
       {
@@ -37,6 +38,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
   },
   {
     "heading": "CAS3 (transitional accommodation)",
+    "hint": undefined,
     "inactive": false,
     "links": [],
     "status": {

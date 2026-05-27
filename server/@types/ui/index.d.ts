@@ -44,6 +44,7 @@ export interface StatusCell {
 export interface StatusCard {
   heading: string
   inactive?: boolean
+  hint?: string
   details?: SummaryListRow[]
   status?: StatusTag
   links?: {

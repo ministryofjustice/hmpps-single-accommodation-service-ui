@@ -21,6 +21,10 @@ export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) =
 export const eligibilityStatusCard = (title: string, service?: ServiceResult): StatusCard => ({
   heading: title,
   inactive: service?.serviceStatus === 'NOT_ELIGIBLE',
+  hint:
+    service?.serviceStatus === 'NOT_ELIGIBLE'
+      ? 'This could be because of risk levels or suitability for a move on at this time.'
+      : undefined,
   status: serviceStatusTag(service?.serviceStatus),
   links: linksForStatus(service?.serviceStatus),
 })

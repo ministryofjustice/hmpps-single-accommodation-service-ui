@@ -35,6 +35,10 @@
         {
           "field": "createdAt",
           "value": "2026-02-22T15:59:20.931Z"
+        },
+        {
+          "field": "outcomeReason",
+          "value": "HOMELESS"
         }
       ],
       "extraInformation": {

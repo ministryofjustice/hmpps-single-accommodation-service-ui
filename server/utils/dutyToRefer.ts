@@ -1,12 +1,5 @@
 import { Request } from 'express'
-import {
-  AuditRecordDto,
-  CaseDto,
-  DtrServiceResult,
-  DtrSubmissionDto,
-  DutyToReferDto,
-  FieldChange,
-} from '@sas/api'
+import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
@@ -106,6 +99,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
         `${statusTag(serviceStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
       ),
     )
+    rows.push(summaryListRowText('Reason', outcomeReasonSummaryLabel[dutyToRefer.submission.outcomeReason]))
   }
   return rows
 }
@@ -118,19 +112,20 @@ export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string =>
 export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
+  const rows: SummaryListRow[] = [
+    summaryListRowText('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
+    summaryListRowOptional('Reference', submission?.referenceNumber, 'No reference added'),
+    summaryListRowText('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
+    summaryListRowText('Submitted by', submission?.createdBy),
+  ]
   switch (status) {
-    case 'NOT_ELIGIBLE':
     case 'NOT_ACCEPTED':
     case 'ACCEPTED':
-      return []
+    case 'SUBMITTED':
+      return rows
+    case 'NOT_ELIGIBLE':
     case 'NOT_STARTED':
       return []
-    case 'SUBMITTED':
-      return [
-        summaryListRowText('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
-        summaryListRowOptional('Reference', submission?.referenceNumber, 'No reference added'),
-        summaryListRowText('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
-      ]
     default:
       return []
   }
@@ -170,7 +165,15 @@ export const formatDutyToReferStatus = (status: DutyToReferDto['status']): strin
   })[status]
 
 const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<DutyToReferDto> => {
-  const submissionFields = ['submissionDate', 'referenceNumber', 'localAuthority', 'id', 'createdBy', 'createdAt']
+  const submissionFields = [
+    'submissionDate',
+    'referenceNumber',
+    'localAuthority',
+    'id',
+    'createdBy',
+    'createdAt',
+    'outcomeReason',
+  ]
   const filterChanges = (predicate: (change: FieldChange) => boolean) =>
     Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
 
@@ -212,18 +215,25 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
 
   const submissionValues =
     submissionDate || localAuthorityName || referenceNumber
-      ? {
-          'Date submitted': formatDateAndDaysAgo(submissionDate),
-          'Local authority': localAuthorityName,
-          Reference: referenceNumber,
-        }
+      ? [
+          { label: 'Date submitted', value: formatDateAndDaysAgo(submissionDate), showLabel: true },
+          { label: 'Local authority', value: localAuthorityName, showLabel: true },
+          { label: 'Reference', value: referenceNumber, showLabel: true },
+        ]
       : undefined
+
+  const values = isOutcome
+    ? [
+        { label: 'Outcome', value: outcomeText, showLabel: false },
+        { label: 'Reason', value: outcomeReasonSummaryLabel[dtr.submission?.outcomeReason], showLabel: true },
+      ]
+    : submissionValues
 
   const html = renderMacro('timelineDutyToRefer', {
     type,
     isOutcome,
     status: status ? serviceStatusTag(status, true) : undefined,
-    values: isOutcome ? { Outcome: outcomeText } : submissionValues,
+    values,
   })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
@@ -277,4 +287,12 @@ export const outcomeReasonLabel: Record<DtrSubmissionDto['outcomeReason'], strin
   NO_LOCAL_CONNECTION: "No, it was rejected as there's no local connection",
   HOMELESS: "No, it was rejected as they're considered intentionally homeless",
   OTHER: 'No, it was rejected for another reason',
+}
+
+export const outcomeReasonSummaryLabel: Record<DtrSubmissionDto['outcomeReason'], string> = {
+  PREVENTION: 'Prevention and relief duty',
+  PRIORITY: 'Priority need',
+  NO_LOCAL_CONNECTION: 'No local connection',
+  HOMELESS: 'Intentionally homeless',
+  OTHER: 'Other reason',
 }

@@ -3,7 +3,40 @@
 exports[`eligibilityToEligibilityCards returns an array of eligibility card objects 1`] = `
 [
   {
-    "details": [],
+    "details": [
+      {
+        "key": {
+          "text": "Submitted to",
+        },
+        "value": {
+          "text": "Some Council",
+        },
+      },
+      {
+        "key": {
+          "text": "Reference",
+        },
+        "value": {
+          "text": "REF123",
+        },
+      },
+      {
+        "key": {
+          "text": "Submitted",
+        },
+        "value": {
+          "text": "1 December 2025 (177 days ago)",
+        },
+      },
+      {
+        "key": {
+          "text": "Submitted by",
+        },
+        "value": {
+          "text": "user1",
+        },
+      },
+    ],
     "heading": "Duty to Refer (DTR)",
     "inactive": false,
     "links": [

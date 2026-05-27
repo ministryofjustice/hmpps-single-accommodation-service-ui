@@ -15,7 +15,7 @@ const acceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['PREVENTION
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {
   submitted() {
-    return this.params({ status: 'SUBMITTED', submission: dtrSubmissionFactory.build({ outcomeReason: null}) })
+    return this.params({ status: 'SUBMITTED', submission: dtrSubmissionFactory.build({ outcomeReason: null }) })
   }
 
   accepted() {

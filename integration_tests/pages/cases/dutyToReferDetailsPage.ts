@@ -1,7 +1,11 @@
 import { expect, Page } from '@playwright/test'
 import { DutyToReferDto } from '@sas/api'
 import PageWithCaseDetails from './pageWithCaseDetails'
-import { formatDutyToReferStatus, outcomeSupportText } from '../../../server/utils/dutyToRefer'
+import {
+  formatDutyToReferStatus,
+  outcomeReasonSummaryLabel,
+  outcomeSupportText,
+} from '../../../server/utils/dutyToRefer'
 import { formatDateAndDaysAgo } from '../../../server/utils/dates'
 
 export default class DutyToReferDetailsPage extends PageWithCaseDetails {
@@ -35,5 +39,6 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
 
     const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${outcomeSupportText(dutyToRefer)}`
     await this.shouldShowSummaryItem('Status', statusText)
+    await this.shouldShowSummaryItem('Reason', outcomeReasonSummaryLabel[dutyToRefer.submission.outcomeReason])
   }
 }

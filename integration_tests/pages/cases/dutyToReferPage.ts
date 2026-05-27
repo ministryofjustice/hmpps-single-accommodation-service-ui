@@ -52,7 +52,6 @@ export default class DutyToReferPage extends AbstractPage {
         ? await verifyPost(apiPaths.cases.dutyToRefer.submit({ crn }))
         : await verifyPut(apiPaths.cases.dutyToRefer.update({ crn, id: submission.id }))
 
-    // TODO unsure how BE will be handling dtr command with optional outcome reason
     const expectedBody: DtrCommand = {
       localAuthorityAreaId: submission.localAuthority.localAuthorityAreaId,
       submissionDate: submission.submissionDate,

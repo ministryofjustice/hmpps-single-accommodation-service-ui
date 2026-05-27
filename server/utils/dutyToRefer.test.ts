@@ -58,6 +58,8 @@ describe('duty to refer utils', () => {
           submissionDate: '2025-12-01',
           referenceNumber: 'REF123',
           localAuthority: { localAuthorityAreaName: 'Some Council' },
+          createdBy: 'user1',
+          createdAt: '2025-12-01T10:00:00.000Z',
         },
       })
 
@@ -90,19 +92,18 @@ describe('duty to refer utils', () => {
       createdBy: 'user1',
       createdAt: '2024-09-23T00:00:00.000Z',
     }
+    const rows = [
+      { term: 'Submitted to', description: 'Some Council' },
+      { term: 'Reference', description: submission.referenceNumber },
+      { term: 'Submitted', description: formatDateAndDaysAgo(submission.submissionDate) },
+      { term: 'Submitted by', description: submission.createdBy },
+    ]
 
     it.each([
       ['NOT_STARTED' as const, []],
-      [
-        'SUBMITTED' as const,
-        [
-          { term: 'Submitted to', description: 'Some Council' },
-          { term: 'Reference', description: submission.referenceNumber },
-          { term: 'Submitted', description: formatDateAndDaysAgo(submission.submissionDate) },
-        ],
-      ],
-      ['NOT_ACCEPTED' as const, []],
-      ['ACCEPTED' as const, []],
+      ['SUBMITTED' as const, rows],
+      ['NOT_ACCEPTED' as const, rows],
+      ['ACCEPTED' as const, rows],
       ['NOT_ELIGIBLE' as const, []],
       [undefined, []],
     ])('returns details for status %s', (status, expectedDetails) => {
@@ -227,6 +228,7 @@ describe('duty to refer utils', () => {
       submissionDate: '2024-09-23',
       createdBy: 'user1',
       createdAt: '2024-09-23T00:00:00.000Z',
+      outcomeReason: 'HOMELESS' as const,
     }
 
     it.each(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)('returns correct rows for status %s', status => {

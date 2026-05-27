@@ -1,6 +1,6 @@
 import type { SuperAgentRequest } from 'superagent'
 import { EligibilityDto } from '@sas/api'
-import { stubFor, stubApiError } from './wiremock'
+import { stubFor, stubApiError, stubApiUpstreamFailure } from './wiremock'
 import { apiResponseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
@@ -18,4 +18,6 @@ export default {
       },
     }),
   stubGetEligibilityByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.eligibility({ crn })),
+  stubGetEligibilityByCrnUpstreamFailure: (crn: string): SuperAgentRequest =>
+    stubApiUpstreamFailure(apiPaths.cases.eligibility({ crn })),
 }

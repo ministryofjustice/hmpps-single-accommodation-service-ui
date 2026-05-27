@@ -203,11 +203,11 @@ describe('casesController', () => {
       const caseData = caseFactory.build({ crn })
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
-      eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility())
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed: [], failedChecks: [] } })
       accommodationService.getCurrentAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
       accommodationService.getNextAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
 
+      eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.withUpstreamFailures())
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.withUpstreamFailures())
       accommodationService.getAccommodationHistory.mockResolvedValue(apiResponseFactory.withUpstreamFailures())
 
@@ -216,7 +216,9 @@ describe('casesController', () => {
       expect(response.render).toHaveBeenCalledWith(
         'pages/show',
         expect.objectContaining({
-          upstreamFailures: ['referralHistory', 'accommodationHistory'],
+          nextActions: [],
+          eligibilityCards: [],
+          upstreamFailures: expect.arrayContaining(['eligibility', 'referralHistory', 'accommodationHistory']),
         }),
       )
     })

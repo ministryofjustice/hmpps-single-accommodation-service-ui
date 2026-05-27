@@ -113,12 +113,13 @@ test.describe('Profile Tracker Page', () => {
 
   test('Shows warnings if the API had upstream failures', async ({ page }) => {
     const crn = 'X123456'
-    const caseData = caseFactory.build({ crn, caseAccess: 'FULL' })
+    const caseData = caseFactory.build({ crn, userAccess: 'FULL' })
 
     await setupStubs({ crn, caseData })
 
     await accommodationApi.stubGetAccommodationHistoryUpstreamFailure(crn)
     await casesApi.stubGetReferralHistoryUpstreamFailure(crn)
+    await eligibilityApi.stubGetEligibilityByCrnUpstreamFailure(crn)
 
     await login(page)
 
@@ -126,7 +127,12 @@ test.describe('Profile Tracker Page', () => {
 
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
 
-    await profileTrackerPage.shouldShowApiErrors(['Referral history', 'Accommodation history'])
+    await profileTrackerPage.shouldShowApiErrors([
+      'Next actions',
+      'Accommodation referrals',
+      'Referral history',
+      'Accommodation history',
+    ])
   })
 
   test.describe('accommodation cards', () => {

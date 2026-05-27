@@ -30,6 +30,7 @@ const fullCases = cases.filter(c => c.userAccess === 'FULL')
 
 // Defines upstream failures for given CRNs
 const upstreamFailures: Record<CaseDto['crn'], string[]> = {
+  H271226: ['eligibility'], // Jim Anderson
   I322559: ['referralHistory'], // Ervin Ratke
   L247269: ['accommodationHistory'], // Bert Morissette
   F608163: ['referralHistory', 'accommodationHistory'], // Ms. Ethel Hudson
@@ -51,6 +52,10 @@ async function stubEligibility() {
       caseDto.crn,
       (eligibility as Record<string, EligibilityDto>)[caseDto.crn],
     )
+
+    if (upstreamFailures[caseDto.crn]?.includes('eligibility')) {
+      await eligibilityApi.stubGetEligibilityByCrnUpstreamFailure(caseDto.crn)
+    }
   }
 }
 

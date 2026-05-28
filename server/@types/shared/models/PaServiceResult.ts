@@ -2,8 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type DlqMessage = {
-    body: Record<string, any>;
-    messageId: string;
-};
-
+import type { ServiceResult } from './ServiceResult'
+export type PaServiceResult = {
+  serviceResult: ServiceResult
+}

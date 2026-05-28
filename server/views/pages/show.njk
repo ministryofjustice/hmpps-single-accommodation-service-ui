@@ -5,6 +5,9 @@
 {% from "components/macros/noFixedAbodeAlert.njk" import noFixedAbodeAlert %}
 {% from "components/macros/referralHistoryTable.njk" import referralHistoryTable %}
 {% from "components/macros/accommodationHistoryTable.njk" import accommodationHistoryTable %}
+{% from "components/macros/apiErrors/summary.njk" import apiErrorsSummary %}
+{% from "components/macros/apiErrors/inset.njk" import apiErrorInset %}
+
 {% extends "partials/layout.njk" %}
 
 {% set pageTitle = applicationName + " - Profile" %}
@@ -26,10 +29,7 @@
 
 {% block content %}
   {% if upstreamFailures | length %}
-    <div class="moj-api-error">
-      <p>Some information on this service is currently unavailable</p>
-      <p>You may need to try again later.</p>
-    </div>
+    {{ apiErrorsSummary() }}
   {% endif %}
 
   {{ caseDetails(caseData, assignedTo) }}
@@ -49,7 +49,7 @@
         <h3 class="govuk-heading-m">Next actions</h3>
 
         {% if 'eligibility' in upstreamFailures %}
-          <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+          {{  apiErrorInset() }}
         {% else %}
           {% if nextActions | length %}
             <ul class="govuk-list govuk-list--bullet">
@@ -69,7 +69,7 @@
       <section>
         <h2 class="govuk-visually-hidden">Accommodation referrals</h2>
         {% if 'eligibility' in upstreamFailures %}
-          <p class="moj-inset-api-error">This information is currently unavailable. Try again later.</p>
+          {{ apiErrorInset() }}
         {% else %}
           {% for card in eligibilityCards %}
             {{ statusCard(card) }}

@@ -150,6 +150,5 @@ export default ReferralFactory.define(() => {
     type: 'CAS1' as const,
     status: 'CANCELLED' as const,
     createdAt: faker.date.past().toISOString(),
-    pdu: faker.location.city()
   }
 })

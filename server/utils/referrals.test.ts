@@ -5,26 +5,26 @@ describe('referrals utilities', () => {
   const referral1 = referralFactory.build({
     id: '123456',
     type: 'CAS1',
-    status: 'ACCEPTED',
-    date: '2023-01-15',
+    status: 'ARCHIVED',
+    createdAt: '2023-01-15',
   })
   const referral2 = referralFactory.build({
     id: '789012',
     type: 'CAS2',
-    status: 'PENDING',
-    date: '2023-02-20',
+    status: 'WITHDRAW',
+    createdAt: '2023-02-20',
   })
   const referral3 = referralFactory.build({
     id: '345678',
     type: 'CAS3',
     status: 'REJECTED',
-    date: '2023-03-25',
+    createdAt: '2023-03-25',
   })
   const referral4 = referralFactory.build({
     id: '901234',
     type: 'CAS2v2',
-    status: 'ACCEPTED',
-    date: '2023-04-30',
+    status: 'ARCHIVED',
+    createdAt: '2023-04-30',
   })
   const referrals = [referral1, referral2, referral3, referral4]
 

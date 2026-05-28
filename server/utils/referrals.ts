@@ -124,7 +124,7 @@ const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
   return details
 }
 
-export const referralHistoryTable = (referrals: Referral[], hasApiError?: boolean, userDisplayName: string): string =>
+export const referralHistoryTable = (referrals: Referral[], hasApiError?: boolean, userDisplayName?: string): string =>
   renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, userDisplayName), hasApiError })
 
 export const referralReferredBy = (c: Referral, name: string): string => {

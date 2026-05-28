@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker/locale/en_GB'
 import { DtrServiceResult, ServiceResult } from '@sas/api'
 import { Factory } from 'fishery'
 import serviceResultFactory from './serviceResult'
@@ -51,16 +50,9 @@ class DtrServiceResultFactory extends Factory<DtrServiceResult> {
 const noSubmissionStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_STARTED', 'NOT_ELIGIBLE', 'UPCOMING']
 
 export default DtrServiceResultFactory.define(() => {
-  const status = faker.helpers.arrayElement([
-    'SUBMITTED',
-    'NOT_STARTED',
-    'ACCEPTED',
-    'NOT_ACCEPTED',
-    'NOT_ELIGIBLE',
-    'UPCOMING',
-  ])
+  const serviceResult = serviceResultFactory.dtr().build()
   return {
-    serviceResult: serviceResultFactory.build({ serviceStatus: status }),
-    submission: noSubmissionStatuses.includes(status) ? null : dtrSubmissionFactory.build(),
+    serviceResult,
+    submission: noSubmissionStatuses.includes(serviceResult.serviceStatus) ? null : dtrSubmissionFactory.build(),
   }
 })

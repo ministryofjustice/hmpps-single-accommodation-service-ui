@@ -27,4 +27,5 @@ export const serviceStatusTag = (status?: ServiceResult['serviceStatus'], isDtr?
     BOOKING_CANCELLED: { text: 'Booking cancelled' },
     ACCEPTED: { text: 'Accepted', colour: 'yellow' },
     NOT_ACCEPTED: { text: 'Not accepted', colour: 'grey' },
+    COMPLETED: { text: 'Completed', colour: 'green' },
   })[status] || { text: 'Unknown' }

@@ -1,4 +1,4 @@
-import { EligibilityDto, Cas1ServiceResult, Cas3ServiceResult, DtrServiceResult, CrsServiceResult } from '@sas/api'
+import { EligibilityDto } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import crn from '../crn'
@@ -15,29 +15,13 @@ const caseActions = [
 ]
 
 export default Factory.define<EligibilityDto>(() => {
-  const allServiceResults: {
-    cas1: Cas1ServiceResult
-    cas3: Cas3ServiceResult
-    crs: CrsServiceResult
-    dtr: DtrServiceResult
-  } = {
-    cas1: { serviceResult: serviceResultFactory.notEligible().build() },
-    cas3: { serviceResult: serviceResultFactory.notEligible().build() },
-    crs: { serviceResult: serviceResultFactory.notEligible().build() },
-    dtr: dtrServiceResultFactory.notStarted().build(),
-  }
-
-  const eligibleService = faker.helpers.arrayElement(Object.keys(allServiceResults)) as keyof typeof allServiceResults
-
-  if (eligibleService === 'dtr') {
-    allServiceResults.dtr = dtrServiceResultFactory.build()
-  } else {
-    allServiceResults[eligibleService] = { serviceResult: serviceResultFactory.build() }
-  }
-
   return {
     crn: crn(),
     caseActions: faker.helpers.arrayElements(caseActions, { min: 1, max: 3 }),
-    ...allServiceResults,
+    cas1: { serviceResult: serviceResultFactory.build() },
+    cas3: { serviceResult: serviceResultFactory.build() },
+    crs: { serviceResult: serviceResultFactory.build() },
+    dtr: dtrServiceResultFactory.build(),
+    pa: { serviceResult: serviceResultFactory.pa().build() },
   }
 })

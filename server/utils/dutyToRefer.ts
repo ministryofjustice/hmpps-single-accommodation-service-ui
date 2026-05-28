@@ -12,7 +12,7 @@ import { serviceStatusTag } from './statusTag'
 
 export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceResult => ({
   caseId: dtr.caseId,
-  serviceResult: { serviceStatus: dtr.status },
+  serviceResult: { serviceStatus: dtr.status, failureReasons: [] },
   submission: dtr.submission,
 })
 

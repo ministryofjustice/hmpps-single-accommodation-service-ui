@@ -24,6 +24,12 @@ jobs:
           node-version-file: '.node-version'
           cache: 'npm'
 
+#      - name: SLSA
+#        uses: ministryofjustice/devsecops-actions/sca/slsa@4cd163be7859cd130800d6719d925318826038ea
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
       - name: Generate Token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
         id: generate-token
@@ -32,7 +38,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Generate Types
-        run: ./script/generate-types ${{ vars.SAS_API_SPEC_URL }}
+        run: npm run generate-types -- ${{ vars.SAS_API_SPEC_URL }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8

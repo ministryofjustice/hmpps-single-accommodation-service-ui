@@ -21,3 +21,9 @@ npx openapi-typescript-codegen -i "$url" -o ./server/@types/shared -c axios --ex
 echo "==> Renaming the declaration file..."
 
 mv ./server/@types/shared/index.ts ./server/@types/shared/index.d.ts
+
+echo "==> Cleaning up formatting..."
+
+git add .
+
+npx lint-staged

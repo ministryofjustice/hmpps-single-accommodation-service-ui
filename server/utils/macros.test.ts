@@ -96,6 +96,7 @@ describe('Macros', () => {
           text: 'Bar',
           colour: 'red',
         },
+        hint: 'Some hint text',
         details: [{ key: { text: 'Baz' }, value: { text: 'Qux' } }],
         links: [{ text: 'Quux', href: '#' }],
       }

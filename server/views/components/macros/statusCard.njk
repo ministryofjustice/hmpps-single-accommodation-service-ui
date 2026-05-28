@@ -4,21 +4,29 @@
 {%- macro statusCard(cardData) -%}
   <article class="sas-card{{ ' sas-card--inactive' if cardData.inactive else '' }}">
     <header class="sas-card__head">
-      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">{{ cardData.heading }}</h3>
+      <h3 class="govuk-heading-m">{{ cardData.heading }}</h3>
       {% if cardData.status -%}
         {{ statusTag({ text: cardData.status.text, colour: cardData.status.colour, noWrap: true }) }}
       {%- endif %}
     </header>
 
     <div class="sas-card__footer">
-      {% if cardData.details and (cardData.details | length > 0) %}
-        {{ govukSummaryList({
-          classes: 'sas-card-summary-list govuk-summary-list--no-border',
-          rows: cardData.details
-        }) }}
-      {% endif %}
+      <div class="sas-card__content">
+        {% if cardData.hint %}
+          <p class="govuk-hint">{{ cardData.hint }}</p>
+        {% endif %}
 
-      {% if cardData.links and(cardData.links | length > 0) %}
+        {% if cardData.details | length %}
+          {{
+            govukSummaryList({
+              classes: 'sas-card-summary-list govuk-summary-list--no-border',
+              rows: cardData.details
+            })
+          }}
+        {% endif %}
+      </div>
+
+      {% if cardData.links | length %}
         <div class="sas-card__links">
           {% for link in cardData.links %}
             <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ link.href }}">{{ link.text }}</a>

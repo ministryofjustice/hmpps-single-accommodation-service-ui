@@ -12,9 +12,18 @@ describe('eligibility utilities', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
       const card = eligibilityStatusCard('Foo', serviceResult)
+
       for (const link of links) {
         expect(card.links).toEqual(expect.arrayContaining([{ text: link, href: expect.any(String) }]))
       }
+    })
+
+    it('renders a hint if the status is not eligible', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_ELIGIBLE' })
+
+      const card = eligibilityStatusCard('Card title', serviceResult)
+
+      expect(card.hint).toEqual('This could be because of risk levels or suitability for a move on at this time.')
     })
   })
 })

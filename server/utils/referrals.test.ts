@@ -6,13 +6,15 @@ describe('referrals utilities', () => {
     id: '123456',
     type: 'CAS1',
     status: 'ACCEPTED',
-    date: '2023-01-15',
+    createdAt: '2023-01-15',
+    referredBy: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' }
   })
   const referral2 = referralFactory.build({
     id: '789012',
     type: 'DTR',
     status: 'WITHDRAWN',
     date: '2023-02-20',
+    referredBy: { username: 'joe_bloggs', forename: 'Joe', surname: 'Bloggs' }
   })
   const referral3 = referralFactory.build({
     id: '345678',
@@ -24,21 +26,21 @@ describe('referrals utilities', () => {
 
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {
-      expect(referralHistoryRows(referrals)).toMatchSnapshot()
+      expect(referralHistoryRows(referrals, 'alice_smith')).toMatchSnapshot()
     })
   })
 
   describe('referralHistoryTable macro', () => {
     it('renders the referral history table for a given list of referrals', () => {
-      expect(referralHistoryTable(referrals)).toMatchSnapshot()
+      expect(referralHistoryTable(referrals, 'alice_smith')).toMatchSnapshot()
     })
 
     it('renders a message and no table when there are no referrals', () => {
-      expect(referralHistoryTable([])).toMatchSnapshot()
+      expect(referralHistoryTable([], 'alice_smith')).toMatchSnapshot()
     })
 
     it('renders a message when there is an API error', () => {
-      expect(referralHistoryTable(null, true)).toMatchSnapshot()
+      expect(referralHistoryTable(null, 'alice_smith', true)).toMatchSnapshot()
     })
   })
 })

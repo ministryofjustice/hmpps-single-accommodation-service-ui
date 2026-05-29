@@ -54,10 +54,10 @@ export const referralStatusTag = (status?: Referral['status'], type?: Referral['
   )
 }
 
-export const referralHistoryRows = (referrals?: Referral[], userDisplayName?: string): TableRow[] => {
+export const referralHistoryRows = (referrals?: Referral[], username?: string): TableRow[] => {
   return (referrals ?? []).map(referral => [
     textContent(referralStatusType(referral.type, referral.status)),
-    textContent(referralReferredBy(referral, userDisplayName)),
+    textContent(referralReferredBy(referral, username)),
     htmlContent(statusCell(referralStatusCell(referral))),
     htmlContent(linksCell(referralLinksForType(referral.type))),
   ])
@@ -124,11 +124,12 @@ const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
   return details
 }
 
-export const referralHistoryTable = (referrals: Referral[], hasApiError?: boolean, userDisplayName?: string): string =>
-  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, userDisplayName), hasApiError })
+export const referralHistoryTable = (referrals: Referral[], username?: string, hasApiError?: boolean): string =>
+  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, username), hasApiError })
 
-export const referralReferredBy = (c: Referral, name: string): string => {
-  return String(c.referredBy) === name ? `You (${name})` : c.referredBy || ''
+export const referralReferredBy = (c: Referral, username: string): string => {
+  const fullName = `${c.referredBy?.forename} ${c.referredBy?.surname}`
+  return String(c.referredBy?.username) === username ? `You (${fullName})` : fullName
 }
 
 export const referralLinksForType = (type: Referral['type']) => {

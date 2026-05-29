@@ -1,6 +1,7 @@
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { AccommodationReferralDto as Referral } from '@sas/api'
+import { assignedUserFactory } from '.'
 
 const cas1Statuses = [
   'CANCELLED',
@@ -25,7 +26,7 @@ class ReferralFactory extends Factory<Referral> {
       referralRejectionReason: undefined,
       localAuthorityArea: null,
       pdu: null,
-      referredBy: faker.person.fullName(),
+      referredBy: assignedUserFactory.build(),
       placementAddress: null,
       placementStatus: null,
       status: faker.helpers.arrayElement(cas1Statuses),
@@ -73,7 +74,7 @@ class ReferralFactory extends Factory<Referral> {
       referralRejectionReason: undefined,
       localAuthorityArea: null,
       pdu: null,
-      referredBy: faker.person.fullName(),
+      referredBy: assignedUserFactory.build(),
       placementAddress: null,
       placementStatus: null,
       status: faker.helpers.arrayElement(cas3Statuses),

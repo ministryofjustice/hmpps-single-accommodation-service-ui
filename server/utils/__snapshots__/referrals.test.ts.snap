@@ -4,14 +4,14 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
 [
   [
     {
-      "text": "Approved Premises (CAS1) application",
+      "text": "Approved Premises (CAS1) placement",
     },
     {
-      "text": "",
+      "text": "You (Alice Smith)",
     },
     {
       "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
+  <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
     <p class="sas-status__date">15 January 2023</p>
     ",
     },
@@ -36,7 +36,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
       "text": "CAS2 for HDC",
     },
     {
-      "text": "",
+      "text": "Joe Bloggs",
     },
     {
       "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
@@ -53,7 +53,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
       "text": "CAS3 referral",
     },
     {
-      "text": "",
+      "text": "Matt Jones",
     },
     {
       "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
@@ -82,7 +82,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
       "text": "CAS2 for Bail",
     },
     {
-      "text": "",
+      "text": "You (Alice Smith)",
     },
     {
       "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
@@ -158,18 +158,18 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">Approved Premises (CAS1) application</th>
+      <th scope="row" class="govuk-table__header">Approved Premises (CAS1) placement</th>
       
     
       
       
-      <td class="govuk-table__cell"></td>
+      <td class="govuk-table__cell">You (Alice Smith)</td>
       
     
       
       
       <td class="govuk-table__cell"><span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
+  <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
     <p class="sas-status__date">15 January 2023</p>
     </td>
       
@@ -204,7 +204,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <td class="govuk-table__cell"></td>
+      <td class="govuk-table__cell">Joe Bloggs</td>
       
     
       
@@ -233,7 +233,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <td class="govuk-table__cell"></td>
+      <td class="govuk-table__cell">Matt Jones</td>
       
     
       
@@ -274,7 +274,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <td class="govuk-table__cell"></td>
+      <td class="govuk-table__cell">You (Alice Smith)</td>
       
     
       

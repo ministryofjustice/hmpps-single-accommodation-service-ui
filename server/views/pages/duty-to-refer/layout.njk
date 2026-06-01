@@ -7,6 +7,8 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% set skipLinkText = 'Cancel' %}
+
 {% block containerStart %}
     {{ govukBackLink({
         text: "Back",
@@ -47,7 +49,7 @@
                 </div>
 
                 <p>
-                    <a class="govuk-link govuk-link--no-visited-state" href={{ backLinkHref }}>{{ skipLinkText }}</a>
+                    <a class="govuk-link govuk-link--no-visited-state" href="{{ backLinkHref }}">{{ skipLinkText }}</a>
                 </p>
             </form>
         </div>

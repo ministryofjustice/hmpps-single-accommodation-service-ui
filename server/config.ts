@@ -54,10 +54,10 @@ export default {
       healthPath: '/health/ping',
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
       timeout: {
-        response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
+        response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
-      agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
+      agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 5000))),
       authClientId: get('AUTH_CODE_CLIENT_ID', 'clientid', requiredInProduction),
       authClientSecret: get('AUTH_CODE_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('CLIENT_CREDS_CLIENT_ID', 'clientid', requiredInProduction),
@@ -68,7 +68,7 @@ export default {
       healthPath: '/health/ping',
       timeout: {
         response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
+        deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
@@ -78,7 +78,7 @@ export default {
       healthPath: '/health/ping',
       timeout: {
         response: Number(get('SAS_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('SAS_API_TIMEOUT_DEADLINE', 5000)),
+        deadline: Number(get('SAS_API_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('SAS_API_TIMEOUT_RESPONSE', 5000))),
     },
@@ -91,7 +91,7 @@ export default {
       healthPath: '/health/ping',
       timeout: {
         response: Number(get('PROBATION_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('PROBATION_API_TIMEOUT_DEADLINE', 5000)),
+        deadline: Number(get('PROBATION_API_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('PROBATION_API_TIMEOUT_RESPONSE', 5000))),
     },
@@ -100,7 +100,7 @@ export default {
       healthPath: '/ping',
       timeout: {
         response: Number(get('OS_DATAHUB_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('OS_DATAHUB_API_TIMEOUT_DEADLINE', 5000)),
+        deadline: Number(get('OS_DATAHUB_API_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('OS_DATAHUB_API_TIMEOUT_RESPONSE', 5000))),
       apiKey: get('OS_DATAHUB_API_KEY', 'os-datahub-api-key', requiredInProduction),

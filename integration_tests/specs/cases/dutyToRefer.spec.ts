@@ -56,7 +56,7 @@ test.describe('duty to refer', () => {
       status: 'ACCEPTED',
       submission: {
         ...submittedDutyToRefer.submission,
-        outcomeReason: 'PREVENTION',
+        outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
       },
     })
 
@@ -154,7 +154,7 @@ test.describe('duty to refer', () => {
       status: 'NOT_ACCEPTED',
       submission: {
         ...submittedDutyToRefer.submission,
-        outcomeReason: 'HOMELESS',
+        outcomeReason: 'INTENTIONALLY_HOMELESS',
       },
     })
     const submissionAddedDutyReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
@@ -323,7 +323,7 @@ test.describe('duty to refer', () => {
       status: 'NOT_ACCEPTED',
       submission: {
         ...acceptedDutyToRefer.submission,
-        outcomeReason: 'HOMELESS',
+        outcomeReason: 'INTENTIONALLY_HOMELESS',
       },
     })
 

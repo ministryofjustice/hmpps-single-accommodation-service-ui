@@ -228,7 +228,7 @@ describe('duty to refer utils', () => {
       submissionDate: '2024-09-23',
       createdBy: 'user1',
       createdAt: '2024-09-23T00:00:00.000Z',
-      outcomeReason: 'HOMELESS' as const,
+      outcomeReason: 'INTENTIONALLY_HOMELESS' as const,
     }
 
     it.each(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)('returns correct rows for status %s', status => {
@@ -312,7 +312,7 @@ describe('duty to refer utils', () => {
 
     it('returns true when outcome reason is valid', () => {
       req.body = {
-        outcomeReason: 'HOMELESS',
+        outcomeReason: 'INTENTIONALLY_HOMELESS',
       }
 
       const result = validateOutcome(req)

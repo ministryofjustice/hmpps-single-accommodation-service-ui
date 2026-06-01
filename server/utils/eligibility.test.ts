@@ -31,6 +31,14 @@ describe('eligibility utilities', () => {
 describe('eligibilityToEligibilityCards', () => {
   const crn = 'X123456'
 
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-21'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   it('returns eligibility cards for each service', () => {
     const eligibility = eligibilityFactory.build({ crn })
 
@@ -56,7 +64,7 @@ describe('eligibilityToEligibilityCards', () => {
           localAuthority: { localAuthorityAreaName: 'Some Council' },
           createdBy: 'user1',
           createdAt: '2025-12-01T10:00:00.000Z',
-          outcomeReason: 'PREVENTION',
+          outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
         },
       },
     })

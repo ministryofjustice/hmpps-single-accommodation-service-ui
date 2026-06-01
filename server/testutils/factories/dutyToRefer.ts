@@ -5,13 +5,13 @@ import crn from '../crn'
 import dtrSubmissionFactory from './dutyToReferSubmission'
 
 const statusToOutcomeReason = (status: DutyToReferDto['status']): DtrSubmissionDto['outcomeReason'] | null => {
-  if (status === 'ACCEPTED') return faker.helpers.arrayElement(['PREVENTION', 'PRIORITY'])
-  if (status === 'NOT_ACCEPTED') return faker.helpers.arrayElement(['NO_LOCAL_CONNECTION', 'HOMELESS', 'OTHER'])
+  if (status === 'ACCEPTED') return faker.helpers.arrayElement(acceptedOutcomeReasons)
+  if (status === 'NOT_ACCEPTED') return faker.helpers.arrayElement(notAcceptedOutcomeReasons)
   return null
 }
 
-const notAcceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['NO_LOCAL_CONNECTION', 'HOMELESS', 'OTHER']
-const acceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['PREVENTION', 'PRIORITY']
+const notAcceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['NO_LOCAL_CONNECTION', 'INTENTIONALLY_HOMELESS', 'REJECTED_FOR_ANOTHER_REASON']
+const acceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['PREVENTION_AND_RELIEF_DUTY', 'PRIORITY_NEED']
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {
   submitted() {

@@ -263,7 +263,7 @@ describe('dutyToReferController', () => {
       request = mock<Request>({
         params: { crn: 'CRN123', id: 'submission-id' },
         body: {
-          outcomeReason: 'PREVENTION',
+          outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
           submissionDate: '2025-06-15',
           localAuthorityAreaId: 'la-id',
           referenceNumber: 'REF123',
@@ -280,7 +280,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         status: 'ACCEPTED',
-        outcomeReason: 'PREVENTION',
+        outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
@@ -298,7 +298,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         status: 'ACCEPTED',
-        outcomeReason: 'PREVENTION',
+        outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',

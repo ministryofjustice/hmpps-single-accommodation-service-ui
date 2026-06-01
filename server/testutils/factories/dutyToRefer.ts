@@ -10,7 +10,11 @@ const statusToOutcomeReason = (status: DutyToReferDto['status']): DtrSubmissionD
   return null
 }
 
-const notAcceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['NO_LOCAL_CONNECTION', 'INTENTIONALLY_HOMELESS', 'REJECTED_FOR_ANOTHER_REASON']
+const notAcceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = [
+  'NO_LOCAL_CONNECTION',
+  'INTENTIONALLY_HOMELESS',
+  'REJECTED_FOR_ANOTHER_REASON',
+]
 const acceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['PREVENTION_AND_RELIEF_DUTY', 'PRIORITY_NEED']
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {

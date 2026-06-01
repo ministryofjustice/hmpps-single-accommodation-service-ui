@@ -80,8 +80,8 @@ if (generate.referrals) {
 if (generate.dutyToRefer) {
   const dtrServiceResultToDutyToRefer = (crn: string, dtr: DtrServiceResult): DutyToReferDto => ({
     crn,
-    caseId: dtr.caseId,
-    status: dtr.serviceResult.serviceStatus as DutyToReferDto['status'],
+    caseId: dtr.caseId ?? faker.string.uuid(),
+    status: dtr.serviceResult.serviceStatus,
     submission: dtr.submission,
   })
 

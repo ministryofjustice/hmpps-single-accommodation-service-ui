@@ -13,4 +13,7 @@ export default function dutyToReferRoutes(router: Router, dutyToReferController:
 
   router.get(uiPaths.dutyToRefer.outcome.pattern, dutyToReferController.outcome())
   router.post(uiPaths.dutyToRefer.outcome.pattern, dutyToReferController.saveOutcome())
+
+  router.get(uiPaths.dutyToRefer.withdraw.pattern, dutyToReferController.withdraw())
+  router.post(uiPaths.dutyToRefer.withdraw.pattern, dutyToReferController.saveWithdrawal())
 }

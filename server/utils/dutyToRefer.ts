@@ -1,5 +1,12 @@
 import { Request } from 'express'
-import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import {
+  AuditRecordDto,
+  CaseDto,
+  DtrServiceResult,
+  DtrSubmissionDto,
+  DutyToReferDto,
+  FieldChange,
+} from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'
@@ -164,6 +171,21 @@ export const validateOutcome = (req: Request) => {
   return validateAndFlashErrors(req, errors)
 }
 
+export const validateWithdraw = (req: Request) => {
+  const errors: Record<string, string> = {}
+  const { withdrawalReason, withdrawalReasonOther } = req.body
+
+  if (!withdrawalReason) {
+    errors.withdrawalReason = 'Select a reason for withdrawal'
+  }
+
+  if (withdrawalReason === 'OTHER' && !withdrawalReasonOther) {
+    errors.withdrawalReasonOther = 'Enter a reason for withdrawal'
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
 export const formatDutyToReferStatus = (status: DutyToReferDto['status']): string =>
   ({
     NOT_ACCEPTED: 'Not accepted',
@@ -283,3 +305,19 @@ export const outcomeReasonSummaryLabel: Record<DtrSubmissionDto['outcomeReason']
   INTENTIONALLY_HOMELESS: 'Intentionally homeless',
   REJECTED_FOR_ANOTHER_REASON: 'Other reason',
 }
+
+export const withdrawalReasonItems = () => [
+  { value: 'NEW_REFERRAL', text: 'Replaced by a new referral' },
+  {
+    value: 'INCORRECT_LOCAL_AUTHORITY',
+    text: 'Incorrect local authority',
+  },
+  { value: 'NO_CONSENT', text: 'Person no longer consents' },
+  { value: 'DISENGAGED', text: 'Person cannot be contacted or has disengaged' },
+  {
+    value: 'HOUSING_NEED_RESOLVED',
+    text: 'Housing need resolved or person already accommodated',
+  },
+  { value: 'NOT_ELIGIBLE', text: 'Not eligible for Duty to Refer (not homeless or at risk)' },
+  { value: 'OTHER', text: 'Other' },
+]

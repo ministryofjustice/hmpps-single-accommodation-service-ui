@@ -1,0 +1,28 @@
+{% extends "pages/duty-to-refer/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block formContent %}
+  <input type="hidden" name="submissionDate" value="{{ dtr.submission.submissionDate }}" />
+  <input type="hidden" name="localAuthorityAreaId" value="{{ dtr.submission.localAuthority.localAuthorityAreaId }}" />
+  <input type="hidden" name="referenceNumber" value="{{ dtr.submission.referenceNumber }}" />
+
+  {{
+    govukRadios({
+        id: "withdrawalReason",
+        name: "withdrawalReason",
+        fieldset: {
+            legend: {
+                text: "Why are you withdrawing this referral?",
+                classes: "govuk-fieldset__legend--m"
+            }
+        },
+        hint: {
+            html: "This records that the referral has been withdrawn and move it to the person’s referral history. <br><br> This does not withdraw the referral in the local authority’s system, so you may still need to do that separately."
+        },
+        items: withdrawalReasonItems,
+        errorMessage: errors.withdrawalReason
+    })
+  }}
+{% endblock %}

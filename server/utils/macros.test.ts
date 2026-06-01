@@ -1,6 +1,6 @@
 import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
 import { CaseDto as Case } from '@sas/api'
-import { riskLevelTag, statusCard, statusCell, statusTag } from './macros'
+import { riskLevelTag, statusCard, statusCell, statusTag, tierScoreTag } from './macros'
 
 describe('Macros', () => {
   describe('Status Tag', () => {
@@ -68,6 +68,16 @@ describe('Macros', () => {
 
     it('renders an unknown risk level tag', () => {
       expect(riskLevelTag(undefined)).toMatchSnapshot()
+    })
+  })
+
+  describe('tierScoreTag', () => {
+    it.each([
+      ['known', 'D3S' as const],
+      ['empty', '' as const],
+      ['undefined', undefined],
+    ])('renders tag if tier is %s', (_, tierScore) => {
+      expect(tierScoreTag(tierScore)).toMatchSnapshot()
     })
   })
 

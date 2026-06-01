@@ -139,3 +139,16 @@ exports[`Macros riskLevelTag renders a risk level tag for risk level VERY_HIGH 1
 `;
 
 exports[`Macros riskLevelTag renders an unknown risk level tag 1`] = `""`;
+
+exports[`Macros tierScoreTag renders tag if tier is empty 1`] = `""`;
+
+exports[`Macros tierScoreTag renders tag if tier is known 1`] = `
+"
+    <div class="sas-risk-tag sas-risk-tag--tier">
+      <dt>Tier</dt>
+      <dd>D3S</dd>
+    </div>
+  "
+`;
+
+exports[`Macros tierScoreTag renders tag if tier is undefined 1`] = `""`;

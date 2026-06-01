@@ -6,6 +6,7 @@ type Macro =
   | 'statusTag'
   | 'statusCell'
   | 'riskLevelTag'
+  | 'tierScoreTag'
   | 'statusCard'
   | 'referralHistoryTable'
   | 'accommodationHistoryTable'
@@ -28,5 +29,7 @@ export const statusTag = (status: StatusTag, noWrap?: boolean) => renderMacro('s
 export const statusCell = (context: { status: StatusTag; date?: string }) => renderMacro('statusCell', context)
 
 export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('riskLevelTag', riskLevel)
+
+export const tierScoreTag = (tierScore: CaseDto['tierScore']) => renderMacro('tierScoreTag', tierScore)
 
 export const statusCard = (cardData: StatusCard) => renderMacro('statusCard', cardData)

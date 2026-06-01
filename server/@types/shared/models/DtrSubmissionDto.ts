@@ -2,13 +2,21 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { LocalAuthorityDto } from './LocalAuthorityDto';
+import type { LocalAuthorityDto } from './LocalAuthorityDto'
 export type DtrSubmissionDto = {
-    id: string;
-    localAuthority: LocalAuthorityDto;
-    referenceNumber?: string | null;
-    submissionDate: string;
-    createdBy: string;
-    createdAt: string;
-};
-
+  id: string
+  localAuthority: LocalAuthorityDto
+  referenceNumber?: string | null
+  submissionDate: string
+  createdBy: string
+  createdAt: string
+  withdrawalReason?:
+    | 'NEW_REFERRAL'
+    | 'INCORRECT_LOCAL_AUTHORITY'
+    | 'NO_CONSENT'
+    | 'DISENGAGED'
+    | 'HOUSING_NEED_RESOLVED'
+    | 'NOT_ELIGIBLE'
+    | 'OTHER'
+  withdrawalReasonOther?: string | null
+}

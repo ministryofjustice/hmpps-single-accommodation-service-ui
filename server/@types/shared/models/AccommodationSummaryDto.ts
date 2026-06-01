@@ -2,15 +2,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AccommodationAddressDetails } from './AccommodationAddressDetails';
-import type { AccommodationStatusDto } from './AccommodationStatusDto';
-import type { AccommodationTypeDto } from './AccommodationTypeDto';
+import type { AccommodationAddressDetails } from './AccommodationAddressDetails'
+import type { AccommodationStatusDto } from './AccommodationStatusDto'
+import type { AccommodationTypeDto } from './AccommodationTypeDto'
 export type AccommodationSummaryDto = {
-    crn: string;
-    startDate?: string | null;
-    endDate?: string | null;
-    address: AccommodationAddressDetails;
-    status?: (AccommodationStatusDto | null);
-    type?: (AccommodationTypeDto | null);
-};
-
+  crn: string
+  cprAddressId?: string | null
+  startDate?: string | null
+  endDate?: string | null
+  address: AccommodationAddressDetails
+  status?: AccommodationStatusDto | null
+  type?: AccommodationTypeDto | null
+}

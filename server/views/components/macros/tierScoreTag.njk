@@ -1,0 +1,8 @@
+{%- macro tierScoreTag(tierScore) -%}
+  {% if tierScore %}
+    <div class="sas-risk-tag sas-risk-tag--tier">
+      <dt>Tier</dt>
+      <dd>{{ tierScore }}</dd>
+    </div>
+  {% endif %}
+{%- endmacro -%}

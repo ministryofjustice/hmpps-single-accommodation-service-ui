@@ -1,4 +1,5 @@
 {% from "components/macros/riskLevelTag.njk" import riskLevelTag %}
+{% from "components/macros/tierScoreTag.njk" import tierScoreTag %}
 
 {%- macro personCell(person) -%}
   <span class="sas-case-list__cell-header" aria-hidden="true">Person</span>
@@ -14,12 +15,7 @@
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
       {{ riskLevelTag(person.riskLevel) }}
 
-      {% if person.tierScore %}
-        <div class="sas-risk-tag sas-risk-tag--tier">
-          <dt>Tier</dt>
-          <dd>{{ person.tierScore }}</dd>
-        </div>
-      {% endif %}
+      {{ tierScoreTag(person.tierScore) }}
     </dl>
 
     <dl class="sas-person-details govuk-!-margin-0">

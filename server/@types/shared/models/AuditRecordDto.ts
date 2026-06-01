@@ -2,11 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { FieldChange } from './FieldChange'
+import type { FieldChange } from './FieldChange';
 export type AuditRecordDto = {
-  type: 'CREATE' | 'UPDATE' | 'NOTE'
-  author: string
-  commitDate: string
-  changes: Array<FieldChange>
-  extraInformation?: any | null
-}
+    type: 'CREATE' | 'UPDATE' | 'NOTE';
+    author: string;
+    commitDate: string;
+    changes: Array<FieldChange>;
+    extraInformation?: any | null;
+};
+

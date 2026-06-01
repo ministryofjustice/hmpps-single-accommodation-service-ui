@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ServiceResult } from './ServiceResult'
+import type { ServiceResult } from './ServiceResult';
 export type PaServiceResult = {
-  serviceResult: ServiceResult
-}
+    serviceResult: ServiceResult;
+};
+

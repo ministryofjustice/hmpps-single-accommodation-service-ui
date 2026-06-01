@@ -10,5 +10,7 @@ export type DtrSubmissionDto = {
     submissionDate: string;
     createdBy: string;
     createdAt: string;
+    withdrawalReason?: 'NEW_REFERRAL' | 'INCORRECT_LOCAL_AUTHORITY' | 'NO_CONSENT' | 'DISENGAGED' | 'HOUSING_NEED_RESOLVED' | 'NOT_ELIGIBLE' | 'OTHER';
+    withdrawalReasonOther?: string | null;
 };
 

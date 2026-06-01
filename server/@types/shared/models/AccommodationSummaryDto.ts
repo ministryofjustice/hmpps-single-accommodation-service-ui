@@ -7,6 +7,7 @@ import type { AccommodationStatusDto } from './AccommodationStatusDto';
 import type { AccommodationTypeDto } from './AccommodationTypeDto';
 export type AccommodationSummaryDto = {
     crn: string;
+    cprAddressId?: string | null;
     startDate?: string | null;
     endDate?: string | null;
     address: AccommodationAddressDetails;

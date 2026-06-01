@@ -12,6 +12,7 @@ import {
   dtrSubmissionFactory,
   dutyToReferFactory,
   eligibilityFactory,
+  dtrServiceResultFactory,
 } from '../../../server/testutils/factories'
 import { login } from '../../testUtils'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
@@ -20,14 +21,19 @@ import DutyToReferDetailsPage from '../../pages/cases/dutyToReferDetailsPage'
 import { dutyToReferTimelineEntry, dutyToReferToDtrServiceResult } from '../../../server/utils/dutyToRefer'
 
 const crn = 'X123456'
-const setupStubs = async (initialDutyToRefer: DutyToReferDto) => {
+const setupStubs = async (initialDutyToRefer?: DutyToReferDto | null) => {
   const caseData = caseFactory.build({ crn })
   await casesApi.stubGetCases([caseData])
   await casesApi.stubGetCaseByCrn(crn, caseData)
-  if (initialDutyToRefer.submission?.id) {
+  if (initialDutyToRefer?.submission?.id) {
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, initialDutyToRefer.submission.id, initialDutyToRefer)
   }
-  const eligibility = eligibilityFactory.build({ crn, dtr: dutyToReferToDtrServiceResult(initialDutyToRefer) })
+  const eligibility = eligibilityFactory.build({
+    crn,
+    dtr: initialDutyToRefer
+      ? dutyToReferToDtrServiceResult(initialDutyToRefer)
+      : dtrServiceResultFactory.notStarted().build(),
+  })
   await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
   await casesApi.stubGetReferralHistory(crn, [])
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
@@ -44,12 +50,7 @@ const setupDutyToReferTimeline = async (submissionId: string, records: AuditReco
 
 test.describe('duty to refer', () => {
   test('should allow user to submit a duty to refer and add outcome from the Case details page', async ({ page }) => {
-    const notStartedDutyToRefer = dutyToReferFactory.notStarted().build({ crn })
-    const submittedDutyToRefer = dutyToReferFactory.build({
-      ...notStartedDutyToRefer,
-      status: 'SUBMITTED',
-      submission: dtrSubmissionFactory.build(),
-    })
+    const submittedDutyToRefer = dutyToReferFactory.submitted().build({ crn })
     const acceptedDutyToRefer = dutyToReferFactory.build({
       ...submittedDutyToRefer,
       status: 'ACCEPTED',
@@ -58,7 +59,7 @@ test.describe('duty to refer', () => {
     const editId = submittedDutyToRefer.submission.id
 
     // Given I have stubbed the API responses
-    const { caseData, eligibility } = await setupStubs(notStartedDutyToRefer)
+    const { caseData, eligibility } = await setupStubs()
 
     // And I am logged in
     await login(page)

@@ -5,13 +5,6 @@ import crn from '../crn'
 import dtrSubmissionFactory from './dutyToReferSubmission'
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {
-  notStarted() {
-    return this.params({
-      status: 'NOT_STARTED',
-      submission: null,
-    })
-  }
-
   submitted() {
     return this.params({ status: 'SUBMITTED', submission: dtrSubmissionFactory.build() })
   }
@@ -26,12 +19,10 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
 }
 
 export default DutyToReferFactory.define(() => {
-  const status = faker.helpers.arrayElement(['SUBMITTED', 'NOT_STARTED', 'ACCEPTED', 'NOT_ACCEPTED'])
-
   return {
     caseId: faker.string.uuid(),
     crn: crn(),
-    status,
-    submission: status !== 'NOT_STARTED' ? dtrSubmissionFactory.build() : undefined,
+    status: faker.helpers.arrayElement(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED', 'WITHDRAWN']),
+    submission: dtrSubmissionFactory.build(),
   }
 })

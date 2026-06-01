@@ -212,14 +212,11 @@ describe('duty to refer utils', () => {
       createdAt: '2024-09-23T00:00:00.000Z',
     }
 
-    it.each(['NOT_STARTED', 'SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)(
-      'returns correct rows for status %s',
-      status => {
-        const dtr = dutyToReferFactory.build({ status, submission })
+    it.each(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)('returns correct rows for status %s', status => {
+      const dtr = dutyToReferFactory.build({ status, submission })
 
-        expect(detailsSummaryListRows(dtr)).toMatchSnapshot()
-      },
-    )
+      expect(detailsSummaryListRows(dtr)).toMatchSnapshot()
+    })
   })
 
   describe('outcomeDetailsSummaryListRows', () => {
@@ -232,14 +229,11 @@ describe('duty to refer utils', () => {
       createdAt: '2024-09-23T00:00:00.000Z',
     }
 
-    it.each(['NOT_STARTED', 'SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)(
-      'returns correct rows for status %s',
-      status => {
-        const dtr = dutyToReferFactory.build({ status, submission })
+    it.each(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)('returns correct rows for status %s', status => {
+      const dtr = dutyToReferFactory.build({ status, submission })
 
-        expect(outcomeDetailsSummaryListRows(dtr)).toMatchSnapshot()
-      },
-    )
+      expect(outcomeDetailsSummaryListRows(dtr)).toMatchSnapshot()
+    })
   })
 
   describe('outcomeSupportText', () => {

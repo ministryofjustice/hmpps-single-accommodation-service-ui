@@ -75,26 +75,24 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
 export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
   const rows = []
 
-  if (dutyToRefer?.status === 'NOT_STARTED' || dutyToRefer?.status === 'SUBMITTED') {
+  if (dutyToRefer?.status === 'SUBMITTED') {
     rows.push(summaryListRowHtml('Status', statusTag(serviceStatusTag(dutyToRefer.status, true))))
   }
-  if (dutyToRefer?.status !== 'NOT_STARTED') {
-    rows.push(
-      summaryListRowText(
-        'Date submitted',
-        dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
-      ),
-    )
-    rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
-    rows.push(summaryListRowOptional('Reference', dutyToRefer.submission.referenceNumber, 'No reference added'))
-  }
+  rows.push(
+    summaryListRowText(
+      'Date submitted',
+      dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
+    ),
+  )
+  rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+  rows.push(summaryListRowOptional('Reference', dutyToRefer.submission.referenceNumber, 'No reference added'))
   return rows
 }
 
 export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
   const rows = []
 
-  if (dutyToRefer?.status !== 'NOT_STARTED' && dutyToRefer?.status !== 'SUBMITTED') {
+  if (dutyToRefer?.status !== 'SUBMITTED') {
     rows.push(
       summaryListRowHtml(
         'Status',
@@ -160,8 +158,8 @@ export const formatDutyToReferStatus = (status: DutyToReferDto['status']): strin
   ({
     NOT_ACCEPTED: 'Not accepted',
     ACCEPTED: 'Accepted',
-    NOT_STARTED: 'Not started',
     SUBMITTED: 'Submitted',
+    WITHDRAWN: 'Withdrawn',
   })[status]
 
 const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<DutyToReferDto> => {
@@ -206,7 +204,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   const outcomeText = isOutcome && localAuthorityName ? outcomeSupportText(dtr as DutyToReferDto) : undefined
 
   const submissionValues =
-    status !== 'NOT_STARTED' && (submissionDate || localAuthorityName || referenceNumber)
+    submissionDate || localAuthorityName || referenceNumber
       ? {
           'Date submitted': formatDateAndDaysAgo(submissionDate),
           'Local authority': localAuthorityName,

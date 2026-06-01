@@ -14,14 +14,12 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   async shouldShowSubmissionDetails(dutyToRefer: DutyToReferDto) {
     await expect(this.page.getByRole('heading', { name: 'Submission details', exact: true })).toBeVisible()
 
-    if (dutyToRefer.status === 'NOT_STARTED' || dutyToRefer.status === 'SUBMITTED') {
+    if (dutyToRefer.status === 'SUBMITTED') {
       await this.shouldShowSummaryItem('Status', formatDutyToReferStatus(dutyToRefer.status))
     }
-    if (dutyToRefer.status !== 'NOT_STARTED' && dutyToRefer.submission) {
-      await this.shouldShowSummaryItem('Date submitted', formatDateAndDaysAgo(dutyToRefer.submission.submissionDate))
-      await this.shouldShowSummaryItem('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName)
-      await this.shouldShowSummaryItem('Reference', dutyToRefer.submission.referenceNumber)
-    }
+    await this.shouldShowSummaryItem('Date submitted', formatDateAndDaysAgo(dutyToRefer.submission.submissionDate))
+    await this.shouldShowSummaryItem('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName)
+    await this.shouldShowSummaryItem('Reference', dutyToRefer.submission.referenceNumber)
   }
 
   async shouldShowEmptyOutcomeDetails() {

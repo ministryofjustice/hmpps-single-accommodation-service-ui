@@ -58,19 +58,6 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
 ]
 `;
 
-exports[`duty to refer utils detailsSummaryListRows returns correct rows for status NOT_STARTED 1`] = `
-[
-  {
-    "key": {
-      "text": "Status",
-    },
-    "value": {
-      "html": "<strong class="govuk-tag govuk-tag--orange">Not started</strong>",
-    },
-  },
-]
-`;
-
 exports[`duty to refer utils detailsSummaryListRows returns correct rows for status SUBMITTED 1`] = `
 [
   {
@@ -365,7 +352,5 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
   },
 ]
 `;
-
-exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows for status NOT_STARTED 1`] = `[]`;
 
 exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows for status SUBMITTED 1`] = `[]`;

@@ -1,12 +1,5 @@
 import { Request } from 'express'
-import {
-  AuditRecordDto,
-  CaseDto,
-  DtrServiceResult,
-  DtrSubmissionDto,
-  DutyToReferDto,
-  FieldChange,
-} from '@sas/api'
+import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'

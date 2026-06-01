@@ -248,7 +248,8 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { submissionDate, localAuthorityAreaId, referenceNumber, withdrawalReason, withdrawalReasonOther } = req.body
+      const { submissionDate, localAuthorityAreaId, referenceNumber, withdrawalReason, withdrawalReasonOther } =
+        req.body
       const errorRedirect = uiPaths.dutyToRefer.withdraw({ crn, id })
       const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.withdraw.pattern, req, uiPaths.cases.show({ crn }))
 
@@ -263,7 +264,7 @@ export default class DutyToReferController {
           localAuthorityAreaId,
           referenceNumber,
           withdrawalReason,
-          withdrawalReasonOther
+          withdrawalReasonOther,
         })
 
         req.flash('success', 'DTR referral withdrawn')

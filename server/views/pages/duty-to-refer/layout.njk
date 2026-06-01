@@ -7,6 +7,8 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% set formColumnClass = formColumnClass or "govuk-grid-column-two-thirds" %}
+{% set submitButtonText = submitButtonText or "Save and continue" %}
 
 {% block containerStart %}
     {{ govukBackLink({
@@ -34,7 +36,7 @@
         </div>
     </div>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="{{ formColumnClass }}">
             <form method="post" novalidate="">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
@@ -42,7 +44,7 @@
 
                 <div class="govuk-button-group">
                     {{ govukButton({
-                    text: "Save and continue",
+                    text: submitButtonText,
                     preventDoubleClick: true
                 }) }}
                 </div>

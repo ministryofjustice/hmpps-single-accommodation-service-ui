@@ -3,6 +3,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% set formColumnClass = "govuk-grid-column-one-half-from-desktop" %}
+{% set submitButtonText = "Withdraw referral" %}
+
 {% block formContent %}
   <input type="hidden" name="submissionDate" value="{{ dtr.submission.submissionDate }}" />
   <input type="hidden" name="localAuthorityAreaId" value="{{ dtr.submission.localAuthority.localAuthorityAreaId }}" />

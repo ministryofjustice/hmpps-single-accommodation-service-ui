@@ -1,7 +1,7 @@
 import { CaseDto as Case } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, StatusCell } from '@sas/ui'
-import { htmlContent } from './utils'
+import { GetCasesQuery, SelectOption, StatusCell } from '@sas/ui'
+import { htmlContent, initialiseName } from './utils'
 import { renderMacro, statusCell } from './macros'
 import config from '../config'
 import { accommodationCell } from './accommodationSummary'
@@ -23,14 +23,24 @@ export const casesResultsSummary = (cases: Case[]): string => {
   return summary
 }
 
-export const queryToFilters = (query: GetCasesQuery, currentUrl: string): { text: string; href: string }[] => {
+export const queryToFilters = (
+  query: GetCasesQuery,
+  currentUrl: string,
+  teams: { name: string; code: string }[] = [],
+): { text: string; href: string }[] => {
   const filters: { text: string; href: string }[] = []
+
   if (query?.searchTerm)
     filters.push({ text: `Search: '${query.searchTerm}'`, href: removeQueryParam(currentUrl, 'searchTerm') })
-  if (query?.assignedTo && query.assignedTo !== 'you')
-    filters.push({ text: `Assigned to: ${query.assignedTo}`, href: removeQueryParam(currentUrl, 'assignedTo') })
+
+  if (query?.teamCode) {
+    const teamName = teams?.find(team => team.code === query.teamCode)?.name
+    filters.push({ text: `Assigned to: ${teamName || 'Unknown team'}`, href: removeQueryParam(currentUrl, 'teamCode') })
+  }
+
   if (query?.riskLevel)
     filters.push({ text: `RoSH: ${formatRiskLevel(query.riskLevel)}`, href: removeQueryParam(currentUrl, 'riskLevel') })
+
   return filters
 }
 
@@ -82,15 +92,6 @@ export const caseAssignedTo = (c: Case, username: string): string => {
   return c.assignedTo?.username.toUpperCase() === username.toUpperCase() ? `You (${fullName})` : fullName
 }
 
-export const mapGetCasesQuery = (query: GetCasesQuery): GetCasesQuery => {
-  const { searchTerm, riskLevel } = query
-
-  return {
-    searchTerm,
-    riskLevel,
-  }
-}
-
 export const caseStatusCell = (c: Case): StatusCell => {
   const date = c.currentAccommodation?.endDate
   return (
@@ -113,3 +114,8 @@ export const displayName = (caseData: Case, laoFlag = '(limited access offender)
       return `${caseData.name} ${caseData.limitedAccess ? laoFlag : ''}`.trim()
   }
 }
+
+export const assignedToOptions = (fullName: string, teams: { name: string; code: string }[]): SelectOption[] => [
+  { text: `You (${initialiseName(fullName)})`, value: '' },
+  ...teams.map(t => ({ text: t.name, value: t.code })),
+]

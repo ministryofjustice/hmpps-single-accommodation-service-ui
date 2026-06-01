@@ -53,16 +53,16 @@ export default class CasesListPage extends AbstractPage {
     }
   }
 
-  async applyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
+  async applyFilters({ searchTerm, teamName, riskLevel }: Record<string, string>) {
     if (searchTerm) await this.completeInputByLabel('Search by name, CRN or prison number', searchTerm)
-    if (assignedTo) await this.selectOptionByLabel('Assigned to', assignedTo)
+    if (teamName) await this.selectOptionByLabel('Assigned to', teamName)
     if (riskLevel) await this.selectOptionByLabel('RoSH', riskLevel)
     await this.clickButton('Apply filters')
   }
 
-  async verifyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
+  async verifyFilters({ searchTerm, teamCode, riskLevel }: Record<string, string>) {
     await this.verifyTextInput('Search by name, CRN or prison number', searchTerm)
-    await this.verifySelectInput('Assigned to', assignedTo)
+    await this.verifySelectInput('Assigned to', teamCode)
     await this.verifySelectInput('RoSH', riskLevel)
   }
 

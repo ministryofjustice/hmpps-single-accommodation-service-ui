@@ -6,10 +6,10 @@ import {
   casesResultsSummary,
   casesToRows,
   caseAssignedTo,
-  mapGetCasesQuery,
   casesTableColumns,
   queryToFilters,
   displayName,
+  assignedToOptions,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -20,10 +20,10 @@ import { addErrorToFlash } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
-import { initialiseName } from '../utils/utils'
 import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 import { collectApiResponses } from '../utils/apiResponses'
+import UserService from '../services/userService'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -38,6 +38,7 @@ export default class CasesController {
     private readonly dutyToReferService: DutyToReferService,
     private readonly proposedAddressesService: ProposedAddressesService,
     private readonly accommodationService: AccommodationService,
+    private readonly userService: UserService,
   ) {}
 
   index(): RequestHandler {
@@ -46,9 +47,13 @@ export default class CasesController {
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
 
-      if (query.assignedTo === undefined) query.assignedTo = 'you'
-      const { data: cases } = await this.casesService.getCases(token, mapGetCasesQuery(query))
-      const filters = queryToFilters(query, req.url)
+      const {
+        data: { teams, cases },
+      } = await collectApiResponses({
+        teams: this.userService.getTeams(token),
+        cases: this.casesService.getCases(token, query),
+      })
+      const filters = queryToFilters(query, req.url, teams)
 
       return res.render('pages/index', {
         resultsSummary: casesResultsSummary(cases),
@@ -56,7 +61,7 @@ export default class CasesController {
         casesRows: casesToRows(cases),
         query,
         filters,
-        assignedToOptions: [{ value: 'you', text: `You (${initialiseName(userFullName)})` }],
+        assignedToOptions: assignedToOptions(userFullName, teams),
         riskLevelOptions: [
           { value: '', text: 'All' },
           { value: 'VERY_HIGH', text: 'Very high' },

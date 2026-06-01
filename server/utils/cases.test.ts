@@ -3,11 +3,11 @@ import {
   casesResultsSummary,
   casesToRows,
   personCell,
-  mapGetCasesQuery,
   queryToFilters,
   actionsCell,
   caseStatusCell,
   displayName,
+  assignedToOptions,
 } from './cases'
 import { accommodationSummaryFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
@@ -159,45 +159,40 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('mapGetCasesQuery', () => {
-    it('maps the search query to the API query', () => {
-      expect(mapGetCasesQuery({ searchTerm: 'CRN123', riskLevel: 'LOW', assignedTo: 'you' })).toEqual({
-        searchTerm: 'CRN123',
-        riskLevel: 'LOW',
-      })
-    })
-  })
-
   describe('queryToFilters', () => {
+    const teams = [
+      { code: 'team-one-code', name: 'Team One' },
+      { code: 'team-two-code', name: 'Team Two' },
+    ]
+
     it('returns an empty array when no filters are applied', () => {
       expect(queryToFilters({}, '/')).toEqual([])
     })
 
-    it('does not include a filter tag when assignedTo is "you"', () => {
-      expect(queryToFilters({ assignedTo: 'you' }, '/')).toEqual([])
-    })
-
     it('returns all active filter tags when multiple filters are applied', () => {
-      const url = '/?assignedTo=anyone&riskLevel=HIGH&searchTerm=CRN123'
-      expect(queryToFilters({ assignedTo: 'anyone', riskLevel: 'HIGH', searchTerm: 'CRN123' }, url)).toEqual([
-        { text: "Search: 'CRN123'", href: '/?assignedTo=anyone&riskLevel=HIGH' },
-        { text: 'Assigned to: anyone', href: '/?riskLevel=HIGH&searchTerm=CRN123' },
-        { text: 'RoSH: High', href: '/?assignedTo=anyone&searchTerm=CRN123' },
+      const url = '/?teamCode=team-two-code&riskLevel=HIGH&searchTerm=CRN123'
+
+      expect(
+        queryToFilters({ teamCode: 'team-two-code', riskLevel: 'HIGH', searchTerm: 'CRN123' }, url, teams),
+      ).toEqual([
+        { text: "Search: 'CRN123'", href: '/?teamCode=team-two-code&riskLevel=HIGH' },
+        { text: 'Assigned to: Team Two', href: '/?riskLevel=HIGH&searchTerm=CRN123' },
+        { text: 'RoSH: High', href: '/?teamCode=team-two-code&searchTerm=CRN123' },
       ])
     })
 
     it.each([
       [
-        'assignedTo',
-        { assignedTo: 'anyone' } as const,
-        '/?assignedTo=anyone&riskLevel=HIGH',
-        [{ text: 'Assigned to: anyone', href: '/?riskLevel=HIGH' }],
+        'teamCode',
+        { teamCode: 'team-one-code' } as const,
+        '/?teamCode=team-one-code&riskLevel=HIGH',
+        [{ text: 'Assigned to: Team One', href: '/?riskLevel=HIGH' }],
       ],
       [
         'riskLevel',
         { riskLevel: 'VERY_HIGH' } as const,
-        '/?assignedTo=anyone&riskLevel=VERY_HIGH',
-        [{ text: 'RoSH: Very high', href: '/?assignedTo=anyone' }],
+        '/?teamCode=team-one-code&riskLevel=VERY_HIGH',
+        [{ text: 'RoSH: Very high', href: '/?teamCode=team-one-code' }],
       ],
       [
         'searchTerm',
@@ -206,7 +201,7 @@ describe('cases utilities', () => {
         [{ text: "Search: 'CRN123'", href: '/?riskLevel=LOW' }],
       ],
     ])('includes a filter tag when %s is set', (_, query, url, expected) => {
-      expect(queryToFilters(query, url)).toEqual(expected)
+      expect(queryToFilters(query, url, teams)).toEqual(expected)
     })
   })
 
@@ -248,6 +243,22 @@ describe('cases utilities', () => {
       const person = caseFactory.unknownAccess().build()
 
       expect(displayName(person)).toEqual('Unknown')
+    })
+  })
+
+  describe('assignedToOptions', () => {
+    it('returns options for the user and their teams', () => {
+      const userFullName = 'Alice Smith'
+      const teams = [
+        { code: 'team-one-code', name: 'Team One' },
+        { code: 'team-two-code', name: 'Team Two' },
+      ]
+
+      expect(assignedToOptions(userFullName, teams)).toEqual([
+        { value: '', text: 'You (A. Smith)' },
+        { value: 'team-one-code', text: 'Team One' },
+        { value: 'team-two-code', text: 'Team Two' },
+      ])
     })
   })
 })

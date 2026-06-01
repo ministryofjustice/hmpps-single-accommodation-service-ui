@@ -35,4 +35,7 @@ export default {
     accommodationHistory: casePath.path('accommodation-history'),
   },
   referenceData: path('/reference-data'),
+  user: {
+    teams: path('/user/teams'),
+  },
 }

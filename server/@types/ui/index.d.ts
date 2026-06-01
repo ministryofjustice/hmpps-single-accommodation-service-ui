@@ -60,7 +60,7 @@ export type MultiPageFormData = {
 export type GetCasesQuery = {
   searchTerm?: string
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
-  assignedTo?: string
+  teamCode?: string
 }
 
 export type DividerItem = {

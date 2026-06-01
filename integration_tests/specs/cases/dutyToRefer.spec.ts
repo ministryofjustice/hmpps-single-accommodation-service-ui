@@ -382,4 +382,71 @@ test.describe('duty to refer', () => {
     // And I should see a timeline entry showing the outcome details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
   })
+
+  test('should allow the user to withdraw a submitted duty to refer', async ({ page }) => {
+    const notStartedDutyToRefer = dutyToReferFactory.notStarted().build({ crn })
+    const submittedDutyToRefer = dutyToReferFactory.submitted().build({ crn })
+    const withdrawnDutyToRefer = dutyToReferFactory.build({
+      ...submittedDutyToRefer,
+      status: 'WITHDRAWN',
+      withdrawalReason: 'NEW_REFERRAL',
+    })
+    const submissionAddedDutyReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
+
+    const editId = submittedDutyToRefer.submission.id
+
+    // Given I have stubbed the API responses
+    const { caseData } = await setupStubs(submittedDutyToRefer)
+    const timelineRecords: AuditRecordDto[] = [submissionAddedDutyReferRecord]
+    await setupDutyToReferTimeline(editId, timelineRecords)
+
+    // Given I am logged in
+    await login(page)
+
+    // When I visit profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // Then I click the link to view duty to refer details in the dtr card
+    await profileTrackerPage.clickLink('View referral and notes', profileTrackerPage.getCard('Duty to Refer (DTR)'))
+
+    // Then I should see the duty to refer details page
+    const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+
+    // And the outcome details section should be empty
+    await dutyToReferDetailsPage.shouldShowEmptyOutcomeDetails()
+
+    // And I should see a timeline entry showing the duty to refer was submitted
+    await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(submissionAddedDutyReferRecord))
+
+    // TODO add button click when dtr details page updated
+    page.goto(`http://localhost:3007/cases/${crn}/dtr/${editId}/withdraw`)
+
+    // Then I should see the duty to refer withdrawal form
+    const dutyToReferWithdrawPage = await DutyToReferPage.verifyOnPage(page, 'Withdraw referral')
+
+    // When I submit the form with missing fields
+    await dutyToReferWithdrawPage.clickButton('Save and continue')
+
+    // Then I should see errors
+    await dutyToReferWithdrawPage.shouldShowErrorMessagesForFields({
+      withdrawalReason: 'Select a reason for withdrawal',
+    })
+
+    // When I complete the form and submit
+    await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
+    const eligibility = eligibilityFactory.build({ crn, dtr: dutyToReferToDtrServiceResult(notStartedDutyToRefer) })
+    await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
+    await dutyToReferWithdrawPage.completeWithdrawalForm(withdrawnDutyToRefer)
+    await dutyToReferWithdrawPage.clickButton('Save and continue')
+
+    // Then the API should have been called to update the duty to refer
+    await dutyToReferWithdrawPage.checkApiCalled(crn, withdrawnDutyToRefer, 'update')
+
+    // And I should see the profile tracker page with a not started duty to refer
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    await profileTrackerPage.shouldShowEligibility(eligibility)
+
+    // And I should see a success banner confirming the referral was withdrawn
+    await profileTrackerPage.shouldShowBanner('DTR referral withdrawn')
+  })
 })

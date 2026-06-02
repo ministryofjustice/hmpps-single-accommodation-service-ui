@@ -14,31 +14,6 @@ describeClient('DutyToReferClient', provider => {
     dutyToReferClient = new DutyToReferClient(mockAuthenticationClient)
   })
 
-  it('should make a GET request to /cases/:crn/dtr using user token and return the response body', async () => {
-    const dutyToRefer = dutyToReferFactory.submitted().build()
-    const body = apiResponseFactory.dutyToRefer(dutyToRefer)
-    const { crn } = body.data
-
-    await provider.addInteraction({
-      state: `DutyToRefer exists for case with CRN ${crn}`,
-      uponReceiving: 'a request to get the current Duty to refer for a case by CRN',
-      withRequest: {
-        method: 'GET',
-        path: apiPaths.cases.dutyToRefer.current({ crn }),
-        headers: {
-          authorization: 'Bearer test-user-token',
-        },
-      },
-      willRespondWith: {
-        status: 200,
-        body,
-      },
-    })
-
-    const response = await dutyToReferClient.getCurrentDtr('test-user-token', crn)
-    expect(response).toEqual(body)
-  })
-
   it('should make a GET request to /cases/:crn/dtr/:id using user token and return the response body', async () => {
     const dutyToRefer = dutyToReferFactory.submitted().build()
     const body = apiResponseFactory.dutyToRefer(dutyToRefer)

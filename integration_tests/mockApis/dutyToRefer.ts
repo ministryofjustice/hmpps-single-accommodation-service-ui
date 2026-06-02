@@ -10,18 +10,6 @@ import {
 import apiPaths from '../../server/paths/api'
 
 export default {
-  stubGetCurrentDtr: (crn: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: apiPaths.cases.dutyToRefer.current({ crn }),
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.dutyToRefer(dutyToReferData || dutyToReferFactory.submitted().build()),
-      },
-    }),
   stubGetDtrBySubmissionId: (crn: string, submissionId: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
     stubFor({
       request: {

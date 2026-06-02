@@ -39,7 +39,7 @@ export type { FieldChange } from './models/FieldChange'
 export type { LocalAuthorityDto } from './models/LocalAuthorityDto'
 export type { NoteCommand } from './models/NoteCommand'
 export type { PaServiceResult } from './models/PaServiceResult'
-export type { OutcomeReason } from './models/OutcomeReason';
+export type { OutcomeReason } from './models/OutcomeReason'
 export type { ProposedAccommodationDetailCommand } from './models/ProposedAccommodationDetailCommand'
 export type { ProposedAccommodationDto } from './models/ProposedAccommodationDto'
 export type { ReferenceDataDto } from './models/ReferenceDataDto'

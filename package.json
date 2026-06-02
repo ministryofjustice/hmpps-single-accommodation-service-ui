@@ -86,7 +86,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1050.0",
+    "@aws-sdk/client-sqs": "^3.1053.0",
     "@faker-js/faker": "^10.4.0",
     "@ministryofjustice/frontend": "9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
@@ -110,7 +110,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "govuk-frontend": "^6.1.0",
-    "helmet": "^8.1.0",
+    "helmet": "^8.2.0",
     "http-errors": "^2.0.1",
     "jest-pact": "^0.13.0",
     "jwt-decode": "^4.0.0",
@@ -162,7 +162,7 @@
     "prettier-plugin-jinja-template": "^2.2.0",
     "start-server-and-test": "^3.0.5",
     "supertest": "^7.2.2",
-    "ts-jest": "^29.4.10",
+    "ts-jest": "^29.4.11",
     "typescript": "6.0.3"
   }
 }

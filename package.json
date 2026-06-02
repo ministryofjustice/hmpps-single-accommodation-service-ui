@@ -58,6 +58,9 @@
     "setupFilesAfterEnv": [
       "<rootDir>/server/testutils/jest.setup.ts"
     ],
+    "moduleNameMapper": {
+      "^https-proxy-agent$": "<rootDir>/node_modules/https-proxy-agent/dist/index.js"
+    },
     "testEnvironment": "node",
     "reporters": [
       "default",
@@ -91,7 +94,7 @@
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-probation-frontend-components": "1.0.2",
     "@ministryofjustice/hmpps-rest-client": "^2.1.0",
-    "@pact-foundation/pact": "^16.4.0",
+    "@pact-foundation/pact": "16.5.0",
     "@pactflow/openapi-pact-comparator": "^1.15.0",
     "@playwright/test": "^1.60.0",
     "accessible-autocomplete": "3.0.1",

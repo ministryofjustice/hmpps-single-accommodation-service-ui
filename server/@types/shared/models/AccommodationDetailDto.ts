@@ -5,11 +5,14 @@
 import type { AccommodationAddressDetails } from './AccommodationAddressDetails'
 import type { AccommodationStatusDto } from './AccommodationStatusDto'
 import type { AccommodationTypeDto } from './AccommodationTypeDto'
-export type AccommodationSummaryDto = {
+export type AccommodationDetailDto = {
   crn: string
+  cprAddressId?: string | null
   startDate?: string | null
   endDate?: string | null
   address: AccommodationAddressDetails
   status?: AccommodationStatusDto | null
   type?: AccommodationTypeDto | null
+  typeVerified?: boolean | null
+  noFixedAbode?: boolean | null
 }

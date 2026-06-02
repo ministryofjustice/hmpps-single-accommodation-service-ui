@@ -3,10 +3,12 @@
 /* tslint:disable */
 
 export type { AccommodationAddressDetails } from './models/AccommodationAddressDetails'
+export type { AccommodationDetailDto } from './models/AccommodationDetailDto'
 export type { AccommodationReferralDto } from './models/AccommodationReferralDto'
 export type { AccommodationStatusDto } from './models/AccommodationStatusDto'
 export type { AccommodationSummaryDto } from './models/AccommodationSummaryDto'
 export type { AccommodationTypeDto } from './models/AccommodationTypeDto'
+export type { ApiResponseDtoAccommodationDetailDto } from './models/ApiResponseDtoAccommodationDetailDto'
 export type { ApiResponseDtoAccommodationSummaryDto } from './models/ApiResponseDtoAccommodationSummaryDto'
 export type { ApiResponseDtoCaseDto } from './models/ApiResponseDtoCaseDto'
 export type { ApiResponseDtoDutyToReferDto } from './models/ApiResponseDtoDutyToReferDto'

@@ -34,13 +34,13 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
 }
 
 export default DutyToReferFactory.define(() => {
-  const status = faker.helpers.arrayElement(['SUBMITTED', 'NOT_STARTED', 'ACCEPTED', 'NOT_ACCEPTED'])
+  const status = faker.helpers.arrayElement(['SUBMITTED', 'WITHDRAWN', 'ACCEPTED', 'NOT_ACCEPTED'])
   const outcomeReason = statusToOutcomeReason(status)
 
   return {
     caseId: faker.string.uuid(),
     crn: crn(),
     status,
-    submission: status !== 'NOT_STARTED' ? dtrSubmissionFactory.build({ outcomeReason }) : undefined,
+    submission: dtrSubmissionFactory.build({ outcomeReason }),
   }
 })

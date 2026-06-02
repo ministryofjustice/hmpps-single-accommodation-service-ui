@@ -11,6 +11,7 @@ import {
   proposedAccommodationFactory,
   referralFactory,
 } from '../server/testutils/factories'
+import { outcomeReasonToStatus } from '../server/utils/dutyToRefer'
 
 import casesFixture from './fixtures/cases.json'
 
@@ -78,10 +79,28 @@ if (generate.referrals) {
 }
 
 if (generate.dutyToRefer) {
+  const toDutyToReferStatus = (dtr: DtrServiceResult): DutyToReferDto['status'] => {
+    const { serviceStatus } = dtr.serviceResult
+
+    switch (serviceStatus) {
+      case 'SUBMITTED':
+      case 'ACCEPTED':
+      case 'NOT_ACCEPTED':
+      case 'WITHDRAWN':
+        return serviceStatus
+      default:
+        if (dtr.submission?.withdrawalReason) {
+          return 'WITHDRAWN'
+        }
+
+        return outcomeReasonToStatus(dtr.submission?.outcomeReason)
+    }
+  }
+
   const dtrServiceResultToDutyToRefer = (crn: string, dtr: DtrServiceResult): DutyToReferDto => ({
     crn,
     caseId: dtr.caseId ?? faker.string.uuid(),
-    status: dtr.serviceResult.serviceStatus,
+    status: toDutyToReferStatus(dtr),
     submission: dtr.submission,
   })
 

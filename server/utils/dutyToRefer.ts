@@ -2,13 +2,19 @@ import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { StatusCard } from '@sas/ui'
-import { formatDateAndDaysAgo, dateInputToIsoDate, formatDateAndAge } from './dates'
+import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
 import { renderMacro, statusTag } from './macros'
 import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
+
+export const submissionFormValues = (dtr: DutyToReferDto): Record<string, string> => ({
+  ...isoDateToDateInput(dtr.submission?.submissionDate, 'submissionDate'),
+  localAuthorityAreaId: dtr.submission?.localAuthority?.localAuthorityAreaId,
+  referenceNumber: dtr.submission?.referenceNumber,
+})
 
 export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceResult => ({
   caseId: dtr.caseId,

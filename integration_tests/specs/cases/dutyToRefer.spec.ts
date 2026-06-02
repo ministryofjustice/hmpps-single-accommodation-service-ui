@@ -276,14 +276,15 @@ test.describe('duty to refer', () => {
     // Then I should see the duty to refer edit submission form
     const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowSubmissionForm(caseData)
+    await dutyToReferPage.shouldShowPopulatedSubmissionForm(submittedDutyToRefer)
 
-    // When I submit the form with missing fields
+    // When I clear the submission date and submit
+    await dutyToReferPage.clearDateInputByLabel('When was the DTR submitted?')
     await dutyToReferPage.clickButton('Save and continue')
 
     // Then I should see errors
     await dutyToReferPage.shouldShowErrorMessagesForFields({
       submissionDate: 'Enter a submission date',
-      localAuthorityAreaId: 'Select a local authority',
     })
 
     // When I complete the form and submit

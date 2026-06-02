@@ -9,6 +9,7 @@ import {
   dutyToReferTimelineEntry,
   outcomeItems,
   outcomeReasonToStatus,
+  submissionFormValues,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -85,8 +86,10 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const { tableRows, localAuthorities } = await this.getSubmissionPageData(token, crn)
+      const { tableRows, localAuthorities, dtr } = await this.getSubmissionPageData(token, crn, id)
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+
+      const formValues = Object.keys(userInput).length > 0 ? userInput : (dtr ? submissionFormValues(dtr) : {})
 
       return res.render('pages/duty-to-refer/submission', {
         pageTitle: `${id ? 'Edit' : 'Add new'} Duty to Refer (DTR) referral details`,
@@ -96,7 +99,7 @@ export default class DutyToReferController {
         localAuthorities,
         errors,
         errorSummary,
-        formValues: userInput,
+        formValues,
       })
     }
   }
@@ -229,14 +232,16 @@ export default class DutyToReferController {
     }
   }
 
-  private async getSubmissionPageData(token: string, crn: string) {
+  private async getSubmissionPageData(token: string, crn: string, id?: string) {
     const [{ data: caseData }, { data: localAuthorities }] = await Promise.all([
       this.casesService.getCase(token, crn),
       this.referenceDataService.getLocalAuthorities(token),
     ])
 
+    const dtr = id ? (await this.dutyToReferService.getDtrBySubmissionId(token, crn, id))?.data : undefined
+
     const tableRows = summaryListRows(caseData)
 
-    return { tableRows, localAuthorities }
+    return { tableRows, localAuthorities, dtr }
   }
 }

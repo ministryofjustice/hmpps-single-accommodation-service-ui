@@ -19,6 +19,14 @@ export default class DutyToReferPage extends AbstractPage {
     await this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
   }
 
+  async shouldShowPopulatedSubmissionForm(dutyToRefer: DutyToReferDto) {
+    await this.verifyDateInputByLabel('When was the DTR submitted?', dutyToRefer.submission.submissionDate)
+    await this.verifySelectInput('What local authority was the DTR submitted to?', dutyToRefer.submission.localAuthority.localAuthorityAreaName)
+    if (dutyToRefer.submission.referenceNumber) {
+      await this.verifyTextInput('Reference number', dutyToRefer.submission.referenceNumber)
+    }
+  }
+
   async completeSubmissionForm(dutyToRefer: DutyToReferDto) {
     await this.completeDateInputByLabel('When was the DTR submitted?', dutyToRefer.submission.submissionDate)
     await this.selectAutocompleteByLabel(

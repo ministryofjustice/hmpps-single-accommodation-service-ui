@@ -1,5 +1,5 @@
 import { DateFieldValues } from '@sas/ui'
-import { calculateAge, dateInputToIsoDate, formatDate, formatDateAndAge, formatDateAndDaysAgo } from './dates'
+import { calculateAge, dateInputToIsoDate, formatDate, formatDateAndAge, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 
 describe('date utilities', () => {
   beforeEach(() => {
@@ -139,6 +139,24 @@ describe('date utilities', () => {
       }
 
       expect(dateInputToIsoDate(date, 'field')).toEqual(undefined)
+    })
+  })
+
+  describe('isoDateToDateInput', () => {
+    it('returns date field values when date is valid', () => {
+      expect(isoDateToDateInput('2022-01-12', 'field')).toEqual({
+        'field-day': '12',
+        'field-month': '01',
+        'field-year': '2022',
+      })
+    })
+
+    it.each([undefined, ''])('returns blank date field values when date is %s', date => {
+      expect(isoDateToDateInput(date, 'field')).toEqual({
+        'field-day': undefined,
+        'field-month': undefined,
+        'field-year': '',
+      })
     })
   })
 })

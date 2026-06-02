@@ -127,8 +127,7 @@ export default class DutyToReferController {
           req.flash('success', 'Submission details updated')
           return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         }
-        await this.dutyToReferService.submit(token, crn, submission)
-        const { data: dtr } = await this.dutyToReferService.getCurrentDtr(token, crn)
+        const dtr = await this.dutyToReferService.submit(token, crn, submission)
         req.flash('success', 'New DTR referral details added')
         return res.redirect(uiPaths.dutyToRefer.show({ crn, id: dtr.submission?.id }))
       } catch {

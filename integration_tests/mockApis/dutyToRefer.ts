@@ -34,7 +34,7 @@ export default {
         jsonBody: apiResponseFactory.dutyToRefer(dutyToReferData || dutyToReferFactory.submitted().build()),
       },
     }),
-  stubSubmitDutyToRefer: (crn: string): SuperAgentRequest =>
+  stubSubmitDutyToRefer: (crn: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'POST',
@@ -42,6 +42,8 @@ export default {
       },
       response: {
         status: 201,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: dutyToReferData || dutyToReferFactory.submitted().build(),
       },
     }),
   stubUpdateDutyToRefer: (crn: string, id: string): SuperAgentRequest =>

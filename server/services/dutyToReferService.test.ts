@@ -50,10 +50,13 @@ describe('DutyToReferService', () => {
 
   it('should call submit on the api client with dtr command data and return its result', async () => {
     const dutyToReferData = dtrCommandFactory.build()
+    const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
+    dutyToReferClient.submit.mockResolvedValue(dutyToRefer)
 
-    await dutyToReferService.submit(token, crn, dutyToReferData)
+    const result = await dutyToReferService.submit(token, crn, dutyToReferData)
 
     expect(dutyToReferClient.submit).toHaveBeenCalledWith(token, crn, dutyToReferData)
+    expect(result).toEqual(dutyToRefer)
   })
 
   describe('getTimeline', () => {

@@ -144,7 +144,7 @@ describe('dutyToReferController', () => {
 
     it('submits and redirects to the details page', async () => {
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
-      dutyToReferService.getCurrentDtr.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
+      dutyToReferService.submit.mockResolvedValue(dtr)
 
       await controller.saveSubmission()(request, response, next)
 

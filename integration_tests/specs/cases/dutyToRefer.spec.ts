@@ -89,9 +89,8 @@ test.describe('duty to refer', () => {
     })
 
     // When I complete the form and submit
-    await dutyToReferApi.stubGetCurrentDtr(crn, submittedDutyToRefer)
+    await dutyToReferApi.stubSubmitDutyToRefer(crn, submittedDutyToRefer)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
-    await dutyToReferApi.stubSubmitDutyToRefer(crn)
     await eligibilityApi.stubGetEligibilityByCrn(crn, {
       ...eligibility,
       dtr: dutyToReferToDtrServiceResult(submittedDutyToRefer),

@@ -90,18 +90,17 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
 }
 
 export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
-  const rows = []
-
-  if (dutyToRefer?.status !== 'SUBMITTED') {
-    rows.push(
-      summaryListRowHtml(
-        'Status',
-        `${statusTag(serviceStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
-      ),
-    )
-    rows.push(summaryListRowText('Reason', outcomeReasonSummaryLabel[dutyToRefer.submission.outcomeReason]))
+  if (dutyToRefer?.status === 'SUBMITTED') {
+    return []
   }
-  return rows
+
+  return [
+    summaryListRowHtml(
+      'Status',
+      `${statusTag(serviceStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
+    ),
+    summaryListRowText('Reason', outcomeReasonSummaryLabel[dutyToRefer.submission.outcomeReason]),
+  ]
 }
 
 export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string =>
@@ -125,7 +124,6 @@ export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
       return rows
     case 'NOT_ELIGIBLE':
     case 'NOT_STARTED':
-      return []
     default:
       return []
   }
@@ -239,50 +237,25 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
 }
 
-export const outcomeItems = (outcomeReason?: DtrSubmissionDto['outcomeReason']) => [
-  {
-    value: 'PREVENTION_AND_RELIEF_DUTY',
-    text: 'Yes, it was accepted on prevention and relief duty',
-    checked: outcomeReason === 'PREVENTION_AND_RELIEF_DUTY',
-  },
-  {
-    value: 'PRIORITY_NEED',
-    text: 'Yes, it was accepted on a priority need',
-    checked: outcomeReason === 'PRIORITY_NEED',
-  },
-  {
-    value: 'NO_LOCAL_CONNECTION',
-    text: "No, it was rejected as there's no local connection",
-    checked: outcomeReason === 'NO_LOCAL_CONNECTION',
-  },
-  {
-    value: 'INTENTIONALLY_HOMELESS',
-    text: "No, it was rejected as they're considered intentionally homeless",
-    checked: outcomeReason === 'INTENTIONALLY_HOMELESS',
-  },
-  {
-    value: 'REJECTED_FOR_ANOTHER_REASON',
-    text: 'No, it was rejected for another reason',
-    checked: outcomeReason === 'REJECTED_FOR_ANOTHER_REASON',
-  },
-]
+export const outcomeItems = (outcomeReason?: DtrSubmissionDto['outcomeReason']) =>
+  Object.entries(outcomeReasonLabel).map(([key, label]) => ({
+    value: key,
+    text: label,
+    checked: outcomeReason === key,
+  }))
 
 export const outcomeReasonToStatus = (outcomeReason: DtrSubmissionDto['outcomeReason']): DutyToReferDto['status'] => {
-  if (!outcomeReason) return 'SUBMITTED'
-
-  if (outcomeReason === 'PREVENTION_AND_RELIEF_DUTY' || outcomeReason === 'PRIORITY_NEED') {
-    return 'ACCEPTED'
+  switch (outcomeReason) {
+    case 'PREVENTION_AND_RELIEF_DUTY':
+    case 'PRIORITY_NEED':
+      return 'ACCEPTED'
+    case 'NO_LOCAL_CONNECTION':
+    case 'INTENTIONALLY_HOMELESS':
+    case 'REJECTED_FOR_ANOTHER_REASON':
+      return 'NOT_ACCEPTED'
+    default:
+      return 'SUBMITTED'
   }
-
-  if (
-    outcomeReason === 'NO_LOCAL_CONNECTION' ||
-    outcomeReason === 'INTENTIONALLY_HOMELESS' ||
-    outcomeReason === 'REJECTED_FOR_ANOTHER_REASON'
-  ) {
-    return 'NOT_ACCEPTED'
-  }
-
-  return 'SUBMITTED'
 }
 
 export const outcomeReasonLabel: Record<DtrSubmissionDto['outcomeReason'], string> = {

@@ -140,6 +140,17 @@ describe('cases utilities', () => {
       expect(caseAssignedTo(person, 'alice_smith')).toEqual('You (Alice Smith)')
     })
 
+    it.each(['USERNAMEONE', 'usernameone', 'UsernameOne'])(
+      'matches for username %s using case-insensitive comparison',
+      username => {
+        const person = caseFactory.build({
+          assignedTo: { username: 'usernameOne', forename: 'Alice', surname: 'Smith' },
+        })
+
+        expect(caseAssignedTo(person, username)).toEqual('You (Alice Smith)')
+      },
+    )
+
     it('returns the assignedTo name when the assignedTo username does not match the given username', () => {
       const person = caseFactory.build({
         assignedTo: { username: 'bob_johnson', forename: 'Bob', surname: 'Johnson' },

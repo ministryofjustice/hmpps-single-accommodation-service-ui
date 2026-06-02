@@ -30,6 +30,7 @@ export type ServiceResult = {
     | 'NOT_ACCEPTED'
   action?: string | null
   link?: string | null
+  url?: string | null
   failureReasons: Array<
     | 'S_TIER'
     | 'MALE_NOT_HIGH_RISK_TIER'

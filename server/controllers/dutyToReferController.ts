@@ -89,7 +89,10 @@ export default class DutyToReferController {
       const { tableRows, localAuthorities, dtr } = await this.getSubmissionPageData(token, crn, id)
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
-      const formValues = Object.keys(userInput).length > 0 ? userInput : (dtr ? submissionFormValues(dtr) : {})
+      let formValues = userInput
+      if (Object.keys(userInput).length === 0) {
+        formValues = dtr ? submissionFormValues(dtr) : {}
+      }
 
       return res.render('pages/duty-to-refer/submission', {
         pageTitle: `${id ? 'Edit' : 'Add new'} Duty to Refer (DTR) referral details`,

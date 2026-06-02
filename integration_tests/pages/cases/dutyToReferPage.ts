@@ -21,7 +21,10 @@ export default class DutyToReferPage extends AbstractPage {
 
   async shouldShowPopulatedSubmissionForm(dutyToRefer: DutyToReferDto) {
     await this.verifyDateInputByLabel('When was the DTR submitted?', dutyToRefer.submission.submissionDate)
-    await this.verifySelectInput('What local authority was the DTR submitted to?', dutyToRefer.submission.localAuthority.localAuthorityAreaName)
+    await this.verifySelectInput(
+      'What local authority was the DTR submitted to?',
+      dutyToRefer.submission.localAuthority.localAuthorityAreaName,
+    )
     if (dutyToRefer.submission.referenceNumber) {
       await this.verifyTextInput('Reference number', dutyToRefer.submission.referenceNumber)
     }

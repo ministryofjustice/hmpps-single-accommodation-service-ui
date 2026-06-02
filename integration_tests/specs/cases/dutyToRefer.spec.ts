@@ -63,7 +63,7 @@ test.describe('duty to refer', () => {
     const editId = submittedDutyToRefer.submission.id
 
     // Given I have stubbed the API responses
-    const { caseData, eligibility } = await setupStubs()
+    const { caseData } = await setupStubs()
     await setupDutyToReferTimeline(editId, [])
 
     // And I am logged in

@@ -91,10 +91,6 @@ test.describe('duty to refer', () => {
     // When I complete the form and submit
     await dutyToReferApi.stubSubmitDutyToRefer(crn, submittedDutyToRefer)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
-    await eligibilityApi.stubGetEligibilityByCrn(crn, {
-      ...eligibility,
-      dtr: dutyToReferToDtrServiceResult(submittedDutyToRefer),
-    })
 
     await dutyToReferPage.completeSubmissionForm(submittedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')

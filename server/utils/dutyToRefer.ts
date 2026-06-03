@@ -11,9 +11,9 @@ import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
 
 export const submissionFormValues = (dtr: DutyToReferDto): Record<string, string> => ({
-  ...isoDateToDateInput(dtr.submission?.submissionDate, 'submissionDate'),
-  localAuthorityAreaId: dtr.submission?.localAuthority?.localAuthorityAreaId,
-  referenceNumber: dtr.submission?.referenceNumber,
+  ...isoDateToDateInput(dtr?.submission?.submissionDate, 'submissionDate'),
+  localAuthorityAreaId: dtr?.submission?.localAuthority?.localAuthorityAreaId,
+  referenceNumber: dtr?.submission?.referenceNumber,
 })
 
 export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceResult => ({

@@ -12,7 +12,7 @@ export default class DutyToReferPage extends AbstractPage {
     this.header = page.locator('h1', { hasText: expectedHeader })
   }
 
-  async shouldShowSubmissionForm(caseData: Case) {
+  async shouldShowCaseSummary(caseData: Case) {
     await this.shouldShowSummaryItem('Name', caseData.name)
     await this.shouldShowSummaryItem('Date of birth', formatDateAndAge(caseData.dateOfBirth))
     await this.shouldShowSummaryItem('CRN', caseData.crn)
@@ -42,10 +42,7 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async shouldShowOutcomePage(caseData: Case, dtr: DutyToReferDto) {
-    await this.shouldShowSummaryItem('Name', caseData.name)
-    await this.shouldShowSummaryItem('Date of birth', formatDateAndAge(caseData.dateOfBirth))
-    await this.shouldShowSummaryItem('CRN', caseData.crn)
-    await this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
+    await this.shouldShowCaseSummary(caseData)
 
     await this.shouldShowSummaryItem('Local authority', dtr.submission.localAuthority.localAuthorityAreaName)
     await this.shouldShowSummaryItem('Date submitted', formatDateAndDaysAgo(dtr.submission.submissionDate))

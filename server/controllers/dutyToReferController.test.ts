@@ -520,7 +520,10 @@ describe('dutyToReferController', () => {
 
       await controller.saveWithdrawal()(request, response, next)
 
-      expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id',
+      expect(dutyToReferService.update).toHaveBeenCalledWith(
+        'token-1',
+        'CRN123',
+        'submission-id',
         expect.objectContaining({
           status: 'WITHDRAWN',
           withdrawalReason: 'OTHER',

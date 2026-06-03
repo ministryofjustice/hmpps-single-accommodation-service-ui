@@ -313,6 +313,10 @@ export const withdrawalReasonItems = (value?: DtrSubmissionDto['withdrawalReason
     text: 'Housing need resolved or person already accommodated',
     checked: value === 'HOUSING_NEED_RESOLVED',
   },
-  { value: 'NOT_ELIGIBLE', text: 'Not eligible for Duty to Refer (not homeless or at risk)', checked: value === 'NOT_ELIGIBLE' },
+  {
+    value: 'NOT_ELIGIBLE',
+    text: 'Not eligible for Duty to Refer (not homeless or at risk)',
+    checked: value === 'NOT_ELIGIBLE',
+  },
   { value: 'OTHER', text: 'Other', checked: value === 'OTHER' },
 ]

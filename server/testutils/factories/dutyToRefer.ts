@@ -47,7 +47,7 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
     const withdrawalReasonOther = withdrawalReason === 'OTHER' ? faker.lorem.sentence() : undefined
     return this.params({
       status: 'WITHDRAWN',
-      submission: dtrSubmissionFactory.build({withdrawalReason, withdrawalReasonOther }),
+      submission: dtrSubmissionFactory.build({ withdrawalReason, withdrawalReasonOther }),
     })
   }
 }

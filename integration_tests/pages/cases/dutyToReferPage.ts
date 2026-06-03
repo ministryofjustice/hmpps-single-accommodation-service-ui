@@ -4,8 +4,7 @@ import AbstractPage from '../abstractPage'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
-import { outcomeReasonLabel } from '../../../server/utils/dutyToRefer'
-import { withdrawalReasonItems } from '../../../server/utils/dutyToRefer'
+import { outcomeReasonLabel, withdrawalReasonItems } from '../../../server/utils/dutyToRefer'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {

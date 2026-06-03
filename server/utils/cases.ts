@@ -79,7 +79,7 @@ export const casesTableColumns = () => {
 
 export const caseAssignedTo = (c: Case, username: string): string => {
   const fullName = `${c.assignedTo.forename} ${c.assignedTo.surname}`
-  return String(c.assignedTo?.username) === username ? `You (${fullName})` : fullName
+  return c.assignedTo?.username.toUpperCase() === username.toUpperCase() ? `You (${fullName})` : fullName
 }
 
 export const mapGetCasesQuery = (query: GetCasesQuery): GetCasesQuery => {

@@ -2,7 +2,7 @@
 import express from 'express'
 
 import createError from 'http-errors'
-
+import * as Sentry from '@sentry/node'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
@@ -52,6 +52,11 @@ export default function createApp(services: Services): express.Application {
   app.use(routes(services))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
+
+  if (config.sentry.dsn) {
+    Sentry.setupExpressErrorHandler(app)
+  }
+
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
 
   return app

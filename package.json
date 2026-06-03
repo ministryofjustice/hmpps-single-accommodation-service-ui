@@ -97,6 +97,7 @@
     "@pact-foundation/pact": "16.5.0",
     "@pactflow/openapi-pact-comparator": "^1.15.0",
     "@playwright/test": "^1.60.0",
+    "@sentry/node": "10.54.0",
     "accessible-autocomplete": "3.0.1",
     "applicationinsights": "^2.9.8",
     "body-parser": "^2.2.2",

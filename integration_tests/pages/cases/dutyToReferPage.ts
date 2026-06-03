@@ -55,13 +55,13 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async completeWithdrawalForm(dutyToRefer: DutyToReferDto) {
-    const reason = dutyToRefer.withdrawalReason
-      ? withdrawalReasonItems().find(item => item.value === dutyToRefer.withdrawalReason)?.text
+    const reason = dutyToRefer.submission.withdrawalReason
+      ? withdrawalReasonItems().find(item => item.value === dutyToRefer.submission.withdrawalReason)?.text
       : 'Other'
 
     await this.selectRadioByLabel(reason)
-    if (dutyToRefer.withdrawalReason === 'OTHER') {
-      await this.completeInputByLabel('Please specify', dutyToRefer.withdrawalReasonOther)
+    if (dutyToRefer.submission.withdrawalReason === 'OTHER') {
+      await this.completeInputByLabel('Please specify', dutyToRefer.submission.withdrawalReasonOther)
     }
   }
 
@@ -84,8 +84,8 @@ export default class DutyToReferPage extends AbstractPage {
     }
 
     if (dutyToRefer.status === 'WITHDRAWN') {
-      expectedBody.withdrawalReason = dutyToRefer.withdrawalReason
-      expectedBody.withdrawalReasonOther = dutyToRefer.withdrawalReasonOther
+      expectedBody.withdrawalReason = dutyToRefer.submission.withdrawalReason
+      expectedBody.withdrawalReasonOther = dutyToRefer.submission.withdrawalReasonOther
     }
 
     expect(requestBody).toEqual(expectedBody)

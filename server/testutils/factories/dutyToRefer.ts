@@ -25,7 +25,8 @@ const withdrawalReasons = [
   'HOUSING_NEED_RESOLVED',
   'NOT_ELIGIBLE',
   'OTHER',
-] as DutyToReferDto['withdrawalReason'][]
+] as DtrSubmissionDto['withdrawalReason'][]
+
 class DutyToReferFactory extends Factory<DutyToReferDto> {
   submitted() {
     return this.params({ status: 'SUBMITTED', submission: dtrSubmissionFactory.build({ outcomeReason: undefined }) })
@@ -43,12 +44,10 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
 
   withdrawn() {
     const withdrawalReason = faker.helpers.arrayElement(withdrawalReasons)
-
+    const withdrawalReasonOther = withdrawalReason === 'OTHER' ? faker.lorem.sentence() : undefined
     return this.params({
       status: 'WITHDRAWN',
-      submission: dtrSubmissionFactory.build(),
-      withdrawalReason,
-      withdrawalReasonOther: withdrawalReason === 'OTHER' ? faker.lorem.sentence() : undefined,
+      submission: dtrSubmissionFactory.build({withdrawalReason, withdrawalReasonOther }),
     })
   }
 }

@@ -264,7 +264,7 @@ export default class DutyToReferController {
           localAuthorityAreaId,
           referenceNumber,
           withdrawalReason,
-          withdrawalReasonOther,
+          withdrawalReasonOther: withdrawalReasonOther || null,
         })
 
         req.flash('success', 'DTR referral withdrawn')

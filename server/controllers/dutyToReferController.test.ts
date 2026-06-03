@@ -508,7 +508,7 @@ describe('dutyToReferController', () => {
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
         withdrawalReason: 'NO_CONSENT',
-        withdrawalReasonOther: '',
+        withdrawalReasonOther: null,
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral withdrawn')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))

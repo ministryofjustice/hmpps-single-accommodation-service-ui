@@ -19,6 +19,7 @@ export type { ApiResponseDtoListAuditRecordDto } from './models/ApiResponseDtoLi
 export type { ApiResponseDtoListCaseDto } from './models/ApiResponseDtoListCaseDto'
 export type { ApiResponseDtoListProposedAccommodationDto } from './models/ApiResponseDtoListProposedAccommodationDto'
 export type { ApiResponseDtoListReferenceDataDto } from './models/ApiResponseDtoListReferenceDataDto'
+export type { ApiResponseDtoListTeam } from './models/ApiResponseDtoListTeam'
 export type { ApiResponseDtoProposedAccommodationDto } from './models/ApiResponseDtoProposedAccommodationDto'
 export type { AssignedToDto } from './models/AssignedToDto'
 export type { AuditRecordDto } from './models/AuditRecordDto'
@@ -43,4 +44,5 @@ export type { ProposedAccommodationDetailCommand } from './models/ProposedAccomm
 export type { ProposedAccommodationDto } from './models/ProposedAccommodationDto'
 export type { ReferenceDataDto } from './models/ReferenceDataDto'
 export type { ServiceResult } from './models/ServiceResult'
+export type { Team } from './models/Team'
 export type { UpstreamFailureDto } from './models/UpstreamFailureDto'

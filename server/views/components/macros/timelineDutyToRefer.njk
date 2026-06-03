@@ -5,12 +5,12 @@
     <p>{{ statusTag(context.status) }}</p>
   {% endif %}
 
-  {% for label, value in context.values %}
-    {% if value %}
-      {% if context.isOutcome %}
-        <p class="govuk-!-margin-bottom-1">{{ value }}</p>
+  {% for item in context.values %}
+    {% if item.value %}
+      {% if item.showLabel %}
+        <p class="govuk-!-margin-bottom-1">{{ item.label }}: {{ item.value }}</p>
       {% else %}
-        <p class="govuk-!-margin-bottom-1">{{ label }}: {{ value }}</p>
+        <p class="govuk-!-margin-bottom-1">{{ item.value }}</p>
       {% endif %}
     {% endif %}
   {% endfor %}

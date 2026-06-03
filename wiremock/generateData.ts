@@ -2,12 +2,11 @@
 import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
-import { CaseDto, DutyToReferDto, ProposedAccommodationDto } from '@sas/api'
+import { CaseDto, DtrServiceResult, DutyToReferDto, ProposedAccommodationDto } from '@sas/api'
 import {
   accommodationSummaryFactory,
   auditRecordFactory,
   caseFactory,
-  dutyToReferFactory,
   eligibilityFactory,
   proposedAccommodationFactory,
   referralFactory,
@@ -79,19 +78,41 @@ if (generate.referrals) {
 }
 
 if (generate.dutyToRefer) {
-  const dutyToRefer = cases.reduce(
-    (responses, c) => ({
-      ...responses,
-      [c.crn]: dutyToReferFactory.build({ crn: c.crn }),
-    }),
-    {},
-  )
-  saveToFixture('dutyToRefer', dutyToRefer)
-  const auditRecords = Object.fromEntries(
-    Object.values(dutyToRefer)
-      .flat()
-      .filter((dtr: DutyToReferDto) => dtr.submission?.id)
-      .map((dtr: DutyToReferDto) => {
+  const toDutyToReferStatus = (dtr: DtrServiceResult): DutyToReferDto['status'] => {
+    const { serviceStatus } = dtr.serviceResult
+
+    switch (serviceStatus) {
+      case 'SUBMITTED':
+      case 'ACCEPTED':
+      case 'NOT_ACCEPTED':
+      case 'WITHDRAWN':
+        return serviceStatus
+      default:
+        if (dtr.submission?.withdrawalReason) {
+          return 'WITHDRAWN'
+        }
+
+        return 'SUBMITTED'
+    }
+  }
+
+  const dtrServiceResultToDutyToRefer = (crn: string, dtr: DtrServiceResult): DutyToReferDto => ({
+    crn,
+    caseId: dtr.caseId ?? faker.string.uuid(),
+    status: toDutyToReferStatus(dtr),
+    submission: dtr.submission,
+  })
+
+  const eligibility = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'eligibility.json'), 'utf8'))
+  const dutyToRefer: Record<string, DutyToReferDto> = {}
+  const auditRecords: Record<string, unknown[]> = {}
+
+  cases.forEach(c => {
+    const eligibilityForCase = eligibility[c.crn]
+    if (eligibilityForCase && eligibilityForCase.dtr) {
+      const dtr = dtrServiceResultToDutyToRefer(c.crn, eligibilityForCase.dtr)
+      dutyToRefer[c.crn] = dtr
+      if (dtr.submission?.id) {
         const records = []
         if (dtr.status === 'SUBMITTED' || dtr.status === 'ACCEPTED' || dtr.status === 'NOT_ACCEPTED') {
           records.push(auditRecordFactory.dutyToReferAdded(dtr.submission).build())
@@ -105,9 +126,11 @@ if (generate.dutyToRefer) {
               .build(),
           )
         }
-        return [dtr.submission.id, records.reverse()]
-      }),
-  )
+        auditRecords[dtr.submission.id] = records.reverse()
+      }
+    }
+  })
+  saveToFixture('dutyToRefer', dutyToRefer)
   saveToFixture('dutyToReferAuditRecords', auditRecords)
 }
 

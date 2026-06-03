@@ -72,3 +72,12 @@ export const dateInputToIsoDate = (body: Record<string, string>, fieldName: stri
 
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 }
+
+export const isoDateToDateInput = (date: string | undefined, fieldName: string): Record<string, string> => {
+  const [year, month, day] = (date || '').split('-')
+  return {
+    [`${fieldName}-day`]: day,
+    [`${fieldName}-month`]: month,
+    [`${fieldName}-year`]: year,
+  }
+}

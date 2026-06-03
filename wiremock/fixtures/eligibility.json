@@ -36,6 +36,7 @@
         },
         "referenceNumber": "XGRCQP6IIR",
         "submissionDate": "2025-06-05",
+        "outcomeReason": "PREVENTION_AND_RELIEF_DUTY",
         "createdBy": "Sonya Miller-Macejkovic",
         "createdAt": "2026-01-19T07:45:12.702Z"
       }
@@ -158,6 +159,7 @@
         },
         "referenceNumber": "CEI1V6BTWY",
         "submissionDate": "2025-09-13",
+        "outcomeReason": "NO_LOCAL_CONNECTION",
         "createdBy": "Winfield Dickens",
         "createdAt": "2026-05-03T03:29:42.897Z"
       }
@@ -242,6 +244,7 @@
         },
         "referenceNumber": "OVI1MX1YRB",
         "submissionDate": "2026-04-07",
+        "outcomeReason": "REJECTED_FOR_ANOTHER_REASON",
         "createdBy": "Miss Elsie Reilly",
         "createdAt": "2025-07-30T20:46:34.105Z"
       }
@@ -292,6 +295,7 @@
         },
         "referenceNumber": "NYUK6MNEFS",
         "submissionDate": "2026-04-25",
+        "outcomeReason": "PRIORITY_NEED",
         "createdBy": "Micheal Grimes",
         "createdAt": "2025-11-20T07:01:11.296Z"
       }

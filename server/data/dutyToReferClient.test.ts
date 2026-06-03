@@ -44,9 +44,10 @@ describeClient('DutyToReferClient', provider => {
     expect(response).toEqual(body)
   })
 
-  it('should make a POST request to /cases/:crn/dtr with data and return 200', async () => {
+  it('should make a POST request to /cases/:crn/dtr with data and return the dtr response', async () => {
     const crn = crnFactory()
     const command = dtrCommandFactory.build()
+    const dutyToRefer = dutyToReferFactory.submitted().build({ crn })
 
     await provider.addInteraction({
       state: `DutyToRefer can be submitted for case with CRN ${crn}`,
@@ -61,10 +62,12 @@ describeClient('DutyToReferClient', provider => {
       },
       willRespondWith: {
         status: 201,
+        body: dutyToRefer,
       },
     })
 
-    await dutyToReferClient.submit('test-user-token', crn, command)
+    const response = await dutyToReferClient.submit('test-user-token', crn, command)
+    expect(response).toEqual(dutyToRefer)
   })
 
   it('should make a PUT request to /cases/:crn/dtr/:id with data and return 200', async () => {

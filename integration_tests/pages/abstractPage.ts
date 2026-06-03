@@ -70,6 +70,21 @@ export default class AbstractPage {
     await fieldset.getByLabel('Year').fill(year)
   }
 
+  async clearDateInputByLabel(label: string) {
+    const fieldset = this.page.getByRole('group', { name: label })
+    await fieldset.getByLabel('Day').fill('')
+    await fieldset.getByLabel('Month').fill('')
+    await fieldset.getByLabel('Year').fill('')
+  }
+
+  async verifyDateInputByLabel(label: string, value: string) {
+    const [year, month, day] = value.split('T')[0].split('-')
+    const fieldset = this.page.getByRole('group', { name: label })
+    await expect(fieldset.getByLabel('Day')).toHaveValue(day)
+    await expect(fieldset.getByLabel('Month')).toHaveValue(month)
+    await expect(fieldset.getByLabel('Year')).toHaveValue(year)
+  }
+
   async selectAutocompleteByLabel(label: string, value: string) {
     const input = this.page.getByRole('combobox', { name: label })
     await input.fill(value)
@@ -109,6 +124,12 @@ export default class AbstractPage {
 
   getCard(title: string) {
     return this.page.locator('.sas-card', {
+      has: this.page.getByRole('heading', { name: title }),
+    })
+  }
+
+  getSummaryCard(title: string) {
+    return this.page.locator('.govuk-summary-card', {
       has: this.page.getByRole('heading', { name: title }),
     })
   }

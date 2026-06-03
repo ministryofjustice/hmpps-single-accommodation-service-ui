@@ -11,6 +11,7 @@ import {
   detailsSummaryListRows,
   dutyToReferTimelineEntry,
   outcomeDetailsSummaryListRows,
+  outcomeItems,
   summaryListRows,
 } from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
@@ -62,20 +63,6 @@ describe('dutyToReferController', () => {
     jest.spyOn(validationUtils, 'addUserInputToFlash')
   })
 
-  describe('guidance', () => {
-    it('renders the guidance page', async () => {
-      await controller.guidance()(request, response, next)
-
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.DUTY_TO_REFER_GUIDANCE, {
-        who: 'user1',
-        correlationId: 'request-id',
-      })
-      expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/guidance', {
-        crn: 'CRN123',
-      })
-    })
-  })
-
   describe('submission', () => {
     it('renders the submission page', async () => {
       await controller.submission()(request, response, next)
@@ -87,8 +74,8 @@ describe('dutyToReferController', () => {
       expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
       expect(referenceDataService.getLocalAuthorities).toHaveBeenCalledWith('token-1')
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
-        pageTitle: 'Add Duty to Refer (DTR) submission details',
-        backLinkHref: '/cases/CRN123/dtr/guidance',
+        pageTitle: 'Add new Duty to Refer (DTR) referral details',
+        backLinkHref: '/cases/CRN123',
         crn: 'CRN123',
         tableRows: summaryListRows(caseData),
         localAuthorities,
@@ -133,7 +120,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith(
         'pages/duty-to-refer/submission',
         expect.objectContaining({
-          pageTitle: 'Edit Duty to Refer (DTR) submission details',
+          pageTitle: 'Edit Duty to Refer (DTR) referral details',
           backLinkHref: '/cases/X456123/dtr/submission-id/details',
         }),
       )
@@ -155,7 +142,10 @@ describe('dutyToReferController', () => {
       })
     })
 
-    it('submits and redirects to the case page', async () => {
+    it('submits and redirects to the details page', async () => {
+      const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
+      dutyToReferService.submit.mockResolvedValue(dtr)
+
       await controller.saveSubmission()(request, response, next)
 
       expect(dutyToReferService.submit).toHaveBeenCalledWith('token-1', 'CRN123', {
@@ -164,8 +154,8 @@ describe('dutyToReferController', () => {
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
       })
-      expect(request.flash).toHaveBeenCalledWith('success', 'Submission details added')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+      expect(request.flash).toHaveBeenCalledWith('success', 'New DTR referral details added')
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dtr.submission.id }))
     })
 
     it('updates and redirects to the flow redirect page when editing', async () => {
@@ -239,11 +229,12 @@ describe('dutyToReferController', () => {
         'existing-submission-id',
       )
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/outcome', {
-        pageTitle: 'Add Duty to Refer (DTR) outcome details',
+        pageTitle: 'Add Duty to Refer (DTR) outcome',
         backLinkHref: '/cases/CRN123',
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
+        outcomeItems: outcomeItems(dtr.submission?.outcomeReason),
         errors: {},
         errorSummary: [],
       })
@@ -259,7 +250,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith(
         'pages/duty-to-refer/outcome',
         expect.objectContaining({
-          pageTitle: 'Edit Duty to Refer (DTR) outcome details',
+          pageTitle: 'Edit Duty to Refer (DTR) outcome',
           backLinkHref: '/cases/CRN123/dtr/existing-submission-id/details',
         }),
       )
@@ -272,7 +263,7 @@ describe('dutyToReferController', () => {
       request = mock<Request>({
         params: { crn: 'CRN123', id: 'submission-id' },
         body: {
-          outcomeStatus: 'ACCEPTED',
+          outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
           submissionDate: '2025-06-15',
           localAuthorityAreaId: 'la-id',
           referenceNumber: 'REF123',
@@ -289,6 +280,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         status: 'ACCEPTED',
+        outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
@@ -306,6 +298,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         status: 'ACCEPTED',
+        outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',

@@ -1,7 +1,11 @@
 import { expect, Page } from '@playwright/test'
 import { DutyToReferDto } from '@sas/api'
 import PageWithCaseDetails from './pageWithCaseDetails'
-import { formatDutyToReferStatus, outcomeSupportText } from '../../../server/utils/dutyToRefer'
+import {
+  formatDutyToReferStatus,
+  outcomeReasonSummaryLabel,
+  outcomeSupportText,
+} from '../../../server/utils/dutyToRefer'
 import { formatDateAndDaysAgo } from '../../../server/utils/dates'
 
 export default class DutyToReferDetailsPage extends PageWithCaseDetails {
@@ -12,7 +16,7 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   }
 
   async shouldShowSubmissionDetails(dutyToRefer: DutyToReferDto) {
-    await expect(this.page.getByRole('heading', { name: 'Submission details', exact: true })).toBeVisible()
+    await expect(this.page.getByRole('heading', { name: 'Referral details', exact: true })).toBeVisible()
 
     if (dutyToRefer.status === 'SUBMITTED') {
       await this.shouldShowSummaryItem('Status', formatDutyToReferStatus(dutyToRefer.status))
@@ -22,9 +26,12 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
     await this.shouldShowSummaryItem('Reference', dutyToRefer.submission.referenceNumber)
   }
 
-  async shouldShowEmptyOutcomeDetails() {
-    await expect(this.page.getByRole('heading', { name: 'Outcome details' })).toBeVisible()
-    await expect(this.page.getByText('No details about the outcome have been added.')).toBeVisible()
+  async shouldShowAddOutcomeButton() {
+    await expect(this.page.getByRole('button', { name: 'Add outcome' })).toBeVisible()
+  }
+
+  async shouldNotShowAddOutcomeButton() {
+    await expect(this.page.getByRole('button', { name: 'Add outcome' })).not.toBeVisible()
   }
 
   async shouldShowOutcomeDetails(dutyToRefer: DutyToReferDto) {
@@ -32,5 +39,6 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
 
     const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${outcomeSupportText(dutyToRefer)}`
     await this.shouldShowSummaryItem('Status', statusText)
+    await this.shouldShowSummaryItem('Reason', outcomeReasonSummaryLabel[dutyToRefer.submission.outcomeReason])
   }
 }

@@ -58,6 +58,8 @@ describe('duty to refer utils', () => {
           submissionDate: '2025-12-01',
           referenceNumber: 'REF123',
           localAuthority: { localAuthorityAreaName: 'Some Council' },
+          createdBy: 'user1',
+          createdAt: '2025-12-01T10:00:00.000Z',
         },
       })
 
@@ -90,19 +92,18 @@ describe('duty to refer utils', () => {
       createdBy: 'user1',
       createdAt: '2024-09-23T00:00:00.000Z',
     }
+    const rows = [
+      { term: 'Submitted to', description: 'Some Council' },
+      { term: 'Reference', description: submission.referenceNumber },
+      { term: 'Submitted', description: formatDateAndDaysAgo(submission.submissionDate) },
+      { term: 'Submitted by', description: submission.createdBy },
+    ]
 
     it.each([
       ['NOT_STARTED' as const, []],
-      [
-        'SUBMITTED' as const,
-        [
-          { term: 'Submitted to', description: 'Some Council' },
-          { term: 'Reference', description: submission.referenceNumber },
-          { term: 'Submitted', description: formatDateAndDaysAgo(submission.submissionDate) },
-        ],
-      ],
-      ['NOT_ACCEPTED' as const, []],
-      ['ACCEPTED' as const, []],
+      ['SUBMITTED' as const, rows],
+      ['NOT_ACCEPTED' as const, rows],
+      ['ACCEPTED' as const, rows],
       ['NOT_ELIGIBLE' as const, []],
       [undefined, []],
     ])('returns details for status %s', (status, expectedDetails) => {
@@ -127,22 +128,22 @@ describe('duty to refer utils', () => {
     it.each([
       {
         status: 'not started',
-        expectedLinks: ['Add submission details'],
+        expectedLinks: ['Add referral details'],
         dtr: dtrServiceResultFactory.notStarted().build(),
       },
       {
         status: 'submitted',
-        expectedLinks: ['Add outcome', 'View referral and notes'],
+        expectedLinks: ['View referral'],
         dtr: dtrServiceResultFactory.submitted().build(),
       },
       {
         status: 'not accepted',
-        expectedLinks: ['View referral and notes'],
+        expectedLinks: ['View referral'],
         dtr: dtrServiceResultFactory.notAccepted().build(),
       },
       {
         status: 'accepted',
-        expectedLinks: ['View referral and notes'],
+        expectedLinks: ['View referral'],
         dtr: dtrServiceResultFactory.accepted().build(),
       },
       { status: 'not eligible', expectedLinks: [], dtr: dtrServiceResultFactory.notEligible().build() },
@@ -189,7 +190,7 @@ describe('duty to refer utils', () => {
       expect(rows).toHaveLength(6)
       expect(rows[4].key.text).toBe('Local authority')
       expect(rows[4].value.text).toBe('Some Council')
-      expect(rows[5].key.text).toBe('Submission date')
+      expect(rows[5].key.text).toBe('Date submitted')
       expect(rows[5].value.text).toBe(formatDateAndDaysAgo('2025-01-10'))
     })
   })
@@ -227,6 +228,7 @@ describe('duty to refer utils', () => {
       submissionDate: '2024-09-23',
       createdBy: 'user1',
       createdAt: '2024-09-23T00:00:00.000Z',
+      outcomeReason: 'INTENTIONALLY_HOMELESS' as const,
     }
 
     it.each(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)('returns correct rows for status %s', status => {
@@ -303,14 +305,14 @@ describe('duty to refer utils', () => {
       const result = validateOutcome(req)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-        outcomeStatus: 'Select duty to refer outcome',
+        outcomeReason: 'Select duty to refer outcome',
       })
       expect(result).toBe(false)
     })
 
-    it('returns true when outcome status is valid', () => {
+    it('returns true when outcome reason is valid', () => {
       req.body = {
-        outcomeStatus: 'ACCEPTED',
+        outcomeReason: 'INTENTIONALLY_HOMELESS',
       }
 
       const result = validateOutcome(req)

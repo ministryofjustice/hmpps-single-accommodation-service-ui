@@ -31,6 +31,14 @@ describe('eligibility utilities', () => {
 describe('eligibilityToEligibilityCards', () => {
   const crn = 'X123456'
 
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-21'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   it('returns eligibility cards for each service', () => {
     const eligibility = eligibilityFactory.build({ crn })
 
@@ -47,7 +55,18 @@ describe('eligibilityToEligibilityCards', () => {
       crn,
       cas1: { serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }) },
       cas3: { serviceResult: serviceResultFactory.build({ serviceStatus: 'CONFIRMED' }) },
-      dtr: { serviceResult: serviceResultFactory.build({ serviceStatus: 'ACCEPTED' }), submission: { id: 'some-id' } },
+      dtr: {
+        serviceResult: serviceResultFactory.build({ serviceStatus: 'ACCEPTED' }),
+        submission: {
+          id: 'some-id',
+          submissionDate: '2025-12-01',
+          referenceNumber: 'REF123',
+          localAuthority: { localAuthorityAreaName: 'Some Council' },
+          createdBy: 'user1',
+          createdAt: '2025-12-01T10:00:00.000Z',
+          outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
+        },
+      },
     })
 
     const cards = eligibilityToEligibilityCards(eligibility, crn)

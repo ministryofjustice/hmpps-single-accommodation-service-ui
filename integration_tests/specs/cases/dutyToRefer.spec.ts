@@ -54,12 +54,17 @@ test.describe('duty to refer', () => {
     const acceptedDutyToRefer = dutyToReferFactory.build({
       ...submittedDutyToRefer,
       status: 'ACCEPTED',
+      submission: {
+        ...submittedDutyToRefer.submission,
+        outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
+      },
     })
 
     const editId = submittedDutyToRefer.submission.id
 
     // Given I have stubbed the API responses
-    const { caseData, eligibility } = await setupStubs()
+    const { caseData } = await setupStubs()
+    await setupDutyToReferTimeline(editId, [])
 
     // And I am logged in
     await login(page)
@@ -67,17 +72,11 @@ test.describe('duty to refer', () => {
     // When I visit profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
-    // And I click the add submission details link
-    await profileTrackerPage.clickLink('Add submission details')
-
-    // Then I should see the duty to refer guidance page
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Submit a duty to refer (DTR)')
-
-    // Then I click the add submission details button
-    await dutyToReferPage.clickButton('Add submission details')
+    // And I click the add referral details link
+    await profileTrackerPage.clickLink('Add referral details')
 
     // Then I should see the duty to refer submission form
-    await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) submission details')
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowSubmissionForm(caseData)
 
     // When I submit the form with missing fields
@@ -90,11 +89,8 @@ test.describe('duty to refer', () => {
     })
 
     // When I complete the form and submit
-    await dutyToReferApi.stubSubmitDutyToRefer(crn)
-    await eligibilityApi.stubGetEligibilityByCrn(crn, {
-      ...eligibility,
-      dtr: dutyToReferToDtrServiceResult(submittedDutyToRefer),
-    })
+    await dutyToReferApi.stubSubmitDutyToRefer(crn, submittedDutyToRefer)
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
 
     await dutyToReferPage.completeSubmissionForm(submittedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')
@@ -102,19 +98,19 @@ test.describe('duty to refer', () => {
     // And the API should have been called to submit the duty to refer
     await dutyToReferPage.checkApiCalled(crn, submittedDutyToRefer)
 
-    // Then I should see the profile tracker page with the new duty to refer details
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await profileTrackerPage.shouldShowEligibility({
-      ...eligibility,
-      dtr: dutyToReferToDtrServiceResult(submittedDutyToRefer),
-    })
+    // Then I should see the duty to refer details page
+    const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowSubmissionDetails(submittedDutyToRefer)
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
 
-    // When I click the add outcome link
-    await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, submittedDutyToRefer)
-    await profileTrackerPage.clickLink('Add outcome')
+    // And I should see a success banner confirming referral details were added
+    await dutyToReferDetailsPage.shouldShowBanner('New DTR referral details added')
+
+    // When I click the add outcome button
+    await dutyToReferDetailsPage.clickButton('Add outcome')
 
     // Then I should see the duty to refer outcome form
-    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome details')
+    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome')
     await outcomePage.shouldShowOutcomePage(caseData, submittedDutyToRefer)
 
     // When I submit the form with missing fields
@@ -122,28 +118,23 @@ test.describe('duty to refer', () => {
 
     // Then I should see errors
     await outcomePage.shouldShowErrorMessagesForFields({
-      outcomeStatus: 'Select duty to refer outcome',
+      outcomeReason: 'Select duty to refer outcome',
     })
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
-    await eligibilityApi.stubGetEligibilityByCrn(crn, {
-      ...eligibility,
-      dtr: dutyToReferToDtrServiceResult(acceptedDutyToRefer),
-    })
-
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, acceptedDutyToRefer)
     await outcomePage.completeOutcomeForm(acceptedDutyToRefer)
     await outcomePage.clickButton('Save and continue')
 
     // Then the API should have been called to update the duty to refer
     await outcomePage.checkApiCalled(crn, acceptedDutyToRefer, 'update')
 
-    // And I should see the profile tracker page with the updated duty to refer details
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await profileTrackerPage.shouldShowEligibility({
-      ...eligibility,
-      dtr: dutyToReferToDtrServiceResult(acceptedDutyToRefer),
-    })
+    // And I should see the duty to refer details page with updated outcome details
+    await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowSubmissionDetails(acceptedDutyToRefer)
+    await dutyToReferDetailsPage.shouldShowOutcomeDetails(acceptedDutyToRefer)
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
 
     // And I should see a success banner confirming outcome details were added
     await profileTrackerPage.shouldShowBanner('Outcome details added')
@@ -156,6 +147,10 @@ test.describe('duty to refer', () => {
     const notAcceptedDutyToRefer = dutyToReferFactory.build({
       ...submittedDutyToRefer,
       status: 'NOT_ACCEPTED',
+      submission: {
+        ...submittedDutyToRefer.submission,
+        outcomeReason: 'INTENTIONALLY_HOMELESS',
+      },
     })
     const submissionAddedDutyReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
     const outcomeAddedDutyToReferRecord = auditRecordFactory
@@ -179,13 +174,11 @@ test.describe('duty to refer', () => {
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
     // Then I click the link to view duty to refer details in the dtr card
-    await profileTrackerPage.clickLink('View referral and notes', profileTrackerPage.getCard('Duty to Refer (DTR)'))
+    await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
 
     // Then I should see the duty to refer details page
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
-
-    // And the outcome details section should be empty
-    await dutyToReferDetailsPage.shouldShowEmptyOutcomeDetails()
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
 
     // And I should see a timeline entry showing the duty to refer was submitted
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(submissionAddedDutyReferRecord))
@@ -194,7 +187,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.clickButton('Add outcome')
 
     // Then I should see the duty to refer outcome form
-    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome details')
+    const outcomePage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) outcome')
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
@@ -210,8 +203,9 @@ test.describe('duty to refer', () => {
 
     // And I should see the duty to refer details page with updated outcome details
     await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
-    await dutyToReferDetailsPage.shouldShowOutcomeDetails(notAcceptedDutyToRefer)
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(notAcceptedDutyToRefer)
+    await dutyToReferDetailsPage.shouldShowOutcomeDetails(notAcceptedDutyToRefer)
 
     // And I should see a success banner confirming outcome details were added
     await dutyToReferDetailsPage.shouldShowBanner('Outcome details added')
@@ -245,7 +239,7 @@ test.describe('duty to refer', () => {
   test('should allow the user to edit submission details', async ({ page }) => {
     const submittedDutyToRefer = dutyToReferFactory.submitted().build({ crn })
     const submissionId = submittedDutyToRefer.submission.id
-    const updatedDutyToRefer = dutyToReferFactory.build({
+    const updatedDutyToRefer = dutyToReferFactory.submitted().build({
       ...submittedDutyToRefer,
       submission: dtrSubmissionFactory.build({ id: submissionId }),
     })
@@ -264,10 +258,11 @@ test.describe('duty to refer', () => {
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
     // Then I click the link to view duty to refer details in the dtr card
-    await profileTrackerPage.clickLink('View referral and notes', profileTrackerPage.getCard('Duty to Refer (DTR)'))
+    await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
 
     // Then I should see the duty to refer details page
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
 
     // And the person's profile should be shown
     await dutyToReferDetailsPage.shouldShowCaseDetails(caseData)
@@ -275,20 +270,21 @@ test.describe('duty to refer', () => {
     // And the submission details should be shown
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(submittedDutyToRefer)
 
-    // Then I click the Edit submission details button
-    await dutyToReferDetailsPage.clickButton('Edit submission details')
+    // Then I click the change button on submission details
+    await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Referral details'))
 
     // Then I should see the duty to refer edit submission form
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) submission details')
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowSubmissionForm(caseData)
+    await dutyToReferPage.shouldShowPopulatedSubmissionForm(submittedDutyToRefer)
 
-    // When I submit the form with missing fields
+    // When I clear the submission date and submit
+    await dutyToReferPage.clearDateInputByLabel('When was the DTR submitted?')
     await dutyToReferPage.clickButton('Save and continue')
 
     // Then I should see errors
     await dutyToReferPage.shouldShowErrorMessagesForFields({
       submissionDate: 'Enter a submission date',
-      localAuthorityAreaId: 'Select a local authority',
     })
 
     // When I complete the form and submit
@@ -305,6 +301,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page with updated submission details
     await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming submission details were updated
@@ -317,7 +314,14 @@ test.describe('duty to refer', () => {
   test('should allow the user to edit outcome details', async ({ page }) => {
     const acceptedDutyToRefer = dutyToReferFactory.accepted().build({ crn })
     const submissionId = acceptedDutyToRefer.submission.id
-    const updatedDutyToRefer = dutyToReferFactory.build({ ...acceptedDutyToRefer, status: 'NOT_ACCEPTED' })
+    const updatedDutyToRefer = dutyToReferFactory.build({
+      ...acceptedDutyToRefer,
+      status: 'NOT_ACCEPTED',
+      submission: {
+        ...acceptedDutyToRefer.submission,
+        outcomeReason: 'INTENTIONALLY_HOMELESS',
+      },
+    })
 
     // Given I have stubbed the API responses
     const { caseData } = await setupStubs(acceptedDutyToRefer)
@@ -337,10 +341,11 @@ test.describe('duty to refer', () => {
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
     // Then I click the link to view duty to refer details in the dtr card
-    await profileTrackerPage.clickLink('View referral and notes', profileTrackerPage.getCard('Duty to Refer (DTR)'))
+    await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
 
     // Then I should see the duty to refer details page
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
 
     // And the person's profile should be shown
     await dutyToReferDetailsPage.shouldShowCaseDetails(caseData)
@@ -348,27 +353,18 @@ test.describe('duty to refer', () => {
     // And the outcome details should be shown
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(acceptedDutyToRefer)
 
-    // Then I click the Edit outcome details button
-    await dutyToReferDetailsPage.clickButton('Edit outcome details')
+    // Then I click the Change link on outcome details
+    await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Outcome details'))
 
     // Then I should see the duty to refer edit outcome form
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) outcome details')
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) outcome')
     await dutyToReferPage.shouldShowOutcomePage(caseData, acceptedDutyToRefer)
-
-    // When I submit the form with missing fields
-    await dutyToReferPage.clickButton('Save and continue')
-
-    // Then I should see errors
-    await dutyToReferPage.shouldShowErrorMessagesForFields({
-      outcomeStatus: 'Select duty to refer outcome',
-    })
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
     timelineRecords.unshift(updatedDutyToReferRecord)
     await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
-
     await dutyToReferPage.completeOutcomeForm(updatedDutyToRefer)
     await dutyToReferPage.clickButton('Save and continue')
 
@@ -377,6 +373,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page with updated outcome details
     await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming outcome details were updated

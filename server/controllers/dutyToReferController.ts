@@ -7,6 +7,9 @@ import {
   detailsSummaryListRows,
   outcomeDetailsSummaryListRows,
   dutyToReferTimelineEntry,
+  outcomeItems,
+  outcomeReasonToStatus,
+  submissionFormValues,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -69,49 +72,37 @@ export default class DutyToReferController {
     }
   }
 
-  guidance(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      const { crn } = req.params
-
-      setFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, FLOW_ENTRY_POINTS)
-
-      await this.auditService.logPageView(Page.DUTY_TO_REFER_GUIDANCE, {
-        who: res.locals.user.username,
-        correlationId: req.id,
-      })
-
-      return res.render('pages/duty-to-refer/guidance', {
-        crn,
-      })
-    }
-  }
-
   submission(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { token } = res.locals.user
       const { crn, id } = req.params
 
       const backLinkHref = id
-        ? setFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, FLOW_ENTRY_POINTS)
-        : uiPaths.dutyToRefer.guidance({ crn })
+        ? setFlowRedirect(uiPaths.cases.show.pattern, req, FLOW_ENTRY_POINTS)
+        : uiPaths.cases.show({ crn })
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
 
-      const { tableRows, localAuthorities } = await this.getSubmissionPageData(token, crn)
+      const { tableRows, localAuthorities, dtr } = await this.getSubmissionPageData(token, crn, id)
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
+      let formValues = userInput
+      if (Object.keys(userInput).length === 0) {
+        formValues = dtr ? submissionFormValues(dtr) : {}
+      }
+
       return res.render('pages/duty-to-refer/submission', {
-        pageTitle: `${id ? 'Edit' : 'Add'} Duty to Refer (DTR) submission details`,
+        pageTitle: `${id ? 'Edit' : 'Add new'} Duty to Refer (DTR) referral details`,
         backLinkHref,
         crn,
         tableRows,
         localAuthorities,
         errors,
         errorSummary,
-        formValues: userInput,
+        formValues,
       })
     }
   }
@@ -122,7 +113,6 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = id ? uiPaths.dutyToRefer.edit({ crn, id }) : uiPaths.dutyToRefer.submission({ crn })
-      const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.guidance.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateSubmission(req)) {
         return res.redirect(errorRedirect)
@@ -141,11 +131,11 @@ export default class DutyToReferController {
         if (id) {
           await this.dutyToReferService.update(token, crn, id, submission)
           req.flash('success', 'Submission details updated')
-        } else {
-          await this.dutyToReferService.submit(token, crn, submission)
-          req.flash('success', 'Submission details added')
+          return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         }
-        return res.redirect(successRedirect)
+        const dtr = await this.dutyToReferService.submit(token, crn, submission)
+        req.flash('success', 'New DTR referral details added')
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id: dtr.submission?.id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
         return res.redirect(errorRedirect)
@@ -175,11 +165,12 @@ export default class DutyToReferController {
       const backLinkHref = setFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, FLOW_ENTRY_POINTS)
 
       return res.render('pages/duty-to-refer/outcome', {
-        pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome details`,
+        pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome`,
         backLinkHref,
         crn,
         dtr,
         tableRows,
+        outcomeItems: outcomeItems(dtr.submission?.outcomeReason),
         errors,
         errorSummary,
       })
@@ -190,7 +181,7 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { outcomeStatus, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
+      const { outcomeReason, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
       const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
 
@@ -199,11 +190,13 @@ export default class DutyToReferController {
       }
 
       try {
+        const outcomeStatus = outcomeReasonToStatus(outcomeReason)
         await this.dutyToReferService.update(token, crn, id, {
           status: outcomeStatus,
           submissionDate,
           localAuthorityAreaId,
           referenceNumber,
+          outcomeReason,
         })
 
         req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
@@ -242,14 +235,16 @@ export default class DutyToReferController {
     }
   }
 
-  private async getSubmissionPageData(token: string, crn: string) {
+  private async getSubmissionPageData(token: string, crn: string, id?: string) {
     const [{ data: caseData }, { data: localAuthorities }] = await Promise.all([
       this.casesService.getCase(token, crn),
       this.referenceDataService.getLocalAuthorities(token),
     ])
 
+    const dtr = id ? (await this.dutyToReferService.getDtrBySubmissionId(token, crn, id))?.data : undefined
+
     const tableRows = summaryListRows(caseData)
 
-    return { tableRows, localAuthorities }
+    return { tableRows, localAuthorities, dtr }
   }
 }

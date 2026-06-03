@@ -115,8 +115,8 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
   "inactive": false,
   "links": [
     {
-      "href": "/cases/CRN123/dtr/guidance",
-      "text": "Add submission details",
+      "href": "/cases/CRN123/dtr/submission",
+      "text": "Add referral details",
     },
   ],
   "status": {
@@ -153,17 +153,21 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
         "text": "1 December 2025 (9 days ago)",
       },
     },
+    {
+      "key": {
+        "text": "Submitted by",
+      },
+      "value": {
+        "text": "user1",
+      },
+    },
   ],
   "heading": "Duty to Refer (DTR)",
   "inactive": false,
   "links": [
     {
-      "href": "/cases/CRN123/dtr/submission-id/outcome",
-      "text": "Add outcome",
-    },
-    {
       "href": "/cases/CRN123/dtr/submission-id/details",
-      "text": "View referral and notes",
+      "text": "View referral",
     },
   ],
   "status": {
@@ -294,6 +298,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
         <p class="govuk-!-margin-bottom-1">Cherwell District Council agreed to support this person with housing</p>
       
     
+  
+    
   ",
   "label": {
     "text": "Outcome details added",
@@ -320,6 +326,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
         <p class="govuk-!-margin-bottom-1">Oxford City Council will not support this person with housing</p>
       
     
+  
+    
   ",
   "label": {
     "text": "Outcome details updated",
@@ -337,6 +345,14 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "html": "<strong class="govuk-tag govuk-tag--yellow">Accepted</strong> <p class="govuk-!-margin-top-4">Some Council agreed to support this person with housing</p>",
     },
   },
+  {
+    "key": {
+      "text": "Reason",
+    },
+    "value": {
+      "text": "Intentionally homeless",
+    },
+  },
 ]
 `;
 
@@ -348,6 +364,14 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
     },
     "value": {
       "html": "<strong class="govuk-tag govuk-tag--grey">Not accepted</strong> <p class="govuk-!-margin-top-4">Some Council will not support this person with housing</p>",
+    },
+  },
+  {
+    "key": {
+      "text": "Reason",
+    },
+    "value": {
+      "text": "Intentionally homeless",
     },
   },
 ]

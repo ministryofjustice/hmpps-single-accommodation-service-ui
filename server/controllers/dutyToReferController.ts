@@ -251,7 +251,6 @@ export default class DutyToReferController {
       const { submissionDate, localAuthorityAreaId, referenceNumber, withdrawalReason, withdrawalReasonOther } =
         req.body
       const errorRedirect = uiPaths.dutyToRefer.withdraw({ crn, id })
-      const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.withdraw.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateWithdraw(req)) {
         return res.redirect(errorRedirect)
@@ -268,7 +267,7 @@ export default class DutyToReferController {
         })
 
         req.flash('success', 'DTR referral withdrawn')
-        return res.redirect(successRedirect)
+        return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem withdrawing the DTR referral. Please try again.')
         return res.redirect(errorRedirect)

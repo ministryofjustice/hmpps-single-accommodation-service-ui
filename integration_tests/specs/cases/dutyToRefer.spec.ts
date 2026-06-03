@@ -77,7 +77,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer submission form
     const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
-    await dutyToReferPage.shouldShowSubmissionForm(caseData)
+    await dutyToReferPage.shouldShowCaseSummary(caseData)
 
     // When I submit the form with missing fields
     await dutyToReferPage.clickButton('Save and continue')
@@ -275,7 +275,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer edit submission form
     const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) referral details')
-    await dutyToReferPage.shouldShowSubmissionForm(caseData)
+    await dutyToReferPage.shouldShowCaseSummary(caseData)
     await dutyToReferPage.shouldShowPopulatedSubmissionForm(submittedDutyToRefer)
 
     // When I clear the submission date and submit

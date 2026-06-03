@@ -13,6 +13,7 @@ import {
   outcomeDetailsSummaryListRows,
   outcomeItems,
   summaryListRows,
+  withdrawalReasonItems,
 } from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
 import {
@@ -423,6 +424,131 @@ describe('dutyToReferController', () => {
       expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         note: 'Some valid note',
       })
+    })
+  })
+
+  describe('withdraw', () => {
+    beforeEach(() => {
+      request.params.id = 'submission-id'
+    })
+
+    it('renders the withdraw page', async () => {
+      jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123/dtr/submission-id/details')
+      const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
+
+      await controller.withdraw()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.DUTY_TO_REFER_WITHDRAW, {
+        who: 'user1',
+        correlationId: 'request-id',
+      })
+      expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
+      expect(dutyToReferService.getDtrBySubmissionId).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id')
+      expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/withdraw', {
+        pageTitle: 'Withdraw referral',
+        backLinkHref: '/cases/CRN123/dtr/submission-id/details',
+        crn: 'CRN123',
+        dtr,
+        tableRows: summaryListRows(caseData, dtr),
+        withdrawalReasonItems: withdrawalReasonItems(undefined),
+        errors: {},
+        errorSummary: [],
+      })
+    })
+
+    it('renders the withdraw page with errors and user input', async () => {
+      jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123/dtr/submission-id/details')
+      const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
+
+      const userInput = { withdrawalReason: 'OTHER', withdrawalReasonOther: '' }
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({
+        errors: { withdrawalReasonOther: { text: 'Enter a reason for withdrawal' } },
+        errorSummary: [{ text: 'Enter a reason for withdrawal', href: '#withdrawalReasonOther' }],
+        userInput,
+      })
+
+      await controller.withdraw()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/duty-to-refer/withdraw',
+        expect.objectContaining({
+          withdrawalReasonItems: withdrawalReasonItems('OTHER'),
+          withdrawalReason: 'OTHER',
+          withdrawalReasonOther: '',
+          errors: { withdrawalReasonOther: { text: 'Enter a reason for withdrawal' } },
+        }),
+      )
+    })
+  })
+
+  describe('saveWithdrawal', () => {
+    beforeEach(() => {
+      dutyToReferService.update.mockResolvedValue()
+      request = mock<Request>({
+        params: { crn: 'CRN123', id: 'submission-id' },
+        body: {
+          submissionDate: '2025-06-15',
+          localAuthorityAreaId: 'la-id',
+          referenceNumber: 'REF123',
+          withdrawalReason: 'NO_CONSENT',
+          withdrawalReasonOther: '',
+        },
+        flash: jest.fn(),
+      })
+    })
+
+    it('saves the withdrawal and redirects to the case page', async () => {
+      await controller.saveWithdrawal()(request, response, next)
+
+      expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
+        status: 'WITHDRAWN',
+        submissionDate: '2025-06-15',
+        localAuthorityAreaId: 'la-id',
+        referenceNumber: 'REF123',
+        withdrawalReason: 'NO_CONSENT',
+        withdrawalReasonOther: '',
+      })
+      expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral withdrawn')
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
+
+    it('saves with OTHER reason and withdrawal reason text', async () => {
+      request.body.withdrawalReason = 'OTHER'
+      request.body.withdrawalReasonOther = 'Some reason'
+
+      await controller.saveWithdrawal()(request, response, next)
+
+      expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id',
+        expect.objectContaining({
+          status: 'WITHDRAWN',
+          withdrawalReason: 'OTHER',
+          withdrawalReasonOther: 'Some reason',
+        }),
+      )
+      expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral withdrawn')
+    })
+
+    it('redirects back when validation fails', async () => {
+      jest.spyOn(dutyToReferUtils, 'validateWithdraw').mockReturnValue(false)
+
+      await controller.saveWithdrawal()(request, response, next)
+
+      expect(dutyToReferService.update).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.withdraw({ crn: 'CRN123', id: 'submission-id' }),
+      )
+    })
+
+    it('redirects back when the API call fails', async () => {
+      dutyToReferService.update.mockRejectedValueOnce(new Error('API error'))
+
+      await controller.saveWithdrawal()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.withdraw({ crn: 'CRN123', id: 'submission-id' }),
+      )
     })
   })
 })

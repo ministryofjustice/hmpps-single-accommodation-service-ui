@@ -160,8 +160,8 @@ describe('date utilities', () => {
 
     it.each([undefined, ''])('returns blank date field values when date is %s', date => {
       expect(isoDateToDateInput(date, 'field')).toEqual({
-        'field-day': undefined,
-        'field-month': undefined,
+        'field-day': '',
+        'field-month': '',
         'field-year': '',
       })
     })

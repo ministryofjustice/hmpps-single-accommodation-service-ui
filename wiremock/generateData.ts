@@ -11,7 +11,6 @@ import {
   proposedAccommodationFactory,
   referralFactory,
 } from '../server/testutils/factories'
-import { outcomeReasonToStatus } from '../server/utils/dutyToRefer'
 
 import casesFixture from './fixtures/cases.json'
 
@@ -93,7 +92,7 @@ if (generate.dutyToRefer) {
           return 'WITHDRAWN'
         }
 
-        return outcomeReasonToStatus(dtr.submission?.outcomeReason)
+        return 'SUBMITTED'
     }
   }
 

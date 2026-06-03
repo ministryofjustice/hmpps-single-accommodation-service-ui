@@ -51,6 +51,14 @@
               })
             }}
           {% endif %}
+          {{
+            govukButton({
+              text: "Withdraw referral",
+              href: paths.dutyToRefer.withdraw({ crn: crn, id: dtrId }),
+              preventDoubleClick: true,
+              classes: "govuk-button--secondary"
+            })
+          }}
         </div>
         {% if outcomeDetailRows.length > 0 %}
           {{

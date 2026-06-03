@@ -84,7 +84,7 @@ export default class DutyToReferPage extends AbstractPage {
 
     if (dutyToRefer.status === 'WITHDRAWN') {
       expectedBody.withdrawalReason = dutyToRefer.submission.withdrawalReason
-      expectedBody.withdrawalReasonOther = dutyToRefer.submission.withdrawalReasonOther
+      expectedBody.withdrawalReasonOther = dutyToRefer.submission.withdrawalReasonOther ?? ''
     }
 
     expect(requestBody).toEqual(expectedBody)

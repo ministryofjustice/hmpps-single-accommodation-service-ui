@@ -1,10 +1,25 @@
 {% extends "pages/duty-to-refer/layout.njk" %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set formColumnClass = "govuk-grid-column-one-half-from-desktop" %}
 {% set submitButtonText = "Withdraw referral" %}
+
+{% set conditionalHtml %}
+    {{ govukInput(
+        {
+            label: {
+                text: 'What is the other reason?'
+            },
+            name: 'withdrawalReasonOther',
+            id: 'withdrawalReasonOther',
+            value: proposedAddress.withdrawalReasonOther,
+            errorMessage: errors.withdrawalReasonOther
+        }
+    ) }}
+{% endset %}
 
 {% block formContent %}
   <input type="hidden" name="submissionDate" value="{{ dtr.submission.submissionDate }}" />
@@ -24,7 +39,7 @@
         hint: {
             html: "This records that the referral has been withdrawn and move it to the person’s referral history. <br><br> This does not withdraw the referral in the local authority’s system, so you may still need to do that separately."
         },
-        items: withdrawalReasonItems,
+        items: injectConditionals(withdrawalReasonItems, { OTHER: conditionalHtml }),
         errorMessage: errors.withdrawalReason
     })
   }}

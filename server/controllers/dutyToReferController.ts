@@ -227,7 +227,7 @@ export default class DutyToReferController {
 
       const tableRows = summaryListRows(caseData, dtr)
 
-      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       const backLinkHref = setFlowRedirect(uiPaths.dutyToRefer.withdraw.pattern, req, FLOW_ENTRY_POINTS)
 
@@ -237,9 +237,10 @@ export default class DutyToReferController {
         crn,
         dtr,
         tableRows,
-        withdrawalReasonItems: withdrawalReasonItems(),
+        withdrawalReasonItems: withdrawalReasonItems(userInput?.withdrawalReason),
         errors,
         errorSummary,
+        ...userInput,
       })
     }
   }

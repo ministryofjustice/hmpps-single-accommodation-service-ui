@@ -299,18 +299,20 @@ export const outcomeReasonSummaryLabel: Record<DtrSubmissionDto['outcomeReason']
   REJECTED_FOR_ANOTHER_REASON: 'Other reason',
 }
 
-export const withdrawalReasonItems = () => [
-  { value: 'NEW_REFERRAL', text: 'Replaced by a new referral' },
+export const withdrawalReasonItems = (value?: DtrSubmissionDto['withdrawalReason']) => [
+  { value: 'NEW_REFERRAL', text: 'Replaced by a new referral', checked: value === 'NEW_REFERRAL' },
   {
     value: 'INCORRECT_LOCAL_AUTHORITY',
     text: 'Incorrect local authority',
+    checked: value === 'INCORRECT_LOCAL_AUTHORITY',
   },
-  { value: 'NO_CONSENT', text: 'Person no longer consents' },
-  { value: 'DISENGAGED', text: 'Person cannot be contacted or has disengaged' },
+  { value: 'NO_CONSENT', text: 'Person no longer consents', checked: value === 'NO_CONSENT' },
+  { value: 'DISENGAGED', text: 'Person cannot be contacted or has disengaged', checked: value === 'DISENGAGED' },
   {
     value: 'HOUSING_NEED_RESOLVED',
     text: 'Housing need resolved or person already accommodated',
+    checked: value === 'HOUSING_NEED_RESOLVED',
   },
-  { value: 'NOT_ELIGIBLE', text: 'Not eligible for Duty to Refer (not homeless or at risk)' },
-  { value: 'OTHER', text: 'Other' },
+  { value: 'NOT_ELIGIBLE', text: 'Not eligible for Duty to Refer (not homeless or at risk)', checked: value === 'NOT_ELIGIBLE' },
+  { value: 'OTHER', text: 'Other', checked: value === 'OTHER' },
 ]

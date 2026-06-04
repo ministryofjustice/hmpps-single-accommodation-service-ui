@@ -167,11 +167,9 @@ export default class DutyToReferController {
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
-      const backLinkHref = setFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, FLOW_ENTRY_POINTS)
-
       return res.render('pages/duty-to-refer/outcome', {
         pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome`,
-        backLinkHref,
+        backLinkHref: uiPaths.dutyToRefer.show({ crn, id }),
         crn,
         dtr,
         tableRows,
@@ -234,11 +232,9 @@ export default class DutyToReferController {
 
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
-      const backLinkHref = setFlowRedirect(uiPaths.dutyToRefer.withdraw.pattern, req, FLOW_ENTRY_POINTS)
-
       return res.render('pages/duty-to-refer/withdraw', {
         pageTitle: 'Withdraw referral',
-        backLinkHref,
+        backLinkHref: uiPaths.dutyToRefer.show({ crn, id }),
         crn,
         dtr,
         tableRows,

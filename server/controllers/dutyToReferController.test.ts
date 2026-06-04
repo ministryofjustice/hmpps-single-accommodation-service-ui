@@ -213,7 +213,6 @@ describe('dutyToReferController', () => {
     })
 
     it('renders the outcome page', async () => {
-      jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123')
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
 
@@ -231,7 +230,7 @@ describe('dutyToReferController', () => {
       )
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/outcome', {
         pageTitle: 'Add Duty to Refer (DTR) outcome',
-        backLinkHref: '/cases/CRN123',
+        backLinkHref: '/cases/CRN123/dtr/existing-submission-id/details',
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
@@ -242,7 +241,6 @@ describe('dutyToReferController', () => {
     })
 
     it('renders the outcome page when editing an outcome', async () => {
-      jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123/dtr/existing-submission-id/details')
       const dtr = dutyToReferFactory.accepted().build({ crn: 'CRN123' })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
 

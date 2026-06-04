@@ -27,8 +27,6 @@ import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
 
-const FLOW_ENTRY_POINTS = [uiPaths.dutyToRefer.show.pattern, uiPaths.cases.show.pattern]
-
 export default class DutyToReferController {
   constructor(
     private readonly auditService: AuditService,
@@ -79,9 +77,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { crn, id } = req.params
 
-      const backLinkHref = id
-        ? uiPaths.dutyToRefer.show({ crn, id })
-        : uiPaths.cases.show({ crn })
+      const backLinkHref = id ? uiPaths.dutyToRefer.show({ crn, id }) : uiPaths.cases.show({ crn })
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
         who: res.locals.user.username,

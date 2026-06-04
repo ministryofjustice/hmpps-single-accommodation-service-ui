@@ -24,7 +24,6 @@ import {
   referenceDataFactory,
 } from '../testutils/factories'
 import { caseAssignedTo } from '../utils/cases'
-import * as backlinksUtils from '../utils/backlinks'
 
 describe('dutyToReferController', () => {
   let request: Request

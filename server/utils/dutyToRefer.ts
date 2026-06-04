@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
-import { StatusCard } from '@sas/ui'
+import { RadioItem, StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
@@ -299,7 +299,7 @@ export const outcomeReasonSummaryLabel: Record<DtrSubmissionDto['outcomeReason']
   REJECTED_FOR_ANOTHER_REASON: 'Other reason',
 }
 
-export const withdrawalReasonItems = (value?: DtrSubmissionDto['withdrawalReason']) => [
+export const withdrawalReasonItems = (value?: DtrSubmissionDto['withdrawalReason']): RadioItem[] => [
   { value: 'NEW_REFERRAL', text: 'Replaced by a new referral', checked: value === 'NEW_REFERRAL' },
   {
     value: 'INCORRECT_LOCAL_AUTHORITY',

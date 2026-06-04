@@ -1,9 +1,6 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
-import { AssignedToDto } from './AssignedToDto'
-
 /* eslint-disable */
 import type { StaffDetailsDto } from './StaffDetailsDto'
 export type AccommodationReferralDto = {

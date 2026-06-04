@@ -1,7 +1,7 @@
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { AccommodationReferralDto as Referral } from '@sas/api'
-import { assignedUserFactory } from '.'
+import assignedUserFactory from './assignedUser'
 
 const cas1Statuses = [
   'CANCELLED',

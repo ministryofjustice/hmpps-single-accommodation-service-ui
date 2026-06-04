@@ -6,21 +6,22 @@ describe('referrals utilities', () => {
     id: '123456',
     type: 'CAS1',
     status: 'ACCEPTED',
-    createdAt: '2023-01-15',
-    referredBy: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' }
+    date: '2023-01-15',
+    referredBy: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' },
   })
   const referral2 = referralFactory.build({
     id: '789012',
     type: 'DTR',
     status: 'WITHDRAWN',
     date: '2023-02-20',
-    referredBy: { username: 'joe_bloggs', forename: 'Joe', surname: 'Bloggs' }
+    referredBy: { username: 'joe_bloggs', forename: 'Joe', surname: 'Bloggs' },
   })
   const referral3 = referralFactory.build({
     id: '345678',
     type: 'CAS3',
     status: 'REJECTED',
     date: '2023-03-25',
+    referredBy: { username: 'matt_jones', forename: 'Matt', surname: 'Jones' }
   })
   const referrals = [referral1, referral2, referral3]
 

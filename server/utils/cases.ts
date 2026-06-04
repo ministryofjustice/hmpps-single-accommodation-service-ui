@@ -1,4 +1,4 @@
-import { CaseDto as Case } from '@sas/api'
+import { CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, SelectOption, StatusCell } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
@@ -26,7 +26,7 @@ export const casesResultsSummary = (cases: Case[]): string => {
 export const queryToFilters = (
   query: GetCasesQuery,
   currentUrl: string,
-  teams: { name: string; code: string }[] = [],
+  teams: Team[] = [],
 ): { text: string; href: string }[] => {
   const filters: { text: string; href: string }[] = []
 
@@ -115,7 +115,7 @@ export const displayName = (caseData: Case, laoFlag = '(limited access offender)
   }
 }
 
-export const assignedToOptions = (fullName: string, teams: { name: string; code: string }[]): SelectOption[] => [
+export const assignedToOptions = (fullName: string, teams: Team[]): SelectOption[] => [
   { text: `You (${initialiseName(fullName)})`, value: '' },
   ...teams.map(t => ({ text: t.name, value: t.code })),
 ]

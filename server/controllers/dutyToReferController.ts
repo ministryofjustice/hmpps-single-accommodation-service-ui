@@ -26,6 +26,7 @@ import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
 import { getFlowRedirect, setFlowRedirect } from '../utils/backlinks'
+import { collectApiResponses } from '../utils/apiResponses'
 
 const FLOW_ENTRY_POINTS = [uiPaths.dutyToRefer.show.pattern, uiPaths.cases.show.pattern]
 
@@ -155,10 +156,12 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [{ data: caseData }, { data: dtr }] = await Promise.all([
-        this.casesService.getCase(token, crn),
-        this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
-      ])
+      const {
+        data: { caseData, dtr },
+      } = await collectApiResponses({
+        caseData: this.casesService.getCase(token, crn),
+        dtr: this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
+      })
 
       const tableRows = summaryListRows(caseData, dtr)
 
@@ -220,10 +223,12 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [{ data: caseData }, { data: dtr }] = await Promise.all([
-        this.casesService.getCase(token, crn),
-        this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
-      ])
+      const {
+        data: { caseData, dtr },
+      } = await collectApiResponses({
+        caseData: this.casesService.getCase(token, crn),
+        dtr: this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
+      })
 
       const tableRows = summaryListRows(caseData, dtr)
 

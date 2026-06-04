@@ -17,7 +17,7 @@ const notAcceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = [
 ]
 const acceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['PREVENTION_AND_RELIEF_DUTY', 'PRIORITY_NEED']
 
-const withdrawalReasons = [
+const withdrawalReasons: DtrSubmissionDto['withdrawalReason'][] = [
   'NEW_REFERRAL',
   'INCORRECT_LOCAL_AUTHORITY',
   'NO_CONSENT',
@@ -25,7 +25,7 @@ const withdrawalReasons = [
   'HOUSING_NEED_RESOLVED',
   'NOT_ELIGIBLE',
   'OTHER',
-] as DtrSubmissionDto['withdrawalReason'][]
+]
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {
   submitted() {

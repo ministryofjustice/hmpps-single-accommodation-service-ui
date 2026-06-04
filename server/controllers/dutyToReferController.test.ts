@@ -112,8 +112,6 @@ describe('dutyToReferController', () => {
     })
 
     it('renders the submission page to edit a submission', async () => {
-      jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/X456123/dtr/submission-id/details')
-
       request.params.id = 'submission-id'
 
       await controller.submission()(request, response, next)
@@ -122,7 +120,7 @@ describe('dutyToReferController', () => {
         'pages/duty-to-refer/submission',
         expect.objectContaining({
           pageTitle: 'Edit Duty to Refer (DTR) referral details',
-          backLinkHref: '/cases/X456123/dtr/submission-id/details',
+          backLinkHref: '/cases/CRN123/dtr/submission-id/details',
         }),
       )
     })
@@ -159,10 +157,9 @@ describe('dutyToReferController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dtr.submission.id }))
     })
 
-    it('updates and redirects to the flow redirect page when editing', async () => {
+    it('updates and redirects to the details page when editing', async () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
-      jest.spyOn(backlinksUtils, 'getFlowRedirect').mockReturnValue(expectedRedirect)
 
       request.params.id = dutyToRefer.submission.id
 
@@ -272,9 +269,7 @@ describe('dutyToReferController', () => {
       })
     })
 
-    it('saves the outcome and redirects to the flow redirect page', async () => {
-      jest.spyOn(backlinksUtils, 'getFlowRedirect').mockReturnValue('/some-redirect')
-
+    it('saves the outcome and redirects to the details page', async () => {
       await controller.saveOutcome()(request, response, next)
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
@@ -285,12 +280,10 @@ describe('dutyToReferController', () => {
         referenceNumber: 'REF123',
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details added')
-      expect(response.redirect).toHaveBeenCalledWith('/some-redirect')
+      expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
     })
 
-    it('updates an existing outcome and redirects to the flow redirect page', async () => {
-      jest.spyOn(backlinksUtils, 'getFlowRedirect').mockReturnValue('/some-other-redirect')
-
+    it('updates an existing outcome and redirects to the details page', async () => {
       request.body.currentStatus = 'NOT_ACCEPTED'
 
       await controller.saveOutcome()(request, response, next)
@@ -303,7 +296,7 @@ describe('dutyToReferController', () => {
         referenceNumber: 'REF123',
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details updated')
-      expect(response.redirect).toHaveBeenCalledWith('/some-other-redirect')
+      expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
     })
 
     it('redirects back when validation fails', async () => {
@@ -431,7 +424,6 @@ describe('dutyToReferController', () => {
     })
 
     it('renders the withdraw page', async () => {
-      jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123/dtr/submission-id/details')
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
 
@@ -456,7 +448,6 @@ describe('dutyToReferController', () => {
     })
 
     it('renders the withdraw page with errors and user input', async () => {
-      jest.spyOn(backlinksUtils, 'setFlowRedirect').mockReturnValue('/cases/CRN123/dtr/submission-id/details')
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
 

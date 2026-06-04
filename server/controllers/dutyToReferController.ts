@@ -25,7 +25,6 @@ import {
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
-import { getFlowRedirect, setFlowRedirect } from '../utils/backlinks'
 import { collectApiResponses } from '../utils/apiResponses'
 
 const FLOW_ENTRY_POINTS = [uiPaths.dutyToRefer.show.pattern, uiPaths.cases.show.pattern]
@@ -81,7 +80,7 @@ export default class DutyToReferController {
       const { crn, id } = req.params
 
       const backLinkHref = id
-        ? setFlowRedirect(uiPaths.cases.show.pattern, req, FLOW_ENTRY_POINTS)
+        ? uiPaths.dutyToRefer.show({ crn, id })
         : uiPaths.cases.show({ crn })
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
@@ -186,7 +185,6 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { outcomeReason, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
-      const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateOutcome(req)) {
         return res.redirect(errorRedirect)
@@ -203,7 +201,7 @@ export default class DutyToReferController {
         })
 
         req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
-        return res.redirect(successRedirect)
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
         return res.redirect(errorRedirect)

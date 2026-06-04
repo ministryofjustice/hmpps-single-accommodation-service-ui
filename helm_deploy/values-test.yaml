@@ -1,0 +1,27 @@
+---
+# Per environment values which override defaults in hmpps-single-accommodation-service-ui/values.yaml
+
+generic-service:
+  replicaCount: 2
+
+  ingress:
+    host: single-accommodation-service-test.hmpps.service.justice.gov.uk
+    tlsSecretName: hmpps-single-accommodation-service-test-cert
+
+  env:
+    INGRESS_URL: "https://single-accommodation-service-test.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    SAS_API_URL: 'https://single-accommodation-service-api-test.hmpps.service.justice.gov.uk'
+    ENVIRONMENT_NAME: TEST
+    AUDIT_ENABLED: "false"
+    COMPONENT_API_URL: "https://probation-frontend-components-dev.hmpps.service.justice.gov.uk"
+    OS_DATAHUB_API_URL: "https://api.os.uk"
+    SAS_ALLOWED_ROLES: "ROLE_PROBATION"
+    V10_CASES_LIST: "false"
+    LOG_LEVEL: 'debug'
+    MAINTENANCE_MODE: "false"
+    HIDE_MANUAL_ADDRESS_ENTRY: "true"
+
+generic-prometheus-alerts:
+  alertSeverity: hmpps-approved-premises-nonprod

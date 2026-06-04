@@ -182,7 +182,7 @@ export default class AbstractPage {
     }
 
     if (statusCell.details) {
-      for (const detail of statusCell.details) {
+      for await (const detail of statusCell.details) {
         if (detail.text) {
           await expect((container || this.page).locator('p', { hasText: detail.text })).toBeVisible()
         } else if (detail.html) {

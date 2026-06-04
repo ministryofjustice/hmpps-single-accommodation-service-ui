@@ -20,7 +20,7 @@ describe('CasesService', () => {
 
     casesClient.getCases.mockResolvedValue(response)
 
-    const query: GetCasesQuery = { searchTerm: 'foo', assignedTo: 'user-id-1' }
+    const query: GetCasesQuery = { searchTerm: 'foo', riskLevel: 'MEDIUM', teamCode: 'team-code-id' }
 
     const result = await casesService.getCases(token, query)
 

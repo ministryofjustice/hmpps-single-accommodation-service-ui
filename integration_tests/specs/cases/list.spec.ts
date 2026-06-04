@@ -1,6 +1,7 @@
 import { test } from '@playwright/test'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
+import userApi from '../../mockApis/user'
 import CasesListPage from '../../pages/cases/listPage'
 import { caseFactory } from '../../../server/testutils/factories'
 import { formatRiskLevel } from '../../../server/utils/cases'
@@ -11,6 +12,13 @@ test.describe('List of cases', () => {
     // GIVEN there are cases to show
     const cases = [...Array(25)].map(() => caseFactory.confirmed().build())
     await casesApi.stubGetCases(cases)
+
+    // AND the user belongs to teams
+    const teams = [
+      { code: 'team-one-code', name: 'Team One' },
+      { code: 'team-two-code', name: 'Team Two' },
+    ]
+    await userApi.stubGetTeams(teams)
 
     const filteredCase = cases[0]
     const { prisonNumber, riskLevel } = filteredCase
@@ -25,7 +33,7 @@ test.describe('List of cases', () => {
     // AND the filters should be set to default values
     await casesListPage.verifyFilters({
       searchTerm: '',
-      assignedTo: 'you',
+      teamCode: '',
       riskLevel: '',
     })
 
@@ -37,6 +45,7 @@ test.describe('List of cases', () => {
     await casesListPage.applyFilters({
       searchTerm: prisonNumber,
       riskLevel: formatRiskLevel(riskLevel),
+      teamName: 'Team One',
     })
 
     // THEN the relevant cases are shown
@@ -46,7 +55,7 @@ test.describe('List of cases', () => {
     // AND the filters are populated with the selected values
     await casesListPage.verifyFilters({
       searchTerm: prisonNumber,
-      assignedTo: 'you',
+      teamCode: 'team-one-code',
       riskLevel,
     })
 
@@ -54,6 +63,7 @@ test.describe('List of cases', () => {
     await casesListPage.shouldShowFilterTags({
       Search: `'${prisonNumber}'`,
       RoSH: formatRiskLevel(riskLevel),
+      'Assigned to': 'Team One',
     })
   })
 

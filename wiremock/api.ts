@@ -5,6 +5,7 @@ import dutyToReferApi from '../integration_tests/mockApis/dutyToRefer'
 import referenceDataApi from '../integration_tests/mockApis/referenceData'
 import proposedAddressesApi from '../integration_tests/mockApis/proposedAddresses'
 import accommodationApi from '../integration_tests/mockApis/accommodation'
+import userApi from '../integration_tests/mockApis/user'
 import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
 import referrals from './fixtures/referrals.json'
@@ -129,6 +130,15 @@ async function stubReferenceData() {
   await referenceDataApi.stubGetAccommodationTypes()
 }
 
+async function stubUserProfile() {
+  await userApi.stubGetTeams([
+    {
+      code: 'T34M',
+      name: 'Team name',
+    },
+  ])
+}
+
 ;(async function () {
   console.log('Resetting wiremock stubs...')
   await resetStubs()
@@ -142,6 +152,7 @@ async function stubReferenceData() {
     stubDutyToRefer(),
     stubProposedAddresses(),
     stubAccommodation(),
+    stubUserProfile(),
   ])
   console.log('Done!')
 })()

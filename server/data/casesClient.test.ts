@@ -35,8 +35,7 @@ describeClient('CasesClient', provider => {
     expect(response).toEqual(body)
   })
 
-  // TODO: Reinstate when new case list endpoint accepts parameters
-  it.skip('should make a GET request to /case-list using user token and query parameters and return the response body', async () => {
+  it('should make a GET request to /case-list using user token and query parameters and return the response body', async () => {
     const body = apiResponseFactory.caseList()
 
     await provider.addInteraction({
@@ -48,6 +47,7 @@ describeClient('CasesClient', provider => {
         query: {
           searchTerm: 'bob',
           riskLevel: 'LOW',
+          teamCode: 'N0345T',
         },
         headers: {
           authorization: 'Bearer test-user-token',
@@ -59,7 +59,11 @@ describeClient('CasesClient', provider => {
       },
     })
 
-    const response = await casesClient.getCases('test-user-token', { searchTerm: 'bob', riskLevel: 'LOW' })
+    const response = await casesClient.getCases('test-user-token', {
+      searchTerm: 'bob',
+      riskLevel: 'LOW',
+      teamCode: 'N0345T',
+    })
     expect(response).toEqual(body)
   })
 

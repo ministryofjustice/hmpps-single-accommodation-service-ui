@@ -22,6 +22,7 @@ import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
 import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
+import UserService from '../services/userService'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -39,6 +40,7 @@ describe('casesController', () => {
   const dutyToReferService = mock<DutyToReferService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
   const accommodationService = mock<AccommodationService>()
+  const userService = mock<UserService>()
 
   const casesController = new CasesController(
     auditService,
@@ -48,6 +50,7 @@ describe('casesController', () => {
     dutyToReferService,
     proposedAddressesService,
     accommodationService,
+    userService,
   )
 
   beforeEach(() => {
@@ -56,8 +59,12 @@ describe('casesController', () => {
   })
 
   describe('index', () => {
+    const teams = [{ code: 'team-code', name: 'Team Name' }]
     const baseContext = {
-      assignedToOptions: [{ value: 'you', text: 'You (J. Doe)' }],
+      assignedToOptions: [
+        { value: '', text: 'You (J. Doe)' },
+        { value: 'team-code', text: 'Team Name' },
+      ],
       riskLevelOptions: [
         { value: '', text: 'All' },
         { value: 'VERY_HIGH', text: 'Very high' },
@@ -66,6 +73,10 @@ describe('casesController', () => {
         { value: 'LOW', text: 'Low' },
       ],
     }
+
+    beforeEach(() => {
+      userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
+    })
 
     it('renders the case list page for the current user by default', async () => {
       const cases = caseFactory.buildList(3)
@@ -79,6 +90,7 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
+      expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {})
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
@@ -86,9 +98,7 @@ describe('casesController', () => {
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases),
         filters: [],
-        query: {
-          assignedTo: 'you',
-        },
+        query: {},
       })
     })
 
@@ -99,19 +109,21 @@ describe('casesController', () => {
       request.query = {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
+        teamCode: 'team-code',
       }
-      request.url = '/?searchTerm=some-crn&riskLevel=HIGH'
+      request.url = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH'
 
       await casesController.index()(request, response, next)
 
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
+        teamCode: 'team-code',
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
         resultsSummary: casesResultsSummary(cases),
-        filters: queryToFilters(request.query, request.url),
+        filters: queryToFilters(request.query, request.url, teams),
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases),
         query: request.query,

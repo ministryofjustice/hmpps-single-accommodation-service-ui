@@ -13,6 +13,7 @@ export const controllers = (services: Services) => ({
     services.dutyToReferService,
     services.proposedAddressesService,
     services.accommodationService,
+    services.userService,
   ),
   proposedAddressesController: new ProposedAddressesController(
     services.auditService,

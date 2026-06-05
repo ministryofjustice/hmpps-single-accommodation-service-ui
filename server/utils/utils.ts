@@ -92,7 +92,7 @@ export const summaryListRowOptional = (
   noValueText: string,
 ): SummaryListRow => (value ? summaryListRowText(label, value) : summaryListRowHtml(label, noValueHtml(noValueText)))
 
-export const radioItems = (labels: Record<string, string>, selectedValue?: string): RadioItem[] => 
+export const radioItems = (labels: Record<string, string>, selectedValue?: string): RadioItem[] =>
   Object.entries(labels).map(([value, text]) => ({
     value,
     text,

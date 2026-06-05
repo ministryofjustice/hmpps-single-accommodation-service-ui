@@ -10,8 +10,6 @@ import {
   updateStatusFromRequest,
   updateNextAccommodationFromRequest,
   accommodationTypeItems,
-  verificationStatusItems,
-  nextAccommodationStatusItems,
   validateUpToAddress,
   validateUpToType,
   validateUpToStatus,
@@ -22,6 +20,8 @@ import {
   addressDetailRows,
   addressTimelineEntry,
   nextActionButton,
+  verificationStatusLabels,
+  nextAccommodationStatusLabels,
 } from '../utils/proposedAddresses'
 import {
   fetchErrorsAndUserInput,
@@ -38,6 +38,7 @@ import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import config from '../config'
+import { radioItems } from '../utils/utils'
 
 interface EditRequest extends Request {
   params: {
@@ -366,7 +367,10 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/status', {
         crn,
-        verificationStatusItems: verificationStatusItems(proposedAddressFormSessionData?.verificationStatus),
+        verificationStatusItems: radioItems(
+          verificationStatusLabels,
+          proposedAddressFormSessionData?.verificationStatus,
+        ),
         backLinkHref,
         errors,
         errorSummary,
@@ -412,7 +416,8 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/next-accommodation', {
         crn,
-        nextAccommodationStatusItems: nextAccommodationStatusItems(
+        nextAccommodationStatusItems: radioItems(
+          nextAccommodationStatusLabels,
           proposedAddressFormSessionData?.nextAccommodationStatus,
         ),
         name: caseData.name,

@@ -9,8 +9,6 @@ import {
   updateTypeFromRequest,
   updateStatusFromRequest,
   accommodationTypeItems,
-  nextAccommodationStatusItems,
-  verificationStatusItems,
   validateUpToNextAccommodation,
   validateUpToStatus,
   validateUpToType,
@@ -288,42 +286,6 @@ describe('Proposed addresses utilities', () => {
 
     it('marks none as checked when no selection provided', () => {
       const items = accommodationTypeItems(accommodationTypesReferenceData)
-
-      expect(items.every(item => item.checked === false)).toBe(true)
-    })
-  })
-
-  describe('verificationStatusItems', () => {
-    it('marks PASSED as checked', () => {
-      const items = verificationStatusItems('PASSED')
-
-      expect(items).toEqual([
-        { value: 'NOT_CHECKED_YET', text: 'Not checked', checked: false },
-        { value: 'PASSED', text: 'Passed', checked: true },
-        { value: 'FAILED', text: 'Failed', checked: false },
-      ])
-    })
-
-    it('marks none as checked when no selection provided', () => {
-      const items = verificationStatusItems()
-
-      expect(items.every(item => item.checked === false)).toBe(true)
-    })
-  })
-
-  describe('nextAccommodationStatusItems', () => {
-    it('marks TO_BE_DECIDED as checked', () => {
-      const items = nextAccommodationStatusItems('TO_BE_DECIDED')
-
-      expect(items).toEqual([
-        { value: 'YES', text: 'Yes', checked: false },
-        { value: 'NO', text: 'No', checked: false },
-        { value: 'TO_BE_DECIDED', text: 'Still to be decided', checked: true },
-      ])
-    })
-
-    it('marks none as checked when no selection provided', () => {
-      const items = nextAccommodationStatusItems()
 
       expect(items.every(item => item.checked === false)).toBe(true)
     })

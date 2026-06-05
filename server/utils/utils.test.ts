@@ -205,7 +205,7 @@ describe('summaryListRowOptional', () => {
 
 describe('radioItems', () => {
   const labels = { NOT_CHECKED_YET: 'Not checked yet', PASSED: 'Passed', FAILED: 'Failed' }
-  
+
   it('marks PASSED as checked', () => {
     const items = radioItems(labels, 'PASSED')
 

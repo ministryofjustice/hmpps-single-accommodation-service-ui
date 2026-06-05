@@ -45,6 +45,8 @@ const dutyToReferController = mock<DutyToReferController>({
   saveSubmission: mockHandler,
   saveOutcome: mockHandler,
   saveNote: mockHandler,
+  withdraw: mockHandler,
+  saveWithdrawal: mockHandler,
 })
 
 const staticController = mock<StaticController>({

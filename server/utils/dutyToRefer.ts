@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
-import { StatusCard } from '@sas/ui'
+import { RadioItem, StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
@@ -164,6 +164,21 @@ export const validateOutcome = (req: Request) => {
   return validateAndFlashErrors(req, errors)
 }
 
+export const validateWithdraw = (req: Request) => {
+  const errors: Record<string, string> = {}
+  const { withdrawalReason, withdrawalReasonOther } = req.body
+
+  if (!withdrawalReason) {
+    errors.withdrawalReason = 'Select a reason for withdrawal'
+  }
+
+  if (withdrawalReason === 'OTHER' && !withdrawalReasonOther) {
+    errors.withdrawalReasonOther = 'Enter a reason for withdrawal'
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
 export const formatDutyToReferStatus = (status: DutyToReferDto['status']): string =>
   ({
     NOT_ACCEPTED: 'Not accepted',
@@ -283,3 +298,25 @@ export const outcomeReasonSummaryLabel: Record<DtrSubmissionDto['outcomeReason']
   INTENTIONALLY_HOMELESS: 'Intentionally homeless',
   REJECTED_FOR_ANOTHER_REASON: 'Other reason',
 }
+
+export const withdrawalReasonItems = (value?: DtrSubmissionDto['withdrawalReason']): RadioItem[] => [
+  { value: 'NEW_REFERRAL', text: 'Replaced by a new referral', checked: value === 'NEW_REFERRAL' },
+  {
+    value: 'INCORRECT_LOCAL_AUTHORITY',
+    text: 'Incorrect local authority',
+    checked: value === 'INCORRECT_LOCAL_AUTHORITY',
+  },
+  { value: 'NO_CONSENT', text: 'Person no longer consents', checked: value === 'NO_CONSENT' },
+  { value: 'DISENGAGED', text: 'Person cannot be contacted or has disengaged', checked: value === 'DISENGAGED' },
+  {
+    value: 'HOUSING_NEED_RESOLVED',
+    text: 'Housing need resolved or person already accommodated',
+    checked: value === 'HOUSING_NEED_RESOLVED',
+  },
+  {
+    value: 'NOT_ELIGIBLE',
+    text: 'Not eligible for Duty to Refer (not homeless or at risk)',
+    checked: value === 'NOT_ELIGIBLE',
+  },
+  { value: 'OTHER', text: 'Other', checked: value === 'OTHER' },
+]

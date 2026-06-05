@@ -15,6 +15,7 @@ export default {
     submission: dutyToReferPath.path('submission'),
     edit: dutyToReferPath.path(':id/edit'),
     outcome: dutyToReferPath.path(':id/outcome'),
+    withdraw: dutyToReferPath.path(':id/withdraw'),
   },
   proposedAddresses: {
     show: proposedAddressesPath.path(':id/details'),

@@ -10,6 +10,8 @@ import {
   outcomeItems,
   outcomeReasonToStatus,
   submissionFormValues,
+  withdrawalReasonItems,
+  validateWithdraw,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -23,9 +25,7 @@ import {
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
-import { getFlowRedirect, setFlowRedirect } from '../utils/backlinks'
-
-const FLOW_ENTRY_POINTS = [uiPaths.dutyToRefer.show.pattern, uiPaths.cases.show.pattern]
+import { collectApiResponses } from '../utils/apiResponses'
 
 export default class DutyToReferController {
   constructor(
@@ -77,9 +77,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { crn, id } = req.params
 
-      const backLinkHref = id
-        ? setFlowRedirect(uiPaths.cases.show.pattern, req, FLOW_ENTRY_POINTS)
-        : uiPaths.cases.show({ crn })
+      const backLinkHref = id ? uiPaths.dutyToRefer.show({ crn, id }) : uiPaths.cases.show({ crn })
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
         who: res.locals.user.username,
@@ -153,20 +151,20 @@ export default class DutyToReferController {
         correlationId: req.id,
       })
 
-      const [{ data: caseData }, { data: dtr }] = await Promise.all([
-        this.casesService.getCase(token, crn),
-        this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
-      ])
+      const {
+        data: { caseData, dtr },
+      } = await collectApiResponses({
+        caseData: this.casesService.getCase(token, crn),
+        dtr: this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
+      })
 
       const tableRows = summaryListRows(caseData, dtr)
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
-      const backLinkHref = setFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, FLOW_ENTRY_POINTS)
-
       return res.render('pages/duty-to-refer/outcome', {
         pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome`,
-        backLinkHref,
+        backLinkHref: uiPaths.dutyToRefer.show({ crn, id }),
         crn,
         dtr,
         tableRows,
@@ -183,7 +181,6 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { outcomeReason, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
-      const successRedirect = getFlowRedirect(uiPaths.dutyToRefer.outcome.pattern, req, uiPaths.cases.show({ crn }))
 
       if (!validateOutcome(req)) {
         return res.redirect(errorRedirect)
@@ -200,9 +197,75 @@ export default class DutyToReferController {
         })
 
         req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
-        return res.redirect(successRedirect)
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
+        return res.redirect(errorRedirect)
+      }
+    }
+  }
+
+  withdraw(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_WITHDRAW, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const {
+        data: { caseData, dtr },
+      } = await collectApiResponses({
+        caseData: this.casesService.getCase(token, crn),
+        dtr: this.dutyToReferService.getDtrBySubmissionId(token, crn, id),
+      })
+
+      const tableRows = summaryListRows(caseData, dtr)
+
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+
+      return res.render('pages/duty-to-refer/withdraw', {
+        pageTitle: 'Withdraw referral',
+        backLinkHref: uiPaths.dutyToRefer.show({ crn, id }),
+        crn,
+        dtr,
+        tableRows,
+        withdrawalReasonItems: withdrawalReasonItems(userInput?.withdrawalReason),
+        errors,
+        errorSummary,
+        ...userInput,
+      })
+    }
+  }
+
+  saveWithdrawal(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+      const { submissionDate, localAuthorityAreaId, referenceNumber, withdrawalReason, withdrawalReasonOther } =
+        req.body
+      const errorRedirect = uiPaths.dutyToRefer.withdraw({ crn, id })
+
+      if (!validateWithdraw(req)) {
+        return res.redirect(errorRedirect)
+      }
+
+      try {
+        await this.dutyToReferService.update(token, crn, id, {
+          status: 'WITHDRAWN',
+          submissionDate,
+          localAuthorityAreaId,
+          referenceNumber,
+          withdrawalReason,
+          withdrawalReasonOther: withdrawalReasonOther || null,
+        })
+
+        req.flash('success', 'DTR referral withdrawn')
+        return res.redirect(uiPaths.cases.show({ crn }))
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem withdrawing the DTR referral. Please try again.')
         return res.redirect(errorRedirect)
       }
     }

@@ -4,7 +4,7 @@ import AbstractPage from '../abstractPage'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
-import { outcomeReasonLabel } from '../../../server/utils/dutyToRefer'
+import { outcomeReasonLabel, withdrawalReasonItems } from '../../../server/utils/dutyToRefer'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -53,6 +53,17 @@ export default class DutyToReferPage extends AbstractPage {
     await this.selectRadioByLabel(reason)
   }
 
+  async completeWithdrawalForm(dutyToRefer: DutyToReferDto) {
+    const reason = dutyToRefer.submission.withdrawalReason
+      ? withdrawalReasonItems().find(item => item.value === dutyToRefer.submission.withdrawalReason)?.text
+      : 'Other'
+
+    await this.selectRadioByLabel(reason)
+    if (dutyToRefer.submission.withdrawalReason === 'OTHER') {
+      await this.completeInputByLabel('Please specify', dutyToRefer.submission.withdrawalReasonOther)
+    }
+  }
+
   async checkApiCalled(crn: string, dutyToRefer: DutyToReferDto, method: 'submit' | 'update' = 'submit') {
     const { submission } = dutyToRefer
     const requestBody =
@@ -69,6 +80,11 @@ export default class DutyToReferPage extends AbstractPage {
 
     if (submission.outcomeReason != null) {
       expectedBody.outcomeReason = submission.outcomeReason
+    }
+
+    if (dutyToRefer.status === 'WITHDRAWN') {
+      expectedBody.withdrawalReason = dutyToRefer.submission.withdrawalReason
+      expectedBody.withdrawalReasonOther = dutyToRefer.submission.withdrawalReasonOther ?? null
     }
 
     expect(requestBody).toEqual(expectedBody)

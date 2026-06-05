@@ -6,7 +6,7 @@
     <header class="sas-card__head">
       <h3 class="govuk-heading-m">{{ cardData.heading }}</h3>
       {% if cardData.status -%}
-        {{ statusTag({ text: cardData.status.text, colour: cardData.status.colour, noWrap: true }) }}
+        {{ statusTag({ text: cardData.status.text, colour: cardData.status.colour, isCard: true }) }}
       {%- endif %}
     </header>
 

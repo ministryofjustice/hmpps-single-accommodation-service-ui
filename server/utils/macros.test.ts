@@ -21,7 +21,7 @@ describe('Macros', () => {
       expect(statusTag(tag)).toMatchSnapshot()
     })
 
-    it('renders a status tag with noWrap class when noWrap is true', () => {
+    it('renders a status tag with isCard class when isCard is true', () => {
       const tag: StatusTag = {
         text: 'Qux',
         colour: 'blue',

@@ -24,7 +24,7 @@ export const renderMacro = <T>(macroName: Macro, context: T): string =>
     { context },
   )
 
-export const statusTag = (status: StatusTag, noWrap?: boolean) => renderMacro('statusTag', { ...status, noWrap })
+export const statusTag = (status: StatusTag, isCard?: boolean) => renderMacro('statusTag', { ...status, isCard })
 
 export const statusCell = (context: { status: StatusTag; date?: string }) => renderMacro('statusCell', context)
 

@@ -8,6 +8,7 @@ import {
   summaryListRowHtml,
   textContent,
   toParagraphs,
+  radioItems,
 } from './utils'
 
 describe('convert to title case', () => {
@@ -199,5 +200,25 @@ describe('summaryListRowOptional', () => {
       key: { text: 'Reference' },
       value: { html: '<span class="sas-colour--dark-grey">No reference added</span>' },
     })
+  })
+})
+
+describe('radioItems', () => {
+  const labels = { NOT_CHECKED_YET: 'Not checked yet', PASSED: 'Passed', FAILED: 'Failed' }
+  
+  it('marks PASSED as checked', () => {
+    const items = radioItems(labels, 'PASSED')
+
+    expect(items).toEqual([
+      { value: 'NOT_CHECKED_YET', text: 'Not checked yet', checked: false },
+      { value: 'PASSED', text: 'Passed', checked: true },
+      { value: 'FAILED', text: 'Failed', checked: false },
+    ])
+  })
+
+  it('marks none as checked when no selection provided', () => {
+    const items = radioItems(labels)
+
+    expect(items.every(item => item.checked === false)).toBe(true)
   })
 })

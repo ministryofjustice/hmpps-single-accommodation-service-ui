@@ -7,11 +7,11 @@ import {
   detailsSummaryListRows,
   outcomeDetailsSummaryListRows,
   dutyToReferTimelineEntry,
-  outcomeItems,
   outcomeReasonToStatus,
   submissionFormValues,
-  withdrawalReasonItems,
   validateWithdraw,
+  outcomeReasonLabels,
+  withdrawReasonLabels,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -26,6 +26,7 @@ import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
+import { radioItems } from '../utils/utils'
 
 export default class DutyToReferController {
   constructor(
@@ -160,7 +161,8 @@ export default class DutyToReferController {
 
       const tableRows = summaryListRows(caseData, dtr)
 
-      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+      const outcomeReason = userInput?.outcomeReason ?? dtr?.submission?.outcomeReason
 
       return res.render('pages/duty-to-refer/outcome', {
         pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome`,
@@ -168,7 +170,7 @@ export default class DutyToReferController {
         crn,
         dtr,
         tableRows,
-        outcomeItems: outcomeItems(dtr.submission?.outcomeReason),
+        outcomeItems: radioItems(outcomeReasonLabels, outcomeReason),
         errors,
         errorSummary,
       })
@@ -225,6 +227,7 @@ export default class DutyToReferController {
       const tableRows = summaryListRows(caseData, dtr)
 
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+      const withdrawalReason = userInput?.withdrawalReason ?? dtr?.submission?.withdrawalReason
 
       return res.render('pages/duty-to-refer/withdraw', {
         pageTitle: 'Withdraw referral',
@@ -232,7 +235,7 @@ export default class DutyToReferController {
         crn,
         dtr,
         tableRows,
-        withdrawalReasonItems: withdrawalReasonItems(userInput?.withdrawalReason),
+        withdrawalReasonItems: radioItems(withdrawReasonLabels, withdrawalReason),
         errors,
         errorSummary,
         ...userInput,

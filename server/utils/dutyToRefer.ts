@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
-import { RadioItem, StatusCard } from '@sas/ui'
+import { StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
@@ -109,7 +109,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
       'Status',
       `${statusTag(serviceStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
     ),
-    summaryListRowText('Reason', outcomeReasonSummaryLabel[dutyToRefer.submission.outcomeReason]),
+    summaryListRowText('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
   ]
 }
 
@@ -248,7 +248,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   const values = isOutcome
     ? [
         { label: 'Outcome', value: outcomeText, showLabel: false },
-        { label: 'Reason', value: outcomeReasonSummaryLabel[dtr.submission?.outcomeReason], showLabel: true },
+        { label: 'Reason', value: outcomeReasonSummaryLabels[dtr.submission?.outcomeReason], showLabel: true },
       ]
     : submissionValues
 
@@ -261,13 +261,6 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
 }
-
-export const outcomeItems = (outcomeReason?: DtrSubmissionDto['outcomeReason']) =>
-  Object.entries(outcomeReasonLabel).map(([key, label]) => ({
-    value: key,
-    text: label,
-    checked: outcomeReason === key,
-  }))
 
 export const outcomeReasonToStatus = (outcomeReason: DtrSubmissionDto['outcomeReason']): DutyToReferDto['status'] => {
   switch (outcomeReason) {
@@ -283,7 +276,7 @@ export const outcomeReasonToStatus = (outcomeReason: DtrSubmissionDto['outcomeRe
   }
 }
 
-export const outcomeReasonLabel: Record<DtrSubmissionDto['outcomeReason'], string> = {
+export const outcomeReasonLabels: Record<DtrSubmissionDto['outcomeReason'], string> = {
   PREVENTION_AND_RELIEF_DUTY: 'Yes, it was accepted on prevention and relief duty',
   PRIORITY_NEED: 'Yes, it was accepted on a priority need',
   NO_LOCAL_CONNECTION: "No, it was rejected as there's no local connection",
@@ -291,7 +284,7 @@ export const outcomeReasonLabel: Record<DtrSubmissionDto['outcomeReason'], strin
   REJECTED_FOR_ANOTHER_REASON: 'No, it was rejected for another reason',
 }
 
-export const outcomeReasonSummaryLabel: Record<DtrSubmissionDto['outcomeReason'], string> = {
+export const outcomeReasonSummaryLabels: Record<DtrSubmissionDto['outcomeReason'], string> = {
   PREVENTION_AND_RELIEF_DUTY: 'Prevention and relief duty',
   PRIORITY_NEED: 'Priority need',
   NO_LOCAL_CONNECTION: 'No local connection',
@@ -299,24 +292,12 @@ export const outcomeReasonSummaryLabel: Record<DtrSubmissionDto['outcomeReason']
   REJECTED_FOR_ANOTHER_REASON: 'Other reason',
 }
 
-export const withdrawalReasonItems = (value?: DtrSubmissionDto['withdrawalReason']): RadioItem[] => [
-  { value: 'NEW_REFERRAL', text: 'Replaced by a new referral', checked: value === 'NEW_REFERRAL' },
-  {
-    value: 'INCORRECT_LOCAL_AUTHORITY',
-    text: 'Incorrect local authority',
-    checked: value === 'INCORRECT_LOCAL_AUTHORITY',
-  },
-  { value: 'NO_CONSENT', text: 'Person no longer consents', checked: value === 'NO_CONSENT' },
-  { value: 'DISENGAGED', text: 'Person cannot be contacted or has disengaged', checked: value === 'DISENGAGED' },
-  {
-    value: 'HOUSING_NEED_RESOLVED',
-    text: 'Housing need resolved or person already accommodated',
-    checked: value === 'HOUSING_NEED_RESOLVED',
-  },
-  {
-    value: 'NOT_ELIGIBLE',
-    text: 'Not eligible for Duty to Refer (not homeless or at risk)',
-    checked: value === 'NOT_ELIGIBLE',
-  },
-  { value: 'OTHER', text: 'Other', checked: value === 'OTHER' },
-]
+export const withdrawReasonLabels: Record<DtrSubmissionDto['withdrawalReason'], string> = {
+  NEW_REFERRAL: 'Replaced by a new referral',
+  INCORRECT_LOCAL_AUTHORITY: 'Incorrect local authority',
+  NO_CONSENT: 'Person no longer consents',
+  DISENGAGED: 'Person cannot be contacted or has disengaged',
+  HOUSING_NEED_RESOLVED: 'Housing need resolved or person already accommodated',
+  NOT_ELIGIBLE: 'Not eligible for Duty to Refer (not homeless or at risk)',
+  OTHER: 'Other',
+}

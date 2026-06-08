@@ -315,23 +315,17 @@ export const accommodationTypeItems = (
     checked: selectedType === code,
   }))
 
-export const verificationStatusItems = (verificationStatus?: ProposedAccommodationDto['verificationStatus']) => [
-  {
-    value: 'NOT_CHECKED_YET',
-    text: 'Not checked',
-    checked: verificationStatus === 'NOT_CHECKED_YET',
-  },
-  {
-    value: 'PASSED',
-    text: 'Passed',
-    checked: verificationStatus === 'PASSED',
-  },
-  {
-    value: 'FAILED',
-    text: 'Failed',
-    checked: verificationStatus === 'FAILED',
-  },
-]
+export const verificationStatusLabels: Record<ProposedAccommodationDto['verificationStatus'], string> = {
+  NOT_CHECKED_YET: 'Not checked',
+  PASSED: 'Passed',
+  FAILED: 'Failed',
+}
+
+export const nextAccommodationStatusLabels: Record<ProposedAccommodationDto['nextAccommodationStatus'], string> = {
+  YES: 'Yes',
+  NO: 'No',
+  TO_BE_DECIDED: 'Still to be decided',
+}
 
 export const nextAccommodationStatusItems = (
   nextAccommodationStatus?: ProposedAccommodationDto['nextAccommodationStatus'],

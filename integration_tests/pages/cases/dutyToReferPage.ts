@@ -4,7 +4,7 @@ import AbstractPage from '../abstractPage'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
-import { outcomeReasonLabel, withdrawalReasonItems } from '../../../server/utils/dutyToRefer'
+import { outcomeReasonLabels, withdrawReasonLabels } from '../../../server/utils/dutyToRefer'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -49,14 +49,12 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async completeOutcomeForm(dutyToRefer: DutyToReferDto) {
-    const reason = outcomeReasonLabel[dutyToRefer.submission.outcomeReason]
+    const reason = outcomeReasonLabels[dutyToRefer.submission.outcomeReason]
     await this.selectRadioByLabel(reason)
   }
 
   async completeWithdrawalForm(dutyToRefer: DutyToReferDto) {
-    const reason = dutyToRefer.submission.withdrawalReason
-      ? withdrawalReasonItems().find(item => item.value === dutyToRefer.submission.withdrawalReason)?.text
-      : 'Other'
+    const reason = withdrawReasonLabels[dutyToRefer.submission.withdrawalReason]
 
     await this.selectRadioByLabel(reason)
     if (dutyToRefer.submission.withdrawalReason === 'OTHER') {

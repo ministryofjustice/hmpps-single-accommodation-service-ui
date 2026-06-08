@@ -11,9 +11,9 @@ import {
   detailsSummaryListRows,
   dutyToReferTimelineEntry,
   outcomeDetailsSummaryListRows,
-  outcomeItems,
+  outcomeReasonLabels,
   summaryListRows,
-  withdrawalReasonItems,
+  withdrawReasonLabels,
 } from '../utils/dutyToRefer'
 import * as validationUtils from '../utils/validation'
 import {
@@ -24,6 +24,7 @@ import {
   referenceDataFactory,
 } from '../testutils/factories'
 import { caseAssignedTo } from '../utils/cases'
+import { radioItems } from '../utils/utils'
 
 describe('dutyToReferController', () => {
   let request: Request
@@ -230,7 +231,7 @@ describe('dutyToReferController', () => {
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
-        outcomeItems: outcomeItems(dtr.submission?.outcomeReason),
+        outcomeItems: radioItems(outcomeReasonLabels),
         errors: {},
         errorSummary: [],
       })
@@ -440,7 +441,7 @@ describe('dutyToReferController', () => {
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
-        withdrawalReasonItems: withdrawalReasonItems(undefined),
+        withdrawalReasonItems: radioItems(withdrawReasonLabels),
         errors: {},
         errorSummary: [],
       })
@@ -462,7 +463,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith(
         'pages/duty-to-refer/withdraw',
         expect.objectContaining({
-          withdrawalReasonItems: withdrawalReasonItems('OTHER'),
+          withdrawalReasonItems: radioItems(withdrawReasonLabels, 'OTHER'),
           withdrawalReason: 'OTHER',
           withdrawalReasonOther: '',
           errors: { withdrawalReasonOther: { text: 'Enter a reason for withdrawal' } },

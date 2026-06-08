@@ -1,5 +1,5 @@
 import { HtmlContent, SummaryListActionItem, SummaryListRow, TextContent } from '@govuk/ui'
-import { SelectOption } from '@sas/ui'
+import { RadioItem, SelectOption } from '@sas/ui'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -91,3 +91,10 @@ export const summaryListRowOptional = (
   value: string | undefined,
   noValueText: string,
 ): SummaryListRow => (value ? summaryListRowText(label, value) : summaryListRowHtml(label, noValueHtml(noValueText)))
+
+export const radioItems = (labels: Record<string, string>, selectedValue?: string): RadioItem[] =>
+  Object.entries(labels).map(([value, text]) => ({
+    value,
+    text,
+    checked: selectedValue === value,
+  }))

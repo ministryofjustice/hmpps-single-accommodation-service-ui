@@ -14,9 +14,9 @@ import {
   accommodationTypeItems,
   checkYourAnswersRows,
   lookupResultsItems,
-  nextAccommodationStatusItems,
   nextActionButton,
-  verificationStatusItems,
+  verificationStatusLabels,
+  nextAccommodationStatusLabels,
 } from '../utils/proposedAddresses'
 import * as validationUtils from '../utils/validation'
 import * as backlinks from '../utils/backlinks'
@@ -34,6 +34,7 @@ import OsDataHubService from '../services/osDataHubService'
 import { formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
+import { radioItems } from '../utils/utils'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -643,7 +644,7 @@ describe('proposedAddressesController', () => {
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
-        verificationStatusItems: verificationStatusItems(),
+        verificationStatusItems: radioItems(verificationStatusLabels),
       })
     })
 
@@ -661,7 +662,7 @@ describe('proposedAddressesController', () => {
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         errors: {},
         errorSummary: [],
-        verificationStatusItems: verificationStatusItems('NOT_CHECKED_YET'),
+        verificationStatusItems: radioItems(verificationStatusLabels, 'NOT_CHECKED_YET'),
       })
     })
 
@@ -722,7 +723,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
-        nextAccommodationStatusItems: nextAccommodationStatusItems(),
+        nextAccommodationStatusItems: radioItems(nextAccommodationStatusLabels),
         name: 'James Smith',
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
@@ -745,7 +746,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
         name: 'James Smith',
-        nextAccommodationStatusItems: nextAccommodationStatusItems('NO'),
+        nextAccommodationStatusItems: radioItems(nextAccommodationStatusLabels, 'NO'),
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
         errors: {},
         errorSummary: [],

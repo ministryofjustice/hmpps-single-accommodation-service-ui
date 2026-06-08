@@ -6,7 +6,7 @@ import type { FieldChange } from './FieldChange'
 export type AuditRecordDto = {
   type: 'CREATE' | 'UPDATE' | 'NOTE'
   author: string
-  commitDate: string
+  commitDate?: string | null
   changes: Array<FieldChange>
   extraInformation?: any | null
 }

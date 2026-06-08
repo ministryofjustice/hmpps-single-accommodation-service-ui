@@ -21,13 +21,13 @@ describe('Macros', () => {
       expect(statusTag(tag)).toMatchSnapshot()
     })
 
-    it('renders a status tag with noWrap class when noWrap is true', () => {
+    it('renders a status tag with classes when classes is provided', () => {
       const tag: StatusTag = {
         text: 'Qux',
         colour: 'blue',
       }
 
-      expect(statusTag(tag, true)).toMatchSnapshot()
+      expect(statusTag(tag, 'govuk-tag--no-wrap')).toMatchSnapshot()
     })
   })
 

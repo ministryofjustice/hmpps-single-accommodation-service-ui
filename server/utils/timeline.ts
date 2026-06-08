@@ -7,12 +7,10 @@ export const timelineEntry = (label: string, html: string, datetime?: string, au
     label: {
       text: label,
     },
-    datetime: datetime
-      ? {
-          timestamp: datetime,
-          type: 'datetime',
-        }
-      : undefined,
+    datetime: {
+      timestamp: datetime,
+      type: 'datetime',
+    },
     byline: author
       ? {
           text: author,

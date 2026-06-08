@@ -16,6 +16,20 @@ exports[`noteTimelineEntry returns a formatted note timeline entry 1`] = `
 }
 `;
 
+exports[`timelineEntry returns a timeline entry with no datetime or author 1`] = `
+{
+  "byline": undefined,
+  "datetime": {
+    "timestamp": undefined,
+    "type": "datetime",
+  },
+  "html": "Content",
+  "label": {
+    "text": "Title",
+  },
+}
+`;
+
 exports[`timelineEntry returns a timeline entry with the given details 1`] = `
 {
   "byline": {

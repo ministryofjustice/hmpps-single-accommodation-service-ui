@@ -83,7 +83,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
 export default AuditRecordFactory.define(() => ({
   type: faker.helpers.arrayElement(['CREATE', 'UPDATE']),
   author: faker.person.fullName(),
-  commitDate: faker.date.past().toISOString(),
+  commitDate: faker.helpers.maybe(() => faker.date.past().toISOString(), { probability: 0.8 }),
   changes: [
     {
       field: 'fieldName',

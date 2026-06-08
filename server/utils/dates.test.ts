@@ -6,6 +6,7 @@ import {
   formatDateAndAge,
   formatDateAndDaysAgo,
   isoDateToDateInput,
+  mojDateOrBlank,
 } from './dates'
 
 describe('date utilities', () => {
@@ -164,6 +165,20 @@ describe('date utilities', () => {
         'field-month': '',
         'field-year': '',
       })
+    })
+  })
+
+  describe('mojDateOrBlank', () => {
+    it('returns a datetime formatted for a timeline entry', () => {
+      expect(mojDateOrBlank('2022-01-12T12:35:00.000Z', 'datetime')).toEqual('12 January 2022 at 12:35pm')
+    })
+
+    it.each([
+      { title: 'an invalid date', value: 'not a date' },
+      { title: 'undefined', value: undefined },
+      { title: 'blank', value: '' },
+    ])('returns nothing if the timestamp is $title', ({ value }) => {
+      expect(mojDateOrBlank(value, 'datetime')).toEqual('')
     })
   })
 })

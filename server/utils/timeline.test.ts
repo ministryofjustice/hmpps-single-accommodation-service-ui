@@ -7,6 +7,10 @@ describe('timelineEntry', () => {
       timelineEntry('Entry label', '<p>Some content</p>', '2025-09-13T13:45:00.000Z', 'Bob Smith'),
     ).toMatchSnapshot()
   })
+
+  it('returns a timeline entry with no datetime or author', () => {
+    expect(timelineEntry('Title', 'Content')).toMatchSnapshot()
+  })
 })
 
 describe('noteTimelineEntry', () => {

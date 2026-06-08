@@ -447,7 +447,7 @@ describe('dutyToReferController', () => {
       })
     })
 
-    fit('renders the withdraw page with errors and user input', async () => {
+    it('renders the withdraw page with errors and user input', async () => {
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
 

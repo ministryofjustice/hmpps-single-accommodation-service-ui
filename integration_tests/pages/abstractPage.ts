@@ -222,7 +222,7 @@ export default class AbstractPage {
     if (byline) {
       await expect(timelineEntry.getByText(`by ${byline.text}`)).toBeVisible()
     }
-    if (datetime) {
+    if (datetime.timestamp) {
       // TODO: This only matches the date portion -- check time also
       await expect(timelineEntry.getByRole('time')).toContainText(formatDate(datetime.timestamp))
     }

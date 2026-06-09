@@ -68,8 +68,8 @@ export type SummaryList = {
 
 export type TimelineEntry = TextOrHtmlContent & {
   label: TextOrHtmlContent
-  datetime?: {
-    timestamp: string
+  datetime: {
+    timestamp?: string
     type: 'datetime'
   }
   byline?: TextOrHtmlContent

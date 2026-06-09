@@ -1,3 +1,7 @@
+import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
+
+const { mojDate } = mojFilters()
+
 const isValidDate = (date?: string) => date && !Number.isNaN(new Date(date).getTime())
 
 export const calculateAge = (dateOfBirth: string) => {
@@ -81,3 +85,6 @@ export const isoDateToDateInput = (date: string | undefined, fieldName: string):
     [`${fieldName}-year`]: year || '',
   }
 }
+
+export const mojDateOrBlank = (timestamp: string, type: 'datetime'): string =>
+  isValidDate(timestamp) ? mojDate(timestamp, type) : ''

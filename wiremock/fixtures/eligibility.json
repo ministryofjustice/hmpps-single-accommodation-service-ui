@@ -6,6 +6,7 @@
       "serviceResult": {
         "serviceStatus": "CONFIRMED",
         "action": "carpo ustulo derelinquo tergiversatio et",
+        "url": "https://cas1.example.com/applications/s511935",
         "failureReasons": []
       }
     },
@@ -13,12 +14,14 @@
       "serviceResult": {
         "serviceStatus": "CONFIRMED",
         "action": "demum dolorem tenus ultio amiculum",
+        "url": "https://cas3.example.com/referrals/s511935",
         "failureReasons": []
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
+        "url": "https://crs.example.com/referrals/s511935",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": {
@@ -30,6 +33,7 @@
       "serviceResult": {
         "serviceStatus": "ACCEPTED",
         "action": "alias usque vitae amaritudo cruentus",
+        "url": "https://dtr.example.com/submissions/s511935",
         "failureReasons": []
       },
       "submission": {
@@ -59,12 +63,14 @@
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "action": "subnecto testimonium tego ubi antepono",
+        "url": "https://cas1.example.com/applications/p712106",
         "failureReasons": []
       }
     },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://cas3.example.com/referrals/p712106",
         "failureReasons": []
       }
     },
@@ -72,6 +78,7 @@
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
         "action": "volva ventus adinventitias minus colligo",
+        "url": "https://crs.example.com/referrals/p712106",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
@@ -79,6 +86,7 @@
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://dtr.example.com/submissions/p712106",
         "failureReasons": []
       },
       "submission": null
@@ -87,6 +95,7 @@
       "serviceResult": {
         "serviceStatus": "COMPLETED",
         "action": "creo argentum antepono triumphus at",
+        "url": "https://pa.example.com/assessments/p712106",
         "failureReasons": []
       }
     }
@@ -97,6 +106,7 @@
     "cas1": {
       "serviceResult": {
         "serviceStatus": "CONFIRMED",
+        "url": "https://cas1.example.com/applications/t274481",
         "failureReasons": []
       }
     },
@@ -117,6 +127,7 @@
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
         "action": "corporis nostrum audentia aveho tibi",
+        "url": "https://dtr.example.com/submissions/t274481",
         "failureReasons": []
       },
       "submission": null
@@ -135,12 +146,14 @@
       "serviceResult": {
         "serviceStatus": "CONFIRMED",
         "action": "catena sol ulterius adsidue sto",
+        "url": "https://cas1.example.com/applications/v938951",
         "failureReasons": []
       }
     },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "CONFIRMED",
+        "url": "https://cas3.example.com/referrals/v938951",
         "failureReasons": []
       }
     },
@@ -148,6 +161,7 @@
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
         "action": "delicate ustilo ulciscor cenaculum deorsum",
+        "url": "https://crs.example.com/referrals/v938951",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
@@ -156,6 +170,7 @@
       "serviceResult": {
         "serviceStatus": "NOT_ACCEPTED",
         "action": "sordeo cras color virga villa",
+        "url": "https://dtr.example.com/submissions/v938951",
         "failureReasons": []
       },
       "submission": {
@@ -184,12 +199,14 @@
     "cas1": {
       "serviceResult": {
         "serviceStatus": "REJECTED",
+        "url": "https://cas1.example.com/applications/t229440",
         "failureReasons": []
       }
     },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "REJECTED",
+        "url": "https://cas3.example.com/referrals/t229440",
         "failureReasons": []
       }
     },
@@ -197,6 +214,7 @@
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "action": "aptus decretum sui conatus ater",
+        "url": "https://crs.example.com/referrals/t229440",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": {
@@ -207,6 +225,7 @@
     "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://dtr.example.com/submissions/t229440",
         "failureReasons": []
       },
       "submission": null
@@ -231,6 +250,7 @@
       "serviceResult": {
         "serviceStatus": "WITHDRAWN",
         "action": "adsum benigne tredecim compello nobis",
+        "url": "https://cas3.example.com/referrals/h271226",
         "failureReasons": []
       }
     },
@@ -238,6 +258,7 @@
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "action": "totus ocer voveo arma utroque",
+        "url": "https://crs.example.com/referrals/h271226",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": {
@@ -249,6 +270,7 @@
       "serviceResult": {
         "serviceStatus": "NOT_ACCEPTED",
         "action": "aer vallum bonus careo agnitio",
+        "url": "https://dtr.example.com/submissions/h271226",
         "failureReasons": []
       },
       "submission": {
@@ -268,6 +290,7 @@
       "serviceResult": {
         "serviceStatus": "COMPLETED",
         "action": "abstergo summisse corpus triumphus damno",
+        "url": "https://pa.example.com/assessments/h271226",
         "failureReasons": []
       }
     }
@@ -279,6 +302,7 @@
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "action": "spiculum suspendo desino canto eos",
+        "url": "https://cas1.example.com/applications/u934069",
         "failureReasons": []
       }
     },
@@ -286,12 +310,14 @@
       "serviceResult": {
         "serviceStatus": "WITHDRAWN",
         "action": "caute thermae bellicus amoveo suffoco",
+        "url": "https://cas3.example.com/referrals/u934069",
         "failureReasons": []
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://crs.example.com/referrals/u934069",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
@@ -300,6 +326,7 @@
       "serviceResult": {
         "serviceStatus": "ACCEPTED",
         "action": "suppellex ager spectaculum aliqua voro",
+        "url": "https://dtr.example.com/submissions/u934069",
         "failureReasons": []
       },
       "submission": {
@@ -319,6 +346,7 @@
       "serviceResult": {
         "serviceStatus": "COMPLETED",
         "action": "sub beneficium cuius curtus delectatio",
+        "url": "https://pa.example.com/assessments/u934069",
         "failureReasons": []
       }
     }
@@ -335,12 +363,14 @@
     "cas3": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://cas3.example.com/referrals/i322559",
         "failureReasons": []
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://crs.example.com/referrals/i322559",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
@@ -349,6 +379,7 @@
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
         "action": "doloremque torqueo traho aegrus tergeo",
+        "url": "https://dtr.example.com/submissions/i322559",
         "failureReasons": []
       },
       "submission": null
@@ -356,6 +387,7 @@
     "pa": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://pa.example.com/assessments/i322559",
         "failureReasons": []
       }
     }
@@ -374,6 +406,7 @@
       "serviceResult": {
         "serviceStatus": "WITHDRAWN",
         "action": "quidem astrum tener derelinquo pax",
+        "url": "https://cas3.example.com/referrals/l247269",
         "failureReasons": []
       }
     },
@@ -389,6 +422,7 @@
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "action": "deprecator ancilla alveus credo pectus",
+        "url": "https://dtr.example.com/submissions/l247269",
         "failureReasons": []
       },
       "submission": {
@@ -423,12 +457,14 @@
     "cas3": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
+        "url": "https://cas3.example.com/referrals/f608163",
         "failureReasons": []
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
+        "url": "https://crs.example.com/referrals/f608163",
         "failureReasons": []
       },
       "commissionedRehabilitativeServices": {
@@ -439,6 +475,7 @@
     "dtr": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
+        "url": "https://dtr.example.com/submissions/f608163",
         "failureReasons": []
       },
       "submission": {

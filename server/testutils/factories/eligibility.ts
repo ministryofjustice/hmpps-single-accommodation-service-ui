@@ -4,6 +4,7 @@ import { faker } from '@faker-js/faker'
 import crn from '../crn'
 import serviceResultFactory from './serviceResult'
 import dtrServiceResultFactory from './dtrServiceResult'
+import crsServiceResultFactory from './crsServiceResult'
 
 const caseActions = [
   'Confirm next address',
@@ -20,7 +21,7 @@ export default Factory.define<EligibilityDto>(() => {
     caseActions: faker.helpers.arrayElements(caseActions, { min: 1, max: 3 }),
     cas1: { serviceResult: serviceResultFactory.build() },
     cas3: { serviceResult: serviceResultFactory.build() },
-    crs: { serviceResult: serviceResultFactory.build() },
+    crs: crsServiceResultFactory.build(),
     dtr: dtrServiceResultFactory.build(),
     pa: { serviceResult: serviceResultFactory.pa().build() },
   }

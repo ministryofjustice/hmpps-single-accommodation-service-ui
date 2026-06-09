@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`CRS utilities crsStatusCard returns a status card for a NOT_ELIGIBLE CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": "No housing need: has somewhere to stay",
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`CRS utilities crsStatusCard returns a status card for a NOT_STARTED CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": "No open CRS accommodation referral.",
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
+`;
+
+exports[`CRS utilities crsStatusCard returns a status card for a SUBMITTED CRS service result 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Submitted",
+      },
+      "value": {
+        "text": "6 June 2026 (3 days ago)",
+      },
+    },
+  ],
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "href": "#",
+      "text": "View referral",
+    },
+  ],
+  "status": {
+    "colour": "yellow",
+    "text": "Submitted",
+  },
+}
+`;

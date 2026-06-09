@@ -18,8 +18,12 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
+        "serviceStatus": "SUBMITTED",
         "failureReasons": []
+      },
+      "commissionedRehabilitativeServices": {
+        "status": "DRAFT",
+        "submissionDate": null
       }
     },
     "dtr": {
@@ -66,9 +70,11 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["INVALID_APPLICATION_STATE"]
-      }
+        "serviceStatus": "NOT_STARTED",
+        "action": "volva ventus adinventitias minus colligo",
+        "failureReasons": []
+      },
+      "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
@@ -102,10 +108,10 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "action": "confugo aduro careo debilito delectatio",
-        "failureReasons": []
-      }
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["DTR_REFERRAL_EXPIRED"]
+      },
+      "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
@@ -140,10 +146,11 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "action": "teres delectatio voluntarius itaque pectus",
-        "failureReasons": ["S_TIER"]
-      }
+        "serviceStatus": "NOT_STARTED",
+        "action": "delicate ustilo ulciscor cenaculum deorsum",
+        "failureReasons": []
+      },
+      "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
@@ -188,9 +195,13 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
-        "action": "clibanus spectaculum cui vulgaris vestrum",
+        "serviceStatus": "SUBMITTED",
+        "action": "aptus decretum sui conatus ater",
         "failureReasons": []
+      },
+      "commissionedRehabilitativeServices": {
+        "status": "LIVE",
+        "submissionDate": "2025-09-11"
       }
     },
     "dtr": {
@@ -226,8 +237,12 @@
     "crs": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
-        "action": "paulatim aspernatur strenuus cohors triumphus",
+        "action": "totus ocer voveo arma utroque",
         "failureReasons": []
+      },
+      "commissionedRehabilitativeServices": {
+        "status": "DRAFT",
+        "submissionDate": null
       }
     },
     "dtr": {
@@ -276,10 +291,10 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
-        "action": "aperio volutabrum amor suppellex sulum",
+        "serviceStatus": "NOT_STARTED",
         "failureReasons": []
-      }
+      },
+      "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
@@ -325,10 +340,10 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "action": "facilis arca odio ratione ex",
+        "serviceStatus": "NOT_STARTED",
         "failureReasons": []
-      }
+      },
+      "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
@@ -365,8 +380,10 @@
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["CRS_NOT_SUBMITTED"]
-      }
+        "action": "depopulo tabella vester vinum comburo",
+        "failureReasons": ["CRS_EXPIRED"]
+      },
+      "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
@@ -411,8 +428,12 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "REJECTED",
+        "serviceStatus": "SUBMITTED",
         "failureReasons": []
+      },
+      "commissionedRehabilitativeServices": {
+        "status": "WITHDRAWN",
+        "submissionDate": "2026-02-28"
       }
     },
     "dtr": {

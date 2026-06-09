@@ -51,6 +51,31 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     },
   },
   {
+    "details": [
+      {
+        "key": {
+          "text": "Submitted",
+        },
+        "value": {
+          "text": "30 November 2025 (52 days ago)",
+        },
+      },
+    ],
+    "heading": "Commissioned Rehabilitative Services (CRS)",
+    "hint": undefined,
+    "inactive": false,
+    "links": [
+      {
+        "href": "#",
+        "text": "View referral",
+      },
+    ],
+    "status": {
+      "colour": "yellow",
+      "text": "Submitted",
+    },
+  },
+  {
     "heading": "Approved premises (CAS1)",
     "hint": undefined,
     "inactive": false,

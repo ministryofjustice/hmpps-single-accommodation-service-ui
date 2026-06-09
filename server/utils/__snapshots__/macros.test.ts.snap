@@ -29,7 +29,7 @@ exports[`Macros Status Card renders a status card with full information 1`] = `
     <div class="sas-card__footer">
       <div class="sas-card__content">
         
-          <p class="govuk-hint">Some hint text</p>
+          <p class="sas-card__hint">Some hint text</p>
         
 
         

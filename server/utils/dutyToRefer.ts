@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
-import { StatusCard } from '@sas/ui'
+import { Link, StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'
 import uiPaths from '../paths/ui'
 import { validateAndFlashErrors } from './validation'
@@ -39,7 +39,7 @@ export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResu
   }
 }
 
-export const linksForStatus = (dtr?: DtrServiceResult, crn?: string) => {
+export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => {
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
 

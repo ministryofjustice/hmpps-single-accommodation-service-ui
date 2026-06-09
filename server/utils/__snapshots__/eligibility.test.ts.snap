@@ -66,7 +66,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": [
       {
-        "href": "#",
+        "href": "https://example.com/view-referral",
         "text": "View referral",
       },
     ],

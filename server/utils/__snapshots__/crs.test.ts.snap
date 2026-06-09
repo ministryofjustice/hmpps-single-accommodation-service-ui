@@ -22,7 +22,7 @@ exports[`CRS utilities crsStatusCard returns a status card for a NOT_STARTED CRS
   "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "https://example.com/start",
       "text": "Start referral",
     },
   ],
@@ -50,7 +50,7 @@ exports[`CRS utilities crsStatusCard returns a status card for a SUBMITTED CRS s
   "inactive": false,
   "links": [
     {
-      "href": "#",
+      "href": "https://example.com/view-referral",
       "text": "View referral",
     },
   ],

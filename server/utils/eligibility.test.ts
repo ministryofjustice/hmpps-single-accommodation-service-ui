@@ -73,7 +73,11 @@ describe('eligibilityToEligibilityCards', () => {
           outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
         },
       },
-      crs: crsServiceResultFactory.submitted().build({
+      crs: crsServiceResultFactory.build({
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'SUBMITTED',
+          url: 'https://example.com/view-referral',
+        }),
         commissionedRehabilitativeServices: crsSubmissionFactory.build({
           submissionDate: '2025-11-30',
         }),

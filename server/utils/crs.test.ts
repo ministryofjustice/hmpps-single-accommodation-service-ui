@@ -19,6 +19,7 @@ describe('CRS utilities', () => {
 
     it('returns a status card for a NOT_STARTED CRS service result', () => {
       const crsServiceResult = crsServiceResultFactory.notStarted().build()
+      crsServiceResult.serviceResult.url = 'https://example.com/start'
 
       expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
     })
@@ -29,6 +30,7 @@ describe('CRS utilities', () => {
           submissionDate: '2026-06-06',
         }),
       })
+      crsServiceResult.serviceResult.url = 'https://example.com/view-referral'
 
       expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
     })

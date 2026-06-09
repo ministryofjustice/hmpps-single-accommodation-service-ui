@@ -62,5 +62,6 @@ export default ServiceResultFactory.define(({ params }) => {
     serviceStatus,
     action: faker.helpers.maybe(() => faker.lorem.words(5)),
     failureReasons,
+    url: faker.internet.url(),
   }
 })

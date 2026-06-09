@@ -22,12 +22,14 @@ const crsStatusCardDetails = (crs?: CrsServiceResult): SummaryListRow[] => {
   return [summaryListRowText('Submitted', formatDateAndDaysAgo(crs.commissionedRehabilitativeServices.submissionDate))]
 }
 
-const crsStatusCardLinks = (serviceStatus: CrsServiceResult['serviceResult']['serviceStatus']): Link[] => {
+const crsStatusCardLinks = (crs?: CrsServiceResult): Link[] => {
+  const { serviceStatus, url } = crs?.serviceResult || {}
+
   switch (serviceStatus) {
     case 'NOT_STARTED':
-      return [{ text: 'Start referral', href: '#' }]
+      return [{ text: 'Start referral', href: url }]
     case 'SUBMITTED':
-      return [{ text: 'View referral', href: '#' }]
+      return [{ text: 'View referral', href: url }]
     case 'NOT_ELIGIBLE':
     default:
       return undefined
@@ -45,7 +47,7 @@ export const crsStatusCard = (crs?: CrsServiceResult): StatusCard => {
     details: crsStatusCardDetails(crs),
     hint: crsStatusCardHint(serviceStatus),
     inactive: serviceStatus === 'NOT_ELIGIBLE',
-    links: crsStatusCardLinks(serviceStatus),
+    links: crsStatusCardLinks(crs),
     status: serviceStatusTag(serviceStatus),
   }
 }

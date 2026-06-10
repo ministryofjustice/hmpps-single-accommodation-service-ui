@@ -10,7 +10,7 @@ export default class CasesListPage extends AbstractPage {
 
   constructor(page: Page) {
     super(page)
-    this.header = page.locator('h1', { hasText: 'Cases' })
+    this.header = page.locator('h1', { hasText: 'Accommodation case list' })
 
     this.casesRows = page.getByRole('table', { name: 'List of cases' }).getByRole('row')
   }

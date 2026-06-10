@@ -1,7 +1,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% extends "pages/proposed-address/layout.njk" %}
 
-{% set pageTitle = "What is the address? " + applicationName %}
+{% set pageTitle = "What is the address?" %}
 {% set backLinkHref = paths.cases.show({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.lookup({crn: crn}) %}
 {% set buttonText = 'Find address' %}

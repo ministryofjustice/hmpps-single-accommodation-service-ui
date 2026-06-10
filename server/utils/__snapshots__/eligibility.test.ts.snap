@@ -1,5 +1,41 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "href": "https://example.com/start",
+      "text": "Start application",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "href": "https://example.com/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
+`;
+
 exports[`eligibilityToEligibilityCards returns an array of eligibility card objects 1`] = `
 [
   {
@@ -81,12 +117,8 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": [
       {
-        "href": "#",
-        "text": "Start referral",
-      },
-      {
-        "href": "#",
-        "text": "Notes",
+        "href": "https://example.com/start-application",
+        "text": "Start application",
       },
     ],
     "status": {
@@ -98,7 +130,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "heading": "CAS3 (transitional accommodation)",
     "hint": undefined,
     "inactive": false,
-    "links": [],
+    "links": undefined,
     "status": {
       "colour": "green",
       "text": "Confirmed",

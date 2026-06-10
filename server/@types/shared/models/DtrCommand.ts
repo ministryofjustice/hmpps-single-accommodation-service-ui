@@ -22,4 +22,6 @@ export type DtrCommand = {
     | 'NO_LOCAL_CONNECTION'
     | 'INTENTIONALLY_HOMELESS'
     | 'REJECTED_FOR_ANOTHER_REASON'
+  submissionNote?: string | null
+  outcomeNote?: string | null
 }

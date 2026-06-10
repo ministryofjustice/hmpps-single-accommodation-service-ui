@@ -5,6 +5,7 @@ import { StatusTag } from '@sas/ui'
 export const serviceStatusTag = (status?: ServiceResult['serviceStatus'], isDtr?: boolean): StatusTag =>
   ({
     NOT_ELIGIBLE: { text: isDtr ? 'Not required' : 'Not eligible', colour: 'grey' },
+    CANNOT_START_YET: { text: 'Cannot start yet', colour: 'grey' },
     UPCOMING: { text: 'Upcoming', colour: 'yellow' },
     NOT_STARTED: { text: 'Not started', colour: 'orange' },
     NOT_SUBMITTED: { text: 'Not submitted', colour: 'red' },

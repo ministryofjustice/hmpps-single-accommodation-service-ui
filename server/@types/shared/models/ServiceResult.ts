@@ -28,6 +28,7 @@ export type ServiceResult = {
     | 'BOOKING_CANCELLED'
     | 'ACCEPTED'
     | 'NOT_ACCEPTED'
+    | 'CANNOT_START_YET'
   action?: string | null
   link?: string | null
   url?: string | null

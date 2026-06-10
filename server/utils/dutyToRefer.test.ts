@@ -385,12 +385,14 @@ describe('duty to refer utils', () => {
 
     it('returns a timeline entry for an outcome added record', () => {
       const auditRecord = auditRecordFactory
-        .dutyToReferAdded(
+        .dutyToReferUpdated(
           dtrSubmissionFactory.build({
             localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
+            outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
           }),
           'ACCEPTED',
           { localAuthorityAreaName: 'Cherwell District Council' },
+          'SUBMITTED'
         )
         .build({
           commitDate: '2025-04-15T15:38:00.000Z',
@@ -405,6 +407,7 @@ describe('duty to refer utils', () => {
         .dutyToReferUpdated(
           dtrSubmissionFactory.build({
             localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
+            outcomeReason: 'INTENTIONALLY_HOMELESS'
           }),
           'NOT_ACCEPTED',
           { localAuthorityAreaName: 'Oxford City Council' },

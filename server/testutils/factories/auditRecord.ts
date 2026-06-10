@@ -59,9 +59,10 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     dtrData: DtrSubmissionDto,
     status?: DutyToReferDto['status'],
     extraInformation?: Record<string, string>,
+    oldStatus: DutyToReferDto['status'] = status,
   ) {
     const changes: FieldChange[] = [
-      ...(status ? [{ field: 'status', value: status as string }] : []),
+      ...(status ? [{ field: 'status', value: status as string, oldValue: oldStatus as string }] : []),
       ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
     ]
 

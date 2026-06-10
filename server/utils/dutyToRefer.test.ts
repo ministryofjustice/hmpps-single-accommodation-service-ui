@@ -367,7 +367,7 @@ describe('duty to refer utils', () => {
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
-    fit('does not render Invalid Date when submissionDate is not present', () => {
+    it('does not render Invalid Date when submissionDate is not present', () => {
       const submission = dtrSubmissionFactory.build({
         submissionDate: null,
         localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },

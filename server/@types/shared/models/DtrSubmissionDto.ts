@@ -9,6 +9,7 @@ export type DtrSubmissionDto = {
   referenceNumber?: string | null
   submissionDate: string
   createdBy: string
+  createdByUsername?: string | null
   createdAt: string
   withdrawalReason?:
     | 'NEW_REFERRAL'

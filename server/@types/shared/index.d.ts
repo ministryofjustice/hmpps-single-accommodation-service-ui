@@ -44,5 +44,6 @@ export type { ProposedAccommodationDetailCommand } from './models/ProposedAccomm
 export type { ProposedAccommodationDto } from './models/ProposedAccommodationDto'
 export type { ReferenceDataDto } from './models/ReferenceDataDto'
 export type { ServiceResult } from './models/ServiceResult'
+export type { StaffDetailsDto } from './models/StaffDetailsDto'
 export type { Team } from './models/Team'
 export type { UpstreamFailureDto } from './models/UpstreamFailureDto'

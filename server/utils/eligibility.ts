@@ -46,6 +46,7 @@ export const linksForCas3Status = (serviceResult?: ServiceResult) => {
       return [{ text: 'View referral', href: url }]
     case 'REJECTED':
       return [{ text: 'Start new referral', href: url }]
+    case 'CANNOT_START_YET':
     case 'NOT_ELIGIBLE':
     case 'UPCOMING':
     default:

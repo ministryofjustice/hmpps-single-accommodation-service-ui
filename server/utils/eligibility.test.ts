@@ -29,6 +29,7 @@ describe('linksForService', () => {
     { service: 'cas3', status: 'BOOKING_CONFIRMED', expected: ['View referral'] },
     { service: 'cas3', status: 'BOOKING_CANCELLED', expected: ['View referral'] },
     { service: 'cas3', status: 'REJECTED', expected: ['Start new referral'] },
+    { service: 'cas3', status: 'CANNOT_START_YET', expected: undefined },
     { service: 'cas3', status: 'NOT_ELIGIBLE', expected: undefined },
     { service: 'cas3', status: 'UPCOMING', expected: undefined },
   ]

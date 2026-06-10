@@ -11,6 +11,7 @@ export const referralStatusType = (type?: Referral['type']): string =>
     CAS2: 'CAS2 for HDC',
     CAS2v2: 'CAS2 for Bail',
     CAS3: 'CAS3',
+    DTR: 'Duty to refer',
   })[type] || 'Unknown'
 
 export const referralStatusTag = (status?: Referral['status']): StatusTag =>
@@ -18,6 +19,7 @@ export const referralStatusTag = (status?: Referral['status']): StatusTag =>
     PENDING: { text: 'Pending', colour: 'yellow' },
     ACCEPTED: { text: 'Accepted', colour: 'green' },
     REJECTED: { text: 'Rejected', colour: 'red' },
+    WITHDRAWN: { text: 'Withdrawn' },
   })[status] || { text: 'Unknown' }
 
 export const referralHistoryRows = (referrals?: Referral[]): TableRow[] => {

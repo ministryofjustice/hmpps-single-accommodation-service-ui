@@ -268,10 +268,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   } else {
     label = 'Submission details changed'
     const showLocalAuthority = auditRecord.changes.some(change => change.field === 'localAuthorityAreaId')
-    values = submissionValues(
-      showLocalAuthority ? submission : { ...submission, localAuthority: undefined },
-      true,
-    )
+    values = submissionValues(showLocalAuthority ? submission : { ...submission, localAuthority: undefined }, true)
   }
 
   const html = renderMacro('timelineDutyToRefer', {

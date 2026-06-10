@@ -236,6 +236,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
         <p class="govuk-!-margin-bottom-1">Reference: REF123</p>
       
     
+  
   ",
   "label": {
     "text": "Submission details added",
@@ -256,25 +257,28 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
   
     
-      
-        <p class="govuk-!-margin-bottom-1">Date submitted: 14 April 2025 (240 days ago)</p>
-      
+  
     
   
     
-      
-        <p class="govuk-!-margin-bottom-1">Local authority: Oxford City Council</p>
-      
-    
   
-    
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
       
-        <p class="govuk-!-margin-bottom-1">Reference: REF456</p>
+        
+          <li>Date submitted changed to: 14 April 2025 (240 days ago)</li>
+        
       
-    
+        
+      
+        
+          <li>Reference changed to: REF456</li>
+        
+      
+    </ul>
   ",
   "label": {
-    "text": "Submission details updated",
+    "text": "Submission details changed",
   },
 }
 `;
@@ -295,11 +299,16 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
       
-        <p class="govuk-!-margin-bottom-1">Cherwell District Council agreed to support this person with housing</p>
+        <p class="govuk-!-margin-bottom-4">Cherwell District Council agreed to support this person with housing</p>
       
     
   
     
+      
+        <p class="govuk-!-margin-bottom-1">Reason: Prevention and relief duty</p>
+      
+    
+  
   ",
   "label": {
     "text": "Outcome details added",
@@ -322,15 +331,22 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
   
     
-      
-        <p class="govuk-!-margin-bottom-1">Oxford City Council will not support this person with housing</p>
-      
-    
   
     
+  
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      
+        
+      
+        
+          <li>Reason changed to: Intentionally homeless</li>
+        
+      
+    </ul>
   ",
   "label": {
-    "text": "Outcome details updated",
+    "text": "Outcome details changed",
   },
 }
 `;

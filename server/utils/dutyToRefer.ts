@@ -239,7 +239,11 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   const submissionValues =
     submissionDate || localAuthorityName || referenceNumber
       ? [
-          { label: 'Date submitted', value: formatDateAndDaysAgo(submissionDate), showLabel: true },
+          {
+            label: 'Date submitted',
+            value: submissionDate ? formatDateAndDaysAgo(submissionDate) : '',
+            showLabel: true,
+          },
           { label: 'Local authority', value: localAuthorityName, showLabel: true },
           { label: 'Reference', value: referenceNumber, showLabel: true },
         ]

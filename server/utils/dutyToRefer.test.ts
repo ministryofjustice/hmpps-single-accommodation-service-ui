@@ -367,6 +367,22 @@ describe('duty to refer utils', () => {
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
+    fit('does not render Invalid Date when submissionDate is not present', () => {
+      const submission = dtrSubmissionFactory.build({
+        submissionDate: null,
+        localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
+        referenceNumber: 'REF456',
+      })
+      const auditRecord = auditRecordFactory.dutyToReferUpdated(submission).build({
+        commitDate: '2025-04-15T10:00:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      const entry = dutyToReferTimelineEntry(auditRecord)
+
+      expect(entry.html).not.toContain('Invalid Date')
+    })
+
     it('returns a timeline entry for an outcome added record', () => {
       const auditRecord = auditRecordFactory
         .dutyToReferAdded(

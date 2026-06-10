@@ -20,6 +20,7 @@ import {
   serviceResultFactory,
   accommodationSummaryFactory,
   proposedAccommodationFactory,
+  crsServiceResultFactory,
 } from '../../../server/testutils/factories'
 
 test.describe('Profile Tracker Page', () => {
@@ -59,6 +60,7 @@ test.describe('Profile Tracker Page', () => {
     const eligibility = eligibilityFactory.build({
       crn,
       dtr: { serviceResult: serviceResultFactory.build(), submission: dutyToRefer.submission },
+      crs: crsServiceResultFactory.build(),
       cas1: { serviceResult: serviceResultFactory.build() },
       cas3: { serviceResult: serviceResultFactory.build() },
     })

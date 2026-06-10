@@ -53,6 +53,11 @@ export interface StatusCard {
   }[]
 }
 
+export type Link = {
+  text: string
+  href: string
+}
+
 export type MultiPageFormData = {
   proposedAddress?: Record<string, ProposedAddressFormData>
 }

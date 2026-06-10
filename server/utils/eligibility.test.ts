@@ -1,5 +1,10 @@
 import { eligibilityStatusCard, eligibilityToEligibilityCards } from './eligibility'
-import { eligibilityFactory, serviceResultFactory } from '../testutils/factories'
+import {
+  crsServiceResultFactory,
+  crsSubmissionFactory,
+  eligibilityFactory,
+  serviceResultFactory,
+} from '../testutils/factories'
 
 describe('eligibility utilities', () => {
   describe('eligibilityStatusCard', () => {
@@ -44,10 +49,11 @@ describe('eligibilityToEligibilityCards', () => {
 
     const cards = eligibilityToEligibilityCards(eligibility, crn)
 
-    expect(cards).toHaveLength(3)
+    expect(cards).toHaveLength(4)
     expect(cards[0].heading).toContain('Duty to Refer (DTR)')
-    expect(cards[1].heading).toContain('Approved premises (CAS1)')
-    expect(cards[2].heading).toContain('CAS3 (transitional accommodation)')
+    expect(cards[1].heading).toContain('Commissioned Rehabilitative Services (CRS)')
+    expect(cards[2].heading).toContain('Approved premises (CAS1)')
+    expect(cards[3].heading).toContain('CAS3 (transitional accommodation)')
   })
 
   it('returns an array of eligibility card objects', () => {
@@ -67,6 +73,15 @@ describe('eligibilityToEligibilityCards', () => {
           outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
         },
       },
+      crs: crsServiceResultFactory.build({
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'SUBMITTED',
+          url: 'https://example.com/view-referral',
+        }),
+        commissionedRehabilitativeServices: crsSubmissionFactory.build({
+          submissionDate: '2025-11-30',
+        }),
+      }),
     })
 
     const cards = eligibilityToEligibilityCards(eligibility, crn)

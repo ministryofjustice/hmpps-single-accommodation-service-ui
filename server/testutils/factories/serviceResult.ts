@@ -21,6 +21,8 @@ const dtrStatuses: Array<ServiceResult['serviceStatus']> = [
   'NOT_ACCEPTED',
 ]
 
+const crsStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_ELIGIBLE', 'NOT_STARTED', 'SUBMITTED']
+
 const paStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_ELIGIBLE', 'NOT_STARTED', 'COMPLETED']
 
 const allFailureReasons: ServiceResult['failureReasons'] = [
@@ -39,12 +41,12 @@ const allFailureReasons: ServiceResult['failureReasons'] = [
 ]
 
 class ServiceResultFactory extends Factory<ServiceResult> {
-  notEligible() {
-    return this.params({ serviceStatus: 'NOT_ELIGIBLE', action: undefined })
-  }
-
   dtr() {
     return this.params({ serviceStatus: faker.helpers.arrayElement(dtrStatuses) })
+  }
+
+  crs() {
+    return this.params({ serviceStatus: faker.helpers.arrayElement(crsStatuses) })
   }
 
   pa() {
@@ -60,5 +62,6 @@ export default ServiceResultFactory.define(({ params }) => {
     serviceStatus,
     action: faker.helpers.maybe(() => faker.lorem.words(5)),
     failureReasons,
+    url: ['NOT_ELIGIBLE', 'UPCOMING'].includes(serviceStatus) ? undefined : faker.internet.url(),
   }
 })

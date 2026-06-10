@@ -150,6 +150,10 @@ export default class AbstractPage {
       }
     }
 
+    if (cardData.hint) {
+      await expect(card).toContainText(cardData.hint)
+    }
+
     for await (const detail of cardData.details || []) {
       const value = detail.value.text || detail.value.html?.replace(/<[^>]*>/g, '')
       await this.shouldShowSummaryItem(detail.key.text, value, card)

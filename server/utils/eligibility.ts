@@ -1,9 +1,10 @@
 import { EligibilityDto, ServiceResult } from '@sas/api'
-import { StatusCard } from '@sas/ui'
+import { Link, StatusCard } from '@sas/ui'
 import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
+import { crsStatusCard } from './crs'
 
-export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']) => {
+export const linksForStatus = (serviceStatus?: ServiceResult['serviceStatus']): Link[] => {
   switch (serviceStatus) {
     case 'NOT_ELIGIBLE':
     case 'UPCOMING':
@@ -31,6 +32,7 @@ export const eligibilityStatusCard = (title: string, service?: ServiceResult): S
 
 export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] => [
   dutyToReferStatusCard(crn, eligibility.dtr),
+  crsStatusCard(eligibility.crs),
   eligibilityStatusCard('Approved premises (CAS1)', eligibility.cas1.serviceResult),
   eligibilityStatusCard('CAS3 (transitional accommodation)', eligibility.cas3.serviceResult),
 ]

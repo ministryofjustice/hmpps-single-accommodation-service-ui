@@ -11,61 +11,64 @@
 {% block content %}
   <h1 class="govuk-heading-xl">Accommodation case list</h1>
 
-  <form method="get" class="govuk-!-margin-bottom-8">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        {{
-          govukInput({
-            label: { text: 'Search by name, CRN or prison number' },
-            name: 'searchTerm',
-            value: query.searchTerm
-          })
-        }}
-      </div>
-    </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-quarter">
-        {{
-          govukSelect({
-            label: {
-              text: 'Assigned to'
-            },
-            name: 'teamCode',
-            value: query.teamCode,
-            items: assignedToOptions,
-            classes: 'govuk-!-width-full'
-          })
-        }}
-      </div>
-      <div class="govuk-grid-column-one-quarter">
-        {{
-          govukSelect({
-            label: {
-              text: 'RoSH'
-            },
-            name: 'riskLevel',
-            value: query.riskLevel,
-            items: riskLevelOptions,
-            classes: 'govuk-!-width-full'
-          })
-        }}
-      </div>
-    </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <div class="sas-filters__actions">{{ govukButton({ text: 'Apply filters' }) }}</div>
-      </div>
-    </div>
-  </form>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <form method="get" class="sas-filters govuk-!-margin-bottom-8">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            {{
+              govukInput({
+                label: { text: 'Search by name, CRN or prison number' },
+                name: 'searchTerm',
+                value: query.searchTerm
+              })
+            }}
+          </div>
+        </div>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-half">
+            {{
+              govukSelect({
+                label: {
+                  text: 'Assigned to'
+                },
+                name: 'teamCode',
+                value: query.teamCode,
+                items: assignedToOptions
+              })
+            }}
+          </div>
+          <div class="govuk-grid-column-one-half">
+            {{
+              govukSelect({
+                label: {
+                  text: 'RoSH'
+                },
+                name: 'riskLevel',
+                value: query.riskLevel,
+                items: riskLevelOptions
+              })
+            }}
+          </div>
+        </div>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <div class="sas-filters__actions">{{ govukButton({ text: 'Apply filters' }) }}</div>
+          </div>
+        </div>
+      </form>
+
       {% if filters and filters.length %}
         <div class="sas-filters__summary">
           <h2 id="case-list-summary" class="govuk-heading-m">Showing {{ resultsSummary }}</h2>
           <p class="govuk-!-margin-bottom-1">Filters applied:</p>
           <ul class="moj-filter-tags">
             {% for filter in filters %}
-              <li><a class="moj-filter__tag" href="{{ filter.href }}"><span class="govuk-visually-hidden">Remove this filter</span> {{ filter.text }}</a></li>
+              <li>
+                <a class="moj-filter__tag" href="{{ filter.href }}"
+                  ><span class="govuk-visually-hidden">Remove this filter</span> {{ filter.text }}</a
+                >
+              </li>
             {% endfor %}
           </ul>
           <p class="govuk-!-margin-bottom-1">

@@ -18,9 +18,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/C321654">
-        Dave Foo
-      </a>
+      <a class="govuk-link" href="/cases/C321654"> Dave Foo </a>
       
     </div>
 
@@ -49,9 +47,10 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
         <dd>C321654</dd>
       </div>
       <div>
-        <dt>Prison number</dt>
-        <dd>A1234BC</dd>
-      </div>
+          <dt>Prison number</dt>
+          <dd>A1234BC</dd>
+        </div>
+      
     </dl>
   </div>"
 `;
@@ -61,9 +60,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/C321654">
-        Dave Foo
-      </a>
+      <a class="govuk-link" href="/cases/C321654"> Dave Foo </a>
       (LAO)
     </div>
 
@@ -92,9 +89,10 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
         <dd>C321654</dd>
       </div>
       <div>
-        <dt>Prison number</dt>
-        <dd>A1234BC</dd>
-      </div>
+          <dt>Prison number</dt>
+          <dd>A1234BC</dd>
+        </div>
+      
     </dl>
   </div>"
 `;
@@ -104,9 +102,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/C321666">
-        Limited access offender
-      </a>
+      <a class="govuk-link" href="/cases/C321666"> Limited access offender </a>
       
     </div>
 
@@ -123,9 +119,36 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
         <dd>C321666</dd>
       </div>
       <div>
-        <dt>Prison number</dt>
-        <dd>Z4567HG</dd>
+          <dt>Prison number</dt>
+          <dd>Z4567HG</dd>
+        </div>
+      
+    </dl>
+  </div>"
+`;
+
+exports[`cases utilities personCell macro renders a formatted cell for a case with limited information 1`] = `
+"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+
+  <div class="sas-person-cell">
+    <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
+      <a class="govuk-link" href="/cases/D777665"> John Doe </a>
+      
+    </div>
+
+    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
+      
+
+      
+    </dl>
+
+    <dl class="sas-person-details govuk-!-margin-0">
+      
+      <div>
+        <dt>CRN</dt>
+        <dd>D777665</dd>
       </div>
+      
     </dl>
   </div>"
 `;
@@ -135,9 +158,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/C321669">
-        Unknown
-      </a>
+      <a class="govuk-link" href="/cases/C321669"> Unknown </a>
       
     </div>
 
@@ -154,9 +175,10 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
         <dd>C321669</dd>
       </div>
       <div>
-        <dt>Prison number</dt>
-        <dd>C4567HG</dd>
-      </div>
+          <dt>Prison number</dt>
+          <dd>C4567HG</dd>
+        </div>
+      
     </dl>
   </div>"
 `;

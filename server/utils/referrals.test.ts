@@ -5,30 +5,30 @@ describe('referrals utilities', () => {
   const referral1 = referralFactory.build({
     id: '123456',
     type: 'CAS1',
-    status: 'CANCELLED',
-    createdAt: '2023-01-15',
-    referredBy: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' },
+    placementStatus: 'CANCELLED',
+    date: '2023-01-15',
+    referredBy: { username: 'alice_smith', name: 'Alice Smith' },
   })
   const referral2 = referralFactory.build({
     id: '789012',
     type: 'CAS2',
-    status: 'WITHDRAW',
-    createdAt: '2023-02-20',
-    referredBy: { username: 'joe_bloggs', forename: 'Joe', surname: 'Bloggs' },
+    placementStatus: 'WITHDRAW',
+    date: '2023-02-20',
+    referredBy: { username: 'joe_bloggs', name: 'Joe Bloggs' },
   })
   const referral3 = referralFactory.build({
     id: '345678',
     type: 'CAS3',
-    status: 'REJECTED',
-    createdAt: '2023-03-25',
-    referredBy: { username: 'matt_jones', forename: 'Matt', surname: 'Jones' },
+    placementStatus: 'REJECTED',
+    date: '2023-03-25',
+    referredBy: { username: 'matt_jones', name: 'Matt Jones' },
   })
   const referral4 = referralFactory.build({
     id: '901234',
     type: 'CAS2v2',
-    status: 'ARCHIVED',
-    createdAt: '2023-04-30',
-    referredBy: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' },
+    placementStatus: 'ARCHIVED',
+    date: '2023-04-30',
+    referredBy: { username: 'alice_smith', name: 'Alice Smith' },
   })
   const referrals = [referral1, referral2, referral3, referral4]
 

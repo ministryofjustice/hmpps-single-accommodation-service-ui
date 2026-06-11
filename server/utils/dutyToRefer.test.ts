@@ -470,6 +470,24 @@ describe('duty to refer utils', () => {
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
+    it('does not include outcome support text when only reason is updated', () => {
+      const auditRecord = auditRecordFactory
+        .dutyToReferUpdated(
+          dtrSubmissionFactory.build({
+            localAuthority: { localAuthorityAreaId: 'la-2', localAuthorityAreaName: 'Oxford City Council' },
+            outcomeReason: 'NO_LOCAL_CONNECTION',
+          }),
+          'NOT_ACCEPTED',
+          { localAuthorityAreaName: 'Oxford City Council' },
+        )
+        .build({
+          commitDate: '2025-04-16T09:00:00.000Z',
+          author: 'Jane Doe',
+        })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
     it('includes outcome support text when outcome is updated with a status change', () => {
       const auditRecord = auditRecordFactory
         .dutyToReferUpdated(

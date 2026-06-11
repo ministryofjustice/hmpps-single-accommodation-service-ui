@@ -45,7 +45,7 @@ expect.extend({
       const openApiSpec = JSON.parse((await getFileContents(apiSpecPath, apiSpecUrl)).toString())
       const pact = JSON.parse((await getFileContents(pactPath)).toString())
 
-      const comparator = new Comparator(openApiSpec)
+      const comparator = new Comparator({ oas: openApiSpec })
       const results = []
 
       try {

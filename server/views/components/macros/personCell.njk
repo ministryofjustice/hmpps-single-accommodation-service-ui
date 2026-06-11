@@ -6,7 +6,7 @@
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.cases.show({ crn: person.crn }) }}">
+      <a class="govuk-link" href="{{ paths.cases.show({ crn: person.crn }) }}">
         {{ person.name }}
       </a>
       {% if person.userAccess === 'FULL' and person.limitedAccess %}(LAO){% endif %}

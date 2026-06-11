@@ -18,7 +18,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321654">
+      <a class="govuk-link" href="/cases/C321654">
         Dave Foo
       </a>
       
@@ -61,7 +61,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321654">
+      <a class="govuk-link" href="/cases/C321654">
         Dave Foo
       </a>
       (LAO)
@@ -104,7 +104,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321666">
+      <a class="govuk-link" href="/cases/C321666">
         Limited access offender
       </a>
       
@@ -135,7 +135,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link govuk-link--no-visited-state" href="/cases/C321669">
+      <a class="govuk-link" href="/cases/C321669">
         Unknown
       </a>
       

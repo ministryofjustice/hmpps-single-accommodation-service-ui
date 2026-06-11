@@ -175,7 +175,7 @@ describe('cases utilities', () => {
       expect(
         queryToFilters({ teamCode: 'team-two-code', riskLevel: 'HIGH', searchTerm: 'CRN123' }, url, teams),
       ).toEqual([
-        { text: "Search: 'CRN123'", href: '/?teamCode=team-two-code&riskLevel=HIGH' },
+        { text: 'Search: ‘CRN123’', href: '/?teamCode=team-two-code&riskLevel=HIGH' },
         { text: 'Assigned to: Team Two', href: '/?riskLevel=HIGH&searchTerm=CRN123' },
         { text: 'RoSH: High', href: '/?teamCode=team-two-code&searchTerm=CRN123' },
       ])
@@ -198,7 +198,7 @@ describe('cases utilities', () => {
         'searchTerm',
         { searchTerm: 'CRN123' } as const,
         '/?searchTerm=CRN123&riskLevel=LOW',
-        [{ text: "Search: 'CRN123'", href: '/?riskLevel=LOW' }],
+        [{ text: 'Search: ‘CRN123’', href: '/?riskLevel=LOW' }],
       ],
     ])('includes a filter tag when %s is set', (_, query, url, expected) => {
       expect(queryToFilters(query, url, teams)).toEqual(expected)

@@ -154,7 +154,7 @@ test.describe('duty to refer', () => {
     })
     const submissionAddedDutyReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
     const outcomeAddedDutyToReferRecord = auditRecordFactory
-      .dutyToReferAdded(notAcceptedDutyToRefer.submission, notAcceptedDutyToRefer.status, {
+      .dutyToReferUpdated(notAcceptedDutyToRefer.submission, notAcceptedDutyToRefer.status, {
         localAuthorityAreaName: notAcceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
       })
       .build()

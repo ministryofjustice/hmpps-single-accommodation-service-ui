@@ -1,7 +1,9 @@
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { AccommodationReferralDto as Referral } from '@sas/api'
-import assignedUserFactory from './assignedUser'
+import staffDetailsFactory from './staffDetails'
+
+const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as const
 
 const cas1Statuses = [
   'CANCELLED',
@@ -12,72 +14,68 @@ const cas1Statuses = [
   'REJECTED',
   'WITHDRAW',
   'EXPIRED',
-] as const
+]
 
-const cas3Statuses = ['REJECTED', 'DEPARTED', 'CANCELLED', 'ARCHIVED'] as const
+const cas3Statuses = ['REJECTED', 'DEPARTED', 'CANCELLED', 'ARCHIVED']
 
 class ReferralFactory extends Factory<Referral> {
   cas1Application() {
     return this.params({
       id: faker.string.uuid(),
-      applicationId: faker.string.uuid(),
       type: 'CAS1',
-      createdAt: faker.date.past().toISOString(),
+      date: faker.date.past().toISOString(),
       referralRejectionReason: undefined,
       localAuthorityArea: null,
       pdu: null,
-      referredBy: assignedUserFactory.build(),
       placementAddress: null,
-      placementStatus: null,
-      status: faker.helpers.arrayElement(cas1Statuses),
+      placementStatus: faker.helpers.arrayElement(cas1Statuses),
+      status: faker.helpers.arrayElement(statuses),
     })
   }
 
   cas1ApplicationExpired() {
-    return this.cas1Application().params({ status: 'EXPIRED' })
+    return this.cas1Application().params({ placementStatus: 'EXPIRED' })
   }
 
   cas1ApplicationWithdrawn() {
-    return this.cas1Application().params({ status: 'WITHDRAW' })
+    return this.cas1Application().params({ placementStatus: 'WITHDRAW' })
   }
 
   cas1ApplicationRejected(reason = 'Some rejection reason') {
-    return this.cas1Application().params({ status: 'REJECTED', referralRejectionReason: reason })
+    return this.cas1Application().params({ placementStatus: 'REJECTED', referralRejectionReason: reason })
   }
 
   cas1PlacementRequestRejected() {
-    return this.cas1Application().params({ status: 'REQUEST_REJECTED' })
+    return this.cas1Application().params({ placementStatus: 'REQUEST_REJECTED' })
   }
 
   cas1PlacementRequestWithdrawn(reason = 'Some request withdrawal reason') {
-    return this.cas1Application().params({ status: 'REQUEST_WITHDRAW', referralRejectionReason: reason })
+    return this.cas1Application().params({ placementStatus: 'REQUEST_WITHDRAW', referralRejectionReason: reason })
   }
 
   cas1PlacementNotArrived() {
-    return this.cas1Application().params({ status: 'NOT_ARRIVED', placementAddress: shortAddress() })
+    return this.cas1Application().params({ placementStatus: 'NOT_ARRIVED', placementAddress: shortAddress() })
   }
 
   cas1PlacementDeparted() {
-    return this.cas1Application().params({ status: 'DEPARTED', placementAddress: shortAddress() })
+    return this.cas1Application().params({ placementStatus: 'DEPARTED', placementAddress: shortAddress() })
   }
 
   cas1PlacementCancelled() {
-    return this.cas1Application().params({ status: 'CANCELLED', pdu: faker.location.city() })
+    return this.cas1Application().params({ placementStatus: 'CANCELLED', pdu: faker.location.city() })
   }
 
   cas3Referral() {
     return this.params({
       id: faker.string.uuid(),
-      applicationId: faker.string.uuid(),
       type: 'CAS3',
-      createdAt: faker.date.past().toISOString(),
+      date: faker.date.past().toISOString(),
       referralRejectionReason: undefined,
       localAuthorityArea: null,
       pdu: null,
-      referredBy: assignedUserFactory.build(),
       placementAddress: null,
-      placementStatus: null,
-      status: faker.helpers.arrayElement(cas3Statuses),
+      placementStatus: faker.helpers.arrayElement(cas3Statuses),
+      status: faker.helpers.arrayElement(statuses),
     })
   }
 
@@ -86,18 +84,19 @@ class ReferralFactory extends Factory<Referral> {
   ) {
     return this.cas3Referral().params({
       status: 'REJECTED',
+      placementStatus: 'REJECTED',
       referralRejectionReason: reason,
-      referralRejectionDetails: faker.lorem.words(40),
+      referralRejectionReasonDetail: faker.lorem.words(40),
     })
   }
 
   cas3ReferralArchived() {
-    return this.cas3Referral().params({ status: 'ARCHIVED' })
+    return this.cas3Referral().params({ placementStatus: 'ARCHIVED' })
   }
 
   cas3BookingDeparted() {
     return this.cas3Referral().params({
-      status: 'DEPARTED',
+      placementStatus: 'DEPARTED',
       pdu: faker.location.city(),
       placementAddress: shortAddress(),
     })
@@ -105,7 +104,7 @@ class ReferralFactory extends Factory<Referral> {
 
   cas3BookingCancelled() {
     return this.cas3Referral().params({
-      status: 'CANCELLED',
+      placementStatus: 'CANCELLED',
       placementAddress: shortAddress(),
       pdu: faker.location.city(),
     })
@@ -147,9 +146,9 @@ const shortAddress = () => `${faker.location.street()}, ${faker.location.zipCode
 export default ReferralFactory.define(() => {
   return {
     id: faker.string.uuid(),
-    applicationId: faker.string.uuid(),
     type: 'CAS1' as const,
-    status: 'CANCELLED' as const,
-    createdAt: faker.date.past().toISOString(),
+    status: 'ACCEPTED' as const,
+    date: faker.date.past().toISOString(),
+    referredBy: staffDetailsFactory.build(),
   }
 })

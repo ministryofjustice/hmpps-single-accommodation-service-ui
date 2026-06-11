@@ -93,9 +93,13 @@
       "applicationId": "e39f293d-7fe2-4f2e-aca5-2503194d4ce8",
       "type": "CAS3",
       "status": "CANCELLED",
-      "createdAt": "2025-08-08T22:38:32.700Z",
+      "date": "2025-08-08T22:38:32.700Z",
       "localAuthorityArea": null,
-      "referredBy": "Lisa Kirlin",
+      "referredBy": {
+        "name": "Lisa Kirlin",
+        "username": "Lisa Kirlin",
+        "staffCode": "163593"
+      },
       "placementAddress": null,
       "placementStatus": null
     },
@@ -104,10 +108,14 @@
       "applicationId": "33beef42-38a2-445f-813c-3e90bf325064",
       "type": "CAS1",
       "status": "DEPARTED",
-      "createdAt": "2025-12-04T03:14:28.668Z",
+      "date": "2025-12-04T03:14:28.668Z",
       "pdu": null,
       "localAuthorityArea": null,
-      "referredBy": "Armando Conn",
+      "referredBy": {
+        "name": "Armando Conn",
+        "username": "Armando Conn",
+        "staffCode": "163593"
+      },
       "placementAddress": "Swift Ridge, TQ69 2DJ",
       "placementStatus": null
     },
@@ -116,13 +124,17 @@
       "applicationId": "09026ccd-3dd4-42a2-8ffc-d8dafc1d2146",
       "type": "CAS3",
       "status": "REJECTED",
-      "createdAt": "2025-10-19T23:49:03.470Z",
+      "date": "2025-10-19T23:49:03.470Z",
       "pdu": null,
       "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
       "localAuthorityArea": null,
-      "referredBy": "Percy Jacobs",
+      "referredBy": {
+        "name": "Albina Cummings",
+        "username": "Karla.Dach75",
+        "staffCode": "260733"
+      },
       "placementAddress": null,
-      "placementStatus": null,
+      "placementStatus": "REJECTED",
       "referralRejectionDetails": "stipes curis tenuis talus desidero summa succedo brevis adflicto praesentium voro ex votum vesper vergo cogo volup contra beatae dolores autus varius appositus speciosus delectatio arbitro debitis vere testimonium bene adnuo tardus ratione talio tergiversatio utroque talus via subnecto stabilis"
     }
   ],
@@ -281,12 +293,16 @@
       "id": "12306078-b769-4076-9c42-e4898f5b208b",
       "applicationId": "09eb5170-aa9a-4d96-91cd-80f47ba8b9b5",
       "type": "CAS1",
-      "status": "REJECTED",
-      "createdAt": "2025-05-21T07:31:21.476Z",
-      "pdu": null,
+      "status": "ACCEPTED",
+      "date": "2025-05-21T07:31:21.476Z",
+      "pdu": "Metz-over-McDermott",
       "referralRejectionReason": "Some rejection reason",
       "localAuthorityArea": null,
-      "referredBy": "Erin Kuphal",
+      "referredBy": {
+        "name": "Pearline Gutmann",
+        "username": "Becky94",
+        "staffCode": "163593"
+      },
       "placementAddress": null,
       "placementStatus": null
     },
@@ -295,13 +311,17 @@
       "applicationId": "1b9a3765-6985-4733-bcbc-78d25ebbce00",
       "type": "CAS3",
       "status": "REJECTED",
-      "createdAt": "2025-11-21T08:32:33.588Z",
+      "date": "2025-11-21T08:32:33.588Z",
       "pdu": null,
       "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
       "localAuthorityArea": null,
-      "referredBy": "Deborah Wehner",
+      "referredBy": {
+        "name": "Deborah Wehner",
+        "username": "Deborah Wehner",
+        "staffCode": "163593"
+      },
       "placementAddress": null,
-      "placementStatus": null,
+      "placementStatus": "REJECTED",
       "referralRejectionDetails": "admoneo toties angustus adaugeo facere tenax eveniet calcar sum avarus adipisci patior nam amplitudo quo audio nobis confido vindico decet cupiditate amor coma aetas blandior assentator timidus tribuo vito curis adaugeo consectetur trucido acervus ullam cotidie tot teres quis utroque"
     },
     {
@@ -309,17 +329,18 @@
       "applicationId": "c16dbc02-0b37-4285-8729-bf305b37cf49",
       "type": "CAS1",
       "status": "REQUEST_WITHDRAW",
-      "createdAt": "2025-05-29T19:01:47.132Z",
+      "date": "2025-05-29T19:01:47.132Z",
       "pdu": null,
       "referralRejectionReason": "Some request withdrawal reason",
       "localAuthorityArea": null,
-      "referredBy": "Emily Jacobs",
-      "placementAddress": null,
-      "placementStatus": null
-    }
-  ],
-  "V938951": [],
-  "T229440": [
+      "referredBy": {
+        "name": "Emily Jacobs",
+        "username": "Emily Jacobs",
+        "staffCode": "163593"
+      },
+      "placementAddress": "Daniel Mead, BZ01 0FT",
+      "placementStatus": "NOT_ARRIVED"
+    },
     {
       "id": "f1647f9c-14c4-4690-8ae4-d261fbe7a5d8",
       "applicationId": "2ce68fdf-821c-4bf8-b5f0-7d6baa0ca9f5",
@@ -415,12 +436,16 @@
       "applicationId": "b78c44bd-0701-4bb2-905b-e9ce76b678a1",
       "type": "CAS1",
       "status": "CANCELLED",
-      "createdAt": "2025-08-30T15:46:45.639Z",
+      "date": "2025-08-30T15:46:45.639Z",
       "pdu": "Cassin Court",
       "localAuthorityArea": null,
-      "referredBy": "Florence Labadie",
-      "placementAddress": null,
-      "placementStatus": null
+      "referredBy": {
+        "name": "Florence Labadie",
+        "username": "Florence Labadie",
+        "staffCode": "163593"
+      },
+      "placementAddress": "Prospect Place, RB69 4JK",
+      "placementStatus": "DEPARTED"
     }
   ],
   "F608163": [
@@ -429,27 +454,33 @@
       "applicationId": "1c66986d-c702-4d6b-a314-e941f55bfdc4",
       "type": "CAS1",
       "status": "EXPIRED",
-      "createdAt": "2025-09-06T14:53:26.260Z",
+      "date": "2025-09-06T14:53:26.260Z",
       "pdu": null,
       "localAuthorityArea": null,
-      "referredBy": "Dr. Jeremiah Wiza",
+      "referredBy": {
+        "name": "Dr. Jeremiah Wiza",
+        "username": "Dr. Jeremiah Wiza",
+        "staffCode": "163593"
+      },
       "placementAddress": null,
       "placementStatus": null
-    }
-  ],
-  "F608163": [
+    },
     {
       "id": "8cc20d7d-6789-4481-8b4f-e43aa89c00c5",
       "applicationId": "ab48ae1f-b90f-48e3-a815-e546530fc440",
       "type": "CAS3",
       "status": "REJECTED",
-      "createdAt": "2025-10-06T22:25:49.676Z",
+      "date": "2025-10-06T22:25:49.676Z",
       "pdu": null,
       "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
       "localAuthorityArea": null,
-      "referredBy": "Dennis Bosco",
+      "referredBy": {
+        "name": "Dennis Bosco",
+        "username": "Dennis Bosco",
+        "staffCode": "163593"
+      },
       "placementAddress": null,
-      "placementStatus": null,
+      "placementStatus": "REJECTED",
       "referralRejectionDetails": "quis tamquam caput varius acervus ara ipsa accusator architecto advenio vesper impedit doloremque cruentus solum temperantia amplexus vomer carpo desidero cogo commemoro theatrum unus umbra thymbra vel incidunt cotidie candidus quae vinco aureus quisquam adfectus conduco supra cubo comparo uter"
     },
     {
@@ -457,10 +488,14 @@
       "applicationId": "a7d4ebf8-e760-41e3-b1e4-fba89c087058",
       "type": "CAS1",
       "status": "NOT_ARRIVED",
-      "createdAt": "2025-11-02T10:08:09.013Z",
+      "date": "2025-11-02T10:08:09.013Z",
       "pdu": null,
       "localAuthorityArea": null,
-      "referredBy": "Tracey Marks",
+      "referredBy": {
+        "name": "Tracey Marks",
+        "username": "Tracey Marks",
+        "staffCode": "163593"
+      },
       "placementAddress": "Rodriguez Row, LQ68 6EB",
       "placementStatus": null
     },
@@ -469,10 +504,14 @@
       "applicationId": "c2e1d09f-4c2c-41c1-935b-f5180d8a5a6b",
       "type": "CAS3",
       "status": "ARCHIVED",
-      "createdAt": "2026-01-27T15:58:33.684Z",
+      "date": "2026-01-27T15:58:33.684Z",
       "pdu": null,
       "localAuthorityArea": null,
-      "referredBy": "Gloria Spinka",
+      "referredBy": {
+        "name": "Gloria Spinka",
+        "username": "Gloria Spinka",
+        "staffCode": "163593"
+      },
       "placementAddress": null,
       "placementStatus": null
     }

@@ -189,6 +189,42 @@ exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refe
 }
 `;
 
+exports[`duty to refer utils dutyToReferTimelineEntry does not include outcome support text when only reason is updated 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-16T09:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+    <p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
+  
+
+  
+    
+  
+    
+  
+
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      
+        
+      
+        
+          <li>Reason changed to: No local connection</li>
+        
+      
+    </ul>
+  ",
+  "label": {
+    "text": "Outcome details changed",
+  },
+}
+`;
+
 exports[`duty to refer utils dutyToReferTimelineEntry does not show local authority when only submission date is changed 1`] = `
 {
   "byline": {

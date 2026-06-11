@@ -1,5 +1,12 @@
 @use "govuk-frontend/dist/govuk" as *;
 
+.sas-filters {
+  & select {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
 .sas-filters__actions {
   display: flex;
   align-items: center;
@@ -23,4 +30,16 @@
   padding: govuk-spacing(4);
   margin-bottom: govuk-spacing(4);
   background-color: govuk-colour("black", $variant: "tint-95");
+}
+
+.moj-filter-tags li {
+  $marginRight: govuk-spacing(2);
+  max-width: calc(100% - $marginRight);
+}
+
+.moj-filter__tag {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: nowrap;
 }

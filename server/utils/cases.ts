@@ -31,7 +31,7 @@ export const queryToFilters = (
   const filters: { text: string; href: string }[] = []
 
   if (query?.searchTerm)
-    filters.push({ text: `Search: '${query.searchTerm}'`, href: removeQueryParam(currentUrl, 'searchTerm') })
+    filters.push({ text: `Search: ‘${query.searchTerm}’`, href: removeQueryParam(currentUrl, 'searchTerm') })
 
   if (query?.teamCode) {
     const teamName = teams?.find(team => team.code === query.teamCode)?.name
@@ -75,11 +75,11 @@ export const casesToRows = (cases: Case[]): TableRow[] =>
 
 export const casesTableColumns = () => {
   if (!config.flags.v10CasesList) {
-    return []
+    return [{ text: 'Name' }]
   }
 
   return [
-    { text: 'Person' },
+    { text: 'Name' },
     { text: 'Current accommodation' },
     { text: 'Next accommodation' },
     { text: 'Status' },

@@ -41,6 +41,19 @@ describe('cases utilities', () => {
       expect(personCell(personFullAccess)).toMatchSnapshot()
     })
 
+    it('renders a formatted cell for a case with limited information', () => {
+      const personWithLimitedInformation = caseFactory.build({
+        name: 'John Doe',
+        crn: 'D777665',
+        prisonNumber: undefined,
+        dateOfBirth: undefined,
+        tierScore: undefined,
+        riskLevel: undefined,
+      })
+
+      expect(personCell(personWithLimitedInformation)).toMatchSnapshot()
+    })
+
     it('renders a formatted cell for a case with full access with LAO flag', () => {
       const personRestrictedAccess = caseFactory.build({
         ...personFullAccess,

@@ -383,6 +383,56 @@ describe('duty to refer utils', () => {
       expect(entry.html).not.toContain('Invalid Date')
     })
 
+    it('shows local authority in submission changes when local authority is changed', () => {
+      const auditRecord = auditRecordFactory.build({
+        type: 'UPDATE',
+        commitDate: '2025-04-16T10:00:00.000Z',
+        author: 'Jane Doe',
+        changes: [
+          { field: 'localAuthorityAreaId', value: 'la-4' },
+          { field: 'submissionDate', value: '2025-04-16' },
+          { field: 'referenceNumber', value: 'REF999' },
+        ],
+        extraInformation: { localAuthorityAreaName: 'South Oxfordshire District Council' },
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('shows reference removed when reference is changed to blank', () => {
+      const auditRecord = auditRecordFactory.build({
+        type: 'UPDATE',
+        commitDate: '2025-04-16T11:00:00.000Z',
+        author: 'Jane Doe',
+        changes: [{ field: 'referenceNumber', value: '', oldValue: 'REF999' }],
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('does not show local authority when only submission date is changed', () => {
+      const auditRecord = auditRecordFactory.build({
+        type: 'UPDATE',
+        commitDate: '2025-04-17T09:00:00.000Z',
+        author: 'Jane Doe',
+        changes: [{ field: 'submissionDate', value: '2025-04-17' }],
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('shows local authority but not reference when only local authority is changed', () => {
+      const auditRecord = auditRecordFactory.build({
+        type: 'UPDATE',
+        commitDate: '2025-04-17T10:00:00.000Z',
+        author: 'Jane Doe',
+        changes: [{ field: 'localAuthorityAreaId', value: 'la-5' }],
+        extraInformation: { localAuthorityAreaName: 'Vale of White Horse District Council' },
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
     it('returns a timeline entry for an outcome added record', () => {
       const auditRecord = auditRecordFactory
         .dutyToReferUpdated(
@@ -411,6 +461,28 @@ describe('duty to refer utils', () => {
           }),
           'NOT_ACCEPTED',
           { localAuthorityAreaName: 'Oxford City Council' },
+        )
+        .build({
+          commitDate: '2025-04-16T09:00:00.000Z',
+          author: 'Jane Doe',
+        })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('includes outcome support text when outcome is updated with a status change', () => {
+      const auditRecord = auditRecordFactory
+        .dutyToReferUpdated(
+          dtrSubmissionFactory.build({
+            localAuthority: {
+              localAuthorityAreaId: 'la-3',
+              localAuthorityAreaName: 'West Oxfordshire District Council',
+            },
+            outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
+          }),
+          'ACCEPTED',
+          { localAuthorityAreaName: 'West Oxfordshire District Council' },
+          'NOT_ACCEPTED',
         )
         .build({
           commitDate: '2025-04-16T09:00:00.000Z',

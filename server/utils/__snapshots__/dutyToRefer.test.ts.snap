@@ -189,6 +189,84 @@ exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refe
 }
 `;
 
+exports[`duty to refer utils dutyToReferTimelineEntry does not show local authority when only submission date is changed 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-17T09:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    
+  
+    
+  
+    
+  
+
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      
+        
+          <li>Date submitted changed to: 17 April 2025 (237 days ago)</li>
+        
+      
+        
+      
+        
+      
+    </ul>
+  ",
+  "label": {
+    "text": "Submission details changed",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry includes outcome support text when outcome is updated with a status change 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-16T09:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+    <p><strong class="govuk-tag govuk-tag--yellow">Accepted</strong></p>
+  
+
+  
+    
+      <p class="">
+        West Oxfordshire District Council agreed to support this person with housing
+      </p>
+    
+  
+    
+  
+
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      
+        
+      
+        
+          <li>Reason changed to: Prevention and relief duty</li>
+        
+      
+    </ul>
+  ",
+  "label": {
+    "text": "Outcome details changed",
+  },
+}
+`;
+
 exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a note 1`] = `
 {
   "byline": {
@@ -220,23 +298,24 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
   
     
-      
-        <p class="govuk-!-margin-bottom-1">Date submitted: 12 April 2025 (242 days ago)</p>
-      
+      <p class="govuk-!-margin-bottom-1">
+        Date submitted: 12 April 2025 (242 days ago)
+      </p>
     
   
     
-      
-        <p class="govuk-!-margin-bottom-1">Local authority: Cherwell District Council</p>
-      
+      <p class="govuk-!-margin-bottom-1">
+        Local authority: Cherwell District Council
+      </p>
     
   
     
-      
-        <p class="govuk-!-margin-bottom-1">Reference: REF123</p>
-      
+      <p class="govuk-!-margin-bottom-1">
+        Reference: REF123
+      </p>
     
   
+
   ",
   "label": {
     "text": "Submission details added",
@@ -262,6 +341,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
   
+
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
       
@@ -298,17 +378,18 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
   
     
-      
-        <p class="govuk-!-margin-bottom-4">Cherwell District Council agreed to support this person with housing</p>
-      
+      <p class="">
+        Cherwell District Council agreed to support this person with housing
+      </p>
     
   
     
-      
-        <p class="govuk-!-margin-bottom-1">Reason: Prevention and relief duty</p>
-      
+      <p class="govuk-!-margin-bottom-1">
+        Reason: Prevention and relief duty
+      </p>
     
   
+
   ",
   "label": {
     "text": "Outcome details added",
@@ -334,6 +415,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
   
+
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
       
@@ -347,6 +429,124 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   ",
   "label": {
     "text": "Outcome details changed",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry shows local authority but not reference when only local authority is changed 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-17T10:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    
+  
+    
+  
+    
+  
+
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      
+        
+      
+        
+          <li>Local authority changed to: Vale of White Horse District Council</li>
+        
+      
+        
+      
+    </ul>
+  ",
+  "label": {
+    "text": "Submission details changed",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in submission changes when localAuthorityAreaId is changed 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-16T10:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    
+  
+    
+  
+    
+  
+
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      
+        
+          <li>Date submitted changed to: 16 April 2025 (238 days ago)</li>
+        
+      
+        
+          <li>Local authority changed to: South Oxfordshire District Council</li>
+        
+      
+        
+          <li>Reference changed to: REF999</li>
+        
+      
+    </ul>
+  ",
+  "label": {
+    "text": "Submission details changed",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry shows reference removed when reference is changed to blank 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-16T11:00:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+
+  
+    
+  
+    
+  
+    
+  
+
+  
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      
+        
+      
+        
+      
+        
+          <li>Reference removed</li>
+        
+      
+    </ul>
+  ",
+  "label": {
+    "text": "Submission details changed",
   },
 }
 `;

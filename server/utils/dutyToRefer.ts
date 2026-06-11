@@ -226,7 +226,7 @@ const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean
   {
     label: 'Reference',
     value: submission.referenceNumber || (isList ? '' : 'No reference added'),
-    showLabel: true,
+    showLabel: submission.referenceNumber !== 'Reference removed',
     isList,
   },
 ]
@@ -267,8 +267,19 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
     values = outcomeValues(submission, hasStatusChanged ? outcomeText : '', true)
   } else {
     label = 'Submission details changed'
-    const showLocalAuthority = auditRecord.changes.some(change => change.field === 'localAuthorityAreaId')
-    values = submissionValues(showLocalAuthority ? submission : { ...submission, localAuthority: undefined }, true)
+    const localAuthority =
+      auditRecord.changes.some(change => change.field === 'localAuthorityAreaId') && submission.localAuthority
+    const referenceChange = auditRecord.changes.find(change => change.field === 'referenceNumber')
+    const referenceNumber = referenceChange && (referenceChange.value || 'Reference removed')
+
+    values = submissionValues(
+      {
+        ...submission,
+        localAuthority: localAuthority || undefined,
+        referenceNumber,
+      },
+      true,
+    )
   }
 
   const html = renderMacro('timelineDutyToRefer', {

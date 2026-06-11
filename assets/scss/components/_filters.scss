@@ -24,3 +24,15 @@
   margin-bottom: govuk-spacing(4);
   background-color: govuk-colour("black", $variant: "tint-95");
 }
+
+.moj-filter-tags li {
+  $marginRight: govuk-spacing(2);
+  max-width: calc(100% - $marginRight);
+}
+
+.moj-filter__tag {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: nowrap;
+}

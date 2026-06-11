@@ -471,7 +471,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority but 
 }
 `;
 
-exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in submission changes when localAuthorityAreaId is changed 1`] = `
+exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in submission changes when local authority is changed 1`] = `
 {
   "byline": {
     "text": "Jane Doe",

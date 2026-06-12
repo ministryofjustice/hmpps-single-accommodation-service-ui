@@ -16,7 +16,7 @@
   "P712106": [
     {
       "id": "5d92bc99-d9be-488a-8d6f-673eca6ff03d",
-      "type": "CAS2",
+      "type": "CAS2HDC",
       "status": "PENDING",
       "date": "2025-03-22T10:44:13.880Z"
     },
@@ -28,7 +28,7 @@
     },
     {
       "id": "3540a3ae-44d4-49e7-84b4-26aae6dafaf6",
-      "type": "CAS2",
+      "type": "CAS2HDC",
       "status": "PENDING",
       "date": "2025-11-22T00:06:34.205Z"
     }
@@ -44,13 +44,13 @@
   "V938951": [
     {
       "id": "043c2e0c-a919-4867-9617-162f6f41d228",
-      "type": "CAS2v2",
+      "type": "CAS2",
       "status": "PENDING",
       "date": "2025-12-26T13:25:13.698Z"
     },
     {
       "id": "75b67416-48b8-4c12-a3fa-78f7a7cb2116",
-      "type": "CAS2",
+      "type": "CAS2HDC",
       "status": "PENDING",
       "date": "2025-11-08T16:25:50.129Z"
     }
@@ -75,7 +75,7 @@
   "I322559": [
     {
       "id": "987466f4-0836-44bb-aa07-19f24032de2a",
-      "type": "CAS2",
+      "type": "CAS2HDC",
       "status": "ACCEPTED",
       "date": "2025-06-15T01:49:10.711Z"
     }
@@ -95,7 +95,7 @@
     },
     {
       "id": "bfa232b2-0ce3-4087-9c8b-63f14b510572",
-      "type": "CAS2v2",
+      "type": "CAS2",
       "status": "REJECTED",
       "date": "2025-04-21T23:54:55.432Z"
     }
@@ -103,7 +103,7 @@
   "F608163": [
     {
       "id": "2e1d2744-7eba-4cc3-9f85-8db9d482a3a3",
-      "type": "CAS2",
+      "type": "CAS2HDC",
       "status": "PENDING",
       "date": "2025-07-07T03:23:41.820Z"
     },
@@ -115,7 +115,7 @@
     },
     {
       "id": "1d0c0092-1be1-410e-bf0f-cb9bd4310783",
-      "type": "CAS2",
+      "type": "CAS2HDC",
       "status": "PENDING",
       "date": "2026-01-02T17:43:16.911Z"
     }

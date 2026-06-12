@@ -4,13 +4,13 @@ import { TableRow, TextOrHtmlContent } from '@govuk/ui'
 import { linksCell } from './tables'
 import { renderMacro, statusCell } from './macros'
 import { htmlContent, textContent } from './utils'
-import { outcomeReasonSummaryLabels } from './dutyToRefer'
+import { outcomeReasonSummaryLabels, withdrawReasonLabels } from './dutyToRefer'
 import { formatDate } from './dates'
 import uiPaths from '../paths/ui'
 
 export const referralStatusType = (type?: Referral['type'], status?: string): string => {
   if (type === 'CAS1') {
-    if (['REQUEST_REJECTED', 'REQUEST_WITHDRAW'].includes(status)) {
+    if (['REQUEST_REJECTED', 'REQUEST_WITHDRAWN'].includes(status)) {
       return 'Approved Premises (CAS1) placement request'
     }
     if (['NOT_ARRIVED', 'DEPARTED', 'CANCELLED'].includes(status)) {
@@ -41,21 +41,26 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
 
 export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag => {
   if (status === 'REJECTED' && type === 'CAS1') {
-    return { text: 'Application rejected', colour: 'orange' }
+    if (['REJECTED', 'WITHDRAWN'].includes(status)) {
+      return { REJECTED: { text: 'Application rejected', colour: 'orange' }, WITHDRAWN: { text: 'Application withdrawn', colour: 'grey' } }[status]
+    }
+  }
+  if (status === 'REJECTED' && type === 'DTR') {
+    return { text: 'Not accepted', colour: 'grey' }
   }
   return (
     {
-      REQUEST_WITHDRAW: { text: 'Request withdrawn', colour: 'grey' },
-      WITHDRAW: { text: 'Application withdrawn', colour: 'grey' },
+      REQUEST_WITHDRAWN: { text: 'Request withdrawn', colour: 'grey' },
       EXPIRED: { text: 'Expired', colour: 'grey' },
       REJECTED: { text: 'Rejected', colour: 'orange' },
       REQUEST_REJECTED: { text: 'Request rejected', colour: 'orange' },
       ACCEPTED: { text: 'Accepted', colour: 'green' },
+      PENDING: { text: 'Pending', colour: 'orange' },
       NOT_ARRIVED: { text: 'Not arrived', colour: 'orange' },
       DEPARTED: { text: 'Departed', colour: 'green' },
       CANCELLED: { text: 'Cancelled', colour: 'orange' },
       ARCHIVED: { text: 'Archived', colour: 'grey' },
-      WITHDRAWN: { text: 'Withdrawn' },
+      WITHDRAWN: { text: 'Withdrawn', colour: 'grey' },
     }[status] || { text: 'Unknown' }
   )
 }
@@ -95,8 +100,13 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   }
 
   if (referral.placementStatus) {
-    const text = `${outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]}`
-    details.push(textContent(`Reason: ${text}`))
+    const reasonText = referral.placementStatus === 'WITHDRAWN'
+      ? withdrawReasonLabels[referral.referralRejectionReason as DtrSubmissionDto['withdrawalReason']]
+      : outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]
+
+    if (reasonText) {
+      details.push(textContent(`Reason: ${reasonText}`))
+    }
   }
 
   return details
@@ -105,7 +115,7 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
 const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
   const details: Array<TextOrHtmlContent> = []
 
-  const placementStatuses = ['REJECTED', 'EXPIRED', 'WITHDRAW']
+  const placementStatuses = ['REJECTED', 'EXPIRED', 'WITHDRAWN']
   if (placementStatuses.includes(referral.placementStatus) && referral.type === 'CAS1') {
     details.push(textContent('No placements'))
   }

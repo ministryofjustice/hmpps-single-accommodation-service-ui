@@ -145,7 +145,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       )
       await this.shouldShowStatusCell(referralStatusCell(referral), row)
 
-      for await (const link of referralLinksForType(referral.type)) {
+      for await (const link of referralLinksForType(referral.type, referral.id, this.caseData.crn)) {
         await expect(row.getByRole('link', { name: link.text })).toHaveAttribute('href', link.href)
       }
     }

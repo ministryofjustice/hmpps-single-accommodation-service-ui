@@ -115,7 +115,7 @@
       },
       "placementAddress": null,
       "placementStatus": "REJECTED",
-      "referralRejectionDetails": "deripio curiositas quod autus quos curatio clementia casso non magnam absque suadeo porro odio sopor thermae speciosus summisse voluntarius blandior alo articulus ullam validus ulciscor vigor aureus curia thema civitas contabesco solutio amaritudo versus stella aurum conduco pectus magnam synagoga"
+      "referralRejectionReasonDetail": "deripio curiositas quod autus quos curatio clementia casso non magnam absque suadeo porro odio sopor thermae speciosus summisse voluntarius blandior alo articulus ullam validus ulciscor vigor aureus curia thema civitas contabesco solutio amaritudo versus stella aurum conduco pectus magnam synagoga"
     }
   ],
   "T274481": [
@@ -135,7 +135,7 @@
       },
       "placementAddress": null,
       "placementStatus": "REJECTED",
-      "referralRejectionDetails": "cultura talio sit alienus tumultus tam adulatio cupio stultus suus appello succurro astrum demo administratio accommodo vesco utroque abscido pecto subito cunabula conitor amplexus tamisium nam sunt aliquid dedecor strenuus hic aqua decet crepusculum subnecto carmen necessitatibus cernuus patria sponte"
+      "referralRejectionReasonDetail": "cultura talio sit alienus tumultus tam adulatio cupio stultus suus appello succurro astrum demo administratio accommodo vesco utroque abscido pecto subito cunabula conitor amplexus tamisium nam sunt aliquid dedecor strenuus hic aqua decet crepusculum subnecto carmen necessitatibus cernuus patria sponte"
     },
     {
       "id": "71851f70-af4d-4d5b-98d6-d2014af16950",
@@ -257,7 +257,7 @@
       },
       "placementAddress": null,
       "placementStatus": "REJECTED",
-      "referralRejectionDetails": "aestas voluptatem blandior utilis comparo amaritudo aranea molestias vinculum vinum denuncio terreo laborum theca sortitus temperantia sint talis vitium correptius civitas accusamus complectus thymum correptius adflicto vetus vesco sperno civis aspernatur adeptio admiratio sed decumbo triumphus cedo vilitas custodia comitatus"
+      "referralRejectionReasonDetail": "aestas voluptatem blandior utilis comparo amaritudo aranea molestias vinculum vinum denuncio terreo laborum theca sortitus temperantia sint talis vitium correptius civitas accusamus complectus thymum correptius adflicto vetus vesco sperno civis aspernatur adeptio admiratio sed decumbo triumphus cedo vilitas custodia comitatus"
     }
   ],
   "I322559": [
@@ -293,7 +293,7 @@
       },
       "placementAddress": null,
       "placementStatus": "REJECTED",
-      "referralRejectionDetails": "comburo a tamisium valens celo tamdiu numquam ver ustilo theologus cresco constans adulatio vester adeptio ventosus beneficium sint pecto cornu thorax aperio virga admiratio facere compello curto pariatur admoneo accommodo custodia clibanus antea tactus ustulo cometes theca contabesco timor congregatio"
+      "referralRejectionReasonDetail": "comburo a tamisium valens celo tamdiu numquam ver ustilo theologus cresco constans adulatio vester adeptio ventosus beneficium sint pecto cornu thorax aperio virga admiratio facere compello curto pariatur admoneo accommodo custodia clibanus antea tactus ustulo cometes theca contabesco timor congregatio"
     },
     {
       "id": "898aff62-5b24-468c-a5a5-5b9c91a6cee8",
@@ -378,7 +378,7 @@
       },
       "placementAddress": null,
       "placementStatus": "REJECTED",
-      "referralRejectionDetails": "non capitulus absconditus benigne adsum ullam universe vacuus totidem aqua asperiores vulgivagus ait arbitro accendo porro aggredior tum concedo ventito ait dens correptius admitto culpa texo adfero verto curto caveo aro beatae amor stabilis cunabula avaritia unde autem modi succedo"
+      "referralRejectionReasonDetail": "non capitulus absconditus benigne adsum ullam universe vacuus totidem aqua asperiores vulgivagus ait arbitro accendo porro aggredior tum concedo ventito ait dens correptius admitto culpa texo adfero verto curto caveo aro beatae amor stabilis cunabula avaritia unde autem modi succedo"
     },
     {
       "id": "368283a7-6ebd-4669-9bc5-4f2c80cbc697",
@@ -447,7 +447,7 @@
       },
       "placementAddress": null,
       "placementStatus": "REJECTED",
-      "referralRejectionDetails": "ater ciminatio cerno balbus tantum volutabrum virtus tremo architecto aestas adstringo culpo in ancilla voveo cribro tamquam arto somnus blandior sumptus tergiversatio curtus dapifer aqua damnatio auctor conicio bibo triduana aveho ater amplitudo tardus in triduana xiphias nesciunt centum bis"
+      "referralRejectionReasonDetail": "ater ciminatio cerno balbus tantum volutabrum virtus tremo architecto aestas adstringo culpo in ancilla voveo cribro tamquam arto somnus blandior sumptus tergiversatio curtus dapifer aqua damnatio auctor conicio bibo triduana aveho ater amplitudo tardus in triduana xiphias nesciunt centum bis"
     },
     {
       "id": "cba0d35e-3869-4fcd-ac71-e28f74baf392",

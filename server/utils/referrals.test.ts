@@ -10,7 +10,7 @@ describe('referrals utilities', () => {
   })
   const referral2 = referralFactory.build({
     id: '789012',
-    type: 'CAS2',
+    type: 'CAS2HDC',
     status: 'PENDING',
     date: '2023-02-20',
   })
@@ -22,7 +22,7 @@ describe('referrals utilities', () => {
   })
   const referral4 = referralFactory.build({
     id: '901234',
-    type: 'CAS2v2',
+    type: 'CAS2',
     status: 'ACCEPTED',
     date: '2023-04-30',
   })

@@ -8,8 +8,8 @@ import { htmlContent, textContent } from './utils'
 export const referralStatusType = (type?: Referral['type']): string =>
   ({
     CAS1: 'Approved premises',
-    CAS2: 'CAS2 for HDC',
-    CAS2v2: 'CAS2 for Bail',
+    CAS2HDC: 'CAS2 for HDC',
+    CAS2: 'CAS2 for Bail',
     CAS3: 'CAS3',
     DTR: 'Duty to refer',
   })[type] || 'Unknown'

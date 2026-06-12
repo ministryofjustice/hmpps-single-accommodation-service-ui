@@ -405,6 +405,7 @@ describe('duty to refer utils', () => {
         commitDate: '2025-04-16T11:00:00.000Z',
         author: 'Jane Doe',
         changes: [{ field: 'referenceNumber', value: '', oldValue: 'REF999' }],
+        extraInformation: { localAuthorityAreaName: 'Oxford City Council' },
       })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -416,6 +417,7 @@ describe('duty to refer utils', () => {
         commitDate: '2025-04-17T09:00:00.000Z',
         author: 'Jane Doe',
         changes: [{ field: 'submissionDate', value: '2025-04-17' }],
+        extraInformation: { localAuthorityAreaName: 'Oxford City Council' },
       })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()

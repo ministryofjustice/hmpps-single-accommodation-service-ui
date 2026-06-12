@@ -3,6 +3,22 @@ import { AuditRecordDto, DtrSubmissionDto, DutyToReferDto, FieldChange, Proposed
 import { faker } from '@faker-js/faker'
 import proposedAccommodationFactory from './proposedAccommodation'
 
+const dtrExtraInformation = (
+  dtrData: DtrSubmissionDto,
+  extraInformation?: Record<string, string>,
+): Record<string, string> | undefined => {
+  const localAuthorityAreaName = dtrData.localAuthority?.localAuthorityAreaName
+
+  if (!localAuthorityAreaName && !extraInformation) {
+    return undefined
+  }
+
+  return {
+    ...(localAuthorityAreaName ? { localAuthorityAreaName } : {}),
+    ...extraInformation,
+  }
+}
+
 class AuditRecordFactory extends Factory<AuditRecordDto> {
   proposedAddressCreated(proposedAddress?: ProposedAccommodationDto) {
     const addressDetails = proposedAddress || proposedAccommodationFactory.build()
@@ -51,7 +67,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     return this.params({
       type: 'CREATE',
       changes,
-      extraInformation,
+      extraInformation: dtrExtraInformation(dtrData, extraInformation),
     })
   }
 
@@ -69,7 +85,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     return this.params({
       type: 'UPDATE',
       changes,
-      extraInformation,
+      extraInformation: dtrExtraInformation(dtrData, extraInformation),
     })
   }
 

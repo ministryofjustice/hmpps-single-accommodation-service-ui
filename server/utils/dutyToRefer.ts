@@ -10,6 +10,8 @@ import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from '
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
 
+const REFERENCE_REMOVED_LABEL = 'Reference removed'
+
 export const submissionFormValues = (dtr: DutyToReferDto | undefined): Record<string, string> => {
   if (!dtr) return {}
 
@@ -213,54 +215,79 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
   } as DutyToReferDto
 }
 
+type TimelineValue = { label: string; value: string; showLabel: boolean; isList?: boolean }
+const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean): TimelineValue[] => [
+  {
+    label: 'Date submitted',
+    value: submission.submissionDate ? formatDateAndDaysAgo(submission.submissionDate) : '',
+    showLabel: true,
+    isList,
+  },
+  { label: 'Local authority', value: submission.localAuthority?.localAuthorityAreaName, showLabel: true, isList },
+  {
+    label: 'Reference',
+    value: submission.referenceNumber || (isList ? '' : 'No reference added'),
+    showLabel: submission.referenceNumber !== REFERENCE_REMOVED_LABEL,
+    isList,
+  },
+]
+
+const outcomeValues = (
+  submission: Partial<DtrSubmissionDto>,
+  outcomeText: string | undefined,
+  isList: boolean,
+): TimelineValue[] => [
+  { label: 'Outcome', value: outcomeText, showLabel: false, isList: false },
+  { label: 'Reason', value: outcomeReasonSummaryLabels[submission.outcomeReason], showLabel: true, isList },
+]
+
 export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
   const { type } = auditRecord
 
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
 
   const dtr = auditRecordChangesToDutyToRefer(auditRecord)
-  const { status } = dtr
-  const isOutcome = status === 'ACCEPTED' || status === 'NOT_ACCEPTED'
-
-  let label: string
-  if (type === 'CREATE') {
-    if (isOutcome) label = 'Outcome details added'
-    else label = 'Submission details added'
-  } else if (isOutcome) {
-    label = 'Outcome details updated'
-  } else {
-    label = 'Submission details updated'
-  }
-
-  const { submissionDate, localAuthority, referenceNumber } = dtr.submission || {}
-  const localAuthorityName = localAuthority?.localAuthorityAreaName
+  const { status, submission } = dtr
+  const isOutcome = submission.outcomeReason !== undefined
+  const statusChange = auditRecord.changes.find(change => change.field === 'status')
+  const localAuthorityName = submission.localAuthority?.localAuthorityAreaName
   const outcomeText = isOutcome && localAuthorityName ? outcomeSupportText(dtr as DutyToReferDto) : undefined
 
-  const submissionValues =
-    submissionDate || localAuthorityName || referenceNumber
-      ? [
-          {
-            label: 'Date submitted',
-            value: submissionDate ? formatDateAndDaysAgo(submissionDate) : '',
-            showLabel: true,
-          },
-          { label: 'Local authority', value: localAuthorityName, showLabel: true },
-          { label: 'Reference', value: referenceNumber, showLabel: true },
-        ]
-      : undefined
+  let label: string
+  let values: TimelineValue[]
 
-  const values = isOutcome
-    ? [
-        { label: 'Outcome', value: outcomeText, showLabel: false },
-        { label: 'Reason', value: outcomeReasonSummaryLabels[dtr.submission?.outcomeReason], showLabel: true },
-      ]
-    : submissionValues
+  if (type === 'CREATE') {
+    label = 'Submission details added'
+    values = submissionValues(submission, false)
+  } else if (isOutcome && statusChange?.oldValue === 'SUBMITTED') {
+    label = 'Outcome details added'
+    values = outcomeValues(submission, outcomeText, false)
+  } else if (isOutcome) {
+    label = 'Outcome details changed'
+    const hasStatusChanged = statusChange?.oldValue !== statusChange?.value
+    values = outcomeValues(submission, hasStatusChanged ? outcomeText : '', true)
+  } else {
+    label = 'Submission details changed'
+    const localAuthority =
+      auditRecord.changes.some(change => change.field === 'localAuthorityAreaId') && submission.localAuthority
+    const referenceChange = auditRecord.changes.find(change => change.field === 'referenceNumber')
+    const referenceNumber = referenceChange && (referenceChange.value || REFERENCE_REMOVED_LABEL)
+
+    values = submissionValues(
+      {
+        ...submission,
+        localAuthority: localAuthority || undefined,
+        referenceNumber,
+      },
+      true,
+    )
+  }
 
   const html = renderMacro('timelineDutyToRefer', {
     type,
-    isOutcome,
     status: status ? serviceStatusTag(status, true) : undefined,
     values,
+    hasListItems: values.some(item => item.isList && item.value),
   })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)

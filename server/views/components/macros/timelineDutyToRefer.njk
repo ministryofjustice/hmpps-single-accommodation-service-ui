@@ -6,12 +6,20 @@
   {% endif %}
 
   {% for item in context.values %}
-    {% if item.value %}
-      {% if item.showLabel %}
-        <p class="govuk-!-margin-bottom-1">{{ item.label }}: {{ item.value }}</p>
-      {% else %}
-        <p class="govuk-!-margin-bottom-1">{{ item.value }}</p>
-      {% endif %}
+    {% if not item.isList and item.value %}
+      <p class="{{ 'govuk-!-margin-bottom-1' if item.showLabel }}">
+        {% if item.showLabel %}{{ item.label }}: {% endif %}{{ item.value }}
+      </p>
     {% endif %}
   {% endfor %}
+
+  {% if context.hasListItems %}
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+      {% for item in context.values %}
+        {% if item.isList and item.value %}
+          <li>{% if item.showLabel %}{{ item.label }} changed to: {% endif %}{{ item.value }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
 {%- endmacro -%}

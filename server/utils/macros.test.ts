@@ -56,6 +56,24 @@ describe('Macros', () => {
 
       expect(statusCell(cell)).toMatchSnapshot()
     })
+
+    it('renders a status cell with date text', () => {
+      const cell: StatusCell = {
+        status: { text: 'John' },
+        dateText: 'Submitted 5 days ago',
+      }
+
+      expect(statusCell(cell)).toMatchSnapshot()
+    })
+
+    it('renders a status cell with details', () => {
+      const cell: StatusCell = {
+        status: { text: 'John' },
+        details: [{ text: 'Detail 1' }, { html: '<p>Detail 2</p>' }],
+      }
+
+      expect(statusCell(cell)).toMatchSnapshot()
+    })
   })
 
   describe('riskLevelTag', () => {

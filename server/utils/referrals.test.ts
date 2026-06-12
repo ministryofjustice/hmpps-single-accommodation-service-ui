@@ -12,7 +12,7 @@ describe('referrals utilities', () => {
   const referral2 = referralFactory.build({
     id: '789012',
     type: 'CAS2',
-    placementStatus: 'WITHDRAW',
+    placementStatus: 'WITHDRAWN',
     date: '2023-02-20',
     referredBy: { username: 'joe_bloggs', name: 'Joe Bloggs' },
   })

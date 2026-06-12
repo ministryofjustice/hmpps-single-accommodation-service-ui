@@ -89,7 +89,7 @@
     "@aws-sdk/client-sqs": "^3.1053.0",
     "@faker-js/faker": "^10.4.0",
     "@ministryofjustice/frontend": "9.0.0",
-    "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
+    "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-probation-frontend-components": "1.0.2",
@@ -121,7 +121,7 @@
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
     "path-to-regexp": "8.4.2",
-    "redis": "^5.12.1",
+    "redis": "^6.0.0",
     "static-path": "0.0.4",
     "superagent": "^10.3.0"
   },

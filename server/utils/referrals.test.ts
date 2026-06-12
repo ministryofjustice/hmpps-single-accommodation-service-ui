@@ -27,21 +27,21 @@ describe('referrals utilities', () => {
 
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {
-      expect(referralHistoryRows(referrals, 'alice_smith')).toMatchSnapshot()
+      expect(referralHistoryRows(referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
   })
 
   describe('referralHistoryTable macro', () => {
     it('renders the referral history table for a given list of referrals', () => {
-      expect(referralHistoryTable(referrals, 'alice_smith')).toMatchSnapshot()
+      expect(referralHistoryTable(referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
 
     it('renders a message and no table when there are no referrals', () => {
-      expect(referralHistoryTable([], 'alice_smith')).toMatchSnapshot()
+      expect(referralHistoryTable([], 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
 
     it('renders a message when there is an API error', () => {
-      expect(referralHistoryTable(null, 'alice_smith', true)).toMatchSnapshot()
+      expect(referralHistoryTable(null, 'alice_smith', 'CRN123', true)).toMatchSnapshot()
     })
   })
 })

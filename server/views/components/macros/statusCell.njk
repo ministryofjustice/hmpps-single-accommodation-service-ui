@@ -3,7 +3,9 @@
 {%- macro statusCell(context) -%}
   <span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
   {{ statusTag(context.status) }}
-  {%- if context.date %}
+  {%- if context.dateText %}
+    <p class="sas-status__date">{{ context.dateText }}</p>
+  {%- elif context.date %}
     <p class="sas-status__date">{{ context.date | date }}</p>
   {%- endif %}
   {%- if context.details %}

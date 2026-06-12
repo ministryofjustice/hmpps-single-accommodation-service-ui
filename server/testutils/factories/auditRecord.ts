@@ -20,6 +20,25 @@ const dtrExtraInformation = (
 }
 
 class AuditRecordFactory extends Factory<AuditRecordDto> {
+  private dtrParams(
+    type: 'CREATE' | 'UPDATE',
+    submissionData: DtrSubmissionDto,
+    status?: DutyToReferDto['status'],
+    oldStatus?: DutyToReferDto['status'],
+    extraInformation?: Record<string, string>,
+  ) {
+    const changes: FieldChange[] = [
+      ...(status ? [{ field: 'status', value: status as string, oldValue: oldStatus as string }] : []),
+      ...Object.entries(submissionData).map(([field, value]) => ({ field, value: value as string })),
+    ]
+
+    return this.params({
+      type,
+      changes,
+      extraInformation: dtrExtraInformation(submissionData, extraInformation),
+    })
+  }
+
   proposedAddressCreated(proposedAddress?: ProposedAccommodationDto) {
     const addressDetails = proposedAddress || proposedAccommodationFactory.build()
 
@@ -59,16 +78,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     status: DutyToReferDto['status'] = 'SUBMITTED',
     extraInformation?: Record<string, string>,
   ) {
-    const changes: FieldChange[] = [
-      { field: 'status', value: status },
-      ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
-    ]
-
-    return this.params({
-      type: 'CREATE',
-      changes,
-      extraInformation: dtrExtraInformation(dtrData, extraInformation),
-    })
+    return this.dtrParams('CREATE', dtrData, status, undefined, extraInformation)
   }
 
   dutyToReferUpdated(
@@ -77,16 +87,7 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     extraInformation?: Record<string, string>,
     oldStatus: DutyToReferDto['status'] = status,
   ) {
-    const changes: FieldChange[] = [
-      ...(status ? [{ field: 'status', value: status as string, oldValue: oldStatus as string }] : []),
-      ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
-    ]
-
-    return this.params({
-      type: 'UPDATE',
-      changes,
-      extraInformation: dtrExtraInformation(dtrData, extraInformation),
-    })
+    return this.dtrParams('UPDATE', dtrData, status, oldStatus, extraInformation)
   }
 
   note(note: string) {

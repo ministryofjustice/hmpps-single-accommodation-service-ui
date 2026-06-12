@@ -5,6 +5,8 @@ import { linksCell } from './tables'
 import { renderMacro, statusCell } from './macros'
 import { htmlContent, textContent } from './utils'
 import { outcomeReasonSummaryLabels } from './dutyToRefer'
+import { formatDate } from './dates'
+import uiPaths from '../paths/ui'
 
 export const referralStatusType = (type?: Referral['type'], status?: string): string => {
   if (type === 'CAS1') {
@@ -58,26 +60,49 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
   )
 }
 
-export const referralHistoryRows = (referrals?: Referral[], username?: string): TableRow[] => {
+export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
   return (referrals ?? []).map(referral => [
     textContent(
       referralStatusType(referral.type, referral.type === 'DTR' ? referral.status : referral.placementStatus),
     ),
     textContent(referralReferredBy(referral, username)),
     htmlContent(statusCell(referralStatusCell(referral))),
-    htmlContent(linksCell(referralLinksForType(referral.type))),
+    htmlContent(linksCell(referralLinksForType(referral.type, referral.id, crn))),
   ])
 }
 
 export const referralStatusCell = (referral: Referral): StatusCell => {
+  if (referral.type === 'DTR'){
+    return {
+      status: referralStatusTag(referral.status, referral.type),
+      dateText: `Submitted on ${formatDate(referral.date)}`,
+      details: getDtrReferralDetails(referral),
+    }
+  }
+
   return {
-    status: referralStatusTag(referral.type === 'DTR' ? referral.status : referral.placementStatus, referral.type),
-    date: referral.date,
-    details: getReferralDetails(referral),
+    status: referralStatusTag(referral.placementStatus, referral.type),
+    date: formatDate(referral.date),
+    details: getCasReferralDetails(referral),
   }
 }
 
-const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
+const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
+  const details: Array<TextOrHtmlContent> = []
+
+  if (referral.localAuthorityArea) {
+    details.push(textContent(`Local authority: ${referral.localAuthorityArea}`))
+  }
+
+  if (referral.placementStatus) {
+    const text = `${outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]}`
+    details.push(textContent(`Reason: ${text}`))
+  }
+
+  return details
+}
+
+const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
   const details: Array<TextOrHtmlContent> = []
 
   const placementStatuses = ['REJECTED', 'EXPIRED', 'WITHDRAW']
@@ -111,23 +136,12 @@ const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
     }
   }
 
-  if (referral.localAuthorityArea) {
-    details.push(textContent(`Local authority area: ${referral.localAuthorityArea}`))
-  }
-
   if (referral.placementAddress) {
     details.push(textContent(referral.placementAddress))
   }
 
   if (referral.pdu) {
     details.push(textContent(`PDU: ${referral.pdu}`))
-  }
-
-  if (referral.placementStatus) {
-    if (referral.type === 'DTR') {
-      const text = `${outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]}`
-      details.push(textContent(`Reason: ${text}`))
-    }
   }
 
   return details
@@ -141,8 +155,10 @@ export const referralReferredBy = (c: Referral, username: string): string => {
   return String(c.referredBy?.username) === username ? `You (${fullName})` : fullName
 }
 
-export const referralLinksForType = (type: Referral['type']) => {
+export const referralLinksForType = (type: Referral['type'], id: string, crn: string) => {
   switch (type) {
+    case 'DTR':
+      return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ crn, id }) }]
     case 'CAS1':
       return [
         {

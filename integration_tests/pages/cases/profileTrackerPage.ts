@@ -136,8 +136,13 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       const i = referrals.indexOf(referral)
       const row = table.locator('tbody tr').nth(i)
 
-      await expect(row).toContainText(referralStatusType(referral.type, referral.status))
-      await expect(row).toContainText(referralStatusTag(referral.status, referral.type).text)
+      const isDtr = referral.type === 'DTR'
+      await expect(row).toContainText(
+        referralStatusType(referral.type, isDtr ? referral.status : referral.placementStatus),
+      )
+      await expect(row).toContainText(
+        referralStatusTag(isDtr ? referral.status : referral.placementStatus, referral.type).text,
+      )
       await this.shouldShowStatusCell(referralStatusCell(referral), row)
 
       for await (const link of referralLinksForType(referral.type)) {

@@ -1,7 +1,9 @@
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
-import { AccommodationReferralDto as Referral } from '@sas/api'
+import { DutyToReferDto, AccommodationReferralDto as Referral } from '@sas/api'
 import staffDetailsFactory from './staffDetails'
+import { acceptedOutcomeReasons, notAcceptedOutcomeReasons, statusToOutcomeReason, withdrawalReasons } from './dutyToRefer'
+import referenceDataFactory from './referenceData'
 
 const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as const
 
@@ -9,16 +11,63 @@ const cas1Statuses = [
   'CANCELLED',
   'DEPARTED',
   'NOT_ARRIVED',
-  'REQUEST_WITHDRAW',
+  'REQUEST_WITHDRAWN',
   'REQUEST_REJECTED',
   'REJECTED',
-  'WITHDRAW',
+  'WITHDRAWN',
   'EXPIRED',
 ]
 
 const cas3Statuses = ['REJECTED', 'DEPARTED', 'CANCELLED', 'ARCHIVED']
 
 class ReferralFactory extends Factory<Referral> {
+  dtrReferral() {
+    const status = faker.helpers.arrayElement(statuses)
+    const outcomeReason = statusToOutcomeReason(status as DutyToReferDto['status'])
+    const withdrawalReason = status === 'WITHDRAWN' ? faker.helpers.arrayElement(withdrawalReasons) : undefined
+    const placementStatus = status === 'WITHDRAWN' ? 'WITHDRAWN' : outcomeReason
+    const localAuthority = referenceDataFactory.localAuthority().build()
+    
+    return this.params({
+      id: faker.string.uuid(),
+      type: 'DTR',
+      date: faker.date.past().toISOString(),
+      referralRejectionReason: withdrawalReason,
+      localAuthorityArea: localAuthority.name,
+      pdu: null,
+      placementAddress: null,
+      status,
+      placementStatus,
+    })
+  }
+
+  dtrReferralAccepted() {
+    const outcomeReason = faker.helpers.arrayElement(acceptedOutcomeReasons)
+    return this.dtrReferral().params({ status: 'ACCEPTED', placementStatus: outcomeReason })
+  }
+
+  dtrReferralNotAccepted() {
+    const outcomeReason = faker.helpers.arrayElement(notAcceptedOutcomeReasons)
+    return this.dtrReferral().params({ status: 'REJECTED', placementStatus: outcomeReason })
+  }
+
+  dtrReferralWithdrawn() {
+    const withdrawalReason = faker.helpers.arrayElement(withdrawalReasons)
+    return this.dtrReferral().params({
+      status: 'WITHDRAWN',
+      placementStatus: 'WITHDRAWN',
+      referralRejectionReason: withdrawalReason,
+    })
+  }
+
+  randomDtrReferral() {
+    return faker.helpers.arrayElement([
+      () => this.dtrReferralAccepted(),
+      () => this.dtrReferralNotAccepted(),
+      () => this.dtrReferralWithdrawn(),
+    ])()
+  }
+
   cas1Application() {
     return this.params({
       id: faker.string.uuid(),
@@ -38,7 +87,7 @@ class ReferralFactory extends Factory<Referral> {
   }
 
   cas1ApplicationWithdrawn() {
-    return this.cas1Application().params({ placementStatus: 'WITHDRAW' })
+    return this.cas1Application().params({ placementStatus: 'WITHDRAWN' })
   }
 
   cas1ApplicationRejected(reason = 'Some rejection reason') {
@@ -50,7 +99,7 @@ class ReferralFactory extends Factory<Referral> {
   }
 
   cas1PlacementRequestWithdrawn(reason = 'Some request withdrawal reason') {
-    return this.cas1Application().params({ placementStatus: 'REQUEST_WITHDRAW', referralRejectionReason: reason })
+    return this.cas1Application().params({ placementStatus: 'REQUEST_WITHDRAWN', referralRejectionReason: reason })
   }
 
   cas1PlacementNotArrived() {
@@ -133,7 +182,7 @@ class ReferralFactory extends Factory<Referral> {
   }
 
   randomReferral() {
-    return faker.helpers.arrayElement([() => this.randomCas1Referral(), () => this.randomCas3Referral()])()
+    return faker.helpers.arrayElement([() => this.randomDtrReferral(), () => this.randomCas1Referral(), () => this.randomCas3Referral()])()
   }
 
   buildReferralHistoryList(count: number) {

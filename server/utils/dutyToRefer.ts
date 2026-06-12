@@ -10,6 +10,8 @@ import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from '
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
 
+const REFERENCE_REMOVED_LABEL = 'Reference removed'
+
 export const submissionFormValues = (dtr: DutyToReferDto | undefined): Record<string, string> => {
   if (!dtr) return {}
 
@@ -214,7 +216,6 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
 }
 
 type TimelineValue = { label: string; value: string; showLabel: boolean; isList?: boolean }
-
 const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean): TimelineValue[] => [
   {
     label: 'Date submitted',
@@ -226,7 +227,7 @@ const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean
   {
     label: 'Reference',
     value: submission.referenceNumber || (isList ? '' : 'No reference added'),
-    showLabel: submission.referenceNumber !== 'Reference removed',
+    showLabel: submission.referenceNumber !== REFERENCE_REMOVED_LABEL,
     isList,
   },
 ]
@@ -270,7 +271,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
     const localAuthority =
       auditRecord.changes.some(change => change.field === 'localAuthorityAreaId') && submission.localAuthority
     const referenceChange = auditRecord.changes.find(change => change.field === 'referenceNumber')
-    const referenceNumber = referenceChange && (referenceChange.value || 'Reference removed')
+    const referenceNumber = referenceChange && (referenceChange.value || REFERENCE_REMOVED_LABEL)
 
     values = submissionValues(
       {

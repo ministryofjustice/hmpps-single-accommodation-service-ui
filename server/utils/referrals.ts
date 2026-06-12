@@ -90,7 +90,7 @@ export const referralStatusCell = (referral: Referral): StatusCell => {
 
   return {
     status: referralStatusTag(referral.placementStatus, referral.type),
-    date: formatDate(referral.date),
+    date: referral.date,
     details: getCasReferralDetails(referral),
   }
 }
@@ -168,9 +168,9 @@ export const referralHistoryTable = (
   hasApiError?: boolean,
 ): string => renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, username, crn), hasApiError })
 
-export const referralReferredBy = (c: Referral, username: string): string => {
-  const fullName = c.referredBy.name
-  return String(c.referredBy?.username) === username ? `You (${fullName})` : fullName
+export const referralReferredBy = (c: Referral, username?: string): string => {
+  const fullName = c.referredBy?.name ?? 'Unknown'
+  return c.referredBy?.username?.toUpperCase() === username?.toUpperCase() ? `You (${fullName})` : fullName
 }
 
 export const referralLinksForType = (type: Referral['type'], id: string, crn: string) => {

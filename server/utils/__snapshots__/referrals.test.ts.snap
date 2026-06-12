@@ -33,23 +33,6 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   ],
   [
     {
-      "text": "CAS2 for HDC",
-    },
-    {
-      "text": "Joe Bloggs",
-    },
-    {
-      "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag govuk-tag--grey">Application withdrawn</strong>
-    <p class="sas-status__date">20 February 2023</p>
-    ",
-    },
-    {
-      "html": "",
-    },
-  ],
-  [
-    {
       "text": "CAS3 referral",
     },
     {
@@ -79,19 +62,31 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   ],
   [
     {
-      "text": "CAS2 for Bail",
+      "text": "Duty to refer",
     },
     {
       "text": "You (Alice Smith)",
     },
     {
       "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
-    <p class="sas-status__date">30 April 2023</p>
+  <strong class="govuk-tag govuk-tag--green">Accepted</strong>
+    <p class="sas-status__date">Submitted on 30 April 2023</p>
     ",
     },
     {
-      "html": "",
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/dtr/901234/details">View referral</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
     },
   ],
 ]
@@ -199,35 +194,6 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">CAS2 for HDC</th>
-      
-    
-      
-      
-      <td class="govuk-table__cell">Joe Bloggs</td>
-      
-    
-      
-      
-      <td class="govuk-table__cell"><span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag govuk-tag--grey">Application withdrawn</strong>
-    <p class="sas-status__date">20 February 2023</p>
-    </td>
-      
-    
-      
-      
-      <td class="govuk-table__cell"></td>
-      
-    
-    </tr>
-  
-
-  
-    <tr class="govuk-table__row">
-    
-      
-      
       <th scope="row" class="govuk-table__header">CAS3 referral</th>
       
     
@@ -269,7 +235,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">CAS2 for Bail</th>
+      <th scope="row" class="govuk-table__header">Duty to refer</th>
       
     
       
@@ -280,14 +246,26 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
       
       
       <td class="govuk-table__cell"><span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
-    <p class="sas-status__date">30 April 2023</p>
+  <strong class="govuk-tag govuk-tag--green">Accepted</strong>
+    <p class="sas-status__date">Submitted on 30 April 2023</p>
     </td>
       
     
       
       
-      <td class="govuk-table__cell"></td>
+      <td class="govuk-table__cell">
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/dtr/901234/details">View referral</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  </td>
       
     
     </tr>

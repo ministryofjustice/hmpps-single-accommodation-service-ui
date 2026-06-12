@@ -10,45 +10,38 @@ describe('referrals utilities', () => {
     referredBy: { username: 'alice_smith', name: 'Alice Smith' },
   })
   const referral2 = referralFactory.build({
-    id: '789012',
-    type: 'CAS2',
-    placementStatus: 'WITHDRAWN',
-    date: '2023-02-20',
-    referredBy: { username: 'joe_bloggs', name: 'Joe Bloggs' },
-  })
-  const referral3 = referralFactory.build({
     id: '345678',
     type: 'CAS3',
     placementStatus: 'REJECTED',
     date: '2023-03-25',
     referredBy: { username: 'matt_jones', name: 'Matt Jones' },
   })
-  const referral4 = referralFactory.build({
+  const referral3 = referralFactory.build({
     id: '901234',
-    type: 'CAS2v2',
-    placementStatus: 'ARCHIVED',
+    type: 'DTR',
+    placementStatus: 'REJECTED',
     date: '2023-04-30',
     referredBy: { username: 'alice_smith', name: 'Alice Smith' },
   })
-  const referrals = [referral1, referral2, referral3, referral4]
+  const referrals = [referral1, referral2, referral3]
 
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {
-      expect(referralHistoryRows(referrals, 'alice_smith')).toMatchSnapshot()
+      expect(referralHistoryRows(referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
   })
 
   describe('referralHistoryTable macro', () => {
     it('renders the referral history table for a given list of referrals', () => {
-      expect(referralHistoryTable(referrals, 'alice_smith')).toMatchSnapshot()
+      expect(referralHistoryTable(referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
 
     it('renders a message and no table when there are no referrals', () => {
-      expect(referralHistoryTable([], 'alice_smith')).toMatchSnapshot()
+      expect(referralHistoryTable([], 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
 
     it('renders a message when there is an API error', () => {
-      expect(referralHistoryTable(null, 'alice_smith', true)).toMatchSnapshot()
+      expect(referralHistoryTable(null, 'alice_smith', 'CRN123', true)).toMatchSnapshot()
     })
   })
 })

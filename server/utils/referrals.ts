@@ -40,7 +40,7 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
 }
 
 export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag => {
-  if (status === 'REJECTED' && type === 'CAS1') {
+  if (type === 'CAS1') {
     if (['REJECTED', 'WITHDRAWN'].includes(status)) {
       return { REJECTED: { text: 'Application rejected', colour: 'orange' }, WITHDRAWN: { text: 'Application withdrawn', colour: 'grey' } }[status]
     }
@@ -157,8 +157,8 @@ const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   return details
 }
 
-export const referralHistoryTable = (referrals: Referral[], username?: string, hasApiError?: boolean): string =>
-  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, username), hasApiError })
+export const referralHistoryTable = (referrals: Referral[], username?: string, crn?: string, hasApiError?: boolean): string =>
+  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, username, crn), hasApiError })
 
 export const referralReferredBy = (c: Referral, username: string): string => {
   const fullName = c.referredBy.name

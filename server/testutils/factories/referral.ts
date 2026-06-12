@@ -2,7 +2,12 @@ import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { DutyToReferDto, AccommodationReferralDto as Referral } from '@sas/api'
 import staffDetailsFactory from './staffDetails'
-import { acceptedOutcomeReasons, notAcceptedOutcomeReasons, statusToOutcomeReason, withdrawalReasons } from './dutyToRefer'
+import {
+  acceptedOutcomeReasons,
+  notAcceptedOutcomeReasons,
+  statusToOutcomeReason,
+  withdrawalReasons,
+} from './dutyToRefer'
 import referenceDataFactory from './referenceData'
 
 const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as const
@@ -27,7 +32,7 @@ class ReferralFactory extends Factory<Referral> {
     const withdrawalReason = status === 'WITHDRAWN' ? faker.helpers.arrayElement(withdrawalReasons) : undefined
     const placementStatus = status === 'WITHDRAWN' ? 'WITHDRAWN' : outcomeReason
     const localAuthority = referenceDataFactory.localAuthority().build()
-    
+
     return this.params({
       id: faker.string.uuid(),
       type: 'DTR',
@@ -182,7 +187,11 @@ class ReferralFactory extends Factory<Referral> {
   }
 
   randomReferral() {
-    return faker.helpers.arrayElement([() => this.randomDtrReferral(), () => this.randomCas1Referral(), () => this.randomCas3Referral()])()
+    return faker.helpers.arrayElement([
+      () => this.randomDtrReferral(),
+      () => this.randomCas1Referral(),
+      () => this.randomCas3Referral(),
+    ])()
   }
 
   buildReferralHistoryList(count: number) {

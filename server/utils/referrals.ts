@@ -42,7 +42,10 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
 export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag => {
   if (type === 'CAS1') {
     if (['REJECTED', 'WITHDRAWN'].includes(status)) {
-      return { REJECTED: { text: 'Application rejected', colour: 'orange' }, WITHDRAWN: { text: 'Application withdrawn', colour: 'grey' } }[status]
+      return {
+        REJECTED: { text: 'Application rejected', colour: 'orange' },
+        WITHDRAWN: { text: 'Application withdrawn', colour: 'grey' },
+      }[status]
     }
   }
   if (status === 'REJECTED' && type === 'DTR') {
@@ -77,7 +80,7 @@ export const referralHistoryRows = (referrals?: Referral[], username?: string, c
 }
 
 export const referralStatusCell = (referral: Referral): StatusCell => {
-  if (referral.type === 'DTR'){
+  if (referral.type === 'DTR') {
     return {
       status: referralStatusTag(referral.status, referral.type),
       dateText: `Submitted on ${formatDate(referral.date)}`,
@@ -100,9 +103,10 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   }
 
   if (referral.placementStatus) {
-    const reasonText = referral.placementStatus === 'WITHDRAWN'
-      ? withdrawReasonLabels[referral.referralRejectionReason as DtrSubmissionDto['withdrawalReason']]
-      : outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]
+    const reasonText =
+      referral.placementStatus === 'WITHDRAWN'
+        ? withdrawReasonLabels[referral.referralRejectionReason as DtrSubmissionDto['withdrawalReason']]
+        : outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]
 
     if (reasonText) {
       details.push(textContent(`Reason: ${reasonText}`))
@@ -157,8 +161,12 @@ const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   return details
 }
 
-export const referralHistoryTable = (referrals: Referral[], username?: string, crn?: string, hasApiError?: boolean): string =>
-  renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, username, crn), hasApiError })
+export const referralHistoryTable = (
+  referrals: Referral[],
+  username?: string,
+  crn?: string,
+  hasApiError?: boolean,
+): string => renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, username, crn), hasApiError })
 
 export const referralReferredBy = (c: Referral, username: string): string => {
   const fullName = c.referredBy.name

@@ -116,7 +116,7 @@ export default class CasesController {
         noFixedAbode: noFixedAbodeAlert(caseData, data.currentAccommodation),
         nextAccommodationCard: accommodationCard('next', data.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', data.currentAccommodation),
-        referralHistoryRows: referralHistoryRows(data.referralHistory),
+        referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),
         eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn) : [],
         proposedAddresses: data.proposedAddresses.proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),

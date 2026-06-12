@@ -4,13 +4,16 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
 [
   [
     {
-      "text": "Approved premises",
+      "text": "Approved Premises (CAS1) placement",
     },
     {
-      "html": "<strong class="govuk-tag govuk-tag--green">Accepted</strong>",
+      "text": "You (Alice Smith)",
     },
     {
-      "text": "15 January 2023",
+      "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
+  <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
+    <p class="sas-status__date">15 January 2023</p>
+    ",
     },
     {
       "html": "
@@ -19,7 +22,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View application</a>
             </li>
           
         </ul>
@@ -30,13 +33,16 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   ],
   [
     {
-      "text": "CAS2 for HDC",
+      "text": "CAS3 referral",
     },
     {
-      "html": "<strong class="govuk-tag govuk-tag--yellow">Pending</strong>",
+      "text": "Matt Jones",
     },
     {
-      "text": "20 February 2023",
+      "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
+  <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
+    <p class="sas-status__date">25 March 2023</p>
+    ",
     },
     {
       "html": "
@@ -45,7 +51,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View referral</a>
             </li>
           
         </ul>
@@ -56,39 +62,16 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   ],
   [
     {
-      "text": "CAS3",
+      "text": "Duty to refer",
     },
     {
-      "html": "<strong class="govuk-tag govuk-tag--red">Rejected</strong>",
+      "text": "You (Alice Smith)",
     },
     {
-      "text": "25 March 2023",
-    },
-    {
-      "html": "
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-      <span class="govuk-table-span govuk-body">
-        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-          
-            <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
-            </li>
-          
-        </ul>
-      </span>
-    </div>
-  ",
-    },
-  ],
-  [
-    {
-      "text": "CAS2 for Bail",
-    },
-    {
-      "html": "<strong class="govuk-tag govuk-tag--green">Accepted</strong>",
-    },
-    {
-      "text": "30 April 2023",
+      "html": "<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
+  <strong class="govuk-tag govuk-tag--green">Accepted</strong>
+    <p class="sas-status__date">Submitted on 30 April 2023</p>
+    ",
     },
     {
       "html": "
@@ -97,7 +80,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/dtr/901234/details">View referral</a>
             </li>
           
         </ul>
@@ -146,17 +129,17 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
       
         
           <div class="govuk-summary-list">
-            <table class="govuk-table">
+            <table class="govuk-table sas-case-list">
 
 
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
     
-      <th scope="col" class="govuk-table__header">Type</th>
+      <th scope="col" class="govuk-table__header">Referral type</th>
     
-      <th scope="col" class="govuk-table__header">Status</th>
+      <th scope="col" class="govuk-table__header">Referred by</th>
     
-      <th scope="col" class="govuk-table__header">Date</th>
+      <th scope="col" class="govuk-table__header">Status and details</th>
     
       <th scope="col" class="govuk-table__header"></th>
     
@@ -170,17 +153,20 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">Approved premises</th>
+      <th scope="row" class="govuk-table__header">Approved Premises (CAS1) placement</th>
       
     
       
       
-      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--green">Accepted</strong></td>
+      <td class="govuk-table__cell">You (Alice Smith)</td>
       
     
       
       
-      <td class="govuk-table__cell">15 January 2023</td>
+      <td class="govuk-table__cell"><span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
+  <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
+    <p class="sas-status__date">15 January 2023</p>
+    </td>
       
     
       
@@ -191,7 +177,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View application</a>
             </li>
           
         </ul>
@@ -208,17 +194,20 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">CAS2 for HDC</th>
+      <th scope="row" class="govuk-table__header">CAS3 referral</th>
       
     
       
       
-      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--yellow">Pending</strong></td>
+      <td class="govuk-table__cell">Matt Jones</td>
       
     
       
       
-      <td class="govuk-table__cell">20 February 2023</td>
+      <td class="govuk-table__cell"><span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
+  <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
+    <p class="sas-status__date">25 March 2023</p>
+    </td>
       
     
       
@@ -229,7 +218,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="#">View referral</a>
             </li>
           
         </ul>
@@ -246,55 +235,20 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">CAS3</th>
+      <th scope="row" class="govuk-table__header">Duty to refer</th>
       
     
       
       
-      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--red">Rejected</strong></td>
+      <td class="govuk-table__cell">You (Alice Smith)</td>
       
     
       
       
-      <td class="govuk-table__cell">25 March 2023</td>
-      
-    
-      
-      
-      <td class="govuk-table__cell">
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-      <span class="govuk-table-span govuk-body">
-        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-          
-            <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
-            </li>
-          
-        </ul>
-      </span>
-    </div>
-  </td>
-      
-    
-    </tr>
-  
-
-  
-    <tr class="govuk-table__row">
-    
-      
-      
-      <th scope="row" class="govuk-table__header">CAS2 for Bail</th>
-      
-    
-      
-      
-      <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--green">Accepted</strong></td>
-      
-    
-      
-      
-      <td class="govuk-table__cell">30 April 2023</td>
+      <td class="govuk-table__cell"><span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
+  <strong class="govuk-tag govuk-tag--green">Accepted</strong>
+    <p class="sas-status__date">Submitted on 30 April 2023</p>
+    </td>
       
     
       
@@ -305,7 +259,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/dtr/901234/details">View referral</a>
             </li>
           
         </ul>

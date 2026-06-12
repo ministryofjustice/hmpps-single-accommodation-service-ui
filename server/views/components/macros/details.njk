@@ -1,0 +1,5 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{%- macro details(context) -%}
+  {{ govukDetails({ summaryText: context.summary, text: context.text, classes: 'govuk-!-margin-bottom-1' }) }}
+{%- endmacro -%}

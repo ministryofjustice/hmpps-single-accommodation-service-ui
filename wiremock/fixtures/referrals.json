@@ -1,123 +1,469 @@
 {
   "S511935": [
     {
-      "id": "ab5878cb-6e04-4459-ac06-a471e4941a23",
-      "type": "CAS1",
-      "status": "REJECTED",
-      "date": "2025-12-04T17:01:43.127Z"
+      "id": "b8695409-0479-4ac2-a84f-4de52da40051",
+      "applicationId": "44b84169-495a-469f-bac9-6832d1443160",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-06-16T09:52:34.886Z",
+      "localAuthorityArea": null,
+      "pdu": "Schneider End",
+      "referredBy": {
+        "name": "Torrey Sanford",
+        "username": "Amiya84",
+        "staffCode": "614024"
+      },
+      "placementAddress": "Paucek Drive, CS41 6NC",
+      "placementStatus": "CANCELLED"
     },
     {
-      "id": "1eb04737-b30f-47b7-8700-cb6cd574e78f",
+      "id": "98158b8d-34fb-4a16-aa81-ac994f74df33",
+      "applicationId": "3ab5fbe6-0c1f-4b7c-8e44-9bca090ba24e",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-12-07T11:33:43.972Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Lance Feeney",
+        "username": "Clint_Haley",
+        "staffCode": "181068"
+      },
+      "placementAddress": null,
+      "placementStatus": "ARCHIVED"
+    },
+    {
+      "id": "f6723e6e-8bd1-4e93-b429-6c145a5a1dc2",
+      "applicationId": "b406e132-e851-495f-b740-8a864a810332",
       "type": "CAS1",
       "status": "ACCEPTED",
-      "date": "2025-09-11T06:05:47.474Z"
+      "date": "2026-02-09T18:22:19.495Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Eunice Jaskolski",
+        "username": "Calvin.Mayert-Grady91",
+        "staffCode": "912126"
+      },
+      "placementAddress": "Tevin Yard, AF51 4UP",
+      "placementStatus": "NOT_ARRIVED"
+    },
+    {
+      "id": "4d8f0dd0-18f5-46e1-9066-d0b1b4791dbf",
+      "applicationId": "ed093826-45c7-439c-8371-8f6ccce4e867",
+      "type": "CAS1",
+      "status": "WITHDRAWN",
+      "date": "2026-01-07T22:19:54.701Z",
+      "referralRejectionReason": "Some request withdrawal reason",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Oceane Kris",
+        "username": "Naomi54",
+        "staffCode": "979418"
+      },
+      "placementAddress": null,
+      "placementStatus": "REQUEST_WITHDRAWN"
+    },
+    {
+      "id": "1a3014ef-c82a-4a8c-a710-932907bdb8bc",
+      "applicationId": "3a7938fc-20e3-410f-9424-3691fffeded3",
+      "type": "CAS1",
+      "status": "REJECTED",
+      "date": "2025-08-16T00:08:01.336Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Valerie Purdy",
+        "username": "Stephany78",
+        "staffCode": "225612"
+      },
+      "placementAddress": null,
+      "placementStatus": "REQUEST_REJECTED"
     }
   ],
   "P712106": [
     {
-      "id": "5d92bc99-d9be-488a-8d6f-673eca6ff03d",
-      "type": "CAS2",
-      "status": "PENDING",
-      "date": "2025-03-22T10:44:13.880Z"
+      "id": "37e6ee79-69f1-4783-aaf2-b9d84df6f479",
+      "applicationId": "e39f293d-7fe2-4f2e-aca5-2503194d4ce8",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-08-08T22:38:32.700Z",
+      "localAuthorityArea": null,
+      "pdu": "Carter-on-Fadel",
+      "referredBy": {
+        "name": "Leah Shields",
+        "username": "Alfonso29",
+        "staffCode": "161478"
+      },
+      "placementAddress": "Lockman Road, BD6 3KT",
+      "placementStatus": "CANCELLED"
     },
     {
-      "id": "9ff15a6f-e542-47f6-b440-6ebf369dfb16",
-      "type": "CAS1",
-      "status": "PENDING",
-      "date": "2025-08-13T13:42:16.834Z"
-    },
-    {
-      "id": "3540a3ae-44d4-49e7-84b4-26aae6dafaf6",
-      "type": "CAS2",
-      "status": "PENDING",
-      "date": "2025-11-22T00:06:34.205Z"
+      "id": "e0c3aeba-0847-4884-8cd9-63a9d9e62141",
+      "applicationId": "41c1ea4c-9744-4ee9-b16b-d2a1c2d71aac",
+      "type": "CAS3",
+      "status": "REJECTED",
+      "date": "2026-01-17T06:06:24.880Z",
+      "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Albina Cummings",
+        "username": "Karla.Dach75",
+        "staffCode": "260733"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED",
+      "referralRejectionReasonDetail": "deripio curiositas quod autus quos curatio clementia casso non magnam absque suadeo porro odio sopor thermae speciosus summisse voluntarius blandior alo articulus ullam validus ulciscor vigor aureus curia thema civitas contabesco solutio amaritudo versus stella aurum conduco pectus magnam synagoga"
     }
   ],
   "T274481": [
     {
-      "id": "0f5997eb-afb9-491c-84f3-1cc7784194fd",
+      "id": "602858a2-cc02-48cf-87cd-6b09f9484e45",
+      "applicationId": "dcff905f-c638-476e-8406-b41316d939ad",
+      "type": "CAS3",
+      "status": "REJECTED",
+      "date": "2025-10-04T17:15:35.107Z",
+      "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Dashawn Lakin",
+        "username": "Kyleigh.Pollich",
+        "staffCode": "117332"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED",
+      "referralRejectionReasonDetail": "cultura talio sit alienus tumultus tam adulatio cupio stultus suus appello succurro astrum demo administratio accommodo vesco utroque abscido pecto subito cunabula conitor amplexus tamisium nam sunt aliquid dedecor strenuus hic aqua decet crepusculum subnecto carmen necessitatibus cernuus patria sponte"
+    },
+    {
+      "id": "71851f70-af4d-4d5b-98d6-d2014af16950",
+      "applicationId": "a92e82cc-8b53-40ac-b501-8e6489b37309",
       "type": "CAS3",
       "status": "ACCEPTED",
-      "date": "2025-10-30T04:35:50.001Z"
+      "date": "2025-09-19T18:01:34.409Z",
+      "localAuthorityArea": null,
+      "pdu": "West Weissnat",
+      "referredBy": {
+        "name": "Emilio Wiegand",
+        "username": "Madison_Wolf71",
+        "staffCode": "943423"
+      },
+      "placementAddress": "Breitenberg Lea, AY47 1EC",
+      "placementStatus": "CANCELLED"
     }
   ],
   "V938951": [
     {
-      "id": "043c2e0c-a919-4867-9617-162f6f41d228",
-      "type": "CAS2v2",
-      "status": "PENDING",
-      "date": "2025-12-26T13:25:13.698Z"
-    },
-    {
-      "id": "75b67416-48b8-4c12-a3fa-78f7a7cb2116",
-      "type": "CAS2",
-      "status": "PENDING",
-      "date": "2025-11-08T16:25:50.129Z"
+      "id": "bf82b1a1-2d28-4bb7-9621-68049f28cfa5",
+      "applicationId": "5821414c-e955-4f10-81d1-6f5535bd41be",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-08-26T10:33:56.435Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Blanca Haag",
+        "username": "Elvira_Anderson",
+        "staffCode": "321486"
+      },
+      "placementAddress": null,
+      "placementStatus": "EXPIRED"
     }
   ],
   "T229440": [
     {
-      "id": "420430be-8344-483b-9977-74c5f50e5c4b",
+      "id": "9179b120-add3-45a9-aad4-f140ddfef99c",
+      "applicationId": "a4ed90b7-0add-40a8-b33e-c2558202bdf7",
       "type": "CAS1",
       "status": "ACCEPTED",
-      "date": "2025-02-26T11:15:19.803Z"
+      "date": "2026-05-15T02:39:48.591Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Vicenta Kunze",
+        "username": "Darby.Okuneva",
+        "staffCode": "137046"
+      },
+      "placementAddress": "Herzog Approach, OA7 2AW",
+      "placementStatus": "NOT_ARRIVED"
     }
   ],
   "H271226": [
     {
-      "id": "791f15ce-9a68-446e-8ab0-61ba43958a28",
+      "id": "65d86322-40cb-460f-b05f-24f90b2d29f2",
+      "applicationId": "5eb96f11-4e99-44fb-9335-6afb3a2ec856",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-06-05T06:47:01.107Z",
+      "localAuthorityArea": null,
+      "pdu": "Townewood",
+      "referredBy": {
+        "name": "Johnny Stiedemann",
+        "username": "Carlie47",
+        "staffCode": "258512"
+      },
+      "placementAddress": "Fairfield Road, DU38 6DI",
+      "placementStatus": "DEPARTED"
+    },
+    {
+      "id": "853aaee2-1a49-4b77-b076-53792eead078",
+      "applicationId": "189d397d-eaad-45a3-9a95-07c3f8b638e7",
       "type": "CAS1",
-      "status": "PENDING",
-      "date": "2025-07-08T20:51:10.401Z"
+      "status": "ACCEPTED",
+      "date": "2025-08-19T05:00:42.687Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Randall Willms",
+        "username": "Stacy_Dietrich",
+        "staffCode": "014627"
+      },
+      "placementAddress": "Field Lane, TP58 7CV",
+      "placementStatus": "DEPARTED"
+    },
+    {
+      "id": "94fd538b-85df-4ba7-9059-a954886e14b6",
+      "applicationId": "20e799c6-4e7b-4d08-a67b-636fcf94efbd",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-09-27T14:45:39.031Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Wayne Bernier",
+        "username": "Alton2",
+        "staffCode": "298945"
+      },
+      "placementAddress": "Holly Close, FJ57 6SI",
+      "placementStatus": "DEPARTED"
     }
   ],
-  "U934069": [],
+  "U934069": [
+    {
+      "id": "388914ea-cc84-4d82-a8be-7446daae04dc",
+      "applicationId": "30229da9-b0ef-455e-8f53-cb3058a3ea2b",
+      "type": "CAS3",
+      "status": "REJECTED",
+      "date": "2025-06-12T03:59:09.566Z",
+      "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Linnie Jones",
+        "username": "Kenna_Bernhard79",
+        "staffCode": "245534"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED",
+      "referralRejectionReasonDetail": "aestas voluptatem blandior utilis comparo amaritudo aranea molestias vinculum vinum denuncio terreo laborum theca sortitus temperantia sint talis vitium correptius civitas accusamus complectus thymum correptius adflicto vetus vesco sperno civis aspernatur adeptio admiratio sed decumbo triumphus cedo vilitas custodia comitatus"
+    }
+  ],
   "I322559": [
     {
-      "id": "987466f4-0836-44bb-aa07-19f24032de2a",
-      "type": "CAS2",
+      "id": "396e9564-b209-4787-be8c-f4acb1b5193e",
+      "applicationId": "35266fc2-59ec-42c4-b47d-e2db40550469",
+      "type": "CAS1",
       "status": "ACCEPTED",
-      "date": "2025-06-15T01:49:10.711Z"
+      "date": "2025-10-29T04:09:39.346Z",
+      "localAuthorityArea": null,
+      "pdu": "Metz-over-McDermott",
+      "referredBy": {
+        "name": "Pearline Gutmann",
+        "username": "Becky94",
+        "staffCode": "163593"
+      },
+      "placementAddress": null,
+      "placementStatus": "CANCELLED"
+    },
+    {
+      "id": "5e09fc86-d7d3-49ee-9c4f-519c7ad8ba28",
+      "applicationId": "8851bace-d737-4d1a-84cd-4a5855faa44c",
+      "type": "CAS3",
+      "status": "REJECTED",
+      "date": "2025-06-07T00:00:16.246Z",
+      "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Johathan Emmerich",
+        "username": "Rene5",
+        "staffCode": "968612"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED",
+      "referralRejectionReasonDetail": "comburo a tamisium valens celo tamdiu numquam ver ustilo theologus cresco constans adulatio vester adeptio ventosus beneficium sint pecto cornu thorax aperio virga admiratio facere compello curto pariatur admoneo accommodo custodia clibanus antea tactus ustulo cometes theca contabesco timor congregatio"
+    },
+    {
+      "id": "898aff62-5b24-468c-a5a5-5b9c91a6cee8",
+      "applicationId": "04841566-08de-4d9e-93ff-06bd9adf7646",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2026-02-27T09:37:47.435Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Nathen Morissette",
+        "username": "Marie_Dibbert",
+        "staffCode": "434069"
+      },
+      "placementAddress": "Daniel Mead, BZ01 0FT",
+      "placementStatus": "NOT_ARRIVED"
+    },
+    {
+      "id": "f1647f9c-14c4-4690-8ae4-d261fbe7a5d8",
+      "applicationId": "2ce68fdf-821c-4bf8-b5f0-7d6baa0ca9f5",
+      "type": "CAS1",
+      "status": "REJECTED",
+      "date": "2026-03-03T10:21:29.244Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Max Doyle-Volkman",
+        "username": "Josefa.Roberts",
+        "staffCode": "468135"
+      },
+      "placementAddress": null,
+      "placementStatus": "REQUEST_REJECTED"
+    },
+    {
+      "id": "7cd98650-33e7-433a-8e84-37c206dad4d3",
+      "applicationId": "09c68f52-50a8-4b7d-9e24-756342699721",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2026-03-11T01:18:40.518Z",
+      "localAuthorityArea": null,
+      "pdu": "Harris Court",
+      "referredBy": {
+        "name": "Lewis Greenholt",
+        "username": "Emmitt.Champlin",
+        "staffCode": "755526"
+      },
+      "placementAddress": "Church Close, CI58 6JE",
+      "placementStatus": "DEPARTED"
     }
   ],
   "L247269": [
     {
-      "id": "b866c245-80df-4c99-bf01-909d387da349",
-      "type": "CAS3",
-      "status": "PENDING",
-      "date": "2025-04-28T11:07:27.443Z"
+      "id": "8c0b3c26-7c90-45e8-9143-7ecc368ac2e9",
+      "applicationId": "aca8fb04-db3a-4e4e-87ed-5711c379f749",
+      "type": "CAS1",
+      "status": "REJECTED",
+      "date": "2025-06-26T17:35:07.883Z",
+      "referralRejectionReason": "Some rejection reason",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Raphaelle Dach",
+        "username": "Estevan32",
+        "staffCode": "540245"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED"
     },
     {
-      "id": "2be4f174-ce52-4a09-9395-da189d75e07b",
+      "id": "506a8e73-edcb-4e11-8ffb-440053c1869c",
+      "applicationId": "e280f8d2-81d4-4b15-9b80-734ca87c5f89",
+      "type": "CAS3",
+      "status": "REJECTED",
+      "date": "2026-01-13T06:25:47.517Z",
+      "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Theron Bogisich",
+        "username": "Mason.Schultz45",
+        "staffCode": "335767"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED",
+      "referralRejectionReasonDetail": "non capitulus absconditus benigne adsum ullam universe vacuus totidem aqua asperiores vulgivagus ait arbitro accendo porro aggredior tum concedo ventito ait dens correptius admitto culpa texo adfero verto curto caveo aro beatae amor stabilis cunabula avaritia unde autem modi succedo"
+    },
+    {
+      "id": "368283a7-6ebd-4669-9bc5-4f2c80cbc697",
+      "applicationId": "d9416ed1-5a24-48ee-9f9d-abcac441ce50",
       "type": "CAS1",
       "status": "ACCEPTED",
-      "date": "2025-07-08T04:01:19.686Z"
+      "date": "2025-07-28T02:38:40.724Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Clarence Robel",
+        "username": "Zita31",
+        "staffCode": "209062"
+      },
+      "placementAddress": null,
+      "placementStatus": "EXPIRED"
     },
     {
-      "id": "bfa232b2-0ce3-4087-9c8b-63f14b510572",
-      "type": "CAS2v2",
-      "status": "REJECTED",
-      "date": "2025-04-21T23:54:55.432Z"
+      "id": "121154c2-7436-4b27-bbbd-5604f5e40f05",
+      "applicationId": "597c5125-ba79-4dbd-a2db-6e5707495149",
+      "type": "CAS1",
+      "status": "ACCEPTED",
+      "date": "2025-11-20T09:08:44.175Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Kelley Aufderhar",
+        "username": "Kristopher_Rempel64",
+        "staffCode": "440564"
+      },
+      "placementAddress": "Prospect Place, RB69 4JK",
+      "placementStatus": "DEPARTED"
     }
   ],
   "F608163": [
     {
-      "id": "2e1d2744-7eba-4cc3-9f85-8db9d482a3a3",
-      "type": "CAS2",
-      "status": "PENDING",
-      "date": "2025-07-07T03:23:41.820Z"
-    },
-    {
-      "id": "33e32efb-22d9-4f4c-b05c-08ca2b6ec0ac",
+      "id": "1eb9c255-b424-442e-836b-0494af6b8acc",
+      "applicationId": "1c66986d-c702-4d6b-a314-e941f55bfdc4",
       "type": "CAS1",
-      "status": "ACCEPTED",
-      "date": "2025-07-09T08:43:52.264Z"
+      "status": "REJECTED",
+      "date": "2026-01-26T06:33:38.853Z",
+      "referralRejectionReason": "Some rejection reason",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Zoie Denesik",
+        "username": "Fidel43",
+        "staffCode": "681231"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED"
     },
     {
-      "id": "1d0c0092-1be1-410e-bf0f-cb9bd4310783",
-      "type": "CAS2",
-      "status": "PENDING",
-      "date": "2026-01-02T17:43:16.911Z"
+      "id": "8d45bb2d-d76d-4b2e-8e20-d1bc912fa2b6",
+      "applicationId": "e76e7f04-4757-4137-8784-915a6c212acb",
+      "type": "CAS3",
+      "status": "REJECTED",
+      "date": "2026-05-07T06:56:10.957Z",
+      "referralRejectionReason": "Local authority alternative suitable accommodation provided (includes Priority need)",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Marcus Hane",
+        "username": "Inez.Dibbert89",
+        "staffCode": "021948"
+      },
+      "placementAddress": null,
+      "placementStatus": "REJECTED",
+      "referralRejectionReasonDetail": "ater ciminatio cerno balbus tantum volutabrum virtus tremo architecto aestas adstringo culpo in ancilla voveo cribro tamquam arto somnus blandior sumptus tergiversatio curtus dapifer aqua damnatio auctor conicio bibo triduana aveho ater amplitudo tardus in triduana xiphias nesciunt centum bis"
+    },
+    {
+      "id": "cba0d35e-3869-4fcd-ac71-e28f74baf392",
+      "applicationId": "e666d33f-6028-4d4a-ab91-11dc0562f8e1",
+      "type": "CAS3",
+      "status": "ACCEPTED",
+      "date": "2025-10-28T16:45:15.035Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Constance O'Reilly",
+        "username": "Orlando9",
+        "staffCode": "765691"
+      },
+      "placementAddress": null,
+      "placementStatus": "ARCHIVED"
     }
   ]
 }

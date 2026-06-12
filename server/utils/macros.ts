@@ -33,8 +33,7 @@ export const statusCell = (context: {
   date?: string
   dateText?: string
   details?: Array<TextOrHtmlContent>
-}) =>
-  renderMacro('statusCell', context)
+}) => renderMacro('statusCell', context)
 
 export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('riskLevelTag', riskLevel)
 

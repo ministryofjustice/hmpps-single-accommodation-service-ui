@@ -15,7 +15,10 @@ export const notAcceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = [
   'INTENTIONALLY_HOMELESS',
   'REJECTED_FOR_ANOTHER_REASON',
 ]
-export const acceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = ['PREVENTION_AND_RELIEF_DUTY', 'PRIORITY_NEED']
+export const acceptedOutcomeReasons: DtrSubmissionDto['outcomeReason'][] = [
+  'PREVENTION_AND_RELIEF_DUTY',
+  'PRIORITY_NEED',
+]
 
 export const withdrawalReasons: DtrSubmissionDto['withdrawalReason'][] = [
   'NEW_REFERRAL',

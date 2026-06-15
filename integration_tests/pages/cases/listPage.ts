@@ -19,7 +19,7 @@ export default class CasesListPage extends AbstractPage {
     await expect(this.page.getByRole('heading', { name: caption })).toBeVisible()
   }
 
-  async shouldShowCases(cases: Case[], headers: string[]) {
+  async shouldShowCases(cases: Case[], headers: string[], assignedTo = false) {
     await this.shouldShowTableHeaders(headers)
 
     for await (const [index, person] of cases.entries()) {
@@ -30,6 +30,13 @@ export default class CasesListPage extends AbstractPage {
 
       await expect(row).toContainText(person.crn as string)
       await expect(row).toContainText(person.prisonNumber as string)
+
+      if (assignedTo) {
+        await expect(row).toContainText('Assigned to')
+        await expect(row).toContainText(`${person.assignedTo.forename} ${person.assignedTo.surname}`)
+      } else {
+        await expect(row).not.toContainText('Assigned to')
+      }
 
       if (person.userAccess !== 'LIMITED') {
         await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)

@@ -125,7 +125,7 @@ describe('casesController', () => {
         resultsSummary: casesResultsSummary(cases),
         filters: queryToFilters(request.query, request.url, teams),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
+        casesRows: casesToRows(cases, 'user1'),
         query: request.query,
       })
     })

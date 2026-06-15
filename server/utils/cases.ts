@@ -53,19 +53,21 @@ const removeQueryParam = (url: string, param: string): string => {
   return queryString ? `${path}?${queryString}` : path
 }
 
-export const personCell = (caseData: Case): string =>
-  renderMacro('personCell', { ...caseData, name: displayName(caseData, '') })
+export const personCell = (caseData: Case, assignedToText?: string): string =>
+  renderMacro('personCell', { ...caseData, name: displayName(caseData, ''), assignedToText })
 
 export const actionsCell = (actions: Case['actions']): string => renderMacro('actionsCell', { actions })
 
-export const casesToRows = (cases: Case[]): TableRow[] =>
+export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[] =>
   cases.map(c => {
+    const assignedToText = currentUsername ? caseAssignedTo(c, currentUsername) : undefined
+
     if (!config.flags.v10CasesList) {
-      return [htmlContent(personCell(c))]
+      return [htmlContent(personCell(c, assignedToText))]
     }
 
     return [
-      htmlContent(personCell(c)),
+      htmlContent(personCell(c, assignedToText)),
       htmlContent(accommodationCell('current', c.currentAccommodation)),
       htmlContent(accommodationCell('next', c.nextAccommodation)),
       htmlContent(statusCell(caseStatusCell(c))),

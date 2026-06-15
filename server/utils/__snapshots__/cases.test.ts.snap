@@ -149,6 +149,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
         <dd>D777665</dd>
       </div>
       
+      
     </dl>
   </div>"
 `;
@@ -179,6 +180,51 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
           <dd>C4567HG</dd>
         </div>
       
+    </dl>
+  </div>"
+`;
+
+exports[`cases utilities personCell macro renders a formatted cell including Assigned to 1`] = `
+"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+
+  <div class="sas-person-cell">
+    <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
+      <a class="govuk-link" href="/cases/C321654"> Dave Foo </a>
+      
+    </div>
+
+    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
+      <div class="sas-risk-tag sas-risk-tag--very-high">
+      <dt>RoSH</dt>
+      <dd>Very high</dd>
+    </div>
+  
+
+      
+    <div class="sas-risk-tag sas-risk-tag--tier">
+      <dt>Tier</dt>
+      <dd>B2</dd>
+    </div>
+  
+    </dl>
+
+    <dl class="sas-person-details govuk-!-margin-0">
+      <div>
+          <dt>Date of birth</dt>
+          <dd>9 October 1980 (45)</dd>
+        </div>
+      <div>
+        <dt>CRN</dt>
+        <dd>C321654</dd>
+      </div>
+      <div>
+          <dt>Prison number</dt>
+          <dd>A1234BC</dd>
+        </div>
+      <div>
+          <dt>Assigned to</dt>
+          <dd>You (John Doe)</dd>
+        </div>
     </dl>
   </div>"
 `;

@@ -50,7 +50,7 @@ test.describe('List of cases', () => {
 
     // THEN the relevant cases are shown
     await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
-    await casesListPage.shouldShowCases([filteredCase], [])
+    await casesListPage.shouldShowCases([filteredCase], [], true)
 
     // AND the filters are populated with the selected values
     await casesListPage.verifyFilters({

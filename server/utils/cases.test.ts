@@ -9,7 +9,7 @@ import {
   displayName,
   assignedToOptions,
 } from './cases'
-import { accommodationSummaryFactory, caseFactory } from '../testutils/factories'
+import { accommodationSummaryFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
 import config from '../config'
 import { accommodationCell } from './accommodationSummary'
@@ -80,6 +80,10 @@ describe('cases utilities', () => {
 
       expect(personCell(personUnknownAccess)).toMatchSnapshot()
     })
+
+    it('renders a formatted cell including Assigned to', () => {
+      expect(personCell(personFullAccess, 'You (John Doe)')).toMatchSnapshot()
+    })
   })
 
   describe('actionsCell macro', () => {
@@ -129,6 +133,22 @@ describe('cases utilities', () => {
           { html: actionsCell(cases[0].actions) },
         ],
       ])
+    })
+
+    it('returns a formatted row for a case assigned to the current user', () => {
+      const cases = caseFactory.buildList(1, {
+        assignedTo: assignedUserFactory.build({ username: 'CURRENT_USER', forename: 'Jane', surname: 'Doe' }),
+      })
+
+      expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'You (Jane Doe)'))
+    })
+
+    it('returns a formatted row for a case assigned to another user', () => {
+      const cases = caseFactory.buildList(1, {
+        assignedTo: assignedUserFactory.build({ username: 'ANOTHER_USER', forename: 'Dave', surname: 'Grant' }),
+      })
+
+      expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'Dave Grant'))
     })
 
     describe('when v10CasesList flag is off', () => {

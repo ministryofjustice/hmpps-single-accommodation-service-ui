@@ -15,6 +15,7 @@ type Macro =
   | 'accommodationCard'
   | 'linksCell'
   | 'accommodationCell'
+  | 'tableTextCell'
   | 'timelineDutyToRefer'
   | 'timelineProposedAddress'
   | 'actionsCell'

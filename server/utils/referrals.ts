@@ -1,7 +1,7 @@
 import { DtrSubmissionDto, AccommodationReferralDto as Referral } from '@sas/api'
 import { StatusCell, StatusTag } from '@sas/ui'
 import { TableRow, TextOrHtmlContent } from '@govuk/ui'
-import { linksCell } from './tables'
+import { linksCell, tableTextCell } from './tables'
 import { renderMacro, statusCell } from './macros'
 import { htmlContent, textContent } from './utils'
 import { outcomeReasonSummaryLabels, withdrawReasonLabels } from './dutyToRefer'
@@ -61,10 +61,13 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
 
 export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
   return (referrals ?? []).map(referral => [
-    textContent(
-      referralStatusType(referral.type, referral.type === 'DTR' ? referral.status : referral.placementStatus),
+    htmlContent(
+      tableTextCell(
+        'Referral type',
+        referralStatusType(referral.type, referral.type === 'DTR' ? referral.status : referral.placementStatus),
+      ),
     ),
-    textContent(referralReferredBy(referral, username)),
+    htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
     htmlContent(statusCell(referralStatusCell(referral))),
     htmlContent(linksCell(referralLinksForType(referral.type, referral.id, crn))),
   ])

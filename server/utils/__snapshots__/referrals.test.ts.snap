@@ -4,10 +4,12 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
 [
   [
     {
-      "text": "Approved Premises (CAS1) placement",
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Approved Premises (CAS1) placement",
     },
     {
-      "text": "You (Alice Smith)",
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)",
     },
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
@@ -33,10 +35,12 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   ],
   [
     {
-      "text": "CAS3 referral",
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  CAS3 referral",
     },
     {
-      "text": "Matt Jones",
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  Matt Jones",
     },
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
@@ -62,10 +66,12 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   ],
   [
     {
-      "text": "Duty to refer",
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Duty to refer",
     },
     {
-      "text": "You (Alice Smith)",
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)",
     },
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
@@ -153,12 +159,14 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">Approved Premises (CAS1) placement</th>
+      <th scope="row" class="govuk-table__header"><span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Approved Premises (CAS1) placement</th>
       
     
       
       
-      <td class="govuk-table__cell">You (Alice Smith)</td>
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)</td>
       
     
       
@@ -194,12 +202,14 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">CAS3 referral</th>
+      <th scope="row" class="govuk-table__header"><span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  CAS3 referral</th>
       
     
       
       
-      <td class="govuk-table__cell">Matt Jones</td>
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  Matt Jones</td>
       
     
       
@@ -235,12 +245,14 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <th scope="row" class="govuk-table__header">Duty to refer</th>
+      <th scope="row" class="govuk-table__header"><span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Duty to refer</th>
       
     
       
       
-      <td class="govuk-table__cell">You (Alice Smith)</td>
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)</td>
       
     
       

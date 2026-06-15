@@ -5,6 +5,7 @@ import { htmlContent, initialiseName } from './utils'
 import { renderMacro, statusCell } from './macros'
 import config from '../config'
 import { accommodationCell } from './accommodationSummary'
+import { formatDate } from './dates'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -98,7 +99,10 @@ export const caseStatusCell = (c: Case): StatusCell => {
   const date = c.currentAccommodation?.endDate
   return (
     {
-      RISK_OF_NO_FIXED_ABODE: { status: { text: 'Risk of no fixed abode', colour: 'orange' }, date },
+      RISK_OF_NO_FIXED_ABODE: {
+        status: { text: 'Risk of no fixed abode', colour: 'orange' },
+        dateText: formatDate(date),
+      },
       NO_FIXED_ABODE: { status: { text: 'No fixed abode', colour: 'grey' } },
       TRANSIENT: { status: { text: 'Transient', colour: 'purple' } },
       SETTLED: { status: { text: 'Settled', colour: 'green' } },

@@ -176,9 +176,9 @@ export default class AbstractPage {
   async shouldShowStatusCell(statusCell: StatusCell, container?: Locator) {
     await this.shouldShowStatusTag(statusCell.status, container)
 
-    if (statusCell.date) {
+    if (statusCell.dateText) {
       const date = (container || this.page).locator('p.sas-status__date')
-      await expect(date).toContainText(formatDate(statusCell.date))
+      await expect(date).toContainText(statusCell.dateText)
     }
 
     if (statusCell.details) {

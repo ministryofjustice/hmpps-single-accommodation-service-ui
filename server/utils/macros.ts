@@ -28,11 +28,8 @@ export const renderMacro = <T>(macroName: Macro, context: T): string =>
 
 export const statusTag = (status: StatusTag, classes?: string) => renderMacro('statusTag', { ...status, classes })
 
-export const statusCell = (context: {
-  status: StatusTag
-  dateText?: string
-  details?: Array<TextOrHtmlContent>
-}) => renderMacro('statusCell', context)
+export const statusCell = (context: { status: StatusTag; dateText?: string; details?: Array<TextOrHtmlContent> }) =>
+  renderMacro('statusCell', context)
 
 export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('riskLevelTag', riskLevel)
 

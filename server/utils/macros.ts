@@ -30,7 +30,6 @@ export const statusTag = (status: StatusTag, classes?: string) => renderMacro('s
 
 export const statusCell = (context: {
   status: StatusTag
-  date?: string
   dateText?: string
   details?: Array<TextOrHtmlContent>
 }) => renderMacro('statusCell', context)

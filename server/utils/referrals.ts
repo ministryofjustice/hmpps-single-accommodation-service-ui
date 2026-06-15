@@ -87,7 +87,7 @@ export const referralStatusCell = (referral: Referral): StatusCell => {
 
   return {
     status: referralStatusTag(referral.placementStatus, referral.type),
-    date: referral.date,
+    dateText: formatDate(referral.date),
     details: getCasReferralDetails(referral),
   }
 }

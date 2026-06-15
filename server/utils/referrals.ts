@@ -119,8 +119,8 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
 const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
   const details: Array<TextOrHtmlContent> = []
 
-  const placementStatuses = ['REJECTED', 'EXPIRED', 'WITHDRAWN']
-  if (placementStatuses.includes(referral.placementStatus) && referral.type === 'CAS1') {
+  const applicationStatuses = ['REJECTED', 'EXPIRED', 'WITHDRAWN']
+  if (applicationStatuses.includes(referral.placementStatus) && referral.type === 'CAS1') {
     details.push(textContent('No placements'))
   }
 

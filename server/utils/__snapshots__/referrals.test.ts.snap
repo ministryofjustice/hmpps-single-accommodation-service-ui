@@ -10,7 +10,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
       "text": "You (Alice Smith)",
     },
     {
-      "html": "<span class="sas-table__cell-header" aria-hidden="true">Status</span>
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
     <p class="sas-status__date">15 January 2023</p>
     ",
@@ -39,7 +39,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
       "text": "Matt Jones",
     },
     {
-      "html": "<span class="sas-table__cell-header" aria-hidden="true">Status</span>
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
     <p class="sas-status__date">25 March 2023</p>
     ",
@@ -68,7 +68,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
       "text": "You (Alice Smith)",
     },
     {
-      "html": "<span class="sas-table__cell-header" aria-hidden="true">Status</span>
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag govuk-tag--green">Accepted</strong>
     <p class="sas-status__date">Submitted on 30 April 2023</p>
     ",
@@ -163,7 +163,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status</span>
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
     <p class="sas-status__date">15 January 2023</p>
     </td>
@@ -204,7 +204,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status</span>
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
     <p class="sas-status__date">25 March 2023</p>
     </td>
@@ -245,7 +245,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status</span>
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag govuk-tag--green">Accepted</strong>
     <p class="sas-status__date">Submitted on 30 April 2023</p>
     </td>

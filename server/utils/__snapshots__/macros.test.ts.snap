@@ -86,13 +86,13 @@ exports[`Macros Status Card renders an inactive status card 1`] = `
 `;
 
 exports[`Macros Status Cell renders a status cell with date text 1`] = `
-"<span class="sas-table__cell-header" aria-hidden="true">Status</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag">John</strong>
     <p class="sas-status__date">Submitted 5 days ago</p>"
 `;
 
 exports[`Macros Status Cell renders a status cell with details 1`] = `
-"<span class="sas-table__cell-header" aria-hidden="true">Status</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag">John</strong>
     
       
@@ -106,7 +106,7 @@ exports[`Macros Status Cell renders a status cell with details 1`] = `
 `;
 
 exports[`Macros Status Cell renders a status cell without date text 1`] = `
-"<span class="sas-table__cell-header" aria-hidden="true">Status</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   <strong class="govuk-tag">John</strong>"
 `;
 

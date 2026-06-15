@@ -1,7 +1,7 @@
 {%- from "components/macros/statusTag.njk" import statusTag %}
 
 {%- macro statusCell(context) -%}
-  <span class="sas-table__cell-header" aria-hidden="true">Status</span>
+  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   {{ statusTag(context.status) }}
   {%- if context.dateText %}
     <p class="sas-status__date">{{ context.dateText }}</p>

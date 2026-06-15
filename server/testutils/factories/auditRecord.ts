@@ -3,7 +3,42 @@ import { AuditRecordDto, DtrSubmissionDto, DutyToReferDto, FieldChange, Proposed
 import { faker } from '@faker-js/faker'
 import proposedAccommodationFactory from './proposedAccommodation'
 
+const dtrExtraInformation = (
+  dtrData: DtrSubmissionDto,
+  extraInformation?: Record<string, string>,
+): Record<string, string> | undefined => {
+  const localAuthorityAreaName = dtrData.localAuthority?.localAuthorityAreaName
+
+  if (!localAuthorityAreaName && !extraInformation) {
+    return undefined
+  }
+
+  return {
+    ...(localAuthorityAreaName ? { localAuthorityAreaName } : {}),
+    ...extraInformation,
+  }
+}
+
 class AuditRecordFactory extends Factory<AuditRecordDto> {
+  private dtrParams(
+    type: 'CREATE' | 'UPDATE',
+    submissionData: DtrSubmissionDto,
+    status?: DutyToReferDto['status'],
+    oldStatus?: DutyToReferDto['status'],
+    extraInformation?: Record<string, string>,
+  ) {
+    const changes: FieldChange[] = [
+      ...(status ? [{ field: 'status', value: status as string, oldValue: oldStatus as string }] : []),
+      ...Object.entries(submissionData).map(([field, value]) => ({ field, value: value as string })),
+    ]
+
+    return this.params({
+      type,
+      changes,
+      extraInformation: dtrExtraInformation(submissionData, extraInformation),
+    })
+  }
+
   proposedAddressCreated(proposedAddress?: ProposedAccommodationDto) {
     const addressDetails = proposedAddress || proposedAccommodationFactory.build()
 
@@ -43,33 +78,16 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
     status: DutyToReferDto['status'] = 'SUBMITTED',
     extraInformation?: Record<string, string>,
   ) {
-    const changes: FieldChange[] = [
-      { field: 'status', value: status },
-      ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
-    ]
-
-    return this.params({
-      type: 'CREATE',
-      changes,
-      extraInformation,
-    })
+    return this.dtrParams('CREATE', dtrData, status, undefined, extraInformation)
   }
 
   dutyToReferUpdated(
     dtrData: DtrSubmissionDto,
     status?: DutyToReferDto['status'],
     extraInformation?: Record<string, string>,
+    oldStatus: DutyToReferDto['status'] = status,
   ) {
-    const changes: FieldChange[] = [
-      ...(status ? [{ field: 'status', value: status as string }] : []),
-      ...Object.entries(dtrData).map(([field, value]) => ({ field, value: value as string })),
-    ]
-
-    return this.params({
-      type: 'UPDATE',
-      changes,
-      extraInformation,
-    })
+    return this.dtrParams('UPDATE', dtrData, status, oldStatus, extraInformation)
   }
 
   note(note: string) {

@@ -9,31 +9,36 @@ import { formatDate } from './dates'
 import uiPaths from '../paths/ui'
 
 export const referralStatusType = (type?: Referral['type'], status?: string): string => {
-  if (type === 'CAS1') {
-    if (['REQUEST_REJECTED', 'REQUEST_WITHDRAWN'].includes(status)) {
-      return 'Approved Premises (CAS1) placement request'
-    }
-    if (['NOT_ARRIVED', 'DEPARTED', 'CANCELLED'].includes(status)) {
-      return 'Approved Premises (CAS1) placement'
-    }
-    return 'Approved Premises (CAS1) application'
+  switch (type) {
+    case 'CAS1':
+      switch (status) {
+        case 'REQUEST_REJECTED':
+        case 'REQUEST_WITHDRAWN':
+          return 'Approved Premises (CAS1) placement request'
+        case 'NOT_ARRIVED':
+        case 'DEPARTED':
+        case 'CANCELLED':
+          return 'Approved Premises (CAS1) placement'
+        default:
+          return 'Approved Premises (CAS1) application'
+      }
+    case 'CAS3':
+      switch (status) {
+        case 'DEPARTED':
+        case 'CANCELLED':
+          return 'CAS3 booking'
+        default:
+          return 'CAS3 referral'
+      }
+    case 'CAS2HDC':
+      return 'CAS2 for HDC'
+    case 'CAS2':
+      return 'CAS2 for Bail'
+    case 'DTR':
+      return 'Duty to refer'
+    default:
+      return 'Unknown'
   }
-  if (type === 'CAS3') {
-    if (['DEPARTED', 'CANCELLED'].includes(status)) {
-      return 'CAS3 booking'
-    }
-    return 'CAS3 referral'
-  }
-  if (type === 'CAS2HDC') {
-    return 'CAS2 for HDC'
-  }
-  if (type === 'CAS2') {
-    return 'CAS2 for Bail'
-  }
-  if (type === 'DTR') {
-    return 'Duty to refer'
-  }
-  return 'Unknown'
 }
 
 export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag => {

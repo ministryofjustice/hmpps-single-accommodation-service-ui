@@ -10,7 +10,7 @@ import {
 } from './dutyToRefer'
 import referenceDataFactory from './referenceData'
 
-const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as const
+const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as Referral['status'][]
 
 const cas1Statuses = [
   'CANCELLED',

@@ -1,7 +1,7 @@
 @use "govuk-frontend/dist/govuk" as *;
 
-.sas-case-list {
-  & .sas-case-list__cell-header {
+.sas-table {
+  & .sas-table__cell-header {
     @extend .govuk-heading-s;
   }
 
@@ -28,7 +28,7 @@
   }
 
   @include govuk-media-query($from: tablet) {
-    & .sas-case-list__cell-header {
+    & .sas-table__cell-header {
       display: none;
     }
   }

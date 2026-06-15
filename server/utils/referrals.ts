@@ -19,9 +19,6 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
     return 'Approved Premises (CAS1) application'
   }
   if (type === 'CAS3') {
-    if (['REJECTED', 'ARCHIVED'].includes(status)) {
-      return 'CAS3 referral'
-    }
     if (['DEPARTED', 'CANCELLED'].includes(status)) {
       return 'CAS3 booking'
     }

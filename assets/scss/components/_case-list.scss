@@ -5,6 +5,11 @@
     @extend .govuk-heading-s;
   }
 
+  & td:only-child .sas-case-list__cell-header,
+  & th:only-child {
+    display: none;
+  }
+
   @include govuk-media-query($until: tablet) {
     & thead {
       display: none;
@@ -28,4 +33,3 @@
     }
   }
 }
-

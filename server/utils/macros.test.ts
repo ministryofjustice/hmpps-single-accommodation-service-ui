@@ -42,7 +42,7 @@ describe('Macros', () => {
 
     it('renders a status cell without date text', () => {
       const cell: StatusCell = {
-        status: { text: 'John' },
+        status: { text: 'Foo' },
       }
 
       expect(statusCell(cell)).toMatchSnapshot()
@@ -50,7 +50,7 @@ describe('Macros', () => {
 
     it('renders a status cell with date text', () => {
       const cell: StatusCell = {
-        status: { text: 'John' },
+        status: { text: 'Foo' },
         dateText: 'Submitted 5 days ago',
       }
 
@@ -59,7 +59,7 @@ describe('Macros', () => {
 
     it('renders a status cell with details', () => {
       const cell: StatusCell = {
-        status: { text: 'John' },
+        status: { text: 'Foo' },
         details: [{ text: 'Detail 1' }, { html: '<p>Detail 2</p>' }],
       }
 

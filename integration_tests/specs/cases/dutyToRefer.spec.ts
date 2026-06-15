@@ -102,6 +102,8 @@ test.describe('duty to refer', () => {
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(submittedDutyToRefer)
     await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
+    await dutyToReferDetailsPage.shouldShowWithdrawReferralButton()
+    await dutyToReferDetailsPage.shouldShowAddNewReferralButton()
 
     // And I should see a success banner confirming referral details were added
     await dutyToReferDetailsPage.shouldShowBanner('New DTR referral details added')
@@ -135,6 +137,8 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(acceptedDutyToRefer)
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(acceptedDutyToRefer)
     await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
+    await dutyToReferDetailsPage.shouldShowWithdrawReferralButton()
+    await dutyToReferDetailsPage.shouldShowAddNewReferralButton()
 
     // And I should see a success banner confirming outcome details were added
     await profileTrackerPage.shouldShowBanner('Outcome details added')
@@ -458,5 +462,56 @@ test.describe('duty to refer', () => {
 
     // And I should see a success banner confirming the referral was withdrawn
     await profileTrackerPage.shouldShowBanner('DTR referral withdrawn')
+  })
+
+  test('should allow the user to add a new referral', async ({ page }) => {
+    const existingDutyToRefer = dutyToReferFactory.submitted().build({ crn })
+    const newDutyToRefer = dutyToReferFactory.submitted().build({ crn })
+
+    // Given I have stubbed the API responses
+    const { caseData } = await setupStubs(existingDutyToRefer)
+    await setupDutyToReferTimeline(existingDutyToRefer.submission.id, [
+      auditRecordFactory.dutyToReferAdded(existingDutyToRefer.submission).build(),
+    ])
+    await setupDutyToReferTimeline(newDutyToRefer.submission.id, [
+      auditRecordFactory.dutyToReferAdded(newDutyToRefer.submission).build(),
+    ])
+
+    // Given I am logged in
+    await login(page)
+
+    // When I visit profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // Then I click the link to view duty to refer details in the dtr card
+    await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
+
+    let dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+
+    // When I click the 'Add new referral' button
+    await dutyToReferDetailsPage.clickButton('Add new referral')
+
+    // Then I should see the duty to refer add submission form
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
+
+    // When I complete the form and submit
+    await dutyToReferApi.stubSubmitDutyToRefer(crn, newDutyToRefer)
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, newDutyToRefer.submission.id, newDutyToRefer)
+
+    await dutyToReferPage.completeSubmissionForm(newDutyToRefer)
+    await dutyToReferPage.clickButton('Save and continue')
+
+    // And the API should have been called to submit the duty to refer
+    await dutyToReferPage.checkApiCalled(crn, newDutyToRefer)
+
+    // Then I should see the new duty to refer details page
+    dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowSubmissionDetails(newDutyToRefer)
+    await dutyToReferDetailsPage.shouldShowAddOutcomeButton()
+    await dutyToReferDetailsPage.shouldShowWithdrawReferralButton()
+    await dutyToReferDetailsPage.shouldShowAddNewReferralButton()
+
+    // And I should see a success banner confirming referral details were added
+    await dutyToReferDetailsPage.shouldShowBanner('New DTR referral details added')
   })
 })

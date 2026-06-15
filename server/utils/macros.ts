@@ -18,7 +18,6 @@ type Macro =
   | 'timelineDutyToRefer'
   | 'timelineProposedAddress'
   | 'actionsCell'
-  | 'details'
 
 export const renderMacro = <T>(macroName: Macro, context: T): string =>
   nunjucksInline().renderString(

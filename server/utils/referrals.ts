@@ -30,10 +30,6 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
         default:
           return 'CAS3 referral'
       }
-    case 'CAS2HDC':
-      return 'CAS2 for HDC'
-    case 'CAS2':
-      return 'CAS2 for Bail'
     case 'DTR':
       return 'Duty to refer'
     default:

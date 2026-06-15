@@ -5,7 +5,7 @@
     @extend .govuk-heading-s;
   }
 
-  & td:only-child .sas-case-list__cell-header,
+  & td:only-child .sas-table__cell-header,
   & th:only-child {
     display: none;
   }

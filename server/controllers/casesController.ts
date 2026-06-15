@@ -55,10 +55,12 @@ export default class CasesController {
       })
       const filters = queryToFilters(query, req.url, teams)
 
+      const currentUsername = query.teamCode ? username : undefined
+
       return res.render('pages/index', {
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
+        casesRows: casesToRows(cases, currentUsername),
         query,
         filters,
         assignedToOptions: assignedToOptions(userFullName, teams),

@@ -32,7 +32,13 @@
           <dt>Prison number</dt>
           <dd>{{ person.prisonNumber }}</dd>
         </div>
-      {% endif %}
+      {%- endif %}
+      {% if person.assignedToText -%}
+        <div>
+          <dt>Assigned to</dt>
+          <dd>{{ person.assignedToText }}</dd>
+        </div>
+      {%- endif %}
     </dl>
   </div>
 {%- endmacro -%}

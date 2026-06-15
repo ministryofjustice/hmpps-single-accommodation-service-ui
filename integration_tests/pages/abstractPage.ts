@@ -192,7 +192,7 @@ export default class AbstractPage {
     }
   }
 
-  async shouldShowDetails(detail: { html: string }, summary: 'Reason details', container?: Locator) {
+  async shouldShowDetails(detail: { html: string }, summary: string, container?: Locator) {
     const text = detail.html.replace(/<[^>]*>/g, '')
 
     await (container || this.page).getByText(summary).click()

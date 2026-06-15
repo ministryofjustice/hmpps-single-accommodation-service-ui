@@ -9,6 +9,7 @@ const url =
     ? `rediss://${config.redis.host}:${config.redis.port}`
     : `redis://${config.redis.host}:${config.redis.port}`
 
+// eslint-disable-next-line import/prefer-default-export
 export const createRedisClient = (): RedisClientType => {
   const client = createClient({
     url,

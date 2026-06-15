@@ -41,34 +41,23 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
   }
 }
 
-export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag => {
-  if (type === 'CAS1') {
-    if (['REJECTED', 'WITHDRAWN'].includes(status)) {
-      return {
-        REJECTED: { text: 'Application rejected', colour: 'orange' },
-        WITHDRAWN: { text: 'Application withdrawn', colour: 'grey' },
-      }[status]
-    }
-  }
-  if (status === 'REJECTED' && type === 'DTR') {
-    return { text: 'Not accepted', colour: 'grey' }
-  }
-  return (
-    {
-      REQUEST_WITHDRAWN: { text: 'Request withdrawn', colour: 'grey' },
-      EXPIRED: { text: 'Expired', colour: 'grey' },
-      REJECTED: { text: 'Rejected', colour: 'orange' },
-      REQUEST_REJECTED: { text: 'Request rejected', colour: 'orange' },
-      ACCEPTED: { text: 'Accepted', colour: 'green' },
-      PENDING: { text: 'Pending', colour: 'orange' },
-      NOT_ARRIVED: { text: 'Not arrived', colour: 'orange' },
-      DEPARTED: { text: 'Departed', colour: 'green' },
-      CANCELLED: { text: 'Cancelled', colour: 'orange' },
-      ARCHIVED: { text: 'Archived', colour: 'grey' },
-      WITHDRAWN: { text: 'Withdrawn', colour: 'grey' },
-    }[status] || { text: 'Unknown' }
-  )
-}
+export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag =>
+  ({
+    REQUEST_WITHDRAWN: { text: 'Request withdrawn', colour: 'grey' },
+    EXPIRED: { text: 'Expired', colour: 'grey' },
+    REJECTED:
+      type === 'DTR'
+        ? { text: 'Not accepted', colour: 'grey' }
+        : { text: type === 'CAS1' ? 'Application rejected' : 'Rejected', colour: 'orange' },
+    REQUEST_REJECTED: { text: 'Request rejected', colour: 'orange' },
+    ACCEPTED: { text: 'Accepted', colour: 'green' },
+    PENDING: { text: 'Pending', colour: 'orange' },
+    NOT_ARRIVED: { text: 'Not arrived', colour: 'orange' },
+    DEPARTED: { text: 'Departed', colour: 'green' },
+    CANCELLED: { text: 'Cancelled', colour: 'orange' },
+    ARCHIVED: { text: 'Archived', colour: 'grey' },
+    WITHDRAWN: { text: type === 'CAS1' ? 'Application withdrawn' : 'Withdrawn', colour: 'grey' },
+  })[status] || { text: 'Unknown' }
 
 export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
   return (referrals ?? []).map(referral => [

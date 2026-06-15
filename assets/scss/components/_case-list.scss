@@ -24,6 +24,10 @@
         display: block;
         padding: govuk-spacing(3) 0 govuk-spacing(2);
       }
+
+      & th {
+        display: block;
+      }
     }
   }
 

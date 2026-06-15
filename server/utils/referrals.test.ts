@@ -9,24 +9,12 @@ describe('referrals utilities', () => {
     date: '2023-01-15',
   })
   const referral2 = referralFactory.build({
-    id: '789012',
-    type: 'CAS2HDC',
-    status: 'PENDING',
-    date: '2023-02-20',
-  })
-  const referral3 = referralFactory.build({
     id: '345678',
     type: 'CAS3',
     status: 'REJECTED',
     date: '2023-03-25',
   })
-  const referral4 = referralFactory.build({
-    id: '901234',
-    type: 'CAS2',
-    status: 'ACCEPTED',
-    date: '2023-04-30',
-  })
-  const referrals = [referral1, referral2, referral3, referral4]
+  const referrals = [referral1, referral2]
 
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {

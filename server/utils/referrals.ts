@@ -136,8 +136,8 @@ const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
     if (reason.length > 200) {
       details.push(
         htmlContent(
-          renderMacro('details', {
-            summary: 'Reason details',
+          renderMacro('govukDetails', {
+            summaryText: 'Reason details',
             text: reason,
           }),
         ),

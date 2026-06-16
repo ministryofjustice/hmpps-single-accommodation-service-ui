@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
-import DutyToReferController from './dutyToReferController'
+import DutyToReferController, { SubmissionFlow } from './dutyToReferController'
 import AuditService, { Page } from '../services/auditService'
 import DutyToReferService from '../services/dutyToReferService'
 import CasesService from '../services/casesService'
@@ -65,8 +65,8 @@ describe('dutyToReferController', () => {
   })
 
   describe('submission', () => {
-    it('renders the submission page', async () => {
-      await controller.submission()(request, response, next)
+    it('renders the submission page for a first referral', async () => {
+      await controller.submission('add')(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.DUTY_TO_REFER_SUBMISSION, {
         who: 'user1',
@@ -75,7 +75,7 @@ describe('dutyToReferController', () => {
       expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
       expect(referenceDataService.getLocalAuthorities).toHaveBeenCalledWith('token-1')
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
-        pageTitle: 'Add new Duty to Refer (DTR) referral details',
+        pageTitle: 'Add Duty to Refer (DTR) referral details',
         backLinkHref: '/cases/CRN123',
         crn: 'CRN123',
         tableRows: summaryListRows(caseData),
@@ -99,7 +99,7 @@ describe('dutyToReferController', () => {
         userInput,
       })
 
-      await controller.submission()(request, response, next)
+      await controller.submission('add')(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith(
         'pages/duty-to-refer/submission',
@@ -114,13 +114,25 @@ describe('dutyToReferController', () => {
     it('renders the submission page to edit a submission', async () => {
       request.params.id = 'submission-id'
 
-      await controller.submission()(request, response, next)
+      await controller.submission('edit')(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith(
         'pages/duty-to-refer/submission',
         expect.objectContaining({
           pageTitle: 'Edit Duty to Refer (DTR) referral details',
           backLinkHref: '/cases/CRN123/dtr/submission-id/details',
+        }),
+      )
+    })
+
+    it('renders the submission page for a new referral', async () => {
+      await controller.submission('addNew')(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/duty-to-refer/submission',
+        expect.objectContaining({
+          pageTitle: 'Add new Duty to Refer (DTR) referral details',
+          backLinkHref: '/cases/CRN123',
         }),
       )
     })
@@ -145,7 +157,7 @@ describe('dutyToReferController', () => {
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.submit.mockResolvedValue(dtr)
 
-      await controller.saveSubmission()(request, response, next)
+      await controller.saveSubmission('add')(request, response, next)
 
       expect(dutyToReferService.submit).toHaveBeenCalledWith('token-1', 'CRN123', {
         status: 'SUBMITTED',
@@ -163,7 +175,7 @@ describe('dutyToReferController', () => {
 
       request.params.id = dutyToRefer.submission.id
 
-      await controller.saveSubmission()(request, response, next)
+      await controller.saveSubmission('edit')(request, response, next)
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', dutyToRefer.submission.id, {
         status: 'SUBMITTED',
@@ -176,10 +188,45 @@ describe('dutyToReferController', () => {
       expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
     })
 
+    it('saves and redirects to the details page when adding a new submission', async () => {
+      const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
+      dutyToReferService.submit.mockResolvedValue(dtr)
+
+      await controller.saveSubmission('addNew')(request, response, next)
+
+      expect(dutyToReferService.submit).toHaveBeenCalledWith('token-1', 'CRN123', {
+        status: 'SUBMITTED',
+        submissionDate: '2025-06-15',
+        localAuthorityAreaId: 'la-id',
+        referenceNumber: 'REF123',
+      })
+      expect(request.flash).toHaveBeenCalledWith('success', {
+        heading: 'New DTR referral details added',
+        body: "<p>The previous referral has been moved to James Smith's referral history</p>",
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dtr.submission.id }))
+    })
+
     describe.each([
-      ['when editing', { id: 'submission-id' }, uiPaths.dutyToRefer.edit({ crn: 'CRN123', id: 'submission-id' })],
-      ['when adding', { id: undefined }, uiPaths.dutyToRefer.submission({ crn: 'CRN123' })],
-    ])('%s a submission', (_, params, errorRedirect) => {
+      [
+        'when editing an existing submission',
+        'edit',
+        { id: 'submission-id' },
+        uiPaths.dutyToRefer.edit({ crn: 'CRN123', id: 'submission-id' }),
+      ],
+      [
+        'when adding a submission for the first time',
+        'add',
+        { id: undefined },
+        uiPaths.dutyToRefer.submission({ crn: 'CRN123' }),
+      ],
+      [
+        'when adding a new submission',
+        'addNew',
+        { id: undefined },
+        uiPaths.dutyToRefer.newSubmission({ crn: 'CRN123' }),
+      ],
+    ])('%s', (_, flow: SubmissionFlow, params, errorRedirect) => {
       beforeEach(() => {
         request.params.id = params.id
       })
@@ -187,7 +234,7 @@ describe('dutyToReferController', () => {
       it('redirects to submission page when validation fails', async () => {
         jest.spyOn(dutyToReferUtils, 'validateSubmission').mockReturnValue(false)
 
-        await controller.saveSubmission()(request, response, next)
+        await controller.saveSubmission(flow)(request, response, next)
 
         expect(dutyToReferService.submit).not.toHaveBeenCalled()
         expect(response.redirect).toHaveBeenCalledWith(errorRedirect)
@@ -197,7 +244,7 @@ describe('dutyToReferController', () => {
         dutyToReferService.submit.mockRejectedValue(new Error('API error'))
         dutyToReferService.update.mockRejectedValue(new Error('API error'))
 
-        await controller.saveSubmission()(request, response, next)
+        await controller.saveSubmission(flow)(request, response, next)
 
         expect(response.redirect).toHaveBeenCalledWith(errorRedirect)
       })

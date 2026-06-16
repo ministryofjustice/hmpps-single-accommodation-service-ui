@@ -76,13 +76,14 @@ test.describe('duty to refer', () => {
     await profileTrackerPage.clickLink('Add referral details')
 
     // Then I should see the duty to refer submission form
-    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowCaseSummary(caseData)
 
     // When I submit the form with missing fields
     await dutyToReferPage.clickButton('Save and continue')
 
     // Then I should see errors
+    await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowErrorMessagesForFields({
       submissionDate: 'Enter a submission date',
       localAuthorityAreaId: 'Select a local authority',
@@ -292,6 +293,7 @@ test.describe('duty to refer', () => {
     await dutyToReferPage.clickButton('Save and continue')
 
     // Then I should see errors
+    await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowErrorMessagesForFields({
       submissionDate: 'Enter a submission date',
     })
@@ -494,6 +496,16 @@ test.describe('duty to refer', () => {
     // Then I should see the duty to refer add submission form
     const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
 
+    // When I submit the form with missing fields
+    await dutyToReferPage.clickButton('Save and continue')
+
+    // Then I should see errors
+    await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
+    await dutyToReferPage.shouldShowErrorMessagesForFields({
+      submissionDate: 'Enter a submission date',
+      localAuthorityAreaId: 'Select a local authority',
+    })
+
     // When I complete the form and submit
     await dutyToReferApi.stubSubmitDutyToRefer(crn, newDutyToRefer)
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, newDutyToRefer.submission.id, newDutyToRefer)
@@ -512,6 +524,9 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowAddNewReferralButton()
 
     // And I should see a success banner confirming referral details were added
-    await dutyToReferDetailsPage.shouldShowBanner('New DTR referral details added')
+    await dutyToReferDetailsPage.shouldShowBanner(
+      'New DTR referral details added',
+      `The previous referral has been moved to ${caseData.name}'s referral history`,
+    )
   })
 })

@@ -1,0 +1,4 @@
+{%- macro tableTextCell(context) -%}
+  <span class="sas-table__cell-header" aria-hidden="true">{{ context.header }}</span>
+  {{ context.text }}
+{%- endmacro -%}

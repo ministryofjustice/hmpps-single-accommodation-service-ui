@@ -1,5 +1,6 @@
 import { StatusCard, StatusTag } from '@sas/ui'
 import { CaseDto } from '@sas/api'
+import { TextOrHtmlContent } from '@govuk/ui'
 import { nunjucksInline } from './nunjucksSetup'
 
 type Macro =
@@ -14,9 +15,11 @@ type Macro =
   | 'accommodationCard'
   | 'linksCell'
   | 'accommodationCell'
+  | 'tableTextCell'
   | 'timelineDutyToRefer'
   | 'timelineProposedAddress'
   | 'actionsCell'
+  | 'govukDetails'
 
 export const renderMacro = <T>(macroName: Macro, context: T): string =>
   nunjucksInline().renderString(
@@ -26,7 +29,8 @@ export const renderMacro = <T>(macroName: Macro, context: T): string =>
 
 export const statusTag = (status: StatusTag, classes?: string) => renderMacro('statusTag', { ...status, classes })
 
-export const statusCell = (context: { status: StatusTag; date?: string }) => renderMacro('statusCell', context)
+export const statusCell = (context: { status: StatusTag; dateText?: string; details?: Array<TextOrHtmlContent> }) =>
+  renderMacro('statusCell', context)
 
 export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('riskLevelTag', riskLevel)
 

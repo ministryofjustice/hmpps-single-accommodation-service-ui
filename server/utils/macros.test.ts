@@ -40,18 +40,27 @@ describe('Macros', () => {
       jest.useRealTimers()
     })
 
-    it('renders a status cell with a date', () => {
+    it('renders a status cell without date text', () => {
       const cell: StatusCell = {
-        status: { text: 'Foo', colour: 'red' },
-        date: '2026-06-01',
+        status: { text: 'Foo' },
       }
 
       expect(statusCell(cell)).toMatchSnapshot()
     })
 
-    it('renders a status cell without a date', () => {
+    it('renders a status cell with date text', () => {
       const cell: StatusCell = {
-        status: { text: 'John' },
+        status: { text: 'Foo' },
+        dateText: 'Submitted 5 days ago',
+      }
+
+      expect(statusCell(cell)).toMatchSnapshot()
+    })
+
+    it('renders a status cell with details', () => {
+      const cell: StatusCell = {
+        status: { text: 'Foo' },
+        details: [{ text: 'Detail 1' }, { html: '<p>Detail 2</p>' }],
       }
 
       expect(statusCell(cell)).toMatchSnapshot()

@@ -70,7 +70,7 @@ if (generate.referrals) {
   const referrals = cases.reduce(
     (responses, c) => ({
       ...responses,
-      [c.crn]: referralFactory.buildList(faker.number.int({ min: 0, max: 3 })),
+      [c.crn]: referralFactory.buildReferralHistoryList(faker.number.int({ min: 0, max: 5 })),
     }),
     {},
   )

@@ -2,7 +2,7 @@
 
 exports[`cases utilities actionsCell macro renders a formatted cell for a given list of actions 1`] = `
 "
-    <span class="sas-case-list__cell-header" aria-hidden="true">Actions</span>
+    <span class="sas-table__cell-header" aria-hidden="true">Actions</span>
 
     <ul class="govuk-list">
         <li>Action 1</li>
@@ -14,7 +14,7 @@ exports[`cases utilities actionsCell macro renders a formatted cell for a given 
 exports[`cases utilities actionsCell macro renders an empty cell when no actions are provided 1`] = `""`;
 
 exports[`cases utilities personCell macro renders a formatted cell for a case with full access 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Name</span>
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
@@ -56,7 +56,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 `;
 
 exports[`cases utilities personCell macro renders a formatted cell for a case with full access with LAO flag 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Name</span>
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
@@ -98,7 +98,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 `;
 
 exports[`cases utilities personCell macro renders a formatted cell for a case with limited access 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Name</span>
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
@@ -128,7 +128,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 `;
 
 exports[`cases utilities personCell macro renders a formatted cell for a case with limited information 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Name</span>
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
@@ -155,7 +155,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 `;
 
 exports[`cases utilities personCell macro renders a formatted cell for a case with unknown access 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Name</span>
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
@@ -185,7 +185,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 `;
 
 exports[`cases utilities personCell macro renders a formatted cell including Assigned to 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Name</span>
+"<span class="sas-table__cell-header" aria-hidden="true">Name</span>
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">

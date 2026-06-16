@@ -1,11 +1,11 @@
 @use "govuk-frontend/dist/govuk" as *;
 
-.sas-case-list {
-  & .sas-case-list__cell-header {
+.sas-table {
+  & .sas-table__cell-header {
     @extend .govuk-heading-s;
   }
 
-  & td:only-child .sas-case-list__cell-header,
+  & td:only-child .sas-table__cell-header,
   & th:only-child {
     display: none;
   }
@@ -24,11 +24,15 @@
         display: block;
         padding: govuk-spacing(3) 0 govuk-spacing(2);
       }
+
+      & th {
+        display: block;
+      }
     }
   }
 
   @include govuk-media-query($from: tablet) {
-    & .sas-case-list__cell-header {
+    & .sas-table__cell-header {
       display: none;
     }
   }

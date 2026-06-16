@@ -176,11 +176,27 @@ export default class AbstractPage {
   async shouldShowStatusCell(statusCell: StatusCell, container?: Locator) {
     await this.shouldShowStatusTag(statusCell.status, container)
 
-    if (statusCell.date) {
-      const hint = (container || this.page).locator('p.govuk-hint')
-      await expect(hint).toContainText(formatDate(statusCell.date))
-      await expect(hint).toContainText(`(${formatDate(statusCell.date, 'days for/in')})`)
+    if (statusCell.dateText) {
+      const date = (container || this.page).locator('p.sas-status__date')
+      await expect(date).toContainText(statusCell.dateText)
     }
+
+    if (statusCell.details) {
+      for await (const detail of statusCell.details) {
+        if (detail.text) {
+          await expect((container || this.page).locator('p', { hasText: detail.text })).toBeVisible()
+        } else if (detail.html) {
+          await this.shouldShowDetails(detail, 'Reason details', container)
+        }
+      }
+    }
+  }
+
+  async shouldShowDetails(detail: { html: string }, summaryText: string, container?: Locator) {
+    const text = detail.html.replace(/<[^>]*>/g, '')
+
+    await (container || this.page).getByText(summaryText).click()
+    await expect((container || this.page).locator('details', { hasText: text })).toBeVisible()
   }
 
   async shouldShowErrorMessagesForFields(errorMessages: Record<string, string>) {

@@ -85,19 +85,29 @@ exports[`Macros Status Card renders an inactive status card 1`] = `
   </article>"
 `;
 
-exports[`Macros Status Cell renders a status cell with a date 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag govuk-tag--red">Foo</strong>
-    <p class="govuk-hint govuk-!-margin-top-2">
-      From 1 June 2026
-      <br/>
-      (in 173 days)
-    </p>"
+exports[`Macros Status Cell renders a status cell with date text 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  <strong class="govuk-tag">Foo</strong>
+    <p class="sas-status__date">Submitted 5 days ago</p>"
 `;
 
-exports[`Macros Status Cell renders a status cell without a date 1`] = `
-"<span class="sas-case-list__cell-header" aria-hidden="true">Status</span>
-  <strong class="govuk-tag">John</strong>"
+exports[`Macros Status Cell renders a status cell with details 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  <strong class="govuk-tag">Foo</strong>
+    
+      
+        <p class="govuk-!-margin-bottom-1">Detail 1</p>
+      
+    
+      
+        <p>Detail 2</p>
+      
+    "
+`;
+
+exports[`Macros Status Cell renders a status cell without date text 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  <strong class="govuk-tag">Foo</strong>"
 `;
 
 exports[`Macros Status Tag renders a status tag with classes when classes is provided 1`] = `"<strong class="govuk-tag govuk-tag--blue govuk-tag--no-wrap">Qux</strong>"`;

@@ -112,7 +112,7 @@ describe('cases utilities', () => {
         status: 'RISK_OF_NO_FIXED_ABODE',
         currentAccommodation: accommodationSummaryFactory.current('2026-06-01', '2025-12-01').build(),
       })
-      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ date: '2026-06-01' }))
+      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ dateText: '1 June 2026' }))
     })
   })
 

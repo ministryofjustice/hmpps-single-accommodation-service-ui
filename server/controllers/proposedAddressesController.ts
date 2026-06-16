@@ -328,6 +328,7 @@ export default class ProposedAddressesController {
           proposedAddressFormSessionData.lookupResults?.length || config.flags.hideManualAddressEntry
             ? uiPaths.proposedAddresses.selectAddress({ crn })
             : uiPaths.proposedAddresses.details({ crn }),
+        address: formatAddress(proposedAddressFormSessionData.address),
         name: caseData.name,
         accommodationTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
         errors,
@@ -372,6 +373,7 @@ export default class ProposedAddressesController {
           proposedAddressFormSessionData?.verificationStatus,
         ),
         backLinkHref,
+        address: formatAddress(proposedAddressFormSessionData.address),
         errors,
         errorSummary,
       })
@@ -422,6 +424,7 @@ export default class ProposedAddressesController {
         ),
         name: caseData.name,
         backLinkHref,
+        address: formatAddress(proposedAddressFormSessionData.address),
         errors,
         errorSummary,
       })

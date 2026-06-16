@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test'
 import { ProposedAddressFormData, RadioItem } from '@sas/ui'
-import { CaseDto as Case } from '@sas/api'
+import { AccommodationAddressDetails, CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import paths from '../../../server/paths/ui'
 import { verifyPost } from '../../mockApis/wiremock'
@@ -11,6 +11,7 @@ import {
   formDataToRequestBody,
 } from '../../../server/utils/proposedAddresses'
 import { accommodationTypesMap } from '../../../server/testutils/factories/proposedAccommodation'
+import { formatAddress } from '../../../server/utils/addresses'
 
 export default class AddProposedAddressPage extends AbstractPage {
   constructor(
@@ -183,5 +184,9 @@ export default class AddProposedAddressPage extends AbstractPage {
     const expectedBody = formDataToRequestBody(proposedAddressData)
 
     expect(requestBody).toEqual(expectedBody)
+  }
+
+  async shouldShowAddressCaption(address: AccommodationAddressDetails) {
+    await expect(this.page.locator('.govuk-caption-l')).toContainText(formatAddress(address))
   }
 }

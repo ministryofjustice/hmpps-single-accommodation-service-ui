@@ -1,20 +1,26 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Is this the next address they will be moving into?" %}
 {% set formAction = paths.proposedAddresses.nextAccommodation({ crn: crn }) %}
+{% set heading %}
+  <span class="govuk-caption-l">{{ address }}</span>
+  <h1 class="govuk-fieldset__heading">Is this the next address that {{ name }} will be moving into?</h1>
+{% endset %}
 
 {% block formContent %}
-{{ govukRadios({
-      name: "nextAccommodationStatus",
-      fieldset: {
-          legend: {
-              text: "Is this the next address that " + name + " will be moving into?",
-              classes: "govuk-fieldset__legend--l"
-          }
-      },
-      items: nextAccommodationStatusItems,
-      errorMessage: errors.nextAccommodationStatus
-  }) }}
+  {{
+    govukRadios({
+        name: "nextAccommodationStatus",
+        fieldset: {
+            legend: {
+                html: heading,
+                classes: "govuk-fieldset__legend--l",
+                isPageHeading: true
+            }
+        },
+        items: nextAccommodationStatusItems,
+        errorMessage: errors.nextAccommodationStatus
+    })
+  }}
 {% endblock %}

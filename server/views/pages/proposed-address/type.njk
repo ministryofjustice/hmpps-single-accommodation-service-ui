@@ -1,21 +1,29 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Which best describes the living arrangement for the person at this address?" %}
 {% set formAction = paths.proposedAddresses.type({crn: crn}) %}
+{% set heading %}
+  <span class="govuk-caption-l">{{ address }}</span>
+  <h1 class="govuk-fieldset__heading">
+    Which best describes the living arrangement for {{ name }} at this address?
+  </h1>
+{% endset %}
 
 {% block formContent %}
-  {{ govukRadios({
-      name: "accommodationTypeCode",
-      fieldset: {
-          legend: {
-              text: "Which best describes the living arrangement for " + name + " at this address?",
-              classes: "govuk-fieldset__legend--l"
-          }
-      },
-      items: accommodationTypeItems,
-      errorMessage: errors.accommodationTypeCode
-  }) }}
+  {{
+    govukRadios({
+        name: "accommodationTypeCode",
+        fieldset: {
+            legend: {
+                html: heading,
+                classes: "govuk-fieldset__legend--l",
+                isPageHeading: true
+            }
+        },
+        items: accommodationTypeItems,
+        errorMessage: errors.accommodationTypeCode
+    })
+  }}
 {% endblock %}

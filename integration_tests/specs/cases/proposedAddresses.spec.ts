@@ -178,6 +178,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see the type form
     await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I submit the form empty
     await addProposedAddressPage.clickButton('Continue')
@@ -193,6 +194,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see the status form
     await addProposedAddressPage.shouldShowStatusForm()
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I submit the form empty
     await addProposedAddressPage.clickButton('Continue')
@@ -214,12 +216,14 @@ test.describe('add proposed address', () => {
 
     // Then I should see the populated status form
     await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I click the back link
     await addProposedAddressPage.clickLink('Back')
 
     // Then I should see the populated type form
     await addProposedAddressPage.shouldShowPopulatedTypeForm(initialProposedAddressData)
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I click the back link
     await addProposedAddressPage.clickLink('Back')
@@ -288,11 +292,12 @@ test.describe('add proposed address', () => {
     const proposedAddressData = proposedAddressFormFactory.build({
       verificationStatus: 'NOT_CHECKED_YET',
     })
-    const selectedAddress = addressFactory.build(
-      resultToAddressDetails(
-        osDataHubApiResponse.results.find(result => result.DPA.ADDRESS === '19A, KEPPEL ROAD, MANCHESTER, M21 0BP'),
-      ),
-    )
+    const firstSelectedAddress = addressFactory
+      .minimal()
+      .build(resultToAddressDetails(osDataHubApiResponse.results.find(address => address.DPA.BUILDING_NUMBER === '19')))
+    const selectedAddress = addressFactory
+      .minimal()
+      .build(resultToAddressDetails(osDataHubApiResponse.results.find(address => address.DPA.BUILDING_NAME === '19A')))
 
     await osDataHubApi.stubOsDataHubGetPostcode('M21 0BP', osDataHubApiResponse)
     await osDataHubApi.stubOsDataHubGetPostcode('N0 0PE', { ...osDataHubApiResponse, results: [] })
@@ -344,6 +349,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see the type form
     await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+    await addProposedAddressPage.shouldShowAddressCaption(firstSelectedAddress)
 
     // When I click back
     await addProposedAddressPage.clickLink('Back')
@@ -369,6 +375,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see the type form
     await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+    await addProposedAddressPage.shouldShowAddressCaption(selectedAddress)
 
     // When I complete the type form
     await addProposedAddressPage.completeTypeForm(proposedAddressData)
@@ -376,6 +383,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see the status form
     await addProposedAddressPage.shouldShowStatusForm()
+    await addProposedAddressPage.shouldShowAddressCaption(selectedAddress)
 
     // When I complete the status form
     await addProposedAddressPage.completeStatusForm(proposedAddressData)
@@ -445,6 +453,7 @@ test.describe('edit proposed address', () => {
 
     // Then I should see the populated status form
     await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I click the back link
     await addProposedAddressPage.clickLink('Back')
@@ -457,6 +466,7 @@ test.describe('edit proposed address', () => {
 
     // Then I should see the populated status form again
     await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     await setupProposedAddresses(crn, [failedStatusUpdate])
 
@@ -505,6 +515,7 @@ test.describe('edit proposed address', () => {
 
     // Then I should see the populated status form
     await addProposedAddressPage.shouldShowPopulatedStatusForm(initialProposedAddressData)
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     await setupProposedAddresses(crn, [notNextAccommodationUpdate])
 
@@ -514,6 +525,7 @@ test.describe('edit proposed address', () => {
 
     // Then I should see the next accommodation form
     await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
+    await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I complete the next accommodation form with 'No'
     await addProposedAddressPage.completeNextAccommodationForm(notNextAccommodationFormData)
@@ -587,6 +599,7 @@ test.describe('edit proposed address', () => {
       ...proposedAddress,
       accommodationTypeCode: proposedAddress.accommodationType.code,
     })
+    await editProposedAddressPage.shouldShowAddressCaption(proposedAddress.address)
 
     // When I update the arrangement type
     const updatedAddressRecord = auditRecordFactory

@@ -153,7 +153,7 @@ describe('dutyToReferController', () => {
       })
     })
 
-    it('submits and redirects to the details page', async () => {
+    it('submits and redirects to the case details page', async () => {
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.submit.mockResolvedValue(dtr)
 
@@ -165,11 +165,12 @@ describe('dutyToReferController', () => {
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
       })
+      expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'New DTR referral details added')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dtr.submission.id }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 
-    it('updates and redirects to the details page when editing', async () => {
+    it('updates and redirects to the DTR details page when editing', async () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
 
@@ -183,12 +184,12 @@ describe('dutyToReferController', () => {
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
       })
-
+      expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
       expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
     })
 
-    it('saves and redirects to the details page when adding a new submission', async () => {
+    it('saves and redirects to the case details page when adding a new submission', async () => {
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.submit.mockResolvedValue(dtr)
 
@@ -200,11 +201,12 @@ describe('dutyToReferController', () => {
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
       })
+      expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
       expect(request.flash).toHaveBeenCalledWith('success', {
         heading: 'New DTR referral details added',
         body: "<p>The previous referral has been moved to James Smith's referral history</p>",
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dtr.submission.id }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 
     describe.each([

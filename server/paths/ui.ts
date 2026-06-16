@@ -13,6 +13,7 @@ export default {
   dutyToRefer: {
     show: dutyToReferPath.path(':id/details'),
     submission: dutyToReferPath.path('submission'),
+    newSubmission: dutyToReferPath.path('submission/new'),
     edit: dutyToReferPath.path(':id/edit'),
     outcome: dutyToReferPath.path(':id/outcome'),
     withdraw: dutyToReferPath.path(':id/withdraw'),

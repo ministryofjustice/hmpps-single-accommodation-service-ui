@@ -216,8 +216,14 @@ export default class AbstractPage {
     await expect(this.page.locator('.govuk-error-summary__body')).toContainText(message)
   }
 
-  async shouldShowBanner(text: string) {
-    return expect(this.page.getByRole('alert')).toContainText(text)
+  async shouldShowBanner(heading: string, body?: string) {
+    const alert = this.page.getByRole('alert')
+
+    await expect(alert).toContainText(heading)
+
+    if (body) {
+      await expect(alert).toContainText(body)
+    }
   }
 
   async verifyTextInput(label: string, value: string) {

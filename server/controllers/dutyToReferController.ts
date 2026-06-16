@@ -28,6 +28,8 @@ import { caseAssignedTo } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
 import { radioItems } from '../utils/utils'
 
+export type SubmissionFlow = 'add' | 'addNew' | 'edit'
+
 export default class DutyToReferController {
   constructor(
     private readonly auditService: AuditService,
@@ -73,7 +75,7 @@ export default class DutyToReferController {
     }
   }
 
-  submission(): RequestHandler {
+  submission(flow: SubmissionFlow): RequestHandler {
     return async (req: Request, res: Response) => {
       const { token } = res.locals.user
       const { crn, id } = req.params
@@ -93,8 +95,10 @@ export default class DutyToReferController {
         ...userInput,
       }
 
+      const pageTitleAction = { add: 'Add', addNew: 'Add new', edit: 'Edit' }[flow]
+
       return res.render('pages/duty-to-refer/submission', {
-        pageTitle: `${id ? 'Edit' : 'Add new'} Duty to Refer (DTR) referral details`,
+        pageTitle: `${pageTitleAction} Duty to Refer (DTR) referral details`,
         backLinkHref,
         crn,
         tableRows,
@@ -106,12 +110,16 @@ export default class DutyToReferController {
     }
   }
 
-  saveSubmission(): RequestHandler {
+  saveSubmission(flow: SubmissionFlow): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber } = req.body
-      const errorRedirect = id ? uiPaths.dutyToRefer.edit({ crn, id }) : uiPaths.dutyToRefer.submission({ crn })
+      const errorRedirect = {
+        add: uiPaths.dutyToRefer.submission,
+        addNew: uiPaths.dutyToRefer.newSubmission,
+        edit: uiPaths.dutyToRefer.edit,
+      }[flow]({ crn, id })
 
       if (!validateSubmission(req)) {
         return res.redirect(errorRedirect)
@@ -132,9 +140,23 @@ export default class DutyToReferController {
           req.flash('success', 'Submission details updated')
           return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         }
-        const dtr = await this.dutyToReferService.submit(token, crn, submission)
-        req.flash('success', 'New DTR referral details added')
-        return res.redirect(uiPaths.dutyToRefer.show({ crn, id: dtr.submission?.id }))
+
+        await this.dutyToReferService.submit(token, crn, submission)
+
+        if (flow === 'addNew') {
+          const {
+            data: { name },
+          } = await this.casesService.getCase(token, crn)
+
+          req.flash('success', {
+            heading: 'New DTR referral details added',
+            body: `<p>The previous referral has been moved to ${name}'s referral history</p>`,
+          })
+        } else {
+          req.flash('success', 'New DTR referral details added')
+        }
+
+        return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
         return res.redirect(errorRedirect)

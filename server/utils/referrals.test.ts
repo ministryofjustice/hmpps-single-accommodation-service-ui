@@ -12,7 +12,7 @@ describe('referrals utilities', () => {
   const referral2 = referralFactory.build({
     id: '789012',
     type: 'DTR',
-    placementStatus: 'WITHDRAWN',
+    status: 'WITHDRAWN',
     date: '2023-02-20',
     referredBy: { username: 'joe_bloggs', name: 'Joe Bloggs' },
   })

@@ -105,7 +105,7 @@ export default class AddProposedAddressPage extends AbstractPage {
     await this.selectRadioByLabel(nextAccommodationLabel)
   }
 
-  async verifyCheckYourAnswersPage(proposedAddressData: ProposedAddressFormData, caseName: string) {
+  async verifyCheckYourAnswersPage(proposedAddressData: ProposedAddressFormData) {
     await expect(this.page.getByText('Check your answers before adding the address')).toBeVisible()
 
     const { address } = proposedAddressData
@@ -120,17 +120,17 @@ export default class AddProposedAddressPage extends AbstractPage {
 
     await this.shouldShowSummaryItem('Address', addressLines)
     await this.shouldShowSummaryItem(
-      `Which best describes the living arrangement for ${caseName} at this address?`,
+      'Living arrangement',
       accommodationTypesMap[proposedAddressData.accommodationTypeCode],
     )
     await this.shouldShowSummaryItem(
-      'What is the status of the address checks?',
+      'Address checks',
       formatProposedAddressStatus(proposedAddressData.verificationStatus),
     )
 
     if (proposedAddressData.verificationStatus === 'PASSED') {
       await this.shouldShowSummaryItem(
-        `Is this the next address that ${caseName} will be moving into?`,
+        'Set as next address',
         formatProposedAddressNextAccommodation(proposedAddressData.nextAccommodationStatus),
       )
     }

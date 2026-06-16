@@ -145,16 +145,16 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('formats address, arrangement and status', () => {
-      const rows = checkYourAnswersRows(baseSessionData, 'CRN123', 'James Taylor', accommodationTypesReferenceData)
+      const rows = checkYourAnswersRows(baseSessionData, 'CRN123', accommodationTypesReferenceData)
 
-      const addressHtml = rows[0].value.html ?? rows[0].value
-      const arrangementHtml = rows[1].value.html ?? rows[1].value
+      const addressHtml = rows.address[0].value.html
+      const arrangementHtml = rows.supportingInfo[0].value.html
 
       expect(addressHtml).toBe('10 Moonlight Road<br />London<br />Greater London<br />NW1 6XE<br />UK')
       expect(arrangementHtml).toBe('Other accommodation type')
-      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/lookup')
-      expect(rows[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
-      expect(rows[2].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
+      expect(rows.address[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/lookup')
+      expect(rows.supportingInfo[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
+      expect(rows.supportingInfo[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
     })
 
     it('formats status when checks failed with reason', () => {
@@ -162,11 +162,9 @@ describe('Proposed addresses utilities', () => {
         ...baseSessionData,
         verificationStatus: 'FAILED',
       })
-      const rows = checkYourAnswersRows(sessionData, 'CRN123', 'James Taylor', accommodationTypesReferenceData)
+      const rows = checkYourAnswersRows(sessionData, 'CRN123', accommodationTypesReferenceData)
 
-      const statusHtml = rows[2].value.html ?? rows[2].value
-
-      expect(statusHtml).toMatchSnapshot()
+      expect(rows.supportingInfo[1].value.html).toMatchSnapshot()
     })
 
     it('links the address change link to the details if the address was entered manually', () => {
@@ -177,14 +175,9 @@ describe('Proposed addresses utilities', () => {
         lookupResults: null,
       })
 
-      const rows = checkYourAnswersRows(
-        fullSessionDataManualAddressEntry,
-        'CRN123',
-        'James Taylor',
-        accommodationTypesReferenceData,
-      )
+      const rows = checkYourAnswersRows(fullSessionDataManualAddressEntry, 'CRN123', accommodationTypesReferenceData)
 
-      expect(rows[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
+      expect(rows.address[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
     })
   })
 

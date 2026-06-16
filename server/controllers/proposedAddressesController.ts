@@ -458,12 +458,9 @@ export default class ProposedAddressesController {
       await this.formData.update(crn, req.session, { redirect: uiPaths.proposedAddresses.checkYourAnswers({ crn }) })
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
-      const [{ data: caseData }, { data: accommodationTypes }] = await Promise.all([
-        this.casesService.getCase(token, crn),
-        this.referenceDataService.getAccommodationTypes(token),
-      ])
+      const { data: accommodationTypes } = await this.referenceDataService.getAccommodationTypes(token)
 
-      const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, caseData.name, accommodationTypes)
+      const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, accommodationTypes)
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.checkYourAnswers.pattern, req, [
         uiPaths.proposedAddresses.status.pattern,
         uiPaths.proposedAddresses.nextAccommodation.pattern,

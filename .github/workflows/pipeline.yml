@@ -38,30 +38,9 @@ jobs:
 
   node_unit_tests:
     name: node unit tests
-    runs-on: [ self-hosted, hmpps-github-actions-runner ]
-    steps:
-      - name: Check out code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
-        with:
-          node-version-file: '.node-version'
-          cache: 'npm'
-
-#      - name: SLSA
-#        uses: ministryofjustice/devsecops-actions/sca/slsa@4cd163be7859cd130800d6719d925318826038ea
-
-      - name: Install dependencies
-        run: npm ci --no-audit
-
-      - name: Run Unit tests
-        run: npm run test:ci
-
-      - name: Check coverage
-        run: |
-          npx nyc report -t ./coverage --reporter=text --reporter=text-summary
-          npx nyc check-coverage -t ./coverage
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
+    needs: [ node_build ]
+    secrets: inherit
 
   # generic node integration tests using wiremock - feel free to override with local tests if required
   node_integration_tests:

@@ -325,11 +325,11 @@ test.describe('duty to refer', () => {
     const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
     await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
 
-    // And the person's profile should be shown
-    await dutyToReferDetailsPage.shouldShowCaseDetails(caseData)
-
     // And the submission details should be shown
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(acceptedDutyToRefer)
+
+    // And the outcome details should be shown
+    await dutyToReferDetailsPage.shouldShowOutcomeDetails(acceptedDutyToRefer)
 
     // Then I click the change button on submission details
     await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Referral details'))

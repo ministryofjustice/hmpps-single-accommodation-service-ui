@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { DtrCommand } from '@sas/api'
 import uiPaths from '../paths/ui'
 import {
   validateSubmission,
@@ -128,14 +129,19 @@ export default class DutyToReferController {
       const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
 
       try {
-        const submission = {
-          status: 'SUBMITTED' as const,
+        const submission: DtrCommand = {
+          status: 'SUBMITTED',
           submissionDate,
           localAuthorityAreaId,
           referenceNumber,
         }
 
         if (id) {
+          const { data: dtr } = await this.dutyToReferService.getDtrBySubmissionId(token, crn, id)
+          if (dtr.status !== 'SUBMITTED') {
+            submission.status = dtr.status
+            submission.outcomeReason = dtr.submission?.outcomeReason
+          }
           await this.dutyToReferService.update(token, crn, id, submission)
           req.flash('success', 'Submission details updated')
           return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))

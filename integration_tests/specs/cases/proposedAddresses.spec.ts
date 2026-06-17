@@ -259,7 +259,18 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
-    // And I complete the next accommodation form with new data
+    // Then I should see the next address form
+    await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
+
+    // When I submit the form empty
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see an error
+    await addProposedAddressPage.shouldShowErrorMessagesForFields({
+      nextAccommodationStatus: 'Select if you want to confirm this as the next address',
+    })
+
+    // When I complete the next accommodation form with new data
     await addProposedAddressPage.completeNextAccommodationForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 

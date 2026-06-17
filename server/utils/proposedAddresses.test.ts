@@ -527,7 +527,7 @@ describe('Proposed addresses utilities', () => {
         expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
           req,
           expect.objectContaining({
-            nextAccommodationStatus: 'Select if this is the next address',
+            nextAccommodationStatus: 'Select if you want to confirm this as the next address',
           }),
         )
       })

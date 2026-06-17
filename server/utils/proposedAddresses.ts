@@ -269,7 +269,7 @@ const validateNextAccommodationFromSession = (req: Request, sessionData: Propose
   const errors: Record<string, string> = {}
 
   if (sessionData?.verificationStatus === 'PASSED' && !sessionData?.nextAccommodationStatus) {
-    errors.nextAccommodationStatus = 'Select if this is the next address'
+    errors.nextAccommodationStatus = 'Select if you want to confirm this as the next address'
   }
 
   return validateAndFlashErrors(req, errors)

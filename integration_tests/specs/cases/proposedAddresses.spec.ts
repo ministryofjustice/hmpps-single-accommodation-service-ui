@@ -489,8 +489,14 @@ test.describe('edit proposed address', () => {
       crn,
       address: addressFactory.minimal().build(confirmedFormData.address),
     })
-    const notNextAccommodationUpdate = { ...updatedProposedAddress, nextAccommodationStatus: 'NO' as const }
-    const notNextAccommodationFormData = { ...confirmedFormData, nextAccommodationStatus: 'NO' as const }
+    const notNextAccommodationUpdate = proposedAccommodationFactory.build({
+      ...updatedProposedAddress,
+      nextAccommodationStatus: 'TO_BE_DECIDED',
+    })
+    const notNextAccommodationFormData = proposedAccommodationFactory.build({
+      ...confirmedFormData,
+      nextAccommodationStatus: 'TO_BE_DECIDED',
+    })
 
     // And I am logged in
     await login(page)

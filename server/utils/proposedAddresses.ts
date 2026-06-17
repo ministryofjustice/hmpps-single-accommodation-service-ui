@@ -94,7 +94,7 @@ export const formatProposedAddressNextAccommodation = (status: ProposedAccommoda
   ({
     YES: 'Yes',
     NO: 'No',
-    TO_BE_DECIDED: 'Still to be decided',
+    TO_BE_DECIDED: 'Not yet',
   })[status]
 
 export const checkYourAnswersRows = (
@@ -326,31 +326,13 @@ export const verificationStatusLabels: Record<ProposedAccommodationDto['verifica
   FAILED: 'Failed',
 }
 
-export const nextAccommodationStatusLabels: Record<ProposedAccommodationDto['nextAccommodationStatus'], string> = {
+export const nextAccommodationStatusLabels: Record<
+  Exclude<ProposedAccommodationDto['nextAccommodationStatus'], 'NO'>,
+  string
+> = {
   YES: 'Yes',
-  NO: 'No',
-  TO_BE_DECIDED: 'Still to be decided',
+  TO_BE_DECIDED: 'Not yet',
 }
-
-export const nextAccommodationStatusItems = (
-  nextAccommodationStatus?: ProposedAccommodationDto['nextAccommodationStatus'],
-) => [
-  {
-    value: 'YES',
-    text: 'Yes',
-    checked: nextAccommodationStatus === 'YES',
-  },
-  {
-    value: 'NO',
-    text: 'No',
-    checked: nextAccommodationStatus === 'NO',
-  },
-  {
-    value: 'TO_BE_DECIDED',
-    text: 'Still to be decided',
-    checked: nextAccommodationStatus === 'TO_BE_DECIDED',
-  },
-]
 
 export const formDataToRequestBody = ({
   accommodationTypeCode,

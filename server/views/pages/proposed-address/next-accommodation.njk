@@ -1,26 +1,29 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% extends "pages/proposed-address/layout.njk" %}
 
-{% set pageTitle = "Is this the next address they will be moving into?" %}
+{% set pageTitle = "Do you want to confirm this as the person's next address?" %}
 {% set formAction = paths.proposedAddresses.nextAccommodation({ crn: crn }) %}
 {% set heading %}
   <span class="govuk-caption-l">{{ address }}</span>
-  <h1 class="govuk-fieldset__heading">Is this the next address that {{ name }} will be moving into?</h1>
+  <h1 class="govuk-fieldset__heading">Do you want to confirm this as the next address for {{ name }}?</h1>
 {% endset %}
 
 {% block formContent %}
   {{
     govukRadios({
-        name: "nextAccommodationStatus",
-        fieldset: {
-            legend: {
-                html: heading,
-                classes: "govuk-fieldset__legend--l",
-                isPageHeading: true
-            }
-        },
-        items: nextAccommodationStatusItems,
-        errorMessage: errors.nextAccommodationStatus
+      name: "nextAccommodationStatus",
+      fieldset: {
+        legend: {
+          html: heading,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      },
+      hint: {
+        text: "If you still need to check other addresses before making a decision, choose 'Not yet'."
+      },
+      items: nextAccommodationStatusItems,
+      errorMessage: errors.nextAccommodationStatus
     })
   }}
 {% endblock %}

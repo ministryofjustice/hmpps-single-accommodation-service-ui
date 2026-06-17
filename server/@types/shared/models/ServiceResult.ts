@@ -32,7 +32,7 @@ export type ServiceResult = {
   action?: string | null
   link?: string | null
   url?: string | null
-  linkType?: 'CAS1_START_APPLICATION' | 'CAS1_VIEW_APPLICATION'
+  linkType?: 'CAS1_START_APPLICATION' | 'CAS1_VIEW_APPLICATION' | 'CAS3_START_REFERRAL' | 'CAS3_VIEW_REFERRAL'
   failureReasons: Array<
     | 'S_TIER'
     | 'MALE_NOT_HIGH_RISK_TIER'

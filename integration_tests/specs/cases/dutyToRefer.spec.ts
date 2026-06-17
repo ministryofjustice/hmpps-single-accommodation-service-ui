@@ -341,6 +341,74 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
   })
 
+  test('should allow the user to edit a submission with an outcome', async ({ page }) => {
+    const acceptedDutyToRefer = dutyToReferFactory.accepted().build({ crn })
+    const submissionId = acceptedDutyToRefer.submission.id
+    const updatedSubmission = dtrSubmissionFactory.build({ id: submissionId })
+    const updatedDutyToRefer = dutyToReferFactory.build({
+      ...acceptedDutyToRefer,
+      submission: { ...updatedSubmission, outcomeReason: acceptedDutyToRefer.submission.outcomeReason },
+    })
+    const submittedDutyToReferRecord = auditRecordFactory.dutyToReferAdded(acceptedDutyToRefer.submission).build()
+    const outcomeDutyToReferRecord = auditRecordFactory.dutyToReferUpdated(acceptedDutyToRefer.submission, 'ACCEPTED', {localAuthorityName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName}, 'SUBMITTED').build()
+    const updatedDutyToReferRecord = auditRecordFactory.dutyToReferUpdated(updatedSubmission).build()
+    const timelineRecords: AuditRecordDto[] = [outcomeDutyToReferRecord, submittedDutyToReferRecord]
+
+    // Given I have stubbed the API responses
+    const { caseData } = await setupStubs({ initialDutyToRefer: acceptedDutyToRefer })
+    await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
+
+    // Given I am logged in
+    await login(page)
+
+    // When I visit profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // Then I click the link to view duty to refer details in the dtr card
+    await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
+
+    // Then I should see the duty to refer details page
+    const dutyToReferDetailsPage = await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
+
+    // And the person's profile should be shown
+    await dutyToReferDetailsPage.shouldShowCaseDetails(caseData)
+
+    // And the submission details should be shown
+    await dutyToReferDetailsPage.shouldShowSubmissionDetails(acceptedDutyToRefer)
+
+    // Then I click the change button on submission details
+    await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Referral details'))
+
+    // Then I should see the duty to refer edit submission form
+    const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) referral details')
+    await dutyToReferPage.shouldShowCaseSummary(caseData)
+    await dutyToReferPage.shouldShowPopulatedSubmissionForm(acceptedDutyToRefer)
+
+    // When I complete the form and submit
+    await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
+    timelineRecords.unshift(updatedDutyToReferRecord)
+    await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
+
+    await dutyToReferPage.completeSubmissionForm(updatedDutyToRefer)
+    await dutyToReferPage.clickButton('Save and continue')
+
+    // And the API should have been called to update the duty to refer
+    await dutyToReferPage.checkApiCalled(crn, updatedDutyToRefer, 'update')
+
+    // Then I should see the duty to refer details page with updated submission details
+    await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
+    await dutyToReferDetailsPage.shouldShowSubmissionDetails(updatedDutyToRefer)
+
+    // And I should see a success banner confirming submission details were updated
+    await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
+
+    // And I should see a timeline entry showing the submission details were updated
+    await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
+  })
+
   test('should allow the user to edit outcome details', async ({ page }) => {
     const acceptedDutyToRefer = dutyToReferFactory.accepted().build({ crn })
     const submissionId = acceptedDutyToRefer.submission.id

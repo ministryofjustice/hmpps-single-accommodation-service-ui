@@ -350,7 +350,14 @@ test.describe('duty to refer', () => {
       submission: { ...updatedSubmission, outcomeReason: acceptedDutyToRefer.submission.outcomeReason },
     })
     const submittedDutyToReferRecord = auditRecordFactory.dutyToReferAdded(acceptedDutyToRefer.submission).build()
-    const outcomeDutyToReferRecord = auditRecordFactory.dutyToReferUpdated(acceptedDutyToRefer.submission, 'ACCEPTED', {localAuthorityName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName}, 'SUBMITTED').build()
+    const outcomeDutyToReferRecord = auditRecordFactory
+      .dutyToReferUpdated(
+        acceptedDutyToRefer.submission,
+        'ACCEPTED',
+        { localAuthorityName: acceptedDutyToRefer.submission.localAuthority.localAuthorityAreaName },
+        'SUBMITTED',
+      )
+      .build()
     const updatedDutyToReferRecord = auditRecordFactory.dutyToReferUpdated(updatedSubmission).build()
     const timelineRecords: AuditRecordDto[] = [outcomeDutyToReferRecord, submittedDutyToReferRecord]
 

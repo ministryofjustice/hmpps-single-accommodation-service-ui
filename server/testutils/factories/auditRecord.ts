@@ -31,7 +31,10 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
       ...(status ? [{ field: 'status', value: status as string, oldValue: oldStatus as string }] : []),
       ...Object.entries(submissionData).flatMap(([field, value]) => {
         if (field === 'localAuthority') {
-          return { field: 'localAuthorityAreaId', value: (value as DtrSubmissionDto['localAuthority'])?.localAuthorityAreaId }
+          return {
+            field: 'localAuthorityAreaId',
+            value: (value as DtrSubmissionDto['localAuthority'])?.localAuthorityAreaId,
+          }
         }
         return { field, value: value as string }
       }),

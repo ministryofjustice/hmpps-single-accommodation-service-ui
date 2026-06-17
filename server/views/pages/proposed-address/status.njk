@@ -1,20 +1,26 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "What is the status of the address checks?" %}
 {% set formAction = paths.proposedAddresses.status({ crn: crn }) %}
+{% set heading %}
+  <span class="govuk-caption-l">{{ address }}</span>
+  <h1 class="govuk-fieldset__heading">What is the status of the address checks?</h1>
+{% endset %}
 
 {% block formContent %}
-{{ govukRadios({
-      name: "verificationStatus",
-      fieldset: {
-          legend: {
-              text: "What is the status of the address checks?",
-              classes: "govuk-fieldset__legend--l"
-          }
-      },
-      items: verificationStatusItems,
-      errorMessage: errors.verificationStatus
-  }) }}
+  {{
+    govukRadios({
+        name: "verificationStatus",
+        fieldset: {
+            legend: {
+                html: heading,
+                classes: "govuk-fieldset__legend--l",
+                isPageHeading: true
+            }
+        },
+        items: verificationStatusItems,
+        errorMessage: errors.verificationStatus
+    })
+  }}
 {% endblock %}

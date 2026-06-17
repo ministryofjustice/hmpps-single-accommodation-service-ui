@@ -529,6 +529,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
+        address: formatAddress(address),
         name: 'James Smith',
         errors: {},
         errorSummary: [],
@@ -547,6 +548,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
+        address: formatAddress(address),
         name: 'James Smith',
         errors: {},
         errorSummary: [],
@@ -642,6 +644,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
+        address: formatAddress(address),
         errors: {},
         errorSummary: [],
         verificationStatusItems: radioItems(verificationStatusLabels),
@@ -660,6 +663,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
+        address: formatAddress(address),
         errors: {},
         errorSummary: [],
         verificationStatusItems: radioItems(verificationStatusLabels, 'NOT_CHECKED_YET'),
@@ -726,6 +730,7 @@ describe('proposedAddressesController', () => {
         nextAccommodationStatusItems: radioItems(nextAccommodationStatusLabels),
         name: 'James Smith',
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
+        address: formatAddress(address),
         errors: {},
         errorSummary: [],
       })
@@ -748,6 +753,7 @@ describe('proposedAddressesController', () => {
         name: 'James Smith',
         nextAccommodationStatusItems: radioItems(nextAccommodationStatusLabels, 'NO'),
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
+        address: formatAddress(address),
         errors: {},
         errorSummary: [],
       })

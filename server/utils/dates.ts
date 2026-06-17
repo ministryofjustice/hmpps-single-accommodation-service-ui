@@ -1,8 +1,18 @@
+import * as Sentry from '@sentry/node'
 import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
+import logger from '../../logger'
 
 const { mojDate } = mojFilters()
 
-const isValidDate = (date?: string) => date && !Number.isNaN(new Date(date).getTime())
+const isValidDate = (date?: string, logError = false) => {
+  if (date && !Number.isNaN(new Date(date).getTime())) return true
+  if (logError) {
+    const errorMsg = `Attempting to render invalid date: ${date}`
+    logger.error(errorMsg)
+    Sentry.captureException(new Error(errorMsg))
+  }
+  return false
+}
 
 export const calculateAge = (dateOfBirth: string) => {
   const birthDate = new Date(dateOfBirth)
@@ -24,7 +34,7 @@ export const formatDate = (
   date?: string,
   format?: 'age' | 'long' | 'days' | 'days for/in' | 'days ago/in' | 'days for/left',
 ): string => {
-  if (!isValidDate(date)) return 'Invalid Date'
+  if (!isValidDate(date, true)) return ''
 
   if (format === 'age') return `${calculateAge(date)}`
 
@@ -56,13 +66,13 @@ export const formatDate = (
 }
 
 export const formatDateAndDaysAgo = (date?: string): string => {
-  if (!isValidDate(date)) return 'Invalid Date'
+  if (!isValidDate(date, true)) return ''
 
   return `${formatDate(date)} (${formatDate(date, 'days ago/in')})`
 }
 
 export const formatDateAndAge = (date?: string): string => {
-  if (!isValidDate(date)) return 'Invalid Date'
+  if (!isValidDate(date, true)) return ''
 
   return `${formatDate(date)} (${formatDate(date, 'age')})`
 }

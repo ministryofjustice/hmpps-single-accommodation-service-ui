@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node'
 import { DateFieldValues } from '@sas/ui'
 import {
   calculateAge,
@@ -8,6 +9,9 @@ import {
   isoDateToDateInput,
   mojDateOrBlank,
 } from './dates'
+import logger from '../../logger'
+
+jest.mock('@sentry/node')
 
 describe('date utilities', () => {
   beforeEach(() => {
@@ -41,10 +45,23 @@ describe('date utilities', () => {
 
   describe('formatDate', () => {
     it.each([
+      ['an invalid date', 'not a date'],
+      ['an undefined date', undefined],
+    ])('creates a log entry and a Sentry error for %s', (_, date) => {
+      jest.spyOn(logger, 'error')
+
+      expect(formatDate(date)).toEqual('')
+
+      const expectedMessage = `Attempting to render invalid date: ${date}`
+      expect(logger.error).toHaveBeenCalledWith(expectedMessage)
+      expect(Sentry.captureException).toHaveBeenCalledWith(new Error(expectedMessage))
+    })
+
+    it.each([
       ['2025-12-03', '3 December 2025'],
       ['2026-01-24', '24 January 2026'],
-      ['not a date', 'Invalid Date'],
-      [undefined, 'Invalid Date'],
+      ['not a date', ''],
+      [undefined, ''],
     ])('formats %s as the date %s', (date, expected) => {
       expect(formatDate(date)).toEqual(expected)
     })
@@ -94,7 +111,7 @@ describe('date utilities', () => {
       ['2000-12-03', '25'],
       ['2000-12-10', '25'],
       ['2000-12-11', '24'],
-      ['not a date', 'Invalid Date'],
+      ['not a date', ''],
     ])('formats %s as the age %s', (date, expected) => {
       expect(formatDate(date, 'age')).toEqual(expected)
     })
@@ -105,8 +122,8 @@ describe('date utilities', () => {
       ['2025-12-03', '3 December 2025 (7 days ago)'],
       ['2025-12-09', '9 December 2025 (1 day ago)'],
       ['2025-12-10', '10 December 2025 (today)'],
-      ['not a date', 'Invalid Date'],
-      [undefined, 'Invalid Date'],
+      ['not a date', ''],
+      [undefined, ''],
     ])('formats %s as the date and days ago %s', (date, expected) => {
       expect(formatDateAndDaysAgo(date)).toEqual(expected)
     })
@@ -116,8 +133,8 @@ describe('date utilities', () => {
     it.each([
       ['1990-01-15', '15 January 1990 (35)'],
       ['2000-12-10', '10 December 2000 (25)'],
-      ['not a date', 'Invalid Date'],
-      [undefined, 'Invalid Date'],
+      ['not a date', ''],
+      [undefined, ''],
     ])('formats %s as the date and age %s', (date, expected) => {
       expect(formatDateAndAge(date)).toEqual(expected)
     })

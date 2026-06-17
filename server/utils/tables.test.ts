@@ -9,7 +9,7 @@ describe('tables utilities', () => {
 
     it('returns a date cell with empty string when given an invalid date', () => {
       const cell = dateCell('invalid-date')
-      expect(cell).toEqual({ text: 'Invalid Date' })
+      expect(cell).toEqual({ text: '' })
     })
   })
 

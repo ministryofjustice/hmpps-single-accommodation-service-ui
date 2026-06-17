@@ -1,6 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Check your answers before adding the address" %}
@@ -8,10 +7,18 @@
 {% set buttonText = "Save" %}
 
 {% block formContent %}
-<h1 class="govuk-heading-l">Check your answers before adding the address</h1>
+  <h1 class="govuk-heading-l">Check your answers before adding the address</h1>
   {{
     govukSummaryList({
-      rows: tableRows
+      rows: tableRows.address
+    })
+  }}
+
+  <h2 class="govuk-heading-m">Supporting information</h2>
+
+  {{
+    govukSummaryList({
+      rows: tableRows.supportingInfo
     })
   }}
 {% endblock %}

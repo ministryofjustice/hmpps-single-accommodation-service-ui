@@ -100,34 +100,39 @@ export const formatProposedAddressNextAccommodation = (status: ProposedAccommoda
 export const checkYourAnswersRows = (
   sessionData: ProposedAddressFormData,
   crn: string,
-  name: string,
   accommodationTypes: ReferenceDataDto[],
-): SummaryListRow[] => {
+): Record<'address' | 'supportingInfo', SummaryListRow[]> => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
   const changeAddressLink = sessionData.lookupResults
     ? uiPaths.proposedAddresses.lookup({ crn })
     : uiPaths.proposedAddresses.details({ crn })
 
-  const rows = [
-    summaryListRowHtml('Address', addressParts.join('<br />'), [{ text: 'Change', href: changeAddressLink }]),
-    summaryListRowHtml(
-      `Which best describes the living arrangement for ${name} at this address?`,
-      accommodationTypes.find(type => type.code === sessionData.accommodationTypeCode).name,
-      [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
-    ),
-    summaryListRowHtml('What is the status of the address checks?', formatStatusWithReason(sessionData), [
-      { text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) },
-    ]),
-  ]
-  if (sessionData.verificationStatus === 'PASSED') {
-    rows.push(
+  const rows = {
+    address: [
+      summaryListRowHtml('Address', addressParts.join('<br />'), [{ text: 'Change', href: changeAddressLink }]),
+    ],
+    supportingInfo: [
       summaryListRowHtml(
-        `Is this the next address that ${name} will be moving into?`,
+        'Living arrangement',
+        accommodationTypes.find(type => type.code === sessionData.accommodationTypeCode).name,
+        [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
+      ),
+      summaryListRowHtml('Address checks', formatStatusWithReason(sessionData), [
+        { text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) },
+      ]),
+    ],
+  }
+
+  if (sessionData.verificationStatus === 'PASSED') {
+    rows.supportingInfo.push(
+      summaryListRowHtml(
+        'Set as next address',
         formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus),
         [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
       ),
     )
   }
+
   return rows
 }
 

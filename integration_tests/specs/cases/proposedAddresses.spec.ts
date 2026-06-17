@@ -209,7 +209,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the check your answers page with my entered data
-    await addProposedAddressPage.verifyCheckYourAnswersPage(initialProposedAddressData, caseData.name)
+    await addProposedAddressPage.verifyCheckYourAnswersPage(initialProposedAddressData)
 
     // When I click the back link
     await addProposedAddressPage.clickLink('Back')
@@ -237,30 +237,25 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the check your answers page with my updated data
-    await addProposedAddressPage.verifyCheckYourAnswersPage(
-      { ...initialProposedAddressData, address: updatedProposedAddressData.address },
-      caseData.name,
-    )
+    await addProposedAddressPage.verifyCheckYourAnswersPage({
+      ...initialProposedAddressData,
+      address: updatedProposedAddressData.address,
+    })
 
     // When I click to change the type
-    await addProposedAddressPage.clickChangeLink(
-      `Which best describes the living arrangement for ${caseData.name} at this address?`,
-    )
+    await addProposedAddressPage.clickChangeLink('Living arrangement')
     await addProposedAddressPage.completeTypeForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the check your answers page with my updated data
-    await addProposedAddressPage.verifyCheckYourAnswersPage(
-      {
-        ...initialProposedAddressData,
-        accommodationTypeCode: updatedProposedAddressData.accommodationTypeCode,
-        address: updatedProposedAddressData.address,
-      },
-      caseData.name,
-    )
+    await addProposedAddressPage.verifyCheckYourAnswersPage({
+      ...initialProposedAddressData,
+      accommodationTypeCode: updatedProposedAddressData.accommodationTypeCode,
+      address: updatedProposedAddressData.address,
+    })
 
     // When I click to change the status checks
-    await addProposedAddressPage.clickChangeLink('What is the status of the address checks?')
+    await addProposedAddressPage.clickChangeLink('Address checks')
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
@@ -269,7 +264,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the check your answers page with my updated data
-    await addProposedAddressPage.verifyCheckYourAnswersPage(updatedProposedAddressData, caseData.name)
+    await addProposedAddressPage.verifyCheckYourAnswersPage(updatedProposedAddressData)
 
     // When I submit the proposed address
     await setupProposedAddresses(crn, proposedAddresses)
@@ -391,7 +386,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see the check your answers page with my entered data
     const submittedAddress = { ...proposedAddressData, address: selectedAddress }
-    await addProposedAddressPage.verifyCheckYourAnswersPage(submittedAddress, caseData.name)
+    await addProposedAddressPage.verifyCheckYourAnswersPage(submittedAddress)
 
     // When I submit the proposed address
     const newProposedAddress = proposedAccommodationFactory.build(submittedAddress)

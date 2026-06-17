@@ -806,7 +806,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
-        tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', 'James Smith', accommodationTypes),
+        tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', accommodationTypes),
         backLinkHref: uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }),
         errors: {},
         errorSummary: [],

@@ -173,6 +173,7 @@ describe('dutyToReferController', () => {
     it('updates and redirects to the DTR details page when editing', async () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       request.params.id = dutyToRefer.submission.id
 
@@ -183,6 +184,28 @@ describe('dutyToReferController', () => {
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
+      })
+      expect(casesService.getCase).not.toHaveBeenCalled()
+      expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
+      expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
+    })
+
+    it('keeps submission status when editing an existing submission that has an outcome', async () => {
+      const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123' })
+      const outcomeReason = dutyToRefer.submission?.outcomeReason
+      const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
+
+      request.params.id = dutyToRefer.submission.id
+
+      await controller.saveSubmission('edit')(request, response, next)
+
+      expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', dutyToRefer.submission.id, {
+        status: 'ACCEPTED',
+        submissionDate: '2025-06-15',
+        localAuthorityAreaId: 'la-id',
+        referenceNumber: 'REF123',
+        outcomeReason,
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')

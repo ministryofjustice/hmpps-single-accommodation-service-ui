@@ -13,6 +13,7 @@ import {
   dutyToReferFactory,
   eligibilityFactory,
   dtrServiceResultFactory,
+  referralFactory,
 } from '../../../server/testutils/factories'
 import { login } from '../../testUtils'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
@@ -493,6 +494,18 @@ test.describe('duty to refer', () => {
     await dutyToReferApi.stubUpdateDutyToRefer(crn, editId)
     const eligibility = eligibilityFactory.build({ crn })
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
+    const referrals = [
+      referralFactory
+        .dtrReferral()
+        .build({
+          id: submittedDutyToRefer.submission.id,
+          status: 'WITHDRAWN',
+          placementStatus: 'WITHDRAWN',
+          referralRejectionReason: withdrawnDutyToRefer.submission.withdrawalReason,
+          localAuthorityArea: submittedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
+        }),
+    ]
+    await casesApi.stubGetReferralHistory(crn, referrals)
     await dutyToReferWithdrawPage.completeWithdrawalForm(withdrawnDutyToRefer)
     await dutyToReferWithdrawPage.clickButton('Withdraw referral')
 
@@ -505,6 +518,31 @@ test.describe('duty to refer', () => {
 
     // And I should see a success banner confirming the referral was withdrawn
     await profileTrackerPage.shouldShowBanner('DTR referral withdrawn')
+
+    // And I should see the withdrawn dtr in the referral history
+    await profileTrackerPage.shouldShowReferralHistory(referrals)
+
+    // And I click the View referral link for the withdrawn dtr
+    await dutyToReferApi.stubGetDtrBySubmissionId(crn, editId, withdrawnDutyToRefer)
+    const withdrawnDutyToReferRecord = auditRecordFactory
+      .dutyToReferUpdated(withdrawnDutyToRefer.submission, withdrawnDutyToRefer.status)
+      .build()
+    await dutyToReferApi.stubGetDutyToReferTimeline(crn, editId, [
+      withdrawnDutyToReferRecord,
+      submissionAddedDutyReferRecord,
+    ])
+    await profileTrackerPage.clickLink('View referral', profileTrackerPage.getSummaryCard('Referral history'))
+
+    // Then I should see the duty to refer details page
+    await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowSubmissionDetails(withdrawnDutyToRefer)
+    await dutyToReferDetailsPage.shouldNotShowOutcomeDetails()
+    await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()
+    await dutyToReferDetailsPage.shouldNotShowWithdrawReferralButton()
+    await dutyToReferDetailsPage.shouldNotShowAddNewReferralButton()
+
+    // And I should see a timeline entry showing the duty to refer was withdrawn
+    await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(withdrawnDutyToReferRecord))
   })
 
   test('should allow the user to add a new referral', async ({ page }) => {

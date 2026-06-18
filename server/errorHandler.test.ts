@@ -1,4 +1,3 @@
-import type { Express } from 'express'
 import request from 'supertest'
 import { mock } from 'jest-mock-extended'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
@@ -7,18 +6,9 @@ import { appWithAllRoutes } from './routes/testutils/appSetup'
 import logger from '../logger'
 import AuditService from './services/auditService'
 
-let app: Express
 const auditService = mock<AuditService>()
 
 jest.mock('../logger')
-
-beforeEach(() => {
-  app = appWithAllRoutes({
-    services: {
-      auditService,
-    },
-  })
-})
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -26,7 +16,7 @@ afterEach(() => {
 
 describe('UI 500', () => {
   it('should render error page with stack in dev mode', () => {
-    return request(app)
+    return request(appWithAllRoutes({}))
       .get('/error')
       .expect(500)
       .expect('Content-Type', /html/)
@@ -64,7 +54,7 @@ describe('UI 500', () => {
 
 describe('UI 404', () => {
   it('should render Not found page with stack in dev mode', () => {
-    return request(app)
+    return request(appWithAllRoutes({}))
       .get('/unknown')
       .expect(404)
       .expect('Content-Type', /html/)
@@ -106,11 +96,12 @@ describe('API 500', () => {
   })
 
   it('should render error page with stack in dev mode', () => {
-    return request(app)
+    return request(appWithAllRoutes({ services: { auditService } }))
       .get('/')
       .expect(500)
       .expect('Content-Type', /html/)
       .expect(res => {
+        expect(auditService.logPageView).toHaveBeenCalled()
         expect(res.text).toContain('Sorry, there is a problem with the service')
         expect(res.text).toContain('Try again later.')
         expect(res.text).toContain('500')
@@ -121,11 +112,12 @@ describe('API 500', () => {
   })
 
   it('should render error page without stack in production mode', () => {
-    return request(appWithAllRoutes({ production: true }))
+    return request(appWithAllRoutes({ production: true, services: { auditService } }))
       .get('/')
       .expect(500)
       .expect('Content-Type', /html/)
       .expect(res => {
+        expect(auditService.logPageView).toHaveBeenCalled()
         expect(res.text).toContain('Sorry, there is a problem with the service')
         expect(res.text).toContain('Try again later.')
         expect(res.text).not.toContain('500')
@@ -146,11 +138,12 @@ describe('API 404', () => {
   })
 
   it('should render Not found page with stack in dev mode', () => {
-    return request(app)
+    return request(appWithAllRoutes({ services: { auditService } }))
       .get('/')
       .expect(404)
       .expect('Content-Type', /html/)
       .expect(res => {
+        expect(auditService.logPageView).toHaveBeenCalled()
         expect(res.text).toContain('Page not found')
         expect(res.text).toContain('404')
         expect(res.text).toContain('[Something not found]')
@@ -160,19 +153,17 @@ describe('API 404', () => {
   })
 
   it('should render Not found page without stack in production mode', () => {
-    return request(appWithAllRoutes({ production: true }))
-      .get('/unknown')
+    return request(appWithAllRoutes({ production: true, services: { auditService } }))
+      .get('/')
       .expect(404)
       .expect('Content-Type', /html/)
       .expect(res => {
+        expect(auditService.logPageView).toHaveBeenCalled()
         expect(res.text).toContain('Page not found')
         expect(res.text).not.toContain('404')
         expect(res.text).not.toContain('[Something not found]')
         expect(res.text).not.toContain('NotFoundError: API not found error')
-        expect(logger.error).toHaveBeenCalledWith(
-          "Error handling request for '/unknown', user 'user1'",
-          expect.any(Error),
-        )
+        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
       })
   })
 })

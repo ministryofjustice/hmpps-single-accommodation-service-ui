@@ -42,34 +42,36 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <section>
-        <div class="govuk-button-group">
-          {% if outcomeDetailRows.length == 0 %}
+        {% if status !== 'WITHDRAWN' %}
+          <div class="govuk-button-group">
+            {% if outcomeDetailRows.length == 0 %}
+              {{
+                govukButton({
+                    text: "Add outcome",
+                    href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                    preventDoubleClick: true
+                })
+              }}
+            {% endif %}
             {{
               govukButton({
-                  text: "Add outcome",
-                  href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
-                  preventDoubleClick: true
+                text: "Withdraw referral",
+                href: paths.dutyToRefer.withdraw({ crn: crn, id: dtrId }),
+                preventDoubleClick: true,
+                classes: "govuk-button--secondary"
               })
             }}
-          {% endif %}
-          {{
-            govukButton({
-              text: "Withdraw referral",
-              href: paths.dutyToRefer.withdraw({ crn: crn, id: dtrId }),
-              preventDoubleClick: true,
-              classes: "govuk-button--secondary"
-            })
-          }}
 
-          {{
-            govukButton({
-              text: "Add new referral",
-              href: paths.dutyToRefer.newSubmission({ crn: crn }),
-              preventDoubleClick: true,
-              classes: "govuk-button--secondary"
-            })
-          }}
-        </div>
+            {{
+              govukButton({
+                text: "Add new referral",
+                href: paths.dutyToRefer.newSubmission({ crn: crn }),
+                preventDoubleClick: true,
+                classes: "govuk-button--secondary"
+              })
+            }}
+          </div>
+        {% endif %}
         {% if outcomeDetailRows.length > 0 %}
           {{
             govukSummaryList({

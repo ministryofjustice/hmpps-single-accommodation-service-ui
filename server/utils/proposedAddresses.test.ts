@@ -527,7 +527,7 @@ describe('Proposed addresses utilities', () => {
         expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
           req,
           expect.objectContaining({
-            nextAccommodationStatus: 'Select if this is the next address',
+            nextAccommodationStatus: 'Select if you want to confirm this as the next address',
           }),
         )
       })
@@ -537,7 +537,6 @@ describe('Proposed addresses utilities', () => {
   describe('proposedAddressFormDataToRequestBody', () => {
     it.each([
       ['YES', 'YES'],
-      ['NO', 'NO'],
       ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
       ['TO_BE_DECIDED', undefined],
     ] as const)(

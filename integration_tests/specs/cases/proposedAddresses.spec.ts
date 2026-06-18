@@ -259,7 +259,18 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
-    // And I complete the next accommodation form with new data
+    // Then I should see the next address form
+    await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
+
+    // When I submit the form empty
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see an error
+    await addProposedAddressPage.shouldShowErrorMessagesForFields({
+      nextAccommodationStatus: 'Select if you want to confirm this as the next address',
+    })
+
+    // When I complete the next accommodation form with new data
     await addProposedAddressPage.completeNextAccommodationForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
@@ -489,8 +500,14 @@ test.describe('edit proposed address', () => {
       crn,
       address: addressFactory.minimal().build(confirmedFormData.address),
     })
-    const notNextAccommodationUpdate = { ...updatedProposedAddress, nextAccommodationStatus: 'NO' as const }
-    const notNextAccommodationFormData = { ...confirmedFormData, nextAccommodationStatus: 'NO' as const }
+    const notNextAccommodationUpdate = proposedAccommodationFactory.build({
+      ...updatedProposedAddress,
+      nextAccommodationStatus: 'TO_BE_DECIDED',
+    })
+    const notNextAccommodationFormData = proposedAccommodationFactory.build({
+      ...confirmedFormData,
+      nextAccommodationStatus: 'TO_BE_DECIDED',
+    })
 
     // And I am logged in
     await login(page)
@@ -522,7 +539,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
     await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
-    // When I complete the next accommodation form with 'No'
+    // When I complete the next accommodation form with 'Not yet'
     await addProposedAddressPage.completeNextAccommodationForm(notNextAccommodationFormData)
     await addProposedAddressPage.clickButton('Continue')
 

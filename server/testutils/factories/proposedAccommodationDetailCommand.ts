@@ -11,7 +11,6 @@ const verificationStatuses: Readonly<ProposedAccommodationDetailCommand['verific
 ]
 const nextAccommodationStatuses: Readonly<ProposedAccommodationDetailCommand['nextAccommodationStatus'][]> = [
   'YES',
-  'NO',
   'TO_BE_DECIDED',
 ]
 

@@ -40,7 +40,7 @@ export default class CasesListPage extends AbstractPage {
 
       if (person.userAccess !== 'LIMITED') {
         await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
-        await expect(row).toContainText(person.tierScore as string)
+        await expect(row).toContainText(person.tierScore || 'Unknown')
         await expect(row).toContainText(formatDate(person.dateOfBirth as string))
       } else {
         await expect(row).not.toContainText('RoSH')

@@ -537,7 +537,6 @@ describe('Proposed addresses utilities', () => {
   describe('proposedAddressFormDataToRequestBody', () => {
     it.each([
       ['YES', 'YES'],
-      ['NO', 'NO'],
       ['TO_BE_DECIDED', 'TO_BE_DECIDED'],
       ['TO_BE_DECIDED', undefined],
     ] as const)(

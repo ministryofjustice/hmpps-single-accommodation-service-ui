@@ -741,7 +741,7 @@ describe('proposedAddressesController', () => {
         address,
         accommodationTypeCode,
         verificationStatus: 'PASSED',
-        nextAccommodationStatus: 'NO',
+        nextAccommodationStatus: 'TO_BE_DECIDED',
       })
 
       jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
@@ -751,7 +751,7 @@ describe('proposedAddressesController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/next-accommodation', {
         crn: 'CRN123',
         name: 'James Smith',
-        nextAccommodationStatusItems: radioItems(nextAccommodationStatusLabels, 'NO'),
+        nextAccommodationStatusItems: radioItems(nextAccommodationStatusLabels, 'TO_BE_DECIDED'),
         backLinkHref: '/cases/CRN123/proposed-addresses/status',
         address: formatAddress(address),
         errors: {},

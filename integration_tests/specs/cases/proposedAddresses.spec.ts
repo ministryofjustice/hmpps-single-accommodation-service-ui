@@ -539,7 +539,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
     await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
-    // When I complete the next accommodation form with 'No'
+    // When I complete the next accommodation form with 'Not yet'
     await addProposedAddressPage.completeNextAccommodationForm(notNextAccommodationFormData)
     await addProposedAddressPage.clickButton('Continue')
 

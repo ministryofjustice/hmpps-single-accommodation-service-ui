@@ -21,7 +21,7 @@ describe('ProposedAddressesService', () => {
     it('should call getProposedAddresses on the api client and return sorted addresses', async () => {
       const passedChecksAddress = proposedAccommodationFactory.build({
         verificationStatus: 'PASSED',
-        nextAccommodationStatus: 'NO',
+        nextAccommodationStatus: undefined,
       })
       const confirmedAddress = proposedAccommodationFactory.build({
         verificationStatus: 'PASSED',

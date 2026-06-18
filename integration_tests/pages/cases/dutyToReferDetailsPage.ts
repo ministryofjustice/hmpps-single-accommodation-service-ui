@@ -61,4 +61,8 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   async shouldNotShowAddNewReferralButton() {
     await expect(this.page.getByRole('button', { name: 'Add new referral' })).not.toBeVisible()
   }
+
+  async shouldShowReferralHistoryCaption() {
+    await expect(this.page.locator('.govuk-caption-l')).toContainText('Referral history')
+  }
 }

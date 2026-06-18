@@ -533,6 +533,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see the duty to refer details page
     await DutyToReferDetailsPage.verifyOnPage(page, 'Duty to Refer (DTR)')
+    await dutyToReferDetailsPage.shouldShowReferralHistoryCaption()
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(withdrawnDutyToRefer)
     await dutyToReferDetailsPage.shouldNotShowOutcomeDetails()
     await dutyToReferDetailsPage.shouldNotShowAddOutcomeButton()

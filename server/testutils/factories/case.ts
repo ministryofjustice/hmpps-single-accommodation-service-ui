@@ -8,6 +8,7 @@ import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
 import accommodationSummaryFactory from './accommodationSummary'
+import actionFactory from './action'
 
 class CaseFactory extends Factory<Case> {
   confirmed() {
@@ -79,7 +80,7 @@ export default CaseFactory.define(() => {
     currentAccommodation,
     nextAccommodation,
     status,
-    actions: faker.helpers.maybe<string[]>(() => [faker.lorem.words(3), faker.lorem.words(3)]) ?? [],
+    actions: actionFactory.buildList(faker.number.int({ min: 0, max: 3 })),
     userAccess: 'FULL' as const,
     limitedAccess: false,
   }

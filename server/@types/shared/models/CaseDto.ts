@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { AccommodationSummaryDto } from './AccommodationSummaryDto'
 import type { AssignedToDto } from './AssignedToDto'
+import type { CaseAction } from './CaseAction'
 export type CaseDto = {
   name?: string | null
   dateOfBirth?: string | null
@@ -17,7 +18,7 @@ export type CaseDto = {
   currentAccommodation?: AccommodationSummaryDto | null
   nextAccommodation?: AccommodationSummaryDto | null
   status?: 'RISK_OF_NO_FIXED_ABODE' | 'NO_FIXED_ABODE' | 'TRANSIENT' | 'SETTLED'
-  actions: Array<string>
+  actions: Array<CaseAction>
   userAccess: 'LIMITED' | 'FULL' | 'UNKNOWN'
   limitedAccess?: boolean | null
 }

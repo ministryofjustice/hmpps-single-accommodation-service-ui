@@ -9,12 +9,20 @@ import {
   displayName,
   assignedToOptions,
 } from './cases'
-import { accommodationSummaryFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
+import { accommodationSummaryFactory, actionFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
 import { statusCell } from './macros'
 import config from '../config'
 import { accommodationCell } from './accommodationSummary'
 
 describe('cases utilities', () => {
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-06-18'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   describe('casesResultsSummary', () => {
     it.each([
       [1, '1 person'],
@@ -88,7 +96,12 @@ describe('cases utilities', () => {
 
   describe('actionsCell macro', () => {
     it('renders a formatted cell for a given list of actions', () => {
-      expect(actionsCell(['Action 1', 'Action 2'])).toMatchSnapshot()
+      const actions = [
+        actionFactory.build({ type: 'ADD_DTR_REFERRAL_DETAILS', startDate: null }),
+        actionFactory.build({ type: 'SUBMIT_CRS_REFERRAL', startDate: '2026-07-23' }),
+      ]
+
+      expect(actionsCell(actions)).toMatchSnapshot()
     })
 
     it('renders an empty cell when no actions are provided', () => {

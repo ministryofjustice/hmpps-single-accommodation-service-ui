@@ -5,6 +5,7 @@ import {
   AccommodationReferralDto as Referral,
   AccommodationSummaryDto,
   ProposedAccommodationDto,
+  CaseAction,
 } from '@sas/api'
 import { formatDate } from '../../../server/utils/dates'
 import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
@@ -19,6 +20,7 @@ import {
 import { addressLines, formatAddress } from '../../../server/utils/addresses'
 import PageWithCaseDetails from './pageWithCaseDetails'
 import { accommodationType, settledTag } from '../../../server/utils/accommodationSummary'
+import { actionsMap } from '../../../server/utils/actions'
 
 export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
@@ -40,11 +42,11 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
   }
 
-  async shouldShowNextActions(actions: string[]) {
+  async shouldShowNextActions(actions: CaseAction[]) {
     const nextActionsCard = this.page.locator('.sas-card--block', { hasText: 'Next actions' })
 
     for await (const action of actions) {
-      await expect(nextActionsCard.getByRole('listitem').filter({ hasText: action })).toBeVisible()
+      await expect(nextActionsCard.getByRole('listitem').filter({ hasText: actionsMap[action.type] })).toBeVisible()
     }
   }
 

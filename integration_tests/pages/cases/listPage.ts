@@ -4,6 +4,7 @@ import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
 import { caseStatusCell } from '../../../server/utils/cases'
+import { actionsMap } from '../../../server/utils/actions'
 
 export default class CasesListPage extends AbstractPage {
   readonly casesRows: Locator
@@ -54,7 +55,7 @@ export default class CasesListPage extends AbstractPage {
 
       if (headers.includes('Actions')) {
         for await (const action of person.actions) {
-          await expect(row).toContainText(action)
+          await expect(row).toContainText(actionsMap[action.type])
         }
       }
     }

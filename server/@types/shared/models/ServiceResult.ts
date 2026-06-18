@@ -1,7 +1,8 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
+import type { CaseAction } from './CaseAction'
 export type ServiceResult = {
   serviceStatus:
     | 'NOT_ELIGIBLE'
@@ -29,7 +30,7 @@ export type ServiceResult = {
     | 'ACCEPTED'
     | 'NOT_ACCEPTED'
     | 'CANNOT_START_YET'
-  action?: string | null
+  action?: CaseAction | null
   link?: string | null
   url?: string | null
   linkType?: 'CAS1_START_APPLICATION' | 'CAS1_VIEW_APPLICATION' | 'CAS3_START_REFERRAL' | 'CAS3_VIEW_REFERRAL'

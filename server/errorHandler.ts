@@ -1,30 +1,39 @@
 /* istanbul ignore file */
 
 import type { Request, Response, NextFunction } from 'express'
-import type { HTTPError } from 'superagent'
+import { HTTPError } from 'superagent'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import logger from '../logger'
 import paths from './paths/ui'
 
+const isSanitisedError = (error: unknown): error is SanitisedError =>
+  (error as SanitisedError).responseStatus !== undefined
+
 export default function createErrorHandler(production: boolean) {
-  return (error: HTTPError, req: Request, res: Response, next: NextFunction): void => {
+  return (error: HTTPError | SanitisedError, req: Request, res: Response, next: NextFunction): void => {
     logger.error(`Error handling request for '${req.originalUrl}', user '${res.locals.user?.username}'`, error)
 
-    if (error.status === 401 || error.status === 403) {
+    const status = isSanitisedError(error) ? error.responseStatus : error.status || 500
+
+    if (status === 401 || status === 403) {
       return res.redirect(paths.static.notAuthorised({}))
     }
 
-    if (error.status === 404) {
+    if (!production) {
+      res.locals.debugErrorData = {
+        status,
+        hint: isSanitisedError(error) ? (error.data as Record<string, string>)?.developerMessage : error.message,
+        trace: error.stack,
+      }
+    }
+
+    if (status === 404) {
       res.status(404)
       return res.render('pages/static/not-found')
     }
 
-    res.locals.message = production ? 'Sorry, there is a problem with the service' : error.message
-    res.locals.hint = production ? 'Try again later.' : null
-    res.locals.status = production ? null : error.status
-    res.locals.stack = production ? null : error.stack
+    res.status(status)
 
-    res.status(error.status || 500)
-
-    return res.render('pages/error')
+    return res.render('pages/static/error')
   }
 }

@@ -1,54 +1,174 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { mock } from 'jest-mock-extended'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
+import { NotFound } from 'http-errors'
 import { appWithAllRoutes } from './routes/testutils/appSetup'
 import logger from '../logger'
+import AuditService from './services/auditService'
 
 let app: Express
+const auditService = mock<AuditService>()
 
 jest.mock('../logger')
 
 beforeEach(() => {
-  app = appWithAllRoutes({})
+  app = appWithAllRoutes({
+    services: {
+      auditService,
+    },
+  })
 })
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET 500', () => {
-  it('should render content with stack in dev mode', () => {
+describe('UI 500', () => {
+  it('should render error page with stack in dev mode', () => {
     return request(app)
-      .get('/')
-      .expect(500)
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('Cannot read properties of undefined')
-        expect(res.text).not.toContain('Sorry, there is a problem with the service.')
-        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
-      })
-  })
-
-  it('should render content without stack in production mode', () => {
-    return request(appWithAllRoutes({ production: true }))
-      .get('/')
+      .get('/error')
       .expect(500)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Sorry, there is a problem with the service')
-        expect(res.text).not.toContain('Cannot read properties of undefined')
-        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
+        expect(res.text).toContain('Try again later.')
+        expect(res.text).toContain('500')
+        expect(res.text).toContain('Server error')
+        expect(res.text).toContain('STACKTRACE')
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error handling request for '/error', user 'user1'",
+          expect.any(Error),
+        )
+      })
+  })
+
+  it('should render error page without stack in production mode', () => {
+    return request(appWithAllRoutes({ production: true }))
+      .get('/error')
+      .expect(500)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Sorry, there is a problem with the service')
+        expect(res.text).toContain('Try again later.')
+        expect(res.text).not.toContain('500')
+        expect(res.text).not.toContain('Server error')
+        expect(res.text).not.toContain('STACKTRACE')
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error handling request for '/error', user 'user1'",
+          expect.any(Error),
+        )
       })
   })
 })
 
-describe('GET 404', () => {
-  it('should render not found page', () => {
+describe('UI 404', () => {
+  it('should render Not found page with stack in dev mode', () => {
     return request(app)
       .get('/unknown')
       .expect(404)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
+        expect(res.text).toContain('404')
+        expect(res.text).toContain('NotFoundError: Not Found')
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error handling request for '/unknown', user 'user1'",
+          expect.any(Error),
+        )
+      })
+  })
+
+  it('should render Not found page without stack in production mode', () => {
+    return request(appWithAllRoutes({ production: true }))
+      .get('/unknown')
+      .expect(404)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Page not found')
+        expect(res.text).not.toContain('404')
+        expect(res.text).not.toContain('NotFoundError: Not Found')
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error handling request for '/unknown', user 'user1'",
+          expect.any(Error),
+        )
+      })
+  })
+})
+
+describe('API 500', () => {
+  const apiError: SanitisedError = new Error('API error')
+  apiError.responseStatus = 500
+  apiError.data = { developerMessage: '[Something went wrong]' }
+
+  beforeEach(() => {
+    auditService.logPageView.mockRejectedValue(apiError)
+  })
+
+  it('should render error page with stack in dev mode', () => {
+    return request(app)
+      .get('/')
+      .expect(500)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Sorry, there is a problem with the service')
+        expect(res.text).toContain('Try again later.')
+        expect(res.text).toContain('500')
+        expect(res.text).toContain('[Something went wrong]')
+        expect(res.text).toContain('Error: API error')
+        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
+      })
+  })
+
+  it('should render error page without stack in production mode', () => {
+    return request(appWithAllRoutes({ production: true }))
+      .get('/')
+      .expect(500)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Sorry, there is a problem with the service')
+        expect(res.text).toContain('Try again later.')
+        expect(res.text).not.toContain('500')
+        expect(res.text).not.toContain('[Something went wrong]')
+        expect(res.text).not.toContain('Error: API error')
+        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
+      })
+  })
+})
+
+describe('API 404', () => {
+  const apiError: SanitisedError = new NotFound('API not found error')
+  apiError.responseStatus = 404
+  apiError.data = { developerMessage: '[Something not found]' }
+
+  beforeEach(() => {
+    auditService.logPageView.mockRejectedValue(apiError)
+  })
+
+  it('should render Not found page with stack in dev mode', () => {
+    return request(app)
+      .get('/')
+      .expect(404)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Page not found')
+        expect(res.text).toContain('404')
+        expect(res.text).toContain('[Something not found]')
+        expect(res.text).toContain('NotFoundError: API not found error')
+        expect(logger.error).toHaveBeenCalledWith("Error handling request for '/', user 'user1'", expect.any(Error))
+      })
+  })
+
+  it('should render Not found page without stack in production mode', () => {
+    return request(appWithAllRoutes({ production: true }))
+      .get('/unknown')
+      .expect(404)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Page not found')
+        expect(res.text).not.toContain('404')
+        expect(res.text).not.toContain('[Something not found]')
+        expect(res.text).not.toContain('NotFoundError: API not found error')
         expect(logger.error).toHaveBeenCalledWith(
           "Error handling request for '/unknown', user 'user1'",
           expect.any(Error),

@@ -1,9 +1,14 @@
 import { expect, test } from '@playwright/test'
 import { resetStubs } from '../mockApis/wiremock'
 import casesApi from '../mockApis/cases'
+import userApi from '../mockApis/user'
 import { login } from '../testUtils'
 
 test.describe('error handling', () => {
+  test.beforeEach(async () => {
+    await userApi.stubGetTeams()
+  })
+
   test.afterEach(async () => {
     await resetStubs()
   })
@@ -13,6 +18,14 @@ test.describe('error handling', () => {
 
     await login(page)
 
-    await expect(page.locator('h1', { hasText: 'Internal Server Error' })).toBeVisible()
+    await expect(page.locator('h1', { hasText: 'Sorry, there is a problem with the service' })).toBeVisible()
+  })
+
+  test('SAS API not found shows not found page', async ({ page }) => {
+    await casesApi.stubGetCases404()
+
+    await login(page)
+
+    await expect(page.locator('h1', { hasText: 'Page not found' })).toBeVisible()
   })
 })

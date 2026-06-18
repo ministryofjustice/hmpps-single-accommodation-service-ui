@@ -1,4 +1,4 @@
-import { CaseDto as Case, Team } from '@sas/api'
+import { CaseAction, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, SelectOption, StatusCell } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
@@ -6,6 +6,7 @@ import { renderMacro, statusCell } from './macros'
 import config from '../config'
 import { accommodationCell } from './accommodationSummary'
 import { formatDate } from './dates'
+import { renderActions } from './actions'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -57,7 +58,8 @@ const removeQueryParam = (url: string, param: string): string => {
 export const personCell = (caseData: Case, assignedToText?: string): string =>
   renderMacro('personCell', { ...caseData, name: displayName(caseData, ''), assignedToText })
 
-export const actionsCell = (actions: Case['actions']): string => renderMacro('actionsCell', { actions })
+export const actionsCell = (actions: CaseAction[]): string =>
+  renderMacro('actionsCell', { actions: renderActions(actions) })
 
 export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[] =>
   cases.map(c => {

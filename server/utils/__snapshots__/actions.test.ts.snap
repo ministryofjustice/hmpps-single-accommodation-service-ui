@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`action utilities renderActions renders a list of actions 1`] = `
+[
+  "Submit a CRS referral",
+  "Create an approved premises (CAS1) placement request",
+  "Add DTR referral details",
+]
+`;

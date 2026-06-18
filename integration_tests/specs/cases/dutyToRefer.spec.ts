@@ -495,15 +495,13 @@ test.describe('duty to refer', () => {
     const eligibility = eligibilityFactory.build({ crn })
     await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
     const referrals = [
-      referralFactory
-        .dtrReferral()
-        .build({
-          id: submittedDutyToRefer.submission.id,
-          status: 'WITHDRAWN',
-          placementStatus: 'WITHDRAWN',
-          referralRejectionReason: withdrawnDutyToRefer.submission.withdrawalReason,
-          localAuthorityArea: submittedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
-        }),
+      referralFactory.dtrReferral().build({
+        id: submittedDutyToRefer.submission.id,
+        status: 'WITHDRAWN',
+        placementStatus: 'WITHDRAWN',
+        referralRejectionReason: withdrawnDutyToRefer.submission.withdrawalReason,
+        localAuthorityArea: submittedDutyToRefer.submission.localAuthority.localAuthorityAreaName,
+      }),
     ]
     await casesApi.stubGetReferralHistory(crn, referrals)
     await dutyToReferWithdrawPage.completeWithdrawalForm(withdrawnDutyToRefer)

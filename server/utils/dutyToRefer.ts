@@ -263,7 +263,9 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
     values = submissionValues(submission, false)
   } else if (status === 'WITHDRAWN') {
     label = 'Referral withdrawn'
-    values = [{ label: 'Reason', value: withdrawReasonLabels[submission.withdrawalReason], showLabel: true, isList: false }]
+    values = [
+      { label: 'Reason', value: withdrawReasonLabels[submission.withdrawalReason], showLabel: true, isList: false },
+    ]
   } else if (isOutcome && statusChange?.oldValue === 'SUBMITTED') {
     label = 'Outcome details added'
     values = outcomeValues(submission, outcomeText, false)

@@ -18,7 +18,7 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   async shouldShowSubmissionDetails(dutyToRefer: DutyToReferDto) {
     await expect(this.page.getByRole('heading', { name: 'Referral details', exact: true })).toBeVisible()
 
-    if (dutyToRefer.status === 'SUBMITTED') {
+    if (dutyToRefer.status === 'SUBMITTED' || dutyToRefer.status === 'WITHDRAWN') {
       await this.shouldShowSummaryItem('Status', formatDutyToReferStatus(dutyToRefer.status))
     }
     await this.shouldShowSummaryItem('Date submitted', formatDateAndDaysAgo(dutyToRefer.submission.submissionDate))
@@ -42,11 +42,27 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
     await this.shouldShowSummaryItem('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason])
   }
 
+  async shouldNotShowOutcomeDetails() {
+    await expect(this.page.getByRole('heading', { name: 'Outcome details', exact: true })).not.toBeVisible()
+  }
+
   async shouldShowWithdrawReferralButton() {
     await expect(this.page.getByRole('button', { name: 'Withdraw referral' })).toBeVisible()
   }
 
+  async shouldNotShowWithdrawReferralButton() {
+    await expect(this.page.getByRole('button', { name: 'Withdraw referral' })).not.toBeVisible()
+  }
+
   async shouldShowAddNewReferralButton() {
     await expect(this.page.getByRole('button', { name: 'Add new referral' })).toBeVisible()
+  }
+
+  async shouldNotShowAddNewReferralButton() {
+    await expect(this.page.getByRole('button', { name: 'Add new referral' })).not.toBeVisible()
+  }
+
+  async shouldShowReferralHistoryCaption() {
+    await expect(this.page.locator('.govuk-caption-l')).toContainText('Referral history')
   }
 }

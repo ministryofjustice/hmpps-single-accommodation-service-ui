@@ -87,7 +87,7 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
 export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
   const rows = []
 
-  if (dutyToRefer?.status === 'SUBMITTED') {
+  if (dutyToRefer?.status === 'SUBMITTED' || dutyToRefer?.status === 'WITHDRAWN') {
     rows.push(summaryListRowHtml('Status', statusTag(serviceStatusTag(dutyToRefer.status, true))))
   }
   rows.push(
@@ -102,7 +102,7 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
 }
 
 export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
-  if (dutyToRefer?.status === 'SUBMITTED') {
+  if (dutyToRefer?.status === 'SUBMITTED' || dutyToRefer?.status === 'WITHDRAWN') {
     return []
   }
 
@@ -198,6 +198,8 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
     'createdBy',
     'createdAt',
     'outcomeReason',
+    'withdrawalReason',
+    'withdrawalReasonOther',
   ]
   const filterChanges = (predicate: (change: FieldChange) => boolean) =>
     Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
@@ -259,6 +261,11 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   if (type === 'CREATE') {
     label = 'Submission details added'
     values = submissionValues(submission, false)
+  } else if (status === 'WITHDRAWN') {
+    label = 'Referral withdrawn'
+    values = [
+      { label: 'Reason', value: withdrawReasonLabels[submission.withdrawalReason], showLabel: true, isList: false },
+    ]
   } else if (isOutcome && statusChange?.oldValue === 'SUBMITTED') {
     label = 'Outcome details added'
     values = outcomeValues(submission, outcomeText, false)

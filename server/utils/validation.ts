@@ -60,12 +60,12 @@ export const addUserInputToFlash = (request: Request): void => {
 }
 
 export const validateAndFlashErrors = (request: Request, errors: Record<string, string>): boolean => {
-  if (Object.keys(errors).length === 0) {
-    return true
-  }
-
   const errorMessages = generateErrorMessages(errors)
   const errorSummary = generateErrorSummary(errors)
+
+  if (errorSummary.length === 0) {
+    return true
+  }
 
   request.flash('errors', JSON.stringify(errorMessages))
   request.flash('errorSummary', JSON.stringify(errorSummary))
@@ -75,3 +75,16 @@ export const validateAndFlashErrors = (request: Request, errors: Record<string, 
 }
 
 export const isValidUKPostcode = (postcode: string): boolean => /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i.test(postcode)
+
+export const aOrAn = (noun: string): string => (/^[aeiou]/i.test(noun) ? 'an' : 'a')
+
+export const validateMandatoryText = (
+  value: string | undefined,
+  label: string,
+  prefix: string = aOrAn(label),
+): string | undefined => (value ? undefined : `Enter ${prefix} ${label}`)
+
+export const validatePostcode = (value: string | undefined): string | undefined => {
+  if (!value) return 'Enter a UK postcode'
+  return isValidUKPostcode(value) ? undefined : 'Enter a full UK postcode, like AA3 1AB'
+}

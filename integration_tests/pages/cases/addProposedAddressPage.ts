@@ -150,7 +150,7 @@ export default class AddProposedAddressPage extends AbstractPage {
 
   async shouldShowNextAccommodationForm(name: string) {
     await expect(
-      this.page.getByRole('group', { name: `Do you want to confirm this as the next address for ${name}` }),
+      this.page.getByRole('group', { name: `Do you want to confirm this as the next address for ${name}?` }),
     ).toBeVisible()
   }
 

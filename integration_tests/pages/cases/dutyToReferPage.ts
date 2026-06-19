@@ -28,6 +28,9 @@ export default class DutyToReferPage extends AbstractPage {
     if (dutyToRefer.submission.referenceNumber) {
       await this.verifyTextInput('Reference number', dutyToRefer.submission.referenceNumber)
     }
+    if (dutyToRefer.submission.submissionNote) {
+      await this.verifyTextInput('Add note', dutyToRefer.submission.submissionNote)
+    }
   }
 
   async completeSubmissionForm(dutyToRefer: DutyToReferDto) {

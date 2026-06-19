@@ -212,7 +212,15 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { outcomeReason, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber, submissionNote, outcomeNote } = req.body
+      const {
+        outcomeReason,
+        currentStatus,
+        submissionDate,
+        localAuthorityAreaId,
+        referenceNumber,
+        submissionNote,
+        outcomeNote,
+      } = req.body
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
 
       if (!validateOutcome(req)) {
@@ -280,8 +288,16 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { submissionDate, localAuthorityAreaId, referenceNumber, withdrawalReason, withdrawalReasonOther, submissionNote, outcomeReason, outcomeNote } =
-        req.body
+      const {
+        submissionDate,
+        localAuthorityAreaId,
+        referenceNumber,
+        withdrawalReason,
+        withdrawalReasonOther,
+        submissionNote,
+        outcomeReason,
+        outcomeNote,
+      } = req.body
       const errorRedirect = uiPaths.dutyToRefer.withdraw({ crn, id })
 
       if (!validateWithdraw(req)) {

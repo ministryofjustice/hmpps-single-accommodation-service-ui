@@ -115,7 +115,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
       `${statusTag(serviceStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
     ),
     summaryListRowText('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
-    summaryListRowOptional('Note', dutyToRefer.submission.outcomeNote, 'No note added')
+    summaryListRowOptional('Note', dutyToRefer.submission.outcomeNote, 'No note added'),
   ]
 }
 
@@ -243,7 +243,7 @@ const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean
     value: submission.submissionNote || (isList ? '' : 'No note added'),
     showLabel: submission.submissionNote !== NOTE_REMOVED_LABEL,
     isList,
-  }
+  },
 ]
 
 const outcomeValues = (
@@ -253,7 +253,12 @@ const outcomeValues = (
 ): TimelineValue[] => [
   { label: 'Outcome', value: outcomeText, showLabel: false, isList: false },
   { label: 'Reason', value: outcomeReasonSummaryLabels[submission.outcomeReason], showLabel: true, isList },
-  { label: 'Note', value: submission.outcomeNote || (isList ? '' : 'No note added'), showLabel: submission.outcomeNote !== NOTE_REMOVED_LABEL, isList }
+  {
+    label: 'Note',
+    value: submission.outcomeNote || (isList ? '' : 'No note added'),
+    showLabel: submission.outcomeNote !== NOTE_REMOVED_LABEL,
+    isList,
+  },
 ]
 
 export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {

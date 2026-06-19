@@ -96,6 +96,12 @@ export const validateSelect = (
   prefix: string = aOrAn(label),
 ): string | undefined => (value ? undefined : `Select ${prefix} ${label}`)
 
+export const validateAutocomplete = (
+  value: string | undefined,
+  label: string,
+  prefix: string = aOrAn(label),
+): string | undefined => (value ? undefined : `Select ${prefix} ${label} from the list`)
+
 export const validateMaxLength = (
   value: string | undefined,
   label: string,

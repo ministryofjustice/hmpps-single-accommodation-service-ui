@@ -84,6 +84,12 @@ export const validateMandatoryText = (
   prefix: string = aOrAn(label),
 ): string | undefined => (value ? undefined : `Enter ${prefix} ${label}`)
 
+export const validateMaxLength = (
+  value: string | undefined,
+  label: string,
+  maxLength: number,
+): string | undefined => (value && value.length > maxLength ? `${label} must be ${maxLength} characters or less` : undefined)
+
 export const validatePostcode = (value: string | undefined): string | undefined => {
   if (!value) return 'Enter a UK postcode'
   return isValidUKPostcode(value) ? undefined : 'Enter a full UK postcode, like AA3 1AB'

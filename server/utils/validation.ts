@@ -84,6 +84,18 @@ export const validateMandatoryText = (
   prefix: string = aOrAn(label),
 ): string | undefined => (value ? undefined : `Enter ${prefix} ${label}`)
 
+export const validateRadioButton = (
+  value: string | undefined,
+  label: string,
+  prefix: string = aOrAn(label),
+): string | undefined => (value ? undefined : `Select ${prefix} ${label}`)
+
+export const validateSelect = (
+  value: string | undefined,
+  label: string,
+  prefix: string = aOrAn(label),
+): string | undefined => (value ? undefined : `Select ${prefix} ${label}`)
+
 export const validateMaxLength = (
   value: string | undefined,
   label: string,

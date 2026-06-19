@@ -32,17 +32,20 @@ export const withdrawalReasons: DtrSubmissionDto['withdrawalReason'][] = [
 
 class DutyToReferFactory extends Factory<DutyToReferDto> {
   submitted() {
-    return this.params({ status: 'SUBMITTED', submission: dtrSubmissionFactory.build({ outcomeReason: undefined }) })
+    const submissionNote = faker.datatype.boolean() ? faker.lorem.sentence() : undefined
+    return this.params({ status: 'SUBMITTED', submission: dtrSubmissionFactory.build({ outcomeReason: undefined, submissionNote }) })
   }
 
   accepted() {
     const outcomeReason = faker.helpers.arrayElement(acceptedOutcomeReasons)
-    return this.params({ status: 'ACCEPTED', submission: dtrSubmissionFactory.build({ outcomeReason }) })
+    const outcomeNote = faker.datatype.boolean() ? faker.lorem.sentence() : undefined
+    return this.params({ status: 'ACCEPTED', submission: dtrSubmissionFactory.build({ outcomeReason, outcomeNote }) })
   }
 
   notAccepted() {
     const outcomeReason = faker.helpers.arrayElement(notAcceptedOutcomeReasons)
-    return this.params({ status: 'NOT_ACCEPTED', submission: dtrSubmissionFactory.build({ outcomeReason }) })
+    const outcomeNote = faker.datatype.boolean() ? faker.lorem.sentence() : undefined
+    return this.params({ status: 'NOT_ACCEPTED', submission: dtrSubmissionFactory.build({ outcomeReason, outcomeNote }) })
   }
 
   withdrawn() {

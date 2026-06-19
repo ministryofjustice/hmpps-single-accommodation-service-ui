@@ -215,6 +215,7 @@ describe('duty to refer utils', () => {
       submissionDate: '2024-09-23',
       createdBy: 'user1',
       createdAt: '2024-09-23T00:00:00.000Z',
+      submissionNote: 'This is a submission note',
     }
 
     it.each(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)('returns correct rows for status %s', status => {
@@ -233,6 +234,7 @@ describe('duty to refer utils', () => {
       createdBy: 'user1',
       createdAt: '2024-09-23T00:00:00.000Z',
       outcomeReason: 'INTENTIONALLY_HOMELESS' as const,
+      outcomeNote: 'This is an outcome note',
     }
 
     it.each(['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'] as const)('returns correct rows for status %s', status => {

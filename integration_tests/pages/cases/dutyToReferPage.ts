@@ -39,6 +39,9 @@ export default class DutyToReferPage extends AbstractPage {
     if (dutyToRefer.submission.referenceNumber) {
       await this.completeInputByLabel('Reference number', dutyToRefer.submission.referenceNumber)
     }
+    if (dutyToRefer.submission.submissionNote) {
+      await this.completeInputByLabel('Add note', dutyToRefer.submission.submissionNote)
+    }
   }
 
   async shouldShowOutcomePage(caseData: Case, dtr: DutyToReferDto) {
@@ -51,6 +54,9 @@ export default class DutyToReferPage extends AbstractPage {
   async completeOutcomeForm(dutyToRefer: DutyToReferDto) {
     const reason = outcomeReasonLabels[dutyToRefer.submission.outcomeReason]
     await this.selectRadioByLabel(reason)
+    if (dutyToRefer.submission.outcomeNote) {
+      await this.completeInputByLabel('Add note', dutyToRefer.submission.outcomeNote)
+    }
   }
 
   async completeWithdrawalForm(dutyToRefer: DutyToReferDto) {
@@ -74,10 +80,12 @@ export default class DutyToReferPage extends AbstractPage {
       submissionDate: submission.submissionDate,
       referenceNumber: submission.referenceNumber,
       status: dutyToRefer.status,
+      submissionNote: submission.submissionNote ?? null,
     }
 
     if (submission.outcomeReason != null) {
       expectedBody.outcomeReason = submission.outcomeReason
+      expectedBody.outcomeNote = submission.outcomeNote ?? null
     }
 
     if (dutyToRefer.status === 'WITHDRAWN') {

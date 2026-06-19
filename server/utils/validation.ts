@@ -78,29 +78,31 @@ export const isValidUKPostcode = (postcode: string): boolean => /^[a-z]{1,2}\d[a
 
 export const aOrAn = (noun: string): string => (/^[aeiou]/i.test(noun) ? 'an' : 'a')
 
+export const isBlank = (value: string | undefined): boolean => !value
+
 export const validateMandatoryText = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (value ? undefined : `Enter ${prefix} ${label}`)
+): string | undefined => (!isBlank(value) ? undefined : `Enter ${prefix} ${label}`)
 
 export const validateRadioButton = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (value ? undefined : `Select ${prefix} ${label}`)
+): string | undefined => (!isBlank(value) ? undefined : `Select ${prefix} ${label}`)
 
 export const validateSelect = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (value ? undefined : `Select ${prefix} ${label}`)
+): string | undefined => (!isBlank(value) ? undefined : `Select ${prefix} ${label}`)
 
 export const validateAutocomplete = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (value ? undefined : `Select ${prefix} ${label} from the list`)
+): string | undefined => (!isBlank(value) ? undefined : `Select ${prefix} ${label} from the list`)
 
 export const validateMaxLength = (
   value: string | undefined,

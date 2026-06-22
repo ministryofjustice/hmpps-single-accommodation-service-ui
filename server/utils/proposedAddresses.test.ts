@@ -629,6 +629,18 @@ describe('Proposed addresses utilities', () => {
         expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
       },
     )
+
+    it('returns a change link to the address lookup if the address has a UPRN', () => {
+      const proposedAddress = proposedAccommodationFactory.build({
+        ...baseProposedAddress,
+        address: { ...baseProposedAddress.address, uprn: 'some-uprn' },
+      })
+      const detailRows = addressDetailRows(proposedAddress)
+
+      expect(detailRows[1]?.actions.items[0].href).toBe(
+        uiPaths.proposedAddresses.edit({ crn: baseProposedAddress.crn, id: proposedAddress.id, page: 'lookup' }),
+      )
+    })
   })
 
   describe('nextActionButton', () => {

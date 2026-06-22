@@ -46,7 +46,14 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     const nextActionsCard = this.page.locator('.sas-card--block', { hasText: 'Next actions' })
 
     for await (const action of actions) {
-      await expect(nextActionsCard.getByRole('listitem').filter({ hasText: actionsMap[action.type] })).toBeVisible()
+      const actionElement = nextActionsCard.getByRole('listitem').nth(actions.indexOf(action))
+      await expect(actionElement).toContainText(actionsMap[action.type])
+      if (action.startDate) {
+        const datetimeElement = actionElement.getByRole('time')
+        await expect(datetimeElement).toContainText(formatDate(action.startDate, 'days ago/in'))
+        await expect(datetimeElement).toHaveAttribute('datetime', action.startDate)
+        await expect(datetimeElement).toHaveAttribute('title', formatDate(action.startDate))
+      }
     }
   }
 

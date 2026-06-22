@@ -6,7 +6,7 @@ exports[`cases utilities actionsCell macro renders a formatted cell for a given 
 
     <ul class="govuk-list">
         <li>Add DTR referral details</li>
-        <li>Submit a CRS referral</li>
+        <li>Submit a CRS referral <time datetime="2026-07-23" title="23 July 2026">in 35 days</time></li>
     </ul>
   "
 `;

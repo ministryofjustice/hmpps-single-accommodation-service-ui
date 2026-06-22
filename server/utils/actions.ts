@@ -1,4 +1,5 @@
 import { CaseAction } from '@sas/api'
+import { formatDate } from './dates'
 
 export const actionsMap: Record<CaseAction['type'], string> = {
   ADD_AND_CONFIRM_PROPOSED_ADDRESS: 'Add and confirm proposed address',
@@ -15,4 +16,8 @@ export const actionsMap: Record<CaseAction['type'], string> = {
   SUBMIT_DTR_REFERRAL: 'Submit a DTR referral',
 }
 
-export const renderActions = (actions: CaseAction[]): string[] => actions.map(action => actionsMap[action.type])
+export const renderActions = (actions: CaseAction[] = []): string[] =>
+  actions.map(
+    action =>
+      `${actionsMap[action.type]}${action.startDate ? ` <time datetime="${action.startDate}" title="${formatDate(action.startDate)}">${formatDate(action.startDate, 'days ago/in')}</time>` : ''}`,
+  )

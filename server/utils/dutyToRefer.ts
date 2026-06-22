@@ -290,7 +290,9 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   } else if (isOutcome) {
     label = 'Outcome details changed'
     const hasStatusChanged = statusChange?.oldValue !== statusChange?.value
-    values = outcomeValues(submission, hasStatusChanged ? outcomeText : '', true)
+    const outcomeNoteChange = auditRecord.changes.find(change => change.field === 'outcomeNote')
+    const outcomeNote = outcomeNoteChange && (outcomeNoteChange.value || NOTE_REMOVED_LABEL)
+    values = outcomeValues({ ...submission, outcomeNote }, hasStatusChanged ? outcomeText : '', true)
   } else {
     label = 'Submission details changed'
     const localAuthority =

@@ -47,6 +47,11 @@ function appSetup(services: Services, production: boolean, userSupplier: () => H
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(routes(services))
+  app.use('/error', () => {
+    const error = new Error('Server error')
+    error.stack = 'STACKTRACE'
+    throw error
+  })
   app.use((req, res, next) => next(new NotFound()))
   app.use(errorHandler(production))
 

@@ -1,0 +1,12 @@
+{% extends './layout.njk' %}
+
+{% block content %}
+  {{ super() }}
+
+  {% if debugErrorData %}
+    <hr />
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">{{ debugErrorData.status }}</h2>
+    <p><strong><code>{{ debugErrorData.hint }}</code></strong></p>
+    <pre>{{ debugErrorData.trace }}</pre>
+  {% endif %}
+{% endblock %}

@@ -178,38 +178,11 @@ export const updateAddressFromRequest = async (
 
 const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const address = sessionData?.address
+
   const errors: Record<string, string> = {}
-
-  if (!address?.buildingName && !address?.thoroughfareName) {
-    errors.addressLine1 = 'Enter address line 1, typically the building and street'
-  } else if (!address?.thoroughfareName && address.buildingName.length > 200) {
-    errors.addressLine1 = 'Address line 1 must be 200 characters or less'
-  }
-
-  if (address?.subBuildingName && address?.subBuildingName.length > 200) {
-    errors.addressLine2 = 'Address line 2 must be 200 characters or less'
-  }
-
-  if (!address?.postTown) {
-    errors.addressTown = 'Enter town or city'
-  } else if (address.postTown.length > 100) {
-    errors.addressTown = 'Town or city must be 100 characters or less'
-  }
-
-  if (address?.county && address?.county.length > 100) {
-    errors.addressCounty = 'County must be 100 characters or less'
-  }
 
   if (!address?.postcode) {
     errors.addressPostcode = 'Enter postcode'
-  } else if (address.postcode.length > 20) {
-    errors.addressPostcode = 'Postal code or zip code must be 20 characters or less'
-  }
-
-  if (!address?.country) {
-    errors.addressCountry = 'Enter country'
-  } else if (address.country.length > 100) {
-    errors.addressCountry = 'Country must be 100 characters or less'
   }
 
   return validateAndFlashErrors(req, errors)

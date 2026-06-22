@@ -101,6 +101,12 @@ export interface SelectOption {
 
 export type DateFieldValues<K extends string> = { [P in `${K}-${'year' | 'month' | 'day'}`]?: string }
 
+export type DateFieldParts = {
+  day?: string
+  month?: string
+  year?: string
+}
+
 export type ApiResponse = {
   data?: unknown
   upstreamFailures?: UpstreamFailureDto[]

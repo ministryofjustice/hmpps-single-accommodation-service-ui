@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/node'
 import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
 import logger from '../../logger'
+import type { DateFieldParts } from '@sas/ui'
 
 const { mojDate } = mojFilters()
 
@@ -98,3 +99,19 @@ export const isoDateToDateInput = (date: string | undefined, fieldName: string):
 
 export const mojDateOrBlank = (timestamp: string, type: 'datetime'): string =>
   isValidDate(timestamp) ? mojDate(timestamp, type) : ''
+
+export const dateFieldParts = (body: Record<string, string | undefined>, field: string): DateFieldParts => {
+  return {
+    day: body[`${field}-day`],
+    month: body[`${field}-month`],
+    year: body[`${field}-year`],
+  }
+}
+
+export const datePartsToUtcDate = ({ day, month, year }: DateFieldParts): Date =>
+  new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 0, 0, 0, 0))
+
+export const getTodayUtcDate = (): Date => {
+  const now = new Date()
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0))
+}

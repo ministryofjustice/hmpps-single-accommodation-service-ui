@@ -1,5 +1,6 @@
 import { Request } from 'express'
-import type { ErrorMessage, ErrorMessages, ErrorSummary } from '@sas/ui'
+import type { DateFieldParts, ErrorMessage, ErrorMessages, ErrorSummary } from '@sas/ui'
+import { datePartsToUtcDate, getTodayUtcDate } from './dates'
 
 export const fetchErrorsAndUserInput = (request: Request) => {
   const errorsFlash = request.flash('errors')
@@ -109,6 +110,76 @@ export const validateMaxLength = (
   label: string,
   maxLength: number,
 ): string | undefined => (value && value.length > maxLength ? `${label} must be ${maxLength} characters or less` : undefined)
+
+const blankDateParts = ({ day, month, year }: DateFieldParts): string[] => {
+  const blankParts: string[] = []
+  if (isBlank(day)) blankParts.push('day')
+  if (isBlank(month)) blankParts.push('month')
+  if (isBlank(year)) blankParts.push('year')
+  return blankParts
+}
+
+export const validateDateFull = (parts: DateFieldParts, label: string, prefix: string = aOrAn(label)): string | undefined =>
+  blankDateParts(parts).length === 3 ? `Enter ${prefix} ${label}` : undefined
+
+export const validateDateParts = (parts: DateFieldParts, label: string): string | undefined => {
+  const blankParts = blankDateParts(parts)
+
+  if (blankParts.length === 0 || blankParts.length === 3) return undefined
+  if (blankParts.length === 1) return `${label} must include a ${blankParts[0]}`
+
+  return `${label} must include a ${blankParts[0]} and a ${blankParts[1]}`
+}
+
+export const validateDateYearLength = ({ year }: DateFieldParts, label: string): string | undefined =>
+  !isBlank(year) && year.length !== 4 ? `${label} must include 4 numbers` : undefined
+
+export const isRealDate = ({ day = '', month = '', year = '' }: DateFieldParts): boolean => {
+  if (!/^\d{1,2}$/.test(day) || !/^\d{1,2}$/.test(month) || !/^\d{1,4}$/.test(year)) return false
+
+  const dayNumber = Number(day)
+  const monthNumber = Number(month)
+  const yearNumber = Number(year)
+
+  const parsed = new Date(Date.UTC(yearNumber, monthNumber - 1, dayNumber))
+  return (
+    parsed.getUTCFullYear() === yearNumber &&
+    parsed.getUTCMonth() === monthNumber - 1 &&
+    parsed.getUTCDate() === dayNumber
+  )
+}
+
+export const validateRealDate = (parts: DateFieldParts, label: string): string | undefined => {
+  if (blankDateParts(parts).length > 0) return undefined
+  return isRealDate(parts) ? undefined : `${label} must be a real date`
+}
+
+export const validateDateInPast = (parts: DateFieldParts, label: string): string | undefined => {
+  if (!isRealDate(parts)) return undefined
+
+  const date = datePartsToUtcDate(parts)
+  const today = getTodayUtcDate()
+  return date >= today ? `${label} must be in the past` : undefined
+}
+
+export const validateDateTodayOrPast = (parts: DateFieldParts, label: string): string | undefined => {
+  if (!isRealDate(parts)) return undefined
+
+  const date = datePartsToUtcDate(parts)
+  const today = getTodayUtcDate()
+  return date > today ? `${label} must be today or in the past` : undefined
+}
+
+export const validateDateNotBefore = (
+  endDate: DateFieldParts,
+  startDate: DateFieldParts,
+  endDateLabel: string,
+  startDateLabel: string,
+): string | undefined => {
+  if (!isRealDate(endDate) || !isRealDate(startDate)) return undefined
+
+  return datePartsToUtcDate(endDate) < datePartsToUtcDate(startDate) ? `The ${endDateLabel} cannot be before the ${startDateLabel}` : undefined
+}
 
 export const validatePostcode = (value: string | undefined): string | undefined => {
   if (!value) return 'Enter a UK postcode'

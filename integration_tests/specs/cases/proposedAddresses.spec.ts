@@ -182,7 +182,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see an error
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      accommodationTypeCode: 'Select an accommodation type',
+      accommodationTypeCode: 'Select a living arrangement',
     })
 
     // Then I complete the type form
@@ -264,7 +264,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see an error
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      nextAccommodationStatus: 'Select if you want to confirm this as the next address',
+      nextAccommodationStatus: 'Select whether address is confirmed',
     })
 
     // When I complete the next accommodation form with new data

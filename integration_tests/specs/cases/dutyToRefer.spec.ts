@@ -112,7 +112,7 @@ test.describe('duty to refer', () => {
     await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowErrorMessagesForFields({
       submissionDate: 'Enter a submission date',
-      localAuthorityAreaId: 'Select a local authority',
+      localAuthorityAreaId: 'Enter a local authority',
     })
 
     // When I complete the form and submit
@@ -161,7 +161,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see errors
     await outcomePage.shouldShowErrorMessagesForFields({
-      outcomeReason: 'Select duty to refer outcome',
+      outcomeReason: 'Select a Duty to Refer (DTR) outcome',
     })
 
     // When I complete the form and submit
@@ -487,7 +487,7 @@ test.describe('duty to refer', () => {
 
     // Then I should see errors
     await dutyToReferWithdrawPage.shouldShowErrorMessagesForFields({
-      withdrawalReason: 'Select a reason for withdrawal',
+      withdrawalReason: 'Select a withdrawal reason',
     })
 
     // When I complete the form and submit
@@ -581,7 +581,7 @@ test.describe('duty to refer', () => {
     await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
     await dutyToReferPage.shouldShowErrorMessagesForFields({
       submissionDate: 'Enter a submission date',
-      localAuthorityAreaId: 'Select a local authority',
+      localAuthorityAreaId: 'Enter a local authority',
     })
 
     // When I complete the form and submit

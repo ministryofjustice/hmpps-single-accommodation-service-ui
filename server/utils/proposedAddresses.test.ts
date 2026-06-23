@@ -363,7 +363,7 @@ describe('Proposed addresses utilities', () => {
         },
         {
           name: 'redirects to details when address invalid',
-          data: { address: { ...validAddress, buildingName: '' } },
+          data: { address: { ...validAddress, postcode: '' } },
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
@@ -379,18 +379,12 @@ describe('Proposed addresses utilities', () => {
         const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
 
         validateUpToAddress(req, {
-          address: { ...validAddress, buildingName: '', postTown: '', postcode: '', country: '' },
+          address: { postcode: '' },
         } as ProposedAddressFormData)
 
-        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
-          req,
-          expect.objectContaining({
-            addressLine1: 'Enter address line 1, typically the building and street',
-            addressTown: 'Enter town or city',
-            addressPostcode: 'Enter postcode',
-            addressCountry: 'Enter country',
-          }),
-        )
+        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(req, {
+          addressPostcode: 'Enter postcode',
+        })
       })
     })
 
@@ -443,7 +437,7 @@ describe('Proposed addresses utilities', () => {
         },
         {
           name: 'redirects to details when address invalid',
-          data: { address: { ...validAddress, country: '' } } as ProposedAddressFormData,
+          data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
@@ -487,7 +481,7 @@ describe('Proposed addresses utilities', () => {
         },
         {
           name: 'redirects to details when address invalid',
-          data: { address: { ...validAddress, buildingName: '' } } as ProposedAddressFormData,
+          data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
@@ -635,6 +629,18 @@ describe('Proposed addresses utilities', () => {
         expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
       },
     )
+
+    it('returns a change link to the address lookup if the address has a UPRN', () => {
+      const proposedAddress = proposedAccommodationFactory.build({
+        ...baseProposedAddress,
+        address: { ...baseProposedAddress.address, uprn: 'some-uprn' },
+      })
+      const detailRows = addressDetailRows(proposedAddress)
+
+      expect(detailRows[1]?.actions.items[0].href).toBe(
+        uiPaths.proposedAddresses.edit({ crn: baseProposedAddress.crn, id: proposedAddress.id, page: 'lookup' }),
+      )
+    })
   })
 
   describe('nextActionButton', () => {

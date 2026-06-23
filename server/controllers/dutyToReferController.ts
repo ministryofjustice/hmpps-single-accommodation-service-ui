@@ -11,6 +11,7 @@ import {
   outcomeReasonToStatus,
   submissionFormValues,
   validateWithdraw,
+  validateNote,
   outcomeReasonLabels,
   withdrawReasonLabels,
 } from '../utils/dutyToRefer'
@@ -21,7 +22,6 @@ import {
   addGenericErrorToFlash,
   addUserInputToFlash,
   fetchErrorsAndUserInput,
-  validateAndFlashErrors,
 } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
@@ -342,8 +342,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { note } = req.body
 
-      if (!note) {
-        validateAndFlashErrors(req, { note: 'Enter a note' })
+      if (!validateNote(req)) {
         return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       }
 

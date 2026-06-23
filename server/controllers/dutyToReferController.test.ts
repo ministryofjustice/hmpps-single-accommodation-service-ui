@@ -541,8 +541,8 @@ describe('dutyToReferController', () => {
 
       const userInput = { withdrawalReason: 'OTHER', withdrawalReasonOther: '' }
       jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({
-        errors: { withdrawalReasonOther: { text: 'Enter a reason for withdrawal' } },
-        errorSummary: [{ text: 'Enter a reason for withdrawal', href: '#withdrawalReasonOther' }],
+        errors: { withdrawalReasonOther: { text: 'Enter other reason for withdrawal' } },
+        errorSummary: [{ text: 'Enter other reason for withdrawal', href: '#withdrawalReasonOther' }],
         userInput,
       })
 
@@ -554,7 +554,7 @@ describe('dutyToReferController', () => {
           withdrawalReasonItems: radioItems(withdrawReasonLabels, 'OTHER'),
           withdrawalReason: 'OTHER',
           withdrawalReasonOther: '',
-          errors: { withdrawalReasonOther: { text: 'Enter a reason for withdrawal' } },
+          errors: { withdrawalReasonOther: { text: 'Enter other reason for withdrawal' } },
         }),
       )
     })

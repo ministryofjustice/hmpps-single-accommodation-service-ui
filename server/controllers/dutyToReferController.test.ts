@@ -196,7 +196,7 @@ describe('dutyToReferController', () => {
     })
 
     it('keeps submission status when editing an existing submission that has an outcome', async () => {
-      const submission = dtrSubmissionFactory.accepted().build({outcomeNote: 'This is an outcome note'})
+      const submission = dtrSubmissionFactory.accepted().build({ outcomeNote: 'This is an outcome note' })
       const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123', submission })
       const outcomeReason = dutyToRefer.submission?.outcomeReason
       const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })

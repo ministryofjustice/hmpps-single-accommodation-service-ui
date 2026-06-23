@@ -1,5 +1,7 @@
 import { match, Path } from 'path-to-regexp'
 import type { Request } from 'express'
+import { IndexRequest } from '@sas/ui'
+import uiPaths from '../paths/ui'
 
 /**
  * Provides referer links for pages with multiple routes
@@ -47,4 +49,12 @@ export const setFlowRedirect = (pagePattern: string, req: Request, matchList: Ar
  */
 export const getFlowRedirect = (pagePattern: string, req: Request, defaultPath = '/'): string => {
   return req.session.pageReferers?.[pagePattern] || defaultPath
+}
+
+export const getCaseListUrl = (req: Request): string => req.session.caseListUrl || uiPaths.cases.index({})
+
+export const setCaseListUrl = (req: IndexRequest): void => {
+  const search = new URLSearchParams(req.query).toString()
+
+  req.session.caseListUrl = `${uiPaths.cases.index({})}${search ? `?${search}` : ''}`
 }

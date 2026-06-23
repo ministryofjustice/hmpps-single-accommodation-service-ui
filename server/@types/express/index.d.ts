@@ -6,6 +6,7 @@ export declare module 'express-session' {
     returnTo: string
     multiPageFormData?: MultiPageFormData
     pageReferers: Record<string, string>
+    caseListUrl?: string
   }
 }
 

@@ -1,28 +1,28 @@
 import { test } from '@playwright/test'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
-import userApi from '../../mockApis/user'
 import CasesListPage from '../../pages/cases/listPage'
 import { caseFactory } from '../../../server/testutils/factories'
 import { formatRiskLevel } from '../../../server/utils/cases'
 import LaoAccessPage from '../../pages/cases/laoAccessPage'
+import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
+import { stubCaseListPage } from '../../helpers/caseListPage'
+import { stubProfilePage } from '../../helpers/profilePage'
 
 test.describe('List of cases', () => {
   test('Should list all cases for the user and allow filtering', async ({ page }) => {
-    // GIVEN there are cases to show
     const cases = [...Array(25)].map(() => caseFactory.confirmed().build())
-    await casesApi.stubGetCases(cases)
-
-    // AND the user belongs to teams
     const teams = [
       { code: 'team-one-code', name: 'Team One' },
       { code: 'team-two-code', name: 'Team Two' },
     ]
-    await userApi.stubGetTeams(teams)
+    await stubCaseListPage(cases, teams)
 
     const filteredCase = cases[0]
     const { prisonNumber, riskLevel } = filteredCase
     await casesApi.stubGetCases([filteredCase], { searchTerm: prisonNumber, riskLevel })
+
+    await stubProfilePage({ crn: filteredCase.crn, caseData: filteredCase })
 
     // WHEN I sign in
     await login(page)
@@ -58,6 +58,25 @@ test.describe('List of cases', () => {
       teamCode: 'team-one-code',
       riskLevel,
     })
+
+    // AND the active filter tags are shown
+    await casesListPage.shouldShowFilterTags({
+      Search: `‘${prisonNumber}’`,
+      RoSH: formatRiskLevel(riskLevel),
+      'Assigned to': 'Team One',
+    })
+
+    // WHEN I click on a case
+    await casesListPage.clickLink(filteredCase.name)
+
+    // THEN I should see the profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, filteredCase)
+
+    // WHEN I click on the Case list link
+    await profileTrackerPage.clickLink('Case list')
+
+    // THEN I should see the Case list page again
+    await CasesListPage.verifyOnPage(page)
 
     // AND the active filter tags are shown
     await casesListPage.shouldShowFilterTags({

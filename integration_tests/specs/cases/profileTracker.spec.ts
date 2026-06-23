@@ -1,15 +1,7 @@
 import { expect, test } from '@playwright/test'
-import {
-  AccommodationReferralDto,
-  AccommodationSummaryDto,
-  CaseDto,
-  EligibilityDto,
-  ProposedAccommodationDto,
-} from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import eligibilityApi from '../../mockApis/eligibility'
-import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import accommodationApi from '../../mockApis/accommodation'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import {
@@ -22,37 +14,10 @@ import {
   proposedAccommodationFactory,
   crsServiceResultFactory,
 } from '../../../server/testutils/factories'
+import { stubProfilePage } from '../../helpers/profilePage'
+import { stubCaseListPage } from '../../helpers/caseListPage'
 
 test.describe('Profile Tracker Page', () => {
-  const setupStubs = async ({
-    crn,
-    caseData,
-    eligibility,
-    referrals,
-    proposedAddresses,
-    currentAccommodation,
-    nextAccommodation,
-    accommodationHistory,
-  }: {
-    crn: string
-    caseData: CaseDto
-    eligibility?: EligibilityDto
-    referrals?: AccommodationReferralDto[]
-    proposedAddresses?: ProposedAccommodationDto[]
-    currentAccommodation?: AccommodationSummaryDto
-    nextAccommodation?: AccommodationSummaryDto
-    accommodationHistory?: AccommodationSummaryDto[]
-  }) => {
-    await casesApi.stubGetCases([caseData])
-    await casesApi.stubGetCaseByCrn(crn, caseData)
-    await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
-    await casesApi.stubGetReferralHistory(crn, referrals)
-    await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
-    await accommodationApi.stubGetCurrentAccommodation(crn, currentAccommodation)
-    await accommodationApi.stubGetNextAccommodation(crn, nextAccommodation)
-    await accommodationApi.stubGetAccommodationHistory(crn, accommodationHistory)
-  }
-
   test('Should display profile tracker for a specific case', async ({ page }) => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
@@ -72,11 +37,16 @@ test.describe('Profile Tracker Page', () => {
     ]
     const accommodationHistory = accommodationSummaryFactory.buildListSequential(5)
 
-    await setupStubs({ crn, caseData, eligibility, referrals, proposedAddresses, accommodationHistory })
+    await stubCaseListPage([caseData])
+    await stubProfilePage({ crn, caseData, eligibility, referrals, proposedAddresses, accommodationHistory })
+
+    // WHEN I sign in
     await login(page)
 
+    // AND I click on the case name
     await page.getByRole('link', { name: caseData.name }).click()
 
+    // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
@@ -91,11 +61,16 @@ test.describe('Profile Tracker Page', () => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn, limitedAccess: true })
 
-    await setupStubs({ crn, caseData })
+    await stubCaseListPage([caseData])
+    await stubProfilePage({ crn, caseData })
+
+    // WHEN I sign in
     await login(page)
 
+    // AND I click on the case name
     await page.getByRole('link', { name: caseData.name }).click()
 
+    // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
@@ -104,12 +79,17 @@ test.describe('Profile Tracker Page', () => {
   test('Shows a 404 if the CRN is not found', async ({ page }) => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
-    await setupStubs({ crn, caseData })
 
+    await stubCaseListPage([caseData])
+    await stubProfilePage({ crn, caseData })
+
+    // WHEN I sign in
     await login(page)
 
+    // AND I visit the URL for an unknown CRN
     await page.goto('/cases/X999999')
 
+    // THEN I should see a 404 page
     await expect(page.locator('h1', { hasText: 'Not found' })).toBeVisible()
   })
 
@@ -117,18 +97,23 @@ test.describe('Profile Tracker Page', () => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn, userAccess: 'FULL' })
 
-    await setupStubs({ crn, caseData })
+    await stubCaseListPage([caseData])
+    await stubProfilePage({ crn, caseData })
 
     await accommodationApi.stubGetAccommodationHistoryUpstreamFailure(crn)
     await casesApi.stubGetReferralHistoryUpstreamFailure(crn)
     await eligibilityApi.stubGetEligibilityByCrnUpstreamFailure(crn)
 
+    // WHEN I sign in
     await login(page)
 
+    // AND I click on the case name
     await page.getByRole('link', { name: caseData.name }).click()
 
+    // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
 
+    // AND I should see the upstream failure warnings
     await profileTrackerPage.shouldShowApiErrors([
       'Next actions',
       'Accommodation referrals',
@@ -144,11 +129,17 @@ test.describe('Profile Tracker Page', () => {
       const caseData = caseFactory.confirmed().build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
       const nextAccommodation = accommodationSummaryFactory.next().build()
-      await setupStubs({ crn, caseData, currentAccommodation, nextAccommodation })
+
+      await stubCaseListPage([caseData])
+      await stubProfilePage({ crn, caseData, currentAccommodation, nextAccommodation })
+
+      // WHEN I sign in
       await login(page)
 
+      // AND I visit the profile tracker page
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
+      // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldShowNextAccommodationCard(nextAccommodation)
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
       await profileTrackerPage.shouldNotShowNoFixedAbodeAlert()
@@ -159,11 +150,17 @@ test.describe('Profile Tracker Page', () => {
     }) => {
       const caseData = caseFactory.riskOfNfa().build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
-      await setupStubs({ crn, caseData, currentAccommodation })
+
+      await stubCaseListPage([caseData])
+      await stubProfilePage({ crn, caseData, currentAccommodation })
+
+      // WHEN I sign in
       await login(page)
 
+      // AND I visit the profile tracker page
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
+      // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
       await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, currentAccommodation)
@@ -171,11 +168,17 @@ test.describe('Profile Tracker Page', () => {
 
     test(`should render no accommodation cards and NFA alert for a case with no fixed abode`, async ({ page }) => {
       const caseData = caseFactory.nfa().build({ crn })
-      await setupStubs({ crn, caseData })
+
+      await stubCaseListPage([caseData])
+      await stubProfilePage({ crn, caseData })
+
+      // WHEN I sign in
       await login(page)
 
+      // AND I visit the profile tracker page
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
+      // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldNotShowCurrentAccommodationCard()
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData)
@@ -186,11 +189,17 @@ test.describe('Profile Tracker Page', () => {
     test('should display a message if there are no proposed addresses at all', async ({ page }) => {
       const crn = 'X123456'
       const caseData = caseFactory.build({ crn })
-      await setupStubs({ crn, caseData })
+
+      await stubCaseListPage([caseData])
+      await stubProfilePage({ crn, caseData })
+
+      // WHEN I sign in
       await login(page)
 
+      // AND I visit the profile tracker page
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
+      // THEN I should see the correct proposed addresses cards
       await profileTrackerPage.shouldShowProposedAddresses()
     })
 
@@ -200,11 +209,17 @@ test.describe('Profile Tracker Page', () => {
       const crn = 'X123456'
       const caseData = caseFactory.build({ crn })
       const proposedAddresses = [proposedAccommodationFactory.build({ verificationStatus: 'FAILED' })]
-      await setupStubs({ crn, caseData, proposedAddresses })
+
+      await stubCaseListPage([caseData])
+      await stubProfilePage({ crn, caseData, proposedAddresses })
+
+      // WHEN I sign in
       await login(page)
 
+      // AND I visit the profile tracker page
       const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
+      // THEN I should see the correct proposed addresses cards
       await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
     })
   })

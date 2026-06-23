@@ -181,6 +181,12 @@ export const validateDateNotBefore = (
   return datePartsToUtcDate(endDate) < datePartsToUtcDate(startDate) ? `The ${endDateLabel} cannot be before the ${startDateLabel}` : undefined
 }
 
+export const validateDateField = (parts: DateFieldParts, label: string): string | undefined =>
+  validateDateFull(parts, label.toLowerCase()) ||
+  validateDateParts(parts, label) ||
+  validateDateYearLength(parts, label) ||
+  validateRealDate(parts, label)
+
 export const validatePostcode = (value: string | undefined): string | undefined => {
   if (!value) return 'Enter a UK postcode'
   return isValidUKPostcode(value) ? undefined : 'Enter a full UK postcode, like AA3 1AB'

@@ -5,8 +5,8 @@ exports[`cases utilities actionsCell macro renders a formatted cell for a given 
     <span class="sas-table__cell-header" aria-hidden="true">Actions</span>
 
     <ul class="govuk-list">
-        <li>Action 1</li>
-        <li>Action 2</li>
+        <li>Add DTR referral details</li>
+        <li>Submit a CRS referral <time datetime="2026-07-23" title="23 July 2026">in 35 days</time></li>
     </ul>
   "
 `;

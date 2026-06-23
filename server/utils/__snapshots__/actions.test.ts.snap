@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`action utilities renderActions renders a list of actions 1`] = `
+[
+  "Create an approved premises (CAS1) placement request",
+  "Provide further information on an approved premises (CAS1) application <time datetime="2026-06-06" title="6 June 2026">today</time>",
+  "Start an approved premises (CAS1) application <time datetime="2026-06-07" title="7 June 2026">in 1 day</time>",
+  "Continue an approved premises (CAS1) application <time datetime="2026-07-06" title="6 July 2026">in 30 days</time>",
+  "Start a CAS3 referral <time datetime="2026-07-29" title="29 July 2026">in 53 days</time>",
+  "Reply to CAS3 bedspace offer <time datetime="2026-08-06" title="6 August 2026">in 61 days</time>",
+  "Submit a DTR referral <time datetime="2026-09-08" title="8 September 2026">in 94 days</time>",
+  "Add DTR referral details <time datetime="2026-10-14" title="14 October 2026">in 130 days</time>",
+  "Add DTR referral outcome <time datetime="2026-12-06" title="6 December 2026">in 183 days</time>",
+  "Submit a CRS accommodation referral <time datetime="2027-01-19" title="19 January 2027">in 227 days</time>",
+  "Submit a CRS referral <time datetime="2027-06-14" title="14 June 2027">in 373 days</time>",
+  "Add and confirm proposed address <time datetime="2029-08-17" title="17 August 2029">in 1168 days</time>",
+]
+`;

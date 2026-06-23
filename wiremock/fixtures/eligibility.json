@@ -1,119 +1,216 @@
 {
   "S511935": {
     "crn": "S511935",
-    "caseActions": ["Add proposed address", "Start CAS3 referral", "Consider home visit"],
+    "caseActions": [
+      {
+        "type": "PROVIDE_INFORMATION",
+        "startDate": "2027-01-25"
+      },
+      {
+        "type": "SUBMIT_CRS_REFERRAL"
+      },
+      {
+        "type": "SUBMIT_CRS_REFERRAL"
+      }
+    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "action": "carpo ustulo derelinquo tergiversatio et",
-        "url": "https://cas1.example.com/applications/s511935",
-        "failureReasons": []
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "action": "demum dolorem tenus ultio amiculum",
-        "url": "https://cas3.example.com/referrals/s511935",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "url": "https://crs.example.com/referrals/s511935",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": {
-        "status": "DRAFT",
-        "submissionDate": null
-      }
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "ACCEPTED",
-        "action": "alias usque vitae amaritudo cruentus",
-        "url": "https://dtr.example.com/submissions/s511935",
-        "failureReasons": []
-      },
-      "submission": {
-        "id": "2dd3e227-82cc-408d-9a1e-4ef5002649fd",
-        "localAuthority": {
-          "localAuthorityAreaId": "bb91cbdb-c4a4-4471-834d-e2a3d954a700",
-          "localAuthorityAreaName": "Wiltshire"
+        "serviceStatus": "REJECTED",
+        "action": {
+          "type": "PROVIDE_INFORMATION",
+          "startDate": "2027-01-25"
         },
-        "referenceNumber": "XGRCQP6IIR",
-        "submissionDate": "2025-06-05",
-        "outcomeReason": "PREVENTION_AND_RELIEF_DUTY",
-        "createdBy": "Sonya Miller-Macejkovic",
-        "createdAt": "2026-01-19T07:45:12.702Z"
-      }
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["S_TIER"]
-      }
-    }
-  },
-  "P712106": {
-    "crn": "P712106",
-    "caseActions": ["Add proposed address", "Add DTR outcome", "Submit a CRS referral"],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "action": "subnecto testimonium tego ubi antepono",
-        "url": "https://cas1.example.com/applications/p712106",
-        "failureReasons": []
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://cas3.example.com/referrals/p712106",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "action": "volva ventus adinventitias minus colligo",
-        "url": "https://crs.example.com/referrals/p712106",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://dtr.example.com/submissions/p712106",
-        "failureReasons": []
-      },
-      "submission": null
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "COMPLETED",
-        "action": "creo argentum antepono triumphus at",
-        "url": "https://pa.example.com/assessments/p712106",
-        "failureReasons": []
-      }
-    }
-  },
-  "T274481": {
-    "crn": "T274481",
-    "caseActions": ["Submit a CRS referral"],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "url": "https://cas1.example.com/applications/t274481",
-        "failureReasons": []
+        "failureReasons": [],
+        "url": "https://official-accompanist.name"
       }
     },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "UPCOMING",
         "failureReasons": []
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "action": {
+          "type": "SUBMIT_CRS_REFERRAL"
+        },
+        "failureReasons": [],
+        "url": "https://unsung-sandbar.com"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "UPCOMING",
+        "action": {
+          "type": "SUBMIT_CRS_REFERRAL"
+        },
+        "failureReasons": []
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://juicy-rim.net/"
+      }
+    }
+  },
+  "P712106": {
+    "crn": "P712106",
+    "caseActions": [
+      {
+        "type": "ADD_DTR_OUTCOME",
+        "startDate": "2026-08-26"
+      }
+    ],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "WITHDRAWN",
+        "failureReasons": [],
+        "url": "https://blond-schedule.org"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "failureReasons": [],
+        "url": "https://oddball-viability.net"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "failureReasons": [],
+        "url": "https://wavy-importance.net/"
+      },
+      "commissionedRehabilitativeServices": {
+        "status": "WITHDRAWN",
+        "submissionDate": "2025-12-31"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "ACCEPTED",
+        "action": {
+          "type": "ADD_DTR_OUTCOME",
+          "startDate": "2026-08-26"
+        },
+        "failureReasons": [],
+        "url": "https://rectangular-rule.com/"
+      },
+      "submission": {
+        "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
+        "localAuthority": {
+          "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
+          "localAuthorityAreaName": "Rugby"
+        },
+        "referenceNumber": "H4YDDVJYEJ",
+        "submissionDate": "2025-08-17",
+        "createdBy": "Ward Mraz-Hilll",
+        "createdAt": "2026-02-17T00:35:24.023Z"
+      }
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["SEX_DATA_NOT_AVAILABLE"]
+      }
+    }
+  },
+  "T274481": {
+    "crn": "T274481",
+    "caseActions": [
+      {
+        "type": "SUBMIT_CRS_REFERRAL"
+      },
+      {
+        "type": "START_APPROVED_PREMISE_APPLICATION"
+      },
+      {
+        "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
+      }
+    ],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "UPCOMING",
+        "failureReasons": []
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "action": {
+          "type": "SUBMIT_CRS_REFERRAL"
+        },
+        "failureReasons": ["SEX_DATA_NOT_AVAILABLE"]
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "action": {
+          "type": "START_APPROVED_PREMISE_APPLICATION"
+        },
+        "failureReasons": [],
+        "url": "https://aged-armoire.name"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "action": {
+          "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
+        },
+        "failureReasons": ["INVALID_CURRENT_ACCOMMODATION_TYPE"]
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": [],
+        "url": "https://weighty-valley.biz"
+      }
+    }
+  },
+  "V938951": {
+    "crn": "V938951",
+    "caseActions": [
+      {
+        "type": "SUBMIT_DTR_REFERRAL",
+        "startDate": "2026-12-05"
+      },
+      {
+        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS"
+      },
+      {
+        "type": "CONTINUE_APPROVED_PREMISE_APPLICATION"
+      }
+    ],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "action": {
+          "type": "SUBMIT_DTR_REFERRAL",
+          "startDate": "2026-12-05"
+        },
+        "failureReasons": [],
+        "url": "https://dutiful-bench.info"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "action": {
+          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS"
+        },
+        "failureReasons": [],
+        "url": "https://untrue-heartbeat.info"
       }
     },
     "crs": {
@@ -125,375 +222,406 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "action": "corporis nostrum audentia aveho tibi",
-        "url": "https://dtr.example.com/submissions/t274481",
+        "serviceStatus": "UPCOMING",
+        "action": {
+          "type": "CONTINUE_APPROVED_PREMISE_APPLICATION"
+        },
         "failureReasons": []
       },
       "submission": null
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["CRS_EXPIRED"]
-      }
-    }
-  },
-  "V938951": {
-    "crn": "V938951",
-    "caseActions": ["Start CAS3 referral", "Consider home visit"],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "action": "catena sol ulterius adsidue sto",
-        "url": "https://cas1.example.com/applications/v938951",
-        "failureReasons": []
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "url": "https://cas3.example.com/referrals/v938951",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "action": "delicate ustilo ulciscor cenaculum deorsum",
-        "url": "https://crs.example.com/referrals/v938951",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ACCEPTED",
-        "action": "sordeo cras color virga villa",
-        "url": "https://dtr.example.com/submissions/v938951",
-        "failureReasons": []
-      },
-      "submission": {
-        "id": "d95c6e37-c03f-4b9b-a60d-cea4c8c74b9f",
-        "localAuthority": {
-          "localAuthorityAreaId": "919b70c2-da58-45a8-b781-687a485db329",
-          "localAuthorityAreaName": "Ashford"
-        },
-        "referenceNumber": "CEI1V6BTWY",
-        "submissionDate": "2025-09-13",
-        "outcomeReason": "NO_LOCAL_CONNECTION",
-        "createdBy": "Winfield Dickens",
-        "createdAt": "2026-05-03T03:29:42.897Z"
-      }
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["SUITABLE_CAS1_APPLICATION"]
+        "serviceStatus": "COMPLETED",
+        "failureReasons": [],
+        "url": "https://parallel-omelet.org/"
       }
     }
   },
   "T229440": {
     "crn": "T229440",
-    "caseActions": ["Submit a CRS referral"],
+    "caseActions": [
+      {
+        "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
+      },
+      {
+        "type": "ADD_DTR_OUTCOME",
+        "startDate": "2028-03-05"
+      }
+    ],
     "cas1": {
       "serviceResult": {
         "serviceStatus": "REJECTED",
-        "url": "https://cas1.example.com/applications/t229440",
-        "failureReasons": []
+        "failureReasons": [],
+        "url": "https://wilted-farm.name"
       }
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "REJECTED",
-        "url": "https://cas3.example.com/referrals/t229440",
+        "serviceStatus": "UPCOMING",
         "failureReasons": []
       }
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "action": "aptus decretum sui conatus ater",
-        "url": "https://crs.example.com/referrals/t229440",
-        "failureReasons": []
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://soupy-footrest.biz/"
       },
-      "commissionedRehabilitativeServices": {
-        "status": "LIVE",
-        "submissionDate": "2025-09-11"
-      }
+      "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://dtr.example.com/submissions/t229440",
-        "failureReasons": []
+        "serviceStatus": "NOT_ELIGIBLE",
+        "action": {
+          "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
+        },
+        "failureReasons": ["SUITABLE_CAS3_APPLICATION"]
       },
       "submission": null
     },
     "pa": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["S_TIER"]
+        "action": {
+          "type": "ADD_DTR_OUTCOME",
+          "startDate": "2028-03-05"
+        },
+        "failureReasons": ["SUITABLE_CAS3_APPLICATION"]
       }
     }
   },
   "H271226": {
     "crn": "H271226",
-    "caseActions": ["Consider home visit"],
+    "caseActions": [
+      {
+        "type": "ADD_DTR_REFERRAL_DETAILS"
+      },
+      {
+        "type": "START_CAS3_REFERRAL"
+      }
+    ],
     "cas1": {
+      "serviceResult": {
+        "serviceStatus": "REJECTED",
+        "failureReasons": [],
+        "url": "https://stunning-sprinkles.com"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "REJECTED",
+        "failureReasons": [],
+        "url": "https://silent-elevator.net"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://impassioned-testimonial.net"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["SEX_DATA_NOT_AVAILABLE"]
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
-        "action": "adsum benigne tredecim compello nobis",
-        "url": "https://cas3.example.com/referrals/h271226",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "action": "totus ocer voveo arma utroque",
-        "url": "https://crs.example.com/referrals/h271226",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": {
-        "status": "DRAFT",
-        "submissionDate": null
-      }
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ACCEPTED",
-        "action": "aer vallum bonus careo agnitio",
-        "url": "https://dtr.example.com/submissions/h271226",
-        "failureReasons": []
-      },
-      "submission": {
-        "id": "e9cde48a-5f60-4e14-9464-49d89ad24cc7",
-        "localAuthority": {
-          "localAuthorityAreaId": "d97c8005-3fbe-4b0d-8c0e-999e8d4109db",
-          "localAuthorityAreaName": "Oldham"
+        "action": {
+          "type": "ADD_DTR_REFERRAL_DETAILS"
         },
-        "referenceNumber": "OVI1MX1YRB",
-        "submissionDate": "2026-04-07",
-        "outcomeReason": "REJECTED_FOR_ANOTHER_REASON",
-        "createdBy": "Miss Elsie Reilly",
-        "createdAt": "2025-07-30T20:46:34.105Z"
-      }
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "COMPLETED",
-        "action": "abstergo summisse corpus triumphus damno",
-        "url": "https://pa.example.com/assessments/h271226",
-        "failureReasons": []
-      }
-    }
-  },
-  "U934069": {
-    "crn": "U934069",
-    "caseActions": ["Confirm next address", "Add proposed address", "Consider home visit"],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "action": "spiculum suspendo desino canto eos",
-        "url": "https://cas1.example.com/applications/u934069",
-        "failureReasons": []
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
-        "action": "caute thermae bellicus amoveo suffoco",
-        "url": "https://cas3.example.com/referrals/u934069",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://crs.example.com/referrals/u934069",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "ACCEPTED",
-        "action": "suppellex ager spectaculum aliqua voro",
-        "url": "https://dtr.example.com/submissions/u934069",
-        "failureReasons": []
-      },
-      "submission": {
-        "id": "4d984ce9-f66f-4df4-91a0-d98fb1804717",
-        "localAuthority": {
-          "localAuthorityAreaId": "dc288bea-85d5-4f02-956b-d4853238ee7b",
-          "localAuthorityAreaName": "Carlisle"
-        },
-        "referenceNumber": "NYUK6MNEFS",
-        "submissionDate": "2026-04-25",
-        "outcomeReason": "PRIORITY_NEED",
-        "createdBy": "Micheal Grimes",
-        "createdAt": "2025-11-20T07:01:11.296Z"
-      }
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "COMPLETED",
-        "action": "sub beneficium cuius curtus delectatio",
-        "url": "https://pa.example.com/assessments/u934069",
-        "failureReasons": []
-      }
-    }
-  },
-  "I322559": {
-    "crn": "I322559",
-    "caseActions": ["Consider home visit", "Submit a CRS referral"],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "UPCOMING",
-        "failureReasons": []
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://cas3.example.com/referrals/i322559",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://crs.example.com/referrals/i322559",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "action": "doloremque torqueo traho aegrus tergeo",
-        "url": "https://dtr.example.com/submissions/i322559",
-        "failureReasons": []
+        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
       },
       "submission": null
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://pa.example.com/assessments/i322559",
-        "failureReasons": []
+        "serviceStatus": "NOT_ELIGIBLE",
+        "action": {
+          "type": "START_CAS3_REFERRAL"
+        },
+        "failureReasons": ["INVALID_APPLICATION_STATE"]
       }
     }
   },
-  "L247269": {
-    "crn": "L247269",
-    "caseActions": ["Add proposed address", "Confirm next address", "Start CAS3 referral"],
+  "U934069": {
+    "crn": "U934069",
+    "caseActions": [
+      {
+        "type": "CREATE_PLACEMENT"
+      },
+      {
+        "type": "PROVIDE_INFORMATION"
+      }
+    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
-        "action": "defaeco celer summopere deinde iure",
-        "failureReasons": []
+        "serviceStatus": "CONFIRMED",
+        "action": {
+          "type": "CREATE_PLACEMENT"
+        },
+        "failureReasons": [],
+        "url": "https://happy-go-lucky-desk.net"
       }
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
-        "action": "quidem astrum tener derelinquo pax",
-        "url": "https://cas3.example.com/referrals/l247269",
-        "failureReasons": []
+        "serviceStatus": "REJECTED",
+        "action": {
+          "type": "PROVIDE_INFORMATION"
+        },
+        "failureReasons": [],
+        "url": "https://pure-event.net"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://meager-obligation.info"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ACCEPTED",
+        "failureReasons": [],
+        "url": "https://key-ocelot.org"
+      },
+      "submission": {
+        "id": "dd461fc9-50ce-4798-9c2f-593ec90e8d69",
+        "localAuthority": {
+          "localAuthorityAreaId": "a009ea3a-8186-4820-a702-935e408ea4a5",
+          "localAuthorityAreaName": "Rutland"
+        },
+        "referenceNumber": "HBXPJ3KVEQ",
+        "submissionDate": "2025-07-25",
+        "createdBy": "Judy Parisian",
+        "createdAt": "2026-03-01T01:46:36.177Z"
+      }
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://dapper-lotion.name"
+      }
+    }
+  },
+  "I322559": {
+    "crn": "I322559",
+    "caseActions": [
+      {
+        "type": "ADD_DTR_REFERRAL_DETAILS"
+      },
+      {
+        "type": "CONTINUE_APPROVED_PREMISE_APPLICATION",
+        "startDate": "2028-03-23"
+      },
+      {
+        "type": "ADD_DTR_OUTCOME",
+        "startDate": "2026-08-01"
+      }
+    ],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "action": {
+          "type": "ADD_DTR_REFERRAL_DETAILS"
+        },
+        "failureReasons": [],
+        "url": "https://velvety-intervention.name"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "action": {
+          "type": "CONTINUE_APPROVED_PREMISE_APPLICATION",
+          "startDate": "2028-03-23"
+        },
+        "failureReasons": ["NON_MALE_NOT_HIGH_RISK_TIER"]
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
-        "action": "depopulo tabella vester vinum comburo",
+        "action": {
+          "type": "ADD_DTR_OUTCOME",
+          "startDate": "2026-08-01"
+        },
+        "failureReasons": ["SUITABLE_CAS3_APPLICATION"]
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ACCEPTED",
+        "failureReasons": [],
+        "url": "https://tidy-tribe.biz"
+      },
+      "submission": {
+        "id": "8a03a410-3481-4fb0-932c-da8721215b86",
+        "localAuthority": {
+          "localAuthorityAreaId": "d949f1cd-927d-48b3-98bb-73b26ddfceb7",
+          "localAuthorityAreaName": "Derby"
+        },
+        "referenceNumber": "CTKUGYFUDG",
+        "submissionDate": "2025-12-27",
+        "createdBy": "Jonas Rodriguez",
+        "createdAt": "2026-06-05T07:31:27.499Z"
+      }
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://improbable-scholarship.net"
+      }
+    }
+  },
+  "L247269": {
+    "crn": "L247269",
+    "caseActions": [
+      {
+        "type": "ADD_DTR_REFERRAL_DETAILS",
+        "startDate": "2028-03-14"
+      },
+      {
+        "type": "CREATE_PLACEMENT",
+        "startDate": "2026-12-28"
+      },
+      {
+        "type": "ADD_DTR_OUTCOME",
+        "startDate": "2027-10-24"
+      },
+      {
+        "type": "PROVIDE_INFORMATION",
+        "startDate": "2026-09-27"
+      }
+    ],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "action": {
+          "type": "ADD_DTR_REFERRAL_DETAILS",
+          "startDate": "2028-03-14"
+        },
         "failureReasons": ["CRS_EXPIRED"]
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "WITHDRAWN",
+        "action": {
+          "type": "CREATE_PLACEMENT",
+          "startDate": "2026-12-28"
+        },
+        "failureReasons": [],
+        "url": "https://excitable-thigh.name"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "action": {
+          "type": "ADD_DTR_OUTCOME",
+          "startDate": "2027-10-24"
+        },
+        "failureReasons": [],
+        "url": "https://self-reliant-lawmaker.name/"
       },
       "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
-        "action": "deprecator ancilla alveus credo pectus",
-        "url": "https://dtr.example.com/submissions/l247269",
-        "failureReasons": []
+        "failureReasons": [],
+        "url": "https://worse-disadvantage.info/"
       },
       "submission": {
-        "id": "19a46769-b9cc-4207-99e2-2c53c8fc3d5c",
+        "id": "54f9f86e-26bf-4092-9fdf-bd46bccadcbf",
         "localAuthority": {
-          "localAuthorityAreaId": "b97c6768-d8e0-4221-b3a0-752ab80c842b",
-          "localAuthorityAreaName": "Falkirk"
+          "localAuthorityAreaId": "e13c6a73-f248-42f0-98c9-02eebfbb7560",
+          "localAuthorityAreaName": "Windsor and Maidenhead"
         },
-        "referenceNumber": "7RX70AXBQQ",
-        "submissionDate": "2025-10-16",
-        "createdBy": "Cielo Reichel",
-        "createdAt": "2025-11-17T23:35:15.184Z"
+        "referenceNumber": "RBRCVEMOA7",
+        "submissionDate": "2025-07-20",
+        "createdBy": "Ira Swift",
+        "createdAt": "2026-05-09T01:12:47.297Z"
       }
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "action": "volutabrum dignissimos copia iure calamitas",
-        "failureReasons": ["NO_CURRENT_ACCOMMODATION_END_DATE"]
+        "serviceStatus": "NOT_STARTED",
+        "action": {
+          "type": "PROVIDE_INFORMATION",
+          "startDate": "2026-09-27"
+        },
+        "failureReasons": [],
+        "url": "https://rowdy-possession.name/"
       }
     }
   },
   "F608163": {
     "crn": "F608163",
-    "caseActions": ["Confirm next address", "Add DTR outcome"],
+    "caseActions": [
+      {
+        "type": "SUBMIT_CRS_REFERRAL",
+        "startDate": "2027-01-20"
+      }
+    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+        "serviceStatus": "WITHDRAWN",
+        "failureReasons": [],
+        "url": "https://fluffy-sarong.info/"
       }
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "url": "https://cas3.example.com/referrals/f608163",
-        "failureReasons": []
+        "serviceStatus": "SUBMITTED",
+        "failureReasons": [],
+        "url": "https://glass-disconnection.com/"
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
-        "url": "https://crs.example.com/referrals/f608163",
-        "failureReasons": []
+        "failureReasons": [],
+        "url": "https://clueless-starboard.info"
       },
       "commissionedRehabilitativeServices": {
-        "status": "WITHDRAWN",
-        "submissionDate": "2026-02-28"
+        "status": "LIVE",
+        "submissionDate": "2026-05-28"
       }
     },
     "dtr": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
-        "url": "https://dtr.example.com/submissions/f608163",
-        "failureReasons": []
+        "action": {
+          "type": "SUBMIT_CRS_REFERRAL",
+          "startDate": "2027-01-20"
+        },
+        "failureReasons": [],
+        "url": "https://reckless-meadow.com"
       },
       "submission": {
-        "id": "c0d6bc13-4e12-4e5c-8611-56596e12f2c6",
+        "id": "77b83279-2844-4a47-9ccc-e82d7ee8e1d9",
         "localAuthority": {
-          "localAuthorityAreaId": "33e6b441-56f4-475d-93d5-132421d27e6d",
-          "localAuthorityAreaName": "Derry City and Strabane"
+          "localAuthorityAreaId": "8a87cf59-3d58-423b-938f-808acb51be1b",
+          "localAuthorityAreaName": "Buckinghamshire"
         },
-        "referenceNumber": "FKOPMZZM89",
-        "submissionDate": "2026-03-09",
-        "createdBy": "Cierra Crist",
-        "createdAt": "2025-11-04T19:54:08.724Z"
+        "referenceNumber": "ZX7NA11BCA",
+        "submissionDate": "2026-03-19",
+        "createdBy": "Lucas Dicki-Hackett",
+        "createdAt": "2026-05-31T14:02:26.154Z"
       }
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["INVALID_CURRENT_ACCOMMODATION_TYPE"]
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://clumsy-airmail.org/"
       }
     }
   }

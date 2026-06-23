@@ -1,6 +1,7 @@
 import { ServiceResult } from '@sas/api'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
+import actionFactory from './action'
 
 const serviceStatuses: Array<ServiceResult['serviceStatus']> = [
   'NOT_ELIGIBLE',
@@ -60,7 +61,7 @@ export default ServiceResultFactory.define(({ params }) => {
 
   return {
     serviceStatus,
-    action: faker.helpers.maybe(() => faker.lorem.words(5)),
+    action: faker.helpers.maybe(() => actionFactory.build()),
     failureReasons,
     url: ['NOT_ELIGIBLE', 'UPCOMING'].includes(serviceStatus) ? undefined : faker.internet.url(),
   }

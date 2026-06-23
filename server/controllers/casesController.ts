@@ -24,6 +24,7 @@ import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
+import { renderActions } from '../utils/actions'
 
 interface IndexRequest extends Request {
   query: GetCasesQuery
@@ -114,7 +115,7 @@ export default class CasesController {
         caseData: { ...caseData, name: displayName(caseData) },
         upstreamFailures,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
-        nextActions: data.eligibility?.caseActions || [],
+        nextActions: renderActions(data.eligibility?.caseActions),
         noFixedAbode: noFixedAbodeAlert(caseData, data.currentAccommodation),
         nextAccommodationCard: accommodationCard('next', data.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', data.currentAccommodation),

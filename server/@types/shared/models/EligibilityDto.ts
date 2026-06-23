@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { Cas1ServiceResult } from './Cas1ServiceResult'
 import type { Cas3ServiceResult } from './Cas3ServiceResult'
+import type { CaseAction } from './CaseAction'
 import type { CrsServiceResult } from './CrsServiceResult'
 import type { DtrServiceResult } from './DtrServiceResult'
 import type { PaServiceResult } from './PaServiceResult'
@@ -14,5 +15,5 @@ export type EligibilityDto = {
   dtr: DtrServiceResult
   crs: CrsServiceResult
   pa: PaServiceResult
-  caseActions: Array<string>
+  caseActions: Array<CaseAction>
 }

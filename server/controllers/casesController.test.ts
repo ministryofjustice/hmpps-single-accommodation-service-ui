@@ -23,6 +23,7 @@ import { referralHistoryRows } from '../utils/referrals'
 import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 import UserService from '../services/userService'
+import { renderActions } from '../utils/actions'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -175,7 +176,7 @@ describe('casesController', () => {
         caseData: { ...caseData, name: 'John Smith (limited access offender)' },
         upstreamFailures: [],
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
-        nextActions: eligibility.caseActions,
+        nextActions: renderActions(eligibility.caseActions),
         noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),
         nextAccommodationCard: accommodationCard('next', nextAccommodation),
         currentAccommodationCard: accommodationCard('current', currentAccommodation),

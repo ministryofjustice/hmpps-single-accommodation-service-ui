@@ -1,28 +1,24 @@
 import { EligibilityDto } from '@sas/api'
 import { Factory } from 'fishery'
-import { faker } from '@faker-js/faker'
 import crn from '../crn'
 import serviceResultFactory from './serviceResult'
 import dtrServiceResultFactory from './dtrServiceResult'
 import crsServiceResultFactory from './crsServiceResult'
 
-const caseActions = [
-  'Confirm next address',
-  'Add DTR outcome',
-  'Add proposed address',
-  'Start CAS3 referral',
-  'Submit a CRS referral',
-  'Consider home visit',
-]
-
 export default Factory.define<EligibilityDto>(() => {
+  const cas1 = { serviceResult: serviceResultFactory.build() }
+  const cas3 = { serviceResult: serviceResultFactory.build() }
+  const crs = crsServiceResultFactory.build()
+  const dtr = dtrServiceResultFactory.build()
+  const pa = { serviceResult: serviceResultFactory.pa().build() }
+
   return {
     crn: crn(),
-    caseActions: faker.helpers.arrayElements(caseActions, { min: 1, max: 3 }),
-    cas1: { serviceResult: serviceResultFactory.build() },
-    cas3: { serviceResult: serviceResultFactory.build() },
-    crs: crsServiceResultFactory.build(),
-    dtr: dtrServiceResultFactory.build(),
-    pa: { serviceResult: serviceResultFactory.pa().build() },
+    caseActions: [cas1, cas3, crs, dtr, pa].flatMap(result => result.serviceResult.action).filter(Boolean),
+    cas1,
+    cas3,
+    crs,
+    dtr,
+    pa,
   }
 })

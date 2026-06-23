@@ -54,7 +54,7 @@
           {% if nextActions | length %}
             <ul class="govuk-list govuk-list--bullet">
               {% for action in nextActions %}
-                <li>{{ action }}</li>
+                <li>{{ action | safe }}</li>
               {% endfor %}
             </ul>
           {% endif %}

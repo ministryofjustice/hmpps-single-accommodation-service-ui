@@ -22,6 +22,7 @@ import {
   nextActionButton,
   verificationStatusLabels,
   nextAccommodationStatusLabels,
+  validateNote,
 } from '../utils/proposedAddresses'
 import {
   fetchErrorsAndUserInput,
@@ -104,10 +105,7 @@ export default class ProposedAddressesController {
       const { token } = res.locals.user
       const { note } = req.body
 
-      if (!note) {
-        validateAndFlashErrors(req, {
-          note: 'Enter a note',
-        })
+      if (!validateNote(req)) {
         return res.redirect(uiPaths.proposedAddresses.show({ crn, id }))
       }
 

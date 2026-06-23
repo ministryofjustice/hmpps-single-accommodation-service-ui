@@ -29,6 +29,9 @@ class DtrSubmissionFactory extends Factory<DtrSubmissionDto> {
     const submissionNote = faker.helpers.maybe(() => faker.lorem.sentence())
     return this.params({
       outcomeReason: undefined,
+      outcomeNote: undefined,
+      withdrawalReason: undefined,
+      withdrawalReasonOther: undefined,
       submissionNote,
     })
   }
@@ -36,7 +39,7 @@ class DtrSubmissionFactory extends Factory<DtrSubmissionDto> {
   accepted() {
     const outcomeReason = faker.helpers.arrayElement(acceptedOutcomeReasons)
     const outcomeNote = faker.helpers.maybe(() => faker.lorem.sentence())
-    return this.params({ outcomeReason, outcomeNote })
+    return this.params({ outcomeReason, outcomeNote, withdrawalReason: undefined, withdrawalReasonOther: undefined })
   }
 
   notAccepted() {
@@ -45,6 +48,8 @@ class DtrSubmissionFactory extends Factory<DtrSubmissionDto> {
     return this.params({
       outcomeReason,
       outcomeNote,
+      withdrawalReason: undefined,
+      withdrawalReasonOther: undefined,
     })
   }
 

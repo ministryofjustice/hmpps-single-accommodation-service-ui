@@ -276,17 +276,18 @@ describe('duty to refer utils', () => {
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
         submissionDate: 'Enter a submission date',
-        localAuthorityAreaId: 'Select a local authority',
+        localAuthorityAreaId: 'Enter a local authority',
       })
       expect(result).toEqual(false)
     })
 
-    it('returns true when submission date and local authority are valid', () => {
+    it('returns true when submission date, local authority, and reference number are valid', () => {
       req.body = {
         localAuthorityAreaId: 'la-id',
         'submissionDate-day': '1',
         'submissionDate-month': '2',
         'submissionDate-year': '2025',
+        referenceNumber: 'REF123',
       }
 
       const result = validateSubmission(req)
@@ -311,7 +312,7 @@ describe('duty to refer utils', () => {
       const result = validateOutcome(req)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-        outcomeReason: 'Select duty to refer outcome',
+        outcomeReason: 'Select a Duty to Refer (DTR) outcome',
       })
       expect(result).toBe(false)
     })

@@ -19,7 +19,7 @@ export const getPageBackLink = (
   pagePattern: string,
   req: Request,
   matchList: Array<Path>,
-  defaultPath = '/',
+  defaultPath?: string,
 ): string => {
   const {
     session,
@@ -33,7 +33,7 @@ export const getPageBackLink = (
     session.pageReferers[pagePattern] = referer
   }
 
-  return foundReferer ? referer : lastReferer || defaultPath
+  return foundReferer ? referer : lastReferer || defaultPath || getCaseListUrl(req)
 }
 
 /**

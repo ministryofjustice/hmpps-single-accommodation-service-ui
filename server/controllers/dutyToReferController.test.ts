@@ -20,6 +20,7 @@ import {
   apiResponseFactory,
   auditRecordFactory,
   caseFactory,
+  dtrSubmissionFactory,
   dutyToReferFactory,
   referenceDataFactory,
 } from '../testutils/factories'
@@ -195,7 +196,8 @@ describe('dutyToReferController', () => {
     })
 
     it('keeps submission status when editing an existing submission that has an outcome', async () => {
-      const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123' })
+      const submission = dtrSubmissionFactory.accepted().build({outcomeNote: 'This is an outcome note'})
+      const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123', submission })
       const outcomeReason = dutyToRefer.submission?.outcomeReason
       const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
@@ -211,7 +213,7 @@ describe('dutyToReferController', () => {
         referenceNumber: 'REF123',
         outcomeReason,
         submissionNote: null,
-        outcomeNote: dutyToRefer.submission?.outcomeNote ?? null,
+        outcomeNote: 'This is an outcome note',
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')

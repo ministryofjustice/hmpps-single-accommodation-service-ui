@@ -91,6 +91,7 @@ export const casesTableColumns = () => {
 }
 
 export const caseAssignedTo = (c: Case, username: string): string => {
+  if (!c.assignedTo) return 'unallocated'
   const fullName = `${c.assignedTo.forename} ${c.assignedTo.surname}`
   return c.assignedTo?.username.toUpperCase() === username.toUpperCase() ? `You (${fullName})` : fullName
 }

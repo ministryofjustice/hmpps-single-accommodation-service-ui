@@ -188,7 +188,14 @@ describe('cases utilities', () => {
       const person = caseFactory.build({
         assignedTo: { username: 'bob_johnson', forename: 'Bob', surname: 'Johnson' },
       })
+
       expect(caseAssignedTo(person, 'alice_smith')).toEqual('Bob Johnson')
+    })
+
+    it('returns "unallocated" if assigned to is null', () => {
+      const person = caseFactory.build({ assignedTo: null })
+
+      expect(caseAssignedTo(person, 'current_user')).toEqual('unallocated')
     })
   })
 

@@ -4,7 +4,13 @@ import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { Link, StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, isoDateToDateInput, formatDateAndAge, dateFieldParts } from './dates'
 import uiPaths from '../paths/ui'
-import { validateAndFlashErrors, validateDateField, validateRadioButton, validateMandatoryText, validateMaxLength } from './validation'
+import {
+  validateAndFlashErrors,
+  validateDateField,
+  validateRadioButton,
+  validateMandatoryText,
+  validateMaxLength,
+} from './validation'
 import { renderMacro, statusTag } from './macros'
 import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
 import { noteTimelineEntry, timelineEntry } from './timeline'
@@ -172,7 +178,9 @@ export const validateWithdraw = (req: Request) => {
   errors.withdrawalReason = validateRadioButton(withdrawalReason, 'withdrawal reason')
 
   if (withdrawalReason === 'OTHER') {
-    errors.withdrawalReasonOther = validateMandatoryText(withdrawalReasonOther, 'other reason for withdrawal', '' ) || validateMaxLength(withdrawalReasonOther, 'Other reason for withdrawal', 4000)
+    errors.withdrawalReasonOther =
+      validateMandatoryText(withdrawalReasonOther, 'other reason for withdrawal', '') ||
+      validateMaxLength(withdrawalReasonOther, 'Other reason for withdrawal', 4000)
   }
 
   return validateAndFlashErrors(req, errors)

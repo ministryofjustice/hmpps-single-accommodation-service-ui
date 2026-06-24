@@ -18,11 +18,7 @@ import {
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
-import {
-  addGenericErrorToFlash,
-  addUserInputToFlash,
-  fetchErrorsAndUserInput,
-} from '../utils/validation'
+import { addGenericErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'

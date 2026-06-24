@@ -105,11 +105,8 @@ export const validateAutocomplete = (
   prefix: string = aOrAn(label),
 ): string | undefined => (!isBlank(value) ? undefined : `Select ${prefix} ${label} from the list`)
 
-export const validateMaxLength = (
-  value: string | undefined,
-  label: string,
-  maxLength: number,
-): string | undefined => (value && value.length > maxLength ? `${label} must be ${maxLength} characters or less` : undefined)
+export const validateMaxLength = (value: string | undefined, label: string, maxLength: number): string | undefined =>
+  value && value.length > maxLength ? `${label} must be ${maxLength} characters or less` : undefined
 
 const blankDateParts = ({ day, month, year }: DateFieldParts): string[] => {
   const blankParts: string[] = []
@@ -119,8 +116,11 @@ const blankDateParts = ({ day, month, year }: DateFieldParts): string[] => {
   return blankParts
 }
 
-export const validateDateFull = (parts: DateFieldParts, label: string, prefix: string = aOrAn(label)): string | undefined =>
-  blankDateParts(parts).length === 3 ? `Enter ${prefix} ${label}` : undefined
+export const validateDateFull = (
+  parts: DateFieldParts,
+  label: string,
+  prefix: string = aOrAn(label),
+): string | undefined => (blankDateParts(parts).length === 3 ? `Enter ${prefix} ${label}` : undefined)
 
 export const validateDateParts = (parts: DateFieldParts, label: string): string | undefined => {
   const blankParts = blankDateParts(parts)
@@ -178,7 +178,9 @@ export const validateDateNotBefore = (
 ): string | undefined => {
   if (!isRealDate(endDate) || !isRealDate(startDate)) return undefined
 
-  return datePartsToUtcDate(endDate) < datePartsToUtcDate(startDate) ? `The ${endDateLabel} cannot be before the ${startDateLabel}` : undefined
+  return datePartsToUtcDate(endDate) < datePartsToUtcDate(startDate)
+    ? `The ${endDateLabel} cannot be before the ${startDateLabel}`
+    : undefined
 }
 
 export const validateDateField = (parts: DateFieldParts, label: string): string | undefined =>

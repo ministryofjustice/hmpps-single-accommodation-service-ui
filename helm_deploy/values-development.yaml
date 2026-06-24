@@ -13,6 +13,10 @@ generic-service:
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     SAS_API_URL: 'https://single-accommodation-service-api-dev.hmpps.service.justice.gov.uk'
+    SAS_API_TIMEOUT_RESPONSE: 5000
+    SAS_API_TIMEOUT_DEADLINE: 10000
+    SAS_CASES_API_TIMEOUT_RESPONSE: 5000
+    SAS_CASES_API_TIMEOUT_DEADLINE: 10000
     ENVIRONMENT: development
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"

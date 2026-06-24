@@ -216,13 +216,14 @@ describe('validators', () => {
     ['validateAutocomplete', validateAutocomplete, 'Select', 'from the list'],
   ])('validateRequired validators: %s', (_name, validator, action, suffix = '') => {
     it.each([
-      ['a value', 'reason', undefined],
-      [undefined, 'reason', `${action} a reason${suffix ? ` ${suffix}` : ''}`],
-      ['', 'reason', `${action} a reason${suffix ? ` ${suffix}` : ''}`],
-      [undefined, 'address', `${action} an address${suffix ? ` ${suffix}` : ''}`],
-      [undefined, 'email address', `${action} an email address${suffix ? ` ${suffix}` : ''}`],
-    ])('returns expected error for value "%s" and label "%s"', (value, label, expected) => {
-      expect(validator(value, label)).toBe(expected)
+      ['a value', 'reason', undefined, undefined],
+      [undefined, 'reason', undefined, `${action} a reason${suffix ? ` ${suffix}` : ''}`],
+      ['', 'reason', undefined, `${action} a reason${suffix ? ` ${suffix}` : ''}`],
+      [undefined, 'address', undefined, `${action} an address${suffix ? ` ${suffix}` : ''}`],
+      [undefined, 'email address', undefined, `${action} an email address${suffix ? ` ${suffix}` : ''}`],
+      [undefined, 'RSVP', 'an', `${action} an RSVP${suffix ? ` ${suffix}` : ''}`],
+    ])('returns expected error for value "%s" and label "%s"', (value, label, prefix, expected) => {
+      expect(validator(value, label, prefix)).toBe(expected)
     })
   })
 

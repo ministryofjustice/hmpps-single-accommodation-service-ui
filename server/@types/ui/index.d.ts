@@ -5,6 +5,7 @@ import {
   UpstreamFailureDto,
 } from '@sas/api'
 import { SummaryListRow } from '@govuk/ui'
+import { Request } from 'express'
 
 export interface ErrorSummary {
   text: string
@@ -67,6 +68,10 @@ export type GetCasesQuery = {
   searchTerm?: string
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
   teamCode?: string
+}
+
+export interface IndexRequest extends Request {
+  query: GetCasesQuery
 }
 
 export type DividerItem = {

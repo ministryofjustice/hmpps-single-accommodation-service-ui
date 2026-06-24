@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import { GetCasesQuery } from '@sas/ui'
+import { IndexRequest } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import {
@@ -25,10 +25,7 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-
-interface IndexRequest extends Request {
-  query: GetCasesQuery
-}
+import { setCaseListUrl } from '../utils/backlinks'
 
 export default class CasesController {
   constructor(
@@ -47,6 +44,8 @@ export default class CasesController {
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
+
+      setCaseListUrl(req)
 
       const {
         data: { teams, cases },

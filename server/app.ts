@@ -22,6 +22,7 @@ import routes from './routes'
 import type { Services } from './services'
 import config from './config'
 import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedirect'
+import { getCaseListUrl } from './utils/backlinks'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -43,6 +44,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpMaintenancePageRedirect())
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')
+    res.locals.caseListUrl = getCaseListUrl(req)
     next()
   })
   app.use(setUpFrontendComponents())

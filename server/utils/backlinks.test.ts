@@ -2,7 +2,8 @@ import { mock } from 'jest-mock-extended'
 import { Session } from 'express-session'
 import { Request } from 'express'
 import * as backlinksUtils from './backlinks'
-import { getFlowRedirect, getPageBackLink, setFlowRedirect } from './backlinks'
+import { getCaseListUrl, getFlowRedirect, getPageBackLink, setCaseListUrl, setFlowRedirect } from './backlinks'
+import uiPaths from '../paths/ui'
 
 describe('Link management', () => {
   const matchList = ['/pattern1/:param', '/pattern2/']
@@ -22,6 +23,10 @@ describe('Link management', () => {
   const nonMatchingReferer = 'http://domain/pattern3/someParameter'
   const lastStoredReferer = 'http://last/stored/222333444555'
 
+  beforeEach(() => {
+    jest.restoreAllMocks()
+  })
+
   describe('getPageBackLink', () => {
     it('should return the referer if it matches a provided path', () => {
       const request = mockRequest(matchingReferer, undefined)
@@ -34,10 +39,11 @@ describe('Link management', () => {
       expect(getPageBackLink(pagePattern, request, matchList)).toEqual(lastStoredReferer)
     })
 
-    it('should return a homepage link if there is no stored referer and the current referer does not match a path', () => {
+    it('should return a case list url if there is no stored referer and the current referer does not match a path', () => {
+      jest.spyOn(backlinksUtils, 'getCaseListUrl').mockReturnValue('/?teamCode=N34')
       const request = mockRequest(null, null)
       request.session = {} as Session
-      expect(getPageBackLink(pagePattern, request, matchList)).toEqual('/')
+      expect(getPageBackLink(pagePattern, request, matchList)).toEqual('/?teamCode=N34')
     })
 
     it('should return the provided default path if there is no stored referer and the current referer does not match a path', () => {
@@ -79,6 +85,39 @@ describe('Link management', () => {
       request.session = {} as Session
 
       expect(getFlowRedirect(pagePattern, request)).toEqual('/')
+    })
+  })
+
+  describe('getCaseListUrl', () => {
+    it('returns the base case list link if none is in session', () => {
+      const request = mock<Request>()
+
+      expect(getCaseListUrl(request)).toEqual(uiPaths.cases.index({}))
+    })
+
+    it('returns the case list link saved in session', () => {
+      const request = mock<Request>({
+        session: {
+          caseListUrl: '/?foo=bar&qux=0',
+        },
+      })
+
+      expect(getCaseListUrl(request)).toEqual('/?foo=bar&qux=0')
+    })
+  })
+
+  describe('setCaseListUrl', () => {
+    it('sets the given case list link in session', () => {
+      const request = mock<Request>({
+        query: {
+          teamCode: 'YES',
+          a: 'b',
+        },
+      })
+
+      setCaseListUrl(request)
+
+      expect(request.session.caseListUrl).toEqual('/?teamCode=YES&a=b')
     })
   })
 })

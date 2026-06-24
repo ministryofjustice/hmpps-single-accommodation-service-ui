@@ -24,6 +24,7 @@ import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
+import * as backLinksUtils from '../utils/backlinks'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -77,6 +78,7 @@ describe('casesController', () => {
 
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
+      jest.spyOn(backLinksUtils, 'setCaseListUrl')
     })
 
     it('renders the case list page for the current user by default', async () => {
@@ -91,6 +93,7 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
+      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {})
       expect(response.render).toHaveBeenCalledWith('pages/index', {
@@ -121,6 +124,7 @@ describe('casesController', () => {
         riskLevel: 'HIGH',
         teamCode: 'team-code',
       })
+      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
         resultsSummary: casesResultsSummary(cases),

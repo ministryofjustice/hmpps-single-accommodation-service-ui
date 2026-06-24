@@ -31,7 +31,7 @@
       {%- endif %}
 
       <p>
-        {{ context.name }}<br />
+        {% if context.name %}{{ context.name }}<br />{% endif %}
         <span class="govuk-hint">{{ context.address | safe }}</span>
       </p>
       {% if context.cardType === 'next' %}

@@ -242,7 +242,7 @@ describe('validators', () => {
 
   describe('validateDateInPast', () => {
     beforeEach(() => {
-      jest.useFakeTimers().setSystemTime(new Date('2026-01-1'))
+      jest.useFakeTimers().setSystemTime(new Date('2026-01-01'))
     })
 
     afterEach(() => {
@@ -263,7 +263,7 @@ describe('validators', () => {
 
   describe('validateDateTodayOrPast', () => {
     beforeEach(() => {
-      jest.useFakeTimers().setSystemTime(new Date('2026-01-1'))
+      jest.useFakeTimers().setSystemTime(new Date('2026-01-01'))
     })
 
     afterEach(() => {

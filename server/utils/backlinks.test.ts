@@ -2,7 +2,7 @@ import { mock } from 'jest-mock-extended'
 import { Session } from 'express-session'
 import { Request } from 'express'
 import * as backlinksUtils from './backlinks'
-import { getCaseListUrl, getFlowRedirect, getPageBackLink, setCaseListUrl, setFlowRedirect } from './backlinks'
+import { getCaseListUrl, getPageBackLink, setCaseListUrl } from './backlinks'
 import uiPaths from '../paths/ui'
 
 describe('Link management', () => {
@@ -50,41 +50,6 @@ describe('Link management', () => {
       const request = mockRequest(null, null)
       request.session = {} as Session
       expect(getPageBackLink(pagePattern, request, matchList, 'defaultPath')).toEqual('defaultPath')
-    })
-  })
-
-  describe('setFlowRedirect', () => {
-    it('should call getPageBackLink and return the result', () => {
-      const request = mockRequest(null, '/last-stored-url')
-      jest.spyOn(backlinksUtils, 'getPageBackLink')
-
-      const redirect = setFlowRedirect(pagePattern, request, matchList)
-
-      expect(backlinksUtils.getPageBackLink).toHaveBeenCalledWith(pagePattern, request, matchList, '/')
-      expect(redirect).toEqual('/last-stored-url')
-    })
-  })
-
-  describe('getFlowRedirect', () => {
-    it('should return the stored referer for the given page pattern', () => {
-      const storedUrl = '/cases/CRN123/dtr'
-      const request = mockRequest(null, storedUrl)
-
-      expect(getFlowRedirect(pagePattern, request)).toEqual(storedUrl)
-    })
-
-    it('should return the default path when no stored referer exists', () => {
-      const request = mockRequest(null, null)
-      request.session = {} as Session
-
-      expect(getFlowRedirect(pagePattern, request, 'defaultPath')).toEqual('defaultPath')
-    })
-
-    it('should return "/" when no stored referer exists and no default is provided', () => {
-      const request = mockRequest(null, null)
-      request.session = {} as Session
-
-      expect(getFlowRedirect(pagePattern, request)).toEqual('/')
     })
   })
 

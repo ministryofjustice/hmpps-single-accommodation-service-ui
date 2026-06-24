@@ -93,7 +93,7 @@
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-probation-frontend-components": "1.0.2",
-    "@ministryofjustice/hmpps-rest-client": "^2.1.0",
+    "@ministryofjustice/hmpps-rest-client": "2.2.0",
     "@pact-foundation/pact": "16.5.0",
     "@pactflow/openapi-pact-comparator": "^2.0.0",
     "@playwright/test": "^1.60.0",

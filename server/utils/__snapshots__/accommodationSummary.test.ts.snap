@@ -4,7 +4,7 @@ exports[`accommodationSummary accommodation history accommodationHistoryRows ret
 [
   [
     {
-      "text": "27 April 2026",
+      "text": "",
     },
     {
       "text": "",
@@ -94,7 +94,7 @@ exports[`accommodationSummary accommodation history accommodationHistoryTable ma
     
       
       
-      <td class="govuk-table__cell">27 April 2026</td>
+      <td class="govuk-table__cell"></td>
       
     
       

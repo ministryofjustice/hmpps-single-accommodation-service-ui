@@ -122,7 +122,7 @@ export const accommodationSummaryAddress = (accommodation: AccommodationSummaryD
 
 export const accommodationHistoryRows = (history?: AccommodationSummaryDto[]): TableRow[] => {
   return (history ?? []).map(accommodation => [
-    textContent(formatDate(accommodation.startDate)),
+    textContent(accommodation.startDate ? formatDate(accommodation.startDate) : ''),
     textContent(accommodation.endDate ? formatDate(accommodation.endDate) : ''),
     htmlContent(accommodationSummaryAddress(accommodation)),
     htmlContent(accommodation.status ? statusTag(accommodationSummaryStatusTag(accommodation.status)) : ''),

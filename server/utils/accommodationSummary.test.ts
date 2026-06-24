@@ -90,7 +90,8 @@ describe('accommodationSummary', () => {
   describe('accommodation history', () => {
     const accommodationHistory = [
       accommodationSummaryFactory.build({
-        startDate: '2026-04-27',
+        startDate: undefined,
+        endDate: undefined,
         status: { code: 'M', description: 'Main' },
         type: { code: 'A02', description: 'Approved Premises' },
         address: addressFactory.minimal().build({

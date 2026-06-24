@@ -1,13 +1,8 @@
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
-import { DutyToReferDto, AccommodationReferralDto as Referral } from '@sas/api'
+import { DtrSubmissionDto, DutyToReferDto, AccommodationReferralDto as Referral } from '@sas/api'
 import staffDetailsFactory from './staffDetails'
-import {
-  acceptedOutcomeReasons,
-  notAcceptedOutcomeReasons,
-  statusToOutcomeReason,
-  withdrawalReasons,
-} from './dutyToRefer'
+import { acceptedOutcomeReasons, notAcceptedOutcomeReasons, withdrawalReasons } from './dutyToReferSubmission'
 import referenceDataFactory from './referenceData'
 
 const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as Referral['status'][]
@@ -61,6 +56,12 @@ const cas3Referrals: ReferralParams[] = [
   () => ({ placementStatus: 'DEPARTED', pdu: faker.location.city(), placementAddress: shortAddress() }),
   () => ({ placementStatus: 'CANCELLED', pdu: faker.location.city(), placementAddress: shortAddress() }),
 ]
+
+export const statusToOutcomeReason = (status: DutyToReferDto['status']): DtrSubmissionDto['outcomeReason'] | null => {
+  if (status === 'ACCEPTED') return faker.helpers.arrayElement(acceptedOutcomeReasons)
+  if (status === 'NOT_ACCEPTED') return faker.helpers.arrayElement(notAcceptedOutcomeReasons)
+  return null
+}
 
 class ReferralFactory extends Factory<Referral> {
   dtrReferral() {

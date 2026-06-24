@@ -1,11 +1,11 @@
 {% extends "pages/duty-to-refer/layout.njk" %}
-
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% block formContent %}
-    {{ govukDateInput({
+  {{
+    govukDateInput({
         id: "submissionDate",
         namePrefix: "submissionDate",
         fieldset: {
@@ -35,8 +35,10 @@
                 value: formValues["submissionDate-year"]
             }
         ]
-    })}}
-    {{ govukSelect({
+    })
+  }}
+  {{
+    govukSelect({
         label: {
             text: 'What local authority was the DTR submitted to?',
             classes: "govuk-!-font-weight-bold govuk-label--s"
@@ -50,9 +52,11 @@
         name: 'localAuthorityAreaId',
         id: 'localAuthorityAreaId',
         errorMessage: errors.localAuthorityAreaId
-    }) }}
+    })
+  }}
 
-    {{ govukInput({
+  {{
+    govukInput({
         label: {
             text: 'Reference number (optional)',
             classes: 'govuk-!-font-weight-bold govuk-label--s'
@@ -61,5 +65,19 @@
         name: 'referenceNumber',
         id: 'referenceNumber',
         value: formValues.referenceNumber
-    }) }}
+    })
+  }}
+
+  {{
+    govukTextarea({
+        name: "submissionNote",
+        label: {
+            text: "Add note (optional)",
+            classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-two-thirds",
+        value: formValues.submissionNote,
+        errorMessage: errors.submissionNote
+    })
+  }}
 {% endblock %}

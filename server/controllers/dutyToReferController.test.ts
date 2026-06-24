@@ -20,6 +20,7 @@ import {
   apiResponseFactory,
   auditRecordFactory,
   caseFactory,
+  dtrSubmissionFactory,
   dutyToReferFactory,
   referenceDataFactory,
 } from '../testutils/factories'
@@ -148,6 +149,7 @@ describe('dutyToReferController', () => {
           'submissionDate-year': '2025',
           'submissionDate-month': '06',
           'submissionDate-day': '15',
+          submissionNote: '',
         },
         flash: jest.fn(),
       })
@@ -156,6 +158,7 @@ describe('dutyToReferController', () => {
     it('submits and redirects to the case details page', async () => {
       const dtr = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
       dutyToReferService.submit.mockResolvedValue(dtr)
+      request.body.submissionNote = 'This is a note'
 
       await controller.saveSubmission('add')(request, response, next)
 
@@ -164,6 +167,7 @@ describe('dutyToReferController', () => {
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
+        submissionNote: 'This is a note',
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'New DTR referral details added')
@@ -184,6 +188,7 @@ describe('dutyToReferController', () => {
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
+        submissionNote: null,
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
@@ -191,7 +196,8 @@ describe('dutyToReferController', () => {
     })
 
     it('keeps submission status when editing an existing submission that has an outcome', async () => {
-      const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123' })
+      const submission = dtrSubmissionFactory.accepted().build({ outcomeNote: 'This is an outcome note' })
+      const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123', submission })
       const outcomeReason = dutyToRefer.submission?.outcomeReason
       const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
@@ -206,6 +212,8 @@ describe('dutyToReferController', () => {
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
         outcomeReason,
+        submissionNote: null,
+        outcomeNote: 'This is an outcome note',
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
@@ -223,6 +231,7 @@ describe('dutyToReferController', () => {
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
+        submissionNote: null,
       })
       expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
       expect(request.flash).toHaveBeenCalledWith('success', {
@@ -336,6 +345,8 @@ describe('dutyToReferController', () => {
           localAuthorityAreaId: 'la-id',
           referenceNumber: 'REF123',
           currentStatus: 'SUBMITTED',
+          submissionNote: '',
+          outcomeNote: '',
         },
         flash: jest.fn(),
       })
@@ -350,6 +361,8 @@ describe('dutyToReferController', () => {
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
+        submissionNote: null,
+        outcomeNote: null,
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details added')
       expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
@@ -357,6 +370,7 @@ describe('dutyToReferController', () => {
 
     it('updates an existing outcome and redirects to the details page', async () => {
       request.body.currentStatus = 'NOT_ACCEPTED'
+      request.body.outcomeNote = 'Some note'
 
       await controller.saveOutcome()(request, response, next)
 
@@ -366,6 +380,8 @@ describe('dutyToReferController', () => {
         submissionDate: '2025-06-15',
         localAuthorityAreaId: 'la-id',
         referenceNumber: 'REF123',
+        submissionNote: null,
+        outcomeNote: 'Some note',
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details updated')
       expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
@@ -555,6 +571,9 @@ describe('dutyToReferController', () => {
           referenceNumber: 'REF123',
           withdrawalReason: 'NO_CONSENT',
           withdrawalReasonOther: '',
+          submissionNote: '',
+          outcomeReason: '',
+          outcomeNote: '',
         },
         flash: jest.fn(),
       })
@@ -570,6 +589,7 @@ describe('dutyToReferController', () => {
         referenceNumber: 'REF123',
         withdrawalReason: 'NO_CONSENT',
         withdrawalReasonOther: null,
+        submissionNote: null,
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral withdrawn')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))

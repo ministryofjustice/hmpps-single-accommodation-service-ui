@@ -26,6 +26,14 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "REF123",
     },
   },
+  {
+    "key": {
+      "text": "Note",
+    },
+    "value": {
+      "text": "This is a submission note",
+    },
+  },
 ]
 `;
 
@@ -53,6 +61,14 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
     },
     "value": {
       "text": "REF123",
+    },
+  },
+  {
+    "key": {
+      "text": "Note",
+    },
+    "value": {
+      "text": "This is a submission note",
     },
   },
 ]
@@ -90,6 +106,14 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
     },
     "value": {
       "text": "REF123",
+    },
+  },
+  {
+    "key": {
+      "text": "Note",
+    },
+    "value": {
+      "text": "This is a submission note",
     },
   },
 ]
@@ -207,6 +231,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not include outcome s
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
@@ -215,6 +241,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not include outcome s
       
         
           <li>Reason changed to: No local connection</li>
+        
+      
         
       
     </ul>
@@ -243,12 +271,16 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not show local author
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
       
         
           <li>Date submitted changed to: 17 April 2025 (237 days ago)</li>
+        
+      
         
       
         
@@ -285,6 +317,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry includes outcome support t
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
@@ -293,6 +327,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry includes outcome support t
       
         
           <li>Reason changed to: Prevention and relief duty</li>
+        
+      
         
       
     </ul>
@@ -351,6 +387,12 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
       </p>
     
   
+    
+      <p class="govuk-!-margin-bottom-1">
+        Note: No note added
+      </p>
+    
+  
 
   ",
   "label": {
@@ -377,6 +419,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
@@ -391,6 +435,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
       
         
           <li>Reference changed to: REF456</li>
+        
+      
         
       
     </ul>
@@ -427,6 +473,12 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
       </p>
     
   
+    
+      <p class="govuk-!-margin-bottom-1">
+        Note: No note added
+      </p>
+    
+  
 
   ",
   "label": {
@@ -453,6 +505,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
@@ -461,6 +515,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
       
         
           <li>Reason changed to: Intentionally homeless</li>
+        
+      
         
       
     </ul>
@@ -489,6 +545,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority but 
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
@@ -497,6 +555,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority but 
       
         
           <li>Local authority changed to: Vale of White Horse District Council</li>
+        
+      
         
       
         
@@ -527,6 +587,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in s
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
@@ -541,6 +603,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in s
       
         
           <li>Reference changed to: REF999</li>
+        
+      
         
       
     </ul>
@@ -569,6 +633,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows reference removed wh
   
     
   
+    
+  
 
   
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
@@ -579,6 +645,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows reference removed wh
       
         
           <li>Reference removed</li>
+        
+      
         
       
     </ul>
@@ -607,6 +675,14 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "text": "Intentionally homeless",
     },
   },
+  {
+    "key": {
+      "text": "Note",
+    },
+    "value": {
+      "text": "This is an outcome note",
+    },
+  },
 ]
 `;
 
@@ -626,6 +702,14 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
     },
     "value": {
       "text": "Intentionally homeless",
+    },
+  },
+  {
+    "key": {
+      "text": "Note",
+    },
+    "value": {
+      "text": "This is an outcome note",
     },
   },
 ]

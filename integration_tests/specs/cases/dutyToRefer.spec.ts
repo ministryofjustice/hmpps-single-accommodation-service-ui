@@ -218,7 +218,7 @@ test.describe('duty to refer', () => {
     const submissionId = submittedDutyToRefer.submission.id
     const updatedDutyToRefer = dutyToReferFactory.submitted().build({
       ...submittedDutyToRefer,
-      submission: dtrSubmissionFactory.build({ id: submissionId }),
+      submission: dtrSubmissionFactory.build({ id: submissionId, submissionNote: 'Updated note' }),
     })
     const submittedDutyToReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
     const updatedDutyToReferRecord = auditRecordFactory.dutyToReferUpdated(submittedDutyToRefer.submission).build()

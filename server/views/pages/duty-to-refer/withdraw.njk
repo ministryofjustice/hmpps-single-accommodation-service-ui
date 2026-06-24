@@ -8,7 +8,8 @@
 {% set submitButtonText = "Withdraw referral" %}
 
 {% set conditionalHtml %}
-    {{ govukInput(
+  {{
+    govukInput(
         {
             label: {
                 text: 'What is the other reason?'
@@ -18,13 +19,17 @@
             value: withdrawalReasonOther,
             errorMessage: errors.withdrawalReasonOther
         }
-    ) }}
+    )
+  }}
 {% endset %}
 
 {% block formContent %}
   <input type="hidden" name="submissionDate" value="{{ dtr.submission.submissionDate }}" />
   <input type="hidden" name="localAuthorityAreaId" value="{{ dtr.submission.localAuthority.localAuthorityAreaId }}" />
   <input type="hidden" name="referenceNumber" value="{{ dtr.submission.referenceNumber }}" />
+  <input type="hidden" name="submissionNote" value="{{ dtr.submission.submissionNote }}" />
+  <input type="hidden" name="outcomeReason" value="{{ dtr.submission.outcomeReason }}" />
+  <input type="hidden" name="outcomeNote" value="{{ dtr.submission.outcomeNote }}" />
 
   {{
     govukRadios({

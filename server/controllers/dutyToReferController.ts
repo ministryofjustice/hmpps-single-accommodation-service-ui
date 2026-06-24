@@ -115,7 +115,7 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { localAuthorityAreaId, referenceNumber } = req.body
+      const { localAuthorityAreaId, referenceNumber, submissionNote } = req.body
       const errorRedirect = {
         add: uiPaths.dutyToRefer.submission,
         addNew: uiPaths.dutyToRefer.newSubmission,
@@ -134,6 +134,7 @@ export default class DutyToReferController {
           submissionDate,
           localAuthorityAreaId,
           referenceNumber,
+          submissionNote: submissionNote || null,
         }
 
         if (id) {
@@ -141,6 +142,7 @@ export default class DutyToReferController {
           if (dtr.status !== 'SUBMITTED') {
             submission.status = dtr.status
             submission.outcomeReason = dtr.submission?.outcomeReason
+            submission.outcomeNote = dtr.submission?.outcomeNote || null
           }
           await this.dutyToReferService.update(token, crn, id, submission)
           req.flash('success', 'Submission details updated')
@@ -199,6 +201,7 @@ export default class DutyToReferController {
         dtr,
         tableRows,
         outcomeItems: radioItems(outcomeReasonLabels, outcomeReason),
+        outcomeNote: userInput?.outcomeNote ?? dtr?.submission?.outcomeNote,
         errors,
         errorSummary,
       })
@@ -209,7 +212,15 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { outcomeReason, currentStatus, submissionDate, localAuthorityAreaId, referenceNumber } = req.body
+      const {
+        outcomeReason,
+        currentStatus,
+        submissionDate,
+        localAuthorityAreaId,
+        referenceNumber,
+        submissionNote,
+        outcomeNote,
+      } = req.body
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
 
       if (!validateOutcome(req)) {
@@ -224,6 +235,8 @@ export default class DutyToReferController {
           localAuthorityAreaId,
           referenceNumber,
           outcomeReason,
+          submissionNote: submissionNote || null,
+          outcomeNote: outcomeNote || null,
         })
 
         req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
@@ -275,8 +288,16 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { submissionDate, localAuthorityAreaId, referenceNumber, withdrawalReason, withdrawalReasonOther } =
-        req.body
+      const {
+        submissionDate,
+        localAuthorityAreaId,
+        referenceNumber,
+        withdrawalReason,
+        withdrawalReasonOther,
+        submissionNote,
+        outcomeReason,
+        outcomeNote,
+      } = req.body
       const errorRedirect = uiPaths.dutyToRefer.withdraw({ crn, id })
 
       if (!validateWithdraw(req)) {
@@ -284,14 +305,22 @@ export default class DutyToReferController {
       }
 
       try {
-        await this.dutyToReferService.update(token, crn, id, {
+        const withdrawal: DtrCommand = {
           status: 'WITHDRAWN',
           submissionDate,
           localAuthorityAreaId,
           referenceNumber,
           withdrawalReason,
           withdrawalReasonOther: withdrawalReasonOther || null,
-        })
+          submissionNote: submissionNote || null,
+        }
+
+        if (outcomeReason) {
+          withdrawal.outcomeReason = outcomeReason
+          withdrawal.outcomeNote = outcomeNote || null
+        }
+
+        await this.dutyToReferService.update(token, crn, id, withdrawal)
 
         req.flash('success', 'DTR referral withdrawn')
         return res.redirect(uiPaths.cases.show({ crn }))

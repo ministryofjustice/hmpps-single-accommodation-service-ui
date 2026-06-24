@@ -229,15 +229,20 @@ describe('validators', () => {
     })
   })
 
-  describe('validateMandatoryText', () => {
+  describe.each([
+    ['validateMandatoryText', validateMandatoryText, 'Enter'],
+    ['validateRadioButton', validateRadioButton, 'Select'],
+    ['validateSelect', validateSelect, 'Select'],
+    ['validateAutocomplete', validateAutocomplete, 'Select', 'from the list'],
+  ])('validateRequired validators: %s', (_name, validator, action, suffix = '') => {
     it.each([
       ['a value', 'reason', undefined],
-      [undefined, 'reason', 'Enter a reason'],
-      ['', 'reason', 'Enter a reason'],
-      [undefined, 'address', 'Enter an address'],
-      [undefined, 'Email address', 'Enter an Email address'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
-      expect(validateMandatoryText(value, label)).toBe(expected)
+      [undefined, 'reason', `${action} a reason${suffix ? ` ${suffix}` : ''}`],
+      ['', 'reason', `${action} a reason${suffix ? ` ${suffix}` : ''}`],
+      [undefined, 'address', `${action} an address${suffix ? ` ${suffix}` : ''}`],
+      [undefined, 'email address', `${action} an email address${suffix ? ` ${suffix}` : ''}`],
+    ])('returns expected error for value "%s" and label "%s"', (value, label, expected) => {
+      expect(validator(value, label)).toBe(expected)
     })
   })
 
@@ -251,31 +256,6 @@ describe('validators', () => {
       ['Some long address', 'Address', 16, 'Address must be 16 characters or less'],
     ])('returns the expected error for value %s and label %s', (value, label, length, expected) => {
       expect(validateMaxLength(value, label, length)).toBe(expected)
-    })
-  })
-
-  describe('validateRadioButton && validateSelect', () => {
-    it.each([
-      ['a value', 'reason', undefined],
-      [undefined, 'reason', 'Select a reason'],
-      ['', 'reason', 'Select a reason'],
-      [undefined, 'address', 'Select an address'],
-      [undefined, 'Email address', 'Select an Email address'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
-      expect(validateRadioButton(value, label)).toBe(expected)
-      expect(validateSelect(value, label)).toBe(expected)
-    })
-  })
-
-  describe('validateAutocomplete', () => {
-    it.each([
-      ['a value', 'reason', undefined],
-      [undefined, 'reason', 'Select a reason from the list'],
-      ['', 'reason', 'Select a reason from the list'],
-      [undefined, 'address', 'Select an address from the list'],
-      [undefined, 'Email address', 'Select an Email address from the list'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
-      expect(validateAutocomplete(value, label)).toBe(expected)
     })
   })
 

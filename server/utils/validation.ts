@@ -81,29 +81,38 @@ export const aOrAn = (noun: string): string => (/^[aeiou]/i.test(noun) ? 'an' : 
 
 export const isBlank = (value: string | undefined): boolean => !value
 
+const validateRequired = (
+  value: string | undefined,
+  label: string,
+  action: string = 'Enter',
+  prefix: string = aOrAn(label),
+  suffix: string = '',
+): string | undefined =>
+  !isBlank(value) ? undefined : `${action} ${prefix} ${label}${suffix ? ` ${suffix}` : ''}`
+
 export const validateMandatoryText = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (!isBlank(value) ? undefined : `Enter ${prefix} ${label}`)
+): string | undefined => validateRequired(value, label, 'Enter', prefix)
 
 export const validateRadioButton = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (!isBlank(value) ? undefined : `Select ${prefix} ${label}`)
+): string | undefined => validateRequired(value, label, 'Select', prefix)
 
 export const validateSelect = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (!isBlank(value) ? undefined : `Select ${prefix} ${label}`)
+): string | undefined => validateRequired(value, label, 'Select', prefix)
 
 export const validateAutocomplete = (
   value: string | undefined,
   label: string,
   prefix: string = aOrAn(label),
-): string | undefined => (!isBlank(value) ? undefined : `Select ${prefix} ${label} from the list`)
+): string | undefined => validateRequired(value, label, 'Select', prefix, 'from the list')
 
 export const validateMaxLength = (value: string | undefined, label: string, maxLength: number): string | undefined =>
   value && value.length > maxLength ? `${label} must be ${maxLength} characters or less` : undefined

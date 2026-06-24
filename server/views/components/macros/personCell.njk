@@ -10,11 +10,13 @@
       {% if person.userAccess === 'FULL' and person.limitedAccess %}(LAO){% endif %}
     </div>
 
+    {% if person.userAccess === 'FULL' %}
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
       {{ riskLevelTag(person.riskLevel) }}
 
       {{ tierScoreTag(person.tierScore) }}
     </dl>
+    {% endif %}
 
     <dl class="sas-person-details govuk-!-margin-0">
       {% if person.dateOfBirth -%}

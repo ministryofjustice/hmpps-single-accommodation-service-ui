@@ -22,20 +22,19 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
       
     </div>
 
+    
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
       <div class="sas-risk-tag sas-risk-tag--very-high">
-      <dt>RoSH</dt>
-      <dd>Very high</dd>
-    </div>
-  
+    <dt>RoSH</dt>
+    <dd>Very high</dd>
+  </div>
 
-      
-    <div class="sas-risk-tag sas-risk-tag--tier">
-      <dt>Tier</dt>
-      <dd>B2</dd>
-    </div>
-  
+      <div class="sas-risk-tag sas-risk-tag--tier">
+    <dt>Tier</dt>
+    <dd>B2</dd>
+  </div>
     </dl>
+    
 
     <dl class="sas-person-details govuk-!-margin-0">
       <div>
@@ -64,20 +63,19 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
       (LAO)
     </div>
 
+    
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
       <div class="sas-risk-tag sas-risk-tag--very-high">
-      <dt>RoSH</dt>
-      <dd>Very high</dd>
-    </div>
-  
+    <dt>RoSH</dt>
+    <dd>Very high</dd>
+  </div>
 
-      
-    <div class="sas-risk-tag sas-risk-tag--tier">
-      <dt>Tier</dt>
-      <dd>B2</dd>
-    </div>
-  
+      <div class="sas-risk-tag sas-risk-tag--tier">
+    <dt>Tier</dt>
+    <dd>B2</dd>
+  </div>
     </dl>
+    
 
     <dl class="sas-person-details govuk-!-margin-0">
       <div>
@@ -106,11 +104,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
       
     </div>
 
-    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
-      
-
-      
-    </dl>
+    
 
     <dl class="sas-person-details govuk-!-margin-0">
       
@@ -136,11 +130,19 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
       
     </div>
 
+    
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
-      
+      <div class="sas-risk-tag sas-risk-tag--">
+    <dt>RoSH</dt>
+    <dd>Unknown</dd>
+  </div>
 
-      
+      <div class="sas-risk-tag sas-risk-tag--tier">
+    <dt>Tier</dt>
+    <dd>Unknown</dd>
+  </div>
     </dl>
+    
 
     <dl class="sas-person-details govuk-!-margin-0">
       
@@ -163,11 +165,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
       
     </div>
 
-    <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
-      
-
-      
-    </dl>
+    
 
     <dl class="sas-person-details govuk-!-margin-0">
       
@@ -193,20 +191,19 @@ exports[`cases utilities personCell macro renders a formatted cell including Ass
       
     </div>
 
+    
     <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-1">
       <div class="sas-risk-tag sas-risk-tag--very-high">
-      <dt>RoSH</dt>
-      <dd>Very high</dd>
-    </div>
-  
+    <dt>RoSH</dt>
+    <dd>Very high</dd>
+  </div>
 
-      
-    <div class="sas-risk-tag sas-risk-tag--tier">
-      <dt>Tier</dt>
-      <dd>B2</dd>
-    </div>
-  
+      <div class="sas-risk-tag sas-risk-tag--tier">
+    <dt>Tier</dt>
+    <dd>B2</dd>
+  </div>
     </dl>
+    
 
     <dl class="sas-person-details govuk-!-margin-0">
       <div>

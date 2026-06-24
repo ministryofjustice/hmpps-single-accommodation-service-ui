@@ -151,9 +151,10 @@ const formatStatusWithReason = (data: ProposedAddressFormData) => {
 }
 
 export const validateLookupFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const errors: Record<string, string> = {}
-  errors.nameOrNumber = validateMandatoryText(sessionData.nameOrNumber, 'property name or number')
-  errors.postcode = validatePostcode(sessionData.postcode)
+  const errors: Record<string, string> = {
+    nameOrNumber: validateMandatoryText(sessionData.nameOrNumber, 'property name or number'),
+    postcode: validatePostcode(sessionData.postcode),
+  }
   return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
 }
 
@@ -177,10 +178,9 @@ export const updateAddressFromRequest = async (
 }
 
 const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const address = sessionData?.address
-  const errors: Record<string, string> = {}
-
-  errors.addressPostcode = validatePostcode(address?.postcode)
+  const errors: Record<string, string> = {
+    addressPostcode: validatePostcode(sessionData?.address?.postcode),
+  }
 
   return validateAndFlashErrors(req, errors)
 }
@@ -194,9 +194,9 @@ export const updateTypeFromRequest = async (req: Request, formDataManager: Multi
 }
 
 const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const errors: Record<string, string> = {}
-
-  errors.accommodationTypeCode = validateRadioButton(sessionData?.accommodationTypeCode, 'living arrangement')
+  const errors: Record<string, string> = {
+    accommodationTypeCode: validateRadioButton(sessionData?.accommodationTypeCode, 'living arrangement'),
+  }
 
   return validateAndFlashErrors(req, errors)
 }
@@ -214,9 +214,9 @@ export const updateStatusFromRequest = async (
 }
 
 const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const errors: Record<string, string> = {}
-
-  errors.verificationStatus = validateRadioButton(sessionData?.verificationStatus, 'status')
+  const errors: Record<string, string> = {
+    verificationStatus: validateRadioButton(sessionData?.verificationStatus, 'status'),
+  }
 
   return validateAndFlashErrors(req, errors)
 }
@@ -425,9 +425,9 @@ export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry
 
 export const validateNote = (req: Request) => {
   const { note } = req.body
-  const errors: Record<string, string> = {}
-
-  errors.note = validateMandatoryText(note, 'note') || validateMaxLength(note, 'Notes', 4000)
+  const errors: Record<string, string> = {
+    note: validateMandatoryText(note, 'note') || validateMaxLength(note, 'Notes', 4000),
+  }
 
   return validateAndFlashErrors(req, errors)
 }

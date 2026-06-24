@@ -152,30 +152,31 @@ export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
 }
 
 export const validateSubmission = (req: Request) => {
-  const errors: Record<string, string> = {}
   const { localAuthorityAreaId, referenceNumber } = req.body
   const submissionDateParts = dateFieldParts(req.body, 'submissionDate')
-  errors.submissionDate = validateDateField(submissionDateParts, 'Submission date')
-  errors.localAuthorityAreaId = validateMandatoryText(localAuthorityAreaId, 'local authority')
-  errors.referenceNumber = validateMaxLength(referenceNumber, 'Reference number', 255)
+  const errors: Record<string, string> = {
+    submissionDate: validateDateField(submissionDateParts, 'Submission date'),
+    localAuthorityAreaId: validateMandatoryText(localAuthorityAreaId, 'local authority'),
+    referenceNumber: validateMaxLength(referenceNumber, 'Reference number', 255),
+  }
 
   return validateAndFlashErrors(req, errors)
 }
 
 export const validateOutcome = (req: Request) => {
-  const errors: Record<string, string> = {}
   const { outcomeReason } = req.body
-
-  errors.outcomeReason = validateRadioButton(outcomeReason, 'Duty to Refer (DTR) outcome')
+  const errors: Record<string, string> = {
+    outcomeReason: validateRadioButton(outcomeReason, 'Duty to Refer (DTR) outcome'),
+  }
 
   return validateAndFlashErrors(req, errors)
 }
 
 export const validateWithdraw = (req: Request) => {
-  const errors: Record<string, string> = {}
   const { withdrawalReason, withdrawalReasonOther } = req.body
-
-  errors.withdrawalReason = validateRadioButton(withdrawalReason, 'withdrawal reason')
+  const errors: Record<string, string> = {
+    withdrawalReason: validateRadioButton(withdrawalReason, 'withdrawal reason'),
+  }
 
   if (withdrawalReason === 'OTHER') {
     errors.withdrawalReasonOther =
@@ -188,9 +189,9 @@ export const validateWithdraw = (req: Request) => {
 
 export const validateNote = (req: Request) => {
   const { note } = req.body
-  const errors: Record<string, string> = {}
-
-  errors.note = validateMandatoryText(note, 'note') || validateMaxLength(note, 'Notes', 4000)
+  const errors: Record<string, string> = {
+    note: validateMandatoryText(note, 'note') || validateMaxLength(note, 'Notes', 4000),
+  }
 
   return validateAndFlashErrors(req, errors)
 }

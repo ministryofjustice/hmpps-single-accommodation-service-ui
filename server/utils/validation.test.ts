@@ -8,17 +8,12 @@ import {
   addUserInputToFlash,
   generateErrorMessages,
   generateErrorSummary,
-  isValidUKPostcode,
   validateAndFlashErrors,
   validateMandatoryText,
   validateRadioButton,
   validateSelect,
   validateMaxLength,
   validateAutocomplete,
-  validateDateFull,
-  validateDateParts,
-  validateDateYearLength,
-  validateRealDate,
   validateDateInPast,
   validateDateTodayOrPast,
   validateDateNotBefore,
@@ -214,21 +209,6 @@ describe('validateAndFlashErrors', () => {
 })
 
 describe('validators', () => {
-  describe('isValidUKPostcode', () => {
-    it.each([
-      [false, ''],
-      [false, '1234567890'],
-      [false, 'NOOO'],
-      [false, 'M145BNNNN'],
-      [false, 'M14 5BNNNN'],
-      [false, 'M23'],
-      [true, 'AA1 1AA'],
-      [true, 'M1 1AA'],
-    ])('returns %s for %s', (expected, input) => {
-      expect(isValidUKPostcode(input)).toBe(expected)
-    })
-  })
-
   describe.each([
     ['validateMandatoryText', validateMandatoryText, 'Enter'],
     ['validateRadioButton', validateRadioButton, 'Select'],
@@ -256,59 +236,6 @@ describe('validators', () => {
       ['Some long address', 'Address', 16, 'Address must be 16 characters or less'],
     ])('returns the expected error for value %s and label %s', (value, label, length, expected) => {
       expect(validateMaxLength(value, label, length)).toBe(expected)
-    })
-  })
-
-  describe('validateDateFull', () => {
-    it.each([
-      [{ day: '31', month: '12', year: '2016' }, 'start date', undefined],
-      [{ day: '31', month: '', year: '' }, 'start date', undefined],
-      [{}, 'start date', 'Enter a start date'],
-      [{ day: '', month: '', year: '' }, 'start date', 'Enter a start date'],
-      [{ day: '', month: '', year: '' }, 'outcome date', 'Enter an outcome date'],
-      [{ day: undefined, month: undefined, year: undefined }, 'start date', 'Enter a start date'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
-      expect(validateDateFull(value, label)).toBe(expected)
-    })
-  })
-
-  describe('validateDateParts', () => {
-    it.each([
-      [{ day: '31', month: '12', year: '2016' }, 'Start date', undefined],
-      [{ day: '', month: '', year: '' }, 'Start date', undefined],
-      [{ day: '31', month: '', year: '' }, 'Start date', 'Start date must include a month and a year'],
-      [{ day: '', month: '12', year: '' }, 'Start date', 'Start date must include a day and a year'],
-      [{ day: '', month: '', year: '2026' }, 'Start date', 'Start date must include a day and a month'],
-      [{ day: '', month: '12', year: '2026' }, 'Start date', 'Start date must include a day'],
-      [{ day: '31', month: '', year: '2026' }, 'Start date', 'Start date must include a month'],
-      [{ day: '31', month: '12', year: '' }, 'Start date', 'Start date must include a year'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
-      expect(validateDateParts(value, label)).toBe(expected)
-    })
-  })
-
-  describe('validateDateYearLength', () => {
-    it.each([
-      [{ year: '2016' }, 'Start date', undefined],
-      [{ year: '' }, 'Start date', undefined],
-      [{ year: '26' }, 'Start date', 'Start date must include 4 numbers'],
-      [{ year: '20166' }, 'Start date', 'Start date must include 4 numbers'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
-      expect(validateDateYearLength(value, label)).toBe(expected)
-    })
-  })
-
-  describe('validateRealDate', () => {
-    it.each([
-      [{ day: '31', month: '12', year: '2016' }, 'Start date', undefined],
-      [{ day: '28', month: '02', year: '2016' }, 'Start date', undefined],
-      [{ day: '29', month: '2', year: '2024' }, 'Start date', undefined],
-      [{ day: '', month: '', year: '' }, 'Start date', undefined],
-      [{ day: '32', month: '12', year: '2016' }, 'Start date', 'Start date must be a real date'],
-      [{ day: '31', month: '13', year: '201' }, 'Start date', 'Start date must be a real date'],
-      [{ day: '29', month: '2', year: '2026' }, 'Start date', 'Start date must be a real date'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
-      expect(validateRealDate(value, label)).toBe(expected)
     })
   })
 
@@ -391,12 +318,69 @@ describe('validators', () => {
 
   describe('validateDateField', () => {
     it.each([
-      [{ day: '31', month: '12', year: '2016' }, 'Submission date', undefined],
-      [{ day: '', month: '', year: '' }, 'Submission date', 'Enter a submission date'],
-      [{ day: '', month: '12', year: '2026' }, 'Submission date', 'Submission date must include a day'],
-      [{ day: '31', month: '12', year: '26' }, 'Submission date', 'Submission date must include 4 numbers'],
-      [{ day: '32', month: '12', year: '2016' }, 'Submission date', 'Submission date must be a real date'],
-    ])('returns the expected error for value %s and label %s', (value, label, expected) => {
+      ['a valid date', { day: '31', month: '12', year: '2016' }, 'Submission date', undefined],
+      ['a valid end of February date', { day: '28', month: '02', year: '2016' }, 'Start date', undefined],
+      ['a valid leap year date', { day: '29', month: '2', year: '2024' }, 'Birth date', undefined],
+      ['all parts missing', {}, 'Start date', 'Enter a start date'],
+      ['all parts blank', { day: '', month: '', year: '' }, 'Submission date', 'Enter a submission date'],
+      [
+        'all parts undefined',
+        { day: undefined, month: undefined, year: undefined },
+        'Outcome date',
+        'Enter an outcome date',
+      ],
+      [
+        'only the day present',
+        { day: '31', month: '', year: '' },
+        'Start date',
+        'Start date must include a month and a year',
+      ],
+      [
+        'only the month present',
+        { day: '', month: '12', year: '' },
+        'Start date',
+        'Start date must include a day and a year',
+      ],
+      [
+        'only the year present',
+        { day: '', month: '', year: '2026' },
+        'Start date',
+        'Start date must include a day and a month',
+      ],
+      ['the day missing', { day: '', month: '12', year: '2026' }, 'Start date', 'Start date must include a day'],
+      ['the month missing', { day: '31', month: '', year: '2026' }, 'Start date', 'Start date must include a month'],
+      ['the year missing', { day: '31', month: '12', year: '' }, 'Start date', 'Start date must include a year'],
+      [
+        'a two digit year',
+        { day: '31', month: '12', year: '26' },
+        'Submission date',
+        'Submission date must include 4 numbers',
+      ],
+      [
+        'a five digit year',
+        { day: '31', month: '12', year: '20166' },
+        'Birth date',
+        'Birth date must include 4 numbers',
+      ],
+      [
+        'an out of range day',
+        { day: '32', month: '12', year: '2016' },
+        'Submission date',
+        'Submission date must be a real date',
+      ],
+      [
+        'an out of range month',
+        { day: '31', month: '13', year: '2016' },
+        'Start date',
+        'Start date must be a real date',
+      ],
+      [
+        'a nonleap year 29 February',
+        { day: '29', month: '2', year: '2026' },
+        'Birth date',
+        'Birth date must be a real date',
+      ],
+    ])('returns the expected error for %s', (_description, value, label, expected) => {
       expect(validateDateField(value, label)).toBe(expected)
     })
   })
@@ -408,6 +392,9 @@ describe('validators', () => {
       [undefined, 'Enter a UK postcode'],
       ['', 'Enter a UK postcode'],
       ['NOOO', 'Enter a full UK postcode, like AA3 1AB'],
+      ['1234567890', 'Enter a full UK postcode, like AA3 1AB'],
+      ['M145BNNNN', 'Enter a full UK postcode, like AA3 1AB'],
+      ['M14 5BNNNN', 'Enter a full UK postcode, like AA3 1AB'],
       ['M23', 'Enter a full UK postcode, like AA3 1AB'],
     ])('returns the expected error for value %s', (value, expected) => {
       expect(validatePostcode(value)).toBe(expected)

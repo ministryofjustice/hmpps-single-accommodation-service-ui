@@ -75,11 +75,11 @@ export const validateAndFlashErrors = (request: Request, errors: Record<string, 
   return false
 }
 
-export const isValidUKPostcode = (postcode: string): boolean => /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i.test(postcode)
+const isValidUKPostcode = (postcode: string): boolean => /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i.test(postcode)
 
-export const aOrAn = (noun: string): string => (/^[aeiou]/i.test(noun) ? 'an' : 'a')
+const aOrAn = (noun: string): string => (/^[aeiou]/i.test(noun) ? 'an' : 'a')
 
-export const isBlank = (value: string | undefined): boolean => !value
+const isBlank = (value: string | undefined): boolean => !value
 
 const validateRequired = (
   value: string | undefined,
@@ -87,8 +87,7 @@ const validateRequired = (
   action: string = 'Enter',
   prefix: string = aOrAn(label),
   suffix: string = '',
-): string | undefined =>
-  !isBlank(value) ? undefined : `${action} ${prefix} ${label}${suffix ? ` ${suffix}` : ''}`
+): string | undefined => (!isBlank(value) ? undefined : `${action} ${prefix} ${label}${suffix ? ` ${suffix}` : ''}`)
 
 export const validateMandatoryText = (
   value: string | undefined,
@@ -125,13 +124,10 @@ const blankDateParts = ({ day, month, year }: DateFieldParts): string[] => {
   return blankParts
 }
 
-export const validateDateFull = (
-  parts: DateFieldParts,
-  label: string,
-  prefix: string = aOrAn(label),
-): string | undefined => (blankDateParts(parts).length === 3 ? `Enter ${prefix} ${label}` : undefined)
+const validateDateFull = (parts: DateFieldParts, label: string, prefix: string = aOrAn(label)): string | undefined =>
+  blankDateParts(parts).length === 3 ? `Enter ${prefix} ${label}` : undefined
 
-export const validateDateParts = (parts: DateFieldParts, label: string): string | undefined => {
+const validateDateParts = (parts: DateFieldParts, label: string): string | undefined => {
   const blankParts = blankDateParts(parts)
 
   if (blankParts.length === 0 || blankParts.length === 3) return undefined
@@ -140,10 +136,10 @@ export const validateDateParts = (parts: DateFieldParts, label: string): string 
   return `${label} must include a ${blankParts[0]} and a ${blankParts[1]}`
 }
 
-export const validateDateYearLength = ({ year }: DateFieldParts, label: string): string | undefined =>
+const validateDateYearLength = ({ year }: DateFieldParts, label: string): string | undefined =>
   !isBlank(year) && year.length !== 4 ? `${label} must include 4 numbers` : undefined
 
-export const isRealDate = ({ day = '', month = '', year = '' }: DateFieldParts): boolean => {
+const isRealDate = ({ day = '', month = '', year = '' }: DateFieldParts): boolean => {
   if (!/^\d{1,2}$/.test(day) || !/^\d{1,2}$/.test(month) || !/^\d{1,4}$/.test(year)) return false
 
   const dayNumber = Number(day)
@@ -158,7 +154,7 @@ export const isRealDate = ({ day = '', month = '', year = '' }: DateFieldParts):
   )
 }
 
-export const validateRealDate = (parts: DateFieldParts, label: string): string | undefined => {
+const validateRealDate = (parts: DateFieldParts, label: string): string | undefined => {
   if (blankDateParts(parts).length > 0) return undefined
   return isRealDate(parts) ? undefined : `${label} must be a real date`
 }

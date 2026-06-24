@@ -28,6 +28,7 @@ import {
   fetchErrorsAndUserInput,
   addErrorToFlash,
   validateAndFlashErrors,
+  validateRadioButton,
   addGenericErrorToFlash,
   addUserInputToFlash,
 } from '../utils/validation'
@@ -250,9 +251,10 @@ export default class ProposedAddressesController {
 
       const address = lookupResults.find(result => result.uprn === addressUprn)
 
-      if (!addressUprn || !address) {
+      const error = validateRadioButton(addressUprn, 'address')
+      if (error || !address) {
         validateAndFlashErrors(req, {
-          addressUprn: 'Select an address',
+          addressUprn: error || 'Select an address',
         })
         return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn }))
       }

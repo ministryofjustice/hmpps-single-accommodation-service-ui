@@ -25,7 +25,7 @@
     "int-test-ui": "npx playwright test --ui",
     "test:integration": "npm run start-wiremock && start-server-and-test start-feature http://localhost:3007/ping int-test",
     "test:integration:ui": "npm run start-wiremock && start-server-and-test start-feature:dev http://localhost:3007/ping int-test-ui",
-    "int-test-init:ci": "npx playwright install",
+    "int-test-init:ci": "npx playwright install chromium --only-shell",
     "test:e2e": "npx playwright test --config ./e2e/playwright.config.ts",
     "test:e2e:ui": "npm run test:e2e -- --ui",
     "clean": "rm -rf dist test_results",

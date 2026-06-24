@@ -184,7 +184,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-05-23",
-  "name": "Unknown",
+  "name": undefined,
   "settledTag": undefined,
   "startDate": "2025-12-01",
 }
@@ -239,7 +239,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
-  "name": "Unknown",
+  "name": undefined,
   "settledTag": undefined,
   "startDate": "2026-05-23",
 }

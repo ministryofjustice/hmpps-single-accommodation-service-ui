@@ -76,11 +76,12 @@ export const accommodationCard = (
   if (!accommodation) return undefined
 
   const { startDate, endDate, type } = accommodation
+  const typeName = accommodationType(accommodation)
 
   return {
     cardType,
     settledTag: settledTag(type),
-    name: accommodationType(accommodation),
+    name: typeName === 'Unknown' ? undefined : typeName,
     address: formatAddress(accommodation.address, '<br />') || undefined,
     startDate,
     endDate,

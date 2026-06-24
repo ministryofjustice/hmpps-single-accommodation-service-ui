@@ -109,9 +109,9 @@ export const dateFieldParts = (body: Record<string, string | undefined>, field: 
 }
 
 export const datePartsToUtcDate = ({ day, month, year }: DateFieldParts): Date =>
-  new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 0, 0, 0, 0))
+  new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)))
 
 export const getTodayUtcDate = (): Date => {
   const now = new Date()
-  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0))
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
 }

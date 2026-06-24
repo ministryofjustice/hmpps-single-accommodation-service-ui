@@ -178,12 +178,9 @@ export const updateAddressFromRequest = async (
 
 const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const address = sessionData?.address
-
   const errors: Record<string, string> = {}
 
-  if (!address?.postcode) {
-    errors.addressPostcode = 'Enter postcode'
-  }
+  errors.addressPostcode = validatePostcode(address?.postcode)
 
   return validateAndFlashErrors(req, errors)
 }

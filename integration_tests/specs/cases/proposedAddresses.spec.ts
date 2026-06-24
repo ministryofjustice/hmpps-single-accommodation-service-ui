@@ -166,7 +166,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see errors
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      addressPostcode: 'Enter postcode',
+      addressPostcode: 'Enter a UK postcode',
     })
 
     // Then I complete the address form

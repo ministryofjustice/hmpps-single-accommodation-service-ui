@@ -383,7 +383,7 @@ describe('Proposed addresses utilities', () => {
         } as ProposedAddressFormData)
 
         expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(req, {
-          addressPostcode: 'Enter postcode',
+          addressPostcode: 'Enter a UK postcode',
         })
       })
     })

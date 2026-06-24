@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node'
 import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
-import logger from '../../logger'
 import type { DateFieldParts } from '@sas/ui'
+import logger from '../../logger'
 
 const { mojDate } = mojFilters()
 

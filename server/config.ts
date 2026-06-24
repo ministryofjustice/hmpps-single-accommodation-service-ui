@@ -123,4 +123,10 @@ export default {
     maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
     hideManualAddressEntry: get('HIDE_MANUAL_ADDRESS_ENTRY', 'false') === 'true',
   },
+  timeoutOverrides: {
+    sasCasesApi: {
+      response: Number(get('SAS_CASES_API_TIMEOUT_RESPONSE', 5000)),
+      deadline: Number(get('SAS_CASES_API_TIMEOUT_DEADLINE', 10000)),
+    },
+  },
 }

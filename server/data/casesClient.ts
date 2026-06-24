@@ -58,10 +58,16 @@ export default class CasesClient extends RestClient {
    */
 
   getCases(token: string, query?: GetCasesQuery) {
-    return this.get<ApiResponseDtoListCaseDto>({ path: apiPaths.cases.index({}), query }, asUser(token))
+    return this.get<ApiResponseDtoListCaseDto>(
+      { path: apiPaths.cases.index({}), query, timeout: config.timeoutOverrides.sasCasesApi },
+      asUser(token),
+    )
   }
 
   getCase(token: string, crn: string) {
-    return this.get<ApiResponseDtoCaseDto>({ path: apiPaths.cases.show({ crn }) }, asUser(token))
+    return this.get<ApiResponseDtoCaseDto>(
+      { path: apiPaths.cases.show({ crn }), timeout: config.timeoutOverrides.sasCasesApi },
+      asUser(token),
+    )
   }
 }

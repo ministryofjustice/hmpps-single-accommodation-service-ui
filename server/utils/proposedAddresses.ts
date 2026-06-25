@@ -20,7 +20,13 @@ import { formatDateAndDaysAgo } from './dates'
 import { summaryListRowText, summaryListRowHtml, toParagraphs } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
-import { isValidUKPostcode, validateAndFlashErrors } from './validation'
+import {
+  validateAndFlashErrors,
+  validateMandatoryText,
+  validateMaxLength,
+  validatePostcode,
+  validateRadioButton,
+} from './validation'
 import { addressLines, formatAddress } from './addresses'
 import { renderMacro, statusTag } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
@@ -145,15 +151,10 @@ const formatStatusWithReason = (data: ProposedAddressFormData) => {
 }
 
 export const validateLookupFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const errors: Record<string, string> = {}
-
-  if (!sessionData.nameOrNumber) errors.nameOrNumber = 'Enter a property name or number'
-  if (!sessionData.postcode) {
-    errors.postcode = 'Enter a UK postcode'
-  } else if (!isValidUKPostcode(sessionData.postcode)) {
-    errors.postcode = 'Enter a full UK postcode, like AA3 1AB'
+  const errors: Record<string, string> = {
+    nameOrNumber: validateMandatoryText(sessionData.nameOrNumber, 'property name or number'),
+    postcode: validatePostcode(sessionData.postcode),
   }
-
   return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
 }
 
@@ -177,12 +178,8 @@ export const updateAddressFromRequest = async (
 }
 
 const validateAddressFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const address = sessionData?.address
-
-  const errors: Record<string, string> = {}
-
-  if (!address?.postcode) {
-    errors.addressPostcode = 'Enter postcode'
+  const errors: Record<string, string> = {
+    addressPostcode: validatePostcode(sessionData?.address?.postcode),
   }
 
   return validateAndFlashErrors(req, errors)
@@ -197,9 +194,8 @@ export const updateTypeFromRequest = async (req: Request, formDataManager: Multi
 }
 
 const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const errors: Record<string, string> = {}
-  if (!sessionData?.accommodationTypeCode) {
-    errors.accommodationTypeCode = 'Select an accommodation type'
+  const errors: Record<string, string> = {
+    accommodationTypeCode: validateRadioButton(sessionData?.accommodationTypeCode, 'living arrangement'),
   }
 
   return validateAndFlashErrors(req, errors)
@@ -218,10 +214,8 @@ export const updateStatusFromRequest = async (
 }
 
 const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
-  const errors: Record<string, string> = {}
-
-  if (!sessionData?.verificationStatus) {
-    errors.verificationStatus = 'Select a status'
+  const errors: Record<string, string> = {
+    verificationStatus: validateRadioButton(sessionData?.verificationStatus, 'status'),
   }
 
   return validateAndFlashErrors(req, errors)
@@ -241,8 +235,12 @@ export const updateNextAccommodationFromRequest = async (
 const validateNextAccommodationFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
   const errors: Record<string, string> = {}
 
-  if (sessionData?.verificationStatus === 'PASSED' && !sessionData?.nextAccommodationStatus) {
-    errors.nextAccommodationStatus = 'Select if you want to confirm this as the next address'
+  if (sessionData?.verificationStatus === 'PASSED') {
+    errors.nextAccommodationStatus = validateRadioButton(
+      sessionData?.nextAccommodationStatus,
+      'address is confirmed',
+      'whether',
+    )
   }
 
   return validateAndFlashErrors(req, errors)
@@ -423,4 +421,13 @@ export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry
   })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+}
+
+export const validateNote = (req: Request) => {
+  const { note } = req.body
+  const errors: Record<string, string> = {
+    note: validateMandatoryText(note, 'note') || validateMaxLength(note, 'Notes', 4000),
+  }
+
+  return validateAndFlashErrors(req, errors)
 }

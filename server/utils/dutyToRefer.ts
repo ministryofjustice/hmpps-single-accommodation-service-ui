@@ -2,9 +2,15 @@ import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { Link, StatusCard } from '@sas/ui'
-import { formatDateAndDaysAgo, dateInputToIsoDate, isoDateToDateInput, formatDateAndAge } from './dates'
+import { formatDateAndDaysAgo, isoDateToDateInput, formatDateAndAge, dateFieldParts } from './dates'
 import uiPaths from '../paths/ui'
-import { validateAndFlashErrors } from './validation'
+import {
+  validateAndFlashErrors,
+  validateDateField,
+  validateRadioButton,
+  validateMandatoryText,
+  validateMaxLength,
+} from './validation'
 import { renderMacro, statusTag } from './macros'
 import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
 import { noteTimelineEntry, timelineEntry } from './timeline'
@@ -146,40 +152,45 @@ export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
 }
 
 export const validateSubmission = (req: Request) => {
-  const errors: Record<string, string> = {}
-  const { localAuthorityAreaId } = req.body
-
-  if (!dateInputToIsoDate(req.body, 'submissionDate')) {
-    errors.submissionDate = 'Enter a submission date'
-  }
-  if (!localAuthorityAreaId) {
-    errors.localAuthorityAreaId = 'Select a local authority'
+  const { localAuthorityAreaId, referenceNumber } = req.body
+  const submissionDateParts = dateFieldParts(req.body, 'submissionDate')
+  const errors: Record<string, string> = {
+    submissionDate: validateDateField(submissionDateParts, 'Submission date'),
+    localAuthorityAreaId: validateMandatoryText(localAuthorityAreaId, 'local authority'),
+    referenceNumber: validateMaxLength(referenceNumber, 'Reference number', 255),
   }
 
   return validateAndFlashErrors(req, errors)
 }
 
 export const validateOutcome = (req: Request) => {
-  const errors: Record<string, string> = {}
   const { outcomeReason } = req.body
-
-  if (!outcomeReason) {
-    errors.outcomeReason = 'Select duty to refer outcome'
+  const errors: Record<string, string> = {
+    outcomeReason: validateRadioButton(outcomeReason, 'Duty to Refer (DTR) outcome'),
   }
 
   return validateAndFlashErrors(req, errors)
 }
 
 export const validateWithdraw = (req: Request) => {
-  const errors: Record<string, string> = {}
   const { withdrawalReason, withdrawalReasonOther } = req.body
-
-  if (!withdrawalReason) {
-    errors.withdrawalReason = 'Select a reason for withdrawal'
+  const errors: Record<string, string> = {
+    withdrawalReason: validateRadioButton(withdrawalReason, 'withdrawal reason'),
   }
 
-  if (withdrawalReason === 'OTHER' && !withdrawalReasonOther) {
-    errors.withdrawalReasonOther = 'Enter a reason for withdrawal'
+  if (withdrawalReason === 'OTHER') {
+    errors.withdrawalReasonOther =
+      validateMandatoryText(withdrawalReasonOther, 'other reason for withdrawal', '') ||
+      validateMaxLength(withdrawalReasonOther, 'Other reason for withdrawal', 4000)
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
+export const validateNote = (req: Request) => {
+  const { note } = req.body
+  const errors: Record<string, string> = {
+    note: validateMandatoryText(note, 'note') || validateMaxLength(note, 'Notes', 4000),
   }
 
   return validateAndFlashErrors(req, errors)

@@ -943,7 +943,7 @@ describe('proposedAddressesController', () => {
       { handler: 'saveSelectAddress', body: { addressUprn: lookupResults[1].uprn } },
       {
         handler: 'saveDetails',
-        body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4', addressCountry: 'Wales' },
+        body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4 5RT', addressCountry: 'Wales' },
       },
       { handler: 'saveType', body: { accommodationTypeCode: 'A44' } },
       { handler: 'saveStatus', body: { verificationStatus: 'NOT_CHECKED_YET' } },
@@ -1002,7 +1002,7 @@ describe('proposedAddressesController', () => {
       { handler: 'saveSelectAddress', body: { addressUprn: lookupResults[1].uprn } },
       {
         handler: 'saveDetails',
-        body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4', addressCountry: 'Wales' },
+        body: { addressLine1: 'Foo', addressTown: 'Town', addressPostcode: 'T4 5RT', addressCountry: 'Wales' },
       },
       { handler: 'saveType', body: { accommodationTypeCode: 'A44' } },
       { handler: 'saveStatus', body: { verificationStatus: 'NOT_CHECKED_YET' } },

@@ -383,7 +383,7 @@ describe('Proposed addresses utilities', () => {
         } as ProposedAddressFormData)
 
         expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(req, {
-          addressPostcode: 'Enter postcode',
+          addressPostcode: 'Enter a UK postcode',
         })
       })
     })
@@ -422,7 +422,7 @@ describe('Proposed addresses utilities', () => {
         expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
           req,
           expect.objectContaining({
-            accommodationTypeCode: 'Select an accommodation type',
+            accommodationTypeCode: 'Select a living arrangement',
           }),
         )
       })
@@ -521,7 +521,7 @@ describe('Proposed addresses utilities', () => {
         expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(
           req,
           expect.objectContaining({
-            nextAccommodationStatus: 'Select if you want to confirm this as the next address',
+            nextAccommodationStatus: 'Select whether address is confirmed',
           }),
         )
       })

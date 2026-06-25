@@ -11,18 +11,14 @@ import {
   outcomeReasonToStatus,
   submissionFormValues,
   validateWithdraw,
+  validateNote,
   outcomeReasonLabels,
   withdrawReasonLabels,
 } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import DutyToReferService from '../services/dutyToReferService'
 import AuditService, { Page } from '../services/auditService'
-import {
-  addGenericErrorToFlash,
-  addUserInputToFlash,
-  fetchErrorsAndUserInput,
-  validateAndFlashErrors,
-} from '../utils/validation'
+import { addGenericErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo } from '../utils/cases'
@@ -342,8 +338,7 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { note } = req.body
 
-      if (!note) {
-        validateAndFlashErrors(req, { note: 'Enter a note' })
+      if (!validateNote(req)) {
         return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       }
 

@@ -25,4 +25,5 @@ mv ./server/@types/shared/index.ts ./server/@types/shared/index.d.ts
 echo "==> Cleaning up formatting..."
 
 git add .
-git diff --quiet || npx lint-staged
+
+npx lint-staged --allow-empty

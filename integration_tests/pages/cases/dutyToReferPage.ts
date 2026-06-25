@@ -41,9 +41,13 @@ export default class DutyToReferPage extends AbstractPage {
     )
     if (dutyToRefer.submission.referenceNumber) {
       await this.completeInputByLabel('Reference number', dutyToRefer.submission.referenceNumber)
+    } else {
+      await this.clearInputByLabel('Reference number')
     }
     if (dutyToRefer.submission.submissionNote) {
       await this.completeInputByLabel('Add note', dutyToRefer.submission.submissionNote)
+    } else {
+      await this.clearInputByLabel('Add note')
     }
   }
 
@@ -59,6 +63,8 @@ export default class DutyToReferPage extends AbstractPage {
     await this.selectRadioByLabel(reason)
     if (dutyToRefer.submission.outcomeNote) {
       await this.completeInputByLabel('Add note', dutyToRefer.submission.outcomeNote)
+    } else {
+      await this.clearInputByLabel('Add note')
     }
   }
 

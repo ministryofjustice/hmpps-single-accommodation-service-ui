@@ -31,7 +31,7 @@ import {
   referenceDataFactory,
 } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
-import { formatAddress } from '../utils/addresses'
+import { addressLines, formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import { radioItems } from '../utils/utils'
@@ -1038,6 +1038,29 @@ describe('proposedAddressesController', () => {
 
         expect(response.redirect).toHaveBeenCalledWith(redirect)
         expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
+      })
+    })
+  })
+
+  describe('arrival', () => {
+    it('renders the arrival confirmation page', async () => {
+      const caseData = caseFactory.build()
+      const proposedAddress = proposedAccommodationFactory.build({
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+      })
+
+      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue('/foo')
+      casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
+      proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
+
+      await controller.arrival()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/arrival', {
+        backLinkHref: '/foo',
+        pageHeading: `Confirm that ${caseData.name} has moved into this address`,
+        addressLines: addressLines(proposedAddress.address),
+        cancelLinkHref: '/foo',
       })
     })
   })

@@ -1,0 +1,22 @@
+{% extends "pages/proposed-address/layout.njk" %}
+
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = "Confirm current address" %}
+{% set buttonText = 'Confirm current address' %}
+
+{% block formContent %}
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
+    <h1 class="govuk-fieldset__heading">{{ pageHeading }}</h1>
+  </legend>
+
+  {% call govukInsetText() %}
+    <address class="govuk-!-font-style-normal">
+      {% for line in addressLines %}
+        {{ line }}{% if not loop.last %}<br />{% endif %}
+      {% endfor %}
+    </address>
+  {% endcall %}
+
+  <p class="govuk-body govuk-!-margin-bottom-9">This will also update the main address in nDelius.</p>
+{% endblock %}

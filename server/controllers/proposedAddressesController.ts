@@ -36,11 +36,12 @@ import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
-import { formatAddress } from '../utils/addresses'
+import { addressLines, formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import config from '../config'
 import { radioItems } from '../utils/utils'
+import { collectApiResponses } from '../utils/apiResponses'
 
 interface EditRequest extends Request {
   params: {
@@ -525,5 +526,36 @@ export default class ProposedAddressesController {
     }
 
     return res.redirect(redirect || nextPagePath)
+  }
+
+  arrival(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+
+      await this.auditService.logPageView(Page.PROPOSED_ADDRESS_ARRIVAL, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const {
+        data: { caseData, proposedAddress },
+      } = await collectApiResponses({
+        caseData: this.casesService.getCase(token, crn),
+        proposedAddress: this.proposedAddressesService.getProposedAddress(token, crn, id),
+      })
+
+      const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.arrival.pattern, req, [
+        uiPaths.proposedAddresses.show.pattern,
+        uiPaths.cases.show.pattern,
+      ])
+
+      return res.render('pages/proposed-address/arrival', {
+        backLinkHref,
+        pageHeading: `Confirm that ${caseData.name} has moved into this address`,
+        addressLines: addressLines(proposedAddress.address),
+        cancelLinkHref: backLinkHref,
+      })
+    }
   }
 }

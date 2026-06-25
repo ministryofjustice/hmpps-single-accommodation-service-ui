@@ -31,6 +31,7 @@ export default {
       update: proposedAddressPath,
       timeline: proposedAddressPath.path('timeline'),
       notes: proposedAddressPath.path('notes'),
+      arrival: proposedAddressPath.path('arrival'),
     },
     accommodationHistory: casePath.path('accommodation-history'),
   },

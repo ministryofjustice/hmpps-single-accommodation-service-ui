@@ -24,6 +24,8 @@ import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
 import { addressTimelineEntry } from '../../../server/utils/proposedAddresses'
 import { accommodationTypes } from '../../../server/testutils/factories/proposedAccommodation'
+import ConfirmCurrentAddressPage from '../../pages/cases/confirmCurrentAddressPage'
+import paths from '../../../server/paths/ui'
 
 const setupCase = async () => {
   const caseData = caseFactory.build()
@@ -680,5 +682,94 @@ test.describe('edit proposed address', () => {
 
     // And a timeline entry should be shown
     await checksPassedAddressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(checksPassedAddressRecord))
+  })
+})
+
+test.describe('set proposed address as current', () => {
+  let caseData: CaseDto
+  let crn: string
+  let confirmedAddress: ProposedAccommodationDto
+
+  test.beforeEach(async () => {
+    // Given there is data for the given case
+    caseData = await setupCase()
+    crn = caseData.crn
+    confirmedAddress = proposedAccommodationFactory.confirmed().build()
+    await setupProposedAddresses(crn, [confirmedAddress])
+  })
+
+  test('should allow the user to set a proposed address as current from the profile tracker page', async ({ page }) => {
+    // Given I am logged in
+    await login(page)
+
+    // When I visit profile tracker page with a proposed address
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // And I click on 'Set as current address'
+    await profileTrackerPage.clickLink('Set as current address')
+
+    // Then I should see the confirmation page
+    const confirmCurrentAddressPage = await ConfirmCurrentAddressPage.verifyOnPage(page, caseData, confirmedAddress)
+
+    // And the page should show the correct information and links
+    await confirmCurrentAddressPage.shouldShowProposedAddress()
+
+    const backLink = paths.cases.show({ crn: caseData.crn })
+    await confirmCurrentAddressPage.shouldShowLink('Back', backLink)
+    await confirmCurrentAddressPage.shouldShowLink('Cancel', backLink)
+
+    // When I click on confirm
+    await confirmCurrentAddressPage.clickButton('Confirm current address')
+
+    // Then the API has been called
+    await confirmCurrentAddressPage.checkApiCalled()
+
+    // And I should see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // And a banner should be shown confirming the proposed address was updated
+    await profileTrackerPage.shouldShowBanner('Current address updated')
+  })
+
+  test('should allow the user to set a proposed address as current from the address details page', async ({ page }) => {
+    // Given I am logged in
+    await login(page)
+
+    // When I visit profile tracker page with a proposed address
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // And I click on 'View details' in the proposed address card
+    await profileTrackerPage.clickLink(
+      'View details',
+      profileTrackerPage.getCard(formatAddress(confirmedAddress.address)),
+    )
+
+    // Then I should see the address details page
+    const addressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(page, confirmedAddress)
+
+    // And I click on 'Set as current address'
+    await addressDetailsPage.clickLink('Set as current address')
+
+    // Then I should see the confirmation page
+    const confirmCurrentAddressPage = await ConfirmCurrentAddressPage.verifyOnPage(page, caseData, confirmedAddress)
+
+    // And the page should show the correct information and links
+    await confirmCurrentAddressPage.shouldShowProposedAddress()
+
+    const backLink = paths.proposedAddresses.show({ crn: caseData.crn, id: confirmedAddress.id })
+    await confirmCurrentAddressPage.shouldShowLink('Back', backLink)
+    await confirmCurrentAddressPage.shouldShowLink('Cancel', backLink)
+
+    // When I click on confirm
+    await confirmCurrentAddressPage.clickButton('Confirm current address')
+
+    // Then the API has been called
+    await confirmCurrentAddressPage.checkApiCalled()
+
+    // And I should see the address details page
+    await ProposedAddressDetailsPage.verifyOnPage(page, confirmedAddress)
+
+    // And a banner should be shown confirming the proposed address was updated
+    await addressDetailsPage.shouldShowBanner('Current address updated')
   })
 })

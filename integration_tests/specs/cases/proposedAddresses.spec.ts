@@ -79,7 +79,10 @@ test.describe('view proposed address details', () => {
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
     // When I click the link to view address details in the proposed address card
-    await profileTrackerPage.clickLink('Notes', profileTrackerPage.getCard(formatAddress(proposedAddress.address)))
+    await profileTrackerPage.clickLink(
+      'View details',
+      profileTrackerPage.getCard(formatAddress(proposedAddress.address)),
+    )
 
     // Then I should see the address details page
     const addressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(page, proposedAddress)
@@ -592,7 +595,10 @@ test.describe('edit proposed address', () => {
     const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
 
     // When I click the link to view address details in the proposed address card
-    await profileTrackerPage.clickLink('Notes', profileTrackerPage.getCard(formatAddress(proposedAddress.address)))
+    await profileTrackerPage.clickLink(
+      'View details',
+      profileTrackerPage.getCard(formatAddress(proposedAddress.address)),
+    )
 
     // Then I should see the address details page
     const addressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(page, proposedAddress)

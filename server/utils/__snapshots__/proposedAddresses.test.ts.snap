@@ -578,6 +578,10 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confi
   "inactive": false,
   "links": [
     {
+      "href": "/cases/CRN123/proposed-addresses/some-id/arrival",
+      "text": "Set as current address",
+    },
+    {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
       "text": "View details",
     },

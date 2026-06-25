@@ -8,6 +8,7 @@ import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import eligibilityApi from '../../mockApis/eligibility'
 import osDataHubApi from '../../mockApis/osDataHubApi'
 import referenceDataApi from '../../mockApis/referenceData'
+import userApi from '../../mockApis/user'
 import { login } from '../../testUtils'
 import {
   addressFactory,
@@ -32,6 +33,7 @@ const setupCase = async () => {
   const { crn } = caseData
 
   await casesApi.stubGetCases([caseData])
+  await userApi.stubGetTeams()
   await casesApi.stubGetCaseByCrn(crn, caseData)
   await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
   await casesApi.stubGetReferralHistory(crn, [])
@@ -700,7 +702,7 @@ test.describe('set proposed address as current', () => {
     // Given there is data for the given case
     caseData = await setupCase()
     crn = caseData.crn
-    confirmedAddress = proposedAccommodationFactory.confirmed().build()
+    confirmedAddress = proposedAccommodationFactory.confirmed().build({ crn: caseData.crn })
     await setupProposedAddresses(crn, [confirmedAddress])
   })
 

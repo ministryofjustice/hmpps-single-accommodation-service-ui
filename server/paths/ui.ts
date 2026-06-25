@@ -32,6 +32,7 @@ export default {
     submit: proposedAddressesPath.path('submit'),
     update: proposedAddressesPath.path('update'),
     cancel: proposedAddressesPath.path('cancel'),
+    arrival: proposedAddressesPath.path(':id/arrival'),
   },
   static: {
     notAuthorised: path('/not-authorised'),

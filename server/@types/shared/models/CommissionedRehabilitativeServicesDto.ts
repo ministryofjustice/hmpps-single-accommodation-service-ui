@@ -3,6 +3,6 @@
 /* tslint:disable */
 
 export type CommissionedRehabilitativeServicesDto = {
-  status: 'DRAFT' | 'LIVE' | 'COMPLETED' | 'WITHDRAWN'
+  status: 'LIVE' | 'COMPLETED' | 'WITHDRAWN'
   submissionDate?: string | null
 }

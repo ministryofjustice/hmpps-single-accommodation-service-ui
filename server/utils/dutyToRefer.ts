@@ -133,17 +133,17 @@ export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string =>
 export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
-  const rows: SummaryListRow[] = [
-    summaryListRowText('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
-    summaryListRowOptional('Reference', submission?.referenceNumber, 'No reference added'),
-    summaryListRowText('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
-    summaryListRowText('Submitted by', submission?.createdBy),
-  ]
+
   switch (status) {
     case 'NOT_ACCEPTED':
     case 'ACCEPTED':
     case 'SUBMITTED':
-      return rows
+      return [
+        summaryListRowText('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
+        summaryListRowOptional('Reference', submission?.referenceNumber, 'No reference added'),
+        summaryListRowText('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
+        summaryListRowText('Submitted by', submission?.createdBy),
+      ]
     case 'NOT_ELIGIBLE':
     case 'NOT_STARTED':
     default:

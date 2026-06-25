@@ -136,8 +136,11 @@ const validateDateParts = (parts: DateFieldParts, label: string): string | undef
   return `${label} must include a ${blankParts[0]} and a ${blankParts[1]}`
 }
 
-const validateDateYearLength = ({ year }: DateFieldParts, label: string): string | undefined =>
-  !isBlank(year) && year.length !== 4 ? `${label} must include 4 numbers` : undefined
+const validateDateYearLength = (
+  { year }: DateFieldParts,
+  label: string,
+  yearLabel: string = `${label} year`,
+): string | undefined => (!isBlank(year) && year.length !== 4 ? `${yearLabel} must include 4 numbers` : undefined)
 
 const isRealDate = ({ day = '', month = '', year = '' }: DateFieldParts): boolean => {
   if (!/^\d{1,2}$/.test(day) || !/^\d{1,2}$/.test(month) || !/^\d{1,4}$/.test(year)) return false
@@ -188,10 +191,10 @@ export const validateDateNotBefore = (
     : undefined
 }
 
-export const validateDateField = (parts: DateFieldParts, label: string): string | undefined =>
+export const validateDateField = (parts: DateFieldParts, label: string, yearLabel?: string): string | undefined =>
   validateDateFull(parts, label.toLowerCase()) ||
   validateDateParts(parts, label) ||
-  validateDateYearLength(parts, label) ||
+  validateDateYearLength(parts, label, yearLabel) ||
   validateRealDate(parts, label)
 
 export const validatePostcode = (value: string | undefined): string | undefined => {

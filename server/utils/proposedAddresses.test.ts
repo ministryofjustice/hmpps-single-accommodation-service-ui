@@ -670,17 +670,24 @@ describe('Proposed addresses utilities', () => {
       })
     })
 
-    it.each([
-      ['has failed checks', { verificationStatus: 'FAILED' as const }],
-      ['has been confirmed', { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const }],
-    ])(
-      'returns nothing when the proposed address %s',
-      (_, proposedAddressParams: Partial<ProposedAccommodationDto>) => {
-        const noButtonAddress = proposedAccommodationFactory.build({ ...proposedAddress, ...proposedAddressParams })
+    it('returns a button to set as current address if the address is confirmed', () => {
+      const checksPassedAddress = proposedAccommodationFactory.build({
+        ...proposedAddress,
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+      })
 
-        expect(nextActionButton(noButtonAddress)).toBeUndefined()
-      },
-    )
+      expect(nextActionButton(checksPassedAddress)).toEqual({
+        text: 'Set as current address',
+        href: uiPaths.proposedAddresses.arrival({ crn, id }),
+      })
+    })
+
+    it('returns nothing when the proposed address has failed checks', () => {
+      const noButtonAddress = proposedAccommodationFactory.build({ ...proposedAddress, verificationStatus: 'FAILED' })
+
+      expect(nextActionButton(noButtonAddress)).toBeUndefined()
+    })
   })
 
   describe('addressTimelineEntry', () => {

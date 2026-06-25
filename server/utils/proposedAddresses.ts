@@ -354,7 +354,13 @@ export const nextActionButton = (proposedAddress: ProposedAccommodationDto): But
       href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }),
     }
   }
-  if (verificationStatus === 'PASSED' && nextAccommodationStatus !== 'YES') {
+  if (verificationStatus === 'PASSED') {
+    if (nextAccommodationStatus === 'YES') {
+      return {
+        text: 'Set as current address',
+        href: uiPaths.proposedAddresses.arrival({ crn, id }),
+      }
+    }
     return {
       text: 'Confirm as next address',
       href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),

@@ -756,7 +756,7 @@ test.describe('set proposed address as current', () => {
     const addressDetailsPage = await ProposedAddressDetailsPage.verifyOnPage(page, confirmedAddress)
 
     // And I click on 'Set as current address'
-    await addressDetailsPage.clickLink('Set as current address')
+    await addressDetailsPage.clickButton('Set as current address')
 
     // Then I should see the confirmation page
     const confirmCurrentAddressPage = await ConfirmCurrentAddressPage.verifyOnPage(page, caseData, confirmedAddress)

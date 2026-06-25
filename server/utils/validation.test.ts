@@ -354,14 +354,14 @@ describe('validators', () => {
       [
         'a two digit year',
         { day: '31', month: '12', year: '26' },
-        'Submission date',
-        'Submission date must include 4 numbers',
+        'Submission date year',
+        'Submission date year must include 4 numbers',
       ],
       [
         'a five digit year',
         { day: '31', month: '12', year: '20166' },
-        'Birth date',
-        'Birth date must include 4 numbers',
+        'Main occupier year of birth',
+        'Main occupier year of birth must include 4 numbers',
       ],
       [
         'an out of range day',

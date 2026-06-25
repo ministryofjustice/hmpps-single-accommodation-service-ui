@@ -390,6 +390,7 @@ describe('validators', () => {
     it.each([
       ['M1 1AA', undefined],
       ['AA1 1AA', undefined],
+      ['AA11AA', undefined],
       [undefined, 'Enter a UK postcode'],
       ['', 'Enter a UK postcode'],
       ['NOOO', 'Enter a full UK postcode, like AA3 1AB'],

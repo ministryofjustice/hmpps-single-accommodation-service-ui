@@ -16,10 +16,16 @@ export const fetchErrorsAndUserInput = (request: Request) => {
   return { errors, errorSummary, userInput }
 }
 
-export const errorSummaryItem = (field: string, text: string): ErrorSummary => {
+export const errorDateParts = (text: string): string[] => {
+  const dateFields = ['day', 'month', 'year']
+  const found = dateFields.filter(part => text.toLowerCase().includes(part))
+  return found.length ? found : dateFields
+}
+
+export const errorSummaryItem = (field: string, text: string, isDateField = false): ErrorSummary => {
   return {
     text,
-    href: `#${field}`,
+    href: isDateField ? `#${field}-${errorDateParts(text)[0]}` : `#${field}`,
   }
 }
 
@@ -29,11 +35,14 @@ export const errorMessage = (text: string): ErrorMessage => {
   }
 }
 
-export const generateErrorSummary = (errors: Record<string, string>): Array<ErrorSummary> => {
+export const generateErrorSummary = (
+  errors: Record<string, string>,
+  dateFields: string[] = [],
+): Array<ErrorSummary> => {
   if (!errors) return []
   return Object.entries(errors)
     .filter(([_, text]) => text)
-    .map(([field, text]) => errorSummaryItem(field, text))
+    .map(([field, text]) => errorSummaryItem(field, text, dateFields.includes(field)))
 }
 
 export const generateErrorMessages = (errors: Record<string, string>): ErrorMessages => {
@@ -60,9 +69,13 @@ export const addUserInputToFlash = (request: Request): void => {
   request.flash('userInput', JSON.stringify(request.body))
 }
 
-export const validateAndFlashErrors = (request: Request, errors: Record<string, string>): boolean => {
+export const validateAndFlashErrors = (
+  request: Request,
+  errors: Record<string, string>,
+  dateFields: string[] = [],
+): boolean => {
   const errorMessages = generateErrorMessages(errors)
-  const errorSummary = generateErrorSummary(errors)
+  const errorSummary = generateErrorSummary(errors, dateFields)
 
   if (errorSummary.length === 0) {
     return true

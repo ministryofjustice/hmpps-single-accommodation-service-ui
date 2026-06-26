@@ -62,7 +62,7 @@ const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: s
     case 'PASSED':
       return [
         {
-          text: 'Confirm as next address',
+          text: 'Set as next address',
           href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
         },
         { text: 'Notes', href: detailsLink },

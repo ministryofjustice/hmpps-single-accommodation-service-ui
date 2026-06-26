@@ -285,7 +285,7 @@ describe('duty to refer utils', () => {
         req,
         {
           submissionDate: 'Enter a date',
-          localAuthorityAreaId: 'Enter a local authority',
+          localAuthorityAreaId: 'Select a local authority from the list',
         },
         ['submissionDate'],
       )

@@ -113,7 +113,7 @@ test.describe('duty to refer', () => {
     await dutyToReferPage.shouldShowErrorMessagesForFields(
       {
         submissionDate: 'Enter a date',
-        localAuthorityAreaId: 'Enter a local authority',
+        localAuthorityAreaId: 'Select a local authority from the list',
       },
       ['submissionDate'],
     )
@@ -588,7 +588,7 @@ test.describe('duty to refer', () => {
     await dutyToReferPage.shouldShowErrorMessagesForFields(
       {
         submissionDate: 'Enter a date',
-        localAuthorityAreaId: 'Enter a local authority',
+        localAuthorityAreaId: 'Select a local authority from the list',
       },
       ['submissionDate'],
     )

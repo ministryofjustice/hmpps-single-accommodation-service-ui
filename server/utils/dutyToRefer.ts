@@ -9,6 +9,7 @@ import {
   validateRadioButton,
   validateMandatoryText,
   validateMaxLength,
+  validateAutocomplete,
   validateDateField,
   validateDateTodayOrPast,
 } from './validation'
@@ -159,7 +160,7 @@ export const validateSubmission = (req: Request) => {
   const errors: Record<string, string> = {
     submissionDate:
       validateDateField(submissionDateParts, 'Date', 'Year') || validateDateTodayOrPast(submissionDateParts, 'Date'),
-    localAuthorityAreaId: validateMandatoryText(localAuthorityAreaId, 'local authority'),
+    localAuthorityAreaId: validateAutocomplete(localAuthorityAreaId, 'local authority'),
     referenceNumber: validateMaxLength(referenceNumber, 'Reference number', 255),
     submissionNote: validateMaxLength(submissionNote, 'Notes', 4000),
   }

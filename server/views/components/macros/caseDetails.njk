@@ -17,8 +17,10 @@
         <dl class="sas-profile-header__details govuk-!-margin-bottom-1">
           <dt>CRN</dt>
           <dd>{{ caseData.crn }}</dd>
-          <dt>Prison number</dt>
-          <dd>{{ caseData.prisonNumber }}</dd>
+          {% if caseData.prisonNumber -%}
+            <dt>Prison number</dt>
+            <dd>{{ caseData.prisonNumber }}</dd>
+          {%- endif %}
           <dt>PNC reference</dt>
           <dd>{{ caseData.pncReference }}</dd>
         </dl>

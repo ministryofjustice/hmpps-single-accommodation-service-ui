@@ -195,6 +195,28 @@ describe('dutyToReferController', () => {
       expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
     })
 
+    it('does not update or flash when saving a submission with no changes', async () => {
+      const dutyToRefer = dutyToReferFactory.submitted().build({
+        crn: 'CRN123',
+        submission: dtrSubmissionFactory.build({
+          submissionDate: '2025-06-15',
+          localAuthority: { localAuthorityAreaId: 'la-id', localAuthorityAreaName: 'A council' },
+          referenceNumber: 'REF123',
+          submissionNote: null,
+        }),
+      })
+      const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
+
+      request.params.id = dutyToRefer.submission.id
+
+      await controller.saveSubmission('edit')(request, response, next)
+
+      expect(dutyToReferService.update).not.toHaveBeenCalled()
+      expect(request.flash).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
+    })
+
     it('keeps submission status when editing an existing submission that has an outcome', async () => {
       const submission = dtrSubmissionFactory.accepted().build({ outcomeNote: 'This is an outcome note' })
       const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123', submission })
@@ -372,6 +394,11 @@ describe('dutyToReferController', () => {
       request.body.currentStatus = 'NOT_ACCEPTED'
       request.body.outcomeNote = 'Some note'
 
+      const dtr = dutyToReferFactory.accepted().build({
+        submission: dtrSubmissionFactory.build({ outcomeReason: 'PREVENTION_AND_RELIEF_DUTY', outcomeNote: null }),
+      })
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
+
       await controller.saveOutcome()(request, response, next)
 
       expect(dutyToReferService.update).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
@@ -384,6 +411,21 @@ describe('dutyToReferController', () => {
         outcomeNote: 'Some note',
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details updated')
+      expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
+    })
+
+    it('does not update or flash when saving outcome with no changes', async () => {
+      request.body.currentStatus = 'NOT_ACCEPTED'
+
+      const dtr = dutyToReferFactory.accepted().build({
+        submission: dtrSubmissionFactory.build({ outcomeReason: 'PREVENTION_AND_RELIEF_DUTY', outcomeNote: null }),
+      })
+      dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dtr))
+
+      await controller.saveOutcome()(request, response, next)
+
+      expect(dutyToReferService.update).not.toHaveBeenCalled()
+      expect(request.flash).not.toHaveBeenCalled()
       expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
     })
 

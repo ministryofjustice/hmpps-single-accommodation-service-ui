@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
+import { DtrCommand } from '@sas/api'
 import {
   detailsForStatus,
   detailsSummaryListRows,
@@ -7,7 +8,9 @@ import {
   dutyToReferTimelineEntry,
   linksForStatus,
   outcomeDetailsSummaryListRows,
+  outcomeHasChanges,
   outcomeSupportText,
+  submissionHasChanges,
   summaryListRows,
   validateOutcome,
   validateSubmission,
@@ -517,6 +520,74 @@ describe('duty to refer utils', () => {
         })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+  })
+
+  describe('submissionHasChanges', () => {
+    const dtr = dutyToReferFactory.submitted().build({
+      submission: dtrSubmissionFactory.build({
+        submissionDate: '2025-04-12',
+        localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
+        referenceNumber: 'REF123',
+        submissionNote: 'Some submission note',
+      }),
+    })
+
+    const unchangedSubmission: DtrCommand = {
+      status: 'SUBMITTED',
+      submissionDate: '2025-04-12',
+      localAuthorityAreaId: 'la-1',
+      referenceNumber: 'REF123',
+      submissionNote: 'Some submission note',
+    }
+
+    it('returns false when nothing has changed', () => {
+      expect(submissionHasChanges(dtr, unchangedSubmission)).toBe(false)
+    })
+
+    it('returns true when the submission date changes', () => {
+      expect(submissionHasChanges(dtr, { ...unchangedSubmission, submissionDate: '2025-04-13' })).toBe(true)
+    })
+
+    it('returns true when the local authority changes', () => {
+      expect(submissionHasChanges(dtr, { ...unchangedSubmission, localAuthorityAreaId: 'la-2' })).toBe(true)
+    })
+
+    it('returns true when the reference number changes', () => {
+      expect(submissionHasChanges(dtr, { ...unchangedSubmission, referenceNumber: 'REF999' })).toBe(true)
+    })
+
+    it('returns true when the submission note changes', () => {
+      expect(submissionHasChanges(dtr, { ...unchangedSubmission, submissionNote: 'Some new submission note' })).toBe(true)
+    })
+  })
+
+  describe('outcomeHasChanges', () => {
+    const dtr = dutyToReferFactory.accepted().build({
+      submission: dtrSubmissionFactory.build({
+        outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
+        outcomeNote: 'Some outcome note',
+      }),
+    })
+
+    const unchangedOutcome: DtrCommand = {
+      status: 'ACCEPTED',
+      submissionDate: '2025-04-12',
+      localAuthorityAreaId: 'la-1',
+      outcomeReason: 'PREVENTION_AND_RELIEF_DUTY',
+      outcomeNote: 'Some outcome note',
+    }
+
+    it('returns false when outcome is unchanged', () => {
+      expect(outcomeHasChanges(dtr, unchangedOutcome)).toBe(false)
+    })
+
+    it('returns true when outcome reason changes', () => {
+      expect(outcomeHasChanges(dtr, { ...unchangedOutcome, outcomeReason: 'PRIORITY_NEED' })).toBe(true)
+    })
+
+    it('returns true when outcome note changes', () => {
+      expect(outcomeHasChanges(dtr, { ...unchangedOutcome, outcomeNote: 'Some new outcome note' })).toBe(true)
     })
   })
 })

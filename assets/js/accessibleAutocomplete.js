@@ -12,11 +12,15 @@ function makeAutocomplete(selectElement) {
   }
 
   const inputClasses = selectElement.getAttribute('data-autocomplete-input-classes') || ''
+  const menuClasses = selectElement.getAttribute('data-autocomplete-menu-classes') || ''
 
   accessibleAutocomplete.enhanceSelectElement({
     selectElement,
     defaultValue: '',
     inputClasses,
+    menuClasses,
+    showAllValues: true,
+    confirmOnBlur: false,
   })
 }
 

@@ -10,6 +10,8 @@ import {
   dutyToReferTimelineEntry,
   outcomeReasonToStatus,
   submissionFormValues,
+  submissionHasChanges,
+  outcomeHasChanges,
   validateWithdraw,
   validateNote,
   outcomeReasonLabels,
@@ -140,8 +142,10 @@ export default class DutyToReferController {
             submission.outcomeReason = dtr.submission?.outcomeReason
             submission.outcomeNote = dtr.submission?.outcomeNote || null
           }
-          await this.dutyToReferService.update(token, crn, id, submission)
-          req.flash('success', 'Submission details updated')
+          if (submissionHasChanges(dtr, submission)) {
+            await this.dutyToReferService.update(token, crn, id, submission)
+            req.flash('success', 'Submission details updated')
+          }
           return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         }
 
@@ -224,18 +228,27 @@ export default class DutyToReferController {
       }
 
       try {
-        const outcomeStatus = outcomeReasonToStatus(outcomeReason)
-        await this.dutyToReferService.update(token, crn, id, {
-          status: outcomeStatus,
+        const submission: DtrCommand = {
+          status: outcomeReasonToStatus(outcomeReason),
           submissionDate,
           localAuthorityAreaId,
           referenceNumber,
           outcomeReason,
           submissionNote: submissionNote || null,
           outcomeNote: outcomeNote || null,
-        })
+        }
 
-        req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
+        if (currentStatus !== 'SUBMITTED') {
+          const { data: dtr } = await this.dutyToReferService.getDtrBySubmissionId(token, crn, id)
+          if (outcomeHasChanges(dtr, submission)) {
+            await this.dutyToReferService.update(token, crn, id, submission)
+            req.flash('success', 'Outcome details updated')
+          }
+          return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
+        }
+
+        await this.dutyToReferService.update(token, crn, id, submission)
+        req.flash('success', 'Outcome details added')
         return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')

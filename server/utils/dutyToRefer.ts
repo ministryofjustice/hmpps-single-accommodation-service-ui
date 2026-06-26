@@ -1,5 +1,13 @@
 import { Request } from 'express'
-import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import {
+  AuditRecordDto,
+  CaseDto,
+  DtrCommand,
+  DtrServiceResult,
+  DtrSubmissionDto,
+  DutyToReferDto,
+  FieldChange,
+} from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { Link, StatusCard } from '@sas/ui'
 import { formatDateAndDaysAgo, isoDateToDateInput, formatDateAndAge, dateFieldParts } from './dates'
@@ -371,4 +379,24 @@ export const withdrawReasonLabels: Record<DtrSubmissionDto['withdrawalReason'], 
   HOUSING_NEED_RESOLVED: 'Housing need resolved or person already accommodated',
   NOT_ELIGIBLE: 'Not eligible for Duty to Refer (not homeless or at risk)',
   OTHER: 'Other',
+}
+
+export const submissionHasChanges = (dtr: DutyToReferDto, submission: DtrCommand): boolean => {
+  const currentSubmission = dtr.submission
+
+  return (
+    submission.submissionDate !== currentSubmission?.submissionDate ||
+    submission.localAuthorityAreaId !== currentSubmission?.localAuthority?.localAuthorityAreaId ||
+    (submission.referenceNumber || null) !== (currentSubmission?.referenceNumber || null) ||
+    (submission.submissionNote || null) !== (currentSubmission?.submissionNote || null)
+  )
+}
+
+export const outcomeHasChanges = (dtr: DutyToReferDto, submission: DtrCommand): boolean => {
+  const currentSubmission = dtr.submission
+
+  return (
+    submission.outcomeReason !== currentSubmission?.outcomeReason ||
+    (submission.outcomeNote || null) !== (currentSubmission?.outcomeNote || null)
+  )
 }

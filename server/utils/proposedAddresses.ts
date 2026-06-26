@@ -65,15 +65,15 @@ const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: s
           text: 'Confirm as next address',
           href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
         },
-        { text: 'Notes', href: detailsLink },
+        { text: 'View details', href: detailsLink },
       ]
     case 'NOT_CHECKED_YET':
       return [
         { text: 'Add checks', href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }) },
-        { text: 'Notes', href: detailsLink },
+        { text: 'View details', href: detailsLink },
       ]
     default:
-      return [{ text: 'Notes', href: detailsLink }]
+      return [{ text: 'View details', href: detailsLink }]
   }
 }
 

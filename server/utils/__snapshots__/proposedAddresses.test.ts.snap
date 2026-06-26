@@ -395,7 +395,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "links": [
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
-      "text": "Notes",
+      "text": "View details",
     },
   ],
   "status": {
@@ -442,7 +442,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
     },
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
-      "text": "Notes",
+      "text": "View details",
     },
   ],
   "status": {
@@ -489,7 +489,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
     },
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
-      "text": "Notes",
+      "text": "View details",
     },
   ],
   "status": {
@@ -536,7 +536,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
     },
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
-      "text": "Notes",
+      "text": "View details",
     },
   ],
   "status": {
@@ -579,7 +579,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "confi
   "links": [
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
-      "text": "Notes",
+      "text": "View details",
     },
   ],
   "status": {
@@ -626,7 +626,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
     },
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
-      "text": "Notes",
+      "text": "View details",
     },
   ],
   "status": {

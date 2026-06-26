@@ -267,7 +267,7 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
-    await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
+    await dutyToReferApi.stubGetDtrBySubmissionIdForEdit(crn, submissionId, submittedDutyToRefer, updatedDutyToRefer)
     timelineRecords.unshift(updatedDutyToReferRecord)
     await setupDutyToReferTimeline(submittedDutyToRefer.submission.id, timelineRecords)
 
@@ -295,7 +295,11 @@ test.describe('duty to refer', () => {
     const updatedSubmission = dtrSubmissionFactory.build({ id: submissionId })
     const updatedDutyToRefer = dutyToReferFactory.build({
       ...acceptedDutyToRefer,
-      submission: { ...updatedSubmission, outcomeReason: acceptedDutyToRefer.submission.outcomeReason },
+      submission: {
+        ...updatedSubmission,
+        outcomeReason: acceptedDutyToRefer.submission.outcomeReason,
+        outcomeNote: acceptedDutyToRefer.submission.outcomeNote,
+      },
     })
     const submittedDutyToReferRecord = auditRecordFactory.dutyToReferAdded(acceptedDutyToRefer.submission).build()
     const outcomeDutyToReferRecord = auditRecordFactory
@@ -342,7 +346,7 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
-    await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
+    await dutyToReferApi.stubGetDtrBySubmissionIdForEdit(crn, submissionId, acceptedDutyToRefer, updatedDutyToRefer)
     timelineRecords.unshift(updatedDutyToReferRecord)
     await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
 
@@ -420,7 +424,7 @@ test.describe('duty to refer', () => {
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
-    await dutyToReferApi.stubGetDtrBySubmissionId(crn, submissionId, updatedDutyToRefer)
+    await dutyToReferApi.stubGetDtrBySubmissionIdForEdit(crn, submissionId, acceptedDutyToRefer, updatedDutyToRefer)
     timelineRecords.unshift(updatedDutyToReferRecord)
     await setupDutyToReferTimeline(acceptedDutyToRefer.submission.id, timelineRecords)
     await dutyToReferPage.completeOutcomeForm(updatedDutyToRefer)

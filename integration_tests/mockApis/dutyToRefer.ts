@@ -1,4 +1,4 @@
-import type { SuperAgentRequest } from 'superagent'
+import type { Response, SuperAgentRequest } from 'superagent'
 import { AuditRecordDto, DutyToReferDto } from '@sas/api'
 import { stubFor } from './wiremock'
 import {
@@ -22,6 +22,38 @@ export default {
         jsonBody: apiResponseFactory.dutyToRefer(dutyToReferData || dutyToReferFactory.submitted().build()),
       },
     }),
+  stubGetDtrBySubmissionIdForEdit: (
+    crn: string,
+    submissionId: string,
+    original: DutyToReferDto,
+    updated: DutyToReferDto,
+  ): Promise<Array<Response>> => {
+    return Promise.all([
+      stubFor({
+        scenarioName: `dtr-${submissionId}`,
+        requiredScenarioState: 'Started',
+        newScenarioState: 'edited',
+        priority: 1,
+        request: { method: 'GET', urlPattern: apiPaths.cases.dutyToRefer.show({ crn, id: submissionId }) },
+        response: {
+          status: 200,
+          headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+          jsonBody: apiResponseFactory.dutyToRefer(original),
+        },
+      }),
+      stubFor({
+        scenarioName: `dtr-${submissionId}`,
+        requiredScenarioState: 'edited',
+        priority: 1,
+        request: { method: 'GET', urlPattern: apiPaths.cases.dutyToRefer.show({ crn, id: submissionId }) },
+        response: {
+          status: 200,
+          headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+          jsonBody: apiResponseFactory.dutyToRefer(updated),
+        },
+      }),
+    ])
+  },
   stubSubmitDutyToRefer: (crn: string, dutyToReferData?: DutyToReferDto): SuperAgentRequest =>
     stubFor({
       request: {

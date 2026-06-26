@@ -1,5 +1,6 @@
 import { HtmlContent, SummaryListActionItem, SummaryListRow, TextContent } from '@govuk/ui'
 import { ErrorMessages, RadioItem, SelectOption } from '@sas/ui'
+import { errorDateParts } from './validation'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -116,9 +117,8 @@ export const dateFieldValues = (
     year = today.getFullYear()
   }
 
-  const errorMessage = errors[fieldName]?.text?.toLowerCase()
-  const foundParts = errorMessage ? ['day', 'month', 'year'].filter(part => errorMessage.includes(part)) : []
-  const erroredParts = errorMessage && foundParts.length === 0 ? ['day', 'month', 'year'] : foundParts
+  const errorMessage = errors[fieldName]?.text
+  const erroredParts = errorMessage ? errorDateParts(errorMessage) : []
 
   const parts = [
     { name: 'day', width: 2, value: day },

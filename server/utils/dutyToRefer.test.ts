@@ -558,7 +558,9 @@ describe('duty to refer utils', () => {
     })
 
     it('returns true when the submission note changes', () => {
-      expect(submissionHasChanges(dtr, { ...unchangedSubmission, submissionNote: 'Some new submission note' })).toBe(true)
+      expect(submissionHasChanges(dtr, { ...unchangedSubmission, submissionNote: 'Some new submission note' })).toBe(
+        true,
+      )
     })
   })
 

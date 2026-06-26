@@ -4,7 +4,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { convertObjectsToSelectOptions, initialiseName } from './utils'
+import { convertObjectsToSelectOptions, dateFieldValues, initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { formatDate, mojDateOrBlank } from './dates'
@@ -31,6 +31,7 @@ const addGlobals = (env: nunjucks.Environment) => {
   })
   env.addGlobal('riskLevel', riskLevelStatusTag)
   env.addGlobal('injectConditionals', injectConditionals)
+  env.addGlobal('dateFieldValues', dateFieldValues)
 
   env.addGlobal('featureFlags', config.flags)
 }

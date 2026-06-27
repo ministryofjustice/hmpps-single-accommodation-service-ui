@@ -18,6 +18,7 @@ import {
   validateDateTodayOrPast,
   validateDateNotBefore,
   validateDateField,
+  validateDateFieldTodayOrPast,
   validatePostcode,
 } from './validation'
 
@@ -390,6 +391,36 @@ describe('validators', () => {
       expect(validateDateField(value, 'Main occupier date of birth', 'Main occupier year of birth')).toBe(
         'Main occupier year of birth must include 4 numbers',
       )
+    })
+  })
+
+  describe('validateDateFieldTodayOrPast', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-01-01'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it.each([
+      ['a valid past date', { day: '31', month: '12', year: '2025' }, 'Submission date', undefined],
+      ['today', { day: '1', month: '1', year: '2026' }, 'Submission date', undefined],
+      ['all parts blank', { day: '', month: '', year: '' }, 'Submission date', 'Enter a submission date'],
+      [
+        'an invalid date',
+        { day: '32', month: '12', year: '2025' },
+        'Submission date',
+        'Submission date must be a real date',
+      ],
+      [
+        'a future date',
+        { day: '2', month: '1', year: '2026' },
+        'Submission date',
+        'Submission date must be today or in the past',
+      ],
+    ])('returns the expected error for %s', (_description, value, label, expected) => {
+      expect(validateDateFieldTodayOrPast(value, label)).toBe(expected)
     })
   })
 

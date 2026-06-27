@@ -2,6 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test'
 import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
 import { TimelineEntry } from '@govuk/ui'
 import { formatDate } from '../../server/utils/dates'
+import { errorDateParts } from '../../server/utils/validation'
 
 export default class AbstractPage {
   readonly page: Page
@@ -199,13 +200,14 @@ export default class AbstractPage {
     await expect((container || this.page).locator('details', { hasText: text })).toBeVisible()
   }
 
-  async shouldShowErrorMessagesForFields(errorMessages: Record<string, string>) {
+  async shouldShowErrorMessagesForFields(errorMessages: Record<string, string>, dateFields: string[] = []) {
     await expect(this.page.getByText('There is a problem')).toBeVisible()
 
     const errorSummary = this.page.locator('.govuk-error-summary__body')
 
     for await (const [field, errorMessage] of Object.entries(errorMessages)) {
-      await expect(errorSummary.getByRole('link', { name: errorMessage })).toHaveAttribute('href', `#${field}`)
+      const href = dateFields.includes(field) ? `#${field}-${errorDateParts(errorMessage)[0]}` : `#${field}`
+      await expect(errorSummary.getByRole('link', { name: errorMessage })).toHaveAttribute('href', href)
       await expect(this.page.locator(`#${field}-error`)).toContainText(errorMessage)
     }
   }

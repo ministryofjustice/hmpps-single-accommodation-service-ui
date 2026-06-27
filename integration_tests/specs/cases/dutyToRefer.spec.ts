@@ -110,10 +110,13 @@ test.describe('duty to refer', () => {
 
     // Then I should see errors
     await DutyToReferPage.verifyOnPage(page, 'Add Duty to Refer (DTR) referral details')
-    await dutyToReferPage.shouldShowErrorMessagesForFields({
-      submissionDate: 'Enter a date',
-      localAuthorityAreaId: 'Enter a local authority',
-    })
+    await dutyToReferPage.shouldShowErrorMessagesForFields(
+      {
+        submissionDate: 'Enter a date',
+        localAuthorityAreaId: 'Enter a local authority',
+      },
+      ['submissionDate'],
+    )
 
     // When I complete the form and submit
     await dutyToReferApi.stubSubmitDutyToRefer(crn, submittedDutyToRefer)
@@ -261,9 +264,12 @@ test.describe('duty to refer', () => {
 
     // Then I should see errors
     await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) referral details')
-    await dutyToReferPage.shouldShowErrorMessagesForFields({
-      submissionDate: 'Enter a date',
-    })
+    await dutyToReferPage.shouldShowErrorMessagesForFields(
+      {
+        submissionDate: 'Enter a date',
+      },
+      ['submissionDate'],
+    )
 
     // When I complete the form and submit
     await dutyToReferApi.stubUpdateDutyToRefer(crn, submissionId)
@@ -579,10 +585,13 @@ test.describe('duty to refer', () => {
 
     // Then I should see errors
     await DutyToReferPage.verifyOnPage(page, 'Add new Duty to Refer (DTR) referral details')
-    await dutyToReferPage.shouldShowErrorMessagesForFields({
-      submissionDate: 'Enter a date',
-      localAuthorityAreaId: 'Enter a local authority',
-    })
+    await dutyToReferPage.shouldShowErrorMessagesForFields(
+      {
+        submissionDate: 'Enter a date',
+        localAuthorityAreaId: 'Enter a local authority',
+      },
+      ['submissionDate'],
+    )
 
     // When I complete the form and submit
     await dutyToReferApi.stubSubmitDutyToRefer(crn, newDutyToRefer)

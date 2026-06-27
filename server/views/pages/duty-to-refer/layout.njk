@@ -7,52 +7,56 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {% block containerStart %}
-    {{ govukBackLink({
+  {{
+    govukBackLink({
         text: "Back",
         href: backLinkHref
-    }) }}
+    })
+  }}
 {% endblock %}
 
 {% block content %}
-    {% if errorSummary and errorSummary.length %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half-from-desktop">
-                {{ govukErrorSummary({
-                    titleText: "There is a problem",
-                    errorList: errorSummary
-                }) }}
-            </div>
-        </div>
-    {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      {% if errorSummary and errorSummary.length %}
+        {{
+          govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          })
+        }}
+      {% endif %}
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half-from-desktop">
-            <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
-            {{
-                govukSummaryList({
-                    rows: tableRows
-                })
-            }}
-        </div>
+      <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+      {{
+        govukSummaryList({
+            rows: tableRows
+        })
+      }}
     </div>
-    <div class="govuk-grid-row">
-        <div class="{{ formColumnClass or "govuk-grid-column-two-thirds-from-desktop" }}">
-            <form method="post" novalidate="">
-                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="{{ formColumnClass or "govuk-grid-column-two-thirds-from-desktop" }}">
+      <form method="post" novalidate="">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-                {% block formContent %}{% endblock %}
+        {% block formContent %}{% endblock %}
 
-                <div class="govuk-button-group">
-                    {{ govukButton({
-                    text: submitButtonText or "Save and continue",
-                    preventDoubleClick: true
-                }) }}
-                </div>
-
-                <p>
-                    <a class="govuk-link govuk-link--no-visited-state" href="{{ backLinkHref }}">{{ skipLinkText or 'Cancel' }}</a>
-                </p>
-            </form>
+        <div class="govuk-button-group">
+          {{
+            govukButton({
+                text: submitButtonText or "Save and continue",
+                preventDoubleClick: true
+            })
+          }}
         </div>
+
+        <p>
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ backLinkHref }}"
+            >{{ skipLinkText or 'Cancel' }}</a
+          >
+        </p>
+      </form>
     </div>
+  </div>
 {% endblock %}

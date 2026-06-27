@@ -6,3 +6,7 @@
 .autocomplete__hint {
   @include govuk-typography-common();
 }
+
+.govuk-form-group--error .autocomplete__input {
+  border-color: $govuk-error-colour;
+}

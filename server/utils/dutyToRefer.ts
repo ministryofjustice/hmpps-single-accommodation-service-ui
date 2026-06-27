@@ -155,7 +155,7 @@ export const validateSubmission = (req: Request) => {
   const { localAuthorityAreaId, referenceNumber } = req.body
   const submissionDateParts = dateFieldParts(req.body, 'submissionDate')
   const errors: Record<string, string> = {
-    submissionDate: validateDateField(submissionDateParts, 'Submission date'),
+    submissionDate: validateDateField(submissionDateParts, 'Date', 'Year'),
     localAuthorityAreaId: validateMandatoryText(localAuthorityAreaId, 'local authority'),
     referenceNumber: validateMaxLength(referenceNumber, 'Reference number', 255),
   }

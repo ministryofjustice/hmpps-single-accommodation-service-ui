@@ -245,11 +245,9 @@ describe('validateAndFlashErrors', () => {
   })
 
   it('flashes a date field error linked to the correct input', () => {
-    const result = validateAndFlashErrors(
-      request,
-      { submissionDate: 'Submission date year must include 4 numbers' },
-      ['submissionDate'],
-    )
+    const result = validateAndFlashErrors(request, { submissionDate: 'Submission date year must include 4 numbers' }, [
+      'submissionDate',
+    ])
     expect(result).toBe(false)
     expect(request.flash).toHaveBeenCalledWith(
       'errorSummary',

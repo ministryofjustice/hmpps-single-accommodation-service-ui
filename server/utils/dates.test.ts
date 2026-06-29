@@ -214,7 +214,7 @@ describe('date utilities', () => {
       ['2026-02-20', '2026-02-20T23:01:00.000Z'],
       ['2026-06-29', '2026-06-29T12:00:00.000Z'],
       ['2026-06-30', '2026-06-29T23:01:00.000Z'],
-    ])('returns local today date %s when UTC date now is %s', (expected, date) => {
+    ])('returns GB today date %s when UTC date now is %s', (expected, date) => {
       jest.setSystemTime(new Date(date))
 
       expect(getTodayLocal()).toEqual(expected)

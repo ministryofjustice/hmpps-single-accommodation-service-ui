@@ -76,4 +76,15 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       },
     }),
+  stubSubmitArrival: (crn: string, id: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.cases.proposedAddresses.arrival({ crn, id }),
+      },
+      response: {
+        status: 201,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    }),
 }

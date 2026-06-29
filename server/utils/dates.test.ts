@@ -6,6 +6,7 @@ import {
   formatDate,
   formatDateAndAge,
   formatDateAndDaysAgo,
+  getTodayLocal,
   isoDateToDateInput,
   mojDateOrBlank,
 } from './dates'
@@ -196,6 +197,27 @@ describe('date utilities', () => {
       { title: 'blank', value: '' },
     ])('returns nothing if the timestamp is $title', ({ value }) => {
       expect(mojDateOrBlank(value, 'datetime')).toEqual('')
+    })
+  })
+
+  describe('getTodayLocal', () => {
+    beforeEach(() => {
+      jest.useFakeTimers()
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it.each([
+      ['2026-02-20', '2026-02-20T12:00:00.000Z'],
+      ['2026-02-20', '2026-02-20T23:01:00.000Z'],
+      ['2026-06-29', '2026-06-29T12:00:00.000Z'],
+      ['2026-06-30', '2026-06-29T23:01:00.000Z'],
+    ])('returns local today date %s when UTC date now is %s', (expected, date) => {
+      jest.setSystemTime(new Date(date))
+
+      expect(getTodayLocal()).toEqual(expected)
     })
   })
 })

@@ -55,6 +55,7 @@ const setupProposedAddresses = async (crn: string, proposedAddresses: ProposedAc
       auditRecordFactory.proposedAddressCreated(proposedAddress).build(),
     ])
     await proposedAddressesApi.stubUpdateProposedAddress(crn, proposedAddress.id)
+    await proposedAddressesApi.stubSubmitArrival(crn, proposedAddress.id)
   }
 }
 
@@ -774,10 +775,10 @@ test.describe('set proposed address as current', () => {
     // Then the API has been called
     await confirmCurrentAddressPage.checkApiCalled()
 
-    // And I should see the address details page
-    await ProposedAddressDetailsPage.verifyOnPage(page, confirmedAddress)
+    // And I should see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     // And a banner should be shown confirming the proposed address was updated
-    await addressDetailsPage.shouldShowBanner('Current address updated')
+    await profileTrackerPage.shouldShowBanner('Current address updated')
   })
 })

@@ -115,3 +115,6 @@ export const getTodayUtcDate = (): Date => {
   const now = new Date()
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
 }
+
+export const getTodayLocal = (): string =>
+  new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0]

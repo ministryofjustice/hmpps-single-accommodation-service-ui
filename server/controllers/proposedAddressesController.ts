@@ -42,6 +42,7 @@ import ReferenceDataService from '../services/referenceDataService'
 import config from '../config'
 import { radioItems } from '../utils/utils'
 import { collectApiResponses } from '../utils/apiResponses'
+import { getTodayLocal } from '../utils/dates'
 
 interface EditRequest extends Request {
   params: {
@@ -556,6 +557,24 @@ export default class ProposedAddressesController {
         addressLines: addressLines(proposedAddress.address),
         cancelLinkHref: backLinkHref,
       })
+    }
+  }
+
+  saveArrival(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+
+      try {
+        await this.proposedAddressesService.submitArrival(token, crn, id, {
+          arrivalDate: getTodayLocal(),
+        })
+        req.flash('success', 'Current address updated')
+        return res.redirect(uiPaths.cases.show({ crn }))
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem saving the current address. Please try again.')
+        return res.redirect(uiPaths.proposedAddresses.arrival({ crn, id }))
+      }
     }
   }
 }

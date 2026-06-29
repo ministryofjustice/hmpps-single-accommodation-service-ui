@@ -4,6 +4,7 @@ import {
   ApiResponseDtoListProposedAccommodationDto,
   ApiResponseDtoProposedAccommodationDto,
   NoteCommand,
+  ProposedAccommodationArrivalCommand,
   ProposedAccommodationDetailCommand,
 } from '@sas/api'
 import config from '../config'
@@ -66,6 +67,13 @@ export default class ProposedAddressesClient extends RestClient {
         path: apiPaths.cases.proposedAddresses.notes({ crn, id }),
         data: note,
       },
+      asUser(token),
+    )
+  }
+
+  async submitArrival(token: string, crn: string, id: string, arrival: ProposedAccommodationArrivalCommand) {
+    return this.post<void>(
+      { path: apiPaths.cases.proposedAddresses.arrival({ crn, id }), data: arrival },
       asUser(token),
     )
   }

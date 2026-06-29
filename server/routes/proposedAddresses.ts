@@ -39,4 +39,5 @@ export default function proposedAddressesRoutes(
   router.get(uiPaths.proposedAddresses.cancel.pattern, proposedAddressesController.cancel())
 
   router.get(uiPaths.proposedAddresses.arrival.pattern, proposedAddressesController.arrival())
+  router.post(uiPaths.proposedAddresses.arrival.pattern, proposedAddressesController.saveArrival())
 }

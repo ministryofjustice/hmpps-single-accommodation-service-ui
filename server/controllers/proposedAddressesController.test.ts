@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { ProposedAddressFormData } from '@sas/ui'
+import { ProposedAccommodationDto } from '@sas/api'
 import ProposedAddressesController from './proposedAddressesController'
 import config from '../config'
 import AuditService, { Page } from '../services/auditService'
@@ -1062,6 +1063,50 @@ describe('proposedAddressesController', () => {
         addressLines: addressLines(proposedAddress.address),
         cancelLinkHref: '/foo',
       })
+    })
+  })
+
+  describe('saveArrival', () => {
+    let proposedAddress: ProposedAccommodationDto
+
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-06-29T12:00:00.000Z'))
+      proposedAddress = proposedAccommodationFactory.build({
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+      })
+      request.params.id = proposedAddress.id
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it('submits and redirects to the profile page with a success banner', async () => {
+      await controller.saveArrival()(request, response, next)
+
+      expect(proposedAddressesService.submitArrival).toHaveBeenCalledWith('token-1', 'CRN123', proposedAddress.id, {
+        arrivalDate: '2026-06-29',
+      })
+      expect(request.flash).toHaveBeenCalledWith('success', 'Current address updated')
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
+
+    it('redirects to the arrival page when there is an API error', async () => {
+      jest.spyOn(proposedAddressesService, 'submitArrival').mockRejectedValue(new Error('API error'))
+
+      await controller.saveArrival()(request, response, next)
+
+      expect(proposedAddressesService.submitArrival).toHaveBeenCalledWith('token-1', 'CRN123', proposedAddress.id, {
+        arrivalDate: '2026-06-29',
+      })
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
+        request,
+        'There was a problem saving the current address. Please try again.',
+      )
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.arrival({ crn: 'CRN123', id: proposedAddress.id }),
+      )
     })
   })
 })

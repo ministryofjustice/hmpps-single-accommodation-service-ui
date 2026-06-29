@@ -7,6 +7,7 @@ import {
   proposedAccommodationDetailCommandFactory,
   apiResponseFactory,
   proposedAccommodationFactory,
+  proposedAccommodationArrivalCommandFactory,
 } from '../testutils/factories'
 
 describeClient('ProposedAddressesClient', provider => {
@@ -161,5 +162,29 @@ describeClient('ProposedAddressesClient', provider => {
     })
 
     await proposedAddressesClient.submitTimelineNote(token, crn, proposedAddress.id, note)
+  })
+
+  it('should make a POST request to /cases/:crn/proposed-accommodations/:id/arrival', async () => {
+    const crn = crnFactory()
+    const proposedAddress = proposedAccommodationFactory.build()
+    const arrival = proposedAccommodationArrivalCommandFactory.build()
+
+    await provider.addInteraction({
+      state: `A proposed address exists for case with CRN ${crn}`,
+      uponReceiving: 'a request to post a proposed address arrival for a case by CRN and address ID',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.proposedAddresses.arrival({ crn, id: proposedAddress.id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: arrival,
+      },
+      willRespondWith: {
+        status: 201,
+      },
+    })
+
+    await proposedAddressesClient.submitArrival(token, crn, proposedAddress.id, arrival)
   })
 })

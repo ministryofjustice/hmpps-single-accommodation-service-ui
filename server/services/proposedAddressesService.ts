@@ -1,5 +1,10 @@
 import { ProposedAddressFormData } from '@sas/ui'
-import { NoteCommand, ProposedAccommodationDto, UpstreamFailureDto } from '@sas/api'
+import {
+  NoteCommand,
+  ProposedAccommodationArrivalCommand,
+  ProposedAccommodationDto,
+  UpstreamFailureDto,
+} from '@sas/api'
 import { ProposedAddressesClient } from '../data'
 import { formDataToRequestBody } from '../utils/proposedAddresses'
 
@@ -50,5 +55,9 @@ export default class ProposedAddressesService {
 
   async submitTimelineNote(token: string, crn: string, id: string, note: NoteCommand) {
     return this.proposedAddressesClient.submitTimelineNote(token, crn, id, note)
+  }
+
+  async submitArrival(token: string, crn: string, id: string, arrival: ProposedAccommodationArrivalCommand) {
+    return this.proposedAddressesClient.submitArrival(token, crn, id, arrival)
   }
 }

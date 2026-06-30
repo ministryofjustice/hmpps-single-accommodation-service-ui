@@ -30,6 +30,7 @@ import {
 import { addressLines, formatAddress } from './addresses'
 import { renderMacro, statusTag } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
+import config from '../config'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
@@ -47,10 +48,11 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodation
     inactive: proposedAddress.verificationStatus === 'FAILED',
     status: proposedAddressStatusTag(status),
     details: [
-      summaryListRowText('Housing arrangement', proposedAddress.accommodationType.description),
+      proposedAddress.accommodationType?.description &&
+        summaryListRowText('Housing arrangement', proposedAddress.accommodationType.description),
       summaryListRowText('Added by', proposedAddress.createdBy),
       summaryListRowText('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
-    ],
+    ].filter(Boolean),
     links: linksForStatus(status, proposedAddress.crn, proposedAddress.id),
   }
 }
@@ -108,9 +110,10 @@ export const checkYourAnswersRows = (
   accommodationTypes: ReferenceDataDto[],
 ): Record<'address' | 'supportingInfo', SummaryListRow[]> => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
-  const changeAddressLink = sessionData.lookupResults
-    ? uiPaths.proposedAddresses.lookup({ crn })
-    : uiPaths.proposedAddresses.details({ crn })
+  const changeAddressLink =
+    sessionData.lookupResults || config.flags.hideManualAddressEntry
+      ? uiPaths.proposedAddresses.lookup({ crn })
+      : uiPaths.proposedAddresses.details({ crn })
 
   const rows = {
     address: [
@@ -250,7 +253,11 @@ export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFo
 
   if (!sessionData) return uiPaths.cases.show({ crn })
 
-  return !validateAddressFromSession(req, sessionData) ? uiPaths.proposedAddresses.details({ crn }) : undefined
+  const redirect =
+    sessionData.lookupResults || config.flags.hideManualAddressEntry
+      ? uiPaths.proposedAddresses.lookup({ crn })
+      : uiPaths.proposedAddresses.details({ crn })
+  return !validateAddressFromSession(req, sessionData) ? redirect : undefined
 }
 
 export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {
@@ -332,7 +339,7 @@ export const addressDetailRows = (proposedAddress: ProposedAccommodationDto): Su
   return [
     summaryListRowHtml('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress)))),
     summaryListRowHtml('Address', formatAddress(proposedAddress.address, '<br />'), [editLink('lookup')]),
-    summaryListRowText('Housing arrangement', proposedAddress.accommodationType.description, [editLink('type')]),
+    summaryListRowText('Housing arrangement', proposedAddress.accommodationType?.description || '', [editLink('type')]),
     summaryListRowText('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus), [
       editLink('status'),
     ]),

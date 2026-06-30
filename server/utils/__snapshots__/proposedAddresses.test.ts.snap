@@ -640,4 +640,43 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "not c
 }
 `;
 
+exports[`Proposed addresses utilities proposedAddressStatusCard returns a status card for an address with no accommodation type 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "John Smith",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 January 2026 (1 day ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "/cases/CRN123/proposed-addresses/some-id/arrival",
+      "text": "Set as current address",
+    },
+    {
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
+      "text": "View details",
+    },
+  ],
+  "status": {
+    "colour": "green",
+    "text": "Confirmed",
+  },
+}
+`;
+
 exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p>Failed</p><p>Not suitable</p>"`;

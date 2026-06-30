@@ -197,12 +197,6 @@ export const validateDateField = (parts: DateFieldParts, label: string, yearLabe
   validateDateYearLength(parts, label, yearLabel) ||
   validateRealDate(parts, label)
 
-export const validateDateFieldTodayOrPast = (
-  parts: DateFieldParts,
-  label: string,
-  yearLabel?: string,
-): string | undefined => validateDateField(parts, label, yearLabel) || validateDateTodayOrPast(parts, label)
-
 export const validatePostcode = (value: string | undefined): string | undefined => {
   if (!value) return 'Enter a UK postcode'
   return isValidUKPostcode(value) ? undefined : 'Enter a full UK postcode, like AA3 1AB'

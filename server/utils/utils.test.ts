@@ -1,6 +1,7 @@
 import {
   convertObjectsToSelectOptions,
   convertToTitleCase,
+  dateFieldValues,
   htmlContent,
   initialiseName,
   summaryListRowOptional,
@@ -220,5 +221,103 @@ describe('radioItems', () => {
     const items = radioItems(labels)
 
     expect(items.every(item => item.checked === false)).toBe(true)
+  })
+})
+
+describe('dateFieldValues', () => {
+  const context = {
+    'submissionDate-day': '28',
+    'submissionDate-month': '2',
+    'submissionDate-year': '2025',
+  }
+
+  it('returns an item for the day, month and year', () => {
+    expect(dateFieldValues('submissionDate', context)).toEqual([
+      { name: 'day', classes: 'govuk-input--width-2', value: '28' },
+      { name: 'month', classes: 'govuk-input--width-2', value: '2' },
+      { name: 'year', classes: 'govuk-input--width-4', value: '2025' },
+    ])
+  })
+
+  it('returns undefined values when the date parts are missing', () => {
+    expect(dateFieldValues('submissionDate', {})).toEqual([
+      { name: 'day', classes: 'govuk-input--width-2', value: undefined },
+      { name: 'month', classes: 'govuk-input--width-2', value: undefined },
+      { name: 'year', classes: 'govuk-input--width-4', value: undefined },
+    ])
+  })
+
+  it('does not highlight any part when the field has no error', () => {
+    const errors = { otherField: { text: 'Some other error' } }
+
+    expect(dateFieldValues('submissionDate', context, errors)).toEqual([
+      { name: 'day', classes: 'govuk-input--width-2', value: '28' },
+      { name: 'month', classes: 'govuk-input--width-2', value: '2' },
+      { name: 'year', classes: 'govuk-input--width-4', value: '2025' },
+    ])
+  })
+
+  it('highlights only the part named in the error', () => {
+    const errors = { submissionDate: { text: 'Submission date year must include 4 numbers' } }
+
+    expect(dateFieldValues('submissionDate', context, errors)).toEqual([
+      { name: 'day', classes: 'govuk-input--width-2', value: '28' },
+      { name: 'month', classes: 'govuk-input--width-2', value: '2' },
+      { name: 'year', classes: 'govuk-input--width-4 govuk-input--error', value: '2025' },
+    ])
+  })
+
+  it('highlights each part named in the error', () => {
+    const errors = { submissionDate: { text: 'Submission date must include a month and a year' } }
+
+    expect(dateFieldValues('submissionDate', context, errors)).toEqual([
+      { name: 'day', classes: 'govuk-input--width-2', value: '28' },
+      { name: 'month', classes: 'govuk-input--width-2 govuk-input--error', value: '2' },
+      { name: 'year', classes: 'govuk-input--width-4 govuk-input--error', value: '2025' },
+    ])
+  })
+
+  it('highlights every part when the error does not name one', () => {
+    const errors = { submissionDate: { text: 'Enter a submission date' } }
+
+    expect(dateFieldValues('submissionDate', context, errors)).toEqual([
+      { name: 'day', classes: 'govuk-input--width-2 govuk-input--error', value: '28' },
+      { name: 'month', classes: 'govuk-input--width-2 govuk-input--error', value: '2' },
+      { name: 'year', classes: 'govuk-input--width-4 govuk-input--error', value: '2025' },
+    ])
+  })
+
+  describe('defaultToToday', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-03-27T12:00:00Z'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it("defaults to today's date when no parts are provided", () => {
+      expect(dateFieldValues('submissionDate', {}, {}, true)).toEqual([
+        { name: 'day', classes: 'govuk-input--width-2', value: 27 },
+        { name: 'month', classes: 'govuk-input--width-2', value: 3 },
+        { name: 'year', classes: 'govuk-input--width-4', value: 2025 },
+      ])
+    })
+
+    it('keeps the provided values rather than defaulting to today', () => {
+      expect(dateFieldValues('submissionDate', context, {}, true)).toEqual([
+        { name: 'day', classes: 'govuk-input--width-2', value: '28' },
+        { name: 'month', classes: 'govuk-input--width-2', value: '2' },
+        { name: 'year', classes: 'govuk-input--width-4', value: '2025' },
+      ])
+    })
+
+    it('does not default to today when only some parts are provided', () => {
+      expect(dateFieldValues('submissionDate', { 'submissionDate-day': '28' }, {}, true)).toEqual([
+        { name: 'day', classes: 'govuk-input--width-2', value: '28' },
+        { name: 'month', classes: 'govuk-input--width-2', value: undefined },
+        { name: 'year', classes: 'govuk-input--width-4', value: undefined },
+      ])
+    })
   })
 })

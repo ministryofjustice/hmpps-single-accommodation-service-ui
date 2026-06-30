@@ -281,10 +281,14 @@ describe('duty to refer utils', () => {
       req.body = {}
       const result = validateSubmission(req)
 
-      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-        submissionDate: 'Enter a date',
-        localAuthorityAreaId: 'Enter a local authority',
-      })
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(
+        req,
+        {
+          submissionDate: 'Enter a date',
+          localAuthorityAreaId: 'Enter a local authority',
+        },
+        ['submissionDate'],
+      )
       expect(result).toEqual(false)
     })
 

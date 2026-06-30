@@ -1,5 +1,6 @@
 import { HtmlContent, SummaryListActionItem, SummaryListRow, TextContent } from '@govuk/ui'
-import { RadioItem, SelectOption } from '@sas/ui'
+import { ErrorMessages, RadioItem, SelectOption } from '@sas/ui'
+import { errorDateParts } from './validation'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -98,3 +99,36 @@ export const radioItems = (labels: Record<string, string>, selectedValue?: strin
     text,
     checked: selectedValue === value,
   }))
+
+export const dateFieldValues = (
+  fieldName: string,
+  context: Record<string, unknown>,
+  errors: ErrorMessages = {},
+  defaultToToday = false,
+) => {
+  let day = context[`${fieldName}-day`]
+  let month = context[`${fieldName}-month`]
+  let year = context[`${fieldName}-year`]
+
+  if (defaultToToday && !day && !month && !year) {
+    const today = new Date()
+    day = today.getDate()
+    month = today.getMonth() + 1
+    year = today.getFullYear()
+  }
+
+  const errorMessage = errors[fieldName]?.text
+  const erroredParts = errorMessage ? errorDateParts(errorMessage) : []
+
+  const parts = [
+    { name: 'day', width: 2, value: day },
+    { name: 'month', width: 2, value: month },
+    { name: 'year', width: 4, value: year },
+  ]
+
+  return parts.map(({ name, width, value }) => ({
+    name,
+    classes: `govuk-input--width-${width}${erroredParts.includes(name) ? ' govuk-input--error' : ''}`,
+    value,
+  }))
+}

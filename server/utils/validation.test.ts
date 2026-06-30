@@ -4,6 +4,7 @@ import { ErrorMessages, ErrorSummary } from '@sas/ui'
 import {
   addErrorToFlash,
   addGenericErrorToFlash,
+  errorDateParts,
   fetchErrorsAndUserInput,
   addUserInputToFlash,
   generateErrorMessages,
@@ -108,6 +109,24 @@ describe('addGenericErrorToFlash', () => {
   })
 })
 
+describe('errorDateParts', () => {
+  it('returns the part named in the message', () => {
+    expect(errorDateParts('Submission date year must include 4 numbers')).toEqual(['year'])
+  })
+
+  it('returns each part named in the message', () => {
+    expect(errorDateParts('Submission date must include a month and a year')).toEqual(['month', 'year'])
+  })
+
+  it('returns all parts when none are named', () => {
+    expect(errorDateParts('Enter a submission date')).toEqual(['day', 'month', 'year'])
+  })
+
+  it('ignores case when matching parts', () => {
+    expect(errorDateParts('Enter a DAY')).toEqual(['day'])
+  })
+})
+
 describe('generateErrorSummary', () => {
   it('returns an empty array if there are no errors', () => {
     const result = generateErrorSummary({})
@@ -129,6 +148,24 @@ describe('generateErrorSummary', () => {
       { text: 'error 1', href: '#field1' },
       { text: 'error 2', href: '#field2' },
     ])
+  })
+
+  it('links a date field to the first part with an error', () => {
+    const errors = {
+      submissionDate: 'Submission date must include a month and a year',
+      field2: 'error 2',
+    }
+    const result = generateErrorSummary(errors, ['submissionDate'])
+    expect(result).toEqual([
+      { text: 'Submission date must include a month and a year', href: '#submissionDate-month' },
+      { text: 'error 2', href: '#field2' },
+    ])
+  })
+
+  it('links a whole date error to the day input', () => {
+    const errors = { submissionDate: 'Enter a submission date' }
+    const result = generateErrorSummary(errors, ['submissionDate'])
+    expect(result).toEqual([{ text: 'Enter a submission date', href: '#submissionDate-day' }])
   })
 })
 
@@ -204,6 +241,17 @@ describe('validateAndFlashErrors', () => {
         { text: 'error 1', href: '#field1' },
         { text: 'error 2', href: '#field2' },
       ]),
+    )
+  })
+
+  it('flashes a date field error linked to the correct input', () => {
+    const result = validateAndFlashErrors(request, { submissionDate: 'Submission date year must include 4 numbers' }, [
+      'submissionDate',
+    ])
+    expect(result).toBe(false)
+    expect(request.flash).toHaveBeenCalledWith(
+      'errorSummary',
+      JSON.stringify([{ text: 'Submission date year must include 4 numbers', href: '#submissionDate-year' }]),
     )
   })
 })

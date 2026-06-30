@@ -164,7 +164,7 @@ export const validateSubmission = (req: Request) => {
     submissionNote: validateMaxLength(submissionNote, 'Notes', 4000),
   }
 
-  return validateAndFlashErrors(req, errors)
+  return validateAndFlashErrors(req, errors, ['submissionDate'])
 }
 
 export const validateOutcome = (req: Request) => {

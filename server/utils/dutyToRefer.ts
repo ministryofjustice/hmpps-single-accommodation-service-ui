@@ -158,8 +158,7 @@ export const validateSubmission = (req: Request) => {
   const submissionDateParts = dateFieldParts(req.body, 'submissionDate')
   const errors: Record<string, string> = {
     submissionDate:
-      validateDateField(submissionDateParts, 'Date', 'Year') ||
-      validateDateTodayOrPast(submissionDateParts, 'Date'),
+      validateDateField(submissionDateParts, 'Date', 'Year') || validateDateTodayOrPast(submissionDateParts, 'Date'),
     localAuthorityAreaId: validateMandatoryText(localAuthorityAreaId, 'local authority'),
     referenceNumber: validateMaxLength(referenceNumber, 'Reference number', 255),
     submissionNote: validateMaxLength(submissionNote, 'Notes', 4000),

@@ -294,12 +294,12 @@ describe('dateFieldValues', () => {
 
     it("defaults to today's date when no parts are provided", () => {
       const today = new Date('2025-03-27T12:00:00Z')
-      jest.useFakeTimers().setSystemTime(today)
+      jest.useFakeTimers().setSystemTime(new Date('2025-03-27T12:00:00Z'))
 
       expect(dateFieldValues('submissionDate', {}, {}, true)).toEqual([
-        { name: 'day', classes: 'govuk-input--width-2', value: today.getDate() },
-        { name: 'month', classes: 'govuk-input--width-2', value: today.getMonth() + 1 },
-        { name: 'year', classes: 'govuk-input--width-4', value: today.getFullYear() },
+        { name: 'day', classes: 'govuk-input--width-2', value: 27 },
+        { name: 'month', classes: 'govuk-input--width-2', value: 3 },
+        { name: 'year', classes: 'govuk-input--width-4', value: 2025 },
       ])
     })
 

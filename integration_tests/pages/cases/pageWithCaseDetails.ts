@@ -15,15 +15,17 @@ export default class PageWithCaseDetails extends AbstractPage {
       { label: 'RoSH', value: riskLevelStatusTag(caseData.riskLevel).text },
       { label: 'Tier', value: caseData.tierScore },
       { label: 'CRN', value: caseData.crn },
-      { label: 'Prison number', value: caseData.prisonNumber },
+      { label: 'Prison number', value: caseData.prisonNumber, optional: true },
       { label: 'PNC reference', value: caseData.pncReference },
       { label: 'Date of birth', value: formatDate(caseData.dateOfBirth) },
       { label: 'Assigned to', value: `${caseData.assignedTo?.forename} ${caseData.assignedTo?.surname}` },
     ]
 
     for await (const detail of details) {
-      const dd = this.page.locator(`dt:has-text("${detail.label}") + dd`)
-      await expect(dd).toContainText(detail.value ?? '')
+      if (!detail.optional || detail.value) {
+        const dd = this.page.locator(`dt:has-text("${detail.label}") + dd`)
+        await expect(dd).toContainText(detail.value ?? '')
+      }
     }
   }
 }

@@ -549,8 +549,8 @@ test.describe('edit proposed address', () => {
     // And the proposed address should show passed status
     await profileTrackerPage.shouldShowProposedAddresses([notNextAccommodationUpdate])
 
-    // When I click the Confirm as next address link
-    await profileTrackerPage.clickLink('Confirm as next address')
+    // When I click the Set as next address link
+    await profileTrackerPage.clickLink('Set as next address')
 
     // Then I should see the populated next accommodation form
     await addProposedAddressPage.shouldShowPopulatedNextAccommodationForm(notNextAccommodationFormData)

@@ -16,7 +16,9 @@ export default class DutyToReferPage extends AbstractPage {
     await this.shouldShowSummaryItem('Name', caseData.name)
     await this.shouldShowSummaryItem('Date of birth', formatDateAndAge(caseData.dateOfBirth))
     await this.shouldShowSummaryItem('CRN', caseData.crn)
-    await this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
+    if (caseData.prisonNumber) {
+      await this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
+    }
   }
 
   async shouldShowPopulatedSubmissionForm(dutyToRefer: DutyToReferDto) {
@@ -29,7 +31,7 @@ export default class DutyToReferPage extends AbstractPage {
       await this.verifyTextInput('Reference number', dutyToRefer.submission.referenceNumber)
     }
     if (dutyToRefer.submission.submissionNote) {
-      await this.verifyTextInput('Add note', dutyToRefer.submission.submissionNote)
+      await this.verifyTextInput('Notes', dutyToRefer.submission.submissionNote)
     }
   }
 
@@ -45,9 +47,9 @@ export default class DutyToReferPage extends AbstractPage {
       await this.clearInputByLabel('Reference number')
     }
     if (dutyToRefer.submission.submissionNote) {
-      await this.completeInputByLabel('Add note', dutyToRefer.submission.submissionNote)
+      await this.completeInputByLabel('Notes', dutyToRefer.submission.submissionNote)
     } else {
-      await this.clearInputByLabel('Add note')
+      await this.clearInputByLabel('Notes')
     }
   }
 
@@ -62,9 +64,9 @@ export default class DutyToReferPage extends AbstractPage {
     const reason = outcomeReasonLabels[dutyToRefer.submission.outcomeReason]
     await this.selectRadioByLabel(reason)
     if (dutyToRefer.submission.outcomeNote) {
-      await this.completeInputByLabel('Add note', dutyToRefer.submission.outcomeNote)
+      await this.completeInputByLabel('Notes', dutyToRefer.submission.outcomeNote)
     } else {
-      await this.clearInputByLabel('Add note')
+      await this.clearInputByLabel('Notes')
     }
   }
 

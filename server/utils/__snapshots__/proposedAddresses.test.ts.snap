@@ -438,7 +438,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "links": [
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/edit/nextAccommodation",
-      "text": "Confirm as next address",
+      "text": "Set as next address",
     },
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
@@ -485,7 +485,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "links": [
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/edit/nextAccommodation",
-      "text": "Confirm as next address",
+      "text": "Set as next address",
     },
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",
@@ -532,7 +532,7 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a "check
   "links": [
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/edit/nextAccommodation",
-      "text": "Confirm as next address",
+      "text": "Set as next address",
     },
     {
       "href": "/cases/CRN123/proposed-addresses/some-id/details",

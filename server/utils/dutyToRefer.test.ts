@@ -184,6 +184,13 @@ describe('duty to refer utils', () => {
       expect(rows[3].value.text).toBe('A1234BC')
     })
 
+    it('does not include prison number row when there is no prison number', () => {
+      const rows = summaryListRows(caseFactory.build({ ...caseData, prisonNumber: undefined }))
+
+      expect(rows).toHaveLength(3)
+      expect(rows.map(row => row.key.text)).not.toContain('Prison number')
+    })
+
     it('formats case data with submission date and local authority', () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({
         submission: { submissionDate: '2025-01-10', localAuthority: { localAuthorityAreaName: 'Some Council' } },
@@ -275,7 +282,7 @@ describe('duty to refer utils', () => {
       const result = validateSubmission(req)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-        submissionDate: 'Enter a submission date',
+        submissionDate: 'Enter a date',
         localAuthorityAreaId: 'Enter a local authority',
       })
       expect(result).toEqual(false)

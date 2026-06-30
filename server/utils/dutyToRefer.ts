@@ -76,9 +76,10 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
     summaryListRowText('Name', caseData.name),
     summaryListRowText('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
     summaryListRowText('CRN', caseData.crn),
-    summaryListRowText('Prison number', caseData.prisonNumber),
   ]
-
+  if (caseData.prisonNumber) {
+    rows.push(summaryListRowText('Prison number', caseData.prisonNumber))
+  }
   if (dutyToRefer) {
     rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
     rows.push(
@@ -152,21 +153,23 @@ export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
 }
 
 export const validateSubmission = (req: Request) => {
-  const { localAuthorityAreaId, referenceNumber } = req.body
+  const { localAuthorityAreaId, referenceNumber, submissionNote } = req.body
   const submissionDateParts = dateFieldParts(req.body, 'submissionDate')
   const errors: Record<string, string> = {
-    submissionDate: validateDateField(submissionDateParts, 'Submission date'),
+    submissionDate: validateDateField(submissionDateParts, 'Date', 'Year'),
     localAuthorityAreaId: validateMandatoryText(localAuthorityAreaId, 'local authority'),
     referenceNumber: validateMaxLength(referenceNumber, 'Reference number', 255),
+    submissionNote: validateMaxLength(submissionNote, 'Notes', 4000),
   }
 
   return validateAndFlashErrors(req, errors)
 }
 
 export const validateOutcome = (req: Request) => {
-  const { outcomeReason } = req.body
+  const { outcomeReason, outcomeNote } = req.body
   const errors: Record<string, string> = {
     outcomeReason: validateRadioButton(outcomeReason, 'Duty to Refer (DTR) outcome'),
+    outcomeNote: validateMaxLength(outcomeNote, 'Notes', 4000),
   }
 
   return validateAndFlashErrors(req, errors)

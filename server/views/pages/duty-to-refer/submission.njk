@@ -64,7 +64,8 @@
         classes: 'govuk-!-width-one-half',
         name: 'referenceNumber',
         id: 'referenceNumber',
-        value: formValues.referenceNumber
+        value: formValues.referenceNumber,
+        errorMessage: errors.referenceNumber
     })
   }}
 
@@ -72,7 +73,7 @@
     govukTextarea({
         name: "submissionNote",
         label: {
-            text: "Add note (optional)",
+            text: "Notes (optional)",
             classes: "govuk-label--s"
         },
         classes: "govuk-!-width-two-thirds",

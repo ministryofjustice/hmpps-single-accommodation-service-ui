@@ -16,7 +16,9 @@ export default class DutyToReferPage extends AbstractPage {
     await this.shouldShowSummaryItem('Name', caseData.name)
     await this.shouldShowSummaryItem('Date of birth', formatDateAndAge(caseData.dateOfBirth))
     await this.shouldShowSummaryItem('CRN', caseData.crn)
-    await this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
+    if (caseData.prisonNumber) {
+      await this.shouldShowSummaryItem('Prison number', caseData.prisonNumber)
+    }
   }
 
   async shouldShowPopulatedSubmissionForm(dutyToRefer: DutyToReferDto) {

@@ -76,9 +76,10 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
     summaryListRowText('Name', caseData.name),
     summaryListRowText('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
     summaryListRowText('CRN', caseData.crn),
-    summaryListRowText('Prison number', caseData.prisonNumber),
   ]
-
+  if (caseData.prisonNumber) {
+    rows.push(summaryListRowText('Prison number', caseData.prisonNumber))
+  }
   if (dutyToRefer) {
     rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
     rows.push(

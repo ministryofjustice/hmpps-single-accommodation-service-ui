@@ -7,7 +7,7 @@
   {% endfor %}
 {% endblock %}
 
-{% block pageTitle %}{{ pageTitle }}{{ ' - ' if pageTitle }}{{ applicationName }}{% endblock %}
+{% block pageTitle %}{{ "Error: " if errorSummary | length }}{{ pageTitle }}{{ ' - ' if pageTitle }}{{ applicationName }}{% endblock %}
 
 {% block govukHeader %}
   {{ feComponents.header | safe }}

@@ -42,7 +42,7 @@ export default class AbstractPage {
   }
 
   async shouldShowLink(text: string | RegExp, href: string, role: 'link' | 'button' = 'link') {
-    expect(await this.page.getByRole(role, { name: text }).getAttribute('href')).toMatch(href)
+    await expect(this.page.getByRole(role, { name: text })).toHaveAttribute('href', href)
   }
 
   async clickLink(text: string | RegExp, container?: Locator): Promise<void> {

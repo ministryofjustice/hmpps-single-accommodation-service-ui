@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { ProposedAddressFormData } from '@sas/ui'
+import { ProposedAccommodationDto } from '@sas/api'
 import ProposedAddressesController from './proposedAddressesController'
 import config from '../config'
 import AuditService, { Page } from '../services/auditService'
@@ -31,7 +32,7 @@ import {
   referenceDataFactory,
 } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
-import { formatAddress } from '../utils/addresses'
+import { addressLines, formatAddress } from '../utils/addresses'
 import { caseAssignedTo } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import { radioItems } from '../utils/utils'
@@ -1039,6 +1040,73 @@ describe('proposedAddressesController', () => {
         expect(response.redirect).toHaveBeenCalledWith(redirect)
         expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
       })
+    })
+  })
+
+  describe('arrival', () => {
+    it('renders the arrival confirmation page', async () => {
+      const caseData = caseFactory.build()
+      const proposedAddress = proposedAccommodationFactory.build({
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+      })
+
+      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue('/foo')
+      casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
+      proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
+
+      await controller.arrival()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/arrival', {
+        backLinkHref: '/foo',
+        pageHeading: `Confirm that ${caseData.name} has moved into this address`,
+        addressLines: addressLines(proposedAddress.address),
+        cancelLinkHref: '/foo',
+      })
+    })
+  })
+
+  describe('saveArrival', () => {
+    let proposedAddress: ProposedAccommodationDto
+
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-06-29T12:00:00.000Z'))
+      proposedAddress = proposedAccommodationFactory.build({
+        verificationStatus: 'PASSED',
+        nextAccommodationStatus: 'YES',
+      })
+      request.params.id = proposedAddress.id
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it('submits and redirects to the profile page with a success banner', async () => {
+      await controller.saveArrival()(request, response, next)
+
+      expect(proposedAddressesService.submitArrival).toHaveBeenCalledWith('token-1', 'CRN123', proposedAddress.id, {
+        arrivalDate: '2026-06-29',
+      })
+      expect(request.flash).toHaveBeenCalledWith('success', 'Current address updated')
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+    })
+
+    it('redirects to the arrival page when there is an API error', async () => {
+      jest.spyOn(proposedAddressesService, 'submitArrival').mockRejectedValue(new Error('API error'))
+
+      await controller.saveArrival()(request, response, next)
+
+      expect(proposedAddressesService.submitArrival).toHaveBeenCalledWith('token-1', 'CRN123', proposedAddress.id, {
+        arrivalDate: '2026-06-29',
+      })
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
+        request,
+        'There was a problem saving the current address. Please try again.',
+      )
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.arrival({ crn: 'CRN123', id: proposedAddress.id }),
+      )
     })
   })
 })

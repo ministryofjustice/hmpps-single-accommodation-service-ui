@@ -56,7 +56,7 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodation
 }
 
 const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: string) => {
-  const detailsLink = uiPaths.proposedAddresses.show({ crn, id })
+  const detailsLink = { text: 'View details', href: uiPaths.proposedAddresses.show({ crn, id }) }
 
   switch (status) {
     case 'PASSED':
@@ -65,15 +65,14 @@ const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: s
           text: 'Set as next address',
           href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
         },
-        { text: 'Notes', href: detailsLink },
+        detailsLink,
       ]
     case 'NOT_CHECKED_YET':
-      return [
-        { text: 'Add checks', href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }) },
-        { text: 'Notes', href: detailsLink },
-      ]
+      return [{ text: 'Add checks', href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }) }, detailsLink]
+    case 'CONFIRMED':
+      return [{ text: 'Set as current address', href: uiPaths.proposedAddresses.arrival({ crn, id }) }, detailsLink]
     default:
-      return [{ text: 'Notes', href: detailsLink }]
+      return [detailsLink]
   }
 }
 
@@ -355,7 +354,13 @@ export const nextActionButton = (proposedAddress: ProposedAccommodationDto): But
       href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }),
     }
   }
-  if (verificationStatus === 'PASSED' && nextAccommodationStatus !== 'YES') {
+  if (verificationStatus === 'PASSED') {
+    if (nextAccommodationStatus === 'YES') {
+      return {
+        text: 'Set as current address',
+        href: uiPaths.proposedAddresses.arrival({ crn, id }),
+      }
+    }
     return {
       text: 'Confirm as next address',
       href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),

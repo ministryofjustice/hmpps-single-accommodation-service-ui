@@ -24,7 +24,16 @@ export const accommodationTypesMap: Readonly<
   Record<AccommodationTypeDto['code'], AccommodationTypeDto['description']>
 > = Object.fromEntries(accommodationTypes.map(type => [type.code, type.description]))
 
-export default Factory.define<ProposedAccommodationDto>(() => {
+class ProposedAccommodationFactory extends Factory<ProposedAccommodationDto> {
+  confirmed() {
+    return this.params({
+      verificationStatus: 'PASSED',
+      nextAccommodationStatus: 'YES',
+    })
+  }
+}
+
+export default ProposedAccommodationFactory.define(() => {
   const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
   const nextAccommodationStatus =
     verificationStatus === 'PASSED' ? faker.helpers.arrayElement(nextAccommodationStatuses) : undefined

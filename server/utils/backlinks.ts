@@ -2,6 +2,7 @@ import { match, Path } from 'path-to-regexp'
 import type { Request } from 'express'
 import { IndexRequest } from '@sas/ui'
 import uiPaths from '../paths/ui'
+import config from '../config'
 
 /**
  * Provides referer links for pages with multiple routes
@@ -19,21 +20,32 @@ export const getPageBackLink = (
   pagePattern: string,
   req: Request,
   matchList: Array<Path>,
-  defaultPath?: string,
+  defaultPath = getCaseListUrl(req),
 ): string => {
   const {
     session,
     headers: { referer },
   } = req
-  const refererPath = (referer && new URL(referer).pathname) || ''
-  const foundReferer = matchList.find(path => match(path)(refererPath))
+  const refererUrl = referer && new URL(referer)
   const lastReferer = session.pageReferers?.[pagePattern]
-  if (foundReferer && lastReferer !== referer) {
-    session.pageReferers = session.pageReferers || {}
-    session.pageReferers[pagePattern] = referer
+
+  if (refererUrl && refererUrl.host === new URL(config.ingressUrl).host) {
+    const refererPath = refererUrl?.pathname
+    const hasMatch = matchList.find(path => match(path)(refererPath))
+
+    if (hasMatch) {
+      const currentReferer = `${refererPath}${refererUrl?.search || ''}`
+
+      session.pageReferers = {
+        ...session.pageReferers,
+        [pagePattern]: currentReferer,
+      }
+
+      return currentReferer
+    }
   }
 
-  return foundReferer ? referer : lastReferer || defaultPath || getCaseListUrl(req)
+  return lastReferer || defaultPath
 }
 
 export const getCaseListUrl = (req: Request): string => req.session.caseListUrl || uiPaths.cases.index({})

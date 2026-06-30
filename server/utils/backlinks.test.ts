@@ -13,25 +13,45 @@ describe('Link management', () => {
     mock<Request & { session: Session }>({
       headers: { referer },
       session: {
-        pageReferers: {
-          [pagePattern]: lastStoredReferer,
-        },
+        pageReferers: lastStoredReferer
+          ? {
+              [pagePattern]: lastStoredReferer,
+            }
+          : undefined,
       },
     })
 
-  const matchingReferer = 'http://domain/pattern1/112233445566'
-  const nonMatchingReferer = 'http://domain/pattern3/someParameter'
-  const lastStoredReferer = 'http://last/stored/222333444555'
+  const matchingReferer = 'http://localhost:3000/pattern1/112233445566'
+  const nonMatchingReferer = 'http://localhost:3000/pattern3/someParameter'
+  const differentDomainMatchingReferer = 'https://example.com/pattern1/abc'
+  const lastStoredReferer = '/stored/222333444555'
 
   beforeEach(() => {
     jest.restoreAllMocks()
   })
 
   describe('getPageBackLink', () => {
-    it('should return the referer if it matches a provided path', () => {
+    beforeEach(() => {
+      jest.spyOn(backlinksUtils, 'getCaseListUrl').mockReturnValue('/?teamCode=N34')
+    })
+
+    it('should return the referer path and save it in session if it matches a provided path', () => {
       const request = mockRequest(matchingReferer, undefined)
-      expect(getPageBackLink(pagePattern, request, matchList)).toEqual(matchingReferer)
-      expect(request.session.pageReferers[pagePattern]).toEqual(matchingReferer)
+      const expected = '/pattern1/112233445566'
+      expect(getPageBackLink(pagePattern, request, matchList)).toEqual(expected)
+      expect(request.session.pageReferers[pagePattern]).toEqual(expected)
+    })
+
+    it('should return any query parameters in the referer path', () => {
+      const request = mockRequest(`${matchingReferer}?foo=qux`, undefined)
+      const expected = '/pattern1/112233445566?foo=qux'
+      expect(getPageBackLink(pagePattern, request, matchList)).toEqual(expected)
+      expect(request.session.pageReferers[pagePattern]).toEqual(expected)
+    })
+
+    it('should return a case list url if the referer path matches but is from a different domain', () => {
+      const request = mockRequest(differentDomainMatchingReferer, undefined)
+      expect(getPageBackLink(pagePattern, request, matchList)).toEqual('/?teamCode=N34')
     })
 
     it('should return the stored referer if the current referer does not match a path', () => {
@@ -40,15 +60,12 @@ describe('Link management', () => {
     })
 
     it('should return a case list url if there is no stored referer and the current referer does not match a path', () => {
-      jest.spyOn(backlinksUtils, 'getCaseListUrl').mockReturnValue('/?teamCode=N34')
-      const request = mockRequest(null, null)
-      request.session = {} as Session
+      const request = mockRequest(nonMatchingReferer, null)
       expect(getPageBackLink(pagePattern, request, matchList)).toEqual('/?teamCode=N34')
     })
 
     it('should return the provided default path if there is no stored referer and the current referer does not match a path', () => {
       const request = mockRequest(null, null)
-      request.session = {} as Session
       expect(getPageBackLink(pagePattern, request, matchList, 'defaultPath')).toEqual('defaultPath')
     })
   })

@@ -18,7 +18,7 @@
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
     "test": "jest",
-    "test:ci": "jest --runInBand",
+    "test:ci": "TZ=\"Europe/London\" jest --runInBand",
     "test:client": "rm -rf tmp/pacts && rm -f tmp/sas-api.json && jest Client --no-coverage",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "npx playwright test",

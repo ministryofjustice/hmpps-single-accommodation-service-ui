@@ -36,6 +36,8 @@ const proposedAddressesController = mock<ProposedAddressesController>({
   checkYourAnswers: mockHandler,
   submit: mockHandler,
   cancel: mockHandler,
+  arrival: mockHandler,
+  saveArrival: mockHandler,
 })
 
 const dutyToReferController = mock<DutyToReferController>({

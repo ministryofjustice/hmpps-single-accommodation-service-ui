@@ -1,3 +1,4 @@
+import { ProposedAccommodationArrivalCommand } from '@sas/api'
 import ProposedAddressesClient from '../data/proposedAddressesClient'
 import { apiResponseFactory, proposedAccommodationFactory, proposedAddressFormFactory } from '../testutils/factories'
 import ProposedAddressesService from './proposedAddressesService'
@@ -109,6 +110,16 @@ describe('ProposedAddressesService', () => {
       await proposedAddressesService.submitTimelineNote(token, crn, id, note)
 
       expect(proposedAddressesClient.submitTimelineNote).toHaveBeenCalledWith(token, crn, id, note)
+    })
+  })
+
+  describe('submitArrival', () => {
+    it('should call submitArrival on the api client with the arrival data', async () => {
+      const arrival: ProposedAccommodationArrivalCommand = { arrivalDate: '2026-06-29' }
+
+      await proposedAddressesService.submitArrival(token, crn, id, arrival)
+
+      expect(proposedAddressesClient.submitArrival).toHaveBeenCalledWith(token, crn, id, arrival)
     })
   })
 })

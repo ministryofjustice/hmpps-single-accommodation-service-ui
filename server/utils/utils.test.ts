@@ -312,5 +312,15 @@ describe('dateFieldValues', () => {
         { name: 'year', classes: 'govuk-input--width-4', value: '2025' },
       ])
     })
+
+    it('does not default to today when only some parts are provided', () => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-03-27T12:00:00Z'))
+
+      expect(dateFieldValues('submissionDate', { 'submissionDate-day': '28' }, {}, true)).toEqual([
+        { name: 'day', classes: 'govuk-input--width-2', value: '28' },
+        { name: 'month', classes: 'govuk-input--width-2', value: undefined },
+        { name: 'year', classes: 'govuk-input--width-4', value: undefined },
+      ])
+    })
   })
 })

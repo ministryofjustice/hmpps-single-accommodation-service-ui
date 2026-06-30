@@ -4,6 +4,7 @@ import AbstractPage from '../abstractPage'
 import { addressLines } from '../../../server/utils/addresses'
 import { verifyPost } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
+import { getTodayLocal } from '../../../server/utils/dates'
 
 export default class ConfirmCurrentAddressPage extends AbstractPage {
   constructor(
@@ -28,10 +29,9 @@ export default class ConfirmCurrentAddressPage extends AbstractPage {
     const requestBody = await verifyPost(
       apiPaths.cases.proposedAddresses.arrival({ crn: this.caseData.crn, id: this.proposedAddress.id }),
     )
-    const today = new Date().toISOString().split('T')[0]
 
     expect(requestBody).toEqual({
-      arrivalDate: today,
+      arrivalDate: getTodayLocal(),
     })
   }
 }

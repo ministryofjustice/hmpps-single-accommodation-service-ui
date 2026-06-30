@@ -13,9 +13,11 @@ describe('Link management', () => {
     mock<Request & { session: Session }>({
       headers: { referer },
       session: {
-        pageReferers: {
-          [pagePattern]: lastStoredReferer,
-        },
+        pageReferers: lastStoredReferer
+          ? {
+              [pagePattern]: lastStoredReferer,
+            }
+          : undefined,
       },
     })
 
@@ -58,14 +60,12 @@ describe('Link management', () => {
     })
 
     it('should return a case list url if there is no stored referer and the current referer does not match a path', () => {
-      const request = mockRequest(null, null)
-      request.session = {} as Session
+      const request = mockRequest(nonMatchingReferer, null)
       expect(getPageBackLink(pagePattern, request, matchList)).toEqual('/?teamCode=N34')
     })
 
     it('should return the provided default path if there is no stored referer and the current referer does not match a path', () => {
       const request = mockRequest(null, null)
-      request.session = {} as Session
       expect(getPageBackLink(pagePattern, request, matchList, 'defaultPath')).toEqual('defaultPath')
     })
   })

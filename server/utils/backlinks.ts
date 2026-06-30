@@ -27,24 +27,25 @@ export const getPageBackLink = (
     headers: { referer },
   } = req
   const refererUrl = referer && new URL(referer)
+  const lastReferer = session.pageReferers?.[pagePattern]
 
   if (refererUrl && refererUrl.host === new URL(config.ingressUrl).host) {
     const refererPath = refererUrl?.pathname
     const hasMatch = matchList.find(path => match(path)(refererPath))
-    const lastReferer = session.pageReferers?.[pagePattern]
 
-    if (hasMatch && lastReferer !== refererPath) {
+    if (hasMatch) {
       const currentReferer = `${refererPath}${refererUrl?.search || ''}`
-      session.pageReferers = session.pageReferers || {}
-      session.pageReferers[pagePattern] = currentReferer
+
+      session.pageReferers = {
+        ...session.pageReferers,
+        [pagePattern]: currentReferer,
+      }
 
       return currentReferer
     }
-
-    return lastReferer
   }
 
-  return defaultPath
+  return lastReferer || defaultPath
 }
 
 export const getCaseListUrl = (req: Request): string => req.session.caseListUrl || uiPaths.cases.index({})

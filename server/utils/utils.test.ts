@@ -288,14 +288,15 @@ describe('dateFieldValues', () => {
   })
 
   describe('defaultToToday', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-03-27T12:00:00Z'))
+    })
+
     afterEach(() => {
       jest.useRealTimers()
     })
 
     it("defaults to today's date when no parts are provided", () => {
-      const today = new Date('2025-03-27T12:00:00Z')
-      jest.useFakeTimers().setSystemTime(new Date('2025-03-27T12:00:00Z'))
-
       expect(dateFieldValues('submissionDate', {}, {}, true)).toEqual([
         { name: 'day', classes: 'govuk-input--width-2', value: 27 },
         { name: 'month', classes: 'govuk-input--width-2', value: 3 },
@@ -304,8 +305,6 @@ describe('dateFieldValues', () => {
     })
 
     it('keeps the provided values rather than defaulting to today', () => {
-      jest.useFakeTimers().setSystemTime(new Date('2025-03-27T12:00:00Z'))
-
       expect(dateFieldValues('submissionDate', context, {}, true)).toEqual([
         { name: 'day', classes: 'govuk-input--width-2', value: '28' },
         { name: 'month', classes: 'govuk-input--width-2', value: '2' },
@@ -314,8 +313,6 @@ describe('dateFieldValues', () => {
     })
 
     it('does not default to today when only some parts are provided', () => {
-      jest.useFakeTimers().setSystemTime(new Date('2025-03-27T12:00:00Z'))
-
       expect(dateFieldValues('submissionDate', { 'submissionDate-day': '28' }, {}, true)).toEqual([
         { name: 'day', classes: 'govuk-input--width-2', value: '28' },
         { name: 'month', classes: 'govuk-input--width-2', value: undefined },

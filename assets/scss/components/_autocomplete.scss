@@ -10,3 +10,8 @@
 .govuk-form-group--error .autocomplete__input {
   border-color: $govuk-error-colour;
 }
+
+.autocomplete__dropdown-arrow-down {
+  z-index: 0;
+  pointer-events: none;
+}

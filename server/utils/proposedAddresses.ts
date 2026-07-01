@@ -377,62 +377,86 @@ export const nextActionButton = (proposedAddress: ProposedAccommodationDto): But
   return undefined
 }
 
-const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): ProposedAccommodationDto => {
-  const addressFields = [
-    'buildingNumber',
-    'buildingName',
-    'subBuildingName',
-    'thoroughfareName',
-    'dependentLocality',
-    'postTown',
-    'postcode',
-    'county',
-    'country',
-    'uprn',
-  ]
+const addressFields = [
+  'buildingNumber',
+  'buildingName',
+  'subBuildingName',
+  'thoroughfareName',
+  'dependentLocality',
+  'postTown',
+  'postcode',
+  'county',
+  'country',
+  'uprn',
+]
 
-  const filterChanges = (predicate: (change: FieldChange) => boolean) =>
-    Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
+type AuditFieldValues = Record<string, string>
+
+const auditRecordChangesToFieldValues = (changes: FieldChange[]): AuditFieldValues =>
+  Object.fromEntries(changes.map(change => [change.field, change.value]))
+
+const fieldValuesToProposedAddress = (fieldValues: AuditFieldValues): ProposedAccommodationDto => {
+  const filterFields = (predicate: (field: string) => boolean) =>
+    Object.fromEntries(Object.entries(fieldValues).filter(([field]) => predicate(field)))
 
   return {
-    ...filterChanges(change => !addressFields.includes(change.field)),
-    address: filterChanges(change => addressFields.includes(change.field)),
+    ...filterFields(field => !addressFields.includes(field)),
+    address: filterFields(field => addressFields.includes(field)),
     accommodationType: {
       code: '',
-      description: auditRecord.changes.find(change => change.field === 'accommodationTypeDescription')?.value,
+      description: fieldValues.accommodationTypeDescription,
     },
   } as ProposedAccommodationDto
 }
 
-export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
+export const addressTimelineEntry = (auditRecord: AuditRecordDto, previousFieldValues: AuditFieldValues = {}): TimelineEntry => {
   const { type } = auditRecord
-
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
 
-  const proposedAddress = auditRecordChangesToProposedAddress(auditRecord)
+  const fieldValues = { ...previousFieldValues, ...auditRecordChangesToFieldValues(auditRecord.changes) }
+  
+  const changedFieldNames = auditRecord.changes.map(change => change.field)
+  const addressChanged = addressFields.some(field => changedFieldNames.includes(field))
+  const housingArrangementChanged = changedFieldNames.includes('accommodationTypeDescription')
+  const addressChecksChanged = changedFieldNames.includes('verificationStatus')
+  const nextAddressChanged = changedFieldNames.includes('nextAccommodationStatus')
 
-  const housingArrangement = proposedAddress.accommodationType?.description
+  const proposedAddress = fieldValuesToProposedAddress(fieldValues)
+  const addressParts = addressLines(proposedAddress.address || {}, 'full')
 
-  const addressChecks = formatProposedAddressStatus(proposedAddress.verificationStatus)
-
-  const nextAddress =
-    type === 'UPDATE' || proposedAddress.verificationStatus === 'PASSED'
-      ? formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)
-      : undefined
-
-  const label = type === 'CREATE' ? 'Address created' : 'Address updated'
+  const label = type === 'CREATE' ? 'Address created' : 'Address changed'
   const html = renderMacro('timelineProposedAddress', {
     type,
-    status: proposedAddressStatusTag(displayStatus(proposedAddress)),
+    status:
+      addressChecksChanged || nextAddressChanged
+        ? proposedAddressStatusTag(displayStatus(proposedAddress))
+        : undefined,
     values: {
-      Address: formatAddress(proposedAddress.address),
-      'Housing arrangement': housingArrangement,
-      'Address checks': addressChecks,
-      'Next address': nextAddress,
+      Address: addressChanged ? '<br />' + addressParts.join('<br />') : undefined,
+      'Housing arrangement': housingArrangementChanged ? proposedAddress.accommodationType?.description : undefined,
+      'Address checks': addressChecksChanged
+        ? formatProposedAddressStatus(proposedAddress.verificationStatus)
+        : undefined,
+      'Next address': nextAddressChanged
+        ? formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)
+        : undefined,
     },
   })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+}
+
+export const addressTimeline = (auditRecords: AuditRecordDto[]): TimelineEntry[] => {
+  let fieldValues: AuditFieldValues = {}
+
+  return [...auditRecords]
+    .reverse()
+    .map(auditRecord => {
+      const entry = addressTimelineEntry(auditRecord, fieldValues)
+      fieldValues = { ...fieldValues, ...auditRecordChangesToFieldValues(auditRecord.changes) }
+      return entry
+    })
+    .reverse()
 }
 
 export const validateNote = (req: Request) => {

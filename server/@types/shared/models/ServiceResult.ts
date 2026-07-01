@@ -5,6 +5,7 @@
 import type { CaseAction } from './CaseAction'
 export type ServiceResult = {
   serviceStatus:
+    | 'NOT_REQUIRED'
     | 'NOT_ELIGIBLE'
     | 'UPCOMING'
     | 'NOT_STARTED'

@@ -13,6 +13,7 @@ function makeAutocomplete(selectElement) {
 
   const inputClasses = selectElement.getAttribute('data-autocomplete-input-classes') || ''
   const menuClasses = selectElement.getAttribute('data-autocomplete-menu-classes') || ''
+  const wrapperClasses = selectElement.getAttribute('data-autocomplete-wrapper-classes') || ''
 
   accessibleAutocomplete.enhanceSelectElement({
     selectElement,
@@ -22,6 +23,11 @@ function makeAutocomplete(selectElement) {
     showAllValues: true,
     confirmOnBlur: false,
   })
+
+  if (wrapperClasses) {
+    const wrapper = selectElement.parentElement?.querySelector('.autocomplete__wrapper')
+    if (wrapper) wrapper.classList.add(...wrapperClasses.split(' ').filter(Boolean))
+  }
 }
 
 export default makeAutocomplete

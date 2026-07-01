@@ -1,4 +1,5 @@
 import accessibleAutocomplete from 'accessible-autocomplete'
+import dropdownArrow from './dropdownArrow'
 
 function makeAutocomplete(selectElement) {
   if (selectElement.hasAttribute('data-autocomplete-hint')) {
@@ -21,6 +22,7 @@ function makeAutocomplete(selectElement) {
     inputClasses,
     menuClasses,
     showAllValues: true,
+    dropdownArrow,
     confirmOnBlur: false,
   })
 

@@ -1,4 +1,5 @@
 import accessibleAutocomplete from 'accessible-autocomplete'
+import dropdownArrow from './dropdownArrow'
 
 function makeAutocomplete(selectElement) {
   if (selectElement.hasAttribute('data-autocomplete-hint')) {
@@ -12,12 +13,23 @@ function makeAutocomplete(selectElement) {
   }
 
   const inputClasses = selectElement.getAttribute('data-autocomplete-input-classes') || ''
+  const menuClasses = selectElement.getAttribute('data-autocomplete-menu-classes') || ''
+  const wrapperClasses = selectElement.getAttribute('data-autocomplete-wrapper-classes') || ''
 
   accessibleAutocomplete.enhanceSelectElement({
     selectElement,
     defaultValue: '',
     inputClasses,
+    menuClasses,
+    showAllValues: true,
+    dropdownArrow,
+    confirmOnBlur: false,
   })
+
+  if (wrapperClasses) {
+    const wrapper = selectElement.parentElement && selectElement.parentElement.querySelector('.autocomplete__wrapper')
+    if (wrapper) wrapper.classList.add(...wrapperClasses.split(' ').filter(Boolean))
+  }
 }
 
 export default makeAutocomplete

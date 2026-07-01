@@ -309,7 +309,7 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
 
   
     
-      <p class="govuk-!-margin-bottom-1">Address: 1 Street, Town, P0 5TC</p>
+      <p class="govuk-!-margin-bottom-1">Address: 1 Street<br />Town<br />P0 5TC</p>
     
   
     

@@ -9,7 +9,7 @@
 
   {% for label, value in context.values %}
     {% if value %}
-      <p class="govuk-!-margin-bottom-1">{{ label }}{{ separator }} {{ value }}</p>
+      <p class="govuk-!-margin-bottom-1">{{ label }}{{ separator }} {{ value | safe }}</p>
     {% endif %}
   {% endfor %}
 {%- endmacro -%}

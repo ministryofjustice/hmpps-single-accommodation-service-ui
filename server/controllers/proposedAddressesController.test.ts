@@ -122,8 +122,6 @@ describe('proposedAddressesController', () => {
 
     jest.spyOn(controller.formData, 'remove')
     jest.spyOn(controller.formData, 'update')
-
-    jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
   })
 
   describe('show', () => {
@@ -245,6 +243,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.cases.show({ crn: 'CRN123' }),
         errors: {},
         errorSummary: [],
       })
@@ -262,6 +261,7 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.cases.show({ crn: 'CRN123' }),
         nameOrNumber: '',
         postcode: 'H23 8TY',
         errors,
@@ -356,6 +356,7 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/select-address', {
         crn: 'CRN123',
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }),
         nameOrNumber,
         postcode,
         addresses: lookupResultsItems(lookupResults, address.uprn),

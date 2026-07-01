@@ -170,6 +170,12 @@ export default class ProposedAddressesController {
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/proposed-address/lookup', {
+        backLinkHref: getPageBackLink(
+          uiPaths.proposedAddresses.lookup.pattern,
+          req,
+          [uiPaths.proposedAddresses.show.pattern],
+          uiPaths.cases.show({ crn }),
+        ),
         crn,
         nameOrNumber,
         postcode,
@@ -229,6 +235,7 @@ export default class ProposedAddressesController {
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/proposed-address/select-address', {
+        backLinkHref: uiPaths.proposedAddresses.lookup({ crn }),
         crn,
         nameOrNumber,
         postcode,
@@ -285,7 +292,12 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/details', {
         crn,
-        backLinkHref: uiPaths.proposedAddresses.lookup({ crn }),
+        backLinkHref: getPageBackLink(
+          uiPaths.proposedAddresses.details.pattern,
+          req,
+          [uiPaths.proposedAddresses.show.pattern],
+          uiPaths.proposedAddresses.lookup({ crn }),
+        ),
         address: proposedAddressFormSessionData?.address || {},
         errors,
         errorSummary,
@@ -324,12 +336,19 @@ export default class ProposedAddressesController {
         this.referenceDataService.getAccommodationTypes(token),
       ])
 
+      const previousPageInFlow =
+        proposedAddressFormSessionData.lookupResults?.length || config.flags.hideManualAddressEntry
+          ? uiPaths.proposedAddresses.selectAddress
+          : uiPaths.proposedAddresses.details
+
       return res.render('pages/proposed-address/type', {
         crn,
-        backLinkHref:
-          proposedAddressFormSessionData.lookupResults?.length || config.flags.hideManualAddressEntry
-            ? uiPaths.proposedAddresses.selectAddress({ crn })
-            : uiPaths.proposedAddresses.details({ crn }),
+        backLinkHref: getPageBackLink(
+          uiPaths.proposedAddresses.type.pattern,
+          req,
+          [uiPaths.proposedAddresses.show.pattern],
+          previousPageInFlow({ crn }),
+        ),
         address: formatAddress(proposedAddressFormSessionData.address),
         name: caseData.name,
         accommodationTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
@@ -363,18 +382,18 @@ export default class ProposedAddressesController {
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
 
-      const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.status.pattern, req, [
-        uiPaths.proposedAddresses.type.pattern,
-        uiPaths.cases.show.pattern,
-      ])
-
       return res.render('pages/proposed-address/status', {
+        backLinkHref: getPageBackLink(
+          uiPaths.proposedAddresses.status.pattern,
+          req,
+          [uiPaths.proposedAddresses.show.pattern, uiPaths.cases.show.pattern],
+          uiPaths.proposedAddresses.type({ crn }),
+        ),
         crn,
         verificationStatusItems: radioItems(
           verificationStatusLabels,
           proposedAddressFormSessionData?.verificationStatus,
         ),
-        backLinkHref,
         address: formatAddress(proposedAddressFormSessionData.address),
         errors,
         errorSummary,
@@ -413,19 +432,19 @@ export default class ProposedAddressesController {
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       const { data: caseData } = await this.casesService.getCase(token, crn)
 
-      const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.nextAccommodation.pattern, req, [
-        uiPaths.cases.show.pattern,
-        uiPaths.proposedAddresses.status.pattern,
-      ])
-
       return res.render('pages/proposed-address/next-accommodation', {
+        backLinkHref: getPageBackLink(
+          uiPaths.proposedAddresses.nextAccommodation.pattern,
+          req,
+          [uiPaths.proposedAddresses.show.pattern, uiPaths.cases.show.pattern],
+          uiPaths.proposedAddresses.status({ crn }),
+        ),
         crn,
         nextAccommodationStatusItems: radioItems(
           nextAccommodationStatusLabels,
           proposedAddressFormSessionData?.nextAccommodationStatus,
         ),
         name: caseData.name,
-        backLinkHref,
         address: formatAddress(proposedAddressFormSessionData.address),
         errors,
         errorSummary,
@@ -463,15 +482,15 @@ export default class ProposedAddressesController {
       const { data: accommodationTypes } = await this.referenceDataService.getAccommodationTypes(token)
 
       const tableRows = checkYourAnswersRows(proposedAddressFormSessionData, crn, accommodationTypes)
-      const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.checkYourAnswers.pattern, req, [
-        uiPaths.proposedAddresses.status.pattern,
-        uiPaths.proposedAddresses.nextAccommodation.pattern,
-      ])
+
+      const previousPageInFlow = proposedAddressFormSessionData.nextAccommodationStatus
+        ? uiPaths.proposedAddresses.nextAccommodation
+        : uiPaths.proposedAddresses.status
 
       return res.render('pages/proposed-address/check-your-answers', {
+        backLinkHref: previousPageInFlow({ crn }),
         crn,
         tableRows,
-        backLinkHref,
         errors,
         errorSummary,
       })

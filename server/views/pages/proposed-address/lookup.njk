@@ -2,7 +2,6 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "What is the address?" %}
-{% set backLinkHref = paths.cases.show({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.lookup({crn: crn}) %}
 {% set buttonText = 'Find address' %}
 {% set hideManualAddressEntry = featureFlags.hideManualAddressEntry %}

@@ -3,7 +3,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set pageTitle = "Select an address" %}
-{% set backLinkHref = paths.proposedAddresses.lookup({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.selectAddress({crn: crn}) %}
 {% set hideManualAddressEntry = featureFlags.hideManualAddressEntry %}
 

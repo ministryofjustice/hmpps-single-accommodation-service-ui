@@ -25,7 +25,7 @@ function makeAutocomplete(selectElement) {
   })
 
   if (wrapperClasses) {
-    const wrapper = selectElement.parentElement?.querySelector('.autocomplete__wrapper')
+    const wrapper = selectElement.parentElement && selectElement.parentElement.querySelector('.autocomplete__wrapper')
     if (wrapper) wrapper.classList.add(...wrapperClasses.split(' ').filter(Boolean))
   }
 }

@@ -126,6 +126,15 @@ describe('Proposed addresses utilities', () => {
 
       expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
+
+    it('returns a status card for an address with no accommodation type', () => {
+      const proposedAddress = proposedAccommodationFactory.build({
+        ...baseAccommodationDetails,
+        accommodationType: null,
+      })
+
+      expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
+    })
   })
 
   describe('summaryListRows', () => {

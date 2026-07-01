@@ -146,7 +146,7 @@ export default class ProposedAddressesController {
       } = await this.proposedAddressesService.getProposedAddress(token, crn, id)
       await this.formData.update(crn, req.session, {
         ...proposedAddress,
-        accommodationTypeCode: accommodationType.code,
+        accommodationTypeCode: accommodationType?.code,
         redirect,
       })
 

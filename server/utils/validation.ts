@@ -205,6 +205,8 @@ export const validateDateNotBefore = (
 }
 
 export const validateDateWithinLastXMonths = (dateParts: DateFieldParts, months: number, label: string) => {
+  if (!isRealDate(dateParts)) return undefined
+
   const now = getTodayUtcDate()
   const monthsAgo = new Date(now.setUTCMonth(now.getUTCMonth() - months))
 

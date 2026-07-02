@@ -405,6 +405,12 @@ describe('validators', () => {
         months: 1,
         expected: 'Date must be within the last month',
       },
+      {
+        title: 'invalid date',
+        date: { day: '34', month: '', year: '2026' },
+        months: 1,
+        expected: undefined,
+      },
     ])('returns the expected result for $title', ({ date, months, expected }) => {
       expect(validateDateWithinLastXMonths(date, months, 'Date')).toBe(expected)
     })

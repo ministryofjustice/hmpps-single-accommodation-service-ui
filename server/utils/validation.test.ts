@@ -123,8 +123,12 @@ describe('errorDateParts', () => {
     expect(errorDateParts('Enter a submission date')).toEqual(['day', 'month', 'year'])
   })
 
+  it('returns all parts if the error message does not refer to a missing field', () => {
+    expect(errorDateParts('Date must be within the last month')).toEqual(['day', 'month', 'year'])
+  })
+
   it('ignores case when matching parts', () => {
-    expect(errorDateParts('Enter a DAY')).toEqual(['day'])
+    expect(errorDateParts('Year of birth must include 4 numbers')).toEqual(['year'])
   })
 })
 

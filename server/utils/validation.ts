@@ -18,7 +18,7 @@ export const fetchErrorsAndUserInput = (request: Request) => {
 
 export const errorDateParts = (text: string): string[] => {
   const dateFields = ['day', 'month', 'year']
-  const found = dateFields.filter(part => text.toLowerCase().includes(part))
+  const found = dateFields.filter(part => text.includes('must include') && text.toLowerCase().includes(part))
   return found.length ? found : dateFields
 }
 

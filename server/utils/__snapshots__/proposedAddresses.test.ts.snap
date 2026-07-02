@@ -309,19 +309,27 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
 
   
     
-      <p class="govuk-!-margin-bottom-1">Address: 1 Street<br />Town<br />P0 5TC</p>
+      
+        <p class="govuk-!-margin-bottom-1">Changed to:<br>1 Street<br>Town<br>P0 5TC</p>
+      
     
   
     
-      <p class="govuk-!-margin-bottom-1">Housing arrangement: Other accommodation type</p>
+      
+        <p class="govuk-!-margin-bottom-1">Housing arrangement: Other accommodation type</p>
+      
     
   
     
-      <p class="govuk-!-margin-bottom-1">Address checks: Passed</p>
+      
+        <p class="govuk-!-margin-bottom-1">Address checks: Passed</p>
+      
     
   
     
-      <p class="govuk-!-margin-bottom-1">Next address: Yes</p>
+      
+        <p class="govuk-!-margin-bottom-1">Next address: Yes</p>
+      
     
   ",
   "label": {
@@ -351,13 +359,15 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
     
   
     
-      <p class="govuk-!-margin-bottom-1">Address checks changed to Passed</p>
+      
+        <p class="govuk-!-margin-bottom-1">Address checks changed to Passed</p>
+      
     
   
     
   ",
   "label": {
-    "text": "Address updated",
+    "text": "Address changed",
   },
 }
 `;

@@ -1,4 +1,5 @@
 import {
+  AuditFieldValues,
   ProposedAddressDisplayStatus,
   ProposedAddressFormData,
   ProposedAddressFormPage,
@@ -390,8 +391,6 @@ const addressFields = [
   'uprn',
 ]
 
-type AuditFieldValues = Record<string, string>
-
 const auditRecordChangesToFieldValues = (changes: FieldChange[]): AuditFieldValues =>
   Object.fromEntries(changes.map(change => [change.field, change.value]))
 
@@ -409,12 +408,15 @@ const fieldValuesToProposedAddress = (fieldValues: AuditFieldValues): ProposedAc
   } as ProposedAccommodationDto
 }
 
-export const addressTimelineEntry = (auditRecord: AuditRecordDto, previousFieldValues: AuditFieldValues = {}): TimelineEntry => {
+export const addressTimelineEntry = (
+  auditRecord: AuditRecordDto,
+  previousFieldValues: AuditFieldValues = {},
+): TimelineEntry => {
   const { type } = auditRecord
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
 
   const fieldValues = { ...previousFieldValues, ...auditRecordChangesToFieldValues(auditRecord.changes) }
-  
+
   const changedFieldNames = auditRecord.changes.map(change => change.field)
   const addressChanged = addressFields.some(field => changedFieldNames.includes(field))
   const housingArrangementChanged = changedFieldNames.includes('accommodationTypeDescription')
@@ -428,11 +430,9 @@ export const addressTimelineEntry = (auditRecord: AuditRecordDto, previousFieldV
   const html = renderMacro('timelineProposedAddress', {
     type,
     status:
-      addressChecksChanged || nextAddressChanged
-        ? proposedAddressStatusTag(displayStatus(proposedAddress))
-        : undefined,
+      addressChecksChanged || nextAddressChanged ? proposedAddressStatusTag(displayStatus(proposedAddress)) : undefined,
     values: {
-      Address: addressChanged ? '<br />' + addressParts.join('<br />') : undefined,
+      Address: addressChanged ? addressParts : undefined,
       'Housing arrangement': housingArrangementChanged ? proposedAddress.accommodationType?.description : undefined,
       'Address checks': addressChecksChanged
         ? formatProposedAddressStatus(proposedAddress.verificationStatus)

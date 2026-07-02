@@ -9,7 +9,11 @@
 
   {% for label, value in context.values %}
     {% if value %}
-      <p class="govuk-!-margin-bottom-1">{{ label }}{{ separator }} {{ value | safe }}</p>
+      {% if label === 'Address' %}
+        <p class="govuk-!-margin-bottom-1">Changed to:{% for line in value %}<br>{{ line }}{% endfor %}</p>
+      {% else %}
+        <p class="govuk-!-margin-bottom-1">{{ label }}{{ separator }} {{ value }}</p>
+      {% endif %}
     {% endif %}
   {% endfor %}
 {%- endmacro -%}

@@ -420,28 +420,33 @@ export const addressTimelineEntry = (
   const changedFieldNames = auditRecord.changes.map(change => change.field)
   const addressChanged = addressFields.some(field => changedFieldNames.includes(field))
   const housingArrangementChanged = changedFieldNames.includes('accommodationTypeDescription')
-  const addressChecksChanged = changedFieldNames.includes('verificationStatus')
-  const nextAddressChanged = changedFieldNames.includes('nextAccommodationStatus')
+  const statusChanged =
+    changedFieldNames.includes('verificationStatus') || changedFieldNames.includes('nextAccommodationStatus')
 
   const proposedAddress = fieldValuesToProposedAddress(fieldValues)
   const addressParts = addressLines(proposedAddress.address || {}, 'full')
 
-  const label = type === 'CREATE' ? 'Address created' : 'Address changed'
-  const html = renderMacro('timelineProposedAddress', {
-    type,
-    status:
-      addressChecksChanged || nextAddressChanged ? proposedAddressStatusTag(displayStatus(proposedAddress)) : undefined,
-    values: {
+  let label: string
+  let values: Record<string, unknown>
+  let status: StatusTag
+
+  if (type === 'CREATE') {
+    label = 'Address created'
+    values = { Address: addressParts }
+    status = proposedAddressStatusTag(displayStatus(proposedAddress))
+  } else if (statusChanged) {
+    label = 'Status changed'
+    values = {}
+    status = proposedAddressStatusTag(displayStatus(proposedAddress))
+  } else {
+    label = housingArrangementChanged ? 'Living arrangement changed' : 'Address changed'
+    values = {
       Address: addressChanged ? addressParts : undefined,
       'Housing arrangement': housingArrangementChanged ? proposedAddress.accommodationType?.description : undefined,
-      'Address checks': addressChecksChanged
-        ? formatProposedAddressStatus(proposedAddress.verificationStatus)
-        : undefined,
-      'Next address': nextAddressChanged
-        ? formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)
-        : undefined,
-    },
-  })
+    }
+  }
+
+  const html = renderMacro('timelineProposedAddress', { type, status, values })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
 }

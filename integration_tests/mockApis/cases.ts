@@ -33,6 +33,7 @@ export default {
         jsonBody: apiResponseFactory.case(caseData || caseFactory.build({ crn })),
       },
     }),
+  stubGetCaseByCrn404: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.show({ crn }), 'GET', 404),
   stubGetCaseByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.show({ crn })),
   stubGetReferralHistory: (crn: string, referrals?: Referral[]): SuperAgentRequest =>
     stubFor({

@@ -81,7 +81,7 @@ test.describe('Profile Tracker Page', () => {
     const caseData = caseFactory.build({ crn })
 
     await stubCaseListPage([caseData])
-    await stubProfilePage({ crn, caseData })
+    await casesApi.stubGetCaseByCrn404('X999999')
 
     // WHEN I sign in
     await login(page)

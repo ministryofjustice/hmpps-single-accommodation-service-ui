@@ -276,6 +276,79 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
 ]
 `;
 
+exports[`Proposed addresses utilities addressTimeline builds each entry with earlier field values carried forward 1`] = `
+[
+  {
+    "byline": {
+      "text": "Florence Collins",
+    },
+    "datetime": {
+      "timestamp": "2026-04-01T09:00:00.000Z",
+      "type": "datetime",
+    },
+    "html": "
+
+  
+
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Changed to:<br>2 New Street<br>Town<br>P0 5TC</p>
+      
+    
+  
+    
+  
+    
+  
+    
+  ",
+    "label": {
+      "text": "Address changed",
+    },
+  },
+  {
+    "byline": {
+      "text": "Dr. Kay Towne",
+    },
+    "datetime": {
+      "timestamp": "2026-03-06T21:37:21.666Z",
+      "type": "datetime",
+    },
+    "html": "
+
+  
+    <p><strong class="govuk-tag govuk-tag--orange">Not checked</strong></p>
+  
+
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Changed to:<br>1 Street<br>Town<br>P0 5TC</p>
+      
+    
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Housing arrangement: Other accommodation type</p>
+      
+    
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Address checks: Not checked</p>
+      
+    
+  
+    
+  ",
+    "label": {
+      "text": "Address created",
+    },
+  },
+]
+`;
+
 exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for a note 1`] = `
 {
   "byline": {

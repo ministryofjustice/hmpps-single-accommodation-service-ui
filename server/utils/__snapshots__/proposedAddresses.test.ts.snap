@@ -287,18 +287,17 @@ exports[`Proposed addresses utilities addressTimeline builds each entry with pre
       "type": "datetime",
     },
     "html": "
+  
 
   
 
   
     
       
-        <p class="govuk-!-margin-bottom-1">Changed to:<br>1 Street<br>Town<br>N3 5TC</p>
+        <p class="govuk-!-margin-bottom-1">
+          Changed to:<br>1 Street<br>Town<br>N3 5TC
+        </p>
       
-    
-  
-    
-  
     
   
     
@@ -316,6 +315,7 @@ exports[`Proposed addresses utilities addressTimeline builds each entry with pre
       "type": "datetime",
     },
     "html": "
+  
 
   
     <p><strong class="govuk-tag govuk-tag--orange">Not checked</strong></p>
@@ -324,22 +324,10 @@ exports[`Proposed addresses utilities addressTimeline builds each entry with pre
   
     
       
-        <p class="govuk-!-margin-bottom-1">Changed to:<br>1 Street<br>Town<br>P0 5TC</p>
+        <p class="govuk-!-margin-bottom-1">
+          1 Street<br>Town<br>P0 5TC
+        </p>
       
-    
-  
-    
-      
-        <p class="govuk-!-margin-bottom-1">Housing arrangement: Other accommodation type</p>
-      
-    
-  
-    
-      
-        <p class="govuk-!-margin-bottom-1">Address checks: Not checked</p>
-      
-    
-  
     
   ",
     "label": {
@@ -347,6 +335,58 @@ exports[`Proposed addresses utilities addressTimeline builds each entry with pre
     },
   },
 ]
+`;
+
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for a confirmed next address record 1`] = `
+{
+  "byline": {
+    "text": "Florence Collins",
+  },
+  "datetime": {
+    "timestamp": "2025-06-15T07:15:13.764Z",
+    "type": "datetime",
+  },
+  "html": "
+  
+
+  
+    <p><strong class="govuk-tag govuk-tag--green">Confirmed</strong></p>
+  
+
+  ",
+  "label": {
+    "text": "Status changed",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for a living arrangement changed record 1`] = `
+{
+  "byline": {
+    "text": "Florence Collins",
+  },
+  "datetime": {
+    "timestamp": "2025-06-15T07:15:13.764Z",
+    "type": "datetime",
+  },
+  "html": "
+  
+
+  
+
+  
+    
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">Changed to: Other accommodation type</p>
+      
+    
+  ",
+  "label": {
+    "text": "Living arrangement changed",
+  },
+}
 `;
 
 exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for a note 1`] = `
@@ -365,6 +405,60 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
 }
 `;
 
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address changed record 1`] = `
+{
+  "byline": {
+    "text": "Florence Collins",
+  },
+  "datetime": {
+    "timestamp": "2025-06-15T07:15:13.764Z",
+    "type": "datetime",
+  },
+  "html": "
+  
+
+  
+
+  
+    
+      
+        <p class="govuk-!-margin-bottom-1">
+          Changed to:<br>1 Street<br>Town<br>P0 5TC
+        </p>
+      
+    
+  
+    
+  ",
+  "label": {
+    "text": "Address changed",
+  },
+}
+`;
+
+exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address checks changed record 1`] = `
+{
+  "byline": {
+    "text": "Florence Collins",
+  },
+  "datetime": {
+    "timestamp": "2025-06-15T07:15:13.764Z",
+    "type": "datetime",
+  },
+  "html": "
+  
+
+  
+    <p><strong class="govuk-tag govuk-tag--yellow">Checks passed</strong></p>
+  
+
+  ",
+  "label": {
+    "text": "Status changed",
+  },
+}
+`;
+
 exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address created record 1`] = `
 {
   "byline": {
@@ -375,6 +469,7 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
     "type": "datetime",
   },
   "html": "
+  
 
   
     <p><strong class="govuk-tag govuk-tag--green">Confirmed</strong></p>
@@ -383,64 +478,14 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
   
     
       
-        <p class="govuk-!-margin-bottom-1">Changed to:<br>1 Street<br>Town<br>P0 5TC</p>
-      
-    
-  
-    
-      
-        <p class="govuk-!-margin-bottom-1">Housing arrangement: Other accommodation type</p>
-      
-    
-  
-    
-      
-        <p class="govuk-!-margin-bottom-1">Address checks: Passed</p>
-      
-    
-  
-    
-      
-        <p class="govuk-!-margin-bottom-1">Next address: Yes</p>
+        <p class="govuk-!-margin-bottom-1">
+          1 Street<br>Town<br>P0 5TC
+        </p>
       
     
   ",
   "label": {
     "text": "Address created",
-  },
-}
-`;
-
-exports[`Proposed addresses utilities addressTimelineEntry returns a timeline entry for an address updated record 1`] = `
-{
-  "byline": {
-    "text": "Florence Collins",
-  },
-  "datetime": {
-    "timestamp": "2025-06-15T07:15:13.764Z",
-    "type": "datetime",
-  },
-  "html": "
-
-  
-    <p><strong class="govuk-tag govuk-tag--yellow">Checks passed</strong></p>
-  
-
-  
-    
-  
-    
-  
-    
-      
-        <p class="govuk-!-margin-bottom-1">Address checks changed to Passed</p>
-      
-    
-  
-    
-  ",
-  "label": {
-    "text": "Address changed",
   },
 }
 `;

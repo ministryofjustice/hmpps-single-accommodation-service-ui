@@ -732,13 +732,61 @@ describe('Proposed addresses utilities', () => {
       expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
-    it('returns a timeline entry for an address updated record', () => {
+    it('returns a timeline entry for an address checks changed record', () => {
       const auditRecord = auditRecordFactory
         .proposedAddressUpdated([
           {
             field: 'verificationStatus',
             value: 'PASSED',
           },
+        ])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a confirmed next address record', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([
+          {
+            field: 'nextAccommodationStatus',
+            value: 'YES',
+          },
+        ])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a living arrangement changed record', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([
+          {
+            field: 'accommodationTypeDescription',
+            value: 'Other accommodation type',
+          },
+        ])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for an address changed record', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([
+          { field: 'buildingNumber', value: '1' },
+          { field: 'thoroughfareName', value: 'Street' },
+          { field: 'postTown', value: 'Town' },
+          { field: 'postcode', value: 'P0 5TC' },
         ])
         .build({
           author: 'Florence Collins',

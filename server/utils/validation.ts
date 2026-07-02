@@ -204,6 +204,15 @@ export const validateDateNotBefore = (
     : undefined
 }
 
+export const validateDateWithinLastXMonths = (dateParts: DateFieldParts, months: number, label: string) => {
+  const now = getTodayUtcDate()
+  const monthsAgo = new Date(now.setUTCMonth(now.getUTCMonth() - months))
+
+  return datePartsToUtcDate(dateParts) < monthsAgo
+    ? `${label} must be within the last ${months === 1 ? 'month' : `${months} months`}`
+    : undefined
+}
+
 export const validateDateField = (parts: DateFieldParts, label: string, yearLabel?: string): string | undefined =>
   validateDateFull(parts, label.toLowerCase()) ||
   validateDateParts(parts, label) ||

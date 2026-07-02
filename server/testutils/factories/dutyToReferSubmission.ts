@@ -86,8 +86,8 @@ export default DtrSubmissionFactory.define(() => {
       localAuthorityAreaName: localAuthority.name,
     },
     referenceNumber: faker.string.alphanumeric({ length: 10 }).toUpperCase(),
-    submissionDate: faker.date.past().toISOString().split('T')[0],
+    submissionDate: faker.date.recent({ days: 180 }).toISOString().split('T')[0],
     createdBy: faker.person.fullName(),
-    createdAt: faker.date.past().toISOString(),
+    createdAt: faker.date.recent().toISOString(),
   }
 })

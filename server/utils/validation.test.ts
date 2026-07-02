@@ -20,6 +20,7 @@ import {
   validateDateNotBefore,
   validateDateField,
   validatePostcode,
+  validateDateWithinLastXMonths,
 } from './validation'
 
 describe('fetchErrorsAndUserInput', () => {
@@ -362,6 +363,46 @@ describe('validators', () => {
       ],
     ])('returns the expected error for date %s before %s', (startDate, endDate, startLabel, endLabel, expected) => {
       expect(validateDateNotBefore(endDate, startDate, endLabel, startLabel)).toBe(expected)
+    })
+  })
+
+  describe('validateDateWithinLastXMonths', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-07-13'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it.each([
+      { title: 'date in the future', date: { day: '14', month: '6', year: '2026' }, months: 3, expected: undefined },
+      {
+        title: 'date within last 6 months',
+        date: { day: '13', month: '1', year: '2026' },
+        months: 6,
+        expected: undefined,
+      },
+      {
+        title: 'date over 6 months ago',
+        date: { day: '12', month: '1', year: '2026' },
+        months: 6,
+        expected: 'Date must be within the last 6 months',
+      },
+      {
+        title: 'date within last month',
+        date: { day: '13', month: '6', year: '2026' },
+        months: 1,
+        expected: undefined,
+      },
+      {
+        title: 'date over a month ago',
+        date: { day: '12', month: '6', year: '2026' },
+        months: 1,
+        expected: 'Date must be within the last month',
+      },
+    ])('returns the expected result for $title', ({ date, months, expected }) => {
+      expect(validateDateWithinLastXMonths(date, months, 'Date')).toBe(expected)
     })
   })
 

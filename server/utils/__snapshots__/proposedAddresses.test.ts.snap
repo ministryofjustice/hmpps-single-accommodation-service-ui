@@ -276,7 +276,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
 ]
 `;
 
-exports[`Proposed addresses utilities addressTimeline builds each entry with earlier field values carried forward 1`] = `
+exports[`Proposed addresses utilities addressTimeline builds each entry with previous field values carried forward 1`] = `
 [
   {
     "byline": {
@@ -293,7 +293,7 @@ exports[`Proposed addresses utilities addressTimeline builds each entry with ear
   
     
       
-        <p class="govuk-!-margin-bottom-1">Changed to:<br>2 New Street<br>Town<br>P0 5TC</p>
+        <p class="govuk-!-margin-bottom-1">Changed to:<br>1 Street<br>Town<br>N3 5TC</p>
       
     
   

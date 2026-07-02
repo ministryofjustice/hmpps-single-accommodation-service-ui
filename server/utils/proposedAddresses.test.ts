@@ -770,7 +770,7 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('addressTimeline', () => {
-    it('builds each entry with earlier field values carried forward', () => {
+    it('builds each entry with previous field values carried forward', () => {
       const proposedAddress = proposedAccommodationFactory.build({
         address: addressFactory.minimal().build({
           buildingNumber: '1',
@@ -782,6 +782,8 @@ describe('Proposed addresses utilities', () => {
           code: 'A444',
           description: 'Other accommodation type',
         },
+        verificationStatus: 'NOT_CHECKED_YET',
+        nextAccommodationStatus: undefined,
         createdBy: 'Dr. Kay Towne',
         createdAt: '2026-03-06T21:37:21.666Z',
       })

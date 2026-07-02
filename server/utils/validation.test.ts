@@ -380,7 +380,7 @@ describe('validators', () => {
     })
 
     it.each([
-      { title: 'date in the future', date: { day: '14', month: '6', year: '2026' }, months: 3, expected: undefined },
+      { title: 'date in the future', date: { day: '14', month: '7', year: '2026' }, months: 3, expected: undefined },
       {
         title: 'date within last 6 months',
         date: { day: '13', month: '1', year: '2026' },

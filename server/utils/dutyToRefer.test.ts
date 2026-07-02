@@ -275,6 +275,7 @@ describe('duty to refer utils', () => {
         session: {},
       })
       jest.spyOn(validationUtils, 'validateAndFlashErrors')
+      jest.useFakeTimers().setSystemTime(new Date('2025-03-01'))
     })
 
     it('sets errors and returns false when submission date and local authority are missing', () => {
@@ -286,6 +287,30 @@ describe('duty to refer utils', () => {
         {
           submissionDate: 'Enter a date',
           localAuthorityAreaId: 'Select a local authority from the list',
+        },
+        ['submissionDate'],
+      )
+      expect(result).toEqual(false)
+    })
+
+    it.each([
+      { title: 'in the future', date: '2025-03-02', error: 'Date must be today or in the past' },
+      { title: 'more than 6 months in the past', date: '2024-07-03', error: 'Date must be within the last 6 months' },
+    ])('sets a date error if the submission date is $title', ({ date, error }) => {
+      const [year, month, day] = date.split('-').map(String)
+      req.body = {
+        localAuthorityAreaId: 'la-id',
+        'submissionDate-day': day,
+        'submissionDate-month': month,
+        'submissionDate-year': year,
+      }
+
+      const result = validateSubmission(req)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(
+        req,
+        {
+          submissionDate: error,
         },
         ['submissionDate'],
       )

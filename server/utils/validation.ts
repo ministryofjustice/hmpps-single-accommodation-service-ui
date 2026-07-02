@@ -18,7 +18,7 @@ export const fetchErrorsAndUserInput = (request: Request) => {
 
 export const errorDateParts = (text: string): string[] => {
   const dateFields = ['day', 'month', 'year']
-  const found = dateFields.filter(part => text.toLowerCase().includes(part))
+  const found = dateFields.filter(part => text.includes('must include') && text.toLowerCase().includes(part))
   return found.length ? found : dateFields
 }
 
@@ -201,6 +201,17 @@ export const validateDateNotBefore = (
 
   return datePartsToUtcDate(endDate) < datePartsToUtcDate(startDate)
     ? `The ${endDateLabel} cannot be before the ${startDateLabel}`
+    : undefined
+}
+
+export const validateDateWithinLastXMonths = (dateParts: DateFieldParts, months: number, label: string) => {
+  if (!isRealDate(dateParts)) return undefined
+
+  const now = getTodayUtcDate()
+  const monthsAgo = new Date(now.setUTCMonth(now.getUTCMonth() - months))
+
+  return datePartsToUtcDate(dateParts) < monthsAgo
+    ? `${label} must be within the last ${months === 1 ? 'month' : `${months} months`}`
     : undefined
 }
 

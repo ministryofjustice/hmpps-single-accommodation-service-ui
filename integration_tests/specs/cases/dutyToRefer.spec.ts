@@ -6,6 +6,7 @@ import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import referenceDataApi from '../../mockApis/referenceData'
+import userApi from '../../mockApis/user'
 import {
   auditRecordFactory,
   caseFactory,
@@ -52,6 +53,7 @@ const setupStubs = async ({
   await referenceDataApi.stubGetLocalAuthorities()
   await accommodationApi.stubGetCurrentAccommodation(crn, undefined)
   await accommodationApi.stubGetNextAccommodation(crn, undefined)
+  await userApi.stubGetTeams()
   return { caseData, eligibility }
 }
 

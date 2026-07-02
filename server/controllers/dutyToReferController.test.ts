@@ -141,6 +141,7 @@ describe('dutyToReferController', () => {
 
   describe('saveSubmission', () => {
     beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-07-01'))
       request = mock<Request>({
         params: { crn: 'CRN123', id: undefined },
         body: {
@@ -153,6 +154,10 @@ describe('dutyToReferController', () => {
         },
         flash: jest.fn(),
       })
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
     })
 
     it('submits and redirects to the case details page', async () => {

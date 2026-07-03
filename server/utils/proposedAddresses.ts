@@ -418,7 +418,6 @@ export const addressTimelineEntry = (
   const fieldValues = { ...previousFieldValues, ...auditRecordChangesToFieldValues(auditRecord.changes) }
 
   const changedFieldNames = auditRecord.changes.map(change => change.field)
-  const addressChanged = addressFields.some(field => changedFieldNames.includes(field))
   const housingArrangementChanged = changedFieldNames.includes('accommodationTypeDescription')
   const statusChanged =
     changedFieldNames.includes('verificationStatus') || changedFieldNames.includes('nextAccommodationStatus')
@@ -438,12 +437,12 @@ export const addressTimelineEntry = (
     label = 'Status changed'
     values = {}
     status = proposedAddressStatusTag(displayStatus(proposedAddress))
+  } else if (housingArrangementChanged) {
+    label = 'Living arrangement changed'
+    values = { 'Housing arrangement': proposedAddress.accommodationType?.description }
   } else {
-    label = housingArrangementChanged ? 'Living arrangement changed' : 'Address changed'
-    values = {
-      Address: addressChanged ? addressParts : undefined,
-      'Housing arrangement': housingArrangementChanged ? proposedAddress.accommodationType?.description : undefined,
-    }
+    label = 'Address changed'
+    values = { Address: addressParts }
   }
 
   const html = renderMacro('timelineProposedAddress', { type, status, values })

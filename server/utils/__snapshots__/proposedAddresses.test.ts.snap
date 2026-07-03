@@ -299,8 +299,6 @@ exports[`Proposed addresses utilities addressTimeline builds each entry with pre
         </p>
       
     
-  
-    
   ",
     "label": {
       "text": "Address changed",
@@ -376,8 +374,6 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
 
   
     
-  
-    
       
         <p class="govuk-!-margin-bottom-1">Changed to: Other accommodation type</p>
       
@@ -426,8 +422,6 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
           Changed to:<br>1 Street<br>Town<br>P0 5TC
         </p>
       
-    
-  
     
   ",
   "label": {

@@ -15,4 +15,5 @@ export type AccommodationReferralDto = {
   referredBy?: StaffDetailsDto | null
   placementAddress?: string | null
   placementStatus?: string | null
+  uiUrl?: string | null
 }

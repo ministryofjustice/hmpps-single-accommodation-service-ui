@@ -2,7 +2,7 @@
 
 {%- macro timelineProposedAddress(context) -%}
   {% set changed = context.type !== 'CREATE' %}
-  {% set separator = 'Changed to:' if changed else '' %}
+  {% set prefix = 'Changed to:' if changed else '' %}
 
   {% if context.status %}
     <p>{{ statusTag(context.status) }}</p>
@@ -12,10 +12,10 @@
     {% if value %}
       {% if label === 'Address' %}
         <p class="govuk-!-margin-bottom-1">
-          {{ separator }}{% for line in value %}{% if changed or not loop.first %}<br>{% endif %}{{ line }}{% endfor %}
+          {{ prefix }}{% for line in value %}{% if changed or not loop.first %}<br>{% endif %}{{ line }}{% endfor %}
         </p>
       {% else %}
-        <p class="govuk-!-margin-bottom-1">{{ separator }} {{ value }}</p>
+        <p class="govuk-!-margin-bottom-1">{{ prefix }} {{ value }}</p>
       {% endif %}
     {% endif %}
   {% endfor %}

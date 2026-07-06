@@ -144,6 +144,10 @@ const getCas3ReferralDetails = (referral: Referral, status?: string): Array<Text
   const details: Array<TextOrHtmlContent> = []
   const bookingStatuses = ['DEPARTED', 'CANCELLED']
 
+  if (referral.referralRejectionReason) {
+    details.push(textContent(`Reason: ${referral.referralRejectionReason}`))
+  }
+
   if (referral.referralRejectionReasonDetail) {
     details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
   }
@@ -176,7 +180,7 @@ export const referralReferredBy = (c: Referral, username?: string): string => {
   return c.referredBy?.username?.toUpperCase() === username?.toUpperCase() ? `You (${fullName})` : fullName
 }
 
-export const referralLinksForType = (type: Referral['type'], id: string, crn: string, url?: string) => {
+export const referralLinksForType = (type: Referral['type'], id: string, crn: string, url?: string | null) => {
   switch (type) {
     case 'DTR':
       return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ crn, id }) }]

@@ -384,6 +384,10 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.completeLookupForm('19a', 'M21 0BP')
     await addProposedAddressPage.clickButton('Find address')
 
+    // Then I should see the confirm address form
+    await addProposedAddressPage.shouldShowConfirmAddressForm(['19a Keppel Road', 'Manchester', 'M21 0BP'])
+    await addProposedAddressPage.clickButton('Continue')
+
     // Then I should see the type form
     await addProposedAddressPage.shouldShowTypeForm(caseData.name)
     await addProposedAddressPage.shouldShowAddressCaption(selectedAddress)

@@ -44,6 +44,8 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async shouldShowSelectAddressForm(nameOrNumber: string, postcode: string, expectedResults: RadioItem[]) {
+    await expect(this.page.getByRole('heading', { level: 1 })).toHaveText(`${expectedResults.length} addresses found`)
+
     await expect(this.page.locator('dt:text("Property name or number") + dd')).toHaveText(nameOrNumber)
     await expect(this.page.locator('dt:text("UK postcode") + dd')).toHaveText(postcode)
 
@@ -56,6 +58,20 @@ export default class AddProposedAddressPage extends AbstractPage {
     for await (const { text, value } of expectedResults) {
       await expect(this.page.getByRole('radio', { name: text })).toHaveValue(value)
     }
+  }
+
+  async shouldShowConfirmAddressForm(addressLines: string[]) {
+    await expect(this.page.getByRole('heading', { level: 1 })).toHaveText('Confirm address')
+
+    const address = this.page.locator('address')
+    for await (const line of addressLines) {
+      await expect(address).toContainText(line)
+    }
+
+    await expect(this.page.getByRole('link', { name: 'Change' })).toHaveAttribute(
+      'href',
+      paths.proposedAddresses.lookup({ crn: this.crn }),
+    )
   }
 
   async completeAddressLookupResultsForm(address: string) {

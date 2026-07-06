@@ -23,7 +23,7 @@ import osDataHubApiResponse from '../../../server/testutils/fixtures/osDataHubAp
 import { resultToAddressDetails } from '../../../server/utils/osDataHub'
 import { formatAddress } from '../../../server/utils/addresses'
 import ProposedAddressDetailsPage from '../../pages/cases/proposedAddressDetailsPage'
-import { addressTimelineEntry } from '../../../server/utils/proposedAddresses'
+import { addressTimeline } from '../../../server/utils/proposedAddresses'
 import { accommodationTypes } from '../../../server/testutils/factories/proposedAccommodation'
 import ConfirmCurrentAddressPage from '../../pages/cases/confirmCurrentAddressPage'
 import paths from '../../../server/paths/ui'
@@ -97,7 +97,7 @@ test.describe('view proposed address details', () => {
     await addressDetailsPage.shouldShowProposedAddressSummary()
 
     // And I should see a timeline entry showing when the address was created
-    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(createdAddressRecord))
+    await addressDetailsPage.shouldShowTimelineEntry(addressTimeline([createdAddressRecord])[0])
 
     // When I click the button to add a note
     await addressDetailsPage.clickButton('Add note')
@@ -120,7 +120,7 @@ test.describe('view proposed address details', () => {
     await addressDetailsPage.shouldShowBanner('Note added')
 
     // And the note should be shown in the timeline at the top
-    await addressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(noteAddressRecord), 0)
+    await addressDetailsPage.shouldShowTimelineEntry(addressTimeline([noteAddressRecord, createdAddressRecord])[0])
   })
 })
 
@@ -648,7 +648,9 @@ test.describe('edit proposed address', () => {
     await updatedAddressDetailsPage.shouldShowProposedAddressSummary()
 
     // And a timeline entry should be shown
-    await updatedAddressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(updatedAddressRecord))
+    await updatedAddressDetailsPage.shouldShowTimelineEntry(
+      addressTimeline([updatedAddressRecord, createdAddressRecord])[0],
+    )
 
     // When I click the Change address checks link
     await updatedAddressDetailsPage.clickChangeLink('Address checks')
@@ -690,7 +692,9 @@ test.describe('edit proposed address', () => {
     await checksPassedAddressDetailsPage.shouldShowProposedAddressSummary()
 
     // And a timeline entry should be shown
-    await checksPassedAddressDetailsPage.shouldShowTimelineEntry(addressTimelineEntry(checksPassedAddressRecord))
+    await checksPassedAddressDetailsPage.shouldShowTimelineEntry(
+      addressTimeline([checksPassedAddressRecord, updatedAddressRecord, createdAddressRecord])[0],
+    )
   })
 })
 

@@ -19,6 +19,7 @@ import {
   lookupResultsItems,
   addressDetailRows,
   addressTimelineEntry,
+  addressTimeline,
   nextActionButton,
 } from './proposedAddresses'
 import {
@@ -731,7 +732,7 @@ describe('Proposed addresses utilities', () => {
       expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
-    it('returns a timeline entry for an address updated record', () => {
+    it('returns a timeline entry for an address checks changed record', () => {
       const auditRecord = auditRecordFactory
         .proposedAddressUpdated([
           {
@@ -745,6 +746,104 @@ describe('Proposed addresses utilities', () => {
         })
 
       expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a confirmed next address record', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([
+          {
+            field: 'nextAccommodationStatus',
+            value: 'YES',
+          },
+        ])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a living arrangement changed record', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([
+          {
+            field: 'accommodationTypeDescription',
+            value: 'Other accommodation type',
+          },
+        ])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for an address changed record', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([
+          { field: 'buildingNumber', value: '1' },
+          { field: 'thoroughfareName', value: 'Street' },
+          { field: 'postTown', value: 'Town' },
+          { field: 'postcode', value: 'P0 5TC' },
+        ])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+
+      expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('ignores previous address values when the current record has no address changes', () => {
+      const auditRecord = auditRecordFactory
+        .proposedAddressUpdated([{ field: 'verificationStatus', value: 'PASSED' }])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2025-06-15T07:15:13.764Z',
+        })
+      const previousFieldValues = {
+        buildingNumber: '1',
+        thoroughfareName: 'Street',
+        postTown: 'Town',
+        postcode: 'P0 5TC',
+      }
+
+      const { html } = addressTimelineEntry(auditRecord, previousFieldValues)
+
+      expect(html).not.toContain('Street')
+      expect(html).not.toContain('Changed to')
+    })
+  })
+
+  describe('addressTimeline', () => {
+    it('builds each entry with previous field values carried forward', () => {
+      const proposedAddress = proposedAccommodationFactory.build({
+        address: addressFactory.minimal().build({
+          buildingNumber: '1',
+          thoroughfareName: 'Street',
+          postTown: 'Town',
+          postcode: 'P0 5TC',
+        }),
+        accommodationType: {
+          code: 'A444',
+          description: 'Other accommodation type',
+        },
+        verificationStatus: 'NOT_CHECKED_YET',
+        nextAccommodationStatus: undefined,
+        createdBy: 'Dr. Kay Towne',
+        createdAt: '2026-03-06T21:37:21.666Z',
+      })
+      const createdRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
+      const postcodeChangedRecord = auditRecordFactory
+        .proposedAddressUpdated([{ field: 'postcode', value: 'N3 5TC' }])
+        .build({
+          author: 'Florence Collins',
+          commitDate: '2026-04-01T09:00:00.000Z',
+        })
+
+      expect(addressTimeline([postcodeChangedRecord, createdRecord])).toMatchSnapshot()
     })
   })
 })

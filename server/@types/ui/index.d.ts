@@ -111,3 +111,5 @@ export type ApiResponse = {
   data?: unknown
   upstreamFailures?: UpstreamFailureDto[]
 }
+
+export type AuditFieldValues = Record<string, string>

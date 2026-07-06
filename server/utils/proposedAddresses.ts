@@ -1,4 +1,5 @@
 import {
+  AuditFieldValues,
   ProposedAddressDisplayStatus,
   ProposedAddressFormData,
   ProposedAddressFormPage,
@@ -377,62 +378,89 @@ export const nextActionButton = (proposedAddress: ProposedAccommodationDto): But
   return undefined
 }
 
-const auditRecordChangesToProposedAddress = (auditRecord: AuditRecordDto): ProposedAccommodationDto => {
-  const addressFields = [
-    'buildingNumber',
-    'buildingName',
-    'subBuildingName',
-    'thoroughfareName',
-    'dependentLocality',
-    'postTown',
-    'postcode',
-    'county',
-    'country',
-    'uprn',
-  ]
+const addressFields = [
+  'buildingNumber',
+  'buildingName',
+  'subBuildingName',
+  'thoroughfareName',
+  'dependentLocality',
+  'postTown',
+  'postcode',
+  'county',
+  'country',
+  'uprn',
+]
 
-  const filterChanges = (predicate: (change: FieldChange) => boolean) =>
-    Object.fromEntries(auditRecord.changes.filter(predicate).map(change => [change.field, change.value]))
+const auditRecordChangesToFieldValues = (changes: FieldChange[]): AuditFieldValues =>
+  Object.fromEntries(changes.map(change => [change.field, change.value]))
+
+const fieldValuesToProposedAddress = (fieldValues: AuditFieldValues): ProposedAccommodationDto => {
+  const filterFields = (predicate: (field: string) => boolean) =>
+    Object.fromEntries(Object.entries(fieldValues).filter(([field]) => predicate(field)))
 
   return {
-    ...filterChanges(change => !addressFields.includes(change.field)),
-    address: filterChanges(change => addressFields.includes(change.field)),
+    ...filterFields(field => !addressFields.includes(field)),
+    address: filterFields(field => addressFields.includes(field)),
     accommodationType: {
       code: '',
-      description: auditRecord.changes.find(change => change.field === 'accommodationTypeDescription')?.value,
+      description: fieldValues.accommodationTypeDescription,
     },
   } as ProposedAccommodationDto
 }
 
-export const addressTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
+export const addressTimelineEntry = (
+  auditRecord: AuditRecordDto,
+  previousFieldValues: AuditFieldValues = {},
+): TimelineEntry => {
   const { type } = auditRecord
-
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
 
-  const proposedAddress = auditRecordChangesToProposedAddress(auditRecord)
+  const fieldValues = { ...previousFieldValues, ...auditRecordChangesToFieldValues(auditRecord.changes) }
 
-  const housingArrangement = proposedAddress.accommodationType?.description
+  const changedFieldNames = auditRecord.changes.map(change => change.field)
+  const housingArrangementChanged = changedFieldNames.includes('accommodationTypeDescription')
+  const statusChanged =
+    changedFieldNames.includes('verificationStatus') || changedFieldNames.includes('nextAccommodationStatus')
 
-  const addressChecks = formatProposedAddressStatus(proposedAddress.verificationStatus)
+  const proposedAddress = fieldValuesToProposedAddress(fieldValues)
+  const addressParts = addressLines(proposedAddress.address || {}, 'full')
 
-  const nextAddress =
-    type === 'UPDATE' || proposedAddress.verificationStatus === 'PASSED'
-      ? formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus)
-      : undefined
+  let label: string
+  let values: Record<string, unknown>
+  let status: StatusTag
 
-  const label = type === 'CREATE' ? 'Address created' : 'Address updated'
-  const html = renderMacro('timelineProposedAddress', {
-    type,
-    status: proposedAddressStatusTag(displayStatus(proposedAddress)),
-    values: {
-      Address: formatAddress(proposedAddress.address),
-      'Housing arrangement': housingArrangement,
-      'Address checks': addressChecks,
-      'Next address': nextAddress,
-    },
-  })
+  if (type === 'CREATE') {
+    label = 'Address created'
+    values = { Address: addressParts }
+    status = proposedAddressStatusTag(displayStatus(proposedAddress))
+  } else if (statusChanged) {
+    label = 'Status changed'
+    values = {}
+    status = proposedAddressStatusTag(displayStatus(proposedAddress))
+  } else if (housingArrangementChanged) {
+    label = 'Living arrangement changed'
+    values = { 'Housing arrangement': proposedAddress.accommodationType?.description }
+  } else {
+    label = 'Address changed'
+    values = { Address: addressParts }
+  }
+
+  const html = renderMacro('timelineProposedAddress', { type, status, values })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+}
+
+export const addressTimeline = (auditRecords: AuditRecordDto[]): TimelineEntry[] => {
+  let fieldValues: AuditFieldValues = {}
+
+  return [...auditRecords]
+    .reverse()
+    .map(auditRecord => {
+      const entry = addressTimelineEntry(auditRecord, fieldValues)
+      fieldValues = { ...fieldValues, ...auditRecordChangesToFieldValues(auditRecord.changes) }
+      return entry
+    })
+    .reverse()
 }
 
 export const validateNote = (req: Request) => {

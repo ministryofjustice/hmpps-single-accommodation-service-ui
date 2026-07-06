@@ -11,7 +11,7 @@ import { user } from '../routes/testutils/appSetup'
 import * as proposedAddressesUtils from '../utils/proposedAddresses'
 import {
   addressDetailRows,
-  addressTimelineEntry,
+  addressTimeline,
   accommodationTypeItems,
   checkYourAnswersRows,
   lookupResultsItems,
@@ -151,7 +151,7 @@ describe('proposedAddressesController', () => {
         assignedTo: caseAssignedTo(caseData, user.username),
         address: formatAddress(proposedAddress.address),
         addressDetailRows: addressDetailRows(proposedAddress),
-        timeline: auditRecords.map(addressTimelineEntry),
+        timeline: addressTimeline(auditRecords),
         nextAction: nextActionButton(proposedAddress),
         errors: {},
         errorSummary: [],

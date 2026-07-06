@@ -24,7 +24,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://magnificent-suv.biz">View application</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/123456">View application</a>
             </li>
           
         </ul>
@@ -86,7 +86,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://grandiose-chow.info/">View referral</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas3/345678">View referral</a>
             </li>
           
         </ul>
@@ -185,7 +185,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://magnificent-suv.biz">View application</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/123456">View application</a>
             </li>
           
         </ul>
@@ -271,7 +271,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://grandiose-chow.info/">View referral</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas3/345678">View referral</a>
             </li>
           
         </ul>

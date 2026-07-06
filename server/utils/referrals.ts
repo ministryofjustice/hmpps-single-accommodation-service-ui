@@ -82,7 +82,8 @@ export const referralStatusCell = (referral: Referral): StatusCell => {
   return {
     status: referralStatusTag(status, referral.type),
     dateText: formatDate(referral.date),
-    details: referral.type === 'CAS1' ? getCas1ReferralDetails(referral, status) : getCas3ReferralDetails(referral, status),
+    details:
+      referral.type === 'CAS1' ? getCas1ReferralDetails(referral, status) : getCas3ReferralDetails(referral, status),
   }
 }
 
@@ -206,9 +207,8 @@ export const getReferralStatus = (referral: Referral): string | undefined => {
   if (referral.status === 'REJECTED') {
     if (referral.referralRejectionReason) {
       return 'REJECTED'
-    } else {
-      return 'ARCHIVED'
     }
+    return 'ARCHIVED'
   }
 
   return placementStatus

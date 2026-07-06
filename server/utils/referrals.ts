@@ -86,6 +86,13 @@ export const referralStatusCell = (referral: Referral): StatusCell => {
   }
 }
 
+const REASON_DETAIL_MAX_LENGTH = 200
+
+const reasonDetailContent = (reason: string): TextOrHtmlContent =>
+  reason.length > REASON_DETAIL_MAX_LENGTH
+    ? htmlContent(renderMacro('govukDetails', { summaryText: 'Reason details', text: reason }))
+    : textContent(`Reason details: ${reason}`)
+
 const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
   const details: Array<TextOrHtmlContent> = []
 
@@ -112,7 +119,8 @@ const getCas1ReferralDetails = (referral: Referral, status?: string): Array<Text
 
   const applicationStatuses = ['REJECTED', 'EXPIRED', 'WITHDRAWN']
   const placementStatuses = ['NOT_ARRIVED', 'DEPARTED', 'CANCELLED']
-  if (applicationStatuses.includes(status) && referral.type === 'CAS1') {
+
+  if (applicationStatuses.includes(status)) {
     details.push(textContent('No placements'))
   }
 
@@ -121,20 +129,7 @@ const getCas1ReferralDetails = (referral: Referral, status?: string): Array<Text
   }
 
   if (referral.referralRejectionReasonDetail) {
-    const reason = referral.referralRejectionReasonDetail
-
-    if (reason.length > 200) {
-      details.push(
-        htmlContent(
-          renderMacro('govukDetails', {
-            summaryText: 'Reason details',
-            text: reason,
-          }),
-        ),
-      )
-    } else {
-      details.push(textContent(`Reason details: ${reason}`))
-    }
+    details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
   }
 
   if (referral.placementAddress && placementStatuses.includes(status)) {
@@ -149,20 +144,7 @@ const getCas3ReferralDetails = (referral: Referral, status?: string): Array<Text
   const bookingStatuses = ['DEPARTED', 'CANCELLED']
 
   if (referral.referralRejectionReasonDetail) {
-    const reason = referral.referralRejectionReasonDetail
-
-    if (reason.length > 200) {
-      details.push(
-        htmlContent(
-          renderMacro('govukDetails', {
-            summaryText: 'Reason details',
-            text: reason,
-          }),
-        ),
-      )
-    } else {
-      details.push(textContent(`Reason details: ${reason}`))
-    }
+    details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
   }
 
   if (status === 'ARCHIVED') {
@@ -170,8 +152,12 @@ const getCas3ReferralDetails = (referral: Referral, status?: string): Array<Text
   }
 
   if (bookingStatuses.includes(status)) {
-    details.push(textContent(referral.placementAddress))
-    details.push(textContent(`PDU: ${referral.pdu}`))
+    if (referral.placementAddress) {
+      details.push(textContent(referral.placementAddress))
+    }
+    if (referral.pdu) {
+      details.push(textContent(`PDU: ${referral.pdu}`))
+    }
   }
 
   return details

@@ -23,6 +23,15 @@ export default function setUpStaticResources(): Router {
     router.use('/assets', express.static(path.join(process.cwd(), dir), staticResourcesConfig))
   })
 
+  // ApplicationInsights web
+  router.use(
+    '/assets/applicationinsights-web/browser/es5/',
+    express.static(
+      path.join(process.cwd(), 'node_modules/@microsoft/applicationinsights-web/browser/es5/'),
+      staticResourcesConfig,
+    ),
+  )
+
   // Don't cache dynamic resources
   router.use(noCache())
 

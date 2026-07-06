@@ -4,6 +4,7 @@ import { StatusTag } from '@sas/ui'
 // eslint-disable-next-line import/prefer-default-export
 export const serviceStatusTag = (status?: ServiceResult['serviceStatus'], isDtr?: boolean): StatusTag =>
   ({
+    NOT_REQUIRED: { text: 'Not required', colour: 'grey' },
     NOT_ELIGIBLE: { text: isDtr ? 'Not required' : 'Not eligible', colour: 'grey' },
     CANNOT_START_YET: { text: 'Cannot start yet', colour: 'grey' },
     UPCOMING: { text: 'Upcoming', colour: 'yellow' },

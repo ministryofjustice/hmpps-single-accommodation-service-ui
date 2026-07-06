@@ -45,8 +45,8 @@ export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResu
 
   return {
     heading: 'Duty to Refer (DTR)',
-    inactive: serviceStatus === 'NOT_ELIGIBLE',
-    status: serviceStatusTag(serviceStatus, true),
+    inactive: serviceStatus === 'NOT_REQUIRED',
+    status: serviceStatusTag(serviceStatus),
     details: detailsForStatus(dutyToRefer),
     links: linksForStatus(dutyToRefer, crn),
   }
@@ -100,7 +100,7 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
   const rows = []
 
   if (dutyToRefer?.status === 'SUBMITTED' || dutyToRefer?.status === 'WITHDRAWN') {
-    rows.push(summaryListRowHtml('Status', statusTag(serviceStatusTag(dutyToRefer.status, true))))
+    rows.push(summaryListRowHtml('Status', statusTag(serviceStatusTag(dutyToRefer.status))))
   }
   rows.push(
     summaryListRowText(
@@ -122,7 +122,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
   return [
     summaryListRowHtml(
       'Status',
-      `${statusTag(serviceStatusTag(dutyToRefer.status, true))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
+      `${statusTag(serviceStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
     ),
     summaryListRowText('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
     summaryListRowOptional('Note', dutyToRefer.submission.outcomeNote, 'No note added'),
@@ -334,7 +334,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
 
   const html = renderMacro('timelineDutyToRefer', {
     type,
-    status: status ? serviceStatusTag(status, true) : undefined,
+    status: status ? serviceStatusTag(status) : undefined,
     values,
     hasListItems: values.some(item => item.isList && item.value),
   })

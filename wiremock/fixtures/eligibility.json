@@ -162,7 +162,7 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
+        "serviceStatus": "NOT_REQUIRED",
         "action": {
           "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
         },
@@ -272,7 +272,7 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
+        "serviceStatus": "NOT_REQUIRED",
         "action": {
           "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
         },
@@ -325,7 +325,7 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
+        "serviceStatus": "NOT_REQUIRED",
         "action": {
           "type": "ADD_DTR_REFERRAL_DETAILS"
         },

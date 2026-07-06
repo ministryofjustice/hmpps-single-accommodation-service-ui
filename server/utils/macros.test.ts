@@ -1,6 +1,6 @@
 import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
 import { CaseDto as Case } from '@sas/api'
-import { riskLevelTag, statusCard, statusCell, statusTag, tierScoreTag } from './macros'
+import { riskLevelTag, statusCard, statusCell, statusTag, tierScoreTag, govukDetails } from './macros'
 
 describe('Macros', () => {
   describe('Status Tag', () => {
@@ -121,6 +121,12 @@ describe('Macros', () => {
       }
 
       expect(statusCard(card)).toMatchSnapshot()
+    })
+  })
+
+  describe('govukDetails', () => {
+    it('renders a details component with the given summary and text', () => {
+      expect(govukDetails('Reason details', 'Some longer explanation')).toMatchSnapshot()
     })
   })
 })

@@ -2,7 +2,7 @@ import { DtrSubmissionDto, AccommodationReferralDto as Referral } from '@sas/api
 import { StatusCell, StatusTag } from '@sas/ui'
 import { TableRow, TextOrHtmlContent } from '@govuk/ui'
 import { linksCell, tableTextCell } from './tables'
-import { renderMacro, statusCell } from './macros'
+import { renderMacro, statusCell, govukDetails } from './macros'
 import { htmlContent, textContent } from './utils'
 import { outcomeReasonSummaryLabels, withdrawReasonLabels } from './dutyToRefer'
 import { formatDate } from './dates'
@@ -91,7 +91,7 @@ const REASON_DETAIL_MAX_LENGTH = 200
 
 const reasonDetailContent = (reason: string): TextOrHtmlContent =>
   reason.length > REASON_DETAIL_MAX_LENGTH
-    ? htmlContent(renderMacro('govukDetails', { summaryText: 'Reason details', text: reason }))
+    ? htmlContent(govukDetails('Reason details', reason))
     : textContent(`Reason details: ${reason}`)
 
 const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {

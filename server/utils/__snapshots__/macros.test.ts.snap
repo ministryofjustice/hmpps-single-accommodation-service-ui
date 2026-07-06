@@ -116,6 +116,20 @@ exports[`Macros Status Tag renders a status tag with given colour 1`] = `"<stron
 
 exports[`Macros Status Tag renders a status tag with the default colour 1`] = `"<strong class="govuk-tag">Baz</strong>"`;
 
+exports[`Macros govukDetails renders a details component with the given summary and text 1`] = `
+"<details class="govuk-details govuk-!-margin-bottom-1">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Reason details
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    Some longer explanation
+  </div>
+</details>
+"
+`;
+
 exports[`Macros riskLevelTag renders a risk level tag for risk level HIGH 1`] = `
 "<div class="sas-risk-tag sas-risk-tag--high">
       <dt>RoSH</dt>

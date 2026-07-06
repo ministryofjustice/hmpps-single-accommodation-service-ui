@@ -37,3 +37,5 @@ export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('ri
 export const tierScoreTag = (tierScore: CaseDto['tierScore']) => renderMacro('tierScoreTag', tierScore)
 
 export const statusCard = (cardData: StatusCard) => renderMacro('statusCard', cardData)
+
+export const govukDetails = (summaryText: string, text: string) => renderMacro('govukDetails', { summaryText, text })

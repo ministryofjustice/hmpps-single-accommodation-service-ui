@@ -7,6 +7,7 @@ describe('referrals utilities', () => {
     type: 'CAS1',
     placementStatus: 'CANCELLED',
     date: '2023-01-15',
+    uiUrl: 'https://example.com/cas1/123456',
     referredBy: { username: 'alice_smith', name: 'Alice Smith' },
   })
   const referral2 = referralFactory.build({
@@ -21,6 +22,7 @@ describe('referrals utilities', () => {
     type: 'CAS3',
     placementStatus: 'REJECTED',
     date: '2023-03-25',
+    uiUrl: 'https://example.com/cas3/345678',
     referredBy: { username: 'matt_jones', name: 'Matt Jones' },
   })
   const referrals = [referral1, referral2, referral3]

@@ -196,7 +196,7 @@ describe('dutyToReferController', () => {
         submissionNote: null,
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
-      expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
+      expect(request.flash).toHaveBeenCalledWith('success', 'Referral details changed')
       expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
     })
 
@@ -221,7 +221,7 @@ describe('dutyToReferController', () => {
         outcomeNote: 'This is an outcome note',
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
-      expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
+      expect(request.flash).toHaveBeenCalledWith('success', 'Referral details changed')
       expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
     })
 

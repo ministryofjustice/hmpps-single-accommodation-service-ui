@@ -141,7 +141,7 @@ export default class DutyToReferController {
             submission.outcomeNote = dtr.submission?.outcomeNote || null
           }
           await this.dutyToReferService.update(token, crn, id, submission)
-          req.flash('success', 'Submission details updated')
+          req.flash('success', 'Referral details changed')
           return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         }
 

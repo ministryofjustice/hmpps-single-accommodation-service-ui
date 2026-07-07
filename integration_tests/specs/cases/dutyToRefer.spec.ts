@@ -292,7 +292,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming submission details were updated
-    await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
+    await dutyToReferDetailsPage.shouldShowBanner('Referral details changed')
 
     // And I should see a timeline entry showing the submission details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
@@ -367,7 +367,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming submission details were updated
-    await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
+    await dutyToReferDetailsPage.shouldShowBanner('Referral details changed')
 
     // And I should see a timeline entry showing the submission details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))

@@ -1,11 +1,8 @@
 {% extends "pages/proposed-address/layout.njk" %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set pageTitle = "Confirm address" %}
 {% set backLinkHref = paths.proposedAddresses.lookup({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.selectAddress({crn: crn}) %}
-{% set hideManualAddressEntry = featureFlags.hideManualAddressEntry %}
 
 {% block formContent %}
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-0">
@@ -21,7 +18,7 @@
       {% endfor %}
     </address>
 
-    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.lookup({ crn: crn }) }}">
+    <a class="govuk-link govuk-link--no-visited-state" href="{{ backLinkHref }}">
       Change
     </a>
   </div>

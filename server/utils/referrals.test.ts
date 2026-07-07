@@ -1,5 +1,5 @@
 import { referralFactory } from '../testutils/factories'
-import { referralHistoryRows, referralHistoryTable } from './referrals'
+import { referralHistoryRows, referralHistoryTable, getReferralStatus } from './referrals'
 
 describe('referrals utilities', () => {
   const referral1 = referralFactory.build({
@@ -44,6 +44,60 @@ describe('referrals utilities', () => {
 
     it('renders a message when there is an API error', () => {
       expect(referralHistoryTable(null, 'alice_smith', 'CRN123', true)).toMatchSnapshot()
+    })
+  })
+
+  describe('getReferralStatus', () => {
+    it('returns DTR status', () => {
+      const referral = referralFactory.build({ type: 'DTR', status: 'WITHDRAWN' })
+      expect(getReferralStatus(referral)).toBe('WITHDRAWN')
+    })
+
+    it('returns placementStatus for CAS1 when present', () => {
+      const referral = referralFactory.build({
+        type: 'CAS1',
+        status: 'ACCEPTED',
+        placementStatus: 'departed',
+      })
+      expect(getReferralStatus(referral)).toBe('DEPARTED')
+    })
+
+    it('returns CAS1 status when placementStatus is null', () => {
+      const referral = referralFactory.build({
+        type: 'CAS1',
+        status: 'REJECTED',
+        placementStatus: null,
+      })
+      expect(getReferralStatus(referral)).toBe('REJECTED')
+    })
+
+    it('returns REJECTED for CAS3 with rejectionReason', () => {
+      const referral = referralFactory.build({
+        type: 'CAS3',
+        status: 'REJECTED',
+        referralRejectionReason: 'No suitable accommodation',
+        placementStatus: null,
+      })
+      expect(getReferralStatus(referral)).toBe('REJECTED')
+    })
+
+    it('returns ARCHIVED for CAS3 without rejectionReason', () => {
+      const referral = referralFactory.build({
+        type: 'CAS3',
+        status: 'REJECTED',
+        referralRejectionReason: null,
+        placementStatus: null,
+      })
+      expect(getReferralStatus(referral)).toBe('ARCHIVED')
+    })
+
+    it('returns placementStatus for CAS3 when status is not REJECTED', () => {
+      const referral = referralFactory.build({
+        type: 'CAS3',
+        status: 'PENDING',
+        placementStatus: 'cancelled',
+      })
+      expect(getReferralStatus(referral)).toBe('CANCELLED')
     })
   })
 })

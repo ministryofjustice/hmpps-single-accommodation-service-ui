@@ -486,7 +486,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(submissionAddedDutyReferRecord))
 
     // And I click the Withdraw referral button
-    await dutyToReferDetailsPage.clickButton('Withdraw referral')
+    await dutyToReferDetailsPage.clickButton('Withdraw this referral')
 
     // Then I should see the duty to refer withdrawal form
     const dutyToReferWithdrawPage = await DutyToReferPage.verifyOnPage(page, 'Withdraw referral')

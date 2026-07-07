@@ -47,11 +47,11 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   }
 
   async shouldShowWithdrawReferralButton() {
-    await expect(this.page.getByRole('button', { name: 'Withdraw referral' })).toBeVisible()
+    await expect(this.page.getByRole('button', { name: 'Withdraw this referral' })).toBeVisible()
   }
 
   async shouldNotShowWithdrawReferralButton() {
-    await expect(this.page.getByRole('button', { name: 'Withdraw referral' })).not.toBeVisible()
+    await expect(this.page.getByRole('button', { name: 'Withdraw this referral' })).not.toBeVisible()
   }
 
   async shouldShowAddNewReferralButton() {

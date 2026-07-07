@@ -388,7 +388,7 @@ describe('dutyToReferController', () => {
         submissionNote: null,
         outcomeNote: 'Some note',
       })
-      expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details updated')
+      expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details changed')
       expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
     })
 

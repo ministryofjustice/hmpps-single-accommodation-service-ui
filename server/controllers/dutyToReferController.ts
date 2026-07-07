@@ -235,7 +235,7 @@ export default class DutyToReferController {
           outcomeNote: outcomeNote || null,
         })
 
-        req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
+        req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details changed' : 'Outcome details added')
         return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')

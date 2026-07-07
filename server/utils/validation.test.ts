@@ -288,6 +288,7 @@ describe('validators', () => {
       ['a'.repeat(10), 'Reason', 10, undefined],
       ['a'.repeat(11), 'Reason', 10, 'Reason must be 10 characters or less'],
       ['Some long address', 'Address', 16, 'Address must be 16 characters or less'],
+      ['a'.repeat(1001), 'Description', 1000, 'Description must be 1,000 characters or less'],
     ])('returns the expected error for value %s and label %s', (value, label, length, expected) => {
       expect(validateMaxLength(value, label, length)).toBe(expected)
     })

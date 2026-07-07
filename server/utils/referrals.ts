@@ -40,7 +40,7 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
 export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag =>
   ({
     REQUEST_WITHDRAWN: { text: 'Request withdrawn', colour: 'grey' },
-    EXPIRED: { text: 'Expired', colour: 'grey' },
+    EXPIRED: type === 'CAS1' ? { text: 'Application expired', colour: 'grey' } : { text: 'Expired', colour: 'grey' },
     REJECTED:
       type === 'DTR'
         ? { text: 'Not accepted', colour: 'grey' }
@@ -200,14 +200,13 @@ export const getReferralStatus = (referral: Referral): string | undefined => {
 
   const placementStatus = referral.placementStatus?.toUpperCase()
   if (referral.type === 'CAS1') {
-    return placementStatus || referral.status
+    if (referral.status === 'EXPIRED') return 'EXPIRED'
+    if (placementStatus === 'NOTARRIVED') return 'NOT_ARRIVED'
+    return placementStatus || referral.requestForPlacementStatus?.toUpperCase() || referral.status
   }
 
-  if (referral.status === 'REJECTED') {
-    if (referral.referralRejectionReason) {
-      return 'REJECTED'
-    }
-    return 'ARCHIVED'
+  if (referral.assessmentStatus.toUpperCase() === 'REJECTED') {
+    return referral.referralRejectionReason ? 'REJECTED' : 'ARCHIVED'
   }
 
   return placementStatus

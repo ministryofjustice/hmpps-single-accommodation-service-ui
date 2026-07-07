@@ -71,6 +71,34 @@ describe('referrals utilities', () => {
       expect(getReferralStatus(referral)).toBe('REJECTED')
     })
 
+    it('returns EXPIRED for CAS1 when status is EXPIRED', () => {
+      const referral = referralFactory.build({
+        type: 'CAS1',
+        status: 'EXPIRED',
+        placementStatus: 'DEPARTED',
+      })
+      expect(getReferralStatus(referral)).toBe('EXPIRED')
+    })
+
+    it('returns NOT_ARRIVED for CAS1 when placementStatus is NOTARRIVED', () => {
+      const referral = referralFactory.build({
+        type: 'CAS1',
+        status: 'ACCEPTED',
+        placementStatus: 'notarrived',
+      })
+      expect(getReferralStatus(referral)).toBe('NOT_ARRIVED')
+    })
+
+    it('returns requestForPlacementStatus for CAS1 when placementStatus is null', () => {
+      const referral = referralFactory.build({
+        type: 'CAS1',
+        status: 'ACCEPTED',
+        placementStatus: null,
+        requestForPlacementStatus: 'request_rejected',
+      })
+      expect(getReferralStatus(referral)).toBe('REQUEST_REJECTED')
+    })
+
     it('returns REJECTED for CAS3 with rejectionReason', () => {
       const referral = referralFactory.build({
         type: 'CAS3',

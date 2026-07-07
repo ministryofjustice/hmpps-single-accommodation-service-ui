@@ -80,19 +80,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
     ",
     },
     {
-      "html": "
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-      <span class="govuk-table-span govuk-body">
-        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-          
-            <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas3/345678">View referral</a>
-            </li>
-          
-        </ul>
-      </span>
-    </div>
-  ",
+      "html": "",
     },
   ],
 ]
@@ -265,19 +253,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       
       
-      <td class="govuk-table__cell">
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-      <span class="govuk-table-span govuk-body">
-        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-          
-            <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas3/345678">View referral</a>
-            </li>
-          
-        </ul>
-      </span>
-    </div>
-  </td>
+      <td class="govuk-table__cell"></td>
       
     
     </tr>

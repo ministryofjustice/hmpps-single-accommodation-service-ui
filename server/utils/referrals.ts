@@ -185,14 +185,9 @@ export const referralLinksForType = (type: Referral['type'], id: string, crn: st
     case 'DTR':
       return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ crn, id }) }]
     case 'CAS1':
-      return [
-        {
-          text: 'View application',
-          href: url,
-        },
-      ]
+      return url ? [{ text: 'View application', href: url }] : []
     case 'CAS3':
-      return [{ text: 'View referral', href: url }]
+      return url ? [{ text: 'View referral', href: url }] : []
     default:
       return []
   }

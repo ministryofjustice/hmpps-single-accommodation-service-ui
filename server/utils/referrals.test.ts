@@ -22,7 +22,7 @@ describe('referrals utilities', () => {
     type: 'CAS3',
     placementStatus: 'REJECTED',
     date: '2023-03-25',
-    uiUrl: 'https://example.com/cas3/345678',
+    uiUrl: null,
     referredBy: { username: 'matt_jones', name: 'Matt Jones' },
   })
   const referrals = [referral1, referral2, referral3]

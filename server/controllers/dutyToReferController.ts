@@ -157,7 +157,7 @@ export default class DutyToReferController {
             body: `<p>The previous referral has been moved to ${name}'s referral history</p>`,
           })
         } else {
-          req.flash('success', 'New DTR referral details added')
+          req.flash('success', 'DTR referral details added')
         }
 
         return res.redirect(uiPaths.cases.show({ crn }))

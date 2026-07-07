@@ -175,7 +175,7 @@ describe('dutyToReferController', () => {
         submissionNote: 'This is a note',
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
-      expect(request.flash).toHaveBeenCalledWith('success', 'New DTR referral details added')
+      expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral details added')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 

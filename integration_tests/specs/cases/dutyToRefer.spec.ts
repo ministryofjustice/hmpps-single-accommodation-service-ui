@@ -137,7 +137,7 @@ test.describe('duty to refer', () => {
     await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     // And I should see a success banner confirming referral details were added
-    await profileTrackerPage.shouldShowBanner('New DTR referral details added')
+    await profileTrackerPage.shouldShowBanner('DTR referral details added')
 
     // And I should see the new DTR eligibility card
     await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(crn, eligibility.dtr))

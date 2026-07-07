@@ -14,7 +14,7 @@ const serviceStatuses: Array<ServiceResult['serviceStatus']> = [
 ]
 
 const dtrStatuses: Array<ServiceResult['serviceStatus']> = [
-  'NOT_ELIGIBLE',
+  'NOT_REQUIRED',
   'UPCOMING',
   'NOT_STARTED',
   'SUBMITTED',

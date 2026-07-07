@@ -69,8 +69,8 @@ describe('duty to refer utils', () => {
       expect(card).toMatchSnapshot()
     })
 
-    it('returns a NOT_ELIGIBLE duty to refer status card object', () => {
-      const dutyToRefer = dtrServiceResultFactory.notEligible().build()
+    it('returns a NOT_REQUIRED duty to refer status card object', () => {
+      const dutyToRefer = dtrServiceResultFactory.notRequired().build()
 
       const card = dutyToReferStatusCard('CRN123', dutyToRefer)
 
@@ -147,7 +147,7 @@ describe('duty to refer utils', () => {
         expectedLinks: ['View referral'],
         dtr: dtrServiceResultFactory.accepted().build(),
       },
-      { status: 'not eligible', expectedLinks: [], dtr: dtrServiceResultFactory.notEligible().build() },
+      { status: 'not required', expectedLinks: [], dtr: dtrServiceResultFactory.notRequired().build() },
       { status: 'upcoming', expectedLinks: [], dtr: dtrServiceResultFactory.upcoming().build() },
       { status: 'undefined', expectedLinks: [], dtr: undefined },
     ])('returns links $links for status $status', ({ expectedLinks, dtr }) => {

@@ -119,7 +119,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
 ]
 `;
 
-exports[`duty to refer utils dutyToReferStatusCard returns a NOT_ELIGIBLE duty to refer status card object 1`] = `
+exports[`duty to refer utils dutyToReferStatusCard returns a NOT_REQUIRED duty to refer status card object 1`] = `
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",

@@ -4,9 +4,9 @@ import serviceResultFactory from './serviceResult'
 import dtrSubmissionFactory from './dutyToReferSubmission'
 
 class DtrServiceResultFactory extends Factory<DtrServiceResult> {
-  notEligible() {
+  notRequired() {
     return this.params({
-      serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_ELIGIBLE' }),
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_REQUIRED' }),
       submission: null,
     })
   }
@@ -47,7 +47,7 @@ class DtrServiceResultFactory extends Factory<DtrServiceResult> {
   }
 }
 
-const noSubmissionStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_STARTED', 'NOT_ELIGIBLE', 'UPCOMING']
+const noSubmissionStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_STARTED', 'NOT_REQUIRED', 'UPCOMING']
 
 export default DtrServiceResultFactory.define(() => {
   const serviceResult = serviceResultFactory.dtr().build()

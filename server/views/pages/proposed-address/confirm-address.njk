@@ -1,0 +1,25 @@
+{% extends "pages/proposed-address/layout.njk" %}
+
+{% set pageTitle = "Confirm address" %}
+{% set backLinkHref = paths.proposedAddresses.lookup({crn: crn}) %}
+{% set formAction = paths.proposedAddresses.selectAddress({crn: crn}) %}
+
+{% block formContent %}
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-0">
+    <h1 class="govuk-fieldset__heading">Confirm address</h1>
+  </legend>
+
+  <input type="hidden" name="addressUprn" value="{{ addressUprn }}" />
+
+  <div class="govuk-inset-text govuk-inset-text--previous-answers">
+    <address class="govuk-!-font-style-normal govuk-!-margin-bottom-4">
+      {% for line in addressLines %}
+        {{ line }}{% if not loop.last %}<br />{% endif %}
+      {% endfor %}
+    </address>
+
+    <a class="govuk-link govuk-link--no-visited-state" href="{{ backLinkHref }}">
+      Change
+    </a>
+  </div>
+{% endblock %}

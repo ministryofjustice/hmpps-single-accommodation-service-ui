@@ -5,9 +5,17 @@ export const addressLines = (
   type: 'simple' | 'full' = 'simple',
 ): string[] => {
   const { subBuildingName, buildingName, buildingNumber, thoroughfareName, postTown, postcode } = address
+  let line1 = `${subBuildingName || ''} ${buildingName || ''}`
+  let line2 = `${buildingNumber || ''} ${thoroughfareName || ''}`
+
+  if (buildingName?.match(/^\d+([A-Za-z]|-\d+)$/)) {
+    line1 = `${subBuildingName || ''}`
+    line2 = `${buildingName || ''} ${thoroughfareName || ''}`
+  }
+
   return [
-    `${subBuildingName || ''} ${buildingName || ''}`,
-    `${buildingNumber || ''} ${thoroughfareName || ''}`,
+    line1,
+    line2,
     `${postTown || ''}`,
     type === 'full' ? `${address.county || ''}` : '',
     `${postcode || ''}`,

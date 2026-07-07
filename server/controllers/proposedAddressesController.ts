@@ -201,11 +201,6 @@ export default class ProposedAddressesController {
         return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
       }
 
-      if (lookupResults.length === 1) {
-        await this.formData.update(crn, session, { lookupResults, address: lookupResults[0] })
-        return this.continue(req, res, uiPaths.proposedAddresses.type({ crn }))
-      }
-
       await this.formData.update(crn, session, { lookupResults })
       return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn: req.params.crn }))
     }
@@ -227,6 +222,14 @@ export default class ProposedAddressesController {
       if (!lookupResults) return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
+
+      if (lookupResults.length === 1) {
+        return res.render('pages/proposed-address/confirm-address', {
+          crn,
+          addressLines: addressLines(lookupResults[0]),
+          addressUprn: lookupResults[0].uprn,
+        })
+      }
 
       return res.render('pages/proposed-address/select-address', {
         crn,

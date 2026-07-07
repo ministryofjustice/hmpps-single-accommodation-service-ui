@@ -326,21 +326,6 @@ describe('proposedAddressesController', () => {
         lookupResults,
       })
     })
-
-    it('saves the address and redirects to the type page if there is exactly one result', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([lookupResults[1]])
-
-      request.body = { nameOrNumber: '23A', postcode: 'M21 0BP' }
-
-      await controller.saveLookup()(request, response, next)
-
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
-      expect(controller.formData.update).toHaveBeenCalledTimes(2)
-      expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
-        lookupResults: [lookupResults[1]],
-        address: lookupResults[1],
-      })
-    })
   })
 
   describe('selectAddress', () => {
@@ -361,6 +346,22 @@ describe('proposedAddressesController', () => {
         addresses: lookupResultsItems(lookupResults, address.uprn),
         errors: {},
         errorSummary: [],
+      })
+    })
+
+    it('renders the confirm address page if there is only one result in the session', async () => {
+      setSessionData({
+        nameOrNumber,
+        postcode,
+        lookupResults: [lookupResults[2]],
+      })
+
+      await controller.selectAddress()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/proposed-address/confirm-address', {
+        crn: 'CRN123',
+        addressLines: addressLines(lookupResults[2]),
+        addressUprn: lookupResults[2].uprn,
       })
     })
 
@@ -924,22 +925,6 @@ describe('proposedAddressesController', () => {
       })
     })
 
-    describe('saveLookup', () => {
-      it('saves the address in session and redirects to Check your Answers if there is only one address result', async () => {
-        osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([lookupResults[1]])
-        request.body = { nameOrNumber: '23A', postcode: 'M21 0BP' }
-
-        await controller.saveLookup()(request, response, next)
-
-        expect(response.redirect).toHaveBeenCalledWith(checkYourAnswersUrl)
-        expect(controller.formData.update).toHaveBeenCalledTimes(2)
-        expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
-          lookupResults: [lookupResults[1]],
-          address: lookupResults[1],
-        })
-      })
-    })
-
     it.each([
       { handler: 'saveSelectAddress', body: { addressUprn: lookupResults[1].uprn } },
       {
@@ -979,23 +964,6 @@ describe('proposedAddressesController', () => {
         ...fullSessionData,
         id,
         redirect,
-      })
-    })
-
-    describe('saveLookup', () => {
-      it('saves the address in session and redirects to the original page if there is only one address result', async () => {
-        osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([lookupResults[1]])
-        request.body = { nameOrNumber: '23A', postcode: 'M21 0BP' }
-
-        await controller.saveLookup()(request, response, next)
-
-        expect(response.redirect).toHaveBeenCalledWith(redirect)
-        expect(proposedAddressesService.update).toHaveBeenCalledWith(
-          'token-1',
-          'CRN123',
-          expect.objectContaining({ id: 'address-id' }),
-        )
-        expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
       })
     })
 

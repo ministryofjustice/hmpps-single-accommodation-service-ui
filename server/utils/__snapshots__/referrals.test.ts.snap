@@ -75,8 +75,12 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
     },
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-  <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
+  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
     <p class="sas-status__date">25 March 2023</p>
+    
+      
+        <p class="govuk-!-margin-bottom-1">No bookings</p>
+      
     ",
     },
     {
@@ -246,8 +250,12 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
       
       
       <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-  <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
+  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
     <p class="sas-status__date">25 March 2023</p>
+    
+      
+        <p class="govuk-!-margin-bottom-1">No bookings</p>
+      
     </td>
       
     

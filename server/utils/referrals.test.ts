@@ -20,7 +20,8 @@ describe('referrals utilities', () => {
   const referral3 = referralFactory.build({
     id: '345678',
     type: 'CAS3',
-    placementStatus: 'REJECTED',
+    assessmentStatus: 'rejected',
+    placementStatus: null,
     date: '2023-03-25',
     uiUrl: null,
     referredBy: { username: 'matt_jones', name: 'Matt Jones' },
@@ -102,7 +103,7 @@ describe('referrals utilities', () => {
     it('returns REJECTED for CAS3 with rejectionReason', () => {
       const referral = referralFactory.build({
         type: 'CAS3',
-        status: 'REJECTED',
+        assessmentStatus: 'rejected',
         referralRejectionReason: 'No suitable accommodation',
         placementStatus: null,
       })
@@ -112,20 +113,29 @@ describe('referrals utilities', () => {
     it('returns ARCHIVED for CAS3 without rejectionReason', () => {
       const referral = referralFactory.build({
         type: 'CAS3',
-        status: 'REJECTED',
+        assessmentStatus: 'rejected',
         referralRejectionReason: null,
         placementStatus: null,
       })
       expect(getReferralStatus(referral)).toBe('ARCHIVED')
     })
 
-    it('returns placementStatus for CAS3 when status is not REJECTED', () => {
+    it('returns placementStatus for CAS3 when assessmentStatus is not REJECTED', () => {
       const referral = referralFactory.build({
         type: 'CAS3',
-        status: 'PENDING',
+        assessmentStatus: 'ready_to_place',
         placementStatus: 'cancelled',
       })
       expect(getReferralStatus(referral)).toBe('CANCELLED')
+    })
+
+    it('returns placementStatus for CAS3 when assessmentStatus is null', () => {
+      const referral = referralFactory.build({
+        type: 'CAS3',
+        assessmentStatus: null,
+        placementStatus: 'departed',
+      })
+      expect(getReferralStatus(referral)).toBe('DEPARTED')
     })
   })
 })

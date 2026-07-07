@@ -205,7 +205,7 @@ export const getReferralStatus = (referral: Referral): string | undefined => {
     return placementStatus || referral.requestForPlacementStatus?.toUpperCase() || referral.status
   }
 
-  if (referral.assessmentStatus.toUpperCase() === 'REJECTED') {
+  if (referral.assessmentStatus?.toUpperCase() === 'REJECTED') {
     return referral.referralRejectionReason ? 'REJECTED' : 'ARCHIVED'
   }
 

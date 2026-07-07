@@ -41,20 +41,23 @@ const cas1Referrals: ReferralParams[] = [
 
 const cas3Referrals: ReferralParams[] = [
   () => ({
-    status: 'REJECTED',
+    status: 'PENDING',
+    assessmentStatus: 'rejected',
     placementStatus: null,
     referralRejectionReason: 'Local authority alternative suitable accommodation provided (includes Priority need)',
     referralRejectionReasonDetail: faker.lorem.words(40),
   }),
-  () => ({ status: 'REJECTED', placementStatus: null, referralRejectionReason: null }),
+  () => ({ status: 'PENDING', assessmentStatus: 'rejected', placementStatus: null, referralRejectionReason: null }),
   () => ({
     status: 'PENDING',
+    assessmentStatus: 'closed',
     placementStatus: 'DEPARTED',
     pdu: faker.location.city(),
     placementAddress: shortAddress(),
   }),
   () => ({
     status: 'PENDING',
+    assessmentStatus: 'ready_to_place',
     placementStatus: 'CANCELLED',
     pdu: faker.location.city(),
     placementAddress: shortAddress(),
@@ -111,6 +114,7 @@ class ReferralFactory extends Factory<Referral> {
       localAuthorityArea: null,
       pdu: null,
       placementAddress: null,
+      assessmentStatus: 'ready_to_place',
       placementStatus: faker.helpers.arrayElement(cas3BookingStatuses),
       status: 'PENDING',
     })

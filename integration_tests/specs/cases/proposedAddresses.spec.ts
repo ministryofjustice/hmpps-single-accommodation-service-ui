@@ -314,7 +314,7 @@ test.describe('add proposed address', () => {
     await osDataHubApi.stubOsDataHubGetPostcode('N0 0PE', { ...osDataHubApiResponse, results: [] })
     const expectedOsResults = [
       { text: '19 Keppel Road, Manchester, M21 0BP', value: '10094949108' },
-      { text: '19a, Keppel Road, Manchester, M21 0BP', value: '10094949109' },
+      { text: '19a Keppel Road, Manchester, M21 0BP', value: '10094949109' },
     ]
 
     // Given I am logged in

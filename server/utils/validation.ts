@@ -127,7 +127,7 @@ export const validateAutocomplete = (
 ): string | undefined => validateRequired(value, label, 'Select', prefix, 'from the list')
 
 export const validateMaxLength = (value: string | undefined, label: string, maxLength: number): string | undefined =>
-  value && value.length > maxLength ? `${label} must be ${maxLength} characters or less` : undefined
+  value && value.length > maxLength ? `${label} must be ${maxLength.toLocaleString()} characters or less` : undefined
 
 const blankDateParts = ({ day, month, year }: DateFieldParts): string[] => {
   const blankParts: string[] = []

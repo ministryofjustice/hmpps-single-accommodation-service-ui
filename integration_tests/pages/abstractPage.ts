@@ -240,6 +240,16 @@ export default class AbstractPage {
     await expect(this.page.getByRole('combobox', { name: label })).toHaveValue(value)
   }
 
+  async assertEqualHtml(locator: Locator, expected: string) {
+    const normalize = (html: string) =>
+      this.page.evaluate(h => {
+        const doc = new DOMParser().parseFromString(h, 'text/html')
+        return doc.body.innerHTML
+      }, html)
+
+    expect(await normalize(await locator.innerHTML())).toEqual(await normalize(expected))
+  }
+
   async shouldShowTimelineEntry(entry: TimelineEntry, position = 0) {
     const { label, byline, datetime, html } = entry
 
@@ -255,6 +265,6 @@ export default class AbstractPage {
       await expect(timelineEntry.getByRole('time')).toContainText(formatDate(datetime.timestamp))
     }
 
-    expect(await timelineEntry.locator('.moj-timeline__description').innerHTML()).toEqual(html.replace(/&#39;/g, "'"))
+    await this.assertEqualHtml(timelineEntry.locator('.moj-timeline__description'), html)
   }
 }

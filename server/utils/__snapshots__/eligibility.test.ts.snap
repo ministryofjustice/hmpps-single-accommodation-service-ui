@@ -82,7 +82,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
       },
     ],
     "status": {
-      "colour": "yellow",
+      "colour": "green",
       "text": "Accepted",
     },
   },

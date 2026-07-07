@@ -2,7 +2,7 @@ import { DtrSubmissionDto, AccommodationReferralDto as Referral } from '@sas/api
 import { StatusCell, StatusTag } from '@sas/ui'
 import { TableRow, TextOrHtmlContent } from '@govuk/ui'
 import { linksCell, tableTextCell } from './tables'
-import { renderMacro, statusCell } from './macros'
+import { renderMacro, statusCell, govukDetails } from './macros'
 import { htmlContent, textContent } from './utils'
 import { outcomeReasonSummaryLabels, withdrawReasonLabels } from './dutyToRefer'
 import { formatDate } from './dates'
@@ -40,7 +40,7 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
 export const referralStatusTag = (status?: string, type?: Referral['type']): StatusTag =>
   ({
     REQUEST_WITHDRAWN: { text: 'Request withdrawn', colour: 'grey' },
-    EXPIRED: { text: 'Expired', colour: 'grey' },
+    EXPIRED: type === 'CAS1' ? { text: 'Application expired', colour: 'grey' } : { text: 'Expired', colour: 'grey' },
     REJECTED:
       type === 'DTR'
         ? { text: 'Not accepted', colour: 'grey' }
@@ -56,34 +56,43 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
   })[status] || { text: 'Unknown' }
 
 export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
-  return (referrals ?? []).map(referral => [
-    htmlContent(
-      tableTextCell(
-        'Referral type',
-        referralStatusType(referral.type, referral.type === 'DTR' ? referral.status : referral.placementStatus),
-      ),
-    ),
-    htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
-    htmlContent(statusCell(referralStatusCell(referral))),
-    htmlContent(linksCell(referralLinksForType(referral.type, referral.id, crn))),
-  ])
+  return (referrals ?? []).map(referral => {
+    const status = getReferralStatus(referral)
+
+    return [
+      htmlContent(tableTextCell('Referral type', referralStatusType(referral.type, status))),
+      htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
+      htmlContent(statusCell(referralStatusCell(referral))),
+      htmlContent(linksCell(referralLinksForType(referral.type, referral.id, crn, referral.uiUrl))),
+    ]
+  })
 }
 
 export const referralStatusCell = (referral: Referral): StatusCell => {
+  const status = getReferralStatus(referral)
+
   if (referral.type === 'DTR') {
     return {
-      status: referralStatusTag(referral.status, referral.type),
+      status: referralStatusTag(status, referral.type),
       dateText: `Submitted on ${formatDate(referral.date)}`,
       details: getDtrReferralDetails(referral),
     }
   }
 
   return {
-    status: referralStatusTag(referral.placementStatus, referral.type),
+    status: referralStatusTag(status, referral.type),
     dateText: formatDate(referral.date),
-    details: getCasReferralDetails(referral),
+    details:
+      referral.type === 'CAS1' ? getCas1ReferralDetails(referral, status) : getCas3ReferralDetails(referral, status),
   }
 }
+
+const REASON_DETAIL_MAX_LENGTH = 200
+
+const reasonDetailContent = (reason: string): TextOrHtmlContent =>
+  reason.length > REASON_DETAIL_MAX_LENGTH
+    ? htmlContent(govukDetails('Reason details', reason))
+    : textContent(`Reason details: ${reason}`)
 
 const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
   const details: Array<TextOrHtmlContent> = []
@@ -106,17 +115,14 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   return details
 }
 
-const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
+const getCas1ReferralDetails = (referral: Referral, status?: string): Array<TextOrHtmlContent> => {
   const details: Array<TextOrHtmlContent> = []
 
   const applicationStatuses = ['REJECTED', 'EXPIRED', 'WITHDRAWN']
-  if (applicationStatuses.includes(referral.placementStatus) && referral.type === 'CAS1') {
-    details.push(textContent('No placements'))
-  }
+  const placementStatuses = ['NOT_ARRIVED', 'DEPARTED', 'CANCELLED']
 
-  const bookingStatuses = ['ARCHIVED']
-  if (bookingStatuses.includes(referral.placementStatus) && referral.type === 'CAS3') {
-    details.push(textContent('No bookings'))
+  if (applicationStatuses.includes(status)) {
+    details.push(textContent('No placements'))
   }
 
   if (referral.referralRejectionReason) {
@@ -124,28 +130,39 @@ const getCasReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   }
 
   if (referral.referralRejectionReasonDetail) {
-    const reason = referral.referralRejectionReasonDetail
-
-    if (reason.length > 200) {
-      details.push(
-        htmlContent(
-          renderMacro('govukDetails', {
-            summaryText: 'Reason details',
-            text: reason,
-          }),
-        ),
-      )
-    } else {
-      details.push(textContent(`Reason details: ${reason}`))
-    }
+    details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
   }
 
-  if (referral.placementAddress) {
+  if (referral.placementAddress && placementStatuses.includes(status)) {
     details.push(textContent(referral.placementAddress))
   }
 
-  if (referral.pdu) {
-    details.push(textContent(`PDU: ${referral.pdu}`))
+  return details
+}
+
+const getCas3ReferralDetails = (referral: Referral, status?: string): Array<TextOrHtmlContent> => {
+  const details: Array<TextOrHtmlContent> = []
+  const bookingStatuses = ['DEPARTED', 'CANCELLED']
+
+  if (referral.referralRejectionReason) {
+    details.push(textContent(`Reason: ${referral.referralRejectionReason}`))
+  }
+
+  if (referral.referralRejectionReasonDetail) {
+    details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
+  }
+
+  if (status === 'ARCHIVED') {
+    details.push(textContent('No bookings'))
+  }
+
+  if (bookingStatuses.includes(status)) {
+    if (referral.placementAddress) {
+      details.push(textContent(referral.placementAddress))
+    }
+    if (referral.pdu) {
+      details.push(textContent(`PDU: ${referral.pdu}`))
+    }
   }
 
   return details
@@ -163,20 +180,34 @@ export const referralReferredBy = (c: Referral, username?: string): string => {
   return c.referredBy?.username?.toUpperCase() === username?.toUpperCase() ? `You (${fullName})` : fullName
 }
 
-export const referralLinksForType = (type: Referral['type'], id: string, crn: string) => {
+export const referralLinksForType = (type: Referral['type'], id: string, crn: string, url?: string | null) => {
   switch (type) {
     case 'DTR':
       return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ crn, id }) }]
     case 'CAS1':
-      return [
-        {
-          text: 'View application',
-          href: '#',
-        },
-      ]
+      return url ? [{ text: 'View application', href: url }] : []
     case 'CAS3':
-      return [{ text: 'View referral', href: '#' }]
+      return url ? [{ text: 'View referral', href: url }] : []
     default:
       return []
   }
+}
+
+export const getReferralStatus = (referral: Referral): string | undefined => {
+  if (referral.type === 'DTR') {
+    return referral.status
+  }
+
+  const placementStatus = referral.placementStatus?.toUpperCase()
+  if (referral.type === 'CAS1') {
+    if (referral.status === 'EXPIRED') return 'EXPIRED'
+    if (placementStatus === 'NOTARRIVED') return 'NOT_ARRIVED'
+    return placementStatus || referral.requestForPlacementStatus?.toUpperCase() || referral.status
+  }
+
+  if (referral.assessmentStatus?.toUpperCase() === 'REJECTED') {
+    return referral.referralRejectionReason ? 'REJECTED' : 'ARCHIVED'
+  }
+
+  return placementStatus
 }

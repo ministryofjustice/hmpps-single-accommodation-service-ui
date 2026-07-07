@@ -7,18 +7,9 @@ import referenceDataFactory from './referenceData'
 
 const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as Referral['status'][]
 
-const cas1Statuses = [
-  'CANCELLED',
-  'DEPARTED',
-  'NOT_ARRIVED',
-  'REQUEST_WITHDRAWN',
-  'REQUEST_REJECTED',
-  'REJECTED',
-  'WITHDRAWN',
-  'EXPIRED',
-]
+const cas1PlacementStatuses = ['NOT_ARRIVED', 'DEPARTED', 'CANCELLED', 'REQUEST_WITHDRAWN', 'REQUEST_REJECTED']
 
-const cas3Statuses = ['REJECTED', 'DEPARTED', 'CANCELLED', 'ARCHIVED']
+const cas3BookingStatuses = ['DEPARTED', 'CANCELLED']
 
 const shortAddress = () => `${faker.location.street()}, ${faker.location.zipCode()}`
 
@@ -35,26 +26,42 @@ const dtrReferrals: ReferralParams[] = [
 ]
 
 const cas1Referrals: ReferralParams[] = [
-  () => ({ placementStatus: 'EXPIRED' }),
-  () => ({ placementStatus: 'WITHDRAWN' }),
-  () => ({ placementStatus: 'REJECTED', referralRejectionReason: 'Some rejection reason' }),
-  () => ({ placementStatus: 'REQUEST_REJECTED' }),
-  () => ({ placementStatus: 'REQUEST_WITHDRAWN', referralRejectionReason: 'Some request withdrawal reason' }),
-  () => ({ placementStatus: 'NOT_ARRIVED', placementAddress: shortAddress() }),
-  () => ({ placementStatus: 'DEPARTED', placementAddress: shortAddress() }),
-  () => ({ placementStatus: 'CANCELLED', pdu: faker.location.city() }),
+  () => ({ status: 'REJECTED', placementStatus: null, referralRejectionReason: 'Some rejection reason' }),
+  () => ({ status: 'WITHDRAWN', placementStatus: null }),
+  () => ({ status: 'ACCEPTED', placementStatus: 'REQUEST_REJECTED' }),
+  () => ({
+    status: 'ACCEPTED',
+    placementStatus: 'REQUEST_WITHDRAWN',
+    referralRejectionReason: 'Some request withdrawal reason',
+  }),
+  () => ({ status: 'ACCEPTED', placementStatus: 'NOT_ARRIVED', placementAddress: shortAddress() }),
+  () => ({ status: 'ACCEPTED', placementStatus: 'DEPARTED', placementAddress: shortAddress() }),
+  () => ({ status: 'ACCEPTED', placementStatus: 'CANCELLED', placementAddress: shortAddress() }),
 ]
 
 const cas3Referrals: ReferralParams[] = [
   () => ({
-    status: 'REJECTED',
-    placementStatus: 'REJECTED',
+    status: 'PENDING',
+    assessmentStatus: 'rejected',
+    placementStatus: null,
     referralRejectionReason: 'Local authority alternative suitable accommodation provided (includes Priority need)',
     referralRejectionReasonDetail: faker.lorem.words(40),
   }),
-  () => ({ placementStatus: 'ARCHIVED' }),
-  () => ({ placementStatus: 'DEPARTED', pdu: faker.location.city(), placementAddress: shortAddress() }),
-  () => ({ placementStatus: 'CANCELLED', pdu: faker.location.city(), placementAddress: shortAddress() }),
+  () => ({ status: 'PENDING', assessmentStatus: 'rejected', placementStatus: null, referralRejectionReason: null }),
+  () => ({
+    status: 'PENDING',
+    assessmentStatus: 'closed',
+    placementStatus: 'DEPARTED',
+    pdu: faker.location.city(),
+    placementAddress: shortAddress(),
+  }),
+  () => ({
+    status: 'PENDING',
+    assessmentStatus: 'ready_to_place',
+    placementStatus: 'CANCELLED',
+    pdu: faker.location.city(),
+    placementAddress: shortAddress(),
+  }),
 ]
 
 export const statusToOutcomeReason = (status: DutyToReferDto['status']): DtrSubmissionDto['outcomeReason'] | null => {
@@ -93,8 +100,8 @@ class ReferralFactory extends Factory<Referral> {
       localAuthorityArea: null,
       pdu: null,
       placementAddress: null,
-      placementStatus: faker.helpers.arrayElement(cas1Statuses),
-      status: faker.helpers.arrayElement(statuses),
+      placementStatus: faker.helpers.arrayElement(cas1PlacementStatuses),
+      status: 'ACCEPTED',
     })
   }
 
@@ -107,8 +114,9 @@ class ReferralFactory extends Factory<Referral> {
       localAuthorityArea: null,
       pdu: null,
       placementAddress: null,
-      placementStatus: faker.helpers.arrayElement(cas3Statuses),
-      status: faker.helpers.arrayElement(statuses),
+      assessmentStatus: 'ready_to_place',
+      placementStatus: faker.helpers.arrayElement(cas3BookingStatuses),
+      status: 'PENDING',
     })
   }
 
@@ -131,6 +139,7 @@ export default ReferralFactory.define(() => {
     type: 'CAS1' as const,
     status: 'ACCEPTED' as const,
     date: faker.date.past().toISOString(),
+    uiUrl: faker.internet.url(),
     referredBy: staffDetailsFactory.build(),
   }
 })

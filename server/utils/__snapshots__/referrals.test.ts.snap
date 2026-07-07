@@ -24,7 +24,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View application</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/123456">View application</a>
             </li>
           
         </ul>
@@ -75,24 +75,16 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
     },
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-  <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
+  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
     <p class="sas-status__date">25 March 2023</p>
+    
+      
+        <p class="govuk-!-margin-bottom-1">No bookings</p>
+      
     ",
     },
     {
-      "html": "
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-      <span class="govuk-table-span govuk-body">
-        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-          
-            <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View referral</a>
-            </li>
-          
-        </ul>
-      </span>
-    </div>
-  ",
+      "html": "",
     },
   ],
 ]
@@ -185,7 +177,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View application</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/123456">View application</a>
             </li>
           
         </ul>
@@ -258,26 +250,18 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
       
       
       <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-  <strong class="govuk-tag govuk-tag--orange">Rejected</strong>
+  <strong class="govuk-tag govuk-tag--grey">Archived</strong>
     <p class="sas-status__date">25 March 2023</p>
+    
+      
+        <p class="govuk-!-margin-bottom-1">No bookings</p>
+      
     </td>
       
     
       
       
-      <td class="govuk-table__cell">
-    <div class="govuk-summary-list__actions govuk-!-padding-0">
-      <span class="govuk-table-span govuk-body">
-        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
-          
-            <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">View referral</a>
-            </li>
-          
-        </ul>
-      </span>
-    </div>
-  </td>
+      <td class="govuk-table__cell"></td>
       
     
     </tr>

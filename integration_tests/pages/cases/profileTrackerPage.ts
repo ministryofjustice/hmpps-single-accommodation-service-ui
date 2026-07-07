@@ -12,6 +12,7 @@ import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility
 import paths from '../../../server/paths/ui'
 import { proposedAddressStatusCard } from '../../../server/utils/proposedAddresses'
 import {
+  getReferralStatus,
   referralLinksForType,
   referralStatusCell,
   referralStatusTag,
@@ -145,13 +146,9 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       const i = referrals.indexOf(referral)
       const row = table.locator('tbody tr').nth(i)
 
-      const isDtr = referral.type === 'DTR'
-      await expect(row).toContainText(
-        referralStatusType(referral.type, isDtr ? referral.status : referral.placementStatus),
-      )
-      await expect(row).toContainText(
-        referralStatusTag(isDtr ? referral.status : referral.placementStatus, referral.type).text,
-      )
+      const status = getReferralStatus(referral)
+      await expect(row).toContainText(referralStatusType(referral.type, status))
+      await expect(row).toContainText(referralStatusTag(status, referral.type).text)
       await this.shouldShowStatusCell(referralStatusCell(referral), row)
 
       for await (const link of referralLinksForType(referral.type, referral.id, this.caseData.crn)) {

@@ -121,6 +121,7 @@ export default {
   flags: {
     v10CasesList: get('V10_CASES_LIST', 'false') === 'true',
     maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
+    maintenanceModeAllowlist: get('MAINTENANCE_MODE_ALLOWLIST', ''),
     hideManualAddressEntry: get('HIDE_MANUAL_ADDRESS_ENTRY', 'false') === 'true',
   },
   timeoutOverrides: {

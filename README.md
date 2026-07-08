@@ -130,6 +130,13 @@ npm run test:e2e:ui
 ```
 
 
+## Maintenance mode
+
+The service can be put into maintenance mode by setting the `MAINTENANCE_MODE` environment variable to `true`.
+
+Additionally, the `MAINTENANCE_MODE_ALLOWLIST` environment variable can be set to a comma-separated list of usernames that are allowed to access the service while it is in maintenance mode.
+
+
 ## Change log
 
 A changelog for the service is available [here](./CHANGELOG.md)

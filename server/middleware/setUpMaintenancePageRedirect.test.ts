@@ -78,32 +78,35 @@ describe('setUpMaintenancePageRedirect', () => {
     })
 
     describe('with a maintenance page allow list', () => {
-      const originalEnv = { ...process.env }
-
-      afterEach(() => {
-        process.env = originalEnv
-      })
-
       describe('when the username belongs to the allowlist', () => {
         beforeEach(() => {
-          process.env.MAINTENANCE_MODE_ALLOWLIST = 'user1,user2'
+          config.flags.maintenanceModeAllowlist = 'user1,user2'
           app = setupApp()
         })
 
-        it('should not redirect to the maintenance page', () => {
+        it('should not redirect to /maintenance', () => {
           return request(app).get('/known').expect(200)
+        })
+
+        it('should redirect /maintenance to /', async () => {
+          const response = await request(app).get('/maintenance').expect(302)
+          expect(response.text).toContain('Found. Redirecting to /')
         })
       })
 
       describe('when the username does not belong to the allowlist', () => {
         beforeEach(() => {
-          process.env.MAINTENANCE_MODE_ALLOWLIST = 'user22'
+          config.flags.maintenanceModeAllowlist = 'user22'
           app = setupApp()
         })
 
         it('should redirect to the maintenance page', async () => {
           const response = await request(app).get('/known').expect(302)
           expect(response.text).toContain('Found. Redirecting to /maintenance')
+        })
+
+        it('should not redirect /maintenance to /', () => {
+          return request(app).get('/maintenance').expect(200)
         })
       })
     })

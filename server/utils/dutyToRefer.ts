@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { Link, StatusCard } from '@sas/ui'
-import { formatDateAndDaysAgo, isoDateToDateInput, formatDateAndAge, dateFieldParts } from './dates'
+import { formatDateAndDaysAgo, isoDateToDateInput, formatDateAndAge, dateFieldParts, formatDate } from './dates'
 import uiPaths from '../paths/ui'
 import {
   validateAndFlashErrors,
@@ -250,7 +250,7 @@ type TimelineValue = { label: string; value: string; showLabel: boolean; isList?
 const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean): TimelineValue[] => [
   {
     label: 'Date submitted',
-    value: submission.submissionDate ? formatDateAndDaysAgo(submission.submissionDate) : '',
+    value: submission.submissionDate ? formatDate(submission.submissionDate) : '',
     showLabel: true,
     isList,
   },
@@ -300,7 +300,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   let values: TimelineValue[]
 
   if (type === 'CREATE') {
-    label = 'Submission details added'
+    label = 'Referral details added'
     values = submissionValues(submission, false)
   } else if (status === 'WITHDRAWN') {
     label = 'Referral withdrawn'
@@ -317,7 +317,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
     const outcomeNote = outcomeNoteChange && (outcomeNoteChange.value || NOTE_REMOVED_LABEL)
     values = outcomeValues({ ...submission, outcomeNote }, hasStatusChanged ? outcomeText : '', true)
   } else {
-    label = 'Submission details changed'
+    label = 'Referral details changed'
     const localAuthority =
       auditRecord.changes.some(change => change.field === 'localAuthorityAreaId') && submission.localAuthority
     const referenceChange = auditRecord.changes.find(change => change.field === 'referenceNumber')

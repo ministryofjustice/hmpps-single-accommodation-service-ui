@@ -278,7 +278,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not show local author
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
       
         
-          <li>Date submitted changed to: 17 April 2025 (237 days ago)</li>
+          <li>Date submitted changed to: 17 April 2025</li>
         
       
         
@@ -290,7 +290,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not show local author
     </ul>
   ",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -372,7 +372,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
       <p class="govuk-!-margin-bottom-1">
-        Date submitted: 12 April 2025 (242 days ago)
+        Date submitted: 12 April 2025
       </p>
     
   
@@ -397,7 +397,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
   ",
   "label": {
-    "text": "Submission details added",
+    "text": "Referral details added",
   },
 }
 `;
@@ -427,7 +427,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
       
         
-          <li>Date submitted changed to: 14 April 2025 (240 days ago)</li>
+          <li>Date submitted changed to: 14 April 2025</li>
         
       
         
@@ -443,7 +443,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     </ul>
   ",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -565,7 +565,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority but 
     </ul>
   ",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -595,7 +595,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in s
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
       
         
-          <li>Date submitted changed to: 16 April 2025 (238 days ago)</li>
+          <li>Date submitted changed to: 16 April 2025</li>
         
       
         
@@ -611,7 +611,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in s
     </ul>
   ",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -653,7 +653,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows reference removed wh
     </ul>
   ",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;

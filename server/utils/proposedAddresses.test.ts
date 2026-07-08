@@ -32,6 +32,7 @@ import * as validationUtils from './validation'
 import MultiPageFormManager from './multiPageFormManager'
 import uiPaths from '../paths/ui'
 import { formatAddress } from './addresses'
+import config from '../config'
 
 const crn = 'CRN123'
 const formDataManager = mock<MultiPageFormManager<'proposedAddress'>>()
@@ -126,6 +127,27 @@ describe('Proposed addresses utilities', () => {
       })
 
       expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
+    })
+
+    describe('When the HIDE_SET_AS_CURRENT_ADDRESS flag is enabled', () => {
+      beforeEach(() => {
+        config.flags.hideSetAsCurrentAddress = true
+      })
+
+      afterEach(() => {
+        config.flags.hideSetAsCurrentAddress = false
+      })
+
+      it('returns a "confirmed" proposed address status card object with no link to set as current address', () => {
+        const proposedAddress = proposedAccommodationFactory.build({
+          ...baseAccommodationDetails,
+          verificationStatus: 'PASSED',
+          nextAccommodationStatus: 'YES',
+          createdAt: '2026-01-20T09:30:00.000Z',
+        })
+
+        expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
+      })
     })
 
     it('returns a status card for an address with no accommodation type', () => {
@@ -690,6 +712,26 @@ describe('Proposed addresses utilities', () => {
       expect(nextActionButton(checksPassedAddress)).toEqual({
         text: 'Set as current address',
         href: uiPaths.proposedAddresses.arrival({ crn, id }),
+      })
+    })
+
+    describe('When the HIDE_SET_AS_CURRENT_ADDRESS flag is enabled', () => {
+      beforeEach(() => {
+        config.flags.hideSetAsCurrentAddress = true
+      })
+
+      afterEach(() => {
+        config.flags.hideSetAsCurrentAddress = false
+      })
+
+      it('does not return a button to set as current address if the address is confirmed', () => {
+        const checksPassedAddress = proposedAccommodationFactory.build({
+          ...proposedAddress,
+          verificationStatus: 'PASSED',
+          nextAccommodationStatus: 'YES',
+        })
+
+        expect(nextActionButton(checksPassedAddress)).toEqual(undefined)
       })
     })
 

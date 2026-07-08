@@ -57,33 +57,33 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
 
 export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
   return (referrals ?? []).map(referral => {
-    const status = getReferralStatus(referral)
+    const { status, type, id, uiUrl } = referral
 
     return [
-      htmlContent(tableTextCell('Referral type', referralStatusType(referral.type, status))),
+      htmlContent(tableTextCell('Referral type', referralStatusType(type, status))),
       htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
       htmlContent(statusCell(referralStatusCell(referral))),
-      htmlContent(linksCell(referralLinksForType(referral.type, referral.id, crn, referral.uiUrl))),
+      htmlContent(linksCell(referralLinksForType(type, id, crn, uiUrl))),
     ]
   })
 }
 
 export const referralStatusCell = (referral: Referral): StatusCell => {
-  const status = getReferralStatus(referral)
+  const { status, type, date } = referral
 
-  if (referral.type === 'DTR') {
+  if (type === 'DTR') {
     return {
-      status: referralStatusTag(status, referral.type),
-      dateText: `Submitted on ${formatDate(referral.date)}`,
+      status: referralStatusTag(status, type),
+      dateText: `Submitted on ${formatDate(date)}`,
       details: getDtrReferralDetails(referral),
     }
   }
 
   return {
-    status: referralStatusTag(status, referral.type),
-    dateText: formatDate(referral.date),
+    status: referralStatusTag(status, type),
+    dateText: formatDate(date),
     details:
-      referral.type === 'CAS1' ? getCas1ReferralDetails(referral, status) : getCas3ReferralDetails(referral, status),
+      type === 'CAS1' ? getCas1ReferralDetails(referral, status) : getCas3ReferralDetails(referral, status),
   }
 }
 
@@ -191,23 +191,4 @@ export const referralLinksForType = (type: Referral['type'], id: string, crn: st
     default:
       return []
   }
-}
-
-export const getReferralStatus = (referral: Referral): string | undefined => {
-  if (referral.type === 'DTR') {
-    return referral.status
-  }
-
-  const placementStatus = referral.placementStatus?.toUpperCase()
-  if (referral.type === 'CAS1') {
-    if (referral.status === 'EXPIRED') return 'EXPIRED'
-    if (placementStatus === 'NOTARRIVED') return 'NOT_ARRIVED'
-    return placementStatus || referral.requestForPlacementStatus?.toUpperCase() || referral.status
-  }
-
-  if (referral.assessmentStatus?.toUpperCase() === 'REJECTED') {
-    return referral.referralRejectionReason ? 'REJECTED' : 'ARCHIVED'
-  }
-
-  return placementStatus
 }

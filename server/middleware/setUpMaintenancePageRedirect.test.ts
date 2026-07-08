@@ -78,15 +78,9 @@ describe('setUpMaintenancePageRedirect', () => {
     })
 
     describe('with a maintenance page allow list', () => {
-      const originalEnv = { ...process.env }
-
-      afterEach(() => {
-        process.env = originalEnv
-      })
-
       describe('when the username belongs to the allowlist', () => {
         beforeEach(() => {
-          process.env.MAINTENANCE_MODE_ALLOWLIST = 'user1,user2'
+          config.flags.maintenanceModeAllowlist = 'user1,user2'
           app = setupApp()
         })
 
@@ -102,7 +96,7 @@ describe('setUpMaintenancePageRedirect', () => {
 
       describe('when the username does not belong to the allowlist', () => {
         beforeEach(() => {
-          process.env.MAINTENANCE_MODE_ALLOWLIST = 'user22'
+          config.flags.maintenanceModeAllowlist = 'user22'
           app = setupApp()
         })
 

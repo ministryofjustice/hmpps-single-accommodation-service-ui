@@ -15,9 +15,9 @@ import {
   validateDateWithinLastXMonths,
 } from './validation'
 import { renderMacro, statusTag } from './macros'
-import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
+import { summaryListRow } from './summaryListRow'
 
 const REFERENCE_REMOVED_LABEL = 'Reference removed'
 const NOTE_REMOVED_LABEL = 'Note removed'
@@ -76,17 +76,17 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
 
 export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
   const rows = [
-    summaryListRowText('Name', caseData.name),
-    summaryListRowText('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
-    summaryListRowText('CRN', caseData.crn),
+    summaryListRow('Name', caseData.name),
+    summaryListRow('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
+    summaryListRow('CRN', caseData.crn),
   ]
   if (caseData.prisonNumber) {
-    rows.push(summaryListRowText('Prison number', caseData.prisonNumber))
+    rows.push(summaryListRow('Prison number', caseData.prisonNumber))
   }
   if (dutyToRefer) {
-    rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+    rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
     rows.push(
-      summaryListRowText(
+      summaryListRow(
         'Date submitted',
         dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
       ),
@@ -100,17 +100,17 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
   const rows = []
 
   if (dutyToRefer?.status === 'SUBMITTED' || dutyToRefer?.status === 'WITHDRAWN') {
-    rows.push(summaryListRowHtml('Status', statusTag(serviceStatusTag(dutyToRefer.status))))
+    rows.push(summaryListRow('Status', statusTag(serviceStatusTag(dutyToRefer.status)), { type: 'html' }))
   }
   rows.push(
-    summaryListRowText(
+    summaryListRow(
       'Date submitted',
       dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
     ),
   )
-  rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
-  rows.push(summaryListRowOptional('Reference', dutyToRefer.submission.referenceNumber, 'No reference added'))
-  rows.push(summaryListRowOptional('Note', dutyToRefer.submission.submissionNote, 'No note added'))
+  rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+  rows.push(summaryListRow('Reference', dutyToRefer.submission.referenceNumber, { noValue: 'No reference added' }))
+  rows.push(summaryListRow('Note', dutyToRefer.submission.submissionNote, { noValue: 'No note added' }))
   return rows
 }
 
@@ -120,12 +120,13 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
   }
 
   return [
-    summaryListRowHtml(
+    summaryListRow(
       'Status',
       `${statusTag(serviceStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
+      { type: 'html' },
     ),
-    summaryListRowText('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
-    summaryListRowOptional('Note', dutyToRefer.submission.outcomeNote, 'No note added'),
+    summaryListRow('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
+    summaryListRow('Note', dutyToRefer.submission.outcomeNote, { noValue: 'No note added' }),
   ]
 }
 
@@ -143,10 +144,10 @@ export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
     case 'ACCEPTED':
     case 'SUBMITTED':
       return [
-        summaryListRowText('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
-        summaryListRowOptional('Reference', submission?.referenceNumber, 'No reference added'),
-        summaryListRowText('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
-        summaryListRowText('Submitted by', submission?.createdBy),
+        summaryListRow('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
+        summaryListRow('Reference', submission?.referenceNumber, { noValue: 'No reference added' }),
+        summaryListRow('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
+        summaryListRow('Submitted by', submission?.createdBy),
       ]
     case 'NOT_ELIGIBLE':
     case 'NOT_STARTED':

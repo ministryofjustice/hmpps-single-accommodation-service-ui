@@ -2,8 +2,8 @@ import { CrsServiceResult } from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
 import { SummaryListRow } from '@govuk/ui'
 import { serviceStatusTag } from './statusTag'
-import { summaryListRowText } from './utils'
 import { formatDateAndDaysAgo } from './dates'
+import { summaryListRow } from './summaryListRow'
 
 const crsStatusCardHint = (serviceStatus: CrsServiceResult['serviceResult']['serviceStatus']): string => {
   switch (serviceStatus) {
@@ -19,7 +19,7 @@ const crsStatusCardHint = (serviceStatus: CrsServiceResult['serviceResult']['ser
 const crsStatusCardDetails = (crs?: CrsServiceResult): SummaryListRow[] => {
   if (!crs?.commissionedRehabilitativeServices?.submissionDate) return undefined
 
-  return [summaryListRowText('Submitted', formatDateAndDaysAgo(crs.commissionedRehabilitativeServices.submissionDate))]
+  return [summaryListRow('Submitted', formatDateAndDaysAgo(crs.commissionedRehabilitativeServices.submissionDate))]
 }
 
 const crsStatusCardLinks = (crs?: CrsServiceResult): Link[] => {

@@ -18,7 +18,7 @@ import {
 import { Request } from 'express'
 import { Button, SummaryListActionItem, SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
-import { summaryListRowText, summaryListRowHtml, toParagraphs } from './utils'
+import { toParagraphs } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import {
@@ -32,6 +32,7 @@ import { addressLines, formatAddress } from './addresses'
 import { renderMacro, statusTag } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import config from '../config'
+import { summaryListRow } from './summaryListRow'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
@@ -50,9 +51,9 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodation
     status: proposedAddressStatusTag(status),
     details: [
       proposedAddress.accommodationType?.description &&
-        summaryListRowText('Housing arrangement', proposedAddress.accommodationType.description),
-      summaryListRowText('Added by', proposedAddress.createdBy),
-      summaryListRowText('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
+        summaryListRow('Housing arrangement', proposedAddress.accommodationType.description),
+      summaryListRow('Added by', proposedAddress.createdBy),
+      summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
     ].filter(Boolean),
     links: linksForStatus(status, proposedAddress.crn, proposedAddress.id),
   }
@@ -119,26 +120,30 @@ export const checkYourAnswersRows = (
 
   const rows = {
     address: [
-      summaryListRowHtml('Address', addressParts.join('<br />'), [{ text: 'Change', href: changeAddressLink }]),
+      summaryListRow('Address', addressParts.join('<br />'), {
+        type: 'html',
+        actions: [{ text: 'Change', href: changeAddressLink }],
+      }),
     ],
     supportingInfo: [
-      summaryListRowHtml(
+      summaryListRow(
         'Living arrangement',
         accommodationTypes.find(type => type.code === sessionData.accommodationTypeCode).name,
-        [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }],
+        { type: 'html', actions: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }] },
       ),
-      summaryListRowHtml('Address checks', formatStatusWithReason(sessionData), [
-        { text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) },
-      ]),
+      summaryListRow('Address checks', formatStatusWithReason(sessionData), {
+        type: 'html',
+        actions: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) }],
+      }),
     ],
   }
 
   if (sessionData.verificationStatus === 'PASSED') {
     rows.supportingInfo.push(
-      summaryListRowHtml(
+      summaryListRow(
         'Set as next address',
         formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus),
-        [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
+        { type: 'html', actions: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }] },
       ),
     )
   }
@@ -341,18 +346,21 @@ export const addressDetailRows = (proposedAddress: ProposedAccommodationDto): Su
   })
 
   return [
-    summaryListRowHtml('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress)))),
-    summaryListRowHtml('Address', formatAddress(proposedAddress.address, '<br />'), [editLink('lookup')]),
-    summaryListRowText('Housing arrangement', proposedAddress.accommodationType?.description || '', [editLink('type')]),
-    summaryListRowText('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus), [
-      editLink('status'),
-    ]),
+    summaryListRow('Status', statusTag(proposedAddressStatusTag(displayStatus(proposedAddress))), { type: 'html' }),
+    summaryListRow('Address', formatAddress(proposedAddress.address, '<br />'), {
+      type: 'html',
+      actions: [editLink('lookup')],
+    }),
+    summaryListRow('Housing arrangement', proposedAddress.accommodationType?.description || '', {
+      actions: [editLink('type')],
+    }),
+    summaryListRow('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus), {
+      actions: [editLink('status')],
+    }),
     proposedAddress.verificationStatus === 'PASSED' &&
-      summaryListRowText(
-        'Next address',
-        formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus),
-        [editLink('nextAccommodation')],
-      ),
+      summaryListRow('Next address', formatProposedAddressNextAccommodation(proposedAddress.nextAccommodationStatus), {
+        actions: [editLink('nextAccommodation')],
+      }),
   ].filter(Boolean)
 }
 

@@ -164,6 +164,14 @@ exports[`Macros riskLevelTag renders a risk level tag for risk level VERY_HIGH 1
 
 exports[`Macros riskLevelTag renders an unknown risk level tag 1`] = `""`;
 
+exports[`Macros textBlock renders a text block 1`] = `
+"<div class="sas-text-block">Some text
+
+multiple lines
+
+&lt;script&gt;alert(&quot;escaped!&quot;)&lt;/script&gt;</div>"
+`;
+
 exports[`Macros tierScoreTag renders tag if tier is empty 1`] = `""`;
 
 exports[`Macros tierScoreTag renders tag if tier is known 1`] = `

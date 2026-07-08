@@ -15,7 +15,7 @@
           {{ prefix }}{% for line in value %}{% if changed or not loop.first %}<br>{% endif %}{{ line }}{% endfor %}
         </p>
       {% else %}
-        <p class="govuk-!-margin-bottom-1">{{ prefix }} {{ value }}</p>
+        <p class="govuk-!-margin-bottom-1">{{ prefix }} {{ value | safe }}</p>
       {% endif %}
     {% endif %}
   {% endfor %}

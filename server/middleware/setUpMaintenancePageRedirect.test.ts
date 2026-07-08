@@ -90,8 +90,13 @@ describe('setUpMaintenancePageRedirect', () => {
           app = setupApp()
         })
 
-        it('should not redirect to the maintenance page', () => {
+        it('should not redirect to /maintenance', () => {
           return request(app).get('/known').expect(200)
+        })
+
+        it('should redirect /maintenance to /', async () => {
+          const response = await request(app).get('/maintenance').expect(302)
+          expect(response.text).toContain('Found. Redirecting to /')
         })
       })
 
@@ -104,6 +109,10 @@ describe('setUpMaintenancePageRedirect', () => {
         it('should redirect to the maintenance page', async () => {
           const response = await request(app).get('/known').expect(302)
           expect(response.text).toContain('Found. Redirecting to /maintenance')
+        })
+
+        it('should not redirect /maintenance to /', () => {
+          return request(app).get('/maintenance').expect(200)
         })
       })
     })

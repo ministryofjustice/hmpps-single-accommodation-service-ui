@@ -356,7 +356,53 @@ line 2</div>",
 }
 `;
 
-exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission added record 1`] = `
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission added record with no reference or note 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-12T17:07:00.000Z",
+    "type": "datetime",
+  },
+  "html": "
+    <p><strong class="govuk-tag govuk-tag--yellow">Submitted</strong></p>
+  
+
+  
+    
+      <p class="govuk-!-margin-bottom-1">
+        Date submitted: 12 April 2025
+      </p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">
+        Local authority: Cherwell District Council
+      </p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">
+        Reference: <span class="sas-colour--dark-grey">No reference added</span>
+      </p>
+    
+  
+    
+      <p class="govuk-!-margin-bottom-1">
+        Note: <span class="sas-colour--dark-grey">No note added</span>
+      </p>
+    
+  
+
+  ",
+  "label": {
+    "text": "Referral details added",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission added record with reference and note 1`] = `
 {
   "byline": {
     "text": "Jane Doe",
@@ -390,7 +436,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
       <p class="govuk-!-margin-bottom-1">
-        Note: No note added
+        Note: <div class="sas-text-block">A note
+here</div>
       </p>
     
   
@@ -476,7 +523,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   
     
       <p class="govuk-!-margin-bottom-1">
-        Note: No note added
+        Note: <span class="sas-colour--dark-grey">No note added</span>
       </p>
     
   

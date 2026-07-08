@@ -18,6 +18,7 @@ import { renderMacro, statusTag, textBlock } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
 import { summaryListRow } from './summaryListRow'
+import { noValueHtml } from './utils'
 
 const REFERENCE_REMOVED_LABEL = 'Reference removed'
 const NOTE_REMOVED_LABEL = 'Note removed'
@@ -257,13 +258,13 @@ const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean
   { label: 'Local authority', value: submission.localAuthority?.localAuthorityAreaName, showLabel: true, isList },
   {
     label: 'Reference',
-    value: submission.referenceNumber || (isList ? '' : 'No reference added'),
+    value: submission.referenceNumber || (isList ? '' : noValueHtml('No reference added')),
     showLabel: submission.referenceNumber !== REFERENCE_REMOVED_LABEL,
     isList,
   },
   {
     label: 'Note',
-    value: textBlock(submission.submissionNote) || (isList ? '' : 'No note added'),
+    value: textBlock(submission.submissionNote) || (isList ? '' : noValueHtml('No note added')),
     showLabel: submission.submissionNote !== NOTE_REMOVED_LABEL,
     isList,
   },
@@ -278,7 +279,7 @@ const outcomeValues = (
   { label: 'Reason', value: outcomeReasonSummaryLabels[submission.outcomeReason], showLabel: true, isList },
   {
     label: 'Note',
-    value: textBlock(submission.outcomeNote) || (isList ? '' : 'No note added'),
+    value: textBlock(submission.outcomeNote) || (isList ? '' : noValueHtml('No note added')),
     showLabel: submission.outcomeNote !== NOTE_REMOVED_LABEL,
     isList,
   },

@@ -382,11 +382,27 @@ describe('duty to refer utils', () => {
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
     })
 
-    it('returns a timeline entry for a submission added record', () => {
+    it('returns a timeline entry for a submission added record with no reference or note', () => {
+      const submission = dtrSubmissionFactory.build({
+        submissionDate: '2025-04-12',
+        localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
+        referenceNumber: undefined,
+        submissionNote: undefined,
+      })
+      const auditRecord = auditRecordFactory.dutyToReferAdded(submission).build({
+        commitDate: '2025-04-12T17:07:00.000Z',
+        author: 'Jane Doe',
+      })
+
+      expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
+    })
+
+    it('returns a timeline entry for a submission added record with reference and note', () => {
       const submission = dtrSubmissionFactory.build({
         submissionDate: '2025-04-12',
         localAuthority: { localAuthorityAreaId: 'la-1', localAuthorityAreaName: 'Cherwell District Council' },
         referenceNumber: 'REF123',
+        submissionNote: 'A note\nhere',
       })
       const auditRecord = auditRecordFactory.dutyToReferAdded(submission).build({
         commitDate: '2025-04-12T17:07:00.000Z',

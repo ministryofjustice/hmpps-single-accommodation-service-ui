@@ -123,6 +123,7 @@ export default {
     maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
     maintenanceModeAllowlist: get('MAINTENANCE_MODE_ALLOWLIST', ''),
     hideManualAddressEntry: get('HIDE_MANUAL_ADDRESS_ENTRY', 'false') === 'true',
+    hideSetAsCurrentAddress: get('HIDE_SET_AS_CURRENT_ADDRESS', 'false') === 'true',
   },
   timeoutOverrides: {
     sasCasesApi: {

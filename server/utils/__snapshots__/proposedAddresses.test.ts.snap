@@ -484,6 +484,49 @@ exports[`Proposed addresses utilities addressTimelineEntry returns a timeline en
 }
 `;
 
+exports[`Proposed addresses utilities proposedAddressStatusCard When the HIDE_SET_AS_CURRENT_ADDRESS flag is enabled returns a "confirmed" proposed address status card object with no link to set as current address 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Housing arrangement",
+      },
+      "value": {
+        "text": "Other accommodation type",
+      },
+    },
+    {
+      "key": {
+        "text": "Added by",
+      },
+      "value": {
+        "text": "John Smith",
+      },
+    },
+    {
+      "key": {
+        "text": "Date added",
+      },
+      "value": {
+        "text": "20 January 2026 (1 day ago)",
+      },
+    },
+  ],
+  "heading": "345 Foo Drive, Winklechester, ZZ1 1ZZ",
+  "inactive": false,
+  "links": [
+    {
+      "href": "/cases/CRN123/proposed-addresses/some-id/details",
+      "text": "View details",
+    },
+  ],
+  "status": {
+    "colour": "green",
+    "text": "Confirmed",
+  },
+}
+`;
+
 exports[`Proposed addresses utilities proposedAddressStatusCard returns a "checks failed" proposed address status card object 1`] = `
 {
   "details": [

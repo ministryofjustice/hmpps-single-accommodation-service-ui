@@ -23,6 +23,7 @@ generic-service:
     V10_CASES_LIST: "false"
     MAINTENANCE_MODE: "true"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
+    HIDE_SET_AS_CURRENT_ADDRESS: "true"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

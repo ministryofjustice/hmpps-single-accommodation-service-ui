@@ -8,7 +8,10 @@ export default function setUpMaintenancePageRedirect(): Router {
 
   router.use((req, res, next) => {
     if (config.flags.maintenanceMode) {
-      if (!allowedPaths.includes(req.path)) {
+      const allowedUsernames = process.env.MAINTENANCE_MODE_ALLOWLIST?.split(',').map(u => u.trim()) || []
+      const currentUsername = res.locals?.user?.username
+
+      if (!allowedPaths.includes(req.path) && (!currentUsername || !allowedUsernames.includes(currentUsername))) {
         return res.redirect(302, paths.static.maintenance({}))
       }
     }

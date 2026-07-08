@@ -14,7 +14,7 @@ import {
   validateDateTodayOrPast,
   validateDateWithinLastXMonths,
 } from './validation'
-import { renderMacro, statusTag } from './macros'
+import { renderMacro, statusTag, textBlock } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
 import { summaryListRow } from './summaryListRow'
@@ -110,7 +110,9 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
   )
   rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
   rows.push(summaryListRow('Reference', dutyToRefer.submission.referenceNumber, { noValue: 'No reference added' }))
-  rows.push(summaryListRow('Note', dutyToRefer.submission.submissionNote, { noValue: 'No note added' }))
+  rows.push(
+    summaryListRow('Note', dutyToRefer.submission.submissionNote, { type: 'textBlock', noValue: 'No note added' }),
+  )
   return rows
 }
 
@@ -126,7 +128,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
       { type: 'html' },
     ),
     summaryListRow('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
-    summaryListRow('Note', dutyToRefer.submission.outcomeNote, { noValue: 'No note added' }),
+    summaryListRow('Note', dutyToRefer.submission.outcomeNote, { type: 'textBlock', noValue: 'No note added' }),
   ]
 }
 
@@ -261,7 +263,7 @@ const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean
   },
   {
     label: 'Note',
-    value: submission.submissionNote || (isList ? '' : 'No note added'),
+    value: textBlock(submission.submissionNote) || (isList ? '' : 'No note added'),
     showLabel: submission.submissionNote !== NOTE_REMOVED_LABEL,
     isList,
   },
@@ -276,7 +278,7 @@ const outcomeValues = (
   { label: 'Reason', value: outcomeReasonSummaryLabels[submission.outcomeReason], showLabel: true, isList },
   {
     label: 'Note',
-    value: submission.outcomeNote || (isList ? '' : 'No note added'),
+    value: textBlock(submission.outcomeNote) || (isList ? '' : 'No note added'),
     showLabel: submission.outcomeNote !== NOTE_REMOVED_LABEL,
     isList,
   },

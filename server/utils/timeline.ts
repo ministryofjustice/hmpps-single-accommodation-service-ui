@@ -1,6 +1,6 @@
 import { TimelineEntry } from '@govuk/ui'
 import { AuditRecordDto } from '@sas/api'
-import { toParagraphs } from './utils'
+import { textBlock } from './macros'
 
 export const timelineEntry = (label: string, html: string, datetime?: string, author?: string): TimelineEntry => {
   return {
@@ -27,7 +27,7 @@ export const noteTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry =>
 
   if (!note) return undefined
 
-  const html = toParagraphs(note.split('\n').filter(Boolean))
+  const html = textBlock(note)
 
   return timelineEntry('Note added', html, commitDate, author)
 }

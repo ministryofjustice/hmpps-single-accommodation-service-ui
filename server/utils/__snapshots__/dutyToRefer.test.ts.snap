@@ -31,7 +31,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Note",
     },
     "value": {
-      "text": "This is a submission note",
+      "html": "<div class="sas-text-block">This is a submission note</div>",
     },
   },
 ]
@@ -68,7 +68,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Note",
     },
     "value": {
-      "text": "This is a submission note",
+      "html": "<div class="sas-text-block">This is a submission note</div>",
     },
   },
 ]
@@ -113,7 +113,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Note",
     },
     "value": {
-      "text": "This is a submission note",
+      "html": "<div class="sas-text-block">This is a submission note</div>",
     },
   },
 ]
@@ -348,7 +348,8 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "timestamp": "2025-04-15T14:30:00.000Z",
     "type": "datetime",
   },
-  "html": "<p>Some note</p><p>line 2</p>",
+  "html": "<div class="sas-text-block">Some note
+line 2</div>",
   "label": {
     "text": "Note added",
   },
@@ -680,7 +681,7 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "text": "Note",
     },
     "value": {
-      "text": "This is an outcome note",
+      "html": "<div class="sas-text-block">This is an outcome note</div>",
     },
   },
 ]
@@ -709,7 +710,7 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "text": "Note",
     },
     "value": {
-      "text": "This is an outcome note",
+      "html": "<div class="sas-text-block">This is an outcome note</div>",
     },
   },
 ]

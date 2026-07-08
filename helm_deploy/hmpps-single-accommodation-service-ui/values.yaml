@@ -61,6 +61,7 @@ generic-service:
     hmpps-single-accommodation-service-ui:
       OS_DATAHUB_API_KEY: 'OS_DATAHUB_API_KEY'
       SENTRY_DSN: 'SENTRY_DSN'
+      MAINTENANCE_MODE_ALLOWLIST: 'MAINTENANCE_MODE_ALLOWLIST'
     # This secret will need to be created in your namespace (note it isn't in hmpps-templates-dev)
     # IRSA configuration in your namespace will also be required, and then uncomment serviceAccountName above.
     # sqs-hmpps-audit-secret:

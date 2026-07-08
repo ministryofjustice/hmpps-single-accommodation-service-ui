@@ -21,7 +21,7 @@ generic-service:
     OS_DATAHUB_API_URL: "https://api.os.uk"
     SAS_ALLOWED_ROLES: "ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER"
     V10_CASES_LIST: "false"
-    MAINTENANCE_MODE: "false"
+    MAINTENANCE_MODE: "true"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
 
 generic-prometheus-alerts:

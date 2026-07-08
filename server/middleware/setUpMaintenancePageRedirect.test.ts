@@ -3,9 +3,19 @@ import type { Request, Response } from 'express'
 import request from 'supertest'
 import config from '../config'
 import setUpMaintenancePageRedirect from './setUpMaintenancePageRedirect'
+import { HmppsUser } from '../interfaces/hmppsUser'
 
 const setupApp = (): Express => {
   const app = express()
+
+  app.use((req, res, next) => {
+    res.locals = {
+      user: {
+        username: 'user2',
+      } as HmppsUser,
+    }
+    next()
+  })
 
   app.use(setUpMaintenancePageRedirect())
 
@@ -64,6 +74,37 @@ describe('setUpMaintenancePageRedirect', () => {
         ['sign-in callback page', '/sign-in/callback'],
       ])('should not redirect requests for the %s at %s', (_, path) => {
         return request(app).get(path).expect(200)
+      })
+    })
+
+    describe('with a maintenance page allow list', () => {
+      const originalEnv = { ...process.env }
+
+      afterEach(() => {
+        process.env = originalEnv
+      })
+
+      describe('when the username belongs to the allowlist', () => {
+        beforeEach(() => {
+          process.env.MAINTENANCE_MODE_ALLOWLIST = 'user1,user2'
+          app = setupApp()
+        })
+
+        it('should not redirect to the maintenance page', () => {
+          return request(app).get('/known').expect(200)
+        })
+      })
+
+      describe('when the username does not belong to the allowlist', () => {
+        beforeEach(() => {
+          process.env.MAINTENANCE_MODE_ALLOWLIST = 'user22'
+          app = setupApp()
+        })
+
+        it('should redirect to the maintenance page', async () => {
+          const response = await request(app).get('/known').expect(302)
+          expect(response.text).toContain('Found. Redirecting to /maintenance')
+        })
       })
     })
   })

@@ -7,7 +7,11 @@ export default function setUpMaintenancePageRedirect(): Router {
   const allowedPaths = ['/sign-in', '/sign-in/callback', '/health', '/maintenance']
 
   router.use((req, res, next) => {
-    const allowedUsernames = config.flags.maintenanceModeAllowlist.split(',').map(u => u.trim()) || []
+    const allowedUsernames =
+      config.flags.maintenanceModeAllowlist
+        .split(',')
+        .map(u => u.trim())
+        .filter(Boolean) || []
     const maintenanceMode = config.flags.maintenanceMode && !allowedUsernames.includes(res.locals?.user?.username)
 
     if (maintenanceMode && !allowedPaths.includes(req.path)) {

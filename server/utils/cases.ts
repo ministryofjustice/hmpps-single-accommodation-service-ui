@@ -1,11 +1,9 @@
 import { CaseAction, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, SelectOption, StatusCell } from '@sas/ui'
+import { GetCasesQuery, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
-import { renderMacro, statusCell } from './macros'
+import { renderMacro } from './macros'
 import config from '../config'
-import { accommodationCell } from './accommodationSummary'
-import { formatDate } from './dates'
 import { renderActions } from './actions'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
@@ -69,10 +67,7 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
       return [htmlContent(personCell(c, assignedToText))]
     }
 
-    return [
-      htmlContent(personCell(c, assignedToText)),
-      htmlContent(actionsCell(c.actions)),
-    ]
+    return [htmlContent(personCell(c, assignedToText)), htmlContent(actionsCell(c.actions))]
   })
 
 export const casesTableColumns = () => {
@@ -94,7 +89,6 @@ export const caseAssignedTo = (c: Case, username: string): string => {
   const fullName = `${c.assignedTo.forename} ${c.assignedTo.surname}`
   return c.assignedTo?.username.toUpperCase() === username.toUpperCase() ? `You (${fullName})` : fullName
 }
-
 
 export const displayName = (caseData: Case, laoFlag = '(limited access offender)'): string => {
   switch (caseData.userAccess) {

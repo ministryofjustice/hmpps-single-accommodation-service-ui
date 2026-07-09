@@ -1,5 +1,9 @@
 import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
-import { ApiResponseDtoListAccommodationSummaryDto, ApiResponseDtoAccommodationSummaryDto, ApiResponseDtoAccommodationSummariesDto } from '@sas/api'
+import {
+  ApiResponseDtoListAccommodationSummaryDto,
+  ApiResponseDtoAccommodationSummaryDto,
+  ApiResponseDtoAccommodationSummariesDto,
+} from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'

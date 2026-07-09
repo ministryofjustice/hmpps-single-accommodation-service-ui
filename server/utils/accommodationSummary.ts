@@ -1,4 +1,4 @@
-import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
+import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
@@ -89,11 +89,13 @@ export const accommodationCard = (
 }
 
 export const noFixedAbodeAlert = (accommodationSummary: AccommodationSummariesDto) => {
-  if (accommodationSummary.caseAccommodationStatus !== 'NO_FIXED_ABODE' && accommodationSummary.caseAccommodationStatus !== 'RISK_OF_NO_FIXED_ABODE') return undefined
+  const status = accommodationSummary.caseAccommodationStatus
+
+  if (status !== 'NO_FIXED_ABODE' && status !== 'RISK_OF_NO_FIXED_ABODE') return undefined
 
   return {
-    date: accommodationSummary.caseAccommodationStatus === 'RISK_OF_NO_FIXED_ABODE' ? accommodationSummary.currentAccommodation?.endDate : null,
-    status: accommodationSummary.caseAccommodationStatus,
+    date: status === 'RISK_OF_NO_FIXED_ABODE' ? accommodationSummary.currentAccommodation?.endDate : null,
+    status,
   }
 }
 

@@ -114,12 +114,7 @@ describe('cases utilities', () => {
     it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)
 
-      expect(casesToRows(cases)).toEqual([
-        [
-          { html: personCell(cases[0]) },
-          { html: actionsCell(cases[0].actions) },
-        ],
-      ])
+      expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }, { html: actionsCell(cases[0].actions) }]])
     })
 
     it('returns a formatted row for a case assigned to the current user', () => {

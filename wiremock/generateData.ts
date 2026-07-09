@@ -162,8 +162,14 @@ if (generate.accommodation) {
   const accommodationHistory: Record<string, unknown> = {}
 
   cases.forEach(c => {
-    const isNoFixedAbode = c.status === 'NO_FIXED_ABODE'
-    const isRiskOfNoFixedAbode = c.status === 'RISK_OF_NO_FIXED_ABODE'
+    const caseAccommodationStatus = faker.helpers.arrayElement([
+      'RISK_OF_NO_FIXED_ABODE',
+      'NO_FIXED_ABODE',
+      'TRANSIENT',
+      'SETTLED',
+    ])
+    const isNoFixedAbode = caseAccommodationStatus === 'NO_FIXED_ABODE'
+    const isRiskOfNoFixedAbode = caseAccommodationStatus === 'RISK_OF_NO_FIXED_ABODE'
 
     const current = isNoFixedAbode ? null : accommodationSummaryFactory.current().build({ crn: c.crn })
     const next =

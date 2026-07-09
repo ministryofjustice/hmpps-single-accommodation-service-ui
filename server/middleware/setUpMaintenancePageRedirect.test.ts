@@ -19,7 +19,7 @@ const setupApp = (): Express => {
 
   app.use(setUpMaintenancePageRedirect())
 
-  const appPaths = ['/known', '/maintenance', '/health', '/sign-in', '/sign-in/callback']
+  const appPaths = ['/known', '/maintenance', '/health', '/sign-in', '/sign-in/callback', '/not-authorised']
 
   appPaths.forEach(path => {
     app.get(path, (_req: Request, res: Response) => {

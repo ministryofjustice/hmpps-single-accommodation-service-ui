@@ -75,13 +75,7 @@ export const casesTableColumns = () => {
     return [{ text: 'Name' }]
   }
 
-  return [
-    { text: 'Name' },
-    { text: 'Current accommodation' },
-    { text: 'Next accommodation' },
-    { text: 'Status' },
-    { text: 'Actions' },
-  ]
+  return [{ text: 'Name' }, { text: 'Actions' }]
 }
 
 export const caseAssignedTo = (c: Case, username: string): string => {

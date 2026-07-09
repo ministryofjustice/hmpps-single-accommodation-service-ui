@@ -9,7 +9,7 @@ type SummaryListRowOptions = {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export const summaryListRow = (label: string, text: string, options: SummaryListRowOptions = {}): SummaryListRow => {
+export const summaryListRow = (label: string, text?: string, options: SummaryListRowOptions = {}): SummaryListRow => {
   const { type = 'text', actions, noValue } = options
 
   let value: TextOrHtmlContent

@@ -4,7 +4,7 @@ import {
   ProposedAccommodationDto,
   UpstreamFailureDto,
 } from '@sas/api'
-import { SummaryListRow } from '@govuk/ui'
+import { SummaryListRow, TextOrHtmlContent } from '@govuk/ui'
 import { Request } from 'express'
 
 export interface ErrorSummary {
@@ -113,3 +113,5 @@ export type ApiResponse = {
 }
 
 export type AuditFieldValues = Record<string, string>
+
+export type TimelineValue = { label?: string; value: TextOrHtmlContent }

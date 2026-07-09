@@ -6,6 +6,7 @@ import {
   RadioItem,
   StatusCard,
   StatusTag,
+  TimelineValue,
 } from '@sas/ui'
 import {
   AccommodationAddressDetails,
@@ -18,7 +19,7 @@ import {
 import { Request } from 'express'
 import { Button, SummaryListActionItem, SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { formatDateAndDaysAgo } from './dates'
-import { toParagraphs } from './utils'
+import { htmlContent, textContent, toParagraphs } from './utils'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from './multiPageFormManager'
 import {
@@ -29,7 +30,7 @@ import {
   validateRadioButton,
 } from './validation'
 import { addressLines, formatAddress } from './addresses'
-import { renderMacro, statusTag } from './macros'
+import { renderMacro, statusTag, textBlock } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import config from '../config'
 import { summaryListRow } from './summaryListRow'
@@ -439,26 +440,26 @@ export const addressTimelineEntry = (
     changedFieldNames.includes('verificationStatus') || changedFieldNames.includes('nextAccommodationStatus')
 
   const proposedAddress = fieldValuesToProposedAddress(fieldValues)
-  const addressParts = addressLines(proposedAddress.address || {}, 'full')
+  const address = addressLines(proposedAddress.address || {}, 'full').join('\n')
 
   let label: string
-  let values: Record<string, unknown>
+  let values: TimelineValue[]
   let status: StatusTag
 
   if (type === 'CREATE') {
     label = 'Address created'
-    values = { Address: addressParts }
+    values = [{ label: 'Address', value: htmlContent(textBlock(address)) }]
     status = proposedAddressStatusTag(displayStatus(proposedAddress))
   } else if (statusChanged) {
     label = 'Status changed'
-    values = {}
+    values = []
     status = proposedAddressStatusTag(displayStatus(proposedAddress))
   } else if (housingArrangementChanged) {
     label = 'Living arrangement changed'
-    values = { 'Housing arrangement': proposedAddress.accommodationType?.description }
+    values = [{ label: 'Housing arrangement', value: textContent(proposedAddress.accommodationType?.description) }]
   } else {
     label = 'Address changed'
-    values = { Address: addressParts }
+    values = [{ label: 'Address', value: htmlContent(textBlock(address)) }]
   }
 
   const html = renderMacro('timelineProposedAddress', { type, status, values })

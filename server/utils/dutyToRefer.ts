@@ -1,18 +1,18 @@
 import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
-import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
-import { Link, StatusCard } from '@sas/ui'
-import { formatDateAndDaysAgo, isoDateToDateInput, formatDateAndAge, dateFieldParts, formatDate } from './dates'
+import { SummaryListRow, TimelineEntry } from '@govuk/ui'
+import { Link, StatusCard, TimelineValue } from '@sas/ui'
+import { dateFieldParts, formatDate, formatDateAndAge, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import uiPaths from '../paths/ui'
 import {
   validateAndFlashErrors,
-  validateRadioButton,
-  validateMandatoryText,
-  validateMaxLength,
   validateAutocomplete,
   validateDateField,
   validateDateTodayOrPast,
   validateDateWithinLastXMonths,
+  validateMandatoryText,
+  validateMaxLength,
+  validateRadioButton,
 } from './validation'
 import { renderMacro, statusTag, textBlock } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
@@ -247,7 +247,6 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
   } as DutyToReferDto
 }
 
-type TimelineValue = { label?: string; value: TextOrHtmlContent }
 const submissionValues = (submission: Partial<DtrSubmissionDto>, isChange: boolean): TimelineValue[] =>
   [
     submission.submissionDate && {

@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
-import { TimelineEntry } from '@govuk/ui'
+import { HtmlContent, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
 import { formatDate } from '../../server/utils/dates'
 import { errorDateParts } from '../../server/utils/validation'
 
@@ -187,13 +187,13 @@ export default class AbstractPage {
         if (detail.text) {
           await expect((container || this.page).locator('p', { hasText: detail.text })).toBeVisible()
         } else if (detail.html) {
-          await this.shouldShowDetails(detail, 'Reason details', container)
+          await this.shouldShowDetails(detail as HtmlContent, 'Reason details', container)
         }
       }
     }
   }
 
-  async shouldShowDetails(detail: { html: string }, summaryText: string, container?: Locator) {
+  async shouldShowDetails(detail: HtmlContent, summaryText: string, container?: Locator) {
     const text = detail.html.replace(/<[^>]*>/g, '')
 
     await (container || this.page).getByText(summaryText).click()

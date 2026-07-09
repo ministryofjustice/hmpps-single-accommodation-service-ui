@@ -384,7 +384,7 @@ describe('Proposed addresses utilities', () => {
 
         expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-          nameOrNumber: 'property name or number must be 255 characters or less',
+          nameOrNumber: 'Property name or number must be 255 characters or less',
           postcode: undefined,
         })
       })

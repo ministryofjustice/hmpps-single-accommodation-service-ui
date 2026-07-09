@@ -158,7 +158,7 @@ export const validateLookupFromSession = (req: Request, sessionData: ProposedAdd
   const errors: Record<string, string> = {
     nameOrNumber:
       validateMandatoryText(sessionData.nameOrNumber, 'property name or number') ||
-      validateMaxLength(sessionData.nameOrNumber, 'property name or number', 255),
+      validateMaxLength(sessionData.nameOrNumber, 'Property name or number', 255),
     postcode: validatePostcode(sessionData.postcode),
   }
   return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined

@@ -138,7 +138,7 @@ export default ReferralFactory.define(() => {
     id: faker.string.uuid(),
     type: 'CAS1' as const,
     status: 'ACCEPTED' as const,
-    date: faker.date.past().toISOString(),
+    date: faker.date.past().toISOString().split('T')[0],
     uiUrl: faker.internet.url(),
     referredBy: staffDetailsFactory.build(),
   }

@@ -372,7 +372,7 @@ describe('Proposed addresses utilities', () => {
 
         expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-          postcode: 'Enter a full UK postcode, like AA3 1AB',
+          postcode: 'Enter a full UK postcode',
         })
       })
 

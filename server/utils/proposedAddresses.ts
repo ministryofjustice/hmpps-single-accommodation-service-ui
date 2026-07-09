@@ -159,7 +159,7 @@ export const validateLookupFromSession = (req: Request, sessionData: ProposedAdd
     nameOrNumber:
       validateMandatoryText(sessionData.nameOrNumber, 'property name or number') ||
       validateMaxLength(sessionData.nameOrNumber, 'property name or number', 255),
-    postcode: validatePostcode(sessionData.postcode) || validateMaxLength(sessionData.postcode, 'postcode', 20),
+    postcode: validatePostcode(sessionData.postcode),
   }
   return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
 }

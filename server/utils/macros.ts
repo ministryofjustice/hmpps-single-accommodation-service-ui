@@ -41,4 +41,4 @@ export const statusCard = (cardData: StatusCard) => renderMacro('statusCard', ca
 
 export const govukDetails = (summaryText: string, text: string) => renderMacro('govukDetails', { summaryText, text })
 
-export const textBlock = (text: string) => renderMacro('textBlock', text)
+export const textBlock = (text?: string) => renderMacro('textBlock', text)

@@ -305,10 +305,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveLookup()(request, response, next)
 
-      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
-        request,
-        'No address found. Check details',
-      )
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'No address found. Check details')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
     })

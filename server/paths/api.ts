@@ -13,6 +13,7 @@ export default {
     accommodation: {
       current: accommodationPath.path('current'),
       next: accommodationPath.path('next'),
+      summary: accommodationPath.path('summary'),
     },
     dutyToRefer: {
       current: dutyToReferPath,

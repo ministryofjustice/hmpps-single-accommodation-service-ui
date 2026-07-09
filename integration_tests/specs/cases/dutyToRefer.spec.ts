@@ -421,7 +421,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(acceptedDutyToRefer)
 
     // Then I click the Change link on outcome details
-    await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Outcome details'))
+    await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Outcome'))
 
     // Then I should see the duty to refer edit outcome form
     const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) outcome')

@@ -14,4 +14,8 @@ export default class AccommodationService {
   async getAccommodationHistory(token: string, crn: string) {
     return this.accommodationClient.getAccommodationHistory(token, crn)
   }
+
+  async getAccommodationSummary(token: string, crn: string) {
+    return this.accommodationClient.getAccommodationSummary(token, crn)
+  }
 }

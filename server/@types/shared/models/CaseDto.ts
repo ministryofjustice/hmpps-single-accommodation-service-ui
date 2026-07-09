@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AccommodationSummaryDto } from './AccommodationSummaryDto'
 import type { AssignedToDto } from './AssignedToDto'
 import type { CaseAction } from './CaseAction'
 export type CaseDto = {
@@ -15,9 +14,6 @@ export type CaseDto = {
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
   pncReference?: string | null
   assignedTo?: AssignedToDto | null
-  currentAccommodation?: AccommodationSummaryDto | null
-  nextAccommodation?: AccommodationSummaryDto | null
-  status?: 'RISK_OF_NO_FIXED_ABODE' | 'NO_FIXED_ABODE' | 'TRANSIENT' | 'SETTLED'
   actions: Array<CaseAction>
   userAccess: 'LIMITED' | 'FULL' | 'UNKNOWN'
   limitedAccess?: boolean | null

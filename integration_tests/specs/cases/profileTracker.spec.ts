@@ -10,6 +10,7 @@ import {
   dutyToReferFactory,
   eligibilityFactory,
   serviceResultFactory,
+  accommodationSummariesFactory,
   accommodationSummaryFactory,
   proposedAccommodationFactory,
   crsServiceResultFactory,
@@ -126,12 +127,15 @@ test.describe('Profile Tracker Page', () => {
     const crn = 'X123456'
 
     test(`should render next and current cards for a confirmed case`, async ({ page }) => {
-      const caseData = caseFactory.confirmed().build({ crn })
+      const caseData = caseFactory.build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
       const nextAccommodation = accommodationSummaryFactory.next().build()
+      const accommodationSummaries = accommodationSummariesFactory
+        .confirmed()
+        .build({ currentAccommodation, nextAccommodation })
 
       await stubCaseListPage([caseData])
-      await stubProfilePage({ crn, caseData, currentAccommodation, nextAccommodation })
+      await stubProfilePage({ crn, caseData, currentAccommodation, nextAccommodation, accommodationSummaries })
 
       // WHEN I sign in
       await login(page)
@@ -148,11 +152,12 @@ test.describe('Profile Tracker Page', () => {
     test(`should render current accommodation card and NFA alert for a case with risk of no fixed abode`, async ({
       page,
     }) => {
-      const caseData = caseFactory.riskOfNfa().build({ crn })
+      const caseData = caseFactory.build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
+      const accommodationSummaries = accommodationSummariesFactory.riskOfNfa().build({ currentAccommodation })
 
       await stubCaseListPage([caseData])
-      await stubProfilePage({ crn, caseData, currentAccommodation })
+      await stubProfilePage({ crn, caseData, currentAccommodation, accommodationSummaries })
 
       // WHEN I sign in
       await login(page)
@@ -163,14 +168,15 @@ test.describe('Profile Tracker Page', () => {
       // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
       await profileTrackerPage.shouldShowCurrentAccommodationCard(currentAccommodation)
-      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData, currentAccommodation)
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(accommodationSummaries)
     })
 
     test(`should render no accommodation cards and NFA alert for a case with no fixed abode`, async ({ page }) => {
-      const caseData = caseFactory.nfa().build({ crn })
+      const caseData = caseFactory.build({ crn })
+      const accommodationSummaries = accommodationSummariesFactory.nfa().build()
 
       await stubCaseListPage([caseData])
-      await stubProfilePage({ crn, caseData })
+      await stubProfilePage({ crn, caseData, accommodationSummaries })
 
       // WHEN I sign in
       await login(page)
@@ -181,7 +187,7 @@ test.describe('Profile Tracker Page', () => {
       // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldNotShowCurrentAccommodationCard()
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
-      await profileTrackerPage.shouldShowNoFixedAbodeAlert(caseData)
+      await profileTrackerPage.shouldShowNoFixedAbodeAlert(accommodationSummaries)
     })
   })
 

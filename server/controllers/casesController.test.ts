@@ -6,6 +6,7 @@ import CasesService from '../services/casesService'
 import ReferralsService from '../services/referralsService'
 import { user } from '../routes/testutils/appSetup'
 import {
+  accommodationSummariesFactory,
   accommodationSummaryFactory,
   apiResponseFactory,
   caseFactory,
@@ -149,6 +150,7 @@ describe('casesController', () => {
       const currentAccommodation = accommodationSummaryFactory.current().build()
       const nextAccommodation = accommodationSummaryFactory.next().build()
       const accommodationHistory = accommodationSummaryFactory.buildListSequential(2)
+      const accommodationSummaries = accommodationSummariesFactory.build()
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
@@ -162,6 +164,9 @@ describe('casesController', () => {
       )
       accommodationService.getAccommodationHistory.mockResolvedValue(
         apiResponseFactory.accommodationHistory(accommodationHistory),
+      )
+      accommodationService.getAccommodationSummary.mockResolvedValue(
+        apiResponseFactory.accommodationSummaries(accommodationSummaries),
       )
 
       await casesController.show()(request, response, next)
@@ -181,7 +186,7 @@ describe('casesController', () => {
         upstreamFailures: [],
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: renderActions(eligibility.caseActions),
-        noFixedAbode: noFixedAbodeAlert(caseData, currentAccommodation),
+        noFixedAbode: noFixedAbodeAlert(accommodationSummaries),
         nextAccommodationCard: accommodationCard('next', nextAccommodation),
         currentAccommodationCard: accommodationCard('current', currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
@@ -223,6 +228,7 @@ describe('casesController', () => {
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed: [], failedChecks: [] } })
       accommodationService.getCurrentAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
       accommodationService.getNextAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
+      accommodationService.getAccommodationSummary.mockResolvedValue(apiResponseFactory.accommodationSummaries())
 
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.withUpstreamFailures())
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.withUpstreamFailures())

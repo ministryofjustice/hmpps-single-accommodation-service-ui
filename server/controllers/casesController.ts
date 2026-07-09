@@ -108,6 +108,7 @@ export default class CasesController {
         currentAccommodation: this.accommodationService.getCurrentAccommodation(token, crn),
         nextAccommodation: this.accommodationService.getNextAccommodation(token, crn),
         accommodationHistory: this.accommodationService.getAccommodationHistory(token, crn),
+        accommodationSummaries: this.accommodationService.getAccommodationSummary(token, crn),
       })
 
       return res.render('pages/show', {
@@ -115,7 +116,7 @@ export default class CasesController {
         upstreamFailures,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: renderActions(data.eligibility?.caseActions),
-        noFixedAbode: noFixedAbodeAlert(caseData, data.currentAccommodation),
+        noFixedAbode: noFixedAbodeAlert(data.accommodationSummaries),
         nextAccommodationCard: accommodationCard('next', data.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', data.currentAccommodation),
         referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),

@@ -5,14 +5,11 @@ import {
   personCell,
   queryToFilters,
   actionsCell,
-  caseStatusCell,
   displayName,
   assignedToOptions,
 } from './cases'
-import { accommodationSummaryFactory, actionFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
-import { statusCell } from './macros'
+import { actionFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
 import config from '../config'
-import { accommodationCell } from './accommodationSummary'
 
 describe('cases utilities', () => {
   beforeEach(() => {
@@ -109,26 +106,6 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('caseStatusCell', () => {
-    it.each([
-      ['RISK_OF_NO_FIXED_ABODE', 'Risk of no fixed abode', 'orange'],
-      ['NO_FIXED_ABODE', 'No fixed abode', 'grey'],
-      ['TRANSIENT', 'Transient', 'purple'],
-      ['SETTLED', 'Settled', 'green'],
-    ] as const)('returns the correct tag for %s status', (status, text, colour) => {
-      const person = caseFactory.build({ status })
-      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ status: { text, colour } }))
-    })
-
-    it('includes the date for RISK_OF_NO_FIXED_ABODE status', () => {
-      const person = caseFactory.build({
-        status: 'RISK_OF_NO_FIXED_ABODE',
-        currentAccommodation: accommodationSummaryFactory.current('2026-06-01', '2025-12-01').build(),
-      })
-      expect(caseStatusCell(person)).toEqual(expect.objectContaining({ dateText: '1 June 2026' }))
-    })
-  })
-
   describe('casesToRows', () => {
     beforeEach(() => {
       config.flags.v10CasesList = true
@@ -137,15 +114,7 @@ describe('cases utilities', () => {
     it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)
 
-      expect(casesToRows(cases)).toEqual([
-        [
-          { html: personCell(cases[0]) },
-          { html: accommodationCell('current', cases[0].currentAccommodation) },
-          { html: accommodationCell('next', cases[0].nextAccommodation) },
-          { html: statusCell(caseStatusCell(cases[0])) },
-          { html: actionsCell(cases[0].actions) },
-        ],
-      ])
+      expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }, { html: actionsCell(cases[0].actions) }]])
     })
 
     it('returns a formatted row for a case assigned to the current user', () => {

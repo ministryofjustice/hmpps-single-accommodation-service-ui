@@ -1,11 +1,9 @@
 import { CaseAction, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, SelectOption, StatusCell } from '@sas/ui'
+import { GetCasesQuery, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
-import { renderMacro, statusCell } from './macros'
+import { renderMacro } from './macros'
 import config from '../config'
-import { accommodationCell } from './accommodationSummary'
-import { formatDate } from './dates'
 import { renderActions } from './actions'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
@@ -69,13 +67,7 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
       return [htmlContent(personCell(c, assignedToText))]
     }
 
-    return [
-      htmlContent(personCell(c, assignedToText)),
-      htmlContent(accommodationCell('current', c.currentAccommodation)),
-      htmlContent(accommodationCell('next', c.nextAccommodation)),
-      htmlContent(statusCell(caseStatusCell(c))),
-      htmlContent(actionsCell(c.actions)),
-    ]
+    return [htmlContent(personCell(c, assignedToText)), htmlContent(actionsCell(c.actions))]
   })
 
 export const casesTableColumns = () => {
@@ -83,34 +75,13 @@ export const casesTableColumns = () => {
     return [{ text: 'Name' }]
   }
 
-  return [
-    { text: 'Name' },
-    { text: 'Current accommodation' },
-    { text: 'Next accommodation' },
-    { text: 'Status' },
-    { text: 'Actions' },
-  ]
+  return [{ text: 'Name' }, { text: 'Actions' }]
 }
 
 export const caseAssignedTo = (c: Case, username: string): string => {
   if (!c.assignedTo) return 'unallocated'
   const fullName = `${c.assignedTo.forename} ${c.assignedTo.surname}`
   return c.assignedTo?.username.toUpperCase() === username.toUpperCase() ? `You (${fullName})` : fullName
-}
-
-export const caseStatusCell = (c: Case): StatusCell => {
-  const date = c.currentAccommodation?.endDate
-  return (
-    {
-      RISK_OF_NO_FIXED_ABODE: {
-        status: { text: 'Risk of no fixed abode', colour: 'orange' },
-        dateText: formatDate(date),
-      },
-      NO_FIXED_ABODE: { status: { text: 'No fixed abode', colour: 'grey' } },
-      TRANSIENT: { status: { text: 'Transient', colour: 'purple' } },
-      SETTLED: { status: { text: 'Settled', colour: 'green' } },
-    }[c.status] || { status: { text: 'Unknown' } }
-  )
 }
 
 export const displayName = (caseData: Case, laoFlag = '(limited access offender)'): string => {

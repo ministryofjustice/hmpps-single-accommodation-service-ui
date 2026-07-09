@@ -3,7 +3,6 @@ import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
-import { caseStatusCell } from '../../../server/utils/cases'
 import { actionsMap } from '../../../server/utils/actions'
 
 export default class CasesListPage extends AbstractPage {
@@ -47,10 +46,6 @@ export default class CasesListPage extends AbstractPage {
         await expect(row).not.toContainText('RoSH')
         await expect(row).not.toContainText('Tier')
         await expect(row).not.toContainText('Date of birth')
-      }
-
-      if (headers.includes('Status') && person.status) {
-        await this.shouldShowStatusCell(caseStatusCell(person), row)
       }
 
       if (headers.includes('Actions')) {

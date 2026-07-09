@@ -307,7 +307,7 @@ describe('proposedAddressesController', () => {
 
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
         request,
-        'No addresses found for this property name or number and UK postcode',
+        'No address found. Check details',
       )
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)

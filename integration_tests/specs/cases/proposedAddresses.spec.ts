@@ -378,7 +378,7 @@ test.describe('add proposed address', () => {
 
     // Then I should see an error
     await addProposedAddressPage.shouldShowGenericErrorMessage(
-      'No addresses found for this property name or number and UK postcode',
+      'No address found. Check details',
     )
 
     // When I change the postcode to one with one result

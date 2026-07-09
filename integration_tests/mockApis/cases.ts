@@ -21,6 +21,7 @@ export default {
     }),
   stubGetCases500: (): SuperAgentRequest => stubApiError(apiPaths.cases.index({})),
   stubGetCases404: (): SuperAgentRequest => stubApiError(apiPaths.cases.index({}), 'GET', 404),
+  stubGetCases403: (): SuperAgentRequest => stubApiError(apiPaths.cases.index({}), 'GET', 403),
   stubGetCaseByCrn: (crn: string, caseData?: Case): SuperAgentRequest =>
     stubFor({
       request: {

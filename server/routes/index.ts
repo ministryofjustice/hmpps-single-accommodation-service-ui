@@ -17,7 +17,6 @@ export default function routes(services: Services): Router {
   proposedAddressesRoutes(router, proposedAddressesController)
   dutyToReferRoutes(router, dutyToReferController)
 
-  router.get(uiPaths.static.notAuthorised.pattern, staticController.notAuthorised())
   router.get(uiPaths.static.maintenance.pattern, staticController.maintenance())
 
   return router

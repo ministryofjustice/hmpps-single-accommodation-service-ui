@@ -38,9 +38,9 @@ passport.use(
 export const setUpAuthenticationErrorRoute = () => {
   const router = Router()
 
-  router.get('/autherror', (req, res) => {
+  router.get('/not-authorised', (req, res) => {
     res.status(401)
-    return res.render('autherror')
+    return res.render('pages/static/not-authorised')
   })
 
   return router
@@ -59,7 +59,7 @@ export default function setupAuthentication() {
   router.get('/sign-in/callback', (req, res, next) =>
     passport.authenticate('oauth2', {
       successReturnToOrRedirect: req.session.returnTo || '/',
-      failureRedirect: '/autherror',
+      failureRedirect: '/not-authorised',
     })(req, res, next),
   )
 

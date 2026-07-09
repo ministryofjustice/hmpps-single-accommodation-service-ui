@@ -18,6 +18,8 @@ export const summaryListRow = (label: string, text: string, options: SummaryList
     value = type === 'text' ? textContent(text) : htmlContent(type === 'textBlock' ? textBlock(text) : text)
   } else if (noValue) {
     value = htmlContent(noValueHtml(noValue))
+  } else {
+    value = textContent()
   }
 
   const row: SummaryListRow = {

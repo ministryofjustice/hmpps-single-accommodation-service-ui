@@ -22,6 +22,13 @@ describe('summaryListRow', () => {
     })
   })
 
+  it('returns a row with empty value', () => {
+    expect(summaryListRow('Empty value', '')).toEqual({
+      key: { text: 'Empty value' },
+      value: { text: '' },
+    })
+  })
+
   it('returns a row with a default for no value', () => {
     expect(summaryListRow('No value', undefined, { noValue: 'N/A' })).toEqual({
       key: { text: 'No value' },

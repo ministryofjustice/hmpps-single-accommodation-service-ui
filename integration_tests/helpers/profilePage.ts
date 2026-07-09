@@ -1,5 +1,6 @@
 import {
   AccommodationReferralDto,
+  AccommodationSummariesDto,
   AccommodationSummaryDto,
   CaseDto,
   EligibilityDto,
@@ -20,6 +21,7 @@ export const stubProfilePage = async ({
   currentAccommodation,
   nextAccommodation,
   accommodationHistory,
+  accommodationSummaries,
 }: {
   crn: string
   caseData: CaseDto
@@ -29,6 +31,7 @@ export const stubProfilePage = async ({
   currentAccommodation?: AccommodationSummaryDto
   nextAccommodation?: AccommodationSummaryDto
   accommodationHistory?: AccommodationSummaryDto[]
+  accommodationSummaries?: AccommodationSummariesDto
 }) => {
   await casesApi.stubGetCaseByCrn(crn, caseData)
   await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
@@ -37,4 +40,5 @@ export const stubProfilePage = async ({
   await accommodationApi.stubGetCurrentAccommodation(crn, currentAccommodation)
   await accommodationApi.stubGetNextAccommodation(crn, nextAccommodation)
   await accommodationApi.stubGetAccommodationHistory(crn, accommodationHistory)
+  await accommodationApi.stubGetAccommodationSummary(crn, accommodationSummaries)
 }

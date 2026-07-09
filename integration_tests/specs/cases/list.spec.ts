@@ -11,7 +11,7 @@ import { stubProfilePage } from '../../helpers/profilePage'
 
 test.describe('List of cases', () => {
   test('Should list all cases for the user and allow filtering', async ({ page }) => {
-    const cases = [...Array(25)].map(() => caseFactory.confirmed().build())
+    const cases = [...Array(25)].map(() => caseFactory.build())
     const teams = [
       { code: 'team-one-code', name: 'Team One' },
       { code: 'team-two-code', name: 'Team Two' },

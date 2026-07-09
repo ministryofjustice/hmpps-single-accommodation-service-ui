@@ -3,6 +3,7 @@ import {
   CaseDto as Case,
   EligibilityDto as Eligibility,
   AccommodationReferralDto as Referral,
+  AccommodationSummariesDto,
   AccommodationSummaryDto,
   ProposedAccommodationDto,
   CaseAction,
@@ -94,20 +95,17 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(this.page.locator('.sas-card', { hasText: 'Current accommodation' })).toHaveCount(0)
   }
 
-  async shouldShowNoFixedAbodeAlert(caseData: Case, accommodation?: AccommodationSummaryDto) {
-    if (caseData.status === 'NO_FIXED_ABODE') {
+  async shouldShowNoFixedAbodeAlert(accommodationSummaries: AccommodationSummariesDto) {
+    if (accommodationSummaries.caseAccommodationStatus === 'NO_FIXED_ABODE') {
       const card = this.page.locator('.moj-alert', { hasText: 'No fixed abode' })
       await expect(card).toBeVisible()
-      if (accommodation?.startDate) {
-        await expect(card).toContainText(`Since ${formatDate(accommodation.startDate, 'long')}`)
-        await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
-      }
     } else {
       const card = this.page.locator('.moj-alert', { hasText: 'Risk of no fixed abode' })
       await expect(card).toBeVisible()
-      if (accommodation?.endDate) {
-        await expect(card).toContainText(`From ${formatDate(accommodation.endDate, 'long')}`)
-        await expect(card).toContainText(`(${formatDate(accommodation.endDate, 'days for/in')})`)
+      const endDate = accommodationSummaries.currentAccommodation?.endDate
+      if (endDate) {
+        await expect(card).toContainText(`From ${formatDate(endDate, 'long')}`)
+        await expect(card).toContainText(`(${formatDate(endDate, 'days for/in')})`)
       }
     }
   }

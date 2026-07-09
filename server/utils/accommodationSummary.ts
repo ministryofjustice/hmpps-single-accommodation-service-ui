@@ -88,8 +88,8 @@ export const accommodationCard = (
   }
 }
 
-export const noFixedAbodeAlert = (accommodationSummary: AccommodationSummariesDto) => {
-  const status = accommodationSummary.caseAccommodationStatus
+export const noFixedAbodeAlert = (accommodationSummary?: AccommodationSummariesDto) => {
+  const status = accommodationSummary?.caseAccommodationStatus
 
   if (status !== 'NO_FIXED_ABODE' && status !== 'RISK_OF_NO_FIXED_ABODE') return undefined
 

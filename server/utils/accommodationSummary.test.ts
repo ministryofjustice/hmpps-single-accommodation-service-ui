@@ -1,5 +1,5 @@
 import { AccommodationAddressDetails, AccommodationSummaryDto } from '@sas/api'
-import { accommodationSummaryFactory, addressFactory, caseFactory } from '../testutils/factories'
+import { accommodationSummariesFactory, accommodationSummaryFactory, addressFactory } from '../testutils/factories'
 import {
   accommodationCard,
   accommodationCell,
@@ -134,19 +134,20 @@ describe('accommodationSummary', () => {
 
   describe('noFixedAbodeAlert', () => {
     it('returns undefined if the case status is not NO_FIXED_ABODE or RISK_OF_NO_FIXED_ABODE', () => {
-      const caseData = caseFactory.build({ status: 'SETTLED' })
-      expect(noFixedAbodeAlert(caseData)).toMatchSnapshot()
+      const accommodationSummaries = accommodationSummariesFactory.build({ caseAccommodationStatus: 'SETTLED' })
+      expect(noFixedAbodeAlert(accommodationSummaries)).toMatchSnapshot()
     })
 
     it('returns no fixed abode alert for NO_FIXED_ABODE status', () => {
-      const caseData = caseFactory.build({ status: 'NO_FIXED_ABODE' })
-      expect(noFixedAbodeAlert(caseData)).toMatchSnapshot()
+      const accommodationSummaries = accommodationSummariesFactory.nfa().build()
+      expect(noFixedAbodeAlert(accommodationSummaries)).toMatchSnapshot()
     })
 
     it('returns risk of no fixed abode alert for RISK_OF_NO_FIXED_ABODE status', () => {
-      const accommodation = accommodationSummaryFactory.current().build({ endDate: '2026-06-01' })
-      const caseData = caseFactory.build({ status: 'RISK_OF_NO_FIXED_ABODE' })
-      expect(noFixedAbodeAlert(caseData, accommodation)).toMatchSnapshot()
+      const accommodationSummaries = accommodationSummariesFactory.riskOfNfa().build({
+        currentAccommodation: accommodationSummaryFactory.current().build({ endDate: '2026-06-01' }),
+      })
+      expect(noFixedAbodeAlert(accommodationSummaries)).toMatchSnapshot()
     })
   })
 })

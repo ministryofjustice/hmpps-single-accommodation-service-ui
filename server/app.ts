@@ -36,6 +36,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
   nunjucksSetup(app)
+  app.use(setUpAuthenticationErrorRoute())
   app.use(setUpAuthentication())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
@@ -46,7 +47,6 @@ export default function createApp(services: Services): express.Application {
     next()
   })
   app.use(setUpFrontendComponents())
-  app.use(setUpAuthenticationErrorRoute())
   app.use(authorisationMiddleware(config.allowedRoles))
 
   app.use(routes(services))

@@ -72,6 +72,7 @@ describe('setUpMaintenancePageRedirect', () => {
         ['maintenance page', '/maintenance'],
         ['sign-in page', '/sign-in'],
         ['sign-in callback page', '/sign-in/callback'],
+        ['not authorised page', '/not-authorised'],
       ])('should not redirect requests for the %s at %s', (_, path) => {
         return request(app).get(path).expect(200)
       })

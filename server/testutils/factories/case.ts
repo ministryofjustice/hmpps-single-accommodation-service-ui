@@ -7,36 +7,9 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
-import accommodationSummaryFactory from './accommodationSummary'
 import actionFactory from './action'
 
 class CaseFactory extends Factory<Case> {
-  confirmed() {
-    const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
-    return this.params({
-      currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
-      nextAccommodation: accommodationSummaryFactory.next(currentEndDate).build(),
-      status: faker.helpers.arrayElement(['SETTLED', 'TRANSIENT']),
-    })
-  }
-
-  riskOfNfa() {
-    const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
-    return this.params({
-      currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
-      nextAccommodation: null,
-      status: 'RISK_OF_NO_FIXED_ABODE',
-    })
-  }
-
-  nfa() {
-    return this.params({
-      currentAccommodation: null,
-      nextAccommodation: null,
-      status: 'NO_FIXED_ABODE',
-    })
-  }
-
   limitedAccess() {
     return this.params({
       name: null,
@@ -47,9 +20,6 @@ class CaseFactory extends Factory<Case> {
       riskLevel: null,
       pncReference: null,
       assignedTo: assignedUserFactory.build(),
-      currentAccommodation: null,
-      nextAccommodation: null,
-      status: null,
       actions: [],
       userAccess: 'LIMITED',
       limitedAccess: null,
@@ -64,10 +34,6 @@ class CaseFactory extends Factory<Case> {
 }
 
 export default CaseFactory.define(() => {
-  const status = faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE', 'TRANSIENT', 'SETTLED'])
-  const currentAccommodation = status === 'NO_FIXED_ABODE' ? null : accommodationSummaryFactory.current().build()
-  const nextAccommodation = status === 'RISK_OF_NO_FIXED_ABODE' ? null : accommodationSummaryFactory.next().build()
-
   return {
     name: faker.person.fullName(),
     crn: crn(),
@@ -77,9 +43,6 @@ export default CaseFactory.define(() => {
     riskLevel: riskLevel(),
     pncReference: pncReference(),
     assignedTo: assignedUserFactory.build(),
-    currentAccommodation,
-    nextAccommodation,
-    status,
     actions: actionFactory.buildList(faker.number.int({ min: 0, max: 3 })),
     userAccess: 'FULL' as const,
     limitedAccess: false,

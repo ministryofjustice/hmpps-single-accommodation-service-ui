@@ -116,7 +116,7 @@ export default class CasesController {
         upstreamFailures,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: renderActions(data.eligibility?.caseActions),
-        noFixedAbode: noFixedAbodeAlert(data.accommodationSummaries, data.currentAccommodation),
+        noFixedAbode: noFixedAbodeAlert(data.accommodationSummaries),
         nextAccommodationCard: accommodationCard('next', data.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', data.currentAccommodation),
         referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),

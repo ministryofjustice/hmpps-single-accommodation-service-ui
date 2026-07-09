@@ -1,7 +1,9 @@
 import { Factory } from 'fishery'
 import {
   AccommodationReferralDto,
+  AccommodationSummariesDto,
   AccommodationSummaryDto,
+  ApiResponseDtoAccommodationSummariesDto,
   ApiResponseDtoAccommodationSummaryDto,
   ApiResponseDtoCaseDto,
   ApiResponseDtoDutyToReferDto,
@@ -29,6 +31,7 @@ import auditRecordFactory from './auditRecord'
 import referenceDataFactory from './referenceData'
 import referralFactory from './referral'
 import accommodationSummaryFactory from './accommodationSummary'
+import accommodationSummariesFactory from './accommodationSummaries'
 import proposedAccommodationFactory from './proposedAccommodation'
 import upstreamFailureFactory from './upstreamFailure'
 
@@ -39,6 +42,12 @@ class ApiResponseFactory extends Factory<ApiResponse> {
 
   accommodationSummary(accommodationSummary?: AccommodationSummaryDto) {
     return this.buildResponse<ApiResponseDtoAccommodationSummaryDto>(accommodationSummary ?? null)
+  }
+
+  accommodationSummaries(accommodationSummaries?: AccommodationSummariesDto) {
+    return this.buildResponse<ApiResponseDtoAccommodationSummariesDto>(
+      accommodationSummaries ?? accommodationSummariesFactory.build(),
+    )
   }
 
   caseList(cases?: CaseDto[]) {

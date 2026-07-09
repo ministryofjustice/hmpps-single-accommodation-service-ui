@@ -6,7 +6,18 @@ import type { StaffDetailsDto } from './StaffDetailsDto'
 export type AccommodationReferralDto = {
   id: string
   type: 'CAS1' | 'CAS3' | 'DTR'
-  status: 'ACCEPTED' | 'REJECTED' | 'PENDING' | 'WITHDRAWN' | 'EXPIRED'
+  status:
+    | 'ACCEPTED'
+    | 'REJECTED'
+    | 'PENDING'
+    | 'WITHDRAWN'
+    | 'EXPIRED'
+    | 'NOT_ARRIVED'
+    | 'DEPARTED'
+    | 'CANCELLED'
+    | 'REQUEST_REJECTED'
+    | 'REQUEST_WITHDRAWN'
+    | 'ARCHIVED'
   assessmentStatus?: string | null
   requestForPlacementStatus?: string | null
   date: string

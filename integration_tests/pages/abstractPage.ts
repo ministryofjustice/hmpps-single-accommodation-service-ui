@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
-import { HtmlContent, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
+import { HtmlContent, TimelineEntry } from '@govuk/ui'
 import { formatDate } from '../../server/utils/dates'
 import { errorDateParts } from '../../server/utils/validation'
 

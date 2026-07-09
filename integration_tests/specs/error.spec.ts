@@ -28,4 +28,12 @@ test.describe('error handling', () => {
 
     await expect(page.locator('h1', { hasText: 'Page not found' })).toBeVisible()
   })
+
+  test('SAS API not authorised failure shows not authorised page', async ({ page }) => {
+    await casesApi.stubGetCases403()
+
+    await login(page)
+
+    await expect(page.locator('h1', { hasText: 'You do not have permission to access Accommodation' })).toBeVisible()
+  })
 })

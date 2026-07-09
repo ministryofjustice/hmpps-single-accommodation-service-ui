@@ -4,7 +4,9 @@
 
 {% block staticContent %}
   <h1 class="govuk-heading-l">You do not have permission to access {{ applicationName }}</h1>
-  <p>You are signed in as {{ user.username }}.</p>
+  {% if user and user.username %}
+    <p>You are signed in as {{ user.username }}.</p>
+  {% endif %}
   <p>If you are signed in with the wrong account, sign out and try again.</p>
   <h2 class="govuk-heading-m">Get access</h2>
   <p>Contact the helpdesk to request access, by calling:</p>

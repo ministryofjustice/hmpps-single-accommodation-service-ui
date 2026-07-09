@@ -50,7 +50,7 @@ describe('authorisationMiddleware', () => {
     authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
 
     expect(next).not.toHaveBeenCalled()
-    expect(res.redirect).toHaveBeenCalledWith('/authError')
+    expect(res.redirect).toHaveBeenCalledWith('/not-authorised')
   })
 
   it('should return next when user has authorised role', () => {

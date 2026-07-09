@@ -52,7 +52,6 @@ const dutyToReferController = mock<DutyToReferController>({
 })
 
 const staticController = mock<StaticController>({
-  notAuthorised: mockHandler,
   maintenance: mockHandler,
 })
 

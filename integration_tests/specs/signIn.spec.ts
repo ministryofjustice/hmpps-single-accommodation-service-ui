@@ -67,6 +67,8 @@ test.describe('SignIn', () => {
   test('User without allowed role sees permission error page', async ({ page }) => {
     await login(page, { name: 'A TestUser', roles: ['ROLE_NOT_ALLOWED'] })
 
-    await expect(page.getByRole('heading')).toHaveText('Authorisation Error')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'You do not have permission to access Accommodation',
+    )
   })
 })

@@ -14,14 +14,6 @@ describe('StaticController', () => {
     staticController = new StaticController()
   })
 
-  describe('notAuthorised', () => {
-    it('should render the not authorise page', () => {
-      staticController.notAuthorised()(request, response, next)
-
-      expect(response.render).toHaveBeenCalledWith('pages/static/not-authorised')
-    })
-  })
-
   describe('maintenance', () => {
     it('should render the maintenance page', () => {
       staticController.maintenance()(request, response, next)

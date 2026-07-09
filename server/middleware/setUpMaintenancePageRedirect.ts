@@ -4,7 +4,13 @@ import paths from '../paths/ui'
 
 export default function setUpMaintenancePageRedirect(): Router {
   const router = express.Router()
-  const allowedPaths = ['/sign-in', '/sign-in/callback', '/health', '/maintenance']
+  const allowedPaths = [
+    '/sign-in',
+    '/sign-in/callback',
+    '/health',
+    paths.static.maintenance({}),
+    paths.static.notAuthorised({}),
+  ]
 
   router.use((req, res, next) => {
     const allowedUsernames =

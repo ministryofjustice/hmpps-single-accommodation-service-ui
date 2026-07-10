@@ -179,6 +179,18 @@ describe('cases utilities', () => {
 
       expect(caseAssignedTo(person, 'current_user')).toEqual('unallocated')
     })
+
+    it('returns an empty string for a limited access case', () => {
+      const person = caseFactory.limitedAccess().build()
+
+      expect(caseAssignedTo(person, 'current_user')).toEqual('')
+    })
+
+    it('returns an empty string for an unknown access case', () => {
+      const person = caseFactory.unknownAccess().build()
+
+      expect(caseAssignedTo(person, 'current_user')).toEqual('')
+    })
   })
 
   describe('queryToFilters', () => {

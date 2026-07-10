@@ -372,8 +372,30 @@ describe('Proposed addresses utilities', () => {
 
         expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-          postcode: 'Enter a full UK postcode, like AA3 1AB',
+          postcode: 'Enter a full UK postcode',
         })
+      })
+
+      it('sets error when the property name or number is too long', () => {
+        const invalidLookup: ProposedAddressFormData = {
+          nameOrNumber: 'a'.repeat(256),
+          postcode: 'AB1 2CD',
+        }
+
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
+        expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+          nameOrNumber: 'Property name or number must be 255 characters or less',
+          postcode: undefined,
+        })
+      })
+
+      it('returns undefined when the property name or number is at the maximum length', () => {
+        const validLookup: ProposedAddressFormData = {
+          nameOrNumber: 'a'.repeat(255),
+          postcode: 'AB1 2CD',
+        }
+
+        expect(validateLookupFromSession(req, validLookup)).toBeUndefined()
       })
 
       it('returns undefined when data is valid', () => {

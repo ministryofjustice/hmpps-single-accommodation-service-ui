@@ -499,11 +499,11 @@ describe('validators', () => {
       ['AA11AA', undefined],
       [undefined, 'Enter a UK postcode'],
       ['', 'Enter a UK postcode'],
-      ['NOOO', 'Enter a full UK postcode, like AA3 1AB'],
-      ['1234567890', 'Enter a full UK postcode, like AA3 1AB'],
-      ['M145BNNNN', 'Enter a full UK postcode, like AA3 1AB'],
-      ['M14 5BNNNN', 'Enter a full UK postcode, like AA3 1AB'],
-      ['M23', 'Enter a full UK postcode, like AA3 1AB'],
+      ['NOOO', 'Enter a full UK postcode'],
+      ['1234567890', 'Enter a full UK postcode'],
+      ['M145BNNNN', 'Enter a full UK postcode'],
+      ['M14 5BNNNN', 'Enter a full UK postcode'],
+      ['M23', 'Enter a full UK postcode'],
     ])('returns the expected error for value %s', (value, expected) => {
       expect(validatePostcode(value)).toBe(expected)
     })

@@ -197,7 +197,7 @@ export default class ProposedAddressesController {
       const lookupResults = await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
 
       if (!lookupResults.length) {
-        addGenericErrorToFlash(req, 'No addresses found for this property name or number and UK postcode')
+        addGenericErrorToFlash(req, 'No address found. Check details')
         return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
       }
 

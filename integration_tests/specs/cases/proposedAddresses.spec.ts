@@ -377,9 +377,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Find address')
 
     // Then I should see an error
-    await addProposedAddressPage.shouldShowGenericErrorMessage(
-      'No addresses found for this property name or number and UK postcode',
-    )
+    await addProposedAddressPage.shouldShowGenericErrorMessage('No address found. Check details')
 
     // When I change the postcode to one with one result
     await addProposedAddressPage.completeLookupForm('19a', 'M21 0BP')

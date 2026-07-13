@@ -223,5 +223,5 @@ export const validateDateField = (parts: DateFieldParts, label: string, yearLabe
 
 export const validatePostcode = (value: string | undefined): string | undefined => {
   if (!value) return 'Enter a UK postcode'
-  return isValidUKPostcode(value) ? undefined : 'Enter a full UK postcode'
+  return isValidUKPostcode(value) ? undefined : 'Enter a valid UK postcode'
 }

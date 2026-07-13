@@ -155,7 +155,10 @@ describe('accommodationSummary', () => {
         currentAccommodation: accommodationSummaryFactory.current().build({ endDate: '2026-06-01' }),
         nextAccommodation: accommodationSummaryFactory.next().build({ endDate: '2026-08-15' }),
       })
-      expect(noFixedAbodeAlert(accommodationSummaries)).toEqual({ status: 'RISK_OF_NO_FIXED_ABODE', date: '2026-08-15' })
+      expect(noFixedAbodeAlert(accommodationSummaries)).toEqual({
+        status: 'RISK_OF_NO_FIXED_ABODE',
+        date: '2026-08-15',
+      })
     })
 
     it('returns a null date when neither accommodation has an end date', () => {

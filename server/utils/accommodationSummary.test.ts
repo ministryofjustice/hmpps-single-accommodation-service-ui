@@ -149,5 +149,21 @@ describe('accommodationSummary', () => {
       })
       expect(noFixedAbodeAlert(accommodationSummaries)).toMatchSnapshot()
     })
+
+    it('uses the next accommodation end date when available for RISK_OF_NO_FIXED_ABODE status', () => {
+      const accommodationSummaries = accommodationSummariesFactory.riskOfNfa().build({
+        currentAccommodation: accommodationSummaryFactory.current().build({ endDate: '2026-06-01' }),
+        nextAccommodation: accommodationSummaryFactory.next().build({ endDate: '2026-08-15' }),
+      })
+      expect(noFixedAbodeAlert(accommodationSummaries)).toEqual({ status: 'RISK_OF_NO_FIXED_ABODE', date: '2026-08-15' })
+    })
+
+    it('returns a null date when neither accommodation has an end date', () => {
+      const accommodationSummaries = accommodationSummariesFactory.riskOfNfa().build({
+        currentAccommodation: accommodationSummaryFactory.current().build({ endDate: undefined }),
+        nextAccommodation: null,
+      })
+      expect(noFixedAbodeAlert(accommodationSummaries)).toEqual({ status: 'RISK_OF_NO_FIXED_ABODE', date: null })
+    })
   })
 })

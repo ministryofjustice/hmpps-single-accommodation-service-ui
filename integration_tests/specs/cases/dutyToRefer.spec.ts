@@ -137,7 +137,7 @@ test.describe('duty to refer', () => {
     await ProfileTrackerPage.verifyOnPage(page, caseData)
 
     // And I should see a success banner confirming referral details were added
-    await profileTrackerPage.shouldShowBanner('New DTR referral details added')
+    await profileTrackerPage.shouldShowBanner('DTR referral details added')
 
     // And I should see the new DTR eligibility card
     await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(crn, eligibility.dtr))
@@ -292,7 +292,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming submission details were updated
-    await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
+    await dutyToReferDetailsPage.shouldShowBanner('Referral details changed')
 
     // And I should see a timeline entry showing the submission details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
@@ -367,7 +367,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowSubmissionDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming submission details were updated
-    await dutyToReferDetailsPage.shouldShowBanner('Submission details updated')
+    await dutyToReferDetailsPage.shouldShowBanner('Referral details changed')
 
     // And I should see a timeline entry showing the submission details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
@@ -421,7 +421,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(acceptedDutyToRefer)
 
     // Then I click the Change link on outcome details
-    await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Outcome details'))
+    await dutyToReferDetailsPage.clickLink('Change', dutyToReferDetailsPage.getSummaryCard('Outcome'))
 
     // Then I should see the duty to refer edit outcome form
     const dutyToReferPage = await DutyToReferPage.verifyOnPage(page, 'Edit Duty to Refer (DTR) outcome')
@@ -444,7 +444,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowOutcomeDetails(updatedDutyToRefer)
 
     // And I should see a success banner confirming outcome details were updated
-    await dutyToReferDetailsPage.shouldShowBanner('Outcome details updated')
+    await dutyToReferDetailsPage.shouldShowBanner('Outcome details changed')
 
     // And I should see a timeline entry showing the outcome details were updated
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(updatedDutyToReferRecord))
@@ -486,7 +486,7 @@ test.describe('duty to refer', () => {
     await dutyToReferDetailsPage.shouldShowTimelineEntry(dutyToReferTimelineEntry(submissionAddedDutyReferRecord))
 
     // And I click the Withdraw referral button
-    await dutyToReferDetailsPage.clickButton('Withdraw referral')
+    await dutyToReferDetailsPage.clickButton('Withdraw this referral')
 
     // Then I should see the duty to refer withdrawal form
     const dutyToReferWithdrawPage = await DutyToReferPage.verifyOnPage(page, 'Withdraw referral')

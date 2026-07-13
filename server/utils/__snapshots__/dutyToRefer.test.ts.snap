@@ -305,7 +305,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry includes outcome support t
     "type": "datetime",
   },
   "html": "
-    <p><strong class="govuk-tag govuk-tag--yellow">Accepted</strong></p>
+    <p><strong class="govuk-tag govuk-tag--green">Accepted</strong></p>
   
 
   
@@ -457,7 +457,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "type": "datetime",
   },
   "html": "
-    <p><strong class="govuk-tag govuk-tag--yellow">Accepted</strong></p>
+    <p><strong class="govuk-tag govuk-tag--green">Accepted</strong></p>
   
 
   
@@ -664,7 +664,7 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "text": "Status",
     },
     "value": {
-      "html": "<strong class="govuk-tag govuk-tag--yellow">Accepted</strong> <p class="govuk-!-margin-top-4">Some Council agreed to support this person with housing</p>",
+      "html": "<strong class="govuk-tag govuk-tag--green">Accepted</strong> <p class="govuk-!-margin-top-4">Some Council agreed to support this person with housing</p>",
     },
   },
   {

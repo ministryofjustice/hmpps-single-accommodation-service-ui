@@ -35,7 +35,7 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   }
 
   async shouldShowOutcomeDetails(dutyToRefer: DutyToReferDto) {
-    await expect(this.page.getByRole('heading', { name: 'Outcome details', exact: true })).toBeVisible()
+    await expect(this.page.getByRole('heading', { name: 'Outcome', exact: true })).toBeVisible()
 
     const statusText = `${formatDutyToReferStatus(dutyToRefer.status)} ${outcomeSupportText(dutyToRefer)}`
     await this.shouldShowSummaryItem('Status', statusText)
@@ -43,15 +43,15 @@ export default class DutyToReferDetailsPage extends PageWithCaseDetails {
   }
 
   async shouldNotShowOutcomeDetails() {
-    await expect(this.page.getByRole('heading', { name: 'Outcome details', exact: true })).not.toBeVisible()
+    await expect(this.page.getByRole('heading', { name: 'Outcome', exact: true })).not.toBeVisible()
   }
 
   async shouldShowWithdrawReferralButton() {
-    await expect(this.page.getByRole('button', { name: 'Withdraw referral' })).toBeVisible()
+    await expect(this.page.getByRole('button', { name: 'Withdraw this referral' })).toBeVisible()
   }
 
   async shouldNotShowWithdrawReferralButton() {
-    await expect(this.page.getByRole('button', { name: 'Withdraw referral' })).not.toBeVisible()
+    await expect(this.page.getByRole('button', { name: 'Withdraw this referral' })).not.toBeVisible()
   }
 
   async shouldShowAddNewReferralButton() {

@@ -4,7 +4,8 @@
   {% if errorList | length %}
     {{ govukErrorSummary({
       titleText: errorTitle if errorTitle else "There is a problem",
-      errorList: errorList
+      errorList: errorList,
+      classes: "govuk-!-margin-top-6 govuk-!-margin-bottom-7"
     }) }}
   {% endif %}
 {% endmacro %}

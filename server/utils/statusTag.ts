@@ -27,7 +27,7 @@ export const serviceStatusTag = (status?: ServiceResult['serviceStatus']): Statu
     BEDSPACE_OFFERED: { text: 'Bedspace offered' },
     BOOKING_CONFIRMED: { text: 'Booking confirmed' },
     BOOKING_CANCELLED: { text: 'Booking cancelled' },
-    ACCEPTED: { text: 'Accepted', colour: 'yellow' },
+    ACCEPTED: { text: 'Accepted', colour: 'green' },
     NOT_ACCEPTED: { text: 'Not accepted', colour: 'grey' },
     COMPLETED: { text: 'Completed', colour: 'green' },
   })[status] || { text: 'Unknown' }

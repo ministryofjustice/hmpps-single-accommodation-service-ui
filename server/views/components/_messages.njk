@@ -1,12 +1,14 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
-{% if successMessages %}
-    {% for message in successMessages %}
-        {{ govukNotificationBanner({
-            html: '<h3 class="govuk-notification-banner__heading">' + (message.heading or message) + '</h3> ' + (message.body or ''),
-            type: 'success',
-            titleId: 'success-title-' ~ loop.index0,
-            classes: 'govuk-notification-banner--full-width-content'
-        }) }}
-    {% endfor %}
+{% if successMessages and successMessages.length %}
+    <div class="govuk-!-padding-top-6">
+        {% for message in successMessages %}
+            {{ govukNotificationBanner({
+                html: '<h3 class="govuk-notification-banner__heading">' + (message.heading or message) + '</h3> ' + (message.body or ''),
+                type: 'success',
+                titleId: 'success-title-' ~ loop.index0,
+                classes: 'govuk-notification-banner--full-width-content govuk-!-margin-bottom-7'
+            }) }}
+        {% endfor %}
+    </div>
 {% endif %}

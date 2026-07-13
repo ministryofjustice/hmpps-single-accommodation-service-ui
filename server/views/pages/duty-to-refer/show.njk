@@ -57,7 +57,7 @@
             {% endif %}
             {{
               govukButton({
-                text: "Withdraw referral",
+                text: "Withdraw this referral",
                 href: paths.dutyToRefer.withdraw({ crn: crn, id: dtrId }),
                 preventDoubleClick: true,
                 classes: "govuk-button--secondary"
@@ -79,13 +79,13 @@
             govukSummaryList({
                 card: {
                   title: {
-                    text: "Outcome details"
+                    text: "Outcome"
                   },
                   actions: {
                     items: [
                       {
                         href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
-                        classes: "govuk-!-font-weight-regular",
+                        classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
                         text: "Change"
                       }
                     ]
@@ -105,7 +105,7 @@
                   items: [
                     {
                       href: paths.dutyToRefer.edit({ crn: crn, id: dtrId }),
-                      classes: "govuk-!-font-weight-regular",
+                      classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
                       text: "Change"
                     }
                   ]

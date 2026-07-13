@@ -141,7 +141,7 @@ export default class DutyToReferController {
             submission.outcomeNote = dtr.submission?.outcomeNote || null
           }
           await this.dutyToReferService.update(token, crn, id, submission)
-          req.flash('success', 'Submission details updated')
+          req.flash('success', 'Referral details changed')
           return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         }
 
@@ -157,7 +157,7 @@ export default class DutyToReferController {
             body: `<p>The previous referral has been moved to ${name}'s referral history</p>`,
           })
         } else {
-          req.flash('success', 'New DTR referral details added')
+          req.flash('success', 'DTR referral details added')
         }
 
         return res.redirect(uiPaths.cases.show({ crn }))
@@ -235,7 +235,7 @@ export default class DutyToReferController {
           outcomeNote: outcomeNote || null,
         })
 
-        req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details updated' : 'Outcome details added')
+        req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details changed' : 'Outcome details added')
         return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')

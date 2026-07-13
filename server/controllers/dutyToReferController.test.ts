@@ -175,7 +175,7 @@ describe('dutyToReferController', () => {
         submissionNote: 'This is a note',
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
-      expect(request.flash).toHaveBeenCalledWith('success', 'New DTR referral details added')
+      expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral details added')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
     })
 
@@ -196,7 +196,7 @@ describe('dutyToReferController', () => {
         submissionNote: null,
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
-      expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
+      expect(request.flash).toHaveBeenCalledWith('success', 'Referral details changed')
       expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
     })
 
@@ -221,7 +221,7 @@ describe('dutyToReferController', () => {
         outcomeNote: 'This is an outcome note',
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
-      expect(request.flash).toHaveBeenCalledWith('success', 'Submission details updated')
+      expect(request.flash).toHaveBeenCalledWith('success', 'Referral details changed')
       expect(response.redirect).toHaveBeenCalledWith(expectedRedirect)
     })
 
@@ -388,7 +388,7 @@ describe('dutyToReferController', () => {
         submissionNote: null,
         outcomeNote: 'Some note',
       })
-      expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details updated')
+      expect(request.flash).toHaveBeenCalledWith('success', 'Outcome details changed')
       expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/dtr/submission-id/details')
     })
 

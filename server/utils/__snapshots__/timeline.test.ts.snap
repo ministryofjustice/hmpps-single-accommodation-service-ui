@@ -9,7 +9,10 @@ exports[`noteTimelineEntry returns a formatted note timeline entry 1`] = `
     "timestamp": "2026-03-25T15:22:00.000Z",
     "type": "datetime",
   },
-  "html": "<p>Line 1</p><p>Line 2</p>",
+  "html": "<div class="sas-text-block">Line 1
+
+
+Line 2</div>",
   "label": {
     "text": "Note added",
   },

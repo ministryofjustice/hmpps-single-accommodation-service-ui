@@ -1,25 +1,28 @@
 {%- from "components/macros/statusTag.njk" import statusTag %}
 
 {%- macro timelineDutyToRefer(context) -%}
-  {% if context.status %}
+  {% if context.status -%}
     <p>{{ statusTag(context.status) }}</p>
-  {% endif %}
+  {%- endif %}
 
-  {% for item in context.values %}
-    {% if not item.isList and item.value %}
-      <p class="{{ 'govuk-!-margin-bottom-1' if item.showLabel }}">
-        {% if item.showLabel %}{{ item.label }}: {% endif %}{{ item.value }}
-      </p>
-    {% endif %}
-  {% endfor %}
+  {% if context.summary -%}
+    <p>{{ context.summary }}</p>
+  {%- endif %}
 
-  {% if context.hasListItems %}
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-      {% for item in context.values %}
-        {% if item.isList and item.value %}
-          <li>{% if item.showLabel %}{{ item.label }} changed to: {% endif %}{{ item.value }}</li>
-        {% endif %}
-      {% endfor %}
+  {% if context.values | length -%}
+    <ul class="govuk-list {{ 'govuk-list--bullet' if context.isChange }} govuk-!-margin-bottom-0">
+      {%- for item in context.values %}
+        <li>
+          {% if item.label -%}
+            {%- set label = item.label -%}
+            {%- if context.isChange %}{% set label = label + ' changed to' %}{% endif -%}
+            {%- if not context.isChange or item.label == 'Note' %}{% set label = label + ':' %}{% endif -%}
+            {{- label -}}
+          {%- endif %}
+
+          {% if item.value.text %}{{ item.value.text }}{% elseif item.value.html %}{{ item.value.html | safe }}{% endif %}
+        </li>
+      {% endfor -%}
     </ul>
-  {% endif %}
+  {%- endif %}
 {%- endmacro -%}

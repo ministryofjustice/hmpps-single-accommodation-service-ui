@@ -1,23 +1,24 @@
 import { Request } from 'express'
 import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
-import { Link, StatusCard } from '@sas/ui'
-import { formatDateAndDaysAgo, isoDateToDateInput, formatDateAndAge, dateFieldParts } from './dates'
+import { Link, StatusCard, TimelineValue } from '@sas/ui'
+import { dateFieldParts, formatDate, formatDateAndAge, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import uiPaths from '../paths/ui'
 import {
   validateAndFlashErrors,
-  validateRadioButton,
-  validateMandatoryText,
-  validateMaxLength,
   validateAutocomplete,
   validateDateField,
   validateDateTodayOrPast,
   validateDateWithinLastXMonths,
+  validateMandatoryText,
+  validateMaxLength,
+  validateRadioButton,
 } from './validation'
-import { renderMacro, statusTag } from './macros'
-import { summaryListRowHtml, summaryListRowOptional, summaryListRowText } from './utils'
+import { renderMacro, statusTag, textBlock } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
+import { summaryListRow } from './summaryListRow'
+import { htmlContent, noValueHtml, textContent } from './utils'
 
 const REFERENCE_REMOVED_LABEL = 'Reference removed'
 const NOTE_REMOVED_LABEL = 'Note removed'
@@ -76,17 +77,17 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
 
 export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
   const rows = [
-    summaryListRowText('Name', caseData.name),
-    summaryListRowText('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
-    summaryListRowText('CRN', caseData.crn),
+    summaryListRow('Name', caseData.name),
+    summaryListRow('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
+    summaryListRow('CRN', caseData.crn),
   ]
   if (caseData.prisonNumber) {
-    rows.push(summaryListRowText('Prison number', caseData.prisonNumber))
+    rows.push(summaryListRow('Prison number', caseData.prisonNumber))
   }
   if (dutyToRefer) {
-    rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+    rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
     rows.push(
-      summaryListRowText(
+      summaryListRow(
         'Date submitted',
         dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
       ),
@@ -100,17 +101,19 @@ export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) 
   const rows = []
 
   if (dutyToRefer?.status === 'SUBMITTED' || dutyToRefer?.status === 'WITHDRAWN') {
-    rows.push(summaryListRowHtml('Status', statusTag(serviceStatusTag(dutyToRefer.status))))
+    rows.push(summaryListRow('Status', statusTag(serviceStatusTag(dutyToRefer.status)), { type: 'html' }))
   }
   rows.push(
-    summaryListRowText(
+    summaryListRow(
       'Date submitted',
       dutyToRefer.submission.submissionDate ? formatDateAndDaysAgo(dutyToRefer.submission.submissionDate) : '',
     ),
   )
-  rows.push(summaryListRowText('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
-  rows.push(summaryListRowOptional('Reference', dutyToRefer.submission.referenceNumber, 'No reference added'))
-  rows.push(summaryListRowOptional('Note', dutyToRefer.submission.submissionNote, 'No note added'))
+  rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
+  rows.push(summaryListRow('Reference', dutyToRefer.submission.referenceNumber, { noValue: 'No reference added' }))
+  rows.push(
+    summaryListRow('Note', dutyToRefer.submission.submissionNote, { type: 'textBlock', noValue: 'No note added' }),
+  )
   return rows
 }
 
@@ -120,12 +123,13 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
   }
 
   return [
-    summaryListRowHtml(
+    summaryListRow(
       'Status',
       `${statusTag(serviceStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
+      { type: 'html' },
     ),
-    summaryListRowText('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
-    summaryListRowOptional('Note', dutyToRefer.submission.outcomeNote, 'No note added'),
+    summaryListRow('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
+    summaryListRow('Note', dutyToRefer.submission.outcomeNote, { type: 'textBlock', noValue: 'No note added' }),
   ]
 }
 
@@ -143,10 +147,10 @@ export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
     case 'ACCEPTED':
     case 'SUBMITTED':
       return [
-        summaryListRowText('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
-        summaryListRowOptional('Reference', submission?.referenceNumber, 'No reference added'),
-        summaryListRowText('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
-        summaryListRowText('Submitted by', submission?.createdBy),
+        summaryListRow('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
+        summaryListRow('Reference', submission?.referenceNumber, { noValue: 'No reference added' }),
+        summaryListRow('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
+        summaryListRow('Submitted by', submission?.createdBy),
       ]
     case 'NOT_ELIGIBLE':
     case 'NOT_STARTED':
@@ -243,43 +247,43 @@ const auditRecordChangesToDutyToRefer = (auditRecord: AuditRecordDto): Partial<D
   } as DutyToReferDto
 }
 
-type TimelineValue = { label: string; value: string; showLabel: boolean; isList?: boolean }
-const submissionValues = (submission: Partial<DtrSubmissionDto>, isList: boolean): TimelineValue[] => [
-  {
-    label: 'Date submitted',
-    value: submission.submissionDate ? formatDateAndDaysAgo(submission.submissionDate) : '',
-    showLabel: true,
-    isList,
-  },
-  { label: 'Local authority', value: submission.localAuthority?.localAuthorityAreaName, showLabel: true, isList },
-  {
-    label: 'Reference',
-    value: submission.referenceNumber || (isList ? '' : 'No reference added'),
-    showLabel: submission.referenceNumber !== REFERENCE_REMOVED_LABEL,
-    isList,
-  },
-  {
-    label: 'Note',
-    value: submission.submissionNote || (isList ? '' : 'No note added'),
-    showLabel: submission.submissionNote !== NOTE_REMOVED_LABEL,
-    isList,
-  },
-]
+const submissionValues = (submission: Partial<DtrSubmissionDto>, isChange: boolean): TimelineValue[] =>
+  [
+    submission.submissionDate && {
+      label: 'Date submitted',
+      value: textContent(formatDate(submission.submissionDate)),
+    },
+    submission.localAuthority && {
+      label: 'Local authority',
+      value: textContent(submission.localAuthority?.localAuthorityAreaName),
+    },
+    (submission.referenceNumber || !isChange) && {
+      label: submission.referenceNumber !== REFERENCE_REMOVED_LABEL ? 'Reference' : undefined,
+      value:
+        (submission.referenceNumber && textContent(submission.referenceNumber)) ||
+        (isChange ? textContent('') : htmlContent(noValueHtml('No reference added'))),
+    },
+    (submission.submissionNote || !isChange) && {
+      label: submission.submissionNote !== NOTE_REMOVED_LABEL ? 'Note' : undefined,
+      value:
+        (submission.submissionNote && htmlContent(textBlock(submission.submissionNote))) ||
+        (isChange ? textContent('') : htmlContent(noValueHtml('No note added'))),
+    },
+  ].filter(Boolean)
 
-const outcomeValues = (
-  submission: Partial<DtrSubmissionDto>,
-  outcomeText: string | undefined,
-  isList: boolean,
-): TimelineValue[] => [
-  { label: 'Outcome', value: outcomeText, showLabel: false, isList: false },
-  { label: 'Reason', value: outcomeReasonSummaryLabels[submission.outcomeReason], showLabel: true, isList },
-  {
-    label: 'Note',
-    value: submission.outcomeNote || (isList ? '' : 'No note added'),
-    showLabel: submission.outcomeNote !== NOTE_REMOVED_LABEL,
-    isList,
-  },
-]
+const outcomeValues = (submission: Partial<DtrSubmissionDto>, isChange: boolean): TimelineValue[] =>
+  [
+    submission.outcomeReason && {
+      label: 'Reason',
+      value: textContent(outcomeReasonSummaryLabels[submission.outcomeReason]),
+    },
+    (submission.outcomeNote || !isChange) && {
+      label: submission.outcomeNote !== NOTE_REMOVED_LABEL ? 'Note' : undefined,
+      value:
+        (submission.outcomeNote && htmlContent(textBlock(submission.outcomeNote))) ||
+        (isChange ? textContent('') : htmlContent(noValueHtml('No note added'))),
+    },
+  ].filter(Boolean)
 
 export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
   const { type } = auditRecord
@@ -294,27 +298,31 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
   const outcomeText = isOutcome && localAuthorityName ? outcomeSupportText(dtr as DutyToReferDto) : undefined
 
   let label: string
+  let summary: string
   let values: TimelineValue[]
+  let isChange = false
 
   if (type === 'CREATE') {
-    label = 'Submission details added'
+    label = 'Referral details added'
     values = submissionValues(submission, false)
   } else if (status === 'WITHDRAWN') {
     label = 'Referral withdrawn'
-    values = [
-      { label: 'Reason', value: withdrawReasonLabels[submission.withdrawalReason], showLabel: true, isList: false },
-    ]
+    values = [{ label: 'Reason', value: textContent(withdrawReasonLabels[submission.withdrawalReason]) }]
   } else if (isOutcome && statusChange?.oldValue === 'SUBMITTED') {
     label = 'Outcome details added'
-    values = outcomeValues(submission, outcomeText, false)
+    summary = outcomeText
+    values = outcomeValues(submission, false)
   } else if (isOutcome) {
     label = 'Outcome details changed'
+    isChange = true
     const hasStatusChanged = statusChange?.oldValue !== statusChange?.value
     const outcomeNoteChange = auditRecord.changes.find(change => change.field === 'outcomeNote')
     const outcomeNote = outcomeNoteChange && (outcomeNoteChange.value || NOTE_REMOVED_LABEL)
-    values = outcomeValues({ ...submission, outcomeNote }, hasStatusChanged ? outcomeText : '', true)
+    summary = hasStatusChanged ? outcomeText : ''
+    values = outcomeValues({ ...submission, outcomeNote }, true)
   } else {
-    label = 'Submission details changed'
+    label = 'Referral details changed'
+    isChange = true
     const localAuthority =
       auditRecord.changes.some(change => change.field === 'localAuthorityAreaId') && submission.localAuthority
     const referenceChange = auditRecord.changes.find(change => change.field === 'referenceNumber')
@@ -328,15 +336,16 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
         referenceNumber,
         submissionNote,
       },
-      true,
+      isChange,
     )
   }
 
   const html = renderMacro('timelineDutyToRefer', {
     type,
     status: status ? serviceStatusTag(status) : undefined,
+    summary,
     values,
-    hasListItems: values.some(item => item.isList && item.value),
+    isChange,
   })
 
   return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)

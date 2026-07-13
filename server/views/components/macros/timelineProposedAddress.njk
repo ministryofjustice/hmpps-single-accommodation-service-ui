@@ -8,15 +8,11 @@
     <p>{{ statusTag(context.status) }}</p>
   {% endif %}
 
-  {% for label, value in context.values %}
-    {% if value %}
-      {% if label === 'Address' %}
-        <p class="govuk-!-margin-bottom-1">
-          {{ prefix }}{% for line in value %}{% if changed or not loop.first %}<br>{% endif %}{{ line }}{% endfor %}
-        </p>
-      {% else %}
-        <p class="govuk-!-margin-bottom-1">{{ prefix }} {{ value }}</p>
-      {% endif %}
-    {% endif %}
-  {% endfor %}
+  {% if context.values | length -%}
+    <ul class="govuk-list govuk-!-margin-bottom-0">
+      {% for item in context.values %}
+        <li>{{ prefix }} {% if item.value.text %}{{ item.value.text }}{% elseif item.value.html %}{{ item.value.html | safe }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+  {%- endif %}
 {%- endmacro -%}

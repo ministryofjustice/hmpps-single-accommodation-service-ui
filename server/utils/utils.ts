@@ -1,4 +1,4 @@
-import { HtmlContent, SummaryListActionItem, SummaryListRow, TextContent } from '@govuk/ui'
+import { HtmlContent, TextContent } from '@govuk/ui'
 import { ErrorMessages, RadioItem, SelectOption } from '@sas/ui'
 import { errorDateParts } from './validation'
 
@@ -62,36 +62,8 @@ export const convertObjectsToSelectOptions = (
   return options
 }
 
-export const summaryListRowText = (label: string, value: string, actions?: SummaryListActionItem[]): SummaryListRow => {
-  const row: SummaryListRow = {
-    key: textContent(label),
-    value: textContent(value),
-  }
-
-  if (actions) {
-    row.actions = { items: actions }
-  }
-
-  return row
-}
-
-export const summaryListRowHtml = (
-  label: string,
-  value: string,
-  actions?: SummaryListActionItem[],
-): SummaryListRow => ({
-  ...summaryListRowText(label, value, actions),
-  value: htmlContent(value),
-})
-
 export const noValueHtml = (text: string, classes: string = 'sas-colour--dark-grey'): string =>
   `<span class="${classes}">${text}</span>`
-
-export const summaryListRowOptional = (
-  label: string,
-  value: string | undefined,
-  noValueText: string,
-): SummaryListRow => (value ? summaryListRowText(label, value) : summaryListRowHtml(label, noValueHtml(noValueText)))
 
 export const radioItems = (labels: Record<string, string>, selectedValue?: string): RadioItem[] =>
   Object.entries(labels).map(([value, text]) => ({

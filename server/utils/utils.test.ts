@@ -4,9 +4,6 @@ import {
   dateFieldValues,
   htmlContent,
   initialiseName,
-  summaryListRowOptional,
-  summaryListRowText,
-  summaryListRowHtml,
   textContent,
   toParagraphs,
   radioItems,
@@ -131,76 +128,6 @@ describe('convertObjectsToSelectOptions', () => {
         selected: false,
       },
     ])
-  })
-})
-
-describe('summaryListRowText', () => {
-  it('returns a row for a summary list', () => {
-    expect(summaryListRowText('Label', 'Value')).toEqual({
-      key: { text: 'Label' },
-      value: { text: 'Value' },
-    })
-  })
-
-  it('returns a row for a summary list with actions', () => {
-    expect(
-      summaryListRowText('Label', 'Value', [
-        { text: 'Link 1', href: '#' },
-        { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
-      ]),
-    ).toEqual({
-      key: { text: 'Label' },
-      value: { text: 'Value' },
-      actions: {
-        items: [
-          { text: 'Link 1', href: '#' },
-          { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
-        ],
-      },
-    })
-  })
-})
-
-describe('summaryListRowHtml', () => {
-  it('returns a row for a summary list with HTML content', () => {
-    expect(summaryListRowHtml('Label', '<p>Value</p>')).toEqual({
-      key: { text: 'Label' },
-      value: { html: '<p>Value</p>' },
-    })
-  })
-
-  it('returns a row for a summary list with HTML content and actions', () => {
-    expect(
-      summaryListRowHtml('Label', '<p>Value</p>', [
-        { text: 'Link 1', href: '#' },
-        { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
-      ]),
-    ).toEqual({
-      key: { text: 'Label' },
-      value: { html: '<p>Value</p>' },
-      actions: {
-        items: [
-          { text: 'Link 1', href: '#' },
-          { text: 'Link 2', href: '/foo', classes: 'foo-bar' },
-        ],
-      },
-    })
-  })
-})
-
-describe('summaryListRowOptional', () => {
-  it('returns a row for summary list when value is present', () => {
-    expect(summaryListRowOptional('Reference', 'ABC123', 'No reference added')).toEqual({
-      key: { text: 'Reference' },
-      value: { text: 'ABC123' },
-    })
-  })
-
-  it('returns a row for summary list when value is undefined', () => {
-    expect(summaryListRowOptional('Reference', undefined, 'No reference added')).toEqual({
-      key: { text: 'Reference' },
-      value: { html: '<span class="sas-colour--dark-grey">No reference added</span>' },
-    })
   })
 })
 

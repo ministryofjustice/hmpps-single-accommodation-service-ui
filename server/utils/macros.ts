@@ -20,6 +20,7 @@ type Macro =
   | 'timelineProposedAddress'
   | 'actionsCell'
   | 'govukDetails'
+  | 'textBlock'
 
 export const renderMacro = <T>(macroName: Macro, context: T): string =>
   nunjucksInline().renderString(
@@ -39,3 +40,5 @@ export const tierScoreTag = (tierScore: CaseDto['tierScore']) => renderMacro('ti
 export const statusCard = (cardData: StatusCard) => renderMacro('statusCard', cardData)
 
 export const govukDetails = (summaryText: string, text: string) => renderMacro('govukDetails', { summaryText, text })
+
+export const textBlock = (text?: string) => renderMacro('textBlock', text)

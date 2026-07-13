@@ -31,7 +31,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Note",
     },
     "value": {
-      "text": "This is a submission note",
+      "html": "<div class="sas-text-block">This is a submission note</div>",
     },
   },
 ]
@@ -68,7 +68,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Note",
     },
     "value": {
-      "text": "This is a submission note",
+      "html": "<div class="sas-text-block">This is a submission note</div>",
     },
   },
 ]
@@ -113,7 +113,7 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
       "text": "Note",
     },
     "value": {
-      "text": "This is a submission note",
+      "html": "<div class="sas-text-block">This is a submission note</div>",
     },
   },
 ]
@@ -222,31 +222,17 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not include outcome s
     "timestamp": "2025-04-16T09:00:00.000Z",
     "type": "datetime",
   },
-  "html": "
-    <p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
-  
+  "html": "<p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
 
   
-    
-  
-    
-  
-    
-  
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-      
-        
-      
-        
-          <li>Reason changed to: No local connection</li>
-        
-      
-        
-      
-    </ul>
-  ",
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          Reason changed to
+
+          No local connection
+        </li>
+      </ul>",
   "label": {
     "text": "Outcome details changed",
   },
@@ -265,32 +251,16 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not show local author
   "html": "
 
   
-    
-  
-    
-  
-    
-  
-    
-  
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-      
-        
-          <li>Date submitted changed to: 17 April 2025 (237 days ago)</li>
-        
-      
-        
-      
-        
-      
-        
-      
-    </ul>
-  ",
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          Date submitted changed to
+
+          17 April 2025
+        </li>
+      </ul>",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -304,35 +274,17 @@ exports[`duty to refer utils dutyToReferTimelineEntry includes outcome support t
     "timestamp": "2025-04-16T09:00:00.000Z",
     "type": "datetime",
   },
-  "html": "
-    <p><strong class="govuk-tag govuk-tag--green">Accepted</strong></p>
-  
+  "html": "<p><strong class="govuk-tag govuk-tag--green">Accepted</strong></p>
 
-  
-    
-      <p class="">
-        West Oxfordshire District Council agreed to support this person with housing
-      </p>
-    
-  
-    
-  
-    
-  
+  <p>West Oxfordshire District Council agreed to support this person with housing</p>
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-      
-        
-      
-        
-          <li>Reason changed to: Prevention and relief duty</li>
-        
-      
-        
-      
-    </ul>
-  ",
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          Reason changed to
+
+          Prevention and relief duty
+        </li>
+      </ul>",
   "label": {
     "text": "Outcome details changed",
   },
@@ -348,14 +300,15 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "timestamp": "2025-04-15T14:30:00.000Z",
     "type": "datetime",
   },
-  "html": "<p>Some note</p><p>line 2</p>",
+  "html": "<div class="sas-text-block">Some note
+line 2</div>",
   "label": {
     "text": "Note added",
   },
 }
 `;
 
-exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission added record 1`] = `
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission added record with no reference or note 1`] = `
 {
   "byline": {
     "text": "Jane Doe",
@@ -364,39 +317,82 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "timestamp": "2025-04-12T17:07:00.000Z",
     "type": "datetime",
   },
-  "html": "
-    <p><strong class="govuk-tag govuk-tag--yellow">Submitted</strong></p>
-  
+  "html": "<p><strong class="govuk-tag govuk-tag--yellow">Submitted</strong></p>
 
   
-    
-      <p class="govuk-!-margin-bottom-1">
-        Date submitted: 12 April 2025 (242 days ago)
-      </p>
-    
-  
-    
-      <p class="govuk-!-margin-bottom-1">
-        Local authority: Cherwell District Council
-      </p>
-    
-  
-    
-      <p class="govuk-!-margin-bottom-1">
-        Reference: REF123
-      </p>
-    
-  
-    
-      <p class="govuk-!-margin-bottom-1">
-        Note: No note added
-      </p>
-    
-  
 
-  ",
+  <ul class="govuk-list  govuk-!-margin-bottom-0">
+        <li>
+          Date submitted:
+
+          12 April 2025
+        </li>
+      
+        <li>
+          Local authority:
+
+          Cherwell District Council
+        </li>
+      
+        <li>
+          Reference:
+
+          <span class="sas-colour--dark-grey">No reference added</span>
+        </li>
+      
+        <li>
+          Note:
+
+          <span class="sas-colour--dark-grey">No note added</span>
+        </li>
+      </ul>",
   "label": {
-    "text": "Submission details added",
+    "text": "Referral details added",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry for a submission added record with reference and note 1`] = `
+{
+  "byline": {
+    "text": "Jane Doe",
+  },
+  "datetime": {
+    "timestamp": "2025-04-12T17:07:00.000Z",
+    "type": "datetime",
+  },
+  "html": "<p><strong class="govuk-tag govuk-tag--yellow">Submitted</strong></p>
+
+  
+
+  <ul class="govuk-list  govuk-!-margin-bottom-0">
+        <li>
+          Date submitted:
+
+          12 April 2025
+        </li>
+      
+        <li>
+          Local authority:
+
+          Cherwell District Council
+        </li>
+      
+        <li>
+          Reference:
+
+          REF123
+        </li>
+      
+        <li>
+          Note:
+
+          <div class="sas-text-block">A note
+here</div>
+        </li>
+      </ul>",
+  "label": {
+    "text": "Referral details added",
   },
 }
 `;
@@ -413,36 +409,28 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   "html": "
 
   
-    
-  
-    
-  
-    
-  
-    
-  
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          Date submitted changed to
+
+          14 April 2025
+        </li>
       
-        
-          <li>Date submitted changed to: 14 April 2025 (240 days ago)</li>
-        
+        <li>
+          Local authority changed to
+
+          Oxford City Council
+        </li>
       
-        
-          <li>Local authority changed to: Oxford City Council</li>
-        
-      
-        
-          <li>Reference changed to: REF456</li>
-        
-      
-        
-      
-    </ul>
-  ",
+        <li>
+          Reference changed to
+
+          REF456
+        </li>
+      </ul>",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -456,31 +444,23 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "timestamp": "2025-04-15T15:38:00.000Z",
     "type": "datetime",
   },
-  "html": "
-    <p><strong class="govuk-tag govuk-tag--green">Accepted</strong></p>
-  
+  "html": "<p><strong class="govuk-tag govuk-tag--green">Accepted</strong></p>
 
-  
-    
-      <p class="">
-        Cherwell District Council agreed to support this person with housing
-      </p>
-    
-  
-    
-      <p class="govuk-!-margin-bottom-1">
-        Reason: Prevention and relief duty
-      </p>
-    
-  
-    
-      <p class="govuk-!-margin-bottom-1">
-        Note: No note added
-      </p>
-    
-  
+  <p>Cherwell District Council agreed to support this person with housing</p>
 
-  ",
+  <ul class="govuk-list  govuk-!-margin-bottom-0">
+        <li>
+          Reason:
+
+          Prevention and relief duty
+        </li>
+      
+        <li>
+          Note:
+
+          <span class="sas-colour--dark-grey">No note added</span>
+        </li>
+      </ul>",
   "label": {
     "text": "Outcome details added",
   },
@@ -496,31 +476,17 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
     "timestamp": "2025-04-16T09:00:00.000Z",
     "type": "datetime",
   },
-  "html": "
-    <p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
-  
+  "html": "<p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
 
   
-    
-  
-    
-  
-    
-  
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-      
-        
-      
-        
-          <li>Reason changed to: Intentionally homeless</li>
-        
-      
-        
-      
-    </ul>
-  ",
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          Reason changed to
+
+          Intentionally homeless
+        </li>
+      </ul>",
   "label": {
     "text": "Outcome details changed",
   },
@@ -539,32 +505,16 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority but 
   "html": "
 
   
-    
-  
-    
-  
-    
-  
-    
-  
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-      
-        
-      
-        
-          <li>Local authority changed to: Vale of White Horse District Council</li>
-        
-      
-        
-      
-        
-      
-    </ul>
-  ",
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          Local authority changed to
+
+          Vale of White Horse District Council
+        </li>
+      </ul>",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -581,36 +531,28 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in s
   "html": "
 
   
-    
-  
-    
-  
-    
-  
-    
-  
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          Date submitted changed to
+
+          16 April 2025
+        </li>
       
-        
-          <li>Date submitted changed to: 16 April 2025 (238 days ago)</li>
-        
+        <li>
+          Local authority changed to
+
+          South Oxfordshire District Council
+        </li>
       
-        
-          <li>Local authority changed to: South Oxfordshire District Council</li>
-        
-      
-        
-          <li>Reference changed to: REF999</li>
-        
-      
-        
-      
-    </ul>
-  ",
+        <li>
+          Reference changed to
+
+          REF999
+        </li>
+      </ul>",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -627,32 +569,16 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows reference removed wh
   "html": "
 
   
-    
-  
-    
-  
-    
-  
-    
-  
 
-  
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-      
-        
-      
-        
-      
-        
-          <li>Reference removed</li>
-        
-      
-        
-      
-    </ul>
-  ",
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>
+          
+
+          Reference removed
+        </li>
+      </ul>",
   "label": {
-    "text": "Submission details changed",
+    "text": "Referral details changed",
   },
 }
 `;
@@ -680,7 +606,7 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "text": "Note",
     },
     "value": {
-      "text": "This is an outcome note",
+      "html": "<div class="sas-text-block">This is an outcome note</div>",
     },
   },
 ]
@@ -709,7 +635,7 @@ exports[`duty to refer utils outcomeDetailsSummaryListRows returns correct rows 
       "text": "Note",
     },
     "value": {
-      "text": "This is an outcome note",
+      "html": "<div class="sas-text-block">This is an outcome note</div>",
     },
   },
 ]

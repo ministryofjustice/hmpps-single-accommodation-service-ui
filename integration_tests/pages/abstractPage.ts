@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
-import { TimelineEntry } from '@govuk/ui'
+import { HtmlContent, TimelineEntry } from '@govuk/ui'
 import { formatDate } from '../../server/utils/dates'
 import { errorDateParts } from '../../server/utils/validation'
 
@@ -187,13 +187,13 @@ export default class AbstractPage {
         if (detail.text) {
           await expect((container || this.page).locator('p', { hasText: detail.text })).toBeVisible()
         } else if (detail.html) {
-          await this.shouldShowDetails(detail, 'Reason details', container)
+          await this.shouldShowDetails(detail as HtmlContent, 'Reason details', container)
         }
       }
     }
   }
 
-  async shouldShowDetails(detail: { html: string }, summaryText: string, container?: Locator) {
+  async shouldShowDetails(detail: HtmlContent, summaryText: string, container?: Locator) {
     const text = detail.html.replace(/<[^>]*>/g, '')
 
     await (container || this.page).getByText(summaryText).click()
@@ -240,6 +240,16 @@ export default class AbstractPage {
     await expect(this.page.getByRole('combobox', { name: label })).toHaveValue(value)
   }
 
+  async assertEqualHtml(locator: Locator, expected: string) {
+    const normalize = (html: string) =>
+      this.page.evaluate(h => {
+        const doc = new DOMParser().parseFromString(h, 'text/html')
+        return doc.body.innerHTML
+      }, html)
+
+    expect(await normalize(await locator.innerHTML())).toEqual(await normalize(expected))
+  }
+
   async shouldShowTimelineEntry(entry: TimelineEntry, position = 0) {
     const { label, byline, datetime, html } = entry
 
@@ -255,6 +265,6 @@ export default class AbstractPage {
       await expect(timelineEntry.getByRole('time')).toContainText(formatDate(datetime.timestamp))
     }
 
-    expect(await timelineEntry.locator('.moj-timeline__description').innerHTML()).toEqual(html.replace(/&#39;/g, "'"))
+    await this.assertEqualHtml(timelineEntry.locator('.moj-timeline__description'), html)
   }
 }

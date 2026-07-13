@@ -224,7 +224,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not include outcome s
   },
   "html": "<p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
 
-
+  
 
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         <li>
@@ -250,7 +250,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry does not show local author
   },
   "html": "
 
-
+  
 
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         <li>
@@ -319,7 +319,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   },
   "html": "<p><strong class="govuk-tag govuk-tag--yellow">Submitted</strong></p>
 
-
+  
 
   <ul class="govuk-list  govuk-!-margin-bottom-0">
         <li>
@@ -327,19 +327,19 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
           12 April 2025
         </li>
-
+      
         <li>
           Local authority:
 
           Cherwell District Council
         </li>
-
+      
         <li>
           Reference:
 
           <span class="sas-colour--dark-grey">No reference added</span>
         </li>
-
+      
         <li>
           Note:
 
@@ -363,7 +363,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   },
   "html": "<p><strong class="govuk-tag govuk-tag--yellow">Submitted</strong></p>
 
-
+  
 
   <ul class="govuk-list  govuk-!-margin-bottom-0">
         <li>
@@ -371,19 +371,19 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
           12 April 2025
         </li>
-
+      
         <li>
           Local authority:
 
           Cherwell District Council
         </li>
-
+      
         <li>
           Reference:
 
           REF123
         </li>
-
+      
         <li>
           Note:
 
@@ -408,7 +408,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   },
   "html": "
 
-
+  
 
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         <li>
@@ -416,13 +416,13 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
           14 April 2025
         </li>
-
+      
         <li>
           Local authority changed to
 
           Oxford City Council
         </li>
-
+      
         <li>
           Reference changed to
 
@@ -454,7 +454,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
 
           Prevention and relief duty
         </li>
-
+      
         <li>
           Note:
 
@@ -478,7 +478,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry returns a timeline entry f
   },
   "html": "<p><strong class="govuk-tag govuk-tag--grey">Not accepted</strong></p>
 
-
+  
 
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         <li>
@@ -504,7 +504,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority but 
   },
   "html": "
 
-
+  
 
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         <li>
@@ -530,7 +530,7 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in s
   },
   "html": "
 
-
+  
 
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         <li>
@@ -538,13 +538,13 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows local authority in s
 
           16 April 2025
         </li>
-
+      
         <li>
           Local authority changed to
 
           South Oxfordshire District Council
         </li>
-
+      
         <li>
           Reference changed to
 
@@ -568,11 +568,11 @@ exports[`duty to refer utils dutyToReferTimelineEntry shows reference removed wh
   },
   "html": "
 
-
+  
 
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         <li>
-
+          
 
           Reference removed
         </li>

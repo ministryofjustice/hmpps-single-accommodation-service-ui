@@ -93,8 +93,10 @@ export const noFixedAbodeAlert = (accommodationSummary?: AccommodationSummariesD
 
   if (status !== 'NO_FIXED_ABODE' && status !== 'RISK_OF_NO_FIXED_ABODE') return undefined
 
+  const date = accommodationSummary.nextAccommodation?.endDate ?? accommodationSummary.currentAccommodation?.endDate
+
   return {
-    date: status === 'RISK_OF_NO_FIXED_ABODE' ? accommodationSummary.currentAccommodation?.endDate : null,
+    date: status === 'RISK_OF_NO_FIXED_ABODE' ? date ?? null : null,
     status,
   }
 }

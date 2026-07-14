@@ -116,10 +116,8 @@ export default {
   ingressUrl: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   supportLinks: {
-    accessRequest: get(
-      'ACCESS_REQUEST_URL',
+    accessRequest:
       'https://teams.microsoft.com/l/channel/19%3Az5eNiEz8KnTOyRQbO1DiirfQqckpP92l0qblWr4_htk1%40thread.tacv2/Accommodation%20service%20pilot%20-%20London?groupId=fa3ba1cb-3f4f-412b-96d5-eedc6066559b&tenantId=c6874728-71e6-41fe-a9e1-2e8c36776a',
-    ),
   },
   allowedRoles: get('SAS_ALLOWED_ROLES', '', requiredInProduction)
     .split(/[\s,]+/)

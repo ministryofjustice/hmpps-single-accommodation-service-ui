@@ -3,6 +3,7 @@ import { resetStubs } from '../mockApis/wiremock'
 import casesApi from '../mockApis/cases'
 import userApi from '../mockApis/user'
 import { login } from '../testUtils'
+import config from '../../server/config'
 
 test.describe('error handling', () => {
   test.beforeEach(async () => {
@@ -37,5 +38,10 @@ test.describe('error handling', () => {
     await expect(
       page.locator('h1', { hasText: 'You do not have permission to access the Accommodation service' }),
     ).toBeVisible()
+
+    await expect(page.getByRole('link', { name: 'Accommodation service Private Beta Teams channel' })).toHaveAttribute(
+      'href',
+      config.supportLinks.accessRequest,
+    )
   })
 })

@@ -48,5 +48,6 @@ export type ServiceResult = {
     | 'INVALID_APPLICATION_STATE'
     | 'SUITABLE_CAS1_APPLICATION'
     | 'SUITABLE_CAS3_APPLICATION'
+    | 'IS_SETTLED'
   >
 }

@@ -34,6 +34,8 @@ test.describe('error handling', () => {
 
     await login(page)
 
-    await expect(page.locator('h1', { hasText: 'You do not have permission to access Accommodation' })).toBeVisible()
+    await expect(
+      page.locator('h1', { hasText: 'You do not have permission to access the Accommodation service' }),
+    ).toBeVisible()
   })
 })

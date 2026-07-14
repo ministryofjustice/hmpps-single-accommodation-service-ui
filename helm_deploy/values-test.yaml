@@ -17,6 +17,7 @@ generic-service:
     SAS_API_TIMEOUT_DEADLINE: 10000
     SAS_CASES_API_TIMEOUT_RESPONSE: 5000
     SAS_CASES_API_TIMEOUT_DEADLINE: 10000
+    ENVIRONMENT: test
     ENVIRONMENT_NAME: TEST
     AUDIT_ENABLED: "false"
     COMPONENT_API_URL: "https://probation-frontend-components-dev.hmpps.service.justice.gov.uk"

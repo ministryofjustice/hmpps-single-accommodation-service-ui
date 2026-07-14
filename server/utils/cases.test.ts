@@ -9,7 +9,6 @@ import {
   assignedToOptions,
 } from './cases'
 import { actionFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
-import config from '../config'
 
 describe('cases utilities', () => {
   beforeEach(() => {

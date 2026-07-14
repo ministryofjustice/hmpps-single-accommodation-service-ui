@@ -139,7 +139,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
     
       <th scope="col" class="govuk-table__header">Status and details</th>
     
-      <th scope="col" class="govuk-table__header"></th>
+      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
     
     </tr>
   </thead>

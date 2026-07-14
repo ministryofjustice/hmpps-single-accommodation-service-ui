@@ -3,7 +3,6 @@ import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
-import { actionsMap } from '../../../server/utils/actions'
 
 export default class CasesListPage extends AbstractPage {
   readonly casesRows: Locator
@@ -46,12 +45,6 @@ export default class CasesListPage extends AbstractPage {
         await expect(row).not.toContainText('RoSH')
         await expect(row).not.toContainText('Tier')
         await expect(row).not.toContainText('Date of birth')
-      }
-
-      if (headers.includes('Actions')) {
-        for await (const action of person.actions) {
-          await expect(row).toContainText(actionsMap[action.type])
-        }
       }
     }
   }

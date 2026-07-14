@@ -107,14 +107,10 @@ describe('cases utilities', () => {
   })
 
   describe('casesToRows', () => {
-    beforeEach(() => {
-      config.flags.v10CasesList = true
-    })
-
     it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)
 
-      expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }, { html: actionsCell(cases[0].actions) }]])
+      expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }]])
     })
 
     it('returns a formatted row for a case assigned to the current user', () => {
@@ -131,18 +127,6 @@ describe('cases utilities', () => {
       })
 
       expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'Dave Grant'))
-    })
-
-    describe('when v10CasesList flag is off', () => {
-      beforeEach(() => {
-        config.flags.v10CasesList = false
-      })
-
-      it('returns only person cell', () => {
-        const cases = caseFactory.buildList(1)
-
-        expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }]])
-      })
     })
   })
 

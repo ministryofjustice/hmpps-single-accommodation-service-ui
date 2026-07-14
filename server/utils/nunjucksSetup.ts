@@ -34,6 +34,7 @@ const addGlobals = (env: nunjucks.Environment) => {
   env.addGlobal('dateFieldValues', dateFieldValues)
 
   env.addGlobal('featureFlags', config.flags)
+  env.addGlobal('supportLinks', config.supportLinks)
 }
 
 export default function nunjucksSetup(app: express.Express): void {

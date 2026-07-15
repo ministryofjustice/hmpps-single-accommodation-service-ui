@@ -22,6 +22,7 @@ import type { Services } from './services'
 import config from './config'
 import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedirect'
 import { getCaseListUrl } from './utils/backlinks'
+import setUpSentryProcessor from './middleware/setUpSentryProcessor'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -54,6 +55,7 @@ export default function createApp(services: Services): express.Application {
   app.use((req, res, next) => next(createError(404, 'Not found')))
 
   if (config.sentry.dsn) {
+    app.use(setUpSentryProcessor())
     Sentry.setupExpressErrorHandler(app)
   }
 

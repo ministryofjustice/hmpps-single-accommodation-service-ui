@@ -1,4 +1,9 @@
-import { initialiseTelemetry, flushTelemetry, telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
+import {
+  initialiseTelemetry,
+  flushTelemetry,
+  telemetry,
+  ModifiableSpan,
+} from '@ministryofjustice/hmpps-azure-telemetry'
 import { SpanFilterFn, SpanInfo } from '@ministryofjustice/hmpps-azure-telemetry/src/main'
 import { context } from '@opentelemetry/api'
 import { SentryContextManager } from '@sentry/node'
@@ -15,6 +20,13 @@ context.setGlobalContextManager(contextManager)
 const applicationInfo = applicationInfoSupplier()
 
 const filterSentry: SpanFilterFn = (span: SpanInfo) => !span.attributes['sentry.op']
+const stripHttpRouteAny = (span: ModifiableSpan) => {
+  const route = span.attributes?.['http.route']
+
+  if (route) {
+    span.setAttribute('http.route', String(route).replace('/{*any}', ''))
+  }
+}
 
 initialiseTelemetry({
   serviceName: applicationInfo.applicationName,
@@ -24,6 +36,7 @@ initialiseTelemetry({
 })
   .addFilter(filterSentry)
   .addFilter(telemetry.processors.filterSpanWherePath(['/health', '/ping', '/info', '/assets/*', '/favicon.ico']))
+  .addModifier(stripHttpRouteAny)
   .addModifier(telemetry.processors.enrichSpanNameWithHttpRoute())
   .startRecording()
 

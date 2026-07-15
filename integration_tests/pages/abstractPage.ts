@@ -3,6 +3,7 @@ import { StatusCard, StatusCell, StatusTag } from '@sas/ui'
 import { HtmlContent, TimelineEntry } from '@govuk/ui'
 import { formatDate } from '../../server/utils/dates'
 import { errorDateParts } from '../../server/utils/validation'
+import config from '../../server/config'
 
 export default class AbstractPage {
   readonly page: Page
@@ -31,6 +32,7 @@ export default class AbstractPage {
   ): Promise<T> {
     const abstractPage = new this(page, ...args)
     await expect(abstractPage.header).toBeVisible()
+    await abstractPage.shouldShowPhaseBanner()
     return abstractPage
   }
 
@@ -266,5 +268,15 @@ export default class AbstractPage {
     }
 
     await this.assertEqualHtml(timelineEntry.locator('.moj-timeline__description'), html)
+  }
+
+  async shouldShowPhaseBanner() {
+    const phaseBanner = this.page.locator('.govuk-phase-banner')
+    await expect(phaseBanner).toContainText('Pilot')
+    await expect(phaseBanner).toContainText('Help us improve the Accommodation service.')
+    await expect(phaseBanner.getByRole('link', { name: 'Complete this survey (opens in a new tab)' })).toHaveAttribute(
+      'href',
+      config.supportLinks.feedbackForm,
+    )
   }
 }

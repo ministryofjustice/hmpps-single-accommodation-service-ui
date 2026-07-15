@@ -5,6 +5,7 @@ import userApi from '../mockApis/user'
 
 import { login, resetStubs } from '../testUtils'
 import CasesListPage from '../pages/cases/listPage'
+import config from '../../server/config'
 
 test.describe('SignIn', () => {
   test.beforeEach(async () => {
@@ -68,7 +69,12 @@ test.describe('SignIn', () => {
     await login(page, { name: 'A TestUser', roles: ['ROLE_NOT_ALLOWED'] })
 
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-      'You do not have permission to access Accommodation',
+      'You do not have permission to access the Accommodation service',
+    )
+
+    await expect(page.getByRole('link', { name: 'Accommodation service Private Beta Teams channel' })).toHaveAttribute(
+      'href',
+      config.supportLinks.accessRequest,
     )
   })
 })

@@ -3,7 +3,6 @@ import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
 import { renderMacro } from './macros'
-import config from '../config'
 import { renderActions } from './actions'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
@@ -63,19 +62,11 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
   cases.map(c => {
     const assignedToText = currentUsername ? caseAssignedTo(c, currentUsername) : undefined
 
-    if (!config.flags.v10CasesList) {
-      return [htmlContent(personCell(c, assignedToText))]
-    }
-
-    return [htmlContent(personCell(c, assignedToText)), htmlContent(actionsCell(c.actions))]
+    return [htmlContent(personCell(c, assignedToText))]
   })
 
 export const casesTableColumns = () => {
-  if (!config.flags.v10CasesList) {
-    return [{ text: 'Name' }]
-  }
-
-  return [{ text: 'Name' }, { text: 'Actions' }]
+  return [{ text: 'Name' }]
 }
 
 export const caseAssignedTo = (c: Case, username: string): string => {

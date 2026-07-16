@@ -1,0 +1,28 @@
+@use "govuk-frontend/dist/govuk" as *;
+
+.sas-report-banner {
+  margin-top: govuk-spacing(6);
+  padding: govuk-spacing(2) govuk-spacing(3);
+  background-color: govuk-colour("black", $variant: "tint-95");
+  border-top: 1px solid govuk-colour("black", $variant: "tint-80");
+
+  @include govuk-media-query($from: tablet) {
+    padding: govuk-spacing(4) govuk-spacing(6);
+  }
+
+  @include govuk-media-query($from: desktop) {
+    margin-top: govuk-spacing(9);
+  }
+}
+
+.sas-report-banner__button {
+  margin-bottom: govuk-spacing(0);
+  border: 1px solid govuk-colour("black");
+  box-shadow: 0 3px 0 govuk-colour("black");
+
+  &:focus,
+  &:focus:not(:active):not(:hover) {
+    border-color: $govuk-focus-colour;
+    box-shadow: 0 0 0 3px $govuk-focus-colour, 0 5px 0 3px govuk-colour("black");
+  }
+}

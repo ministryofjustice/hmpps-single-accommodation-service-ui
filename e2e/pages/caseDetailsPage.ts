@@ -1,7 +1,8 @@
 import { expect, Page } from '@playwright/test'
 
 export class CaseDetailsPage {
-  constructor(private readonly page: Page) {}
+  constructor(private readonly page: Page) {
+  }
 
   private serviceCard(heading: string) {
     return this.page.locator('article.sas-card').filter({
@@ -123,11 +124,20 @@ export class CaseDetailsPage {
       .click()
   }
 
-  async expectCurrentAccommodation(address: string, status: string) {
+  async expectCurrentAccommodation(
+    addressLine: string,
+    townOrCity: string,
+    postcode: string,
+    status: string,
+  ) {
     const currentAccommodationCard = this.currentAccommodationCard()
+    const address = currentAccommodationCard.locator('.govuk-hint')
 
     await expect(currentAccommodationCard).toBeVisible()
     await expect(currentAccommodationCard.locator('.govuk-tag')).toHaveText(status)
-    await expect(currentAccommodationCard.getByText(address)).toBeVisible()
+
+    await expect(address).toContainText(addressLine)
+    await expect(address).toContainText(townOrCity)
+    await expect(address).toContainText(postcode)
   }
 }

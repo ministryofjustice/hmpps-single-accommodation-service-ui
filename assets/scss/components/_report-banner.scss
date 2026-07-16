@@ -22,7 +22,7 @@
 
   &:focus,
   &:focus:not(:active):not(:hover) {
-    border-color: govuk-colour("black");
-    box-shadow: 0 5px 0 govuk-colour("black");
+    border-color: $govuk-focus-colour;
+    box-shadow: 0 0 0 3px $govuk-focus-colour, 0 5px 0 3px govuk-colour("black");
   }
 }

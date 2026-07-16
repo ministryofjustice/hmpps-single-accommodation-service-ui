@@ -46,6 +46,10 @@
   {% include "components/_messages.njk" %}
 {% endblock %}
 
+{% block containerEnd %}
+  {% include "components/_reportBanner.njk" %}
+{% endblock %}
+
 {% block govukFooter %}
   {{ feComponents.footer | safe }}
 {% endblock %}

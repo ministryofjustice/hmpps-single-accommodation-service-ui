@@ -99,7 +99,9 @@ test('Can add and confirm a proposed address', async ({ page, users: { probation
 
   // THEN I should see the address in Current accommodation
   await caseDetailsPage.expectCurrentAccommodation(
-    fullAddress,
-    CurrentAccommodationStatus.SETTLED
+    '40 Merriam Close',
+    'London',
+    'E4 9JQ',
+    CurrentAccommodationStatus.SETTLED,
   )
 })

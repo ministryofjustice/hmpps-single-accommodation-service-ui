@@ -33,6 +33,7 @@ export default class AbstractPage {
     const abstractPage = new this(page, ...args)
     await expect(abstractPage.header).toBeVisible()
     await abstractPage.shouldShowPhaseBanner()
+    await abstractPage.shouldShowReportBanner()
     return abstractPage
   }
 
@@ -277,6 +278,14 @@ export default class AbstractPage {
     await expect(phaseBanner.getByRole('link', { name: 'Complete this survey (opens in a new tab)' })).toHaveAttribute(
       'href',
       config.supportLinks.feedbackForm,
+    )
+  }
+
+  async shouldShowReportBanner() {
+    const reportBanner = this.page.locator('.sas-report-banner')
+    await expect(reportBanner.getByRole('button', { name: 'Report a problem (opens in Teams)' })).toHaveAttribute(
+      'href',
+      config.supportLinks.accessRequest,
     )
   }
 }

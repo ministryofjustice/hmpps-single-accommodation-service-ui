@@ -72,6 +72,8 @@ test.describe('SignIn', () => {
       'You do not have permission to access the Accommodation service',
     )
 
+    await expect(page.getByText('You are signed in as USER1.')).toBeVisible()
+
     await expect(page.getByRole('link', { name: 'Accommodation service Private Beta Teams channel' })).toHaveAttribute(
       'href',
       config.supportLinks.accessRequest,

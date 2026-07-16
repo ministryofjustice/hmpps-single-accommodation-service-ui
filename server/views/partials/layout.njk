@@ -1,5 +1,7 @@
 {% extends "govuk/template.njk" %}
 
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
 {% block head %}
   {% include "./applicationInsightsScript.njk" %}
 
@@ -25,6 +27,17 @@
       </div>
     </div>
   </section>
+
+  {% set phaseBannerHtml %}
+    Help us improve the Accommodation service. <a href="{{ supportLinks.feedbackForm }}" target="_blank">Complete this survey (opens in a new tab)</a>
+  {% endset %}
+
+  {{ govukPhaseBanner({
+    tag: {
+      text: "Pilot"
+    },
+    html: phaseBannerHtml
+  }) }}
 {% endblock %}
 
 {% block bodyStart %}{% endblock %}

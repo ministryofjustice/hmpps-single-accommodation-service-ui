@@ -10,38 +10,28 @@ Repository for the UI for the Single Accommodation Service (SAS).
 - [Node.js](https://nodejs.org/en/) version 24
 - [Docker](https://www.docker.com/) (if running against a containerised local stack)
 
-## Install dependencies
+
+## Initial setup
+
+### Install dependencies
 
 ```shell
-npm install
+npm run setup
+```
+
+### Prepare git hooks
+
+```shell
+npm run prepare
 ```
 
 ## Running the application
 
-To run the SAS service locally, first copy the `.env.template` file to `.env`. The default variables should be sufficient for local development against a containerised local stack:
+To run the SAS service locally, copy the `.env.example` file to `.env`. The default variables should be sufficient for local development against a [running local API](https://github.com/ministryofjustice/hmpps-single-accommodation-service-api):
 
 ```shell
-cp .env.template .env
+cp .env.example .env
 ```
-
-### Running against a containerised local stack
-
-First, bring up the local stack:
-
-```shell
-docker compose up --scale=app=0
-```
-
-You can then start the SAS UI service:
-
-```shell
-npm run start:dev
-```
-
-The service will be available at http://localhost:3000. You can login with the following credentials:
-
-- username: `AUTH_USER`
-- password: `password123456`
 
 ### Running against the dev stack
 
@@ -72,6 +62,27 @@ The JSON Wiremock fixtures are located in `wiremock/fixtures`. These should most
 ```shell
 ts-node wiremock/generateData.ts
 ```
+
+### Running against a containerised local stack
+
+_**NOTE:** this method is not maintained and is only provided for reference purposes._
+
+First, bring up the local stack:
+
+```shell
+docker compose up --scale=app=0
+```
+
+You can then start the SAS UI service:
+
+```shell
+npm run start:dev
+```
+
+The service will be available at http://localhost:3000. You can login with the following credentials:
+
+- username: `AUTH_USER`
+- password: `password123456`
 
 ## Local development
 

@@ -38,7 +38,8 @@ passport.use(
 export const setUpAuthenticationErrorRoute = () => {
   const router = Router()
 
-  router.get('/not-authorised', (req, res) => {
+  router.get('/not-authorised', passport.initialize(), passport.session(), (req, res) => {
+    res.locals.user = req.user as HmppsUser
     res.status(401)
     return res.render('pages/static/not-authorised')
   })

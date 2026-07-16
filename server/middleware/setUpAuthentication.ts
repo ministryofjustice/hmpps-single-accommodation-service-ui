@@ -6,6 +6,7 @@ import { VerificationClient, AuthenticatedRequest } from '@ministryofjustice/hmp
 import config from '../config'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import generateOauthClientToken from '../utils/clientCredentials'
+import { frontendComponentsMiddleware } from './setUpFrontendComponents'
 import logger from '../../logger'
 
 passport.serializeUser((user, done) => {
@@ -38,10 +39,17 @@ passport.use(
 export const setUpAuthenticationErrorRoute = () => {
   const router = Router()
 
-  router.get('/not-authorised', (req, res) => {
-    res.status(401)
-    return res.render('pages/static/not-authorised')
-  })
+  router.get(
+    '/not-authorised',
+    passport.initialize(),
+    passport.session(),
+    (req, res, next) => {
+      res.locals.user = req.user as HmppsUser
+      next()
+    },
+    frontendComponentsMiddleware,
+    (_req, res) => res.status(401).render('pages/static/not-authorised'),
+  )
 
   return router
 }

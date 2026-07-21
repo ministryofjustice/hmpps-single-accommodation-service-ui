@@ -443,6 +443,7 @@ describe('dutyToReferController', () => {
         submissionDetailRows: detailsSummaryListRows(dutyToRefer),
         outcomeDetailRows: outcomeDetailsSummaryListRows(dutyToRefer),
         status: dutyToRefer?.status,
+        active: dutyToRefer.active,
         errors: {},
         errorSummary: [],
       })

@@ -27,6 +27,7 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
     return this.params({
       status: 'WITHDRAWN',
       submission: dtrSubmissionFactory.withdrawn().build(),
+      active: false,
     })
   }
 }
@@ -39,5 +40,6 @@ export default DutyToReferFactory.define(() => {
     crn: crn(),
     status,
     submission: dtrSubmissionFactory.withStatus(status).build(),
+    active: true
   }
 })

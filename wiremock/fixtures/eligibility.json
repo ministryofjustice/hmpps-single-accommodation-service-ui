@@ -339,7 +339,7 @@
         "action": {
           "type": "START_CAS3_REFERRAL"
         },
-        "failureReasons": ["INVALID_APPLICATION_STATE"]
+        "failureReasons": ["HAS_NEXT_ACCOMMODATION"]
       }
     }
   },

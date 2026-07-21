@@ -5,10 +5,10 @@
 {% block head %}
   {% include "./applicationInsightsScript.njk" %}
 
-  <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
   {% for css in feComponents.cssIncludes %}
       <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
   {% endfor %}
+  <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block pageTitle %}{{ "Error: " if errorSummary | length }}{{ pageTitle }}{{ ' - ' if pageTitle }}{{ applicationName }}{% endblock %}

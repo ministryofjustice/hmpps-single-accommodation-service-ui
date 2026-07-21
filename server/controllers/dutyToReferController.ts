@@ -65,6 +65,7 @@ export default class DutyToReferController {
         outcomeDetailRows,
         timeline: auditRecords.map(dutyToReferTimelineEntry),
         status: dutyToRefer?.status,
+        active: dutyToRefer.active,
         ...userInput,
         errors,
         errorSummary,

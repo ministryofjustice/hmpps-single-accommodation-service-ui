@@ -459,6 +459,7 @@ test.describe('duty to refer', () => {
         ...submittedDutyToRefer.submission,
         withdrawalReason: 'NEW_REFERRAL',
       },
+      active: false,
     })
     const submissionAddedDutyReferRecord = auditRecordFactory.dutyToReferAdded(submittedDutyToRefer.submission).build()
 

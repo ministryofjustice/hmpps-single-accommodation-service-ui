@@ -8,4 +8,5 @@ export type DutyToReferDto = {
   crn: string
   status: 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED' | 'WITHDRAWN'
   submission?: DtrSubmissionDto | null
+  active?: boolean | null
 }

@@ -40,6 +40,6 @@ export default DutyToReferFactory.define(() => {
     crn: crn(),
     status,
     submission: dtrSubmissionFactory.withStatus(status).build(),
-    active: true,
+    active: status !== 'WITHDRAWN',
   }
 })

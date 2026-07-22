@@ -26,7 +26,7 @@ generic-service:
     LOG_LEVEL: 'debug'
     MAINTENANCE_MODE: "false"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
-    HIDE_SET_AS_CURRENT_ADDRESS: "true"
+    HIDE_SET_AS_CURRENT_ADDRESS: "false"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises-nonprod

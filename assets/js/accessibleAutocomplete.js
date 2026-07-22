@@ -35,7 +35,7 @@ function makeAutocomplete(selectElement) {
     configurationOptions.selectElement.selectedIndex = -1
     const filteredResults = availableOptions
       .map(option => option.textContent || option.innerText)
-      .filter(result => result.indexOf(query) !== -1)
+      .filter(result => result.toLowerCase().indexOf(query.toLowerCase()) !== -1)
     populateResults(filteredResults)
   }
   accessibleAutocomplete.enhanceSelectElement(configurationOptions)

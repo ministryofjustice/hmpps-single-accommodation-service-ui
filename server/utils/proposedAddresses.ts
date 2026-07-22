@@ -308,7 +308,7 @@ export const accommodationTypeItems = (
   }))
 
 export const verificationStatusLabels: Record<ProposedAccommodationDto['verificationStatus'], string> = {
-  NOT_CHECKED_YET: 'Not checked',
+  NOT_CHECKED_YET: 'Not checked yet',
   PASSED: 'Passed',
   FAILED: 'Failed',
 }

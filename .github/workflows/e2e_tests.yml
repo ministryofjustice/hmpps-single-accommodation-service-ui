@@ -8,8 +8,18 @@ permissions:
   contents: read
 
 jobs:
+  e2e_test_data_setup:
+    name: Setup test data
+    uses: ministryofjustice/hmpps-probation-integration-e2e-tests/.github/workflows/test.yml@SAS-68-setup-data
+    secrets: inherit
+    with:
+      directory: test-data-setup
+      projects: '["single-accommodation-service"]'
+      workers: 1
+
   e2e_test:
     name: "SAS E2E Tests 🧪"
+    needs: e2e_test_data_setup
     runs-on: [ self-hosted, hmpps-github-actions-runner ]
     strategy:
       fail-fast: false
@@ -39,11 +49,17 @@ jobs:
       - name: Install Playwright
         run: npx playwright install chromium
 
+      - name: Load test data
+        env:
+          TEST_DATA: ${{ needs.e2e_test_data_setup.outputs.output-data }}
+        run: echo "$TEST_DATA" >> "$GITHUB_ENV"
+
       - name: Run E2E Tests
         env:
           E2E_BASE_URL: 'https://single-accommodation-service-dev.hmpps.service.justice.gov.uk'
           SAS_E2E_PROBATION_USER_USERNAME: ${{ secrets.E2E_USER_SAS_USER_PP_USERNAME }}
           SAS_E2E_PROBATION_USER_PASSWORD: ${{ secrets.E2E_USER_SAS_USER_PP_PASSWORD }}
+          SAS_E2E_BASE_CASE_NAME: ${{ env.BASE_CASE_NAME }}
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
       - name: Upload Playwright report

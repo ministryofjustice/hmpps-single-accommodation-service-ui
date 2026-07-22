@@ -39,11 +39,38 @@ jobs:
       - name: Install Playwright
         run: npx playwright install chromium
 
+      - name: Setup data
+        run: npx playwright test -c test-data-setup
+        env:
+          TZ: Europe/London
+
+          # URLs
+          AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
+          DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
+          OASYS_URL: https://t2.oasys.service.justice.gov.uk/eor/f?p=100:101
+          PRISON_API: https://prison-api-dev.prison.service.justice.gov.uk
+
+          # Credentials
+          DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
+          DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+          OASYS_USERNAME_BOOKING: ${{ secrets.E2E_OASYS_USERNAME_BOOKING }}
+          OASYS_PASSWORD_BOOKING: ${{ secrets.E2E_OASYS_PASSWORD_BOOKING }}
+          DPS_USERNAME: ${{ secrets.E2E_DPS_USERNAME }}
+          HMPPS_AUTH_CLIENT_ID: ${{ secrets.E2E_HMPPS_AUTH_CLIENT_ID }}
+          HMPPS_AUTH_CLIENT_SECRET: ${{ secrets.E2E_HMPPS_AUTH_CLIENT_SECRET }}
+
+      - name: Parse setup output to environment
+        id: setup-data
+        run: |
+          outputFile=tmp/OUTPUT.txt
+          [ -f $outputFile ] && cat "$outputFile" >> "$GITHUB_ENV" || true
+
       - name: Run E2E Tests
         env:
           E2E_BASE_URL: 'https://single-accommodation-service-dev.hmpps.service.justice.gov.uk'
           SAS_E2E_PROBATION_USER_USERNAME: ${{ secrets.E2E_USER_SAS_USER_PP_USERNAME }}
           SAS_E2E_PROBATION_USER_PASSWORD: ${{ secrets.E2E_USER_SAS_USER_PP_PASSWORD }}
+          SAS_E2E_BASE_CASE_NAME: ${{ env.BASE_CASE_NAME }}
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
       - name: Upload Playwright report

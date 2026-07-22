@@ -14,7 +14,7 @@ jobs:
     secrets: inherit
     with:
       directory: test-data-setup
-      projects: '["single-accommodation-service"]'
+      projects: '["approved-premises-data-creator"]'
       workers: 1
 
   e2e_test:

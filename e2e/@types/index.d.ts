@@ -8,5 +8,6 @@ declare module '@sas/e2e' {
 
   type TestOptions = {
     users: Record<UserType, UserLoginDetails>
+    cases: Record<string, { name: string }>
   }
 }

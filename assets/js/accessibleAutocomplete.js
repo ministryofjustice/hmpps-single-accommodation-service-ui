@@ -18,7 +18,7 @@ function makeAutocomplete(selectElement) {
 
   const configurationOptions = {
     selectElement,
-    defaultValue: 'Choose a local authority',
+    defaultValue: '',
     inputClasses,
     menuClasses,
     showAllValues: true,

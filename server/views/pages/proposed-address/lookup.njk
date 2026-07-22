@@ -1,7 +1,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% extends "pages/proposed-address/layout.njk" %}
 
-{% set pageTitle = "What is the address?" %}
+{% set pageTitle = "Find an address" %}
 {% set backLinkHref = paths.cases.show({crn: crn}) %}
 {% set formAction = paths.proposedAddresses.lookup({crn: crn}) %}
 {% set buttonText = 'Find address' %}
@@ -18,8 +18,8 @@
 {% endblock %}
 
 {% block formContent %}
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
-    <h1 class="govuk-fieldset__heading">What is the address?</h1>
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <h1 class="govuk-fieldset__heading">Find an address</h1>
   </legend>
 
   {% if not hideManualAddressEntry %}

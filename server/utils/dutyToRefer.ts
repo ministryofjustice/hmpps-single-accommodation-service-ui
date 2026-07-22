@@ -368,8 +368,8 @@ export const outcomeReasonToStatus = (outcomeReason: DtrSubmissionDto['outcomeRe
 export const outcomeReasonLabels: Record<DtrSubmissionDto['outcomeReason'], string> = {
   PREVENTION_AND_RELIEF_DUTY: 'Yes, it was accepted on prevention and relief duty',
   PRIORITY_NEED: 'Yes, it was accepted on a priority need',
-  NO_LOCAL_CONNECTION: "No, it was rejected as there's no local connection",
-  INTENTIONALLY_HOMELESS: "No, it was rejected as they're considered intentionally homeless",
+  NO_LOCAL_CONNECTION: 'No, it was rejected as there is no local connection',
+  INTENTIONALLY_HOMELESS: 'No, it was rejected as they are considered intentionally homeless',
   REJECTED_FOR_ANOTHER_REASON: 'No, it was rejected for another reason',
 }
 

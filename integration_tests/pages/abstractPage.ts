@@ -275,7 +275,7 @@ export default class AbstractPage {
     const phaseBanner = this.page.locator('.govuk-phase-banner')
     await expect(phaseBanner).toContainText('Pilot')
     await expect(phaseBanner).toContainText('Help us improve the Accommodation service.')
-    await expect(phaseBanner.getByRole('link', { name: 'Complete this survey (opens in a new tab)' })).toHaveAttribute(
+    await expect(phaseBanner.getByRole('link', { name: 'Complete this survey (opens in new tab)' })).toHaveAttribute(
       'href',
       config.supportLinks.feedbackForm,
     )

@@ -32,7 +32,7 @@
             'data-autocomplete-hint': { value: true, optional: true },
             'data-autocomplete-wrapper-classes': { value: 'govuk-!-width-two-thirds', optional: true }
         },
-        items: convertObjectsToSelectOptions(localAuthorities, '', 'name', 'id', formValues.localAuthorityAreaId),
+        items: convertObjectsToSelectOptions(localAuthorities, 'Choose a local authority', 'name', 'id', formValues.localAuthorityAreaId),
         name: 'localAuthorityAreaId',
         id: 'localAuthorityAreaId',
         errorMessage: errors.localAuthorityAreaId

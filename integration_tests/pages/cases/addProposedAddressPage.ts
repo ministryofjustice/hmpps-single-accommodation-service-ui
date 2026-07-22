@@ -17,7 +17,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   constructor(
     page: Page,
     private readonly crn: string,
-    expectedHeader = 'What is the address?',
+    expectedHeader = 'Find an address',
   ) {
     super(page)
     this.header = page.getByRole('group', { name: expectedHeader })

@@ -58,6 +58,10 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
   }
 
+  async shouldNotShowNextActionsCard() {
+    await expect(this.page.locator('.sas-card', { hasText: 'Next actions' })).toHaveCount(0)
+  }
+
   async shouldShowAddress(accommodation: AccommodationSummaryDto, card: Locator) {
     const addressParts = addressLines(accommodation.address)
 

@@ -32,9 +32,8 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
   }
 }
 
-export default DutyToReferFactory.define(() => {
-  const status = faker.helpers.arrayElement(['SUBMITTED', 'WITHDRAWN', 'ACCEPTED', 'NOT_ACCEPTED'])
-
+export default DutyToReferFactory.define(({ params }) => {
+  const status = params?.status ?? faker.helpers.arrayElement(['SUBMITTED', 'WITHDRAWN', 'ACCEPTED', 'NOT_ACCEPTED'])
   return {
     caseId: faker.string.uuid(),
     crn: crn(),

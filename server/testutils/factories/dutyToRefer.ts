@@ -9,19 +9,17 @@ class DutyToReferFactory extends Factory<DutyToReferDto> {
     return this.params({
       status: 'SUBMITTED',
       submission: dtrSubmissionFactory.submitted().build(),
-      active: true,
     })
   }
 
   accepted() {
-    return this.params({ status: 'ACCEPTED', submission: dtrSubmissionFactory.accepted().build(), active: true })
+    return this.params({ status: 'ACCEPTED', submission: dtrSubmissionFactory.accepted().build() })
   }
 
   notAccepted() {
     return this.params({
       status: 'NOT_ACCEPTED',
       submission: dtrSubmissionFactory.notAccepted().build(),
-      active: true,
     })
   }
 

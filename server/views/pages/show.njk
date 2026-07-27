@@ -52,13 +52,11 @@
           {% if 'eligibility' in upstreamFailures %}
             {{  apiErrorInset() }}
           {% else %}
-            {% if nextActions | length %}
               <ul class="govuk-list govuk-list--bullet">
                 {% for action in nextActions %}
                   <li>{{ action | safe }}</li>
                 {% endfor %}
               </ul>
-            {% endif %}
           {% endif %}
         </section>
       {% endif %}

@@ -16,15 +16,29 @@ function makeAutocomplete(selectElement) {
   const menuClasses = selectElement.getAttribute('data-autocomplete-menu-classes') || ''
   const wrapperClasses = selectElement.getAttribute('data-autocomplete-wrapper-classes') || ''
 
-  accessibleAutocomplete.enhanceSelectElement({
+  const configurationOptions = {
     selectElement,
     defaultValue: '',
     inputClasses,
     menuClasses,
     showAllValues: true,
     dropdownArrow,
-    confirmOnBlur: false,
-  })
+    confirmOnBlur: true,
+    preserveNullOptions: true,
+    autoselect: true,
+  }
+  const availableOptions = [].filter.call(
+    configurationOptions.selectElement.options,
+    option => option.value || configurationOptions.preserveNullOptions,
+  )
+  configurationOptions.source = (query, populateResults) => {
+    configurationOptions.selectElement.selectedIndex = -1
+    const filteredResults = availableOptions
+      .map(option => option.textContent || option.innerText)
+      .filter(result => result.toLowerCase().indexOf(query.toLowerCase()) !== -1)
+    populateResults(filteredResults)
+  }
+  accessibleAutocomplete.enhanceSelectElement(configurationOptions)
 
   if (wrapperClasses) {
     const wrapper = selectElement.parentElement && selectElement.parentElement.querySelector('.autocomplete__wrapper')

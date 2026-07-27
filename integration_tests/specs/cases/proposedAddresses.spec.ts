@@ -37,8 +37,6 @@ const setupCase = async () => {
   await casesApi.stubGetCaseByCrn(crn, caseData)
   await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
   await casesApi.stubGetReferralHistory(crn, [])
-  await accommodationApi.stubGetCurrentAccommodation(crn, undefined)
-  await accommodationApi.stubGetNextAccommodation(crn, undefined)
   await accommodationApi.stubGetAccommodationSummary(crn, undefined)
   await accommodationApi.stubGetAccommodationHistory(crn, [])
   await referenceDataApi.stubGetAccommodationTypes()

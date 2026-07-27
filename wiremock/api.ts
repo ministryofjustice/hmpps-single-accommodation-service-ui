@@ -108,14 +108,11 @@ async function stubProposedAddresses() {
 
 async function stubAccommodation() {
   for await (const caseDto of fullCases) {
-    await accommodationApi.stubGetCurrentAccommodation(
-      caseDto.crn,
-      (currentAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],
-    )
-    await accommodationApi.stubGetNextAccommodation(
-      caseDto.crn,
-      (nextAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],
-    )
+    await accommodationApi.stubGetAccommodationSummary(caseDto.crn, {
+      currentAccommodation: (currentAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],
+      nextAccommodation: (nextAccommodation as Record<string, AccommodationSummaryDto>)[caseDto.crn],
+    })
+
     const history = (accommodationHistory as Record<string, AccommodationSummaryDto[]>)[caseDto.crn]
     await accommodationApi.stubGetAccommodationHistory(caseDto.crn, history)
 

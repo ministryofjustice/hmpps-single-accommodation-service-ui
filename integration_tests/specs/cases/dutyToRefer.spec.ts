@@ -51,8 +51,6 @@ const setupStubs = async ({
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
   await accommodationApi.stubGetAccommodationHistory(crn, [])
   await referenceDataApi.stubGetLocalAuthorities()
-  await accommodationApi.stubGetCurrentAccommodation(crn, undefined)
-  await accommodationApi.stubGetNextAccommodation(crn, undefined)
   await accommodationApi.stubGetAccommodationSummary(crn, undefined)
   await userApi.stubGetTeams()
   return { caseData, eligibility }

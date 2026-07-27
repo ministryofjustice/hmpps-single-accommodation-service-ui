@@ -158,7 +158,7 @@ test.describe('Profile Tracker Page', () => {
         .build({ currentAccommodation, nextAccommodation })
 
       await stubCaseListPage([caseData])
-      await stubProfilePage({ crn, caseData, currentAccommodation, nextAccommodation, accommodationSummaries })
+      await stubProfilePage({ crn, caseData, accommodationSummaries })
 
       // WHEN I sign in
       await login(page)
@@ -180,7 +180,7 @@ test.describe('Profile Tracker Page', () => {
       const accommodationSummaries = accommodationSummariesFactory.riskOfNfa().build({ currentAccommodation })
 
       await stubCaseListPage([caseData])
-      await stubProfilePage({ crn, caseData, currentAccommodation, accommodationSummaries })
+      await stubProfilePage({ crn, caseData, accommodationSummaries })
 
       // WHEN I sign in
       await login(page)

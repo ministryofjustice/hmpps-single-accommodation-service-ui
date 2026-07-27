@@ -18,8 +18,6 @@ export const stubProfilePage = async ({
   eligibility,
   referrals,
   proposedAddresses,
-  currentAccommodation,
-  nextAccommodation,
   accommodationHistory,
   accommodationSummaries,
 }: {
@@ -28,8 +26,6 @@ export const stubProfilePage = async ({
   eligibility?: EligibilityDto
   referrals?: AccommodationReferralDto[]
   proposedAddresses?: ProposedAccommodationDto[]
-  currentAccommodation?: AccommodationSummaryDto
-  nextAccommodation?: AccommodationSummaryDto
   accommodationHistory?: AccommodationSummaryDto[]
   accommodationSummaries?: AccommodationSummariesDto
 }) => {
@@ -37,8 +33,6 @@ export const stubProfilePage = async ({
   await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
   await casesApi.stubGetReferralHistory(crn, referrals)
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
-  await accommodationApi.stubGetCurrentAccommodation(crn, currentAccommodation)
-  await accommodationApi.stubGetNextAccommodation(crn, nextAccommodation)
   await accommodationApi.stubGetAccommodationHistory(crn, accommodationHistory)
   await accommodationApi.stubGetAccommodationSummary(crn, accommodationSummaries)
 }

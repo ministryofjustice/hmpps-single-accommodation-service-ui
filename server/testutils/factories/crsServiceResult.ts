@@ -11,6 +11,13 @@ class CrsServiceResultFactory extends Factory<CrsServiceResult> {
     })
   }
 
+  notRequired() {
+    return this.params({
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_REQUIRED' }),
+      commissionedRehabilitativeServices: null,
+    })
+  }
+
   notStarted() {
     return this.params({
       serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),

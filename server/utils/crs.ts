@@ -31,6 +31,7 @@ const crsStatusCardLinks = (crs?: CrsServiceResult): Link[] => {
     case 'SUBMITTED':
       return [{ text: 'View referral', href: url }]
     case 'NOT_ELIGIBLE':
+    case 'NOT_REQUIRED':
     default:
       return undefined
   }
@@ -46,7 +47,7 @@ export const crsStatusCard = (crs?: CrsServiceResult): StatusCard => {
     heading: 'Commissioned Rehabilitative Services (CRS)',
     details: crsStatusCardDetails(crs),
     hint: crsStatusCardHint(serviceStatus),
-    inactive: serviceStatus === 'NOT_ELIGIBLE',
+    inactive: serviceStatus === 'NOT_ELIGIBLE' || serviceStatus === 'NOT_REQUIRED',
     links: crsStatusCardLinks(crs),
     status: serviceStatusTag(serviceStatus),
   }

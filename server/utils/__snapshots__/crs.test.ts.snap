@@ -14,6 +14,20 @@ exports[`CRS utilities crsStatusCard returns a status card for a NOT_ELIGIBLE CR
 }
 `;
 
+exports[`CRS utilities crsStatusCard returns a status card for a NOT_REQUIRED CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not required",
+  },
+}
+`;
+
 exports[`CRS utilities crsStatusCard returns a status card for a NOT_STARTED CRS service result 1`] = `
 {
   "details": undefined,

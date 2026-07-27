@@ -17,6 +17,12 @@ describe('CRS utilities', () => {
       expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
     })
 
+    it('returns a status card for a NOT_REQUIRED CRS service result', () => {
+      const crsServiceResult = crsServiceResultFactory.notRequired().build()
+
+      expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
+    })
+
     it('returns a status card for a NOT_STARTED CRS service result', () => {
       const crsServiceResult = crsServiceResultFactory.notStarted().build()
       crsServiceResult.serviceResult.url = 'https://example.com/start'

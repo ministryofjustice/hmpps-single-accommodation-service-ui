@@ -5,5 +5,4 @@
 export type StaffDetailsDto = {
   name: string
   username?: string | null
-  staffCode?: string | null
 }

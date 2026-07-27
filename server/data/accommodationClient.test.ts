@@ -7,7 +7,6 @@ import AccommodationClient from './accommodationClient'
 describeClient('AccommodationClient', provider => {
   let accommodationClient: AccommodationClient
   let mockAuthenticationClient: jest.Mocked<AuthenticationClient>
-  const token = 'test-user-token'
 
   beforeEach(() => {
     accommodationClient = new AccommodationClient(mockAuthenticationClient)

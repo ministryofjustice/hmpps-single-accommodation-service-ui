@@ -45,21 +45,21 @@
       <h2 class="govuk-visually-hidden">Current situation</h2>
       {{ noFixedAbodeAlert(noFixedAbode) }}
 
-      <section class="sas-card sas-card--block">
-        <h3 class="govuk-heading-m">Next actions</h3>
+      {% if 'eligibility' in upstreamFailures or nextActions | length > 0 %}
+        <section class="sas-card sas-card--block">
+          <h3 class="govuk-heading-m">Next actions</h3>
 
-        {% if 'eligibility' in upstreamFailures %}
-          {{  apiErrorInset() }}
-        {% else %}
-          {% if nextActions | length %}
-            <ul class="govuk-list govuk-list--bullet">
-              {% for action in nextActions %}
-                <li>{{ action | safe }}</li>
-              {% endfor %}
-            </ul>
+          {% if 'eligibility' in upstreamFailures %}
+            {{  apiErrorInset() }}
+          {% else %}
+              <ul class="govuk-list govuk-list--bullet">
+                {% for action in nextActions %}
+                  <li>{{ action | safe }}</li>
+                {% endfor %}
+              </ul>
           {% endif %}
-        {% endif %}
-      </section>
+        </section>
+      {% endif %}
 
       {{ accommodationCard(currentAccommodationCard) }}
       {{ accommodationCard(nextAccommodationCard) }}

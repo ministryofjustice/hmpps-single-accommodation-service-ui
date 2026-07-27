@@ -57,6 +57,29 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowReferralHistory(referrals)
     await profileTrackerPage.shouldShowAccommodationHistory(accommodationHistory)
   })
+  test('Should not show next actions when there arent any', async ({ page }) => {
+    const crn = 'X123456'
+    const caseData = caseFactory.build({ crn })
+    const eligibility = eligibilityFactory.build({
+      crn,
+      caseActions: [],
+    })
+
+    await stubCaseListPage([caseData])
+    await stubProfilePage({ crn, caseData, eligibility })
+
+    // WHEN I sign in
+    await login(page)
+
+    // AND I click on the case name
+    await page.getByRole('link', { name: caseData.name }).click()
+
+    // THEN I should see the profile tracker page
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // AND I should see there are no actions
+    await profileTrackerPage.shouldNotShowNextActionsCard()
+  })
 
   test('should display the profile tracker for a case with LAO flag', async ({ page }) => {
     const crn = 'X123456'

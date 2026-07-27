@@ -8,8 +8,6 @@
         "description": "viciously well-worn"
       },
       "verificationStatus": "FAILED",
-      "startDate": "2025-10-09",
-      "endDate": "2026-09-20",
       "address": {
         "postcode": "JF77 5FZ",
         "subBuildingName": "Suite 612",
@@ -33,8 +31,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "YES",
-      "startDate": "2026-02-12",
-      "endDate": "2026-12-16",
       "address": {
         "postcode": "KY0 2GX",
         "buildingNumber": "8",
@@ -60,8 +56,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "NO",
-      "startDate": "2026-01-08",
-      "endDate": "2026-06-22",
       "address": {
         "postcode": "DG4 4JY",
         "buildingNumber": "6",
@@ -86,8 +80,6 @@
         "description": "among"
       },
       "verificationStatus": "FAILED",
-      "startDate": "2026-03-22",
-      "endDate": "2027-04-13",
       "address": {
         "postcode": "KU37 3SE",
         "buildingNumber": "65",
@@ -110,8 +102,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "NO",
-      "startDate": "2026-03-16",
-      "endDate": "2026-11-10",
       "address": {
         "postcode": "RX8 8UQ",
         "buildingNumber": "96",
@@ -133,8 +123,6 @@
         "description": "limply obnoxiously"
       },
       "verificationStatus": "FAILED",
-      "startDate": "2025-10-31",
-      "endDate": "2026-06-27",
       "address": {
         "postcode": "LT57 8NY",
         "subBuildingName": "Apt. 288",
@@ -161,8 +149,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "NO",
-      "startDate": "2025-08-06",
-      "endDate": "2026-10-15",
       "address": {
         "postcode": "II08 8TF",
         "buildingNumber": "341",
@@ -184,8 +170,6 @@
         "description": "mid carefully"
       },
       "verificationStatus": "NOT_CHECKED_YET",
-      "startDate": "2026-05-04",
-      "endDate": "2026-09-22",
       "address": {
         "postcode": "HV0 3QH",
         "buildingNumber": "58",
@@ -208,8 +192,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "TO_BE_DECIDED",
-      "startDate": "2025-10-13",
-      "endDate": "2027-02-21",
       "address": {
         "postcode": "MF03 1DO",
         "buildingNumber": "810",
@@ -234,8 +216,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "YES",
-      "startDate": "2025-08-22",
-      "endDate": "2026-07-09",
       "address": {
         "postcode": "IM27 6CM",
         "subBuildingName": "Suite 382",
@@ -259,8 +239,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "YES",
-      "startDate": "2026-02-20",
-      "endDate": "2026-12-29",
       "address": {
         "postcode": "MF55 7NV",
         "buildingNumber": "64",
@@ -283,8 +261,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "YES",
-      "startDate": "2025-10-31",
-      "endDate": "2026-08-20",
       "address": {
         "postcode": "BY55 1KD",
         "subBuildingName": "Suite 793",
@@ -310,8 +286,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "YES",
-      "startDate": "2025-11-25",
-      "endDate": "2026-09-10",
       "address": {
         "postcode": "KF7 1KG",
         "buildingNumber": "13",
@@ -334,8 +308,6 @@
       },
       "verificationStatus": "PASSED",
       "nextAccommodationStatus": "NO",
-      "startDate": "2025-05-23",
-      "endDate": "2026-11-15",
       "address": {
         "postcode": "QK59 7PW",
         "buildingName": "Dickinson Meadow",

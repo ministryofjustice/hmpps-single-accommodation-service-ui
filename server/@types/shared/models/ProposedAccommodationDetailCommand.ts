@@ -4,11 +4,8 @@
 /* eslint-disable */
 import type { AccommodationAddressDetails } from './AccommodationAddressDetails'
 export type ProposedAccommodationDetailCommand = {
-  name?: string | null
   accommodationTypeCode?: string | null
   verificationStatus: 'NOT_CHECKED_YET' | 'FAILED' | 'PASSED'
   nextAccommodationStatus: 'YES' | 'NO' | 'TO_BE_DECIDED'
   address: AccommodationAddressDetails
-  startDate?: string | null
-  endDate?: string | null
 }

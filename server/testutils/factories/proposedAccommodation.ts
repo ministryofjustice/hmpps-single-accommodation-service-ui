@@ -45,6 +45,6 @@ export default ProposedAccommodationFactory.define(() => {
     nextAccommodationStatus,
     address: addressFactory.build(),
     createdAt: faker.date.recent({ days: 10 }).toISOString(),
-    createdBy: faker.person.fullName(),
+    createdBy: `${faker.person.firstName()} ${faker.person.lastName()}`,
   }
 })

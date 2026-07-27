@@ -4,6 +4,7 @@ import { GetCasesQuery, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
 import { renderMacro } from './macros'
 import { renderActions } from './actions'
+import { staffName } from './staff'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -72,8 +73,7 @@ export const casesTableColumns = () => {
 export const caseAssignedTo = (c: Case, username: string): string => {
   if (c.userAccess !== 'FULL') return ''
   if (!c.assignedTo) return 'unallocated'
-  const fullName = `${c.assignedTo.forename} ${c.assignedTo.surname}`
-  return c.assignedTo?.username.toUpperCase() === username.toUpperCase() ? `You (${fullName})` : fullName
+  return staffName(c.assignedTo, username)
 }
 
 export const displayName = (caseData: Case, laoFlag = '(limited access offender)'): string => {

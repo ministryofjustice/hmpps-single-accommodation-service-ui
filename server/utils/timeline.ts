@@ -1,6 +1,7 @@
 import { TimelineEntry } from '@govuk/ui'
 import { AuditRecordDto } from '@sas/api'
 import { textBlock } from './macros'
+import { staffName } from './staff'
 
 export const timelineEntry = (label: string, html: string, datetime?: string, author?: string): TimelineEntry => {
   return {
@@ -20,8 +21,8 @@ export const timelineEntry = (label: string, html: string, datetime?: string, au
   }
 }
 
-export const noteTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
-  const { commitDate, author } = auditRecord
+export const noteTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
+  const { commitDate, authorDetails } = auditRecord
 
   const note = auditRecord.changes.find(change => change.field === 'note')?.value
 
@@ -29,5 +30,5 @@ export const noteTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry =>
 
   const html = textBlock(note)
 
-  return timelineEntry('Note added', html, commitDate, author)
+  return timelineEntry('Note added', html, commitDate, staffName(authorDetails, currentUsername))
 }

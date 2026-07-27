@@ -147,8 +147,6 @@ describe('casesController', () => {
       const eligibility = eligibilityFactory.build()
       const proposed = proposedAccommodationFactory.buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
       const failedChecks = proposedAccommodationFactory.buildList(1, { verificationStatus: 'FAILED' })
-      const currentAccommodation = accommodationSummaryFactory.current().build()
-      const nextAccommodation = accommodationSummaryFactory.next().build()
       const accommodationHistory = accommodationSummaryFactory.buildListSequential(2)
       const accommodationSummaries = accommodationSummariesFactory.build()
 
@@ -156,12 +154,6 @@ describe('casesController', () => {
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.eligibility(eligibility))
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed, failedChecks } })
-      accommodationService.getCurrentAccommodation.mockResolvedValue(
-        apiResponseFactory.accommodationSummary(currentAccommodation),
-      )
-      accommodationService.getNextAccommodation.mockResolvedValue(
-        apiResponseFactory.accommodationSummary(nextAccommodation),
-      )
       accommodationService.getAccommodationHistory.mockResolvedValue(
         apiResponseFactory.accommodationHistory(accommodationHistory),
       )
@@ -187,8 +179,8 @@ describe('casesController', () => {
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: renderActions(eligibility.caseActions),
         noFixedAbode: noFixedAbodeAlert(accommodationSummaries),
-        nextAccommodationCard: accommodationCard('next', nextAccommodation),
-        currentAccommodationCard: accommodationCard('current', currentAccommodation),
+        nextAccommodationCard: accommodationCard('next', accommodationSummaries.nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', accommodationSummaries.currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility, crn),
         proposedAddresses: proposed.map(proposedAddressStatusCard),
@@ -226,8 +218,6 @@ describe('casesController', () => {
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed: [], failedChecks: [] } })
-      accommodationService.getCurrentAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
-      accommodationService.getNextAccommodation.mockResolvedValue(apiResponseFactory.accommodationSummary())
       accommodationService.getAccommodationSummary.mockResolvedValue(apiResponseFactory.accommodationSummaries())
 
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.withUpstreamFailures())

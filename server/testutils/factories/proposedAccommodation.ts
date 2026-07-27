@@ -43,8 +43,6 @@ export default ProposedAccommodationFactory.define(() => {
     accommodationType: faker.helpers.arrayElement(accommodationTypes),
     verificationStatus,
     nextAccommodationStatus,
-    startDate: faker.date.past().toISOString().substring(0, 10),
-    endDate: faker.date.future().toISOString().substring(0, 10),
     address: addressFactory.build(),
     createdAt: faker.date.recent({ days: 10 }).toISOString(),
     createdBy: faker.person.fullName(),

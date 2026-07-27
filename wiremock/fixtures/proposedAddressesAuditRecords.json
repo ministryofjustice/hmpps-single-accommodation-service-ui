@@ -27,14 +27,6 @@
         "field": "nextAccommodationStatus"
       },
       {
-        "field": "startDate",
-        "value": "2025-10-09"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-09-20"
-      },
-      {
         "field": "postcode",
         "value": "JF77 5FZ"
       },
@@ -111,14 +103,6 @@
       {
         "field": "nextAccommodationStatus",
         "value": "YES"
-      },
-      {
-        "field": "startDate",
-        "value": "2026-02-12"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-12-16"
       },
       {
         "field": "postcode",
@@ -198,14 +182,6 @@
         "value": "NO"
       },
       {
-        "field": "startDate",
-        "value": "2026-01-08"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-06-22"
-      },
-      {
         "field": "postcode",
         "value": "DG4 4JY"
       },
@@ -280,14 +256,6 @@
       },
       {
         "field": "nextAccommodationStatus"
-      },
-      {
-        "field": "startDate",
-        "value": "2026-03-22"
-      },
-      {
-        "field": "endDate",
-        "value": "2027-04-13"
       },
       {
         "field": "postcode",
@@ -367,14 +335,6 @@
         "value": "NO"
       },
       {
-        "field": "startDate",
-        "value": "2026-03-16"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-11-10"
-      },
-      {
         "field": "postcode",
         "value": "RX8 8UQ"
       },
@@ -449,14 +409,6 @@
       },
       {
         "field": "nextAccommodationStatus"
-      },
-      {
-        "field": "startDate",
-        "value": "2025-10-31"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-06-27"
       },
       {
         "field": "postcode",
@@ -537,14 +489,6 @@
         "value": "NO"
       },
       {
-        "field": "startDate",
-        "value": "2025-08-06"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-10-15"
-      },
-      {
         "field": "postcode",
         "value": "II08 8TF"
       },
@@ -619,14 +563,6 @@
       },
       {
         "field": "nextAccommodationStatus"
-      },
-      {
-        "field": "startDate",
-        "value": "2026-05-04"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-09-22"
       },
       {
         "field": "postcode",
@@ -706,14 +642,6 @@
         "value": "TO_BE_DECIDED"
       },
       {
-        "field": "startDate",
-        "value": "2025-10-13"
-      },
-      {
-        "field": "endDate",
-        "value": "2027-02-21"
-      },
-      {
         "field": "postcode",
         "value": "MF03 1DO"
       },
@@ -789,14 +717,6 @@
       {
         "field": "nextAccommodationStatus",
         "value": "YES"
-      },
-      {
-        "field": "startDate",
-        "value": "2025-08-22"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-07-09"
       },
       {
         "field": "postcode",
@@ -877,14 +797,6 @@
         "value": "YES"
       },
       {
-        "field": "startDate",
-        "value": "2026-02-20"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-12-29"
-      },
-      {
         "field": "postcode",
         "value": "MF55 7NV"
       },
@@ -960,14 +872,6 @@
       {
         "field": "nextAccommodationStatus",
         "value": "YES"
-      },
-      {
-        "field": "startDate",
-        "value": "2025-10-31"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-08-20"
       },
       {
         "field": "postcode",
@@ -1048,14 +952,6 @@
         "value": "YES"
       },
       {
-        "field": "startDate",
-        "value": "2025-11-25"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-09-10"
-      },
-      {
         "field": "postcode",
         "value": "KF7 1KG"
       },
@@ -1131,14 +1027,6 @@
       {
         "field": "nextAccommodationStatus",
         "value": "NO"
-      },
-      {
-        "field": "startDate",
-        "value": "2025-05-23"
-      },
-      {
-        "field": "endDate",
-        "value": "2026-11-15"
       },
       {
         "field": "postcode",

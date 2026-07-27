@@ -6,5 +6,4 @@ export type AssignedToDto = {
   forename: string
   surname: string
   username?: string | null
-  staffCode?: string | null
 }

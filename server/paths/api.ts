@@ -11,8 +11,6 @@ export default {
     index: path('/case-list'),
     show: casePath,
     accommodation: {
-      current: accommodationPath.path('current'),
-      next: accommodationPath.path('next'),
       summary: accommodationPath.path('summary'),
     },
     dutyToRefer: {

@@ -24,4 +24,15 @@ describe('AccommodationService', () => {
     expect(accommodationClient.getAccommodationHistory).toHaveBeenCalledWith(token, 'X123456')
     expect(result).toEqual(response)
   })
+
+  it('should call getAccommodationSummary on the api client and return its result', async () => {
+    const response = apiResponseFactory.accommodationSummaries()
+
+    accommodationClient.getAccommodationSummary.mockResolvedValue(response)
+
+    const result = await accommodationService.getAccommodationSummary(token, 'X123456')
+
+    expect(accommodationClient.getAccommodationSummary).toHaveBeenCalledWith(token, 'X123456')
+    expect(result).toEqual(response)
+  })
 })

@@ -99,16 +99,14 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   if (referral.localAuthorityArea) {
     details.push(textContent(`Local authority: ${referral.localAuthorityArea}`))
   }
+  
+  const reasonText =
+    referral.status === 'WITHDRAWN'
+      ? withdrawReasonLabels[referral.referralRejectionReason as DtrSubmissionDto['withdrawalReason']]
+      : outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]
 
-  if (referral.placementStatus) {
-    const reasonText =
-      referral.placementStatus === 'WITHDRAWN'
-        ? withdrawReasonLabels[referral.referralRejectionReason as DtrSubmissionDto['withdrawalReason']]
-        : outcomeReasonSummaryLabels[referral.placementStatus as DtrSubmissionDto['outcomeReason']]
-
-    if (reasonText) {
-      details.push(textContent(`Reason: ${reasonText}`))
-    }
+  if (reasonText) {
+    details.push(textContent(`Reason: ${reasonText}`))
   }
 
   return details

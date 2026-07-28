@@ -14,6 +14,8 @@ describe('referrals utilities', () => {
     id: '789012',
     type: 'DTR',
     status: 'WITHDRAWN',
+    placementStatus: 'PRIORITY_NEED',
+    referralRejectionReason: 'NEW_REFERRAL',
     date: '2023-02-20',
     referredBy: { username: 'joe_bloggs', name: 'Joe Bloggs' },
   })

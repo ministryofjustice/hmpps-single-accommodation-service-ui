@@ -99,7 +99,7 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   if (referral.localAuthorityArea) {
     details.push(textContent(`Local authority: ${referral.localAuthorityArea}`))
   }
-  
+
   const reasonText =
     referral.status === 'WITHDRAWN'
       ? withdrawReasonLabels[referral.referralRejectionReason as DtrSubmissionDto['withdrawalReason']]

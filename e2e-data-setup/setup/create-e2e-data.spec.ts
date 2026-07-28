@@ -20,9 +20,7 @@ import {
   NextMonth,
 } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time'
 import { TEST_STAFF, TEST_TEAM } from '../fixtures'
-import saveOutput from '../utils/saveOutput'
-
-test.describe.configure({ retries: 0 })
+import appendToFile from '../utils/appendToFile'
 
 test('Create data for Base Case', async ({ page }) => {
   await loginDelius(page)
@@ -33,7 +31,8 @@ test('Create data for Base Case', async ({ page }) => {
     person,
     providerName: TEST_TEAM.provider,
   })
-  saveOutput('BASE_CASE_NAME', `${person.firstName} ${person.lastName}`)
+  appendToFile(`BASE_CASE_NAME=${person.firstName} ${person.lastName}`)
+  appendToFile(crn, 'CRN.txt')
   console.log('OK \n----------')
 
   console.log('Creating custodial event...')
@@ -41,7 +40,8 @@ test('Create data for Base Case', async ({ page }) => {
   console.log('OK \n----------')
 
   console.log('Creating booking...')
-  const { bookingId } = await createAndBookPrisoner(page, crn, person)
+  const { nomisId, bookingId } = await createAndBookPrisoner(page, crn, person)
+  appendToFile(nomisId, 'NOMIS.txt')
   console.log('OK \n----------')
 
   console.log('Creating OASys assessment...')

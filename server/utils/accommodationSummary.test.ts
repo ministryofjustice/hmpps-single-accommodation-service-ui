@@ -43,12 +43,13 @@ describe('accommodationSummary', () => {
       })
       const noTypeSummary = summaryFactory('2026-05-23').build({ address, type: null })
 
-      const testCases: [string, AccommodationSummaryDto][] = [
+      const testCases: [string, AccommodationSummaryDto | null][] = [
         ['CAS2', cas2Summary],
         ['CAS3', cas3Summary],
         ['Private address', privateSummary],
         ['No type', noTypeSummary],
         ['Undefined', undefined],
+        ['Null', null],
       ]
 
       it.skip.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {

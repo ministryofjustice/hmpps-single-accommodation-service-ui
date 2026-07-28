@@ -190,6 +190,8 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 }
 `;
 
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Null accommodation 1`] = `undefined`;
+
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Private address accommodation 1`] = `
 {
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
@@ -244,6 +246,8 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "startDate": "2026-05-23",
 }
 `;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Null accommodation 1`] = `undefined`;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Private address accommodation 1`] = `
 {

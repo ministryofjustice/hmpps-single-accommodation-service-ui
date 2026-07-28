@@ -19,6 +19,7 @@ import { noteTimelineEntry, timelineEntry } from './timeline'
 import { serviceStatusTag } from './statusTag'
 import { summaryListRow } from './summaryListRow'
 import { htmlContent, noValueHtml, textContent } from './utils'
+import { staffName } from './staff'
 
 const REFERENCE_REMOVED_LABEL = 'Reference removed'
 const NOTE_REMOVED_LABEL = 'Note removed'
@@ -285,7 +286,7 @@ const outcomeValues = (submission: Partial<DtrSubmissionDto>, isChange: boolean)
     },
   ].filter(Boolean)
 
-export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineEntry => {
+export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
   const { type } = auditRecord
 
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
@@ -348,7 +349,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto): TimelineE
     isChange,
   })
 
-  return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+  return timelineEntry(label, html, auditRecord.commitDate, staffName(auditRecord.authorDetails, currentUsername))
 }
 
 export const outcomeReasonToStatus = (outcomeReason: DtrSubmissionDto['outcomeReason']): DutyToReferDto['status'] => {

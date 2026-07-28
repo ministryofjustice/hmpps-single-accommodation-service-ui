@@ -9,6 +9,7 @@ import {
   assignedToOptions,
 } from './cases'
 import { actionFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
+import * as staffUtils from './staff'
 
 describe('cases utilities', () => {
   beforeEach(() => {
@@ -130,31 +131,15 @@ describe('cases utilities', () => {
   })
 
   describe('caseAssignedTo', () => {
-    it('returns "You (name)" when the assignedTo username matches the given username', () => {
-      const person = caseFactory.build({
-        assignedTo: { username: 'alice_smith', forename: 'Alice', surname: 'Smith' },
-      })
+    it('returns the staff name', () => {
+      jest.spyOn(staffUtils, 'staffName')
 
-      expect(caseAssignedTo(person, 'alice_smith')).toEqual('You (Alice Smith)')
-    })
-
-    it.each(['USERNAMEONE', 'usernameone', 'UsernameOne'])(
-      'matches for username %s using case-insensitive comparison',
-      username => {
-        const person = caseFactory.build({
-          assignedTo: { username: 'usernameOne', forename: 'Alice', surname: 'Smith' },
-        })
-
-        expect(caseAssignedTo(person, username)).toEqual('You (Alice Smith)')
-      },
-    )
-
-    it('returns the assignedTo name when the assignedTo username does not match the given username', () => {
       const person = caseFactory.build({
         assignedTo: { username: 'bob_johnson', forename: 'Bob', surname: 'Johnson' },
       })
 
       expect(caseAssignedTo(person, 'alice_smith')).toEqual('Bob Johnson')
+      expect(staffUtils.staffName).toHaveBeenCalledWith(person.assignedTo, 'alice_smith')
     })
 
     it('returns "unallocated" if assigned to is null', () => {

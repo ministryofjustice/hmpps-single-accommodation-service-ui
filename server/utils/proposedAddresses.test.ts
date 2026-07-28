@@ -24,6 +24,7 @@ import {
 } from './proposedAddresses'
 import {
   addressFactory,
+  assignedUserFactory,
   auditRecordFactory,
   proposedAccommodationFactory,
   proposedAddressFormFactory,
@@ -765,10 +766,18 @@ describe('Proposed addresses utilities', () => {
   })
 
   describe('addressTimelineEntry', () => {
+    const authorDetails = assignedUserFactory.build({
+      forename: 'Florence',
+      surname: 'Collins',
+    })
+
     it('returns a timeline entry for a note', () => {
       const auditRecord = auditRecordFactory.note('Some note\nline 2').build({
         commitDate: '2025-07-18T17:53:24.426Z',
-        author: 'Candace Schumm',
+        authorDetails: assignedUserFactory.build({
+          forename: 'Candace',
+          surname: 'Schumm',
+        }),
       })
 
       expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -788,10 +797,12 @@ describe('Proposed addresses utilities', () => {
         },
         verificationStatus: 'PASSED',
         nextAccommodationStatus: 'YES',
-        createdBy: 'Dr. Kay Towne',
+        createdBy: 'Florence Collins',
         createdAt: '2026-03-06T21:37:21.666Z',
       })
-      const auditRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
+      const auditRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build({
+        authorDetails,
+      })
 
       expect(addressTimelineEntry(auditRecord)).toMatchSnapshot()
     })
@@ -805,7 +816,7 @@ describe('Proposed addresses utilities', () => {
           },
         ])
         .build({
-          author: 'Florence Collins',
+          authorDetails,
           commitDate: '2025-06-15T07:15:13.764Z',
         })
 
@@ -821,7 +832,7 @@ describe('Proposed addresses utilities', () => {
           },
         ])
         .build({
-          author: 'Florence Collins',
+          authorDetails,
           commitDate: '2025-06-15T07:15:13.764Z',
         })
 
@@ -837,7 +848,7 @@ describe('Proposed addresses utilities', () => {
           },
         ])
         .build({
-          author: 'Florence Collins',
+          authorDetails,
           commitDate: '2025-06-15T07:15:13.764Z',
         })
 
@@ -853,7 +864,7 @@ describe('Proposed addresses utilities', () => {
           { field: 'postcode', value: 'P0 5TC' },
         ])
         .build({
-          author: 'Florence Collins',
+          authorDetails,
           commitDate: '2025-06-15T07:15:13.764Z',
         })
 
@@ -864,7 +875,7 @@ describe('Proposed addresses utilities', () => {
       const auditRecord = auditRecordFactory
         .proposedAddressUpdated([{ field: 'verificationStatus', value: 'PASSED' }])
         .build({
-          author: 'Florence Collins',
+          authorDetails,
           commitDate: '2025-06-15T07:15:13.764Z',
         })
       const previousFieldValues = {
@@ -896,14 +907,22 @@ describe('Proposed addresses utilities', () => {
         },
         verificationStatus: 'NOT_CHECKED_YET',
         nextAccommodationStatus: undefined,
-        createdBy: 'Dr. Kay Towne',
+        createdBy: 'Kay Towne',
         createdAt: '2026-03-06T21:37:21.666Z',
       })
-      const createdRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build()
+      const createdRecord = auditRecordFactory.proposedAddressCreated(proposedAddress).build({
+        authorDetails: assignedUserFactory.build({
+          forename: 'Kay',
+          surname: 'Towne',
+        }),
+      })
       const postcodeChangedRecord = auditRecordFactory
         .proposedAddressUpdated([{ field: 'postcode', value: 'N3 5TC' }])
         .build({
-          author: 'Florence Collins',
+          authorDetails: assignedUserFactory.build({
+            forename: 'Florence',
+            surname: 'Collins',
+          }),
           commitDate: '2026-04-01T09:00:00.000Z',
         })
 

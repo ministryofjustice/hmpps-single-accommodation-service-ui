@@ -38,7 +38,7 @@ export default class DutyToReferController {
   show(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
-      const { token } = res.locals.user
+      const { username, token } = res.locals.user
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_DETAILS, {
         who: res.locals.user.username,
@@ -60,10 +60,10 @@ export default class DutyToReferController {
         crn,
         dtrId: id,
         caseData,
-        assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
+        assignedTo: caseAssignedTo(caseData, username),
         submissionDetailRows,
         outcomeDetailRows,
-        timeline: auditRecords.map(dutyToReferTimelineEntry),
+        timeline: auditRecords.map(record => dutyToReferTimelineEntry(record, username)),
         status: dutyToRefer?.status,
         active: dutyToRefer.active,
         ...userInput,

@@ -2,6 +2,7 @@ import { Factory } from 'fishery'
 import { AuditRecordDto, DtrSubmissionDto, DutyToReferDto, FieldChange, ProposedAccommodationDto } from '@sas/api'
 import { faker } from '@faker-js/faker'
 import proposedAccommodationFactory from './proposedAccommodation'
+import assignedUserFactory from './assignedUser'
 
 const dtrExtraInformation = (
   dtrData: DtrSubmissionDto,
@@ -66,9 +67,11 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
       return { field: property, value: value as string }
     })
 
+    const [forename, surname] = addressDetails.createdBy.split(' ')
+
     return this.params({
       type: 'CREATE',
-      author: addressDetails.createdBy,
+      authorDetails: assignedUserFactory.build({ forename, surname }),
       commitDate: addressDetails.createdAt,
       changes,
     })
@@ -108,7 +111,8 @@ class AuditRecordFactory extends Factory<AuditRecordDto> {
 
 export default AuditRecordFactory.define(() => ({
   type: faker.helpers.arrayElement(['CREATE', 'UPDATE']),
-  author: faker.person.fullName(),
+  author: '',
+  authorDetails: assignedUserFactory.build(),
   commitDate: faker.helpers.maybe(() => faker.date.past().toISOString(), { probability: 0.8 }),
   changes: [
     {

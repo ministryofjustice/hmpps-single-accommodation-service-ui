@@ -34,6 +34,7 @@ import { renderMacro, statusTag, textBlock } from './macros'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import config from '../config'
 import { summaryListRow } from './summaryListRow'
+import { staffName } from './staff'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
@@ -428,6 +429,7 @@ const fieldValuesToProposedAddress = (fieldValues: AuditFieldValues): ProposedAc
 export const addressTimelineEntry = (
   auditRecord: AuditRecordDto,
   previousFieldValues: AuditFieldValues = {},
+  currentUsername?: string,
 ): TimelineEntry => {
   const { type } = auditRecord
   if (type === 'NOTE') return noteTimelineEntry(auditRecord)
@@ -464,16 +466,16 @@ export const addressTimelineEntry = (
 
   const html = renderMacro('timelineProposedAddress', { type, status, values })
 
-  return timelineEntry(label, html, auditRecord.commitDate, auditRecord.author)
+  return timelineEntry(label, html, auditRecord.commitDate, staffName(auditRecord.authorDetails, currentUsername))
 }
 
-export const addressTimeline = (auditRecords: AuditRecordDto[]): TimelineEntry[] => {
+export const addressTimeline = (auditRecords: AuditRecordDto[], currentUsername?: string): TimelineEntry[] => {
   let fieldValues: AuditFieldValues = {}
 
   return [...auditRecords]
     .reverse()
     .map(auditRecord => {
-      const entry = addressTimelineEntry(auditRecord, fieldValues)
+      const entry = addressTimelineEntry(auditRecord, fieldValues, currentUsername)
       fieldValues = { ...fieldValues, ...auditRecordChangesToFieldValues(auditRecord.changes) }
       return entry
     })

@@ -15,6 +15,7 @@ import {
 import * as validationUtils from './validation'
 import {
   actionFactory,
+  assignedUserFactory,
   auditRecordFactory,
   caseFactory,
   dtrServiceResultFactory,
@@ -365,6 +366,11 @@ describe('duty to refer utils', () => {
   })
 
   describe('dutyToReferTimelineEntry', () => {
+    const authorDetails = assignedUserFactory.build({
+      forename: 'Jane',
+      surname: 'Doe',
+    })
+
     beforeEach(() => {
       jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
     })
@@ -376,7 +382,7 @@ describe('duty to refer utils', () => {
     it('returns a timeline entry for a note', () => {
       const auditRecord = auditRecordFactory.note('Some note\nline 2').build({
         commitDate: '2025-04-15T14:30:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
       })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -391,7 +397,7 @@ describe('duty to refer utils', () => {
       })
       const auditRecord = auditRecordFactory.dutyToReferAdded(submission).build({
         commitDate: '2025-04-12T17:07:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
       })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -406,7 +412,7 @@ describe('duty to refer utils', () => {
       })
       const auditRecord = auditRecordFactory.dutyToReferAdded(submission).build({
         commitDate: '2025-04-12T17:07:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
       })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -420,7 +426,7 @@ describe('duty to refer utils', () => {
       })
       const auditRecord = auditRecordFactory.dutyToReferUpdated(submission).build({
         commitDate: '2025-04-15T10:00:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
       })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -434,7 +440,7 @@ describe('duty to refer utils', () => {
       })
       const auditRecord = auditRecordFactory.dutyToReferUpdated(submission).build({
         commitDate: '2025-04-15T10:00:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
       })
 
       const entry = dutyToReferTimelineEntry(auditRecord)
@@ -446,7 +452,7 @@ describe('duty to refer utils', () => {
       const auditRecord = auditRecordFactory.build({
         type: 'UPDATE',
         commitDate: '2025-04-16T10:00:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
         changes: [
           { field: 'localAuthorityAreaId', value: 'la-4' },
           { field: 'submissionDate', value: '2025-04-16' },
@@ -462,7 +468,7 @@ describe('duty to refer utils', () => {
       const auditRecord = auditRecordFactory.build({
         type: 'UPDATE',
         commitDate: '2025-04-16T11:00:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
         changes: [{ field: 'referenceNumber', value: '', oldValue: 'REF999' }],
         extraInformation: { localAuthorityAreaName: 'Oxford City Council' },
       })
@@ -474,7 +480,7 @@ describe('duty to refer utils', () => {
       const auditRecord = auditRecordFactory.build({
         type: 'UPDATE',
         commitDate: '2025-04-17T09:00:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
         changes: [{ field: 'submissionDate', value: '2025-04-17' }],
         extraInformation: { localAuthorityAreaName: 'Oxford City Council' },
       })
@@ -486,7 +492,7 @@ describe('duty to refer utils', () => {
       const auditRecord = auditRecordFactory.build({
         type: 'UPDATE',
         commitDate: '2025-04-17T10:00:00.000Z',
-        author: 'Jane Doe',
+        authorDetails,
         changes: [{ field: 'localAuthorityAreaId', value: 'la-5' }],
         extraInformation: { localAuthorityAreaName: 'Vale of White Horse District Council' },
       })
@@ -507,7 +513,7 @@ describe('duty to refer utils', () => {
         )
         .build({
           commitDate: '2025-04-15T15:38:00.000Z',
-          author: 'Jane Doe',
+          authorDetails,
         })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -525,7 +531,7 @@ describe('duty to refer utils', () => {
         )
         .build({
           commitDate: '2025-04-16T09:00:00.000Z',
-          author: 'Jane Doe',
+          authorDetails,
         })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -543,7 +549,7 @@ describe('duty to refer utils', () => {
         )
         .build({
           commitDate: '2025-04-16T09:00:00.000Z',
-          author: 'Jane Doe',
+          authorDetails,
         })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()
@@ -565,7 +571,7 @@ describe('duty to refer utils', () => {
         )
         .build({
           commitDate: '2025-04-16T09:00:00.000Z',
-          author: 'Jane Doe',
+          authorDetails,
         })
 
       expect(dutyToReferTimelineEntry(auditRecord)).toMatchSnapshot()

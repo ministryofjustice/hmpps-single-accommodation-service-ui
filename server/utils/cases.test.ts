@@ -260,12 +260,20 @@ describe('cases utilities', () => {
         surname: 'Foo',
       })
 
-      it('renders the middle names', () => {
+      it('renders the middle names by default', () => {
         expect(displayName(personWithMiddleNames)).toEqual('Dave John Charles Foo')
       })
 
-      it('does not render middle names for case list', () => {
-        expect(displayName(personWithMiddleNames, { caseList: true })).toEqual('Foo, Dave')
+      it('does not render the middle names if onlyFirstLast is specified', () => {
+        expect(displayName(personWithMiddleNames, { onlyFirstLast: true })).toEqual('Dave Foo')
+      })
+
+      it('renders middle names for case list by default', () => {
+        expect(displayName(personWithMiddleNames, { caseList: true })).toEqual('Foo, Dave John Charles')
+      })
+
+      it('does not render middle names for case list when onlyFirstLast is specified', () => {
+        expect(displayName(personWithMiddleNames, { caseList: true, onlyFirstLast: true })).toEqual('Foo, Dave')
       })
     })
   })

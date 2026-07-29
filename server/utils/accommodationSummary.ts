@@ -71,7 +71,7 @@ export const settledTag = (type?: AccommodationSummaryDto['type']): StatusTag =>
 
 export const accommodationCard = (
   cardType: 'current' | 'next',
-  accommodation?: AccommodationSummaryDto,
+  accommodation?: AccommodationSummaryDto | null,
 ): AccommodationCardContext => {
   if (!accommodation) return undefined
 

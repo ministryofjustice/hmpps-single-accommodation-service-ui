@@ -4,7 +4,6 @@ import {
   AccommodationSummariesDto,
   AccommodationSummaryDto,
   ApiResponseDtoAccommodationSummariesDto,
-  ApiResponseDtoAccommodationSummaryDto,
   ApiResponseDtoCaseDto,
   ApiResponseDtoDutyToReferDto,
   ApiResponseDtoEligibilityDto,
@@ -38,10 +37,6 @@ import upstreamFailureFactory from './upstreamFailure'
 class ApiResponseFactory extends Factory<ApiResponse> {
   buildResponse<T extends ApiResponse>(data: T['data']) {
     return this.params({ data }).build() as T
-  }
-
-  accommodationSummary(accommodationSummary?: AccommodationSummaryDto) {
-    return this.buildResponse<ApiResponseDtoAccommodationSummaryDto>(accommodationSummary ?? null)
   }
 
   accommodationSummaries(accommodationSummaries?: AccommodationSummariesDto) {

@@ -1,5 +1,4 @@
-import { accommodationSummaryFactory, apiResponseFactory } from '../testutils/factories'
-import crnFactory from '../testutils/crn'
+import { apiResponseFactory } from '../testutils/factories'
 import AccommodationClient from '../data/accommodationClient'
 import AccommodationService from './accommodationService'
 
@@ -15,30 +14,6 @@ describe('AccommodationService', () => {
     accommodationService = new AccommodationService(accommodationClient)
   })
 
-  it('should call getCurrentAccommodation on the api client and return its result', async () => {
-    const crn = crnFactory()
-    const accommodation = accommodationSummaryFactory.build({ crn })
-    const response = apiResponseFactory.accommodationSummary(accommodation)
-    accommodationClient.getCurrentAccommodation.mockResolvedValue(response)
-
-    const result = await accommodationService.getCurrentAccommodation(token, crn)
-
-    expect(accommodationClient.getCurrentAccommodation).toHaveBeenCalledWith(token, crn)
-    expect(result).toEqual(response)
-  })
-
-  it('should call getNextAccommodation on the api client and return its result', async () => {
-    const crn = crnFactory()
-    const accommodation = accommodationSummaryFactory.build({ crn })
-    const response = apiResponseFactory.accommodationSummary(accommodation)
-    accommodationClient.getNextAccommodation.mockResolvedValue(response)
-
-    const result = await accommodationService.getNextAccommodation(token, crn)
-
-    expect(accommodationClient.getNextAccommodation).toHaveBeenCalledWith(token, crn)
-    expect(result).toEqual(response)
-  })
-
   it('should call getAccommodationHistory on the api client and return its result', async () => {
     const response = apiResponseFactory.accommodationHistory()
 
@@ -47,6 +22,17 @@ describe('AccommodationService', () => {
     const result = await accommodationService.getAccommodationHistory(token, 'X123456')
 
     expect(accommodationClient.getAccommodationHistory).toHaveBeenCalledWith(token, 'X123456')
+    expect(result).toEqual(response)
+  })
+
+  it('should call getAccommodationSummary on the api client and return its result', async () => {
+    const response = apiResponseFactory.accommodationSummaries()
+
+    accommodationClient.getAccommodationSummary.mockResolvedValue(response)
+
+    const result = await accommodationService.getAccommodationSummary(token, 'X123456')
+
+    expect(accommodationClient.getAccommodationSummary).toHaveBeenCalledWith(token, 'X123456')
     expect(result).toEqual(response)
   })
 })

@@ -157,6 +157,7 @@ if (generate.proposedAddresses) {
 }
 
 if (generate.accommodation) {
+  const caseAccommodationStatuses: Record<string, unknown> = {}
   const currentAccommodation: Record<string, unknown> = {}
   const nextAccommodation: Record<string, unknown> = {}
   const accommodationHistory: Record<string, unknown> = {}
@@ -175,6 +176,7 @@ if (generate.accommodation) {
     const next =
       isNoFixedAbode || isRiskOfNoFixedAbode ? null : accommodationSummaryFactory.next().build({ crn: c.crn })
 
+    caseAccommodationStatuses[c.crn] = caseAccommodationStatus
     currentAccommodation[c.crn] = current
     nextAccommodation[c.crn] = next
 
@@ -183,6 +185,7 @@ if (generate.accommodation) {
     accommodationHistory[c.crn] = current ? [current, ...previous] : previous
   })
 
+  saveToFixture('caseAccommodationStatus', caseAccommodationStatuses)
   saveToFixture('currentAccommodation', currentAccommodation)
   saveToFixture('nextAccommodation', nextAccommodation)
   saveToFixture('accommodationHistory', accommodationHistory)

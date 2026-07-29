@@ -162,7 +162,8 @@ describe('duty to refer utils', () => {
   describe('summaryListRows', () => {
     const caseData = caseFactory.build({
       crn: 'CRN123',
-      name: 'John Smith',
+      forename: 'John',
+      surname: 'Smith',
       dateOfBirth: '1990-01-15',
       prisonNumber: 'A1234BC',
       actions: [

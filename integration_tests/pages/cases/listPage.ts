@@ -3,6 +3,7 @@ import { CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
+import { displayName } from '../../../server/utils/cases'
 
 export default class CasesListPage extends AbstractPage {
   readonly casesRows: Locator
@@ -24,7 +25,7 @@ export default class CasesListPage extends AbstractPage {
     for await (const [index, person] of cases.entries()) {
       const row =
         person.userAccess !== 'LIMITED'
-          ? this.page.getByRole('row', { name: person.name })
+          ? this.page.getByRole('row', { name: displayName(person, { caseList: true, laoFlag: '' }) })
           : this.page.locator('tbody').getByRole('row').nth(index)
 
       await expect(row).toContainText(person.crn as string)
@@ -69,5 +70,9 @@ export default class CasesListPage extends AbstractPage {
         await expect(this.page.getByRole('link', { name: filterText })).toBeVisible()
       }
     }
+  }
+
+  async clickCaseLink(caseData: Case) {
+    await this.clickLink(displayName(caseData, { caseList: true, laoFlag: '' }))
   }
 }

@@ -67,7 +67,7 @@ test.describe('List of cases', () => {
     })
 
     // WHEN I click on a case
-    await casesListPage.clickLink(filteredCase.name)
+    await casesListPage.clickCaseLink(filteredCase)
 
     // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, filteredCase)
@@ -100,7 +100,7 @@ test.describe('List of cases', () => {
     await casesListPage.shouldShowCases(cases, [])
 
     // WHEN I click on a Limited access offender link
-    await casesListPage.clickLink('Limited access offender')
+    await casesListPage.clickCaseLink(cases[2])
 
     // THEN I should see the LAO access page
     const laoAccessPage = await LaoAccessPage.verifyOnPage(page, cases[2])

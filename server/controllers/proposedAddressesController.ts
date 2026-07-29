@@ -37,7 +37,7 @@ import CasesService from '../services/casesService'
 import OsDataHubService from '../services/osDataHubService'
 import { getPageBackLink } from '../utils/backlinks'
 import { addressLines, formatAddress } from '../utils/addresses'
-import { caseAssignedTo } from '../utils/cases'
+import { caseAssignedTo, displayName } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import config from '../config'
 import { radioItems } from '../utils/utils'
@@ -84,6 +84,7 @@ export default class ProposedAddressesController {
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/proposed-address/show', {
+        displayName: displayName(caseData),
         caseData,
         assignedTo: caseAssignedTo(caseData, username),
         address: formatAddress(proposedAddress.address),
@@ -334,7 +335,7 @@ export default class ProposedAddressesController {
             ? uiPaths.proposedAddresses.selectAddress({ crn })
             : uiPaths.proposedAddresses.details({ crn }),
         address: formatAddress(proposedAddressFormSessionData.address),
-        name: caseData.name,
+        name: displayName(caseData),
         accommodationTypeItems: accommodationTypeItems(accommodationTypes, accommodationTypeCode),
         errors,
         errorSummary,
@@ -427,7 +428,7 @@ export default class ProposedAddressesController {
           nextAccommodationStatusLabels,
           proposedAddressFormSessionData?.nextAccommodationStatus,
         ),
-        name: caseData.name,
+        name: displayName(caseData),
         backLinkHref,
         address: formatAddress(proposedAddressFormSessionData.address),
         errors,
@@ -556,7 +557,7 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/arrival', {
         backLinkHref,
-        pageHeading: `Confirm that ${caseData.name} has moved into this address`,
+        pageHeading: `Confirm that ${displayName(caseData)} has moved into this address`,
         addressLines: addressLines(proposedAddress.address),
         cancelLinkHref: backLinkHref,
       })

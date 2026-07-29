@@ -5,6 +5,7 @@ import { addressLines } from '../../../server/utils/addresses'
 import { verifyPost } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import { getTodayLocal } from '../../../server/utils/dates'
+import { displayName } from '../../../server/utils/cases'
 
 export default class ConfirmCurrentAddressPage extends AbstractPage {
   constructor(
@@ -14,7 +15,7 @@ export default class ConfirmCurrentAddressPage extends AbstractPage {
   ) {
     super(page)
 
-    this.header = page.locator('h1', { hasText: `Confirm that ${caseData.name} has moved into this address` })
+    this.header = page.locator('h1', { hasText: `Confirm that ${displayName(caseData)} has moved into this address` })
   }
 
   async shouldShowProposedAddress() {

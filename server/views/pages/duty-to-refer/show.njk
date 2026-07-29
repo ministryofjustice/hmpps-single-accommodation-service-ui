@@ -32,7 +32,8 @@
 {% block content %}
   {{ showErrorSummary(errorSummary) }}
 
-  {{ caseDetails(caseData, assignedTo) }}
+  {{ caseDetails(displayName, caseData, assignedTo) }}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       {% if not active %}

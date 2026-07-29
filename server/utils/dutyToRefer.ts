@@ -20,6 +20,7 @@ import { serviceStatusTag } from './statusTag'
 import { summaryListRow } from './summaryListRow'
 import { htmlContent, noValueHtml, textContent } from './utils'
 import { staffName } from './staff'
+import { displayName } from './cases'
 
 const REFERENCE_REMOVED_LABEL = 'Reference removed'
 const NOTE_REMOVED_LABEL = 'Note removed'
@@ -78,7 +79,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
 
 export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
   const rows = [
-    summaryListRow('Name', caseData.name),
+    summaryListRow('Name', displayName(caseData)),
     summaryListRow('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
     summaryListRow('CRN', caseData.crn),
   ]

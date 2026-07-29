@@ -54,7 +54,11 @@ const removeQueryParam = (url: string, param: string): string => {
 }
 
 export const personCell = (caseData: Case, assignedToText?: string): string =>
-  renderMacro('personCell', { ...caseData, name: displayName(caseData, ''), assignedToText })
+  renderMacro('personCell', {
+    ...caseData,
+    name: displayName(caseData, { laoFlag: '', caseList: true }),
+    assignedToText,
+  })
 
 export const actionsCell = (actions: CaseAction[]): string =>
   renderMacro('actionsCell', { actions: renderActions(actions) })
@@ -76,14 +80,23 @@ export const caseAssignedTo = (c: Case, username: string): string => {
   return staffName(c.assignedTo, username)
 }
 
-export const displayName = (caseData: Case, laoFlag = '(limited access offender)'): string => {
+type DisplayNameOptions = {
+  laoFlag?: string
+  caseList?: boolean
+}
+
+export const displayName = (caseData: Case, options: DisplayNameOptions = {}): string => {
+  const { laoFlag = '(limited access offender)', caseList = false } = options
+  const { forename, middleNames, surname } = caseData ?? {}
+  const name = caseList ? [surname, forename].join(', ') : [forename, middleNames, surname].filter(Boolean).join(' ')
+
   switch (caseData.userAccess) {
     case 'LIMITED':
       return 'Limited access offender'
     case 'UNKNOWN':
       return 'Unknown'
     default:
-      return `${caseData.name} ${caseData.limitedAccess ? laoFlag : ''}`.trim()
+      return `${name} ${caseData.limitedAccess ? laoFlag : ''}`.trim()
   }
 }
 

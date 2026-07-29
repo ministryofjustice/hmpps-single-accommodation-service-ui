@@ -17,6 +17,7 @@ import {
 } from '../../../server/testutils/factories'
 import { stubProfilePage } from '../../helpers/profilePage'
 import { stubCaseListPage } from '../../helpers/caseListPage'
+import CasesListPage from '../../pages/cases/listPage'
 
 test.describe('Profile Tracker Page', () => {
   test('Should display profile tracker for a specific case', async ({ page }) => {
@@ -45,7 +46,8 @@ test.describe('Profile Tracker Page', () => {
     await login(page)
 
     // AND I click on the case name
-    await page.getByRole('link', { name: caseData.name }).click()
+    const caseListPage = await CasesListPage.verifyOnPage(page)
+    await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
@@ -57,6 +59,7 @@ test.describe('Profile Tracker Page', () => {
     await profileTrackerPage.shouldShowReferralHistory(referrals)
     await profileTrackerPage.shouldShowAccommodationHistory(accommodationHistory)
   })
+
   test('Should not show next actions when there arent any', async ({ page }) => {
     const crn = 'X123456'
     const caseData = caseFactory.build({ crn })
@@ -72,7 +75,8 @@ test.describe('Profile Tracker Page', () => {
     await login(page)
 
     // AND I click on the case name
-    await page.getByRole('link', { name: caseData.name }).click()
+    const caseListPage = await CasesListPage.verifyOnPage(page)
+    await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
@@ -92,7 +96,8 @@ test.describe('Profile Tracker Page', () => {
     await login(page)
 
     // AND I click on the case name
-    await page.getByRole('link', { name: caseData.name }).click()
+    const caseListPage = await CasesListPage.verifyOnPage(page)
+    await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
@@ -132,7 +137,8 @@ test.describe('Profile Tracker Page', () => {
     await login(page)
 
     // AND I click on the case name
-    await page.getByRole('link', { name: caseData.name }).click()
+    const caseListPage = await CasesListPage.verifyOnPage(page)
+    await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)

@@ -5,6 +5,7 @@ import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
 import { outcomeReasonLabels, withdrawReasonLabels } from '../../../server/utils/dutyToRefer'
+import { displayName } from '../../../server/utils/cases'
 
 export default class DutyToReferPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -13,7 +14,7 @@ export default class DutyToReferPage extends AbstractPage {
   }
 
   async shouldShowCaseSummary(caseData: Case) {
-    await this.shouldShowSummaryItem('Name', caseData.name)
+    await this.shouldShowSummaryItem('Name', displayName(caseData))
     await this.shouldShowSummaryItem('Date of birth', formatDateAndAge(caseData.dateOfBirth))
     await this.shouldShowSummaryItem('CRN', caseData.crn)
     if (caseData.prisonNumber) {

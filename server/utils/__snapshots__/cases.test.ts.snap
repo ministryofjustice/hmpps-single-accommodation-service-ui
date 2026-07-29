@@ -18,7 +18,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/C321654"> Dave Foo </a>
+      <a class="govuk-link" href="/cases/C321654"> Foo, Dave </a>
       
     </div>
 
@@ -60,7 +60,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/C321654"> Dave Foo </a>
+      <a class="govuk-link" href="/cases/C321654"> Foo, Dave </a>
       (LAO)
     </div>
 
@@ -132,7 +132,7 @@ exports[`cases utilities personCell macro renders a formatted cell for a case wi
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/D777665"> John Doe </a>
+      <a class="govuk-link" href="/cases/D777665"> Doe, John </a>
       
     </div>
 
@@ -189,7 +189,7 @@ exports[`cases utilities personCell macro renders a formatted cell including Ass
 
   <div class="sas-person-cell">
     <div class="govuk-!-margin-bottom-2 govuk-!-font-weight-bold">
-      <a class="govuk-link" href="/cases/C321654"> Dave Foo </a>
+      <a class="govuk-link" href="/cases/C321654"> Foo, Dave </a>
       
     </div>
 

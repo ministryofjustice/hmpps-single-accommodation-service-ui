@@ -1,12 +1,12 @@
 {% from "components/macros/riskLevelTag.njk" import riskLevelTag %}
 {% from "components/macros/tierScoreTag.njk" import tierScoreTag %}
 
-{% macro caseDetails(caseData, assignedTo) %}
+{% macro caseDetails(displayName, caseData, assignedTo) %}
   <header class="sas-profile-header">
     {# <img class="sas-profile-image" alt="Photo of {{ caseData.name }}" src=""> #}
     <div>
       <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-        {{ caseData.name }}
+        {{ displayName }}
       </h1>
       <dl class="sas-risk-tags govuk-!-margin-0 govuk-!-margin-bottom-2">
         {{ riskLevelTag(caseData.riskLevel) }}

@@ -21,7 +21,7 @@ import AuditService, { Page } from '../services/auditService'
 import { addGenericErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import { dateInputToIsoDate } from '../utils/dates'
 import ReferenceDataService from '../services/referenceDataService'
-import { caseAssignedTo } from '../utils/cases'
+import { caseAssignedTo, displayName } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
 import { radioItems } from '../utils/utils'
 
@@ -59,6 +59,7 @@ export default class DutyToReferController {
       return res.render('pages/duty-to-refer/show', {
         crn,
         dtrId: id,
+        displayName: displayName(caseData),
         caseData,
         assignedTo: caseAssignedTo(caseData, username),
         submissionDetailRows,
@@ -149,13 +150,11 @@ export default class DutyToReferController {
         await this.dutyToReferService.submit(token, crn, submission)
 
         if (flow === 'addNew') {
-          const {
-            data: { name },
-          } = await this.casesService.getCase(token, crn)
+          const { data: caseData } = await this.casesService.getCase(token, crn)
 
           req.flash('success', {
             heading: 'New DTR referral details added',
-            body: `<p>The previous referral has been moved to ${name}'s referral history</p>`,
+            body: `<p>The previous referral has been moved to ${displayName(caseData)}'s referral history</p>`,
           })
         } else {
           req.flash('success', 'DTR referral details added')

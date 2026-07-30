@@ -24,6 +24,9 @@ export const setupConfig: PlaywrightTestConfig = {
     screenshot: 'only-on-failure',
     actionTimeout: 30 * 1000, // 30 seconds
     navigationTimeout: 30 * 1000, // 30 seconds
+    launchOptions: {
+      slowMo: 150,
+    },
     ...devices['Desktop Chrome'],
   },
 }

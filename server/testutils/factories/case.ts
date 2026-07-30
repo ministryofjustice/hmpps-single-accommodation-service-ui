@@ -37,11 +37,14 @@ class CaseFactory extends Factory<Case> {
 }
 
 export default CaseFactory.define(() => {
+  const forename = faker.person.firstName()
+  const surname = faker.person.lastName()
+
   return {
-    name: faker.person.fullName(),
-    forename: faker.person.firstName(),
+    name: `${forename} ${surname}`,
+    forename,
     middleNames: null as string,
-    surname: faker.person.lastName(),
+    surname,
     crn: crn(),
     dateOfBirth: faker.date.birthdate().toISOString().substring(0, 10),
     prisonNumber: prisonNumber(),

@@ -1,3 +1,4 @@
+import { CaseDto } from '@sas/api'
 import {
   caseAssignedTo,
   casesResultsSummary,
@@ -34,7 +35,8 @@ describe('cases utilities', () => {
 
   describe('personCell macro', () => {
     const personFullAccess = caseFactory.build({
-      name: 'Dave Foo',
+      forename: 'Dave',
+      surname: 'Foo',
       crn: 'C321654',
       prisonNumber: 'A1234BC',
       dateOfBirth: '1980-10-09',
@@ -48,7 +50,8 @@ describe('cases utilities', () => {
 
     it('renders a formatted cell for a case with limited information', () => {
       const personWithLimitedInformation = caseFactory.build({
-        name: 'John Doe',
+        forename: 'John',
+        surname: 'Doe',
         crn: 'D777665',
         prisonNumber: undefined,
         dateOfBirth: undefined,
@@ -208,43 +211,77 @@ describe('cases utilities', () => {
   })
 
   describe('displayName', () => {
-    it("returns the person's name for a case with full access with no LAO flag", () => {
-      const person = caseFactory.build({
-        name: 'Dave Foo',
-        limitedAccess: false,
-      })
+    let person: CaseDto
 
+    beforeEach(() => {
+      person = caseFactory.build({
+        forename: 'Dave',
+        surname: 'Foo',
+      })
+    })
+
+    it("returns the person's name for a case with full access with no LAO flag", () => {
       expect(displayName(person)).toEqual('Dave Foo')
+      expect(displayName(person, { caseList: true })).toEqual('Foo, Dave')
     })
 
     it("returns the person's name followed by LAO for a case with full access with LAO flag", () => {
-      const person = caseFactory.build({
-        name: 'Dave Foo',
-        limitedAccess: true,
-      })
+      person.limitedAccess = true
 
       expect(displayName(person)).toEqual('Dave Foo (limited access offender)')
+      expect(displayName(person, { caseList: true })).toEqual('Foo, Dave (limited access offender)')
     })
 
     it("returns the person's name followed by a custom LAO flag for a case with full access with LAO flag", () => {
-      const person = caseFactory.build({
-        name: 'Dave Foo',
-        limitedAccess: true,
-      })
+      person.limitedAccess = true
 
-      expect(displayName(person, '[foo]')).toEqual('Dave Foo [foo]')
+      expect(displayName(person, { laoFlag: '[foo]' })).toEqual('Dave Foo [foo]')
+      expect(displayName(person, { laoFlag: '[foo]', caseList: true })).toEqual('Foo, Dave [foo]')
+    })
+
+    it('Returns "Unknown" if forename and surname are missing', () => {
+      person.forename = null
+      person.surname = null
+
+      expect(displayName(person)).toEqual('Unknown')
     })
 
     it('returns "Limited access offender" for a case with a case with limited access', () => {
-      const person = caseFactory.limitedAccess().build()
+      const laoPerson = caseFactory.limitedAccess().build()
 
-      expect(displayName(person)).toEqual('Limited access offender')
+      expect(displayName(laoPerson)).toEqual('Limited access offender')
+      expect(displayName(laoPerson, { caseList: true })).toEqual('Limited access offender')
     })
 
     it('returns "Unknown" for a case with a case with unknown access', () => {
-      const person = caseFactory.unknownAccess().build()
+      const unknownPerson = caseFactory.unknownAccess().build()
 
-      expect(displayName(person)).toEqual('Unknown')
+      expect(displayName(unknownPerson)).toEqual('Unknown')
+      expect(displayName(unknownPerson, { caseList: true })).toEqual('Unknown')
+    })
+
+    describe('with middle names', () => {
+      const personWithMiddleNames = caseFactory.build({
+        forename: 'Dave',
+        middleNames: 'John Charles',
+        surname: 'Foo',
+      })
+
+      it('renders the middle names by default', () => {
+        expect(displayName(personWithMiddleNames)).toEqual('Dave John Charles Foo')
+      })
+
+      it('does not render the middle names if onlyFirstLast is specified', () => {
+        expect(displayName(personWithMiddleNames, { onlyFirstLast: true })).toEqual('Dave Foo')
+      })
+
+      it('renders middle names for case list by default', () => {
+        expect(displayName(personWithMiddleNames, { caseList: true })).toEqual('Foo, Dave John Charles')
+      })
+
+      it('does not render middle names for case list when onlyFirstLast is specified', () => {
+        expect(displayName(personWithMiddleNames, { caseList: true, onlyFirstLast: true })).toEqual('Foo, Dave')
+      })
     })
   })
 

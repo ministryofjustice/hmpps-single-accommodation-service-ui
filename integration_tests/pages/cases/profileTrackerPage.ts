@@ -22,6 +22,7 @@ import { addressLines, formatAddress } from '../../../server/utils/addresses'
 import PageWithCaseDetails from './pageWithCaseDetails'
 import { accommodationType, settledTag } from '../../../server/utils/accommodationSummary'
 import { actionsMap } from '../../../server/utils/actions'
+import { displayName } from '../../../server/utils/cases'
 
 export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
@@ -29,7 +30,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     readonly caseData: Case,
   ) {
     super(page)
-    this.header = page.locator('h1', { hasText: caseData.name })
+    this.header = page.locator('h1', { hasText: displayName(caseData) })
   }
 
   static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {

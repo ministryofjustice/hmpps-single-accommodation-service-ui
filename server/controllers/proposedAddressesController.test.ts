@@ -33,7 +33,7 @@ import {
 } from '../testutils/factories'
 import OsDataHubService from '../services/osDataHubService'
 import { addressLines, formatAddress } from '../utils/addresses'
-import { caseAssignedTo } from '../utils/cases'
+import { caseAssignedTo, displayName } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import { radioItems } from '../utils/utils'
 
@@ -94,7 +94,13 @@ describe('proposedAddressesController', () => {
     jest.clearAllMocks()
 
     casesService.getCase.mockResolvedValue(
-      apiResponseFactory.case(caseFactory.build({ name: 'James Smith', actions: [] })),
+      apiResponseFactory.case(
+        caseFactory.build({
+          forename: 'James',
+          surname: 'Smith',
+          actions: [],
+        }),
+      ),
     )
     referenceDataService.getAccommodationTypes.mockResolvedValue(apiResponseFactory.referenceData(accommodationTypes))
 
@@ -147,6 +153,7 @@ describe('proposedAddressesController', () => {
         correlationId: 'request-id',
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/show', {
+        displayName: displayName(caseData),
         caseData,
         assignedTo: caseAssignedTo(caseData, user.username),
         address: formatAddress(proposedAddress.address),
@@ -1024,7 +1031,7 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/arrival', {
         backLinkHref: '/foo',
-        pageHeading: `Confirm that ${caseData.name} has moved into this address`,
+        pageHeading: `Confirm that ${displayName(caseData)} has moved into this address`,
         addressLines: addressLines(proposedAddress.address),
         cancelLinkHref: '/foo',
       })

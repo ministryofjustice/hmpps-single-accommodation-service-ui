@@ -142,7 +142,12 @@ describe('casesController', () => {
       const crn = 'X123456'
       request.params.crn = crn
 
-      const caseData = caseFactory.build({ crn, name: 'John Smith', limitedAccess: true })
+      const caseData = caseFactory.build({
+        crn,
+        forename: 'John',
+        surname: 'Smith',
+        limitedAccess: true,
+      })
       const referralHistory = referralFactory.buildList(2)
       const eligibility = eligibilityFactory.build()
       const proposed = proposedAccommodationFactory.buildList(2, { verificationStatus: 'NOT_CHECKED_YET' })
@@ -174,7 +179,8 @@ describe('casesController', () => {
       expect(accommodationService.getAccommodationHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
-        caseData: { ...caseData, name: 'John Smith (limited access offender)' },
+        displayName: 'John Smith (limited access offender)',
+        caseData,
         upstreamFailures: [],
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: renderActions(eligibility.caseActions),

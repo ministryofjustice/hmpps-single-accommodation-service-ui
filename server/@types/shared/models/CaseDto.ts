@@ -5,7 +5,14 @@
 import type { AssignedToDto } from './AssignedToDto'
 import type { CaseAction } from './CaseAction'
 export type CaseDto = {
+  /**
+   * Use forename and surname instead
+   * @deprecated
+   */
   name?: string | null
+  forename?: string | null
+  middleNames?: string | null
+  surname?: string | null
   dateOfBirth?: string | null
   crn: string
   prisonNumber?: string | null

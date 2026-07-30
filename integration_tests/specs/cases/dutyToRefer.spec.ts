@@ -25,6 +25,7 @@ import {
   dutyToReferTimelineEntry,
   dutyToReferToDtrServiceResult,
 } from '../../../server/utils/dutyToRefer'
+import { displayName } from '../../../server/utils/cases'
 
 const crn = 'X123456'
 const setupStubs = async ({
@@ -611,7 +612,7 @@ test.describe('duty to refer', () => {
     // And I should see a success banner confirming referral details were added
     await profileTrackerPage.shouldShowBanner(
       'New DTR referral details added',
-      `The previous referral has been moved to ${caseData.name}'s referral history`,
+      `The previous referral has been moved to ${displayName(caseData)}'s referral history`,
     )
 
     // And I should see the new DTR eligibility card

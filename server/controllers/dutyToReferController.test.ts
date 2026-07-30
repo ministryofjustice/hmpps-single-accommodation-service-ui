@@ -24,7 +24,7 @@ import {
   dutyToReferFactory,
   referenceDataFactory,
 } from '../testutils/factories'
-import { caseAssignedTo } from '../utils/cases'
+import { caseAssignedTo, displayName } from '../utils/cases'
 import { radioItems } from '../utils/utils'
 
 describe('dutyToReferController', () => {
@@ -37,7 +37,11 @@ describe('dutyToReferController', () => {
   const casesService = mock<CasesService>()
   const referenceDataService = mock<ReferenceDataService>()
 
-  const caseData = caseFactory.build({ name: 'James Smith', crn: 'CRN123' })
+  const caseData = caseFactory.build({
+    forename: 'James',
+    surname: 'Smith',
+    crn: 'CRN123',
+  })
   const localAuthorities = referenceDataFactory.localAuthority().buildList(3)
 
   let controller: DutyToReferController
@@ -437,6 +441,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/show', {
         crn,
         dtrId: 'submission-id',
+        displayName: displayName(caseData),
         caseData,
         timeline: [
           dutyToReferTimelineEntry(auditRecords[0], 'user1'),

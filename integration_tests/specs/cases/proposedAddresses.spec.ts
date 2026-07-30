@@ -27,6 +27,7 @@ import { addressTimeline } from '../../../server/utils/proposedAddresses'
 import { accommodationTypes } from '../../../server/testutils/factories/proposedAccommodation'
 import ConfirmCurrentAddressPage from '../../pages/cases/confirmCurrentAddressPage'
 import paths from '../../../server/paths/ui'
+import { displayName } from '../../../server/utils/cases'
 
 const setupCase = async () => {
   const caseData = caseFactory.build()
@@ -181,7 +182,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the type form
-    await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+    await addProposedAddressPage.shouldShowTypeForm(displayName(caseData))
     await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I submit the form empty
@@ -264,7 +265,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the next address form
-    await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
+    await addProposedAddressPage.shouldShowNextAccommodationForm(displayName(caseData))
 
     // When I submit the form empty
     await addProposedAddressPage.clickButton('Continue')
@@ -358,7 +359,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the type form
-    await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+    await addProposedAddressPage.shouldShowTypeForm(displayName(caseData))
     await addProposedAddressPage.shouldShowAddressCaption(firstSelectedAddress)
 
     // When I click back
@@ -386,7 +387,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the type form
-    await addProposedAddressPage.shouldShowTypeForm(caseData.name)
+    await addProposedAddressPage.shouldShowTypeForm(displayName(caseData))
     await addProposedAddressPage.shouldShowAddressCaption(selectedAddress)
 
     // When I complete the type form
@@ -542,7 +543,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the next accommodation form
-    await addProposedAddressPage.shouldShowNextAccommodationForm(caseData.name)
+    await addProposedAddressPage.shouldShowNextAccommodationForm(displayName(caseData))
     await addProposedAddressPage.shouldShowAddressCaption(initialProposedAddressData.address)
 
     // When I complete the next accommodation form with 'Not yet'
@@ -614,7 +615,7 @@ test.describe('edit proposed address', () => {
     const editProposedAddressPage = await AddProposedAddressPage.verifyOnPage(
       page,
       crn,
-      `Which best describes the living arrangement for ${caseData.name} at this address?`,
+      `Which best describes the living arrangement for ${displayName(caseData)} at this address?`,
     )
     await editProposedAddressPage.shouldShowPopulatedTypeForm({
       ...proposedAddress,

@@ -110,7 +110,8 @@ export default class CasesController {
       })
 
       return res.render('pages/show', {
-        caseData: { ...caseData, name: displayName(caseData) },
+        displayName: displayName(caseData),
+        caseData,
         upstreamFailures,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: renderActions(data.eligibility?.caseActions),

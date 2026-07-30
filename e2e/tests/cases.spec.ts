@@ -11,5 +11,6 @@ test('Case list', async ({ page, users: { probation: probationUser } }) => {
   await page.getByRole('link', { name: firstCaseName }).click()
 
   // THEN I should see the case details page
-  await expect(page.getByRole('heading', { name: firstCaseName, level: 1 })).toBeVisible()
+  const fullName = firstCaseName.split(', ').reverse().join(' ')
+  await expect(page.getByRole('heading', { name: fullName, level: 1 })).toBeVisible()
 })

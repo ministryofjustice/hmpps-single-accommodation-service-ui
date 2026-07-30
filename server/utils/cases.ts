@@ -88,9 +88,9 @@ type DisplayNameOptions = {
 
 export const displayName = (caseData: Case, options: DisplayNameOptions = {}): string => {
   const { laoFlag = '(limited access offender)', caseList = false, onlyFirstLast = false } = options
-  const { forename, middleNames, surname } = caseData ?? {}
+  const { forename = '', middleNames = '', surname = '' } = caseData ?? {}
   const name = caseList
-    ? `${surname}, ${forename} ${(!onlyFirstLast && middleNames) || ''}`.trim()
+    ? `${[surname, forename].filter(Boolean).join(', ')} ${(!onlyFirstLast && middleNames) || ''}`.trim()
     : [forename, !onlyFirstLast && middleNames, surname].filter(Boolean).join(' ')
 
   switch (caseData.userAccess) {
@@ -99,7 +99,7 @@ export const displayName = (caseData: Case, options: DisplayNameOptions = {}): s
     case 'UNKNOWN':
       return 'Unknown'
     default:
-      return `${name} ${caseData.limitedAccess ? laoFlag : ''}`.trim()
+      return `${name || 'Unknown'} ${caseData.limitedAccess ? laoFlag : ''}`.trim()
   }
 }
 

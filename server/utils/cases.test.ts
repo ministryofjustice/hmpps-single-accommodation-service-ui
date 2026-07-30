@@ -239,6 +239,13 @@ describe('cases utilities', () => {
       expect(displayName(person, { laoFlag: '[foo]', caseList: true })).toEqual('Foo, Dave [foo]')
     })
 
+    it('Returns "Unknown" if forename and surname are missing', () => {
+      person.forename = null
+      person.surname = null
+
+      expect(displayName(person)).toEqual('Unknown')
+    })
+
     it('returns "Limited access offender" for a case with a case with limited access', () => {
       const laoPerson = caseFactory.limitedAccess().build()
 

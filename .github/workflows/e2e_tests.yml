@@ -74,6 +74,7 @@ jobs:
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
       - name: Teardown data
+        if: always()
         run: npm run test:e2e:data:teardown
 
       - name: Upload Playwright report

@@ -16,6 +16,24 @@ jobs:
       # Add to the matrix to start splitting the tests across multiple shards
       matrix:
         shard: [1]
+    env:
+      TZ: Europe/London
+
+      # URLs
+      AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
+      DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
+      OASYS_URL: https://t2.oasys.service.justice.gov.uk/eor/f?p=100:101
+      PRISON_API: https://prison-api-dev.prison.service.justice.gov.uk
+
+      # Credentials
+      DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
+      DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+      OASYS_USERNAME_BOOKING: ${{ secrets.E2E_OASYS_USERNAME_BOOKING }}
+      OASYS_PASSWORD_BOOKING: ${{ secrets.E2E_OASYS_PASSWORD_BOOKING }}
+      DPS_USERNAME: ${{ secrets.E2E_DPS_USERNAME }}
+      HMPPS_AUTH_CLIENT_ID: ${{ secrets.E2E_HMPPS_AUTH_CLIENT_ID }}
+      HMPPS_AUTH_CLIENT_SECRET: ${{ secrets.E2E_HMPPS_AUTH_CLIENT_SECRET }}
+
     steps:
       - name: Check out code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
@@ -41,23 +59,6 @@ jobs:
 
       - name: Setup data
         run: npm run test:e2e:data:setup
-        env:
-          TZ: Europe/London
-
-          # URLs
-          AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
-          DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
-          OASYS_URL: https://t2.oasys.service.justice.gov.uk/eor/f?p=100:101
-          PRISON_API: https://prison-api-dev.prison.service.justice.gov.uk
-
-          # Credentials
-          DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
-          DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
-          OASYS_USERNAME_BOOKING: ${{ secrets.E2E_OASYS_USERNAME_BOOKING }}
-          OASYS_PASSWORD_BOOKING: ${{ secrets.E2E_OASYS_PASSWORD_BOOKING }}
-          DPS_USERNAME: ${{ secrets.E2E_DPS_USERNAME }}
-          HMPPS_AUTH_CLIENT_ID: ${{ secrets.E2E_HMPPS_AUTH_CLIENT_ID }}
-          HMPPS_AUTH_CLIENT_SECRET: ${{ secrets.E2E_HMPPS_AUTH_CLIENT_SECRET }}
 
       - name: Parse setup output to environment
         id: setup-data

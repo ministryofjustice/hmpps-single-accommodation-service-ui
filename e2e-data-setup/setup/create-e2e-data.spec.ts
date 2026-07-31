@@ -44,11 +44,13 @@ test('Create data for Base Case', async ({ page }) => {
   appendToFile(nomisId, 'NOMIS.txt')
   console.log('OK \n----------')
 
-  console.log('Creating OASys assessment...')
-  await oasysLogin(page, UserType.Booking)
-  await createLayer3CompleteAssessment(page, crn, person, 'Yes')
-  await signAndlock(page)
-  console.log('OK \n----------')
+  if (process.env.OASYS_USERNAME_BOOKING) {
+    console.log('Creating OASys assessment...')
+    await oasysLogin(page, UserType.Booking)
+    await createLayer3CompleteAssessment(page, crn, person, 'Yes')
+    await signAndlock(page)
+    console.log('OK \n----------')
+  }
 
   console.log('Updating custody dates...')
   await updateCustodyDates(bookingId, { conditionalReleaseDate: formatDate(NextMonth.toJSDate(), 'yyyy-MM-dd') })

@@ -3,6 +3,7 @@ import { Link, StatusCard } from '@sas/ui'
 import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
+import { formatDate } from './dates'
 
 export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   const { serviceStatus, url } = serviceResult || {}
@@ -76,16 +77,58 @@ const headingForService = (service: 'cas1' | 'cas3') => {
   }
 }
 
+const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): string => {
+  const { serviceStatus, failureReasons, action } = serviceResult || {}
+
+  if (serviceStatus === 'CANNOT_START_YET') {
+    if (failureReasons.includes('DTR_REFERRAL_EXPIRED')) {
+      // TODO: Handle MALE/NON_MALE CRS needed
+      if (failureReasons.includes('CRS_NOT_SUBMITTED')) {
+        return 'You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.'
+      }
+      // if (failureReasons.includes('MALE_CRS_NOT_SUBMITTED')) {
+      //   return 'You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.'
+      // }
+      // if (failureReasons.includes('NON_MALE_CRS_NOT_SUBMITTED')) {
+      //   return 'You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.'
+      // }
+      return 'You need to add DTR referral details before you can make a CAS3 referral.'
+    }
+
+    // TODO: Handle MALE/NON_MALE CRS needed
+    if (failureReasons.includes('CRS_NOT_SUBMITTED')) {
+      return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
+    }
+    // if (failureReasons.includes('MALE_CRS_NOT_SUBMITTED')) {
+    //   return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
+    // }
+    // if (failureReasons.includes('NON_MALE_CRS_NOT_SUBMITTED')) {
+    //   return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
+    // }
+  }
+
+  if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas1') {
+    return 'This could be because of risk levels or suitability for a move on at this time.'
+  }
+
+  if (serviceStatus === 'UPCOMING' && action?.startDate) {
+    return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
+  }
+
+  if (serviceStatus === 'BEDSPACE_OFFERED') {
+    return 'Bedspace details are sent by email'
+  }
+
+  return undefined
+}
+
 export const eligibilityStatusCard = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): StatusCard => {
   const { serviceStatus } = serviceResult || {}
 
   return {
     heading: headingForService(service),
     inactive: serviceStatus === 'NOT_ELIGIBLE',
-    hint:
-      serviceStatus === 'NOT_ELIGIBLE'
-        ? 'This could be because of risk levels or suitability for a move on at this time.'
-        : undefined,
+    hint: hintForServiceResult(service, serviceResult),
     status: serviceStatusTag(serviceStatus),
     links: linksForService(service, serviceResult),
   }

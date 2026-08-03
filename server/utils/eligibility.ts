@@ -127,7 +127,7 @@ const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceR
 }
 
 export const eligibilityStatusCard = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): StatusCard => {
-  const { serviceStatus } = serviceResult || {}
+  const { serviceStatus } = serviceResult ?? {}
 
   return {
     heading: headingForService(service),

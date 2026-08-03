@@ -51,7 +51,7 @@ export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceRe
 })
 
 const hintForDTR = (result: ServiceResult) => {
-  const { serviceStatus, action } = result
+  const { serviceStatus, action } = result ?? {}
 
   if (serviceStatus === 'UPCOMING' && action?.startDate) {
     return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`

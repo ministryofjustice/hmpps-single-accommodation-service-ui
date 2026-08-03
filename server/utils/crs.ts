@@ -6,7 +6,7 @@ import { formatDate, formatDateAndDaysAgo } from './dates'
 import { summaryListRow } from './summaryListRow'
 
 const crsStatusCardHint = (result: CrsServiceResult['serviceResult']): string => {
-  const { serviceStatus, action } = result
+  const { serviceStatus, action } = result ?? {}
   switch (serviceStatus) {
     case 'NOT_ELIGIBLE':
       return 'No referral needed for accommodation.\nYou can still complete a CRS for other requirements.'

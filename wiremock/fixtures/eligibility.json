@@ -1,217 +1,17 @@
 {
   "S511935": {
     "crn": "S511935",
-    "caseActions": [
-      {
-        "type": "PROVIDE_INFORMATION",
-        "startDate": "2027-01-25"
-      },
-      {
-        "type": "SUBMIT_CRS_REFERRAL"
-      },
-      {
-        "type": "SUBMIT_CRS_REFERRAL"
-      }
-    ],
+    "caseActions": [],
     "cas1": {
-      "serviceResult": {
-        "serviceStatus": "REJECTED",
-        "action": {
-          "type": "PROVIDE_INFORMATION",
-          "startDate": "2027-01-25"
-        },
-        "failureReasons": [],
-        "url": "https://official-accompanist.name"
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "UPCOMING",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "action": {
-          "type": "SUBMIT_CRS_REFERRAL"
-        },
-        "failureReasons": [],
-        "url": "https://crs/submit"
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "UPCOMING",
-        "action": {
-          "type": "SUBMIT_DTR_REFERRAL",
-          "startDate": "2027-03-04"
-        },
-        "failureReasons": []
-      },
-      "submission": null
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "url": "https://juicy-rim.net/"
-      }
-    }
-  },
-  "P712106": {
-    "crn": "P712106",
-    "caseActions": [
-      {
-        "type": "ADD_DTR_OUTCOME",
-        "startDate": "2026-08-26"
-      }
-    ],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
-        "failureReasons": [],
-        "url": "https://blond-schedule.org"
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "failureReasons": [],
-        "url": "https://oddball-viability.net"
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "failureReasons": [],
-        "url": "https://crs/view"
-      },
-      "commissionedRehabilitativeServices": {
-        "status": "WITHDRAWN",
-        "submissionDate": "2025-12-31"
-      }
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "ACCEPTED",
-        "action": {
-          "type": "ADD_DTR_OUTCOME",
-          "startDate": "2026-08-26"
-        },
-        "failureReasons": [],
-        "url": "https://rectangular-rule.com/"
-      },
-      "submission": {
-        "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
-        "localAuthority": {
-          "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
-          "localAuthorityAreaName": "Rugby"
-        },
-        "referenceNumber": "H4YDDVJYEJ",
-        "submissionDate": "2025-08-17",
-        "createdBy": "Ward Mraz-Hilll",
-        "createdAt": "2026-02-17T00:35:24.023Z"
-      }
-    },
-    "pa": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["SEX_DATA_NOT_AVAILABLE"]
-      }
-    }
-  },
-  "T274481": {
-    "crn": "T274481",
-    "caseActions": [
-      {
-        "type": "SUBMIT_CRS_REFERRAL"
-      },
-      {
-        "type": "START_APPROVED_PREMISE_APPLICATION"
-      },
-      {
-        "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
-      }
-    ],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "UPCOMING",
-        "failureReasons": []
+        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
       }
     },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
-        "action": {
-          "type": "SUBMIT_CRS_REFERRAL"
-        },
-        "failureReasons": ["SEX_DATA_NOT_AVAILABLE"]
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "action": {
-          "type": "START_CRS_REFERRAL"
-        },
-        "failureReasons": [],
-        "url": "https://crs/start"
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_REQUIRED",
-        "action": {
-          "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
-        },
-        "failureReasons": ["INVALID_CURRENT_ACCOMMODATION_TYPE"]
-      },
-      "submission": null
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "COMPLETED",
-        "failureReasons": [],
-        "url": "https://weighty-valley.biz"
-      }
-    }
-  },
-  "V938951": {
-    "crn": "V938951",
-    "caseActions": [
-      {
-        "type": "SUBMIT_DTR_REFERRAL",
-        "startDate": "2026-12-05"
-      },
-      {
-        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS"
-      },
-      {
-        "type": "CONTINUE_APPROVED_PREMISE_APPLICATION"
-      }
-    ],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "action": {
-          "type": "SUBMIT_DTR_REFERRAL",
-          "startDate": "2026-12-05"
-        },
-        "failureReasons": [],
-        "url": "https://dutiful-bench.info"
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "action": {
-          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS"
-        },
-        "failureReasons": [],
-        "url": "https://untrue-heartbeat.info"
+        "failureReasons": ["S_TIER"]
       }
     },
     "crs": {
@@ -223,10 +23,7 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
-        "action": {
-          "type": "CONTINUE_APPROVED_PREMISE_APPLICATION"
-        },
+        "serviceStatus": "NOT_REQUIRED",
         "failureReasons": []
       },
       "submission": null
@@ -234,228 +31,73 @@
     "pa": {
       "serviceResult": {
         "serviceStatus": "COMPLETED",
-        "failureReasons": [],
-        "url": "https://parallel-omelet.org/"
+        "failureReasons": []
       }
     }
   },
-  "T229440": {
-    "crn": "T229440",
+  "P712106": {
+    "crn": "P712106",
     "caseActions": [
       {
-        "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
+        "type": "START_APPROVED_PREMISE_APPLICATION",
+        "startDate": "2027-06-08"
       },
       {
-        "type": "ADD_DTR_OUTCOME",
-        "startDate": "2028-03-05"
+        "type": "START_CAS3_REFERRAL",
+        "startDate": "2026-12-15"
+      },
+      {
+        "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL",
+        "startDate": "2027-03-25"
+      },
+      {
+        "type": "SUBMIT_DTR_REFERRAL",
+        "startDate": "2026-02-23"
+      },
+      {
+        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+        "startDate": null
       }
     ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "REJECTED",
+        "serviceStatus": "UPCOMING",
         "failureReasons": [],
-        "url": "https://wilted-farm.name"
+        "action": {
+          "type": "START_APPROVED_PREMISE_APPLICATION",
+          "startDate": "2027-06-08"
+        }
       }
     },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "UPCOMING",
-        "failureReasons": []
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_REQUIRED",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_REQUIRED",
-        "action": {
-          "type": "REPLY_TO_CAS3_BEDSPACE_OFFER"
-        },
-        "failureReasons": ["SUITABLE_CAS3_APPLICATION"]
-      },
-      "submission": null
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "action": {
-          "type": "ADD_DTR_OUTCOME",
-          "startDate": "2028-03-05"
-        },
-        "failureReasons": ["SUITABLE_CAS3_APPLICATION"]
-      }
-    }
-  },
-  "H271226": {
-    "crn": "H271226",
-    "caseActions": [
-      {
-        "type": "ADD_DTR_REFERRAL_DETAILS"
-      },
-      {
-        "type": "START_CAS3_REFERRAL"
-      }
-    ],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "REJECTED",
         "failureReasons": [],
-        "url": "https://stunning-sprinkles.com"
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "REJECTED",
-        "failureReasons": [],
-        "url": "https://silent-elevator.net"
+        "action": {
+          "type": "START_CAS3_REFERRAL",
+          "startDate": "2026-12-15"
+        }
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "UPCOMING",
+        "failureReasons": [],
         "action": {
           "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL",
           "startDate": "2027-03-25"
-        },
-        "failureReasons": []
+        }
       },
       "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_REQUIRED",
-        "action": {
-          "type": "ADD_DTR_REFERRAL_DETAILS"
-        },
-        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
-      },
-      "submission": null
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "action": {
-          "type": "START_CAS3_REFERRAL"
-        },
-        "failureReasons": ["HAS_NEXT_ACCOMMODATION"]
-      }
-    }
-  },
-  "U934069": {
-    "crn": "U934069",
-    "caseActions": [
-      {
-        "type": "CREATE_PLACEMENT"
-      },
-      {
-        "type": "PROVIDE_INFORMATION"
-      }
-    ],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "CONFIRMED",
-        "action": {
-          "type": "CREATE_PLACEMENT"
-        },
+        "serviceStatus": "UPCOMING",
         "failureReasons": [],
-        "url": "https://happy-go-lucky-desk.net"
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "REJECTED",
         "action": {
-          "type": "PROVIDE_INFORMATION"
-        },
-        "failureReasons": [],
-        "url": "https://pure-event.net"
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": []
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ACCEPTED",
-        "failureReasons": [],
-        "url": "https://key-ocelot.org"
-      },
-      "submission": {
-        "id": "dd461fc9-50ce-4798-9c2f-593ec90e8d69",
-        "localAuthority": {
-          "localAuthorityAreaId": "a009ea3a-8186-4820-a702-935e408ea4a5",
-          "localAuthorityAreaName": "Rutland"
-        },
-        "referenceNumber": "HBXPJ3KVEQ",
-        "submissionDate": "2025-07-25",
-        "createdBy": "Judy Parisian",
-        "createdAt": "2026-03-01T01:46:36.177Z"
-      }
-    },
-    "pa": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "url": "https://dapper-lotion.name"
-      }
-    }
-  },
-  "I322559": {
-    "crn": "I322559",
-    "caseActions": [
-      {
-        "type": "ADD_DTR_REFERRAL_DETAILS"
-      },
-      {
-        "type": "CONTINUE_APPROVED_PREMISE_APPLICATION",
-        "startDate": "2028-03-23"
-      },
-      {
-        "type": "ADD_DTR_OUTCOME",
-        "startDate": "2026-08-01"
-      }
-    ],
-    "cas1": {
-      "serviceResult": {
-        "serviceStatus": "SUBMITTED",
-        "action": {
-          "type": "ADD_DTR_REFERRAL_DETAILS"
-        },
-        "failureReasons": [],
-        "url": "https://velvety-intervention.name"
-      }
-    },
-    "cas3": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "action": {
-          "type": "CONTINUE_APPROVED_PREMISE_APPLICATION",
-          "startDate": "2028-03-23"
-        },
-        "failureReasons": ["NON_MALE_NOT_HIGH_RISK_TIER"]
-      }
-    },
-    "crs": {
-      "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["SUITABLE_CAS3_APPLICATION"]
-      },
-      "commissionedRehabilitativeServices": null
-    },
-    "dtr": {
-      "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "url": "https://tidy-tribe.biz"
+          "type": "SUBMIT_DTR_REFERRAL",
+          "startDate": "2026-02-23"
+        }
       },
       "submission": null
     },
@@ -463,108 +105,78 @@
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
         "failureReasons": [],
-        "url": "https://improbable-scholarship.net"
+        "action": {
+          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+          "startDate": null
+        }
       }
     }
   },
-  "L247269": {
-    "crn": "L247269",
+  "T274481": {
+    "crn": "T274481",
     "caseActions": [
-      {
-        "type": "ADD_DTR_REFERRAL_DETAILS",
-        "startDate": "2028-03-14"
-      },
-      {
-        "type": "CREATE_PLACEMENT",
-        "startDate": "2026-12-28"
-      },
-      {
-        "type": "ADD_DTR_OUTCOME",
-        "startDate": "2027-10-24"
-      },
-      {
-        "type": "PROVIDE_INFORMATION",
-        "startDate": "2026-09-27"
-      }
+      { "type": "START_APPROVED_PREMISE_APPLICATION" },
+      { "type": "START_CAS3_REFERRAL" },
+      { "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL" },
+      { "type": "SUBMIT_DTR_REFERRAL" }
     ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "action": {
-          "type": "ADD_DTR_REFERRAL_DETAILS",
-          "startDate": "2028-03-14"
-        },
-        "failureReasons": ["CRS_EXPIRED"]
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://cas1/start"
       }
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
-        "action": {
-          "type": "CREATE_PLACEMENT",
-          "startDate": "2026-12-28"
-        },
+        "serviceStatus": "NOT_STARTED",
         "failureReasons": [],
-        "url": "https://excitable-thigh.name"
+        "url": "https://cas3/start"
       }
     },
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
-        "failureReasons": []
+        "failureReasons": [],
+        "url": "https://crs/start"
       },
       "commissionedRehabilitativeServices": null
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "NOT_STARTED",
         "failureReasons": [],
-        "url": "https://worse-disadvantage.info/"
+        "url": "https://dtr/add"
       },
-      "submission": {
-        "id": "54f9f86e-26bf-4092-9fdf-bd46bccadcbf",
-        "localAuthority": {
-          "localAuthorityAreaId": "e13c6a73-f248-42f0-98c9-02eebfbb7560",
-          "localAuthorityAreaName": "Windsor and Maidenhead"
-        },
-        "referenceNumber": "RBRCVEMOA7",
-        "submissionDate": "2025-07-20",
-        "createdBy": "Ira Swift",
-        "createdAt": "2026-05-09T01:12:47.297Z"
-      }
+      "submission": null
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "action": {
-          "type": "PROVIDE_INFORMATION",
-          "startDate": "2026-09-27"
-        },
-        "failureReasons": [],
-        "url": "https://rowdy-possession.name/"
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
       }
     }
   },
-  "F608163": {
-    "crn": "F608163",
+  "V938951": {
+    "crn": "V938951",
     "caseActions": [
       {
-        "type": "SUBMIT_CRS_REFERRAL",
-        "startDate": "2027-01-20"
+        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+        "startDate": null
       }
     ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
+        "serviceStatus": "SUBMITTED",
         "failureReasons": [],
-        "url": "https://fluffy-sarong.info/"
+        "url": "https://cas1/view"
       }
     },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "failureReasons": [],
-        "url": "https://glass-disconnection.com/"
+        "url": "https://cas3/view"
       }
     },
     "crs": {
@@ -580,31 +192,320 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "REJECTED",
-        "action": {
-          "type": "VIEW_CRS_REFERRAL",
-          "startDate": "2027-01-20"
-        },
+        "serviceStatus": "SUBMITTED",
         "failureReasons": [],
-        "url": "https://reckless-meadow.com"
+        "url": "https://dtr/view"
       },
       "submission": {
-        "id": "77b83279-2844-4a47-9ccc-e82d7ee8e1d9",
+        "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
         "localAuthority": {
-          "localAuthorityAreaId": "8a87cf59-3d58-423b-938f-808acb51be1b",
-          "localAuthorityAreaName": "Buckinghamshire"
+          "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
+          "localAuthorityAreaName": "Rugby"
         },
-        "referenceNumber": "ZX7NA11BCA",
-        "submissionDate": "2026-03-19",
-        "createdBy": "Lucas Dicki-Hackett",
-        "createdAt": "2026-05-31T14:02:26.154Z"
+        "referenceNumber": "H4YDDVJYEJ",
+        "submissionDate": "2025-08-17",
+        "createdBy": "Ward Mraz-Hilll",
+        "createdAt": "2026-02-17T00:35:24.023Z"
       }
     },
     "pa": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
         "failureReasons": [],
-        "url": "https://clumsy-airmail.org/"
+        "action": {
+          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+          "startDate": null
+        }
+      }
+    }
+  },
+  "T229440": {
+    "crn": "T229440",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "APPLICATION_REJECTED",
+        "failureReasons": [],
+        "url": "https://cas1/start-new"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "REJECTED",
+        "failureReasons": [],
+        "url": "https://cas3/start-new"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["DTR_REFERRAL_EXPIRED"]
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ACCEPTED",
+        "failureReasons": [],
+        "url": "https://dtr/view"
+      },
+      "submission": {
+        "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
+        "localAuthority": {
+          "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
+          "localAuthorityAreaName": "Rugby"
+        },
+        "referenceNumber": "H4YDDVJYEJ",
+        "submissionDate": "2025-08-17",
+        "createdBy": "Ward Mraz-Hilll",
+        "createdAt": "2026-02-17T00:35:24.023Z"
+      }
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
+      }
+    }
+  },
+  "H271226": {
+    "crn": "H271226",
+    "caseActions": [
+      {
+        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+        "startDate": null
+      }
+    ],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "INFO_REQUESTED",
+        "failureReasons": [],
+        "url": "https://cas1/view"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "BEDSPACE_OFFERED",
+        "failureReasons": [],
+        "url": "https://cas3/view"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "failureReasons": [],
+        "url": "https://crs/view"
+      },
+      "commissionedRehabilitativeServices": {
+        "status": "LIVE",
+        "submissionDate": "2026-05-28"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "ACCEPTED",
+        "failureReasons": [],
+        "url": "https://dtr/view"
+      },
+      "submission": {
+        "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
+        "localAuthority": {
+          "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
+          "localAuthorityAreaName": "Rugby"
+        },
+        "referenceNumber": "H4YDDVJYEJ",
+        "submissionDate": "2025-08-17",
+        "createdBy": "Ward Mraz-Hilll",
+        "createdAt": "2026-02-17T00:35:24.023Z"
+      }
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "action": {
+          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+          "startDate": null
+        }
+      }
+    }
+  },
+  "U934069": {
+    "crn": "U934069",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "PLACEMENT_BOOKED",
+        "failureReasons": [],
+        "url": "https://cas1/view"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "BOOKING_CONFIRMED",
+        "failureReasons": [],
+        "url": "https://cas3/view"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "failureReasons": [],
+        "url": "https://crs/view"
+      },
+      "commissionedRehabilitativeServices": {
+        "status": "LIVE",
+        "submissionDate": "2026-05-28"
+      }
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "ACCEPTED",
+        "failureReasons": [],
+        "url": "https://dtr/view"
+      },
+      "submission": {
+        "id": "dd461fc9-50ce-4798-9c2f-593ec90e8d69",
+        "localAuthority": {
+          "localAuthorityAreaId": "a009ea3a-8186-4820-a702-935e408ea4a5",
+          "localAuthorityAreaName": "Rutland"
+        },
+        "referenceNumber": "HBXPJ3KVEQ",
+        "submissionDate": "2025-07-25",
+        "createdBy": "Judy Parisian",
+        "createdAt": "2026-03-01T01:46:36.177Z"
+      }
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
+      }
+    }
+  },
+  "I322559": {
+    "crn": "I322559",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "PLACEMENT_CANCELLED",
+        "failureReasons": [],
+        "url": "https://cas1/create-new-placement-request"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "BOOKING_CANCELLED",
+        "failureReasons": [],
+        "url": "https://cas3/view"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://crs/start"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://dtr/add"
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
+      }
+    }
+  },
+  "L247269": {
+    "crn": "L247269",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "CANNOT_START_YET",
+        "failureReasons": ["DTR_REFERRAL_EXPIRED", "CRS_NOT_SUBMITTED"]
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://crs/start"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://dtr/add"
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
+      }
+    }
+  },
+  "F608163": {
+    "crn": "F608163",
+    "caseActions": [
+      {
+        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+        "startDate": null
+      }
+    ],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "PLACEMENT_REQUEST_NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://cas1/create-placement-request"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "CANNOT_START_YET",
+        "failureReasons": ["CRS_NOT_SUBMITTED"]
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://crs/start"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://dtr/add"
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "action": {
+          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
+          "startDate": null
+        }
       }
     }
   }

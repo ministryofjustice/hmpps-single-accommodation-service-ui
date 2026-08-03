@@ -1,5 +1,13 @@
 import { Request } from 'express'
-import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import {
+  AuditRecordDto,
+  CaseDto,
+  DtrServiceResult,
+  DtrSubmissionDto,
+  DutyToReferDto,
+  FieldChange,
+  ServiceResult,
+} from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { Link, StatusCard, TimelineValue } from '@sas/ui'
 import { dateFieldParts, formatDate, formatDateAndAge, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
@@ -42,6 +50,16 @@ export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceRe
   submission: dtr.submission,
 })
 
+const hintForDTR = (result: ServiceResult) => {
+  const { serviceStatus, action } = result
+
+  if (serviceStatus === 'UPCOMING' && action?.startDate) {
+    return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
+  }
+
+  return undefined
+}
+
 export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResult): StatusCard => {
   const { serviceResult } = dutyToRefer || {}
   const { serviceStatus } = serviceResult || {}
@@ -49,6 +67,7 @@ export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResu
   return {
     heading: 'Duty to Refer (DTR)',
     inactive: serviceStatus === 'NOT_REQUIRED',
+    hint: hintForDTR(serviceResult),
     status: serviceStatusTag(serviceStatus),
     details: detailsForStatus(dutyToRefer),
     links: linksForStatus(dutyToRefer, crn),

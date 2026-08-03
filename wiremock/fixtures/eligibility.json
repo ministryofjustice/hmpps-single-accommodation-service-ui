@@ -45,7 +45,8 @@
       "serviceResult": {
         "serviceStatus": "UPCOMING",
         "action": {
-          "type": "SUBMIT_CRS_REFERRAL"
+          "type": "SUBMIT_DTR_REFERRAL",
+          "startDate": "2027-03-04"
         },
         "failureReasons": []
       },
@@ -452,21 +453,11 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_ACCEPTED",
+        "serviceStatus": "NOT_STARTED",
         "failureReasons": [],
         "url": "https://tidy-tribe.biz"
       },
-      "submission": {
-        "id": "8a03a410-3481-4fb0-932c-da8721215b86",
-        "localAuthority": {
-          "localAuthorityAreaId": "d949f1cd-927d-48b3-98bb-73b26ddfceb7",
-          "localAuthorityAreaName": "Derby"
-        },
-        "referenceNumber": "CTKUGYFUDG",
-        "submissionDate": "2025-12-27",
-        "createdBy": "Jonas Rodriguez",
-        "createdAt": "2026-06-05T07:31:27.499Z"
-      }
+      "submission": null
     },
     "pa": {
       "serviceResult": {
@@ -589,9 +580,9 @@
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "REJECTED",
         "action": {
-          "type": "SUBMIT_CRS_REFERRAL",
+          "type": "VIEW_CRS_REFERRAL",
           "startDate": "2027-01-20"
         },
         "failureReasons": [],

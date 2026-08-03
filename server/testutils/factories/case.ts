@@ -12,7 +12,6 @@ import actionFactory from './action'
 class CaseFactory extends Factory<Case> {
   limitedAccess() {
     return this.params({
-      name: null,
       forename: null,
       middleNames: null,
       surname: null,
@@ -37,14 +36,10 @@ class CaseFactory extends Factory<Case> {
 }
 
 export default CaseFactory.define(() => {
-  const forename = faker.person.firstName()
-  const surname = faker.person.lastName()
-
   return {
-    name: `${forename} ${surname}`,
-    forename,
+    forename: faker.person.firstName(),
     middleNames: null as string,
-    surname,
+    surname: faker.person.lastName(),
     crn: crn(),
     dateOfBirth: faker.date.birthdate().toISOString().substring(0, 10),
     prisonNumber: prisonNumber(),

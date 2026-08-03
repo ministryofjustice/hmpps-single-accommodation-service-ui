@@ -4,7 +4,8 @@ exports[`CRS utilities crsStatusCard returns a status card for a NOT_ELIGIBLE CR
 {
   "details": undefined,
   "heading": "Commissioned Rehabilitative Services (CRS)",
-  "hint": "No referral needed for accommodation.<br />You can still complete a CRS for other requirements.",
+  "hint": "No referral needed for accommodation.
+You can still complete a CRS for other requirements.",
   "inactive": true,
   "links": undefined,
   "status": {

@@ -9,7 +9,7 @@ const crsStatusCardHint = (result: CrsServiceResult['serviceResult']): string =>
   const { serviceStatus, action } = result
   switch (serviceStatus) {
     case 'NOT_ELIGIBLE':
-      return 'No referral needed for accommodation.<br />You can still complete a CRS for other requirements.'
+      return 'No referral needed for accommodation.\nYou can still complete a CRS for other requirements.'
     case 'NOT_STARTED':
       return 'No open CRS accommodation referral.'
     case 'UPCOMING':

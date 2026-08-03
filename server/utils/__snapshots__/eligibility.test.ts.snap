@@ -124,24 +124,6 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
 }
 `;
 
-exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 2`] = `
-{
-  "heading": "Approved premises (CAS1)",
-  "hint": undefined,
-  "inactive": false,
-  "links": [
-    {
-      "external": true,
-      "href": "https://example.com/view",
-      "text": "View application",
-    },
-  ],
-  "status": {
-    "text": "Placement booked",
-  },
-}
-`;
-
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status card 1`] = `
 {
   "heading": "Approved premises (CAS1)",

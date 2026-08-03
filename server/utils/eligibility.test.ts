@@ -124,10 +124,6 @@ describe('eligibilityStatusCard', () => {
         },
       },
       {
-        title: 'PLACEMENT_BOOKED',
-        result: { serviceStatus: 'PLACEMENT_BOOKED', url: 'https://example.com/view' },
-      },
-      {
         title: 'PLACEMENT_REQUEST_WITHDRAWN',
         result: {
           serviceStatus: 'PLACEMENT_REQUEST_WITHDRAWN',

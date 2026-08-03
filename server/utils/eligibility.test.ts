@@ -79,7 +79,11 @@ describe('eligibilityStatusCard', () => {
       },
       {
         title: 'SUBMITTED',
-        result: { serviceStatus: 'NOT_SUBMITTED', url: 'https://example.com/view' },
+        result: { serviceStatus: 'SUBMITTED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'NOT_SUBMITTED',
+        result: { serviceStatus: 'NOT_SUBMITTED', url: 'https://example.com/continue' },
       },
       {
         title: 'INFO_REQUESTED',

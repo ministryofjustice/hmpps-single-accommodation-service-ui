@@ -135,7 +135,7 @@ describe('accommodationSummary', () => {
 
   describe('noFixedAbodeAlert', () => {
     it('returns undefined if the case status is not NO_FIXED_ABODE or RISK_OF_NO_FIXED_ABODE', () => {
-      const accommodationSummaries = accommodationSummariesFactory.build({ caseAccommodationStatus: 'SETTLED' })
+      const accommodationSummaries = accommodationSummariesFactory.build({ caseAccommodationStatus: undefined })
       expect(noFixedAbodeAlert(accommodationSummaries)).toMatchSnapshot()
     })
 

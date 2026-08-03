@@ -7,7 +7,7 @@ class AccommodationSummariesFactory extends Factory<AccommodationSummariesDto> {
   confirmed() {
     const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
     return this.params({
-      caseAccommodationStatus: faker.helpers.arrayElement(['SETTLED', 'TRANSIENT']),
+      caseAccommodationStatus: undefined,
       currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
       nextAccommodation: accommodationSummaryFactory.next(currentEndDate).build(),
     })
@@ -32,12 +32,9 @@ class AccommodationSummariesFactory extends Factory<AccommodationSummariesDto> {
 }
 
 export default AccommodationSummariesFactory.define((): AccommodationSummariesDto => {
-  const caseAccommodationStatus = faker.helpers.arrayElement([
-    'RISK_OF_NO_FIXED_ABODE',
-    'NO_FIXED_ABODE',
-    'TRANSIENT',
-    'SETTLED',
-  ])
+  const caseAccommodationStatus = faker.helpers.maybe(() =>
+    faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE']),
+  )
   const currentAccommodation =
     caseAccommodationStatus === 'NO_FIXED_ABODE' ? null : accommodationSummaryFactory.current().build()
   const nextAccommodation =

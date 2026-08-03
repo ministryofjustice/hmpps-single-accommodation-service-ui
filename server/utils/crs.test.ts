@@ -1,5 +1,6 @@
+import { CommissionedRehabilitativeServicesDto, ServiceResult } from '@sas/api'
 import { crsStatusCard } from './crs'
-import { crsServiceResultFactory, crsSubmissionFactory } from '../testutils/factories'
+import { crsServiceResultFactory, crsSubmissionFactory, serviceResultFactory } from '../testutils/factories'
 
 describe('CRS utilities', () => {
   beforeEach(() => {
@@ -11,32 +12,45 @@ describe('CRS utilities', () => {
   })
 
   describe('crsStatusCard', () => {
-    it('returns a status card for a NOT_ELIGIBLE CRS service result', () => {
-      const crsServiceResult = crsServiceResultFactory.notEligible().build()
-
-      expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
-    })
-
-    it('returns a status card for a NOT_REQUIRED CRS service result', () => {
-      const crsServiceResult = crsServiceResultFactory.notRequired().build()
-
-      expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
-    })
-
-    it('returns a status card for a NOT_STARTED CRS service result', () => {
-      const crsServiceResult = crsServiceResultFactory.notStarted().build()
-      crsServiceResult.serviceResult.url = 'https://example.com/start'
-
-      expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
-    })
-
-    it('returns a status card for a SUBMITTED CRS service result', () => {
-      const crsServiceResult = crsServiceResultFactory.submitted().build({
-        commissionedRehabilitativeServices: crsSubmissionFactory.build({
+    // See: https://hmpps-single-accommodation-service-prototype-main.apps.live.cloud-platform.service.justice.gov.uk/10-0/_statuses?r=t#crs
+    const testCases: {
+      title: string
+      result: Partial<ServiceResult>
+      submission?: CommissionedRehabilitativeServicesDto
+    }[] = [
+      { title: 'NOT_ELIGIBLE', result: { serviceStatus: 'NOT_ELIGIBLE' } },
+      { title: 'NOT_REQUIRED', result: { serviceStatus: 'NOT_REQUIRED' } },
+      {
+        title: 'UPCOMING',
+        result: {
+          serviceStatus: 'UPCOMING',
+          action: { type: 'SUBMIT_CRS_ACCOMMODATION_REFERRAL', startDate: '2027-03-25' },
+        },
+      },
+      { title: 'NOT_STARTED', result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' } },
+      {
+        title: 'SUBMITTED',
+        result: {
+          serviceStatus: 'SUBMITTED',
+          url: 'https://example.com/view-referral',
+        },
+        submission: crsSubmissionFactory.build({
           submissionDate: '2026-06-06',
         }),
+      },
+    ]
+
+    it.each(testCases)('returns a status card for a $title CRS service result', ({ result, submission }) => {
+      const crsServiceResult = crsServiceResultFactory.build({
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_REQUIRED',
+          action: undefined,
+          failureReasons: [],
+          url: undefined,
+          ...result,
+        }),
+        commissionedRehabilitativeServices: submission,
       })
-      crsServiceResult.serviceResult.url = 'https://example.com/view-referral'
 
       expect(crsStatusCard(crsServiceResult)).toMatchSnapshot()
     })

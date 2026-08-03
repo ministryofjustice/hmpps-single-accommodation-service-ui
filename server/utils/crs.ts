@@ -2,15 +2,20 @@ import { CrsServiceResult } from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
 import { SummaryListRow } from '@govuk/ui'
 import { serviceStatusTag } from './statusTag'
-import { formatDateAndDaysAgo } from './dates'
+import { formatDate, formatDateAndDaysAgo } from './dates'
 import { summaryListRow } from './summaryListRow'
 
-const crsStatusCardHint = (serviceStatus: CrsServiceResult['serviceResult']['serviceStatus']): string => {
+const crsStatusCardHint = (result: CrsServiceResult['serviceResult']): string => {
+  const { serviceStatus, action } = result
   switch (serviceStatus) {
     case 'NOT_ELIGIBLE':
-      return 'No housing need: has somewhere to stay'
+      return 'No referral needed for accommodation.<br />You can still complete a CRS for other requirements.'
     case 'NOT_STARTED':
       return 'No open CRS accommodation referral.'
+    case 'UPCOMING':
+      return action?.startDate
+        ? `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
+        : undefined
     default:
       return undefined
   }
@@ -41,14 +46,13 @@ const crsStatusCardLinks = (crs?: CrsServiceResult): Link[] => {
 
 // eslint-disable-next-line import/prefer-default-export
 export const crsStatusCard = (crs?: CrsServiceResult): StatusCard => {
-  const {
-    serviceResult: { serviceStatus },
-  } = crs || {}
+  const { serviceResult } = crs || {}
+  const { serviceStatus } = serviceResult
 
   return {
     heading: 'Commissioned Rehabilitative Services (CRS)',
     details: crsStatusCardDetails(crs),
-    hint: crsStatusCardHint(serviceStatus),
+    hint: crsStatusCardHint(serviceResult),
     inactive: serviceStatus === 'NOT_ELIGIBLE' || serviceStatus === 'NOT_REQUIRED',
     links: crsStatusCardLinks(crs),
     status: serviceStatusTag(serviceStatus),

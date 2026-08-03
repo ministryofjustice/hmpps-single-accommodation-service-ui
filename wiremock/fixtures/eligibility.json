@@ -37,7 +37,7 @@
           "type": "SUBMIT_CRS_REFERRAL"
         },
         "failureReasons": [],
-        "url": "https://unsung-sandbar.com"
+        "url": "https://crs/submit"
       },
       "commissionedRehabilitativeServices": null
     },
@@ -85,7 +85,7 @@
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "failureReasons": [],
-        "url": "https://wavy-importance.net/"
+        "url": "https://crs/view"
       },
       "commissionedRehabilitativeServices": {
         "status": "WITHDRAWN",
@@ -153,10 +153,10 @@
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
         "action": {
-          "type": "START_APPROVED_PREMISE_APPLICATION"
+          "type": "START_CRS_REFERRAL"
         },
         "failureReasons": [],
-        "url": "https://aged-armoire.name"
+        "url": "https://crs/start"
       },
       "commissionedRehabilitativeServices": null
     },
@@ -264,9 +264,8 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "url": "https://soupy-footrest.biz/"
+        "serviceStatus": "NOT_REQUIRED",
+        "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
     },
@@ -317,9 +316,12 @@
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "url": "https://impassioned-testimonial.net"
+        "serviceStatus": "UPCOMING",
+        "action": {
+          "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL",
+          "startDate": "2027-03-25"
+        },
+        "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
     },
@@ -376,8 +378,7 @@
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "url": "https://meager-obligation.info"
+        "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
     },
@@ -445,10 +446,6 @@
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
-        "action": {
-          "type": "ADD_DTR_OUTCOME",
-          "startDate": "2026-08-01"
-        },
         "failureReasons": ["SUITABLE_CAS3_APPLICATION"]
       },
       "commissionedRehabilitativeServices": null
@@ -523,12 +520,7 @@
     "crs": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
-        "action": {
-          "type": "ADD_DTR_OUTCOME",
-          "startDate": "2027-10-24"
-        },
-        "failureReasons": [],
-        "url": "https://self-reliant-lawmaker.name/"
+        "failureReasons": []
       },
       "commissionedRehabilitativeServices": null
     },
@@ -588,7 +580,7 @@
       "serviceResult": {
         "serviceStatus": "SUBMITTED",
         "failureReasons": [],
-        "url": "https://clueless-starboard.info"
+        "url": "https://crs/view"
       },
       "commissionedRehabilitativeServices": {
         "status": "LIVE",

@@ -4,7 +4,7 @@ exports[`CRS utilities crsStatusCard returns a status card for a NOT_ELIGIBLE CR
 {
   "details": undefined,
   "heading": "Commissioned Rehabilitative Services (CRS)",
-  "hint": "No housing need: has somewhere to stay",
+  "hint": "No referral needed for accommodation.<br />You can still complete a CRS for other requirements.",
   "inactive": true,
   "links": undefined,
   "status": {
@@ -73,6 +73,20 @@ exports[`CRS utilities crsStatusCard returns a status card for a SUBMITTED CRS s
   "status": {
     "colour": "yellow",
     "text": "Submitted",
+  },
+}
+`;
+
+exports[`CRS utilities crsStatusCard returns a status card for a UPCOMING CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": "Start referral from 25 March 2027 (in 289 days).",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "yellow",
+    "text": "Upcoming",
   },
 }
 `;

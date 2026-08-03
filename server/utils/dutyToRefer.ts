@@ -59,7 +59,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
 
-  const notes = submission?.id && {
+  const link = submission?.id && {
     text: 'View referral',
     href: uiPaths.dutyToRefer.show({ crn, id: submission.id }),
   }
@@ -67,11 +67,10 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
   switch (status) {
     case 'NOT_ACCEPTED':
     case 'ACCEPTED':
-      return [notes]
+    case 'SUBMITTED':
+      return [link]
     case 'NOT_STARTED':
       return [{ text: 'Add referral details', href: uiPaths.dutyToRefer.submission({ crn }) }]
-    case 'SUBMITTED':
-      return [notes]
     default:
       return []
   }

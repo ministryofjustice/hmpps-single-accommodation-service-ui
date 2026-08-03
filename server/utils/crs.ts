@@ -25,11 +25,13 @@ const crsStatusCardDetails = (crs?: CrsServiceResult): SummaryListRow[] => {
 const crsStatusCardLinks = (crs?: CrsServiceResult): Link[] => {
   const { serviceStatus, url } = crs?.serviceResult || {}
 
+  const link: Omit<Link, 'text'> = { href: url, external: true }
+
   switch (serviceStatus) {
     case 'NOT_STARTED':
-      return [{ text: 'Start referral', href: url }]
+      return [{ text: 'Start referral', ...link }]
     case 'SUBMITTED':
-      return [{ text: 'View referral', href: url }]
+      return [{ text: 'View referral', ...link }]
     case 'NOT_ELIGIBLE':
     case 'NOT_REQUIRED':
     default:

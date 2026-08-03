@@ -58,7 +58,21 @@ exports[`Macros Status Card renders a status card with full information 1`] = `
       
         <div class="sas-card__links">
           
-            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">Quux</a>
+            <a
+              class="govuk-body govuk-link govuk-link--no-visited-state"
+              href="#"
+              
+            >
+              Quux
+            </a>
+          
+            <a
+              class="govuk-body govuk-link govuk-link--no-visited-state"
+              href="https://example.com"
+              target="_blank" rel="noreferrer noopener"
+            >
+              Foo
+            </a>
           
         </div>
       

@@ -49,15 +49,13 @@ export interface StatusCard {
   hint?: string
   details?: SummaryListRow[]
   status?: StatusTag
-  links?: {
-    text: string
-    href: string
-  }[]
+  links?: Link[]
 }
 
 export type Link = {
   text: string
   href: string
+  external?: boolean
 }
 
 export type MultiPageFormData = {

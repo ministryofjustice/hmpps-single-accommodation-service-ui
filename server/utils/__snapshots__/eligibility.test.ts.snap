@@ -7,6 +7,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/start",
       "text": "Start new application",
     },
@@ -24,6 +25,7 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View application",
     },
@@ -42,6 +44,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/create-new-placement-request",
       "text": "Create new placement request",
     },
@@ -72,6 +75,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/start",
       "text": "Start application",
     },
@@ -90,6 +94,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View application",
     },
@@ -107,6 +112,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 2
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View application",
     },
@@ -124,6 +130,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/create-new-placement-request",
       "text": "Create new placement request",
     },
@@ -141,6 +148,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/create-placement-request",
       "text": "Create placement request",
     },
@@ -158,6 +166,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/create-new-placement-request",
       "text": "Create new placement request",
     },
@@ -175,6 +184,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View application",
     },
@@ -192,6 +202,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/create-new-placement-request",
       "text": "Create new placement request",
     },
@@ -209,6 +220,7 @@ exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "Continue application",
     },
@@ -253,6 +265,7 @@ exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View referral",
     },
@@ -270,6 +283,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View referral",
     },
@@ -287,6 +301,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View referral",
     },
@@ -300,7 +315,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to add DTR referral details before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -313,7 +328,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed s
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -326,7 +341,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS nee
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DTR and CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -339,7 +354,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DT
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -352,7 +367,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS n
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, both DTR and CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -382,6 +397,7 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/start",
       "text": "Start referral",
     },
@@ -400,6 +416,7 @@ exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/start-new",
       "text": "Start new referral",
     },
@@ -418,6 +435,7 @@ exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/view",
       "text": "View referral",
     },
@@ -508,6 +526,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": [
       {
+        "external": true,
         "href": "https://example.com/view-referral",
         "text": "View referral",
       },
@@ -523,6 +542,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": [
       {
+        "external": true,
         "href": "https://example.com/start-application",
         "text": "Start application",
       },

@@ -59,22 +59,162 @@ describe('linksForService', () => {
 })
 
 describe('eligibilityStatusCard', () => {
+  // See: https://hmpps-single-accommodation-service-prototype-main.apps.live.cloud-platform.service.justice.gov.uk/10-0/_statuses?r=t
+  const testCases: Record<'cas1' | 'cas3', { title: string; result: Partial<ServiceResult> }[]> = {
+    cas1: [
+      {
+        title: 'NOT_ELIGIBLE',
+        result: { serviceStatus: 'NOT_ELIGIBLE' },
+      },
+      {
+        title: 'UPCOMING',
+        result: {
+          serviceStatus: 'UPCOMING',
+          action: { type: 'START_APPROVED_PREMISE_APPLICATION', startDate: '2026-11-08' },
+        },
+      },
+      {
+        title: 'NOT_STARTED',
+        result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' },
+      },
+      {
+        title: 'SUBMITTED',
+        result: { serviceStatus: 'SUBMITTED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'NOT_SUBMITTED',
+        result: { serviceStatus: 'NOT_SUBMITTED', url: 'https://example.com/continue' },
+      },
+      {
+        title: 'INFO_REQUESTED',
+        result: { serviceStatus: 'INFO_REQUESTED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'APPLICATION_REJECTED',
+        result: { serviceStatus: 'APPLICATION_REJECTED', url: 'https://example.com/start' },
+      },
+      {
+        title: 'PLACEMENT_BOOKED',
+        result: { serviceStatus: 'PLACEMENT_BOOKED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'NOT_ARRIVED',
+        result: { serviceStatus: 'NOT_ARRIVED', url: 'https://example.com/create-new-placement-request' },
+      },
+      {
+        title: 'PLACEMENT_CANCELLED',
+        result: { serviceStatus: 'PLACEMENT_CANCELLED', url: 'https://example.com/create-new-placement-request' },
+      },
+      {
+        title: 'PLACEMENT_REQUEST_NOT_STARTED',
+        result: {
+          serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED',
+          url: 'https://example.com/create-placement-request',
+        },
+      },
+      {
+        title: 'PLACEMENT_REQUEST_SUBMITTED',
+        result: { serviceStatus: 'PLACEMENT_REQUEST_SUBMITTED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'PLACEMENT_REQUEST_REJECTED',
+        result: {
+          serviceStatus: 'PLACEMENT_REQUEST_REJECTED',
+          url: 'https://example.com/create-new-placement-request',
+        },
+      },
+      {
+        title: 'PLACEMENT_REQUEST_WITHDRAWN',
+        result: {
+          serviceStatus: 'PLACEMENT_REQUEST_WITHDRAWN',
+          url: 'https://example.com/create-new-placement-request',
+        },
+      },
+      {
+        title: 'WITHDRAWN',
+        result: { serviceStatus: 'WITHDRAWN', url: 'https://example.com/start' },
+      },
+    ],
+    cas3: [
+      {
+        title: 'NOT_ELIGIBLE',
+        result: { serviceStatus: 'NOT_ELIGIBLE' },
+      },
+      // TODO: This status should be `DTR_REFERRAL_NOT_SUBMITTED`
+      {
+        title: 'CANNOT_START_YET, DTR needed',
+        result: { serviceStatus: 'CANNOT_START_YET', failureReasons: ['DTR_REFERRAL_EXPIRED'] },
+      },
+      // TODO: This failure reason should be `MALE_CRS_NOT_SUBMITTED`
+      {
+        title: 'CANNOT_START_YET, men, CRS needed',
+        result: { serviceStatus: 'CANNOT_START_YET', failureReasons: ['CRS_NOT_SUBMITTED'] },
+      },
+      // TODO: These failure reasons should be `DTR_REFERRAL_NOT_SUBMITTED` and `MALE_CRS_NOT_SUBMITTED`
+      {
+        title: 'CANNOT_START_YET, men, both DTR and CRS needed',
+        result: { serviceStatus: 'CANNOT_START_YET', failureReasons: ['DTR_REFERRAL_EXPIRED', 'CRS_NOT_SUBMITTED'] },
+      },
+      // TODO: This failure reason should be `NON_MALE_CRS_NOT_SUBMITTED`
+      {
+        title: 'CANNOT_START_YET, women, CRS needed',
+        result: { serviceStatus: 'CANNOT_START_YET', failureReasons: ['CRS_NOT_SUBMITTED'] },
+      },
+      // TODO: These failure reasons should be `DTR_REFERRAL_NOT_SUBMITTED` and `NON_MALE_CRS_NOT_SUBMITTED`
+      {
+        title: 'CANNOT_START_YET, women, both DTR and CRS needed',
+        result: { serviceStatus: 'CANNOT_START_YET', failureReasons: ['DTR_REFERRAL_EXPIRED', 'CRS_NOT_SUBMITTED'] },
+      },
+      {
+        title: 'UPCOMING',
+        result: { serviceStatus: 'UPCOMING', action: { type: 'START_CAS3_REFERRAL', startDate: '2026-12-15' } },
+      },
+      {
+        title: 'NOT_STARTED',
+        result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' },
+      },
+      {
+        title: 'SUBMITTED',
+        result: { serviceStatus: 'SUBMITTED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'REJECTED',
+        result: { serviceStatus: 'REJECTED', url: 'https://example.com/start-new' },
+      },
+      {
+        title: 'BEDSPACE_OFFERED',
+        result: { serviceStatus: 'BEDSPACE_OFFERED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'BOOKING_CONFIRMED',
+        result: { serviceStatus: 'BOOKING_CONFIRMED', url: 'https://example.com/view' },
+      },
+      {
+        title: 'BOOKING_CANCELLED',
+        result: { serviceStatus: 'BOOKING_CANCELLED', url: 'https://example.com/view' },
+      },
+    ],
+  }
+
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-07-31'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   describe.each(['cas1', 'cas3'] as const)('for %s', service => {
-    it('renders a NOT_STARTED status card', () => {
+    it.each(testCases[service])('renders a $title status card', ({ result }) => {
       const serviceResult = serviceResultFactory.build({
-        serviceStatus: 'NOT_STARTED',
-        url: 'https://example.com/start',
+        serviceStatus: 'NOT_REQUIRED',
+        action: undefined,
+        failureReasons: [],
+        url: undefined,
+        ...result,
       })
 
       expect(eligibilityStatusCard(service, serviceResult)).toMatchSnapshot()
-    })
-
-    it('renders a hint if the status is not eligible', () => {
-      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_ELIGIBLE' })
-
-      const card = eligibilityStatusCard(service, serviceResult)
-
-      expect(card.hint).toEqual('This could be because of risk levels or suitability for a move on at this time.')
     })
   })
 })

@@ -1,5 +1,73 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start",
+      "text": "Start new application",
+    },
+  ],
+  "status": {
+    "text": "Application rejected",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View application",
+    },
+  ],
+  "status": {
+    "colour": "yellow",
+    "text": "Info requested",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/create-new-placement-request",
+      "text": "Create new placement request",
+    },
+  ],
+  "status": {
+    "text": "Not arrived",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": "This could be because of risk levels or suitability for a move on at this time.",
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = `
 {
   "heading": "Approved premises (CAS1)",
@@ -7,6 +75,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/start",
       "text": "Start application",
     },
@@ -18,6 +87,310 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = 
 }
 `;
 
+exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/continue",
+      "text": "Continue application",
+    },
+  ],
+  "status": {
+    "colour": "red",
+    "text": "Not submitted",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View application",
+    },
+  ],
+  "status": {
+    "text": "Placement booked",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/create-new-placement-request",
+      "text": "Create new placement request",
+    },
+  ],
+  "status": {
+    "text": "Placement cancelled",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/create-placement-request",
+      "text": "Create placement request",
+    },
+  ],
+  "status": {
+    "text": "Placement request not started",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/create-new-placement-request",
+      "text": "Create new placement request",
+    },
+  ],
+  "status": {
+    "text": "Placement request rejected",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View application",
+    },
+  ],
+  "status": {
+    "text": "Placement request submitted",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/create-new-placement-request",
+      "text": "Create new placement request",
+    },
+  ],
+  "status": {
+    "text": "Placement request withdrawn",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View application",
+    },
+  ],
+  "status": {
+    "colour": "yellow",
+    "text": "Submitted",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": "Start referral from 8 November 2026 (in 100 days).",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "yellow",
+    "text": "Upcoming",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
+{
+  "heading": "Approved premises (CAS1)",
+  "hint": undefined,
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Withdrawn",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "Bedspace details are sent by email",
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View referral",
+    },
+  ],
+  "status": {
+    "text": "Bedspace offered",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View referral",
+    },
+  ],
+  "status": {
+    "text": "Booking cancelled",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View referral",
+    },
+  ],
+  "status": {
+    "text": "Booking confirmed",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "You need to add DTR referral details before you can make a CAS3 referral.",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS needed status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DTR and CRS needed status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS needed status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, both DTR and CRS needed status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
@@ -25,6 +398,7 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = 
   "inactive": false,
   "links": [
     {
+      "external": true,
       "href": "https://example.com/start",
       "text": "Start referral",
     },
@@ -32,6 +406,57 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = 
   "status": {
     "colour": "orange",
     "text": "Not started",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start-new",
+      "text": "Start new referral",
+    },
+  ],
+  "status": {
+    "colour": "red",
+    "text": "Rejected",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View referral",
+    },
+  ],
+  "status": {
+    "colour": "yellow",
+    "text": "Submitted",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a UPCOMING status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "Start referral from 15 December 2026 (in 137 days).",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "yellow",
+    "text": "Upcoming",
   },
 }
 `;
@@ -74,6 +499,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
       },
     ],
     "heading": "Duty to Refer (DTR)",
+    "hint": undefined,
     "inactive": false,
     "links": [
       {
@@ -102,6 +528,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": [
       {
+        "external": true,
         "href": "https://example.com/view-referral",
         "text": "View referral",
       },
@@ -117,6 +544,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": [
       {
+        "external": true,
         "href": "https://example.com/start-application",
         "text": "Start application",
       },

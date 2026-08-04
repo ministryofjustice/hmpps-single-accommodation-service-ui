@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
+import { DtrSubmissionDto, ServiceResult } from '@sas/api'
 import {
   detailsForStatus,
   detailsSummaryListRows,
@@ -29,6 +30,33 @@ describe('duty to refer utils', () => {
   let req: Request
 
   describe('dutyToReferStatusCard', () => {
+    const submission: DtrSubmissionDto = dtrSubmissionFactory.build({
+      id: 'submission-id',
+      submissionDate: '2025-12-01',
+      referenceNumber: 'REF123',
+      localAuthority: { localAuthorityAreaName: 'Some Council' },
+      createdBy: 'user1',
+      createdAt: '2025-12-01T10:00:00.000Z',
+    })
+
+    // See: https://hmpps-single-accommodation-service-prototype-main.apps.live.cloud-platform.service.justice.gov.uk/10-0/_statuses?r=t#dtr
+    const testCases: {
+      title: string
+      result: Partial<ServiceResult>
+      caseId?: string
+      submission?: DtrSubmissionDto
+    }[] = [
+      { title: 'NOT_REQUIRED', result: { serviceStatus: 'NOT_REQUIRED' } },
+      {
+        title: 'UPCOMING',
+        result: { serviceStatus: 'UPCOMING', action: { type: 'SUBMIT_DTR_REFERRAL', startDate: '2026-02-23' } },
+      },
+      { title: 'NOT_STARTED', result: { serviceStatus: 'NOT_STARTED' } },
+      { title: 'SUBMITTED', result: { serviceStatus: 'SUBMITTED' }, submission },
+      { title: 'ACCEPTED', result: { serviceStatus: 'ACCEPTED' }, submission },
+      { title: 'NOT_ACCEPTED', result: { serviceStatus: 'NOT_ACCEPTED' }, submission },
+    ]
+
     beforeEach(() => {
       jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
     })
@@ -37,51 +65,18 @@ describe('duty to refer utils', () => {
       jest.useRealTimers()
     })
 
-    it('returns a duty to refer status card object', () => {
-      const dutyToRefer = dtrServiceResultFactory.build()
-
-      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
-
-      expect(card.heading).toEqual('Duty to Refer (DTR)')
-    })
-
-    it('returns a NOT_STARTED duty to refer status card object', () => {
-      const dutyToRefer = dtrServiceResultFactory.notStarted().build()
-
-      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
-
-      expect(card).toMatchSnapshot()
-    })
-
-    it('returns a SUBMITTED duty to refer status card object', () => {
-      const dutyToRefer = dtrServiceResultFactory.submitted().build({
-        submission: {
-          id: 'submission-id',
-          submissionDate: '2025-12-01',
-          referenceNumber: 'REF123',
-          localAuthority: { localAuthorityAreaName: 'Some Council' },
-          createdBy: 'user1',
-          createdAt: '2025-12-01T10:00:00.000Z',
-        },
+    it.each(testCases)('returns a $title duty to refer status card object', ({ result, submission: dtrSubmission }) => {
+      const dutyToRefer = dtrServiceResultFactory.build({
+        serviceResult: serviceResultFactory.build({
+          action: undefined,
+          failureReasons: [],
+          url: undefined,
+          ...result,
+        }),
+        submission: dtrSubmission,
       })
 
-      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
-
-      expect(card).toMatchSnapshot()
-    })
-
-    it('returns a NOT_REQUIRED duty to refer status card object', () => {
-      const dutyToRefer = dtrServiceResultFactory.notRequired().build()
-
-      const card = dutyToReferStatusCard('CRN123', dutyToRefer)
-
-      expect(card).toMatchSnapshot()
-    })
-
-    it('returns an empty duty to refer card for undefined duty to refer', () => {
-      const card = dutyToReferStatusCard('CRN123', undefined)
-
-      expect(card).toMatchSnapshot()
+      expect(dutyToReferStatusCard('CRN123', dutyToRefer)).toMatchSnapshot()
     })
   })
 

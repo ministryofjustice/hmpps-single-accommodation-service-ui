@@ -1,5 +1,13 @@
 import { Request } from 'express'
-import { AuditRecordDto, CaseDto, DtrServiceResult, DtrSubmissionDto, DutyToReferDto, FieldChange } from '@sas/api'
+import {
+  AuditRecordDto,
+  CaseDto,
+  DtrServiceResult,
+  DtrSubmissionDto,
+  DutyToReferDto,
+  FieldChange,
+  ServiceResult,
+} from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { Link, StatusCard, TimelineValue } from '@sas/ui'
 import { dateFieldParts, formatDate, formatDateAndAge, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
@@ -42,6 +50,16 @@ export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceRe
   submission: dtr.submission,
 })
 
+const hintForDTR = (result: ServiceResult) => {
+  const { serviceStatus, action } = result ?? {}
+
+  if (serviceStatus === 'UPCOMING' && action?.startDate) {
+    return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
+  }
+
+  return undefined
+}
+
 export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResult): StatusCard => {
   const { serviceResult } = dutyToRefer || {}
   const { serviceStatus } = serviceResult || {}
@@ -49,6 +67,7 @@ export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResu
   return {
     heading: 'Duty to Refer (DTR)',
     inactive: serviceStatus === 'NOT_REQUIRED',
+    hint: hintForDTR(serviceResult),
     status: serviceStatusTag(serviceStatus),
     details: detailsForStatus(dutyToRefer),
     links: linksForStatus(dutyToRefer, crn),
@@ -59,7 +78,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
 
-  const notes = submission?.id && {
+  const link = submission?.id && {
     text: 'View referral',
     href: uiPaths.dutyToRefer.show({ crn, id: submission.id }),
   }
@@ -67,11 +86,10 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
   switch (status) {
     case 'NOT_ACCEPTED':
     case 'ACCEPTED':
-      return [notes]
+    case 'SUBMITTED':
+      return [link]
     case 'NOT_STARTED':
       return [{ text: 'Add referral details', href: uiPaths.dutyToRefer.submission({ crn }) }]
-    case 'SUBMITTED':
-      return [notes]
     default:
       return []
   }

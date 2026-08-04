@@ -13,7 +13,7 @@
     <div class="sas-card__footer">
       <div class="sas-card__content">
         {% if cardData.hint %}
-          <p class="sas-card__hint">{{ cardData.hint }}</p>
+          <p class="sas-card__hint">{{ cardData.hint | escape | nl2br }}</p>
         {% endif %}
 
         {% if cardData.details | length %}
@@ -29,7 +29,13 @@
       {% if cardData.links | length %}
         <div class="sas-card__links">
           {% for link in cardData.links %}
-            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ link.href }}">{{ link.text }}</a>
+            <a
+              class="govuk-body govuk-link govuk-link--no-visited-state"
+              href="{{ link.href }}"
+              {% if link.external %}target="_blank" rel="noreferrer noopener"{% endif %}
+            >
+              {{ link.text }}
+            </a>
           {% endfor %}
         </div>
       {% endif %}

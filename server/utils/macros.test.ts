@@ -117,7 +117,10 @@ describe('Macros', () => {
         },
         hint: 'Some hint text',
         details: [{ key: { text: 'Baz' }, value: { text: 'Qux' } }],
-        links: [{ text: 'Quux', href: '#' }],
+        links: [
+          { text: 'Quux', href: '#' },
+          { text: 'Foo', href: 'https://example.com', external: true },
+        ],
       }
 
       expect(statusCard(card)).toMatchSnapshot()

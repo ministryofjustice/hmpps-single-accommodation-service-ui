@@ -119,10 +119,115 @@ exports[`duty to refer utils detailsSummaryListRows returns correct rows for sta
 ]
 `;
 
+exports[`duty to refer utils dutyToReferStatusCard returns a ACCEPTED duty to refer status card object 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Submitted to",
+      },
+      "value": {
+        "text": "Some Council",
+      },
+    },
+    {
+      "key": {
+        "text": "Reference",
+      },
+      "value": {
+        "text": "REF123",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted",
+      },
+      "value": {
+        "text": "1 December 2025 (9 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted by",
+      },
+      "value": {
+        "text": "user1",
+      },
+    },
+  ],
+  "heading": "Duty to Refer (DTR)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "href": "/cases/CRN123/dtr/submission-id/details",
+      "text": "View referral",
+    },
+  ],
+  "status": {
+    "colour": "green",
+    "text": "Accepted",
+  },
+}
+`;
+
+exports[`duty to refer utils dutyToReferStatusCard returns a NOT_ACCEPTED duty to refer status card object 1`] = `
+{
+  "details": [
+    {
+      "key": {
+        "text": "Submitted to",
+      },
+      "value": {
+        "text": "Some Council",
+      },
+    },
+    {
+      "key": {
+        "text": "Reference",
+      },
+      "value": {
+        "text": "REF123",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted",
+      },
+      "value": {
+        "text": "1 December 2025 (9 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted by",
+      },
+      "value": {
+        "text": "user1",
+      },
+    },
+  ],
+  "heading": "Duty to Refer (DTR)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "href": "/cases/CRN123/dtr/submission-id/details",
+      "text": "View referral",
+    },
+  ],
+  "status": {
+    "colour": "grey",
+    "text": "Not accepted",
+  },
+}
+`;
+
 exports[`duty to refer utils dutyToReferStatusCard returns a NOT_REQUIRED duty to refer status card object 1`] = `
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",
+  "hint": undefined,
   "inactive": true,
   "links": [],
   "status": {
@@ -136,6 +241,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a NOT_STARTED duty to
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",
+  "hint": undefined,
   "inactive": false,
   "links": [
     {
@@ -187,6 +293,7 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
     },
   ],
   "heading": "Duty to Refer (DTR)",
+  "hint": undefined,
   "inactive": false,
   "links": [
     {
@@ -201,14 +308,16 @@ exports[`duty to refer utils dutyToReferStatusCard returns a SUBMITTED duty to r
 }
 `;
 
-exports[`duty to refer utils dutyToReferStatusCard returns an empty duty to refer card for undefined duty to refer 1`] = `
+exports[`duty to refer utils dutyToReferStatusCard returns a UPCOMING duty to refer status card object 1`] = `
 {
   "details": [],
   "heading": "Duty to Refer (DTR)",
+  "hint": "Start referral from 23 February 2026 (in 75 days).",
   "inactive": false,
   "links": [],
   "status": {
-    "text": "Unknown",
+    "colour": "yellow",
+    "text": "Upcoming",
   },
 }
 `;

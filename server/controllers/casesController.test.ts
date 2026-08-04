@@ -26,6 +26,7 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import * as backLinksUtils from '../utils/backlinks'
+import { breadcrumbs } from '../utils/breadcrumbs'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -179,6 +180,7 @@ describe('casesController', () => {
       expect(accommodationService.getAccommodationHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
+        breadcrumbs: breadcrumbs(request),
         displayName: 'John Smith (limited access offender)',
         caseData,
         upstreamFailures: [],

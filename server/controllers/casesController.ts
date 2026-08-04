@@ -26,6 +26,7 @@ import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import { setCaseListUrl } from '../utils/backlinks'
+import { breadcrumbs } from '../utils/breadcrumbs'
 
 export default class CasesController {
   constructor(
@@ -110,6 +111,7 @@ export default class CasesController {
       })
 
       return res.render('pages/show', {
+        breadcrumbs: breadcrumbs(req),
         displayName: displayName(caseData),
         caseData,
         upstreamFailures,

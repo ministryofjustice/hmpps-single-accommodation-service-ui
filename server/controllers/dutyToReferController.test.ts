@@ -26,6 +26,7 @@ import {
 } from '../testutils/factories'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { radioItems } from '../utils/utils'
+import { breadcrumbs } from '../utils/breadcrumbs'
 
 describe('dutyToReferController', () => {
   let request: Request
@@ -439,6 +440,7 @@ describe('dutyToReferController', () => {
       })
 
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/show', {
+        breadcrumbs: breadcrumbs(request, caseData),
         crn,
         dtrId: 'submission-id',
         displayName: displayName(caseData),

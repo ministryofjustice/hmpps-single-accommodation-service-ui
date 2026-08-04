@@ -1,4 +1,3 @@
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "components/macros/caseDetails.njk" import caseDetails %}
 {% from "components/macros/statusCard.njk" import statusCard %}
 {% from "components/macros/accommodationCard.njk" import accommodationCard %}
@@ -12,20 +11,6 @@
 
 {% set pageTitle = "Profile" %}
 {% set mainClasses = "sas-profile-page" %}
-
-{% block containerStart %}
-  {{
-    govukBreadcrumbs({
-        items: [
-            {
-                text: "Case list",
-                href: caseListUrl
-            }
-        ]
-    })
-  }}
-  {{ super() }}
-{% endblock %}
 
 {% block content %}
   {% if upstreamFailures | length %}

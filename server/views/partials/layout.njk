@@ -1,6 +1,7 @@
 {% extends "govuk/template.njk" %}
 
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 
 {% block head %}
   {% include "./applicationInsightsScript.njk" %}
@@ -43,6 +44,14 @@
 {% block bodyStart %}{% endblock %}
 
 {% block containerStart %}
+  {% if breadcrumbs %}
+    {{
+      govukBreadcrumbs({
+        items: breadcrumbs
+      })
+    }}
+  {% endif %}
+
   {% include "components/_messages.njk" %}
 {% endblock %}
 

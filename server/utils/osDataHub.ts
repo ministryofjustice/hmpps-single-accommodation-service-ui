@@ -34,7 +34,7 @@ export const filterResultsByNameOrNumber = (results: OsDataHubResult[] = [], nam
   const sanitisedNameOrNumber = nameOrNumber.toUpperCase()
 
   return results.filter(result =>
-    ['BUILDING_NUMBER', 'BUILDING_NAME', 'SUB_BUILDING_NAME'].some(key =>
+    ['ORGANISATION_NAME', 'BUILDING_NUMBER', 'BUILDING_NAME', 'SUB_BUILDING_NAME'].some(key =>
       result.DPA[key as keyof OsDataHubResult['DPA']]?.includes(sanitisedNameOrNumber),
     ),
   )

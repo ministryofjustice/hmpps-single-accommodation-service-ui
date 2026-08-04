@@ -28,14 +28,20 @@ export type OsDataHubResponse = {
   results?: OsDataHubResult[]
 }
 
+const sanitise = (text?: string) =>
+  text
+    ?.toUpperCase()
+    .replace(/\W/g, '')
+    .replace(/\s{2,}/g, '')
+
 export const filterResultsByNameOrNumber = (results: OsDataHubResult[] = [], nameOrNumber?: string) => {
   if (!nameOrNumber) return results
 
-  const sanitisedNameOrNumber = nameOrNumber.toUpperCase()
+  const sanitisedNameOrNumber = sanitise(nameOrNumber)
 
   return results.filter(result =>
     ['ORGANISATION_NAME', 'BUILDING_NUMBER', 'BUILDING_NAME', 'SUB_BUILDING_NAME'].some(key =>
-      result.DPA[key as keyof OsDataHubResult['DPA']]?.includes(sanitisedNameOrNumber),
+      sanitise(result.DPA[key as keyof OsDataHubResult['DPA']])?.includes(sanitisedNameOrNumber),
     ),
   )
 }

@@ -13,6 +13,7 @@ describe('OS DataHub utils', () => {
       { DPA: { BUILDING_NAME: '3 LITTLE PIGS' } },
       { DPA: { SUB_BUILDING_NAME: 'SOMETHING 333' } },
       { DPA: { ORGANISATION_NAME: 'QUEEN ELIZABETH HOSPITAL' } },
+      { DPA: { ORGANISATION_NAME: "ST. SIDEWELL'S C OF E" } },
     ] as OsDataHubResult[]
 
     it('returns no results if results are undefined', () => {
@@ -24,8 +25,14 @@ describe('OS DataHub utils', () => {
       ['219', [results[1], results[3], results[5]]],
       ['3', [results[6], results[7], results[8]]],
       ['Little pigs', [results[7]]],
+      ['little   pigs', [results[7]]],
+      ['little. pigs.', [results[7]]],
       ['Queen elizabeth', [results[9]]],
       ['Hospital', [results[9]]],
+      ['sidewells', [results[10]]],
+      ["sidewell's", [results[10]]],
+      ['st sidewell', [results[10]]],
+      ['st. sidewells', [results[10]]],
       [undefined, results],
     ])(`returns results for name or number "%s"`, (nameOrNumber, expected) => {
       expect(filterResultsByNameOrNumber(results, nameOrNumber)).toEqual(expected)

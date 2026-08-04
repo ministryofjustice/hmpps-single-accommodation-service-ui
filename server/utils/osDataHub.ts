@@ -31,8 +31,8 @@ export type OsDataHubResponse = {
 const sanitise = (text?: string) =>
   text
     ?.toUpperCase()
-    .replace(/\W/g, '')
-    .replace(/\s{2,}/g, '')
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s{2,}/g, ' ')
 
 export const filterResultsByNameOrNumber = (results: OsDataHubResult[] = [], nameOrNumber?: string) => {
   if (!nameOrNumber) return results

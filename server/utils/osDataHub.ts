@@ -58,7 +58,9 @@ const countryCodesMap: Record<string, string> = {
 
 export const resultToAddressDetails = (result: OsDataHubResult): AccommodationAddressDetails => ({
   postcode: result.DPA.POSTCODE,
-  subBuildingName: convertToTitleCase(result.DPA.SUB_BUILDING_NAME),
+  subBuildingName: [convertToTitleCase(result.DPA.ORGANISATION_NAME), convertToTitleCase(result.DPA.SUB_BUILDING_NAME)]
+    .filter(Boolean)
+    .join(', '),
   buildingName: convertToTitleCase(result.DPA.BUILDING_NAME),
   buildingNumber: result.DPA.BUILDING_NUMBER,
   thoroughfareName: convertToTitleCase(result.DPA.THOROUGHFARE_NAME),

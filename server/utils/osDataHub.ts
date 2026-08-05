@@ -32,7 +32,7 @@ const sanitise = (text?: string) =>
   text
     ?.toUpperCase()
     .replace(/[^\w\s]/g, '')
-    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+/g, ' ')
 
 export const filterResultsByNameOrNumber = (results: OsDataHubResult[] = [], nameOrNumber?: string) => {
   if (!nameOrNumber) return results

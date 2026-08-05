@@ -156,6 +156,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-02-03",
+  "link": null,
   "name": "CAS2 accommodation of 13 weeks or more",
   "settledTag": {
     "colour": "purple",
@@ -170,6 +171,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-07-31",
+  "link": null,
   "name": "CAS3",
   "settledTag": {
     "colour": "purple",
@@ -184,6 +186,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-05-23",
+  "link": null,
   "name": undefined,
   "settledTag": undefined,
   "startDate": "2025-12-01",
@@ -197,6 +200,22 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-09-10",
+  "link": null,
+  "name": "Living in the home of a friend, family member or partner: settled",
+  "settledTag": {
+    "colour": "green",
+    "text": "Settled",
+  },
+  "startDate": "2025-12-01",
+}
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Private and in SAS accommodation 1`] = `
+{
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+  "cardType": "current",
+  "endDate": "2026-09-10",
+  "link": null,
   "name": "Living in the home of a friend, family member or partner: settled",
   "settledTag": {
     "colour": "green",
@@ -213,6 +232,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
+  "link": null,
   "name": "CAS2 accommodation of 13 weeks or more",
   "settledTag": {
     "colour": "purple",
@@ -227,6 +247,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
+  "link": null,
   "name": "CAS3",
   "settledTag": {
     "colour": "purple",
@@ -241,6 +262,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
+  "link": null,
   "name": undefined,
   "settledTag": undefined,
   "startDate": "2026-05-23",
@@ -254,6 +276,22 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
+  "link": null,
+  "name": "Living in the home of a friend, family member or partner: settled",
+  "settledTag": {
+    "colour": "green",
+    "text": "Settled",
+  },
+  "startDate": "2026-09-10",
+}
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Private and in SAS accommodation 1`] = `
+{
+  "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
+  "cardType": "next",
+  "endDate": undefined,
+  "link": "/cases/L489936/proposed-addresses/df4b775f-29fa-413e-b39b-1df368288df7/details",
   "name": "Living in the home of a friend, family member or partner: settled",
   "settledTag": {
     "colour": "green",

@@ -36,6 +36,7 @@ import { addressLines, formatAddress } from '../utils/addresses'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import { radioItems } from '../utils/utils'
+import { breadcrumbs } from '../utils/breadcrumbs'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -153,6 +154,7 @@ describe('proposedAddressesController', () => {
         correlationId: 'request-id',
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/show', {
+        breadcrumbs: breadcrumbs(request, caseData),
         displayName: displayName(caseData),
         caseData,
         assignedTo: caseAssignedTo(caseData, user.username),

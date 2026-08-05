@@ -43,6 +43,7 @@ import config from '../config'
 import { radioItems } from '../utils/utils'
 import { collectApiResponses } from '../utils/apiResponses'
 import { getTodayLocal } from '../utils/dates'
+import { breadcrumbs } from '../utils/breadcrumbs'
 
 interface EditRequest extends Request {
   params: {
@@ -84,6 +85,7 @@ export default class ProposedAddressesController {
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/proposed-address/show', {
+        breadcrumbs: breadcrumbs(req, caseData),
         displayName: displayName(caseData),
         caseData,
         assignedTo: caseAssignedTo(caseData, username),

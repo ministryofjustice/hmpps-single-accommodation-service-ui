@@ -2,7 +2,6 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "moj/components/timeline/macro.njk" import mojTimeline %}
 {% from "components/macros/errorSummary.njk" import showErrorSummary %}
@@ -10,24 +9,6 @@
 
 {% set pageTitle = "Duty to Refer (DTR)" %}
 {% set mainClasses = "sas-profile-page" %}
-
-{% block containerStart %}
-  {{
-    govukBreadcrumbs({
-      items: [
-        {
-          text: "Case list",
-          href: caseListUrl
-        },
-        {
-          text: caseData.name,
-          href: paths.cases.show({ crn: caseData.crn })
-        }
-      ]
-    })
-  }}
-  {{ super() }}
-{% endblock %}
 
 {% block content %}
   {{ showErrorSummary(errorSummary) }}

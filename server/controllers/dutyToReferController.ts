@@ -24,6 +24,7 @@ import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
 import { radioItems } from '../utils/utils'
+import { breadcrumbs } from '../utils/breadcrumbs'
 
 export type SubmissionFlow = 'add' | 'addNew' | 'edit'
 
@@ -57,6 +58,7 @@ export default class DutyToReferController {
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       return res.render('pages/duty-to-refer/show', {
+        breadcrumbs: breadcrumbs(req, caseData),
         crn,
         dtrId: id,
         displayName: displayName(caseData),

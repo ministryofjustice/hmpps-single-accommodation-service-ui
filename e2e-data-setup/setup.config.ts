@@ -16,7 +16,7 @@ export const setupConfig: PlaywrightTestConfig = {
   workers: 2,
   reporter: [['html', { outputFolder: '../test_results/e2e-data-setup/report' }]],
   outputDir: '../test_results/e2e-data-setup/artefacts',
-  timeout: 5 * 60 * 1000, // 3 minutes
+  timeout: 5 * 60 * 1000, // 5 minutes
   globalTimeout: 15 * 60 * 1000, // 15 minutes
   use: {
     trace: 'off',

@@ -28,14 +28,20 @@ export type OsDataHubResponse = {
   results?: OsDataHubResult[]
 }
 
+const sanitise = (text?: string) =>
+  text
+    ?.toUpperCase()
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, ' ')
+
 export const filterResultsByNameOrNumber = (results: OsDataHubResult[] = [], nameOrNumber?: string) => {
   if (!nameOrNumber) return results
 
-  const sanitisedNameOrNumber = nameOrNumber.toUpperCase()
+  const sanitisedNameOrNumber = sanitise(nameOrNumber)
 
   return results.filter(result =>
-    ['BUILDING_NUMBER', 'BUILDING_NAME', 'SUB_BUILDING_NAME'].some(key =>
-      result.DPA[key as keyof OsDataHubResult['DPA']]?.includes(sanitisedNameOrNumber),
+    ['ORGANISATION_NAME', 'BUILDING_NUMBER', 'BUILDING_NAME', 'SUB_BUILDING_NAME'].some(key =>
+      sanitise(result.DPA[key as keyof OsDataHubResult['DPA']])?.includes(sanitisedNameOrNumber),
     ),
   )
 }
@@ -52,7 +58,9 @@ const countryCodesMap: Record<string, string> = {
 
 export const resultToAddressDetails = (result: OsDataHubResult): AccommodationAddressDetails => ({
   postcode: result.DPA.POSTCODE,
-  subBuildingName: convertToTitleCase(result.DPA.SUB_BUILDING_NAME),
+  subBuildingName: [convertToTitleCase(result.DPA.ORGANISATION_NAME), convertToTitleCase(result.DPA.SUB_BUILDING_NAME)]
+    .filter(Boolean)
+    .join(', '),
   buildingName: convertToTitleCase(result.DPA.BUILDING_NAME),
   buildingNumber: result.DPA.BUILDING_NUMBER,
   thoroughfareName: convertToTitleCase(result.DPA.THOROUGHFARE_NAME),

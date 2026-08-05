@@ -28,6 +28,7 @@
     "int-test-init:ci": "npx playwright install chromium --only-shell",
     "test:e2e": "npx playwright test --config ./e2e/playwright.config.ts",
     "test:e2e:ui": "npm run test:e2e -- --ui",
+    "test:e2e:smoke": "npm run test:e2e -- smoke.spec.ts",
     "test:e2e:data:setup": "npx playwright test --config ./e2e-data-setup/setup.config.ts",
     "test:e2e:data:teardown": "npx playwright test --config ./e2e-data-setup/teardown.config.ts",
     "clean": "rm -rf dist test_results",

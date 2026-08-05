@@ -1,7 +1,7 @@
 export const TEST_STAFF = {
-  name: 'TestUser, SAS (PS - PO)',
+  name: 'TestUserE2E, SAS (PS - Other)',
   firstName: 'SAS',
-  lastName: 'TestUser',
+  lastName: 'TestUserE2E',
 }
 
 export const TEST_TEAM = {

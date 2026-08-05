@@ -10,7 +10,11 @@ import clearNationalSearch from '../steps/clearNationalSearch'
 const DATA_DIR = join(process.cwd(), 'tmp')
 
 const readLines = (filename: string) => {
-  return readFileSync(join(DATA_DIR, filename)).toString().split('\n').filter(Boolean)
+  return readFileSync(join(DATA_DIR, filename))
+    .toString()
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean)
 }
 
 test('Teardown E2E data', async ({ page }) => {

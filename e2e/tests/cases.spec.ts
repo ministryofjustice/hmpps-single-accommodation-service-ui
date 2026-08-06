@@ -9,6 +9,8 @@ import { signIn } from '../steps/signIn'
 import { refreshUntil } from '../utils/refreshUntil'
 
 test('Case list', async ({ page, users: { probation: probationUser }, cases }) => {
+  test.setTimeout(minutesToMilliseconds(12))
+
   const [forename, surname] = cases.BASE_CASE.name.split(' ')
 
   // GIVEN I sign in as a probation user
@@ -18,8 +20,8 @@ test('Case list', async ({ page, users: { probation: probationUser }, cases }) =
 
   // AND I can see the expected allocated case
   await refreshUntil(page, () => expect(caseLink).toBeVisible(), {
-    timeout: minutesToMilliseconds(10),
-    intervals: [secondsToMilliseconds(10), secondsToMilliseconds(30), secondsToMilliseconds(60)],
+    timeout: minutesToMilliseconds(11),
+    intervals: [secondsToMilliseconds(15)],
   })
 
   // AND I click on the case link

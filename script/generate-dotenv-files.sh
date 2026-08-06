@@ -6,18 +6,13 @@ set -o pipefail
 
 cd "$(dirname "$0")"
 SCRIPT_DIR="$(pwd)"
-# shellcheck source=script/utils/inject_k8s_secrets.sh
-. "$SCRIPT_DIR"/utils/inject_k8s_secrets.sh
+# shellcheck source=script/utils/render_env_template.sh
+. "$SCRIPT_DIR"/utils/render_env_template.sh
 
 repo_root="$(cd "$SCRIPT_DIR/.." && pwd)"
 op_account="ministryofjustice.1password.eu"
 k8s_namespace="hmpps-community-accommodation-dev"
 date_suffix="$(date +%Y%m%d-%H%M%S)"
-
-if ! command -v op >/dev/null 2>&1; then
-  echo "Cannot find 'op'. Please install it first." >&2
-  exit 1
-fi
 
 shopt -s nullglob
 
@@ -40,8 +35,6 @@ for source_file in "${source_files[@]}"; do
     cp -p "$target_file" "$backup_file"
     rm -f "$target_file"
   fi
-
   echo "Rendering '$source_file' to '$target_file'"
-  op inject --account "$op_account" -i "$source_file" -o "$target_file"
-  inject_k8s_secrets "$target_file" "$k8s_namespace"
+  render_env_template "$source_file" "$target_file" "$op_account" "$k8s_namespace"
 done

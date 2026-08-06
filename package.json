@@ -34,6 +34,7 @@
     "clean": "rm -rf dist test_results",
     "rebuild": "npm run clean && npm i && npm run build",
     "generate-dotenv-files": "script/generate-dotenv-files.sh",
+    "set-github-secrets": "script/set-github-secrets.sh",
     "generate-types": "script/generate-types",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },

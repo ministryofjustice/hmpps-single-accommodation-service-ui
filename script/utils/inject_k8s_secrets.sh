@@ -2,6 +2,7 @@
 
 set -e
 # shellcheck disable=SC3040
+set -o pipefail
 # Replace k8s secret placeholders in a rendered dotenv file.
 #
 # The target file should already contain literal values in the form

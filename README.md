@@ -148,6 +148,24 @@ To run the tests in the PlayWright UI:
 npm run test:e2e:ui
 ```
 
+#### E2E tests environment variables on GitHub
+
+The E2E tests rely on secrets being set on GitHub. Environment variables that are needed as secrets on GitHub are flagged with `# GH_SECRET:PREFIX` at the end of the line in the dotenv template files.
+
+The `script/set-github-secrets.sh` is used to create/update these GitHub secrets from the dev Kubernetes secrets and from 1Password (the script can be run with a `--dry-run` flag to see which secrets will be created or updated first):
+
+```shell
+./script/set-github-secrets.sh
+```
+
+For example, for the following template file in the repository:
+
+```dotenv
+VARIABLE_NAME="value" # GH_SECRET:E2E
+```
+
+Running the script would create/update the secret called `E2E_VARIABLE_NAME`.
+
 
 ## Maintenance mode
 

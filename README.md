@@ -27,15 +27,19 @@ npm run prepare
 
 ## Running the application
 
-To run the SAS service locally, copy the `.env.example` file to `.env`. The default variables should be sufficient for local development against a [running local API](https://github.com/ministryofjustice/hmpps-single-accommodation-service-api):
+To run the SAS service locally, copy the `.env.tpl` file to `.env`. The default variables should be sufficient for local development against a [running local API](https://github.com/ministryofjustice/hmpps-single-accommodation-service-api):
 
 ```shell
-cp .env.example .env
+cp .env.tpl .env
 ```
 
 ### Running against the dev stack
 
-You can also run the local service against the dev external service (HMPPS Auth and SAS API). Get the `.env` file from the CAS vault of the [MoJ 1Password](https://ministryofjustice.1password.eu/signin) account.
+You can also run the local service against the dev external service (HMPPS Auth and SAS API). You will first need to create your local env files with secrets from 1Password and Kubernetes (ask for access):
+
+```shell
+npm run generate-dotenv-files
+```
 
 You can then start the SAS UI service:
 
@@ -126,7 +130,11 @@ npm run test:integration:ui
 
 The E2E tests should cover any journey that interacts with the API, to ensure the correct flow of data between the UI and an actual API. These tests only need to cover 'happy paths', that is, successful journeys through the service, resulting in actions being recorded. The E2E tests only need to verify the rendering of errors that are the result of a business logic violation: for instance, when a user attempts to create a booking for a room that is already booked, the API may return a conflict error.
 
-The E2E tests can be run against other environments from your local machine by setting the `E2E_BASE_URL` environment variable in the `e2e.env` file.
+Ensure you have created local dotenv files first:
+
+```shell
+npm run generate-dotenv-files
+```
 
 The tests can be run headless with:
 

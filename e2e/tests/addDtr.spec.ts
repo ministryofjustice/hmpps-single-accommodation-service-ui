@@ -1,26 +1,19 @@
 import { test } from '../test'
 import { signIn } from '../steps/signIn'
-import { CaseDetailsPage } from '../pages/caseDetailsPage'
-import { AddDtrReferralDetailsPage } from '../pages/addDtrReferralDetailsPage'
-import { ViewDtrReferralDetailsPage } from '../pages/viewDtrReferralDetailsPage'
-import {
-  AddDtrOutcomePage,
-  DtrOutcome,
-} from '../pages/addDtrOutcomePage'
+import CaseDetailsPage from '../pages/caseDetailsPage'
+import AddDtrReferralDetailsPage from '../pages/addDtrReferralDetailsPage'
+import ViewDtrReferralDetailsPage from '../pages/viewDtrReferralDetailsPage'
+import { AddDtrOutcomePage, DtrOutcome } from '../pages/addDtrOutcomePage'
 
 test('Previous DTR referral is withdrawn when a new referral is added', async ({
-                                                                                 page,
-                                                                                 users: { probation: probationUser },
-                                                                               }) => {
+  page,
+  users: { probation: probationUser },
+}) => {
   // GIVEN I sign in as a probation user
   await signIn(page, probationUser)
 
   // AND I open the first case
-  const firstCaseName = await page
-    .getByRole('row')
-    .nth(1)
-    .getByRole('link')
-    .textContent()
+  const firstCaseName = await page.getByRole('row').nth(1).getByRole('link').textContent()
 
   await page
     .getByRole('link', {
@@ -47,9 +40,7 @@ test('Previous DTR referral is withdrawn when a new referral is added', async ({
     year: '2026',
   })
 
-  await addDtrReferralDetailsPage.selectLocalAuthority(
-    'Birmingham City Council',
-  )
+  await addDtrReferralDetailsPage.selectLocalAuthority('Birmingham City Council')
 
   await addDtrReferralDetailsPage.saveAndContinue()
 
@@ -75,9 +66,7 @@ test('Previous DTR referral is withdrawn when a new referral is added', async ({
     year: '2026',
   })
 
-  await addDtrReferralDetailsPage.selectLocalAuthority(
-    'Aberdeen City',
-  )
+  await addDtrReferralDetailsPage.selectLocalAuthority('Aberdeen City')
 
   await addDtrReferralDetailsPage.saveAndContinue()
 
@@ -95,8 +84,7 @@ test('Previous DTR referral is withdrawn when a new referral is added', async ({
 
   await addDtrOutcomePage.expectPageToBeDisplayed()
 
-  const outcome: DtrOutcome =
-    'Yes, it was accepted on prevention and relief duty'
+  const outcome: DtrOutcome = 'Yes, it was accepted on prevention and relief duty'
 
   await addDtrOutcomePage.selectOutcome(outcome)
   await addDtrOutcomePage.saveAndContinue()

@@ -1,14 +1,14 @@
 import { expect } from '@playwright/test'
 import { test } from '../test'
 import { signIn } from '../steps/signIn'
-import { CaseDetailsPage } from '../pages/caseDetailsPage'
-import { AddPropAddressPage } from '../pages/addPropAddressPage'
-import { SelectAddressPage } from '../pages/selectAddressPage'
-import { LivingArrangementPage } from '../pages/livingArrangementPage'
-import { AddressStatusCheckPage } from '../pages/addressStatusCheckPage'
-import { ConfirmAddressPage } from '../pages/confirmAddressPage'
-import { CheckAnswersPage } from '../pages/checkAnswersPage'
-import { ConfirmCurrentAddressPage } from '../pages/confirmCurrentAddressPage'
+import CaseDetailsPage from '../pages/caseDetailsPage'
+import AddPropAddressPage from '../pages/addPropAddressPage'
+import SelectAddressPage from '../pages/selectAddressPage'
+import LivingArrangementPage from '../pages/livingArrangementPage'
+import AddressStatusCheckPage from '../pages/addressStatusCheckPage'
+import ConfirmAddressPage from '../pages/confirmAddressPage'
+import CheckAnswersPage from '../pages/checkAnswersPage'
+import ConfirmCurrentAddressPage from '../pages/confirmCurrentAddressPage'
 import { ProposedAddressStatus, CurrentAccommodationStatus } from '../data/statuses'
 
 test('Can add and confirm a proposed address', async ({ page, users: { probation: probationUser } }) => {
@@ -77,20 +77,13 @@ test('Can add and confirm a proposed address', async ({ page, users: { probation
   await checkAnswersPage.save()
 
   // THEN I should return to the case details page and see the confirmed proposed address
-  await caseDetailsPage.expectProposedAddressStatus(
-    fullAddress,
-    ProposedAddressStatus.CONFIRMED,
-  )
+  await caseDetailsPage.expectProposedAddressStatus(fullAddress, ProposedAddressStatus.CONFIRMED)
 
   // AND I should be able to view the proposed address details
-  await caseDetailsPage.expectProposedAddressViewDetailsLink(
-    fullAddress,
-  )
+  await caseDetailsPage.expectProposedAddressViewDetailsLink(fullAddress)
 
   // WHEN I set the proposed address as the current address
-  await caseDetailsPage.setProposedAddressAsCurrent(
-    fullAddress,
-  )
+  await caseDetailsPage.setProposedAddressAsCurrent(fullAddress)
 
   // AND I confirm the person has moved into this address
   const confirmCurrentAddressPage = new ConfirmCurrentAddressPage(page)

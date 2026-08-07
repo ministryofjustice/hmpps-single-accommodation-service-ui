@@ -6,7 +6,7 @@ type DateInput = {
   year: string
 }
 
-export class AddDtrReferralDetailsPage {
+export default class AddDtrReferralDetailsPage {
   constructor(private readonly page: Page) {}
 
   async expectPageToBeDisplayed() {

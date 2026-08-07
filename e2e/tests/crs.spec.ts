@@ -1,6 +1,6 @@
 import { test } from '../test'
 import { signIn } from '../steps/signIn'
-import { CaseDetailsPage } from '../pages/caseDetailsPage'
+import CaseDetailsPage from '../pages/caseDetailsPage'
 
 test('CRS status is Not required', async ({ page, users: { probation: probationUser } }) => {
   // GIVEN I sign in as a probation user

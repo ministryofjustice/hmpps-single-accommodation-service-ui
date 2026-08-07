@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test'
 
-export class ViewDtrReferralDetailsPage {
+export default class ViewDtrReferralDetailsPage {
   constructor(private readonly page: Page) {}
 
   async expectPageToBeDisplayed() {
@@ -18,8 +18,8 @@ export class ViewDtrReferralDetailsPage {
         name: 'Add outcome',
       })
       .click()
-
   }
+
   async clickAddNewReferral() {
     await this.page
       .getByRole('link', {

@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test'
 
-export class SelectAddressPage {
+export default class SelectAddressPage {
   constructor(private readonly page: Page) {}
 
   async expectPage() {
@@ -13,8 +13,6 @@ export class SelectAddressPage {
   }
 
   async continue() {
-    await this.page
-      .getByRole('button', { name: 'Continue' })
-      .click()
+    await this.page.getByRole('button', { name: 'Continue' }).click()
   }
 }

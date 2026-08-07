@@ -30,7 +30,7 @@ render_env_template() {
 
   # Create temp directory and set umask for secure file creation
   tmp_dir="$(mktemp -d)"
-  trap "rm -rf '$tmp_dir'" RETURN
+  trap 'rm -rf "$tmp_dir"' EXIT
   template_basename="$(basename "$template_file")"
   rendered_basename="${template_basename%.tpl}"
   tmp_rendered="$tmp_dir/$rendered_basename"

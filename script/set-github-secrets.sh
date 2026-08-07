@@ -14,7 +14,7 @@ repo_root="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 OP_ACCOUNT="ministryofjustice.1password.eu"
 K8S_NAMESPACE="hmpps-community-accommodation-dev"
-GITHUB_REPO="ministryofjustice/hmpps-single-accommodation-services-ui"
+GITHUB_REPO="ministryofjustice/hmpps-single-accommodation-service-ui"
 dry_run=false
 
 for arg in "$@"; do

@@ -34,26 +34,6 @@ for arg in "$@"; do
   esac
 done
 
-trim() {
-  local value="$1"
-  value="${value#"${value%%[![:space:]]*}"}"
-  value="${value%"${value##*[![:space:]]}"}"
-  printf '%s' "$value"
-}
-
-strip_wrapping_quotes() {
-  local value="$1"
-  if [[ "$value" == \"*\" && "$value" == *\" ]]; then
-    printf '%s' "${value:1:${#value}-2}"
-    return
-  fi
-  if [[ "$value" == \'*\' && "$value" == *\' ]]; then
-    printf '%s' "${value:1:${#value}-2}"
-    return
-  fi
-  printf '%s' "$value"
-}
-
 if ! command -v gh >/dev/null 2>&1; then
   echo "Cannot find 'gh'. Please install GitHub CLI first." >&2
   exit 1
@@ -89,29 +69,29 @@ for template_file in "${template_files[@]}"; do
 
   render_env_template "$template_file" "$tmp_rendered" "$OP_ACCOUNT" "$K8S_NAMESPACE"
 
+  # Extract variable names marked with GH_SECRET from the template file
+  # and resolve their values from the rendered env file via source
   while IFS= read -r line || [[ -n "$line" ]]; do
+    # Check if line contains GH_SECRET marker
     if [[ "$line" =~ GH_SECRET[:/]([A-Za-z0-9_]+) ]]; then
       prefix="${BASH_REMATCH[1]}"
     else
       continue
     fi
 
-    assignment="${line%%#*}"
-    if [[ "$assignment" != *"="* ]]; then
+    # Extract variable name (everything before first '=' character)
+    if [[ "$line" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)= ]]; then
+      var_name="${BASH_REMATCH[1]}"
+    else
       continue
     fi
 
-    var_name="$(trim "${assignment%%=*}")"
-    var_value="$(trim "${assignment#*=}")"
-    var_value="$(strip_wrapping_quotes "$var_value")"
-
-    if [[ -z "$var_name" ]]; then
-      continue
-    fi
+    # Source the rendered file and get the variable's value
+    var_value=$( (source "$tmp_rendered" 2>/dev/null; eval "printf '%s' \"\${$var_name:-}\"") )
 
     secret_name="${prefix}_${var_name}"
     secret_values["$secret_name"]="$var_value"
-  done < "$tmp_rendered"
+  done < "$template_file"
 done
 
 if [[ ${#secret_values[@]} -eq 0 ]]; then

@@ -13,6 +13,8 @@ render_env_template() {
   local target_file="$2"
   local op_account="$3"
   local k8s_namespace="$4"
+  local tmp_dir
+  local tmp_rendered
 
   if [[ ! -f "$template_file" ]]; then
     echo "Template file '$template_file' does not exist." >&2
@@ -24,6 +26,20 @@ render_env_template() {
     exit 1
   fi
 
-  op inject --account "$op_account" -i "$template_file" -o "$target_file"
-  inject_k8s_secrets "$target_file" "$k8s_namespace"
+  # Create temp directory and set umask for secure file creation
+  tmp_dir="$(mktemp -d)"
+  trap "rm -rf '$tmp_dir'" RETURN
+  tmp_rendered="$tmp_dir/rendered.env"
+
+  # Set restrictive umask so op inject creates the file with mode 600
+  (
+    umask 077
+    op inject --account "$op_account" -i "$template_file" -o "$tmp_rendered"
+  )
+  inject_k8s_secrets "$tmp_rendered" "$k8s_namespace"
+
+  # Move temp file to target and ensure restrictive permissions
+  rm -f "$target_file"
+  mv "$tmp_rendered" "$target_file"
+  chmod 600 "$target_file"
 }

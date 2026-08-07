@@ -31,10 +31,10 @@ for source_file in "${source_files[@]}"; do
   if [[ -f "$target_file" ]]; then
     backup_file="$target_file.backup-$date_suffix"
 
-    echo "Backing up '$target_file' to '$backup_file'"
+    echo "Backing up '$(basename "$target_file")' to '$(basename "$backup_file")'"
     cp -p "$target_file" "$backup_file"
     rm -f "$target_file"
   fi
-  echo "Rendering '$source_file' to '$target_file'"
+  echo "Rendering '$(basename "$source_file")' to '$(basename "$target_file")'"
   render_env_template "$source_file" "$target_file" "$op_account" "$k8s_namespace"
 done

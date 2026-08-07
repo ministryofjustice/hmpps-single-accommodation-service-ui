@@ -11,6 +11,7 @@ set -o pipefail
 inject_k8s_secrets() {
   local target_file="$1"
   local k8s_namespace="$2"
+  local target_filename
 
   if ! command -v kubectl >/dev/null 2>&1; then
     echo "Cannot find 'kubectl'. Please install it first." >&2
@@ -31,7 +32,7 @@ inject_k8s_secrets() {
   mapfile -t refs < <(grep -oE "k8s://[^[:space:]\"']+/[^[:space:]\"']+" "$target_file" | sort -u || true)
 
   if [[ ${#refs[@]} -eq 0 ]]; then
-    echo "No k8s secret references found in '$target_file'"
+    echo "No k8s secret references found in '$(basename "$target_file")'"
     return 0
   fi
 

@@ -5,6 +5,7 @@ import { TestOptions } from '@sas/e2e'
 config({
   path: 'e2e.env',
   override: true,
+  quiet: true,
 })
 
 export default defineConfig<TestOptions>({

@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test'
 
-export class LivingArrangementPage {
+export default class LivingArrangementPage {
   constructor(private readonly page: Page) {}
 
   async expectPage() {

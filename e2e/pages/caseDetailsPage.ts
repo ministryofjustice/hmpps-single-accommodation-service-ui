@@ -8,7 +8,7 @@ type DtrReferralHistoryDetails = {
   reason?: string
 }
 
-export class CaseDetailsPage {
+export default class CaseDetailsPage {
   constructor(private readonly page: Page) {}
 
   private serviceCard(heading: string) {
@@ -74,6 +74,7 @@ export class CaseDetailsPage {
       'https://find-and-refer-intervention-dev.hmpps.service.justice.gov.uk',
     )
   }
+
   async clickStartCrsReferral() {
     await this.crsCard()
       .getByRole('link', {
@@ -110,12 +111,14 @@ export class CaseDetailsPage {
   }
 
   proposedAddressCard(address: string) {
-    return this.proposedAddressesSection().locator('article.sas-card').filter({
-      has: this.page.getByRole('heading', {
-        name: address,
-        level: 3,
-      }),
-    })
+    return this.proposedAddressesSection()
+      .locator('article.sas-card')
+      .filter({
+        has: this.page.getByRole('heading', {
+          name: address,
+          level: 3,
+        }),
+      })
   }
 
   currentAccommodationCard() {
@@ -162,11 +165,7 @@ export class CaseDetailsPage {
       }),
     ).toBeVisible()
 
-    await expect(
-      this.proposedAddressesSection().getByText(
-        'No proposed addresses have been added.',
-      ),
-    ).toBeVisible()
+    await expect(this.proposedAddressesSection().getByText('No proposed addresses have been added.')).toBeVisible()
   }
 
   async clickAddProposedAddress() {
@@ -200,12 +199,7 @@ export class CaseDetailsPage {
       .click()
   }
 
-  async expectCurrentAccommodation(
-    addressLine: string,
-    townOrCity: string,
-    postcode: string,
-    status: string,
-  ) {
+  async expectCurrentAccommodation(addressLine: string, townOrCity: string, postcode: string, status: string) {
     const currentAccommodationCard = this.currentAccommodationCard()
     const address = currentAccommodationCard.locator('.govuk-hint')
 
@@ -218,12 +212,12 @@ export class CaseDetailsPage {
   }
 
   async expectDtrReferralInHistory({
-                                     referredBy,
-                                     status,
-                                     submissionDate,
-                                     localAuthority,
-                                     reason,
-                                   }: DtrReferralHistoryDetails) {
+    referredBy,
+    status,
+    submissionDate,
+    localAuthority,
+    reason,
+  }: DtrReferralHistoryDetails) {
     const referralRow = this.dtrReferralHistoryRow()
 
     await expect(referralRow).toBeVisible()
@@ -237,9 +231,7 @@ export class CaseDetailsPage {
 
     await expect(referralRow).toContainText(referredBy)
 
-    await expect(
-      referralRow.locator('.govuk-tag'),
-    ).toHaveText(status)
+    await expect(referralRow.locator('.govuk-tag')).toHaveText(status)
 
     await expect(
       referralRow.getByText(`Submitted on ${submissionDate}`, {

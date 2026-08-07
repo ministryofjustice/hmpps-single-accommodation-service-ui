@@ -24,7 +24,7 @@ render_env_template() {
   fi
 
   if ! command -v op >/dev/null 2>&1; then
-    echo "Cannot find 'op'. Please install it first." >&2
+    echo "Cannot find 'op' (1Password cli). Please install it first." >&2
     exit 1
   fi
 

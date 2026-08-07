@@ -49,12 +49,14 @@ inject_k8s_secrets() {
     fi
 
     secret_json="${secret_cache[$secret_name]}"
-    secret_value="$(jq -r --arg key "$secret_key" '.data[$key] // empty | @base64d' <<<"$secret_json")"
 
-    if [[ -z "$secret_value" ]]; then
+    # Check key existence before decoding (empty values are valid)
+    if ! jq -e --arg key "$secret_key" '.data[$key]' <<<"$secret_json" >/dev/null 2>&1; then
       echo "Unable to resolve '$ref' from secret '$secret_name' in namespace '$k8s_namespace'" >&2
       exit 1
     fi
+
+    secret_value="$(jq -r --arg key "$secret_key" '.data[$key] | @base64d' <<<"$secret_json")"
 
     OLD_REF="$ref" NEW_VALUE="$secret_value" perl -0pi -e '
       my $old = $ENV{OLD_REF};

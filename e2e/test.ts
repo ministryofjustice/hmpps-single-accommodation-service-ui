@@ -21,3 +21,6 @@ export { expect }
 // API clients
 // Page objects
 // Services
+cases: {
+  'BAse case": {'
+}

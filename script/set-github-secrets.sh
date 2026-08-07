@@ -103,7 +103,7 @@ echo "==> Setting GitHub secrets in '$GITHUB_REPO'"
 
 for secret_name in "${!secret_values[@]}"; do
   if [[ "$dry_run" == true ]]; then
-    echo "Would set secret '$secret_name'"
+    echo "Would set secret '$secret_name' to '${secret_values[$secret_name]}'"
     continue
   fi
 

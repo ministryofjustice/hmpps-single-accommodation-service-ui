@@ -4,21 +4,19 @@ import CaseDetailsPage from '../pages/caseDetailsPage'
 import AddDtrReferralDetailsPage from '../pages/addDtrReferralDetailsPage'
 import ViewDtrReferralDetailsPage from '../pages/viewDtrReferralDetailsPage'
 import { AddDtrOutcomePage, DtrOutcome } from '../pages/addDtrOutcomePage'
+import { getCaseLink } from '../steps/getCaseLink'
 
 test('Previous DTR referral is withdrawn when a new referral is added', async ({
   page,
   users: { probation: probationUser },
+  cases: { BASE_CASE },
 }) => {
   // GIVEN I sign in as a probation user
   await signIn(page, probationUser)
 
-  // AND I open the first case
-  const firstCaseLink = page
-    .getByRole('row')
-    .nth(1)
-    .getByRole('link')
-
-  await firstCaseLink.click()
+  // AND I open the relevant case
+  const { caseLink } = await getCaseLink(page, BASE_CASE)
+  await caseLink.click()
 
   const caseDetailsPage = new CaseDetailsPage(page)
   const addDtrReferralDetailsPage = new AddDtrReferralDetailsPage(page)

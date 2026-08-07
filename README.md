@@ -25,33 +25,43 @@ npm run setup
 npm run prepare
 ```
 
-## Running the application
+### Create local env files
 
-To run the SAS service locally, copy the `.env.tpl` file to `.env`. The default variables should be sufficient for local development against a [running local API](https://github.com/ministryofjustice/hmpps-single-accommodation-service-api):
-
-```shell
-cp .env.tpl .env
-```
-
-### Running against the dev stack
-
-You can also run the local service against the dev external service (HMPPS Auth and SAS API). You will first need to create your local env files with secrets from 1Password and Kubernetes (ask for access):
+The following script will create your local env files with secrets from 1Password and Kubernetes (ask for access):
 
 ```shell
 npm run generate-dotenv-files
 ```
 
-You can then start the SAS UI service:
+## Running the application
+
+You can run the application against local containerised services with the default environment:
+
+```shell
+docker compose up -d
+npm run start:dev
+```
+
+### Running against the dev stack
+
+You can also run the local service against the dev external service (HMPPS Auth and SAS API). You will need to uncomment the relevant lines in your `.env` file:
+
+```dotenv
+# Uncomment the following to run the local app against the dev environment
+SAS_API_URL=https://single-accommodation-service-api-dev.hmpps.service.justice.gov.uk
+HMPPS_AUTH_URL='https://sign-in-dev.hmpps.service.justice.gov.uk/auth'
+SAS_ALLOWED_ROLES='ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER'
+```
+
+Then start the local service as normal:
 
 ```shell
 npm run start:dev
 ```
 
-The service will be available at http://localhost:3000. You can then login using any of the CAS test credentials available in the CAS vault in 1Password.
-
 ### Running against a fully mocked stack
 
-You can run the service locally against a fully mocked API. When doing so, a Wiremock instance is spun up which serves the data found in `wiremock/fixtures` for the various API endpoints:
+You can run the service locally against a fully mocked API: this is useful for quickly testing variations of UI elements, as the mocked responses from the API can be manipulated easily. When doing so, a Wiremock instance is spun up which serves the data found in `wiremock/fixtures` for the various API endpoints:
 
 ```shell
 npm run start:dev:wiremock

@@ -14,7 +14,7 @@ export default class ViewDtrReferralDetailsPage {
 
   async clickAddOutcome() {
     await this.page
-      .getByRole('link', {
+      .getByRole('button', {
         name: 'Add outcome',
       })
       .click()
@@ -22,7 +22,7 @@ export default class ViewDtrReferralDetailsPage {
 
   async clickAddNewReferral() {
     await this.page
-      .getByRole('link', {
+      .getByRole('button', {
         name: 'Add new referral',
       })
       .click()
@@ -30,20 +30,26 @@ export default class ViewDtrReferralDetailsPage {
 
   async expectOutcomeAddedBanner() {
     await expect(
-      this.page.getByRole('heading', {
-        name: 'Outcome details added',
-        level: 3,
-      }),
+      this.page
+        .getByLabel('Success')
+        .getByRole('heading', {
+          name: 'Outcome details added',
+          level: 3,
+        }),
     ).toBeVisible()
   }
 
   async returnToCaseDetails() {
-    await this.page
-      .getByRole('navigation', {
-        name: 'Breadcrumb',
-      })
-      .getByRole('link')
-      .last()
-      .click()
+    const caseDetailsLink = this.page.locator(
+      '.govuk-breadcrumbs__link[href^="/cases/"]',
+    )
+
+    const href = await caseDetailsLink.getAttribute('href')
+
+    if (!href) {
+      throw new Error('Case details breadcrumb link is missing')
+    }
+
+    await this.page.goto(href)
   }
 }

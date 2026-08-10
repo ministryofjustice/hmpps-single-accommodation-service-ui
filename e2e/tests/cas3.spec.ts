@@ -7,8 +7,12 @@ test('CAS3 status is Not eligible', async ({ page, users: { probation: probation
   await signIn(page, probationUser)
 
   // AND I click on the first result
-  const firstCaseName = await page.getByRole('row').nth(1).getByRole('link').textContent()
-  await page.getByRole('link', { name: firstCaseName }).click()
+  const firstCaseLink = page
+    .getByRole('row')
+    .nth(1)
+    .getByRole('link')
+
+  await firstCaseLink.click()
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)

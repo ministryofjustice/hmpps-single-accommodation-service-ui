@@ -12,7 +12,7 @@ export default class AddDtrReferralDetailsPage {
   async expectPageToBeDisplayed() {
     await expect(
       this.page.getByRole('heading', {
-        name: 'Add Duty to Refer (DTR) referral details',
+        name: /Add( new)? Duty to Refer \(DTR\) referral details/,
         level: 1,
       }),
     ).toBeVisible()

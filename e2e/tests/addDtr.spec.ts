@@ -13,13 +13,12 @@ test('Previous DTR referral is withdrawn when a new referral is added', async ({
   await signIn(page, probationUser)
 
   // AND I open the first case
-  const firstCaseName = await page.getByRole('row').nth(1).getByRole('link').textContent()
+  const firstCaseLink = page
+    .getByRole('row')
+    .nth(1)
+    .getByRole('link')
 
-  await page
-    .getByRole('link', {
-      name: firstCaseName ?? '',
-    })
-    .click()
+  await firstCaseLink.click()
 
   const caseDetailsPage = new CaseDetailsPage(page)
   const addDtrReferralDetailsPage = new AddDtrReferralDetailsPage(page)
@@ -40,7 +39,7 @@ test('Previous DTR referral is withdrawn when a new referral is added', async ({
     year: '2026',
   })
 
-  await addDtrReferralDetailsPage.selectLocalAuthority('Birmingham City Council')
+  await addDtrReferralDetailsPage.selectLocalAuthority('Aberdeen City')
 
   await addDtrReferralDetailsPage.saveAndContinue()
 
@@ -105,6 +104,6 @@ test('Previous DTR referral is withdrawn when a new referral is added', async ({
     referredBy: 'You (SAS TestUser)',
     status: 'Withdrawn',
     submissionDate: '15 July 2026',
-    localAuthority: 'Birmingham City Council',
+    localAuthority: 'Aberdeen City',
   })
 })

@@ -138,7 +138,10 @@ export default class CaseDetailsPage {
     })
   }
 
-  private dtrReferralHistoryRow() {
+  private dtrReferralHistoryRow(
+    submissionDate: string,
+    localAuthority: string,
+  ) {
     return this.referralHistoryTable()
       .getByRole('row')
       .filter({
@@ -147,6 +150,13 @@ export default class CaseDetailsPage {
           exact: true,
         }),
       })
+      .filter({
+        hasText: `Submitted on ${submissionDate}`,
+      })
+      .filter({
+        hasText: `Local authority: ${localAuthority}`,
+      })
+      .first()
   }
 
   async expectProposedAddressesEmptyState() {
@@ -218,7 +228,10 @@ export default class CaseDetailsPage {
     localAuthority,
     reason,
   }: DtrReferralHistoryDetails) {
-    const referralRow = this.dtrReferralHistoryRow()
+    const referralRow = this.dtrReferralHistoryRow(
+      submissionDate,
+      localAuthority,
+    )
 
     await expect(referralRow).toBeVisible()
 

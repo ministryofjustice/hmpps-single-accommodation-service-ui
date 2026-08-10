@@ -35,7 +35,6 @@ export const formatDate = (
   date?: string,
   format?: 'age' | 'long' | 'days' | 'days for/in' | 'days ago/in' | 'days for/left',
 ): string => {
-  date = "2030-12-10"
   if (!isValidDate(date, true)) return ''
 
   if (format === 'age') return `${calculateAge(date)}`

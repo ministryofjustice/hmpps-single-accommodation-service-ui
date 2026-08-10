@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test'
 import { TestOptions } from '@sas/e2e'
 
 config({
-  path: 'e2e.env',
+  path: '.env.e2e',
   override: true,
   quiet: true,
 })

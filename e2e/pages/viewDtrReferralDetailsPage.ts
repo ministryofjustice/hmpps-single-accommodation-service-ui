@@ -30,19 +30,15 @@ export default class ViewDtrReferralDetailsPage {
 
   async expectOutcomeAddedBanner() {
     await expect(
-      this.page
-        .getByLabel('Success')
-        .getByRole('heading', {
-          name: 'Outcome details added',
-          level: 3,
-        }),
+      this.page.getByLabel('Success').getByRole('heading', {
+        name: 'Outcome details added',
+        level: 3,
+      }),
     ).toBeVisible()
   }
 
   async returnToCaseDetails() {
-    const caseDetailsLink = this.page.locator(
-      '.govuk-breadcrumbs__link[href^="/cases/"]',
-    )
+    const caseDetailsLink = this.page.locator('.govuk-breadcrumbs__link[href^="/cases/"]')
 
     const href = await caseDetailsLink.getAttribute('href')
 

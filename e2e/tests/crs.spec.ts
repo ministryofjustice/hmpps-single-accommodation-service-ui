@@ -7,10 +7,7 @@ test.skip('CRS status is Not required', async ({ page, users: { probation: proba
   await signIn(page, probationUser)
 
   // AND I click on the first result
-  const firstCaseLink = page
-    .getByRole('row')
-    .nth(1)
-    .getByRole('link')
+  const firstCaseLink = page.getByRole('row').nth(1).getByRole('link')
 
   await firstCaseLink.click()
 

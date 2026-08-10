@@ -138,10 +138,7 @@ export default class CaseDetailsPage {
     })
   }
 
-  private dtrReferralHistoryRow(
-    submissionDate: string,
-    localAuthority: string,
-  ) {
+  private dtrReferralHistoryRow(submissionDate: string, localAuthority: string) {
     return this.referralHistoryTable()
       .getByRole('row')
       .filter({
@@ -228,10 +225,7 @@ export default class CaseDetailsPage {
     localAuthority,
     reason,
   }: DtrReferralHistoryDetails) {
-    const referralRow = this.dtrReferralHistoryRow(
-      submissionDate,
-      localAuthority,
-    )
+    const referralRow = this.dtrReferralHistoryRow(submissionDate, localAuthority)
 
     await expect(referralRow).toBeVisible()
 

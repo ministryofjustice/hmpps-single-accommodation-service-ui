@@ -7,10 +7,7 @@ test.skip('CAS1 status is Not eligible', async ({ page, users: { probation: prob
   await signIn(page, probationUser)
 
   // AND I click on the first result
-  const firstCaseLink = page
-    .getByRole('row')
-    .nth(1)
-    .getByRole('link')
+  const firstCaseLink = page.getByRole('row').nth(1).getByRole('link')
 
   await firstCaseLink.click()
 

@@ -8,10 +8,7 @@ test.skip('Proposed addresses empty state is displayed', async ({ page, users: {
   await signIn(page, probationUser)
 
   // AND I click on the first result
-  const firstCaseLink = page
-    .getByRole('row')
-    .nth(1)
-    .getByRole('link')
+  const firstCaseLink = page.getByRole('row').nth(1).getByRole('link')
 
   await firstCaseLink.click()
 

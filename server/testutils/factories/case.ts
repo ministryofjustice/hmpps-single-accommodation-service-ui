@@ -7,7 +7,6 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
-import actionFactory from './action'
 
 class CaseFactory extends Factory<Case> {
   limitedAccess() {
@@ -22,7 +21,6 @@ class CaseFactory extends Factory<Case> {
       riskLevel: null,
       pncReference: null,
       assignedTo: assignedUserFactory.build(),
-      actions: [],
       userAccess: 'LIMITED',
       limitedAccess: null,
     })
@@ -47,7 +45,6 @@ export default CaseFactory.define(() => {
     riskLevel: riskLevel(),
     pncReference: pncReference(),
     assignedTo: assignedUserFactory.build(),
-    actions: actionFactory.buildList(faker.number.int({ min: 0, max: 3 })),
     userAccess: 'FULL' as const,
     limitedAccess: false,
   }

@@ -99,7 +99,6 @@ describe('proposedAddressesController', () => {
         caseFactory.build({
           forename: 'James',
           surname: 'Smith',
-          actions: [],
         }),
       ),
     )

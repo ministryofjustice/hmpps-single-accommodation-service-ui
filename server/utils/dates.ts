@@ -50,7 +50,13 @@ export const formatDate = (
     }
     if (days > 0) {
       if (format.includes('left')) return `${days} ${daysLabel} left`
-      if (format.includes('in')) return `in ${days} ${daysLabel}`
+      if (format.includes('in')) {
+        if (days >= 365) {
+          const years = Math.floor(days / 365)
+          return `in over ${years} ${years === 1 ? 'year' : 'years'}`
+        }
+        return `in ${days} ${daysLabel}`
+      }
     }
 
     return days.toString()

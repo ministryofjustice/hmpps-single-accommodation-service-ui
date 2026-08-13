@@ -2,7 +2,7 @@ import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummary
 import { TableRow } from '@govuk/ui'
 import { StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
-import { addressLines, formatAddress } from './addresses'
+import { addressLines, formatAddress, isSameAddress } from './addresses'
 import { formatDate } from './dates'
 import { renderMacro, statusTag } from './macros'
 
@@ -124,14 +124,32 @@ export const accommodationSummaryAddress = (accommodation: AccommodationSummaryD
     .filter(Boolean)
     .join('<br />')
 
-export const accommodationHistoryRows = (history?: AccommodationSummaryDto[]): TableRow[] => {
-  return (history ?? []).map(accommodation => [
-    textContent(accommodation.startDate ? formatDate(accommodation.startDate) : ''),
-    textContent(accommodation.endDate ? formatDate(accommodation.endDate) : ''),
-    htmlContent(accommodationSummaryAddress(accommodation)),
-    htmlContent(accommodation.status ? statusTag(accommodationSummaryStatusTag(accommodation.status)) : ''),
-  ])
+export const accommodationHistoryRows = (
+  history?: AccommodationSummaryDto[],
+  currentAccommodation?: AccommodationSummaryDto,
+): TableRow[] => {
+  return (history ?? []).map(accommodation => {
+    const isCurrent =
+      isSameAddress(accommodation.address, currentAccommodation?.address) &&
+      accommodation.startDate === currentAccommodation?.startDate
+
+    const endDate = accommodation.endDate ? formatDate(accommodation.endDate) : ''
+
+    return [
+      textContent(accommodation.startDate ? formatDate(accommodation.startDate) : ''),
+      textContent(isCurrent ? 'Current' : endDate),
+      htmlContent(accommodationSummaryAddress(accommodation)),
+      htmlContent(accommodation.status ? statusTag(accommodationSummaryStatusTag(accommodation.status)) : ''),
+    ]
+  })
 }
 
-export const accommodationHistoryTable = (history: AccommodationSummaryDto[], hasApiError?: boolean): string =>
-  renderMacro('accommodationHistoryTable', { rows: accommodationHistoryRows(history), hasApiError })
+export const accommodationHistoryTable = (
+  history: AccommodationSummaryDto[],
+  hasApiError?: boolean,
+  currentAccommodation?: AccommodationSummaryDto,
+): string =>
+  renderMacro('accommodationHistoryTable', {
+    rows: accommodationHistoryRows(history, currentAccommodation),
+    hasApiError,
+  })

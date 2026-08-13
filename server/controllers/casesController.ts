@@ -123,7 +123,10 @@ export default class CasesController {
         referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),
         eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn) : [],
         proposedAddresses: data.proposedAddresses.proposed.map(proposedAddressStatusCard),
-        accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),
+        accommodationHistoryRows: accommodationHistoryRows(
+          data.accommodationHistory,
+          data.accommodationSummaries?.currentAccommodation,
+        ),
         failedChecksAddresses: data.proposedAddresses.failedChecks.map(proposedAddressStatusCard),
       })
     }

@@ -1,7 +1,7 @@
 import { AccommodationAddressDetails } from '@sas/api'
 import { addressFactory } from '../testutils/factories'
 
-import { addressLines, formatAddress } from './addresses'
+import { addressLines, formatAddress, isSameAddress } from './addresses'
 
 describe('addresses utilities', () => {
   describe('addressLines', () => {
@@ -104,6 +104,42 @@ describe('addresses utilities', () => {
 
     it('returns an empty string for an undefined address', () => {
       expect(formatAddress(undefined)).toEqual('')
+    })
+  })
+
+  describe('isSameAddress', () => {
+    it.each([
+      ['the first address is missing', undefined, addressFactory.minimal().build()],
+      ['the second address is missing', addressFactory.minimal().build(), undefined],
+      ['both addresses are null', null, null],
+    ])('returns false when %s', (_, first, second) => {
+      expect(isSameAddress(first, second)).toBe(false)
+    })
+
+    it('returns true when both addresses have matching uprns', () => {
+      const address = addressFactory.minimal().build({ uprn: '123456789', postTown: 'London' })
+      const otherAddress = addressFactory.minimal().build({ uprn: '123456789', postTown: 'Manchester' })
+
+      expect(isSameAddress(address, otherAddress)).toBe(true)
+    })
+
+    it('returns false when the uprns dont match', () => {
+      const address = addressFactory.minimal().build({ uprn: '123456789' })
+      const otherAddress = addressFactory.minimal().build({ uprn: '987654321' })
+
+      expect(isSameAddress(address, otherAddress)).toBe(false)
+    })
+
+    it('returns true when a uprn is missing but addresses match', () => {
+      const parts = { buildingNumber: '123', thoroughfareName: 'Fake Street', postTown: 'London', postcode: 'FA1 2BA' }
+      const address = addressFactory.minimal().build(parts)
+      const otherAddress = addressFactory.minimal().build(parts)
+
+      expect(isSameAddress(address, otherAddress)).toBe(true)
+    })
+
+    it('returns false for two empty addresses', () => {
+      expect(isSameAddress(addressFactory.minimal().build(), addressFactory.minimal().build())).toBe(false)
     })
   })
 })

@@ -27,3 +27,14 @@ export const addressLines = (
 
 export const formatAddress = (address: AccommodationAddressDetails, separator = ', '): string =>
   addressLines(address).join(separator)
+
+export const isSameAddress = (
+  address?: AccommodationAddressDetails,
+  otherAddress?: AccommodationAddressDetails,
+): boolean => {
+  if (!address || !otherAddress) return false
+  if (address.uprn && otherAddress.uprn) return address.uprn === otherAddress.uprn
+
+  const formatted = formatAddress(address)
+  return formatted !== '' && formatted === formatAddress(otherAddress)
+}

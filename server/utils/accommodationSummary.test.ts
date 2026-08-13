@@ -116,6 +116,34 @@ describe('accommodationSummary', () => {
       it('returns a row for each accommodation', () => {
         expect(accommodationHistoryRows(accommodationHistory)).toMatchSnapshot()
       })
+
+      it('shows "Current" in end date cell when a row matches the current accommodation', () => {
+        const currentAccommodation = accommodationHistory[1]
+        const rows = accommodationHistoryRows(accommodationHistory, currentAccommodation)
+
+        expect(rows[0][1]).toEqual({ text: '' })
+        expect(rows[1][1]).toEqual({ text: 'Current' })
+      })
+
+      it('shows "Current" only on the current accommodation row when an address repeats', () => {
+        const address = addressFactory.minimal().build({ uprn: '123456789', postTown: 'London' })
+        const currentAccommodation = accommodationSummaryFactory.build({ startDate: '2024-01-01', address })
+        const history = [
+          accommodationSummaryFactory.build({ startDate: '2020-01-01', endDate: '2021-01-01', address }),
+          accommodationSummaryFactory.build({ startDate: '2024-01-01', endDate: '2025-01-01', address }),
+        ]
+
+        const rows = accommodationHistoryRows(history, currentAccommodation)
+
+        expect(rows[0][1]).toEqual({ text: '1 January 2021' })
+        expect(rows[1][1]).toEqual({ text: 'Current' })
+      })
+
+      it('shows the end date when a row does not match the current accommodation', () => {
+        const rows = accommodationHistoryRows(accommodationHistory)
+
+        expect(rows[1][1]).toEqual({ text: '27 April 2026' })
+      })
     })
 
     describe('accommodationHistoryTable macro', () => {

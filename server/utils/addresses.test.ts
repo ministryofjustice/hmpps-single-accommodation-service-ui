@@ -108,11 +108,9 @@ describe('addresses utilities', () => {
   })
 
   describe('isSameAddress', () => {
-    const address = addressFactory.minimal().build()
-
     it.each([
-      ['the first address is missing', undefined, address],
-      ['the second address is missing', address, undefined],
+      ['the first address is missing', undefined, addressFactory.minimal().build()],
+      ['the second address is missing', addressFactory.minimal().build(), undefined],
       ['both addresses are null', null, null],
     ])('returns false when %s', (_, first, second) => {
       expect(isSameAddress(first, second)).toBe(false)

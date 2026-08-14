@@ -69,7 +69,7 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
   cases.map(c => {
     const assignedToText = currentUsername ? caseAssignedTo(c, currentUsername) : undefined
     if (!config.flags.caseListV2) {
-      return [htmlContent(personCell(c, assignedToText))]
+        return [htmlContent(personCell(c, assignedToText))]
     }
     const accommodationStatus = accommodationStatusCell(c)
     return [

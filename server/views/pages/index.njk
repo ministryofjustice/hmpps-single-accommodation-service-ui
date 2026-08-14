@@ -7,15 +7,16 @@
 
 {% set pageTitle = "Case list" %}
 {% set mainClasses = "govuk-body" %}
+{% set caseListV2 = featureFlags.caseListV2 %}
 
 {% block content %}
   <h1 class="govuk-heading-xl">Accommodation case list</h1>
 
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half-from-desktop">
+    <div class="{{ 'govuk-grid-column-full' if caseListV2 else 'govuk-grid-column-one-half-from-desktop' }}">
       <form method="get" class="sas-filters govuk-!-margin-bottom-8">
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full">
+          <div class="{{ 'govuk-grid-column-one-half' if caseListV2 else 'govuk-grid-column-full' }}">
             {{
               govukInput({
                 label: { text: 'Search by name, CRN or prison number' },
@@ -26,7 +27,7 @@
           </div>
         </div>
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-half">
+          <div class="{{ 'govuk-grid-column-one-quarter' if caseListV2 else 'govuk-grid-column-one-half' }}">
             {{
               govukSelect({
                 label: {
@@ -38,7 +39,7 @@
               })
             }}
           </div>
-          <div class="govuk-grid-column-one-half">
+          <div class="{{ 'govuk-grid-column-one-quarter' if caseListV2 else 'govuk-grid-column-one-half' }}">
             {{
               govukSelect({
                 label: {

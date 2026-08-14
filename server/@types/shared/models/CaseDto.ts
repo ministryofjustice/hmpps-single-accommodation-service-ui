@@ -4,6 +4,8 @@
 /* eslint-disable */
 import type { AccommodationSummariesDto } from './AccommodationSummariesDto'
 import type { AssignedToDto } from './AssignedToDto'
+import type { AccommodationSummaryDto } from './AccommodationSummaryDto'
+
 export type CaseDto = {
   forename?: string | null
   middleNames?: string | null

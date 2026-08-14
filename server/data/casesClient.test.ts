@@ -3,6 +3,7 @@ import CasesClient from './casesClient'
 import describeClient from '../testutils/describeClient'
 import { apiResponseFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
+import config from '../config'
 
 describeClient('CasesClient', provider => {
   let casesClient: CasesClient
@@ -13,6 +14,7 @@ describeClient('CasesClient', provider => {
   })
 
   it('should make a GET request to /case-list using user token and return the response body', async () => {
+    config.flags.caseListV2 = false
     const body = apiResponseFactory.caseList()
 
     await provider.addInteraction({
@@ -36,6 +38,7 @@ describeClient('CasesClient', provider => {
   })
 
   it('should make a GET request to /case-list using user token and query parameters and return the response body', async () => {
+    config.flags.caseListV2 = false
     const body = apiResponseFactory.caseList()
 
     await provider.addInteraction({
@@ -64,6 +67,30 @@ describeClient('CasesClient', provider => {
       riskLevel: 'LOW',
       teamCode: 'N0345T',
     })
+    expect(response).toEqual(body)
+  })
+
+  it.skip('should make a GET request to /v2/case-list using user token and return the response body', async () => {
+    config.flags.caseListV2 = true
+    const body = apiResponseFactory.caseListV2()
+
+    await provider.addInteraction({
+      state: 'Cases exist for user',
+      uponReceiving: 'a request to get user cases from the v2 endpoint',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.indexV2({}),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+
+    const response = await casesClient.getCases('test-user-token')
     expect(response).toEqual(body)
   })
 

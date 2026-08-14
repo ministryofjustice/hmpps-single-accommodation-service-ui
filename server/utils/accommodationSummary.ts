@@ -1,6 +1,6 @@
-import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { StatusTag } from '@sas/ui'
+import { StatusCell, StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
 import { formatDate } from './dates'
@@ -104,6 +104,27 @@ export const noFixedAbodeAlert = (accommodationSummary?: AccommodationSummariesD
     date: status === 'RISK_OF_NO_FIXED_ABODE' ? (date ?? null) : null,
     status,
   }
+}
+
+const accommodationStatusTag = (status?: CaseDto['status']): StatusTag =>
+  ({
+    NO_FIXED_ABODE: { text: 'No fixed abode', colour: 'grey' },
+    RISK_OF_NO_FIXED_ABODE: { text: 'Risk of no fixed abode', colour: 'orange' },
+    SETTLED: { text: 'Settled', colour: 'green' },
+    TRANSIENT: { text: 'Transient', colour: 'pink' },
+  })[status]
+
+export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
+  const status = accommodationStatusTag(caseData?.status)
+
+  if (!status) return undefined
+
+  if (caseData.status === 'RISK_OF_NO_FIXED_ABODE') {
+    const date = caseData.nextAccommodation?.endDate ?? caseData.currentAccommodation?.endDate
+    return { status, dateText: date ? `From ${formatDate(date)}` : undefined }
+  }
+
+  return { status }
 }
 
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationSummaryDto): string =>

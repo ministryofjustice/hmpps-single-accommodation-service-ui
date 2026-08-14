@@ -7,6 +7,7 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
+import accommodationSummaryFactory from './accommodationSummary'
 import accommodationSummariesFactory from './accommodationSummaries'
 
 class CaseFactory extends Factory<Case> {

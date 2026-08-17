@@ -27,13 +27,9 @@ const dtrReferrals: ReferralParams[] = [
 
 const cas1Referrals: ReferralParams[] = [
   () => ({ status: 'REJECTED', placementStatus: null, referralRejectionReason: 'Some rejection reason' }),
-  () => ({ status: 'WITHDRAWN', placementStatus: null, withdrawalReason: 'Some withdrawal reason' }),
+  () => ({ status: 'WITHDRAWN', placementStatus: null }),
   () => ({ status: 'ACCEPTED', placementStatus: 'REQUEST_REJECTED' }),
-  () => ({
-    status: 'ACCEPTED',
-    placementStatus: 'REQUEST_WITHDRAWN',
-    referralRejectionReason: 'Some request withdrawal reason',
-  }),
+  () => ({ status: 'REQUEST_WITHDRAWN', placementStatus: null, withdrawalReason: 'ChangeInCircumstances' }),
   () => ({ status: 'ACCEPTED', placementStatus: 'NOT_ARRIVED', placementAddress: shortAddress() }),
   () => ({ status: 'ACCEPTED', placementStatus: 'DEPARTED', placementAddress: shortAddress() }),
   () => ({ status: 'ACCEPTED', placementStatus: 'CANCELLED', placementAddress: shortAddress() }),

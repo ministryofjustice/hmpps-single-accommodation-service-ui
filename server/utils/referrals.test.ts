@@ -30,10 +30,10 @@ describe('referrals utilities', () => {
   const referral4 = referralFactory.build({
     id: '901234',
     type: 'CAS1',
-    status: 'WITHDRAWN',
+    status: 'REQUEST_WITHDRAWN',
     date: '2023-04-30',
     uiUrl: 'https://example.com/cas1/901234',
-    withdrawalReason: 'Person no longer requires placement',
+    withdrawalReason: 'ChangeInCircumstances',
     referralRejectionReason: 'Some rejection reason',
     referralRejectionReasonDetail: 'Some rejection reason detail',
     referredBy: { username: 'alice_smith', name: 'Alice Smith' },

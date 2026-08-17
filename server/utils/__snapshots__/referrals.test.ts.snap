@@ -94,7 +94,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   [
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
-  Approved Premises (CAS1) application",
+  Approved Premises (CAS1) placement request",
     },
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
@@ -102,15 +102,11 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
     },
     {
       "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-  <strong class="govuk-tag govuk-tag--grey">Application withdrawn</strong>
+  <strong class="govuk-tag govuk-tag--grey">Request withdrawn</strong>
     <p class="sas-status__date">30 April 2023</p>
     
       
-        <p class="govuk-!-margin-bottom-1">No placements</p>
-      
-    
-      
-        <p class="govuk-!-margin-bottom-1">Reason: Person no longer requires placement</p>
+        <p class="govuk-!-margin-bottom-1">Reason: Their circumstances changed</p>
       
     ",
     },
@@ -320,7 +316,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
       
       
       <th scope="row" class="govuk-table__header"><span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
-  Approved Premises (CAS1) application</th>
+  Approved Premises (CAS1) placement request</th>
       
     
       
@@ -332,15 +328,11 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
       
       
       <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-  <strong class="govuk-tag govuk-tag--grey">Application withdrawn</strong>
+  <strong class="govuk-tag govuk-tag--grey">Request withdrawn</strong>
     <p class="sas-status__date">30 April 2023</p>
     
       
-        <p class="govuk-!-margin-bottom-1">No placements</p>
-      
-    
-      
-        <p class="govuk-!-margin-bottom-1">Reason: Person no longer requires placement</p>
+        <p class="govuk-!-margin-bottom-1">Reason: Their circumstances changed</p>
       
     </td>
       

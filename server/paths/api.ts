@@ -9,7 +9,6 @@ const dutyToReferPath = casePath.path('dtr')
 export default {
   cases: {
     index: path('/case-list'),
-    indexV2: path('/v2/case-list'),
     show: casePath,
     accommodation: {
       summary: accommodationPath.path('summary'),

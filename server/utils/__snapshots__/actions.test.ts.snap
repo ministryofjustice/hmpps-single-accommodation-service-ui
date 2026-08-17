@@ -14,5 +14,10 @@ exports[`action utilities renderActions renders a list of actions 1`] = `
   "Submit a CRS accommodation referral <time datetime="2027-01-19" title="19 January 2027">in 227 days</time>",
   "Submit a CRS referral <time datetime="2027-06-14" title="14 June 2027">in over 1 year</time>",
   "Add and confirm proposed address <time datetime="2029-08-17" title="17 August 2029">in over 3 years</time>",
+  "You need to add DTR referral details before you can make a CAS3 referral. <time datetime="2026-06-08" title="8 June 2026">in 2 days</time>",
+  "You need to submit a CRS referral before you can make a CAS3 referral. <time datetime="2026-06-09" title="9 June 2026">in 3 days</time>",
+  "You need to submit a CRS accommodation referral before you can make a CAS3 referral. <time datetime="2026-06-10" title="10 June 2026">in 4 days</time>",
+  "You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral. <time datetime="2026-06-11" title="11 June 2026">in 5 days</time>",
+  "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral. <time datetime="2026-06-12" title="12 June 2026">in 6 days</time>",
 ]
 `;

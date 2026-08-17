@@ -27,7 +27,7 @@ const dtrReferrals: ReferralParams[] = [
 
 const cas1Referrals: ReferralParams[] = [
   () => ({ status: 'REJECTED', placementStatus: null, referralRejectionReason: 'Some rejection reason' }),
-  () => ({ status: 'WITHDRAWN', placementStatus: null }),
+  () => ({ status: 'WITHDRAWN', placementStatus: null, withdrawalReason: 'Some withdrawal reason' }),
   () => ({ status: 'ACCEPTED', placementStatus: 'REQUEST_REJECTED' }),
   () => ({
     status: 'ACCEPTED',
@@ -97,6 +97,7 @@ class ReferralFactory extends Factory<Referral> {
       type: 'CAS1',
       date: faker.date.past().toISOString(),
       referralRejectionReason: undefined,
+      withdrawalReason: null,
       localAuthorityArea: null,
       pdu: null,
       placementAddress: null,

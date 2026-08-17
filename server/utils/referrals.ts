@@ -122,12 +122,17 @@ const getCas1ReferralDetails = (referral: Referral, status?: string): Array<Text
     details.push(textContent('No placements'))
   }
 
-  if (referral.referralRejectionReason) {
-    details.push(textContent(`Reason: ${referral.referralRejectionReason}`))
-  }
-
-  if (referral.referralRejectionReasonDetail) {
-    details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
+  if (status === 'WITHDRAWN') {
+    if (referral.withdrawalReason) {
+      details.push(textContent(`Reason: ${referral.withdrawalReason}`))
+    }
+  } else {
+    if (referral.referralRejectionReason) {
+      details.push(textContent(`Reason: ${referral.referralRejectionReason}`))
+    }
+    if (referral.referralRejectionReasonDetail) {
+      details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
+    }
   }
 
   if (referral.placementAddress && placementStatuses.includes(status)) {

@@ -1,6 +1,5 @@
 import {
   AccommodationAddressDetails,
-  AccommodationSummariesDto,
   ProposedAccommodationDetailCommand,
   ProposedAccommodationDto,
   UpstreamFailureDto,
@@ -32,8 +31,6 @@ export type ProposedAddressFormData = Partial<ProposedAccommodationDetailCommand
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | ProposedAccommodationDto['verificationStatus']
-
-export type CaseAccommodationDisplayStatus = AccommodationSummariesDto['caseAccommodationStatus'] | 'SETTLED' | 'TRANSIENT'
 
 export interface StatusTag {
   text: string

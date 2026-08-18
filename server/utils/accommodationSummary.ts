@@ -1,6 +1,6 @@
 import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { StatusCell, StatusTag } from '@sas/ui'
+import { CaseAccommodationDisplayStatus, StatusCell, StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
 import { formatDate } from './dates'
@@ -106,7 +106,7 @@ export const noFixedAbodeAlert = (accommodationSummary?: AccommodationSummariesD
   }
 }
 
-const accommodationStatusTag = (status?: CaseDto['status']): StatusTag =>
+const accommodationStatusTag = (status?: CaseAccommodationDisplayStatus): StatusTag =>
   ({
     NO_FIXED_ABODE: { text: 'No fixed abode', colour: 'grey' },
     RISK_OF_NO_FIXED_ABODE: { text: 'Risk of no fixed abode', colour: 'orange' },
@@ -114,17 +114,37 @@ const accommodationStatusTag = (status?: CaseDto['status']): StatusTag =>
     TRANSIENT: { text: 'Transient', colour: 'pink' },
   })[status]
 
+const displayStatus = (summaries?: AccommodationSummariesDto): CaseAccommodationDisplayStatus => {
+  const caseStatus = summaries?.caseAccommodationStatus
+
+  if (caseStatus === 'NO_FIXED_ABODE' || caseStatus === 'RISK_OF_NO_FIXED_ABODE') return caseStatus
+
+  const accommodation = summaries?.nextAccommodation ?? summaries?.currentAccommodation
+  const tag = settledTag(accommodation?.type)
+
+  if (tag === settled) return 'SETTLED'
+  if (tag === transient) return 'TRANSIENT'
+  return undefined
+}
+
 export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
-  const status = accommodationStatusTag(caseData?.status)
+  const summaries = caseData?.accommodationSummaries
+  const displayedStatus = displayStatus(summaries)
+  const tag = accommodationStatusTag(displayedStatus)
 
-  if (!status) return undefined
+  if (!tag) return undefined
 
-  if (caseData.status === 'RISK_OF_NO_FIXED_ABODE') {
-    const date = caseData.nextAccommodation?.endDate ?? caseData.currentAccommodation?.endDate
-    return { status, dateText: date ? `From ${formatDate(date)}` : undefined }
+  if (displayedStatus === 'RISK_OF_NO_FIXED_ABODE') {
+    const date = summaries.nextAccommodation?.endDate ?? summaries.currentAccommodation?.endDate
+    return { status: tag, dateText: date ? `From ${formatDate(date)} (${formatDate(date, 'days for/in')})` : undefined }
   }
 
-  return { status }
+  if (displayedStatus === 'SETTLED' || displayedStatus === 'TRANSIENT') {
+    const date = summaries.currentAccommodation?.startDate
+    return { status: tag, dateText: date ? `Since ${formatDate(date)} (${formatDate(date, 'days for/in')})` : undefined }
+  }
+
+  return { status: tag }
 }
 
 export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationSummaryDto): string =>

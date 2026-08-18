@@ -139,8 +139,8 @@ describe('cases utilities', () => {
         expect(casesToRows(cases)).toEqual([
           [
             { html: personCell(cases[0]) },
-            { html: accommodationCell('current', cases[0].currentAccommodation) || 'None' },
-            { html: accommodationCell('next', cases[0].nextAccommodation) || 'None' },
+            { html: accommodationCell('current', cases[0].accommodationSummaries.currentAccommodation) || 'None' },
+            { html: accommodationCell('next', cases[0].accommodationSummaries.nextAccommodation) || 'None' },
             { html: accommodationStatus ? statusCell(accommodationStatus) : '' },
           ],
         ])

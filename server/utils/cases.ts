@@ -74,8 +74,8 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
     const accommodationStatus = accommodationStatusCell(c)
     return [
       htmlContent(personCell(c, assignedToText)),
-      htmlContent(accommodationCell('current', c.currentAccommodation) || 'None'),
-      htmlContent(accommodationCell('next', c.nextAccommodation) || 'None'),
+      htmlContent(accommodationCell('current', c.accommodationSummaries?.currentAccommodation) || 'None'),
+      htmlContent(accommodationCell('next', c.accommodationSummaries?.nextAccommodation) || 'None'),
       htmlContent(accommodationStatus ? statusCell(accommodationStatus) : ''),
     ]
   })

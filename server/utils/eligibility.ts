@@ -85,18 +85,19 @@ const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceR
   const { serviceStatus, failureReasons, action } = serviceResult || {}
 
   if (serviceStatus === 'CANNOT_START_YET') {
-    if (failureReasons.includes('DTR_REFERRAL_EXPIRED')) {
-      // TODO: Handle MALE/NON_MALE CRS needed
-      if (failureReasons.includes('CRS_NOT_SUBMITTED')) {
+    switch (action.type) {
+      case 'SUBMIT_DTR_BEFORE_CAS3':
+        return 'You need to add DTR referral details before you can make a CAS3 referral.'
+      case 'SUBMIT_CRS_BEFORE_CAS3':
+        return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
+      case 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3':
         return 'You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.'
-      }
-      // if (failureReasons.includes('MALE_CRS_NOT_SUBMITTED')) {
-      //   return 'You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.'
-      // }
-      // if (failureReasons.includes('NON_MALE_CRS_NOT_SUBMITTED')) {
-      //   return 'You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.'
-      // }
-      return 'You need to add DTR referral details before you can make a CAS3 referral.'
+      case 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3':
+        return 'You need to submit a CRS referral before you can make a CAS3 referral.'
+      case 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3':
+        return 'You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.'
+      default:
+        return 'Cannot start yet but reason unknown.'
     }
 
     // TODO: Handle MALE/NON_MALE CRS needed
@@ -131,7 +132,7 @@ export const eligibilityStatusCard = (service: 'cas1' | 'cas3', serviceResult?: 
 
   return {
     heading: headingForService(service),
-    inactive: serviceStatus === 'NOT_ELIGIBLE',
+    inactive: serviceStatus === 'NOT_ELIGIBLE' || serviceStatus === 'CANNOT_START_YET',
     hint: hintForServiceResult(service, serviceResult),
     status: serviceStatusTag(serviceStatus),
     links: linksForService(service, serviceResult),

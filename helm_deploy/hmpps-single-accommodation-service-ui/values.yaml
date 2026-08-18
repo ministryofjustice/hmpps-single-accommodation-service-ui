@@ -68,7 +68,7 @@ generic-service:
 
   allowlist:
     groups:
-      - internal
+      - digital_staff_and_mojo
 
 generic-prometheus-alerts:
   targetApplication: hmpps-single-accommodation-service-ui

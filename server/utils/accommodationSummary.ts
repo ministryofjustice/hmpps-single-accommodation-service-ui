@@ -78,12 +78,10 @@ export const accommodationCard = (
 
   const { startDate, endDate, type } = accommodation
   const typeName = accommodationType(accommodation)
-  let link: string | null = null
-  if (cardType === 'next') {
-    link = accommodation.proposedAccommodationId
+  const link =
+    cardType === 'next' && accommodation.proposedAccommodationId
       ? uiPaths.proposedAddresses.show({ crn: accommodation.crn, id: accommodation.proposedAccommodationId })
       : null
-  }
   return {
     cardType,
     settledTag: settledTag(type),

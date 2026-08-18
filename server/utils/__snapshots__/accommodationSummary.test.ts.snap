@@ -210,7 +210,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 }
 `;
 
-exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Private and in SAS accommodation 1`] = `
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Private and proposed accommodation accommodation 1`] = `
 {
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
@@ -286,7 +286,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 }
 `;
 
-exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Private and in SAS accommodation 1`] = `
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Private and proposed accommodation accommodation 1`] = `
 {
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",

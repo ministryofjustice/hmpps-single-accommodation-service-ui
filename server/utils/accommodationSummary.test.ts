@@ -41,12 +41,11 @@ describe('accommodationSummary', () => {
         address,
         type: { code: 'A07B' },
       })
-      const privateAndInSas = summaryFactory('2026-09-10').build({
+      const privateAndProposedAccommodation = summaryFactory('2026-09-10').build({
         address,
         type: { code: 'A07B' },
-        isProposedAccommodation: true,
         crn: 'L489936',
-        cprAddressId: 'df4b775f-29fa-413e-b39b-1df368288df7',
+        proposedAccommodationId: 'df4b775f-29fa-413e-b39b-1df368288df7',
       })
       const noTypeSummary = summaryFactory('2026-05-23').build({ address, type: null })
 
@@ -54,7 +53,7 @@ describe('accommodationSummary', () => {
         ['CAS2', cas2Summary],
         ['CAS3', cas3Summary],
         ['Private address', privateSummary],
-        ['Private and in SAS', privateAndInSas],
+        ['Private and proposed accommodation', privateAndProposedAccommodation],
         ['No type', noTypeSummary],
         ['Undefined', undefined],
         ['Null', null],

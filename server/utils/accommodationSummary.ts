@@ -80,8 +80,9 @@ export const accommodationCard = (
   const typeName = accommodationType(accommodation)
   let link: string | null = null
   if (cardType === 'next') {
-    const id = accommodation.isProposedAccommodation ? accommodation.cprAddressId : null
-    link = id ? uiPaths.proposedAddresses.show({ crn: accommodation.crn, id }) : null
+    link = accommodation.proposedAccommodationId
+      ? uiPaths.proposedAddresses.show({ crn: accommodation.crn, id: accommodation.proposedAccommodationId })
+      : null
   }
   return {
     cardType,

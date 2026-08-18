@@ -1,6 +1,6 @@
 import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { CaseAccommodationDisplayStatus, StatusCell, StatusTag } from '@sas/ui'
+import { StatusCell, StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
 import { daysUntil, formatDate } from './dates'
@@ -114,24 +114,11 @@ const accommodationStatusTag = (status?: AccommodationSummariesDto['caseAccommod
     TRANSIENT: { text: 'Transient', colour: 'pink' },
   })[status]
 
-const displayStatus = (summaries?: AccommodationSummariesDto): CaseAccommodationDisplayStatus => {
-  const caseStatus = summaries?.caseAccommodationStatus
-
-  if (caseStatus === 'NO_FIXED_ABODE' || caseStatus === 'RISK_OF_NO_FIXED_ABODE') return caseStatus
-
-  const accommodation = summaries?.nextAccommodation ?? summaries?.currentAccommodation
-  const tag = settledTag(accommodation?.type)
-
-  if (tag === settled) return 'SETTLED'
-  if (tag === transient) return 'TRANSIENT'
-  return undefined
-}
-
 export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
   const summaries = caseData?.accommodationSummaries
   const status = accommodationStatusTag(summaries?.caseAccommodationStatus)
 
-  if (!tag) return undefined
+  if (!status) return undefined
 
   const date = summaries.caseAccommodationStatusDate
   if (!date) return { status }

@@ -7,7 +7,7 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
-import accommodationSummaryFactory from './accommodationSummary'
+import accommodationSummariesFactory from './accommodationSummaries'
 
 class CaseFactory extends Factory<Case> {
   limitedAccess() {
@@ -34,28 +34,20 @@ class CaseFactory extends Factory<Case> {
   }
 
   settled() {
-    const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
     return this.params({
-      status: 'SETTLED',
-      currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
-      nextAccommodation: accommodationSummaryFactory.next(currentEndDate).build(),
+      accommodationSummaries: accommodationSummariesFactory.confirmed().build(),
     })
   }
 
   riskOfNfa() {
-    const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
     return this.params({
-      status: 'RISK_OF_NO_FIXED_ABODE',
-      currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
-      nextAccommodation: null,
+      accommodationSummaries: accommodationSummariesFactory.riskOfNfa().build(),
     })
   }
 
   nfa() {
     return this.params({
-      status: 'NO_FIXED_ABODE',
-      currentAccommodation: null,
-      nextAccommodation: null,
+      accommodationSummaries: accommodationSummariesFactory.nfa().build(),
     })
   }
 }

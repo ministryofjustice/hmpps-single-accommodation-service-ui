@@ -73,22 +73,12 @@ export default AccommodationSummariesFactory.define((): AccommodationSummariesDt
   }
 
   const currentStartDate = faker.date.past().toISOString().substring(0, 10)
-  const hasNext = faker.datatype.boolean()
+  const nextStartDate = faker.helpers.maybe(() => faker.date.soon({ days: 60 }).toISOString().substring(0, 10))
 
-  if (!hasNext) {
-    return {
-      caseAccommodationStatus,
-      caseAccommodationStatusDate: currentStartDate,
-      currentAccommodation: accommodationSummaryFactory.build({ startDate: currentStartDate, endDate: undefined }),
-      nextAccommodation: null,
-    }
-  }
-
-  const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
   return {
     caseAccommodationStatus,
-    caseAccommodationStatusDate: currentEndDate,
-    currentAccommodation: accommodationSummaryFactory.current(currentEndDate, currentStartDate).build(),
-    nextAccommodation: accommodationSummaryFactory.next(currentEndDate).build(),
+    caseAccommodationStatusDate: currentStartDate,
+    currentAccommodation: accommodationSummaryFactory.build({ startDate: currentStartDate, endDate: nextStartDate }),
+    nextAccommodation: nextStartDate ? accommodationSummaryFactory.next(nextStartDate).build() : null,
   }
 })

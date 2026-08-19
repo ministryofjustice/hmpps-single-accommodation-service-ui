@@ -91,6 +91,41 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
       "html": "",
     },
   ],
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Approved Premises (CAS1) placement request",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  <strong class="govuk-tag govuk-tag--grey">Request withdrawn</strong>
+    <p class="sas-status__date">30 April 2023</p>
+    
+      
+        <p class="govuk-!-margin-bottom-1">Reason: Their circumstances changed</p>
+      
+    ",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/901234">View application</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
 ]
 `;
 
@@ -270,6 +305,53 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
       
       
       <td class="govuk-table__cell"></td>
+      
+    
+    </tr>
+  
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <th scope="row" class="govuk-table__header"><span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Approved Premises (CAS1) placement request</th>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  <strong class="govuk-tag govuk-tag--grey">Request withdrawn</strong>
+    <p class="sas-status__date">30 April 2023</p>
+    
+      
+        <p class="govuk-!-margin-bottom-1">Reason: Their circumstances changed</p>
+      
+    </td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/901234">View application</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  </td>
       
     
     </tr>

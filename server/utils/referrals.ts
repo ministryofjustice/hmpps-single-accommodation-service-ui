@@ -122,12 +122,19 @@ const getCas1ReferralDetails = (referral: Referral, status?: string): Array<Text
     details.push(textContent('No placements'))
   }
 
-  if (referral.referralRejectionReason) {
-    details.push(textContent(`Reason: ${referral.referralRejectionReason}`))
-  }
-
-  if (referral.referralRejectionReasonDetail) {
-    details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
+  if (status === 'REQUEST_WITHDRAWN') {
+    if (referral.withdrawalReason) {
+      details.push(
+        textContent(`Reason: ${withdrawalReasonLabels[referral.withdrawalReason] ?? referral.withdrawalReason}`),
+      )
+    }
+  } else {
+    if (referral.referralRejectionReason) {
+      details.push(textContent(`Reason: ${referral.referralRejectionReason}`))
+    }
+    if (referral.referralRejectionReasonDetail) {
+      details.push(reasonDetailContent(referral.referralRejectionReasonDetail))
+    }
   }
 
   if (referral.placementAddress && placementStatuses.includes(status)) {
@@ -188,4 +195,15 @@ export const referralLinksForType = (type: Referral['type'], id: string, crn: st
     default:
       return []
   }
+}
+
+export const withdrawalReasonLabels: Record<string, string> = {
+  AlternativeProvisionIdentified: 'Another provision has been identified',
+  ChangeInCircumstances: 'Their circumstances changed',
+  ChangeInReleaseDecision: 'The release decision changed',
+  NoCapacityDueToLostBed: "There's no capacity due to a lost bed",
+  NoCapacityDueToPlacementPrioritisation: "There's no capacity due to placement prioritisation",
+  NoCapacity: "There's no capacity",
+  ErrorInPlacementRequest: 'There was an error in the request',
+  DuplicatePlacementRequest: 'The request was a duplicate',
 }

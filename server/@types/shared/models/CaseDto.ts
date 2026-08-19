@@ -1,10 +1,9 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 import type { AccommodationSummariesDto } from './AccommodationSummariesDto'
 import type { AssignedToDto } from './AssignedToDto'
-
 export type CaseDto = {
   forename?: string | null
   middleNames?: string | null

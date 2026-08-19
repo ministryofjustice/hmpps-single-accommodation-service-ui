@@ -128,10 +128,15 @@ export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
   return { status, dateText: `${prefix} ${formatDate(date)} (${formatDate(date, 'days for/in')})` }
 }
 
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationSummaryDto): string =>
+export const accommodationCell = (
+  cellType: 'current' | 'next',
+  accommodation?: AccommodationSummaryDto,
+  status?: AccommodationSummariesDto['caseAccommodationStatus'],
+): string =>
   accommodation
     ? renderMacro('accommodationCell', {
         cellType,
+        status,
         accommodationType: accommodationType(accommodation),
         addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
         ...accommodation,

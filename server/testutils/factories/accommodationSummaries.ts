@@ -46,7 +46,12 @@ class AccommodationSummariesFactory extends Factory<AccommodationSummariesDto> {
 }
 
 export default AccommodationSummariesFactory.define((): AccommodationSummariesDto => {
-  const caseAccommodationStatus = faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE', 'TRANSIENT', 'SETTLED'])
+  const caseAccommodationStatus = faker.helpers.arrayElement([
+    'RISK_OF_NO_FIXED_ABODE',
+    'NO_FIXED_ABODE',
+    'TRANSIENT',
+    'SETTLED',
+  ])
 
   if (caseAccommodationStatus === 'NO_FIXED_ABODE') {
     return {

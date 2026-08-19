@@ -46,17 +46,44 @@ class AccommodationSummariesFactory extends Factory<AccommodationSummariesDto> {
 }
 
 export default AccommodationSummariesFactory.define((): AccommodationSummariesDto => {
-  const caseAccommodationStatus = faker.helpers.maybe(() =>
-    faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE']),
-  )
-  const currentAccommodation =
-    caseAccommodationStatus === 'NO_FIXED_ABODE' ? null : accommodationSummaryFactory.current().build()
-  const nextAccommodation =
-    caseAccommodationStatus === 'RISK_OF_NO_FIXED_ABODE' ? null : accommodationSummaryFactory.next().build()
+  const caseAccommodationStatus = faker.helpers.arrayElement(['RISK_OF_NO_FIXED_ABODE', 'NO_FIXED_ABODE', 'TRANSIENT', 'SETTLED'])
 
+  if (caseAccommodationStatus === 'NO_FIXED_ABODE') {
+    return {
+      caseAccommodationStatus,
+      caseAccommodationStatusDate: null,
+      currentAccommodation: null,
+      nextAccommodation: null,
+    }
+  }
+
+  if (caseAccommodationStatus === 'RISK_OF_NO_FIXED_ABODE') {
+    const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
+    return {
+      caseAccommodationStatus,
+      caseAccommodationStatusDate: currentEndDate,
+      currentAccommodation: accommodationSummaryFactory.current(currentEndDate).build(),
+      nextAccommodation: null,
+    }
+  }
+
+  const currentStartDate = faker.date.past().toISOString().substring(0, 10)
+  const hasNext = faker.datatype.boolean()
+
+  if (!hasNext) {
+    return {
+      caseAccommodationStatus,
+      caseAccommodationStatusDate: currentStartDate,
+      currentAccommodation: accommodationSummaryFactory.build({ startDate: currentStartDate, endDate: undefined }),
+      nextAccommodation: null,
+    }
+  }
+
+  const currentEndDate = faker.date.soon({ days: 60 }).toISOString().substring(0, 10)
   return {
     caseAccommodationStatus,
-    currentAccommodation,
-    nextAccommodation,
+    caseAccommodationStatusDate: currentEndDate,
+    currentAccommodation: accommodationSummaryFactory.current(currentEndDate, currentStartDate).build(),
+    nextAccommodation: accommodationSummaryFactory.next(currentEndDate).build(),
   }
 })

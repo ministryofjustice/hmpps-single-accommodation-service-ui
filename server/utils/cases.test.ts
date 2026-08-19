@@ -134,6 +134,7 @@ describe('cases utilities', () => {
 
       it('returns a formatted row with accommodation and status columns', () => {
         const cases = caseFactory.settled().buildList(1)
+        const { currentAccommodation, nextAccommodation, caseAccommodationStatus } = cases[0].accommodationSummaries
         const accommodationStatus = accommodationStatusCell(cases[0])
 
         expect(casesToRows(cases)).toEqual([

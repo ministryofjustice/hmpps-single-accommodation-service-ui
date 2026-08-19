@@ -129,7 +129,7 @@ export default {
     maintenanceModeAllowlist: get('MAINTENANCE_MODE_ALLOWLIST', ''),
     hideManualAddressEntry: get('HIDE_MANUAL_ADDRESS_ENTRY', 'false') === 'true',
     hideSetAsCurrentAddress: get('HIDE_SET_AS_CURRENT_ADDRESS', 'false') === 'true',
-    caseListV2: get('CASE_LIST_V2_ENABLED', 'true') === 'true',
+    caseListV2: get('CASE_LIST_V2_ENABLED', 'false') === 'true',
   },
   timeoutOverrides: {
     sasCasesApi: {

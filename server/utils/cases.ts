@@ -72,7 +72,7 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
       return [htmlContent(personCell(c, assignedToText))]
     }
     const accommodationStatus = accommodationStatusCell(c)
-    const { currentAccommodation, nextAccommodation, caseAccommodationStatus } = c.accommodationSummaries
+    const { currentAccommodation, nextAccommodation, caseAccommodationStatus } = c.accommodationSummaries ?? {}
     return [
       htmlContent(personCell(c, assignedToText)),
       htmlContent(accommodationCell('current', currentAccommodation, caseAccommodationStatus) || 'No accommodation'),

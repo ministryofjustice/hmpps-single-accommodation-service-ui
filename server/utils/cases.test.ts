@@ -169,7 +169,7 @@ describe('cases utilities', () => {
         expect(casesToRows(cases)).toEqual([
           [
             { html: personCell(cases[0]) },
-            { html: 'None' },
+            { html: 'No accommodation' },
             { html: 'None' },
             { html: statusCell(accommodationStatus) },
           ],

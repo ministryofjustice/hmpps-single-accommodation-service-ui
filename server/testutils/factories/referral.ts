@@ -4,6 +4,7 @@ import { DtrSubmissionDto, DutyToReferDto, AccommodationReferralDto as Referral 
 import staffDetailsFactory from './staffDetails'
 import { acceptedOutcomeReasons, notAcceptedOutcomeReasons, withdrawalReasons } from './dutyToReferSubmission'
 import referenceDataFactory from './referenceData'
+import { ukPostcode } from './ukPostcode'
 
 const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as Referral['status'][]
 
@@ -11,7 +12,7 @@ const cas1PlacementStatuses = ['NOT_ARRIVED', 'DEPARTED', 'CANCELLED', 'REQUEST_
 
 const cas3BookingStatuses = ['DEPARTED', 'CANCELLED']
 
-const shortAddress = () => `${faker.location.street()}, ${faker.location.zipCode()}`
+const shortAddress = () => `${faker.location.street()}, ${ukPostcode()}`
 
 type ReferralParams = () => Partial<Referral>
 

@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker/locale/en_GB'
 import { Factory } from 'fishery'
 import { ProposedAddressFormData } from '@sas/ui'
 import proposedAccommodationDetailCommandFactory from './proposedAccommodationDetailCommand'
+import { ukPostcode } from './ukPostcode'
 
 class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
   manualAddress() {
@@ -11,7 +12,7 @@ class ProposedAddressFormFactory extends Factory<ProposedAddressFormData> {
         subBuildingName: faker.helpers.maybe(() => faker.location.secondaryAddress(), { probability: 0.3 }),
         postTown: faker.location.city(),
         county: faker.helpers.maybe(() => faker.location.state(), { probability: 0.3 }),
-        postcode: faker.location.zipCode(),
+        postcode: ukPostcode(),
         country: faker.location.country(),
         buildingNumber: undefined,
         thoroughfareName: undefined,

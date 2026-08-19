@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AccommodationSummariesDto } from './AccommodationSummariesDto'
 import type { AssignedToDto } from './AssignedToDto'
 export type CaseDto = {
   forename?: string | null
@@ -17,4 +18,5 @@ export type CaseDto = {
   assignedTo?: AssignedToDto | null
   userAccess: 'LIMITED' | 'FULL' | 'UNKNOWN'
   limitedAccess?: boolean | null
+  accommodationSummaries?: AccommodationSummariesDto | null
 }

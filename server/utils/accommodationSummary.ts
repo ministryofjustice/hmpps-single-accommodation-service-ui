@@ -136,10 +136,10 @@ export const accommodationCell = (
   accommodation
     ? renderMacro('accommodationCell', {
         cellType,
-        status,
         accommodationType: accommodationType(accommodation),
         addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
         ...accommodation,
+        caseStatus: status,
       })
     : ''
 

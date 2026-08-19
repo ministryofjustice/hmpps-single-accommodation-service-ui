@@ -4,6 +4,7 @@ import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
 import { formatDate } from './dates'
+import { actionsMap } from './actions'
 
 export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   const { serviceStatus, url } = serviceResult || {}
@@ -82,35 +83,9 @@ const headingForService = (service: 'cas1' | 'cas3') => {
 }
 
 const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): string => {
-  const { serviceStatus, failureReasons, action } = serviceResult || {}
+  const { serviceStatus, action } = serviceResult || {}
 
-  if (serviceStatus === 'CANNOT_START_YET') {
-    switch (action.type) {
-      case 'SUBMIT_DTR_BEFORE_CAS3':
-        return 'You need to add DTR referral details before you can make a CAS3 referral.'
-      case 'SUBMIT_CRS_BEFORE_CAS3':
-        return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
-      case 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3':
-        return 'You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.'
-      case 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3':
-        return 'You need to submit a CRS referral before you can make a CAS3 referral.'
-      case 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3':
-        return 'You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.'
-      default:
-        return 'Cannot start yet but reason unknown.'
-    }
-
-    // TODO: Handle MALE/NON_MALE CRS needed
-    if (failureReasons.includes('CRS_NOT_SUBMITTED')) {
-      return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
-    }
-    // if (failureReasons.includes('MALE_CRS_NOT_SUBMITTED')) {
-    //   return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
-    // }
-    // if (failureReasons.includes('NON_MALE_CRS_NOT_SUBMITTED')) {
-    //   return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
-    // }
-  }
+  if (serviceStatus === 'CANNOT_START_YET') return action ? actionsMap[action?.type] : undefined
 
   if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas1') {
     return 'This could be because of risk levels or suitability for a move on at this time.'

@@ -141,24 +141,28 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'NOT_ELIGIBLE' },
       },
       {
-        title: 'CANNOT_START_YET, DTR needed',
+        title: 'CANNOT_START_YET due to DTR',
         result: { serviceStatus: 'CANNOT_START_YET', action: { type: 'SUBMIT_DTR_BEFORE_CAS3' } },
       },
       {
-        title: 'CANNOT_START_YET, men, CRS needed',
-        result: { serviceStatus: 'CANNOT_START_YET', action: { type: 'SUBMIT_CRS_BEFORE_CAS3' } },
-      },
-      {
-        title: 'CANNOT_START_YET, men, both DTR and CRS needed',
-        result: { serviceStatus: 'CANNOT_START_YET', action: { type: 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3' } },
-      },
-      {
-        title: 'CANNOT_START_YET, women, CRS needed',
+        title: 'CANNOT_START_YET due to Male CRS needed',
         result: { serviceStatus: 'CANNOT_START_YET', action: { type: 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3' } },
       },
       {
-        title: 'CANNOT_START_YET, women, both DTR and CRS needed',
+        title: 'CANNOT_START_YET due to Male DTR and CRS needed',
         result: { serviceStatus: 'CANNOT_START_YET', action: { type: 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3' } },
+      },
+      {
+        title: 'CANNOT_START_YET due to NonMale CRS needed',
+        result: { serviceStatus: 'CANNOT_START_YET', action: { type: 'SUBMIT_CRS_BEFORE_CAS3' } },
+      },
+      {
+        title: 'CANNOT_START_YET due to NonMale DTR and CRS needed',
+        result: { serviceStatus: 'CANNOT_START_YET', action: { type: 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3' } },
+      },
+      {
+        title: 'CANNOT_START_YET with null action',
+        result: { serviceStatus: 'CANNOT_START_YET', action: null },
       },
       {
         title: 'UPCOMING',
@@ -201,14 +205,7 @@ describe('eligibilityStatusCard', () => {
 
   describe.each(['cas1', 'cas3'] as const)('for %s', service => {
     it.each(testCases[service])('renders a $title status card', ({ result }) => {
-      const serviceResult = serviceResultFactory.build({
-        serviceStatus: 'NOT_REQUIRED',
-        action: undefined,
-        failureReasons: [],
-        url: undefined,
-        ...result,
-      })
-
+      const serviceResult = serviceResultFactory.build({ ...result })
       expect(eligibilityStatusCard(service, serviceResult)).toMatchSnapshot()
     })
   })

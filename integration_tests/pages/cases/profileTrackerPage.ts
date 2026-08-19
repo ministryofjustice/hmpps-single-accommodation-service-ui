@@ -83,6 +83,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
 
     await expect(card).toContainText(`From ${formatDate(accommodation.startDate, 'long')}`)
     await expect(card).toContainText(`(${formatDate(accommodation.startDate, 'days for/in')})`)
+    if (accommodation.proposedAccommodationId) await expect(card).toContainText('View address details')
   }
 
   async shouldShowNextAccommodationAlert(accommodation: AccommodationSummaryDto) {

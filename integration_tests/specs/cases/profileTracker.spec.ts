@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import eligibilityApi from '../../mockApis/eligibility'
@@ -158,7 +159,12 @@ test.describe('Profile Tracker Page', () => {
     test(`should render next and current cards for a confirmed case`, async ({ page }) => {
       const caseData = caseFactory.build({ crn })
       const currentAccommodation = accommodationSummaryFactory.current().build()
-      const nextAccommodation = accommodationSummaryFactory.next().build()
+      const nextAccommodation = accommodationSummaryFactory
+        .next(
+          null,
+          faker.helpers.maybe(() => faker.string.uuid()),
+        )
+        .build()
       const accommodationSummaries = accommodationSummariesFactory
         .confirmed()
         .build({ currentAccommodation, nextAccommodation })

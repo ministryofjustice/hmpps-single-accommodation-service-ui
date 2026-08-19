@@ -24,10 +24,11 @@ class AccommodationSummaryFactory extends Factory<AccommodationSummaryDto> {
     })
   }
 
-  next(startDate?: string) {
+  next(startDate?: string, proposedAccommodationId?: string) {
     return this.params({
       startDate: startDate || faker.date.soon({ days: 60 }).toISOString().substring(0, 10),
       endDate: undefined,
+      proposedAccommodationId,
     })
   }
 
@@ -58,5 +59,6 @@ export default AccommodationSummaryFactory.define((): AccommodationSummaryDto =>
     address: addressFactory.build(),
     status: accommodationStatusFactory.build(),
     type: accommodationTypesFactory.build(),
+    proposedAccommodationId: undefined,
   }
 })

@@ -435,7 +435,11 @@
     "cas3": {
       "serviceResult": {
         "serviceStatus": "CANNOT_START_YET",
-        "failureReasons": ["DTR_REFERRAL_EXPIRED", "CRS_NOT_SUBMITTED"]
+        "failureReasons": [],
+        "action": {
+          "type": "SUBMIT_DTR_AND_CRS_BEFORE_CAS3",
+          "startDate": null
+        }
       }
     },
     "crs": {
@@ -479,7 +483,11 @@
     "cas3": {
       "serviceResult": {
         "serviceStatus": "CANNOT_START_YET",
-        "failureReasons": ["CRS_NOT_SUBMITTED"]
+        "failureReasons": [],
+        "action": {
+          "type": "SUBMIT_CRS_BEFORE_CAS3",
+          "startDate": null
+        }
       }
     },
     "crs": {
@@ -506,6 +514,142 @@
           "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
           "startDate": null
         }
+      }
+    }
+  },
+  "G193847": {
+    "crn": "G193847",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "CANNOT_START_YET",
+        "failureReasons": [],
+        "action": {
+          "type": "SUBMIT_DTR_BEFORE_CAS3",
+          "startDate": null
+        }
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://crs/start"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://dtr/add"
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
+      }
+    }
+  },
+  "W482910": {
+    "crn": "W482910",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["NON_MALE_NOT_HIGH_RISK_TIER"]
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "CANNOT_START_YET",
+        "failureReasons": [],
+        "action": {
+          "type": "SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3",
+          "startDate": null
+        }
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://crs/start"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "ACCEPTED",
+        "failureReasons": [],
+        "url": "https://dtr/view"
+      },
+      "submission": {
+        "id": "e3b7a1c2-9d4f-4e8a-b6c5-1234567890ab",
+        "localAuthority": {
+          "localAuthorityAreaId": "b1c2d3e4-f5a6-7890-abcd-ef1234567890",
+          "localAuthorityAreaName": "Bristol"
+        },
+        "referenceNumber": "W4BCRS0001",
+        "submissionDate": "2025-10-01",
+        "createdBy": "Jane Smith",
+        "createdAt": "2025-10-01T09:00:00.000Z"
+      }
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
+      }
+    }
+  },
+  "N375621": {
+    "crn": "N375621",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["NON_MALE_NOT_HIGH_RISK_TIER"]
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "CANNOT_START_YET",
+        "failureReasons": [],
+        "action": {
+          "type": "SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3",
+          "startDate": null
+        }
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://crs/start"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://dtr/add"
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
       }
     }
   }

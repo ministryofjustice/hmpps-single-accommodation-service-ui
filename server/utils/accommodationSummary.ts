@@ -5,6 +5,7 @@ import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
 import { formatDate } from './dates'
 import { renderMacro, statusTag } from './macros'
+import uiPaths from '../paths/ui'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
   const { type } = accommodation
@@ -77,7 +78,10 @@ export const accommodationCard = (
 
   const { startDate, endDate, type } = accommodation
   const typeName = accommodationType(accommodation)
-
+  const link =
+    cardType === 'next' && accommodation.proposedAccommodationId
+      ? uiPaths.proposedAddresses.show({ crn: accommodation.crn, id: accommodation.proposedAccommodationId })
+      : null
   return {
     cardType,
     settledTag: settledTag(type),
@@ -85,6 +89,7 @@ export const accommodationCard = (
     address: formatAddress(accommodation.address, '<br />') || undefined,
     startDate,
     endDate,
+    link,
   }
 }
 

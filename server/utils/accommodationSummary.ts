@@ -1,9 +1,9 @@
-import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { StatusTag } from '@sas/ui'
+import { StatusCell, StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
-import { formatDate } from './dates'
+import { daysUntil, formatDate } from './dates'
 import { renderMacro, statusTag } from './macros'
 import uiPaths from '../paths/ui'
 
@@ -106,13 +106,40 @@ export const noFixedAbodeAlert = (accommodationSummary?: AccommodationSummariesD
   }
 }
 
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationSummaryDto): string =>
+const accommodationStatusTag = (status?: AccommodationSummariesDto['caseAccommodationStatus']): StatusTag =>
+  ({
+    NO_FIXED_ABODE: { text: 'No fixed abode', colour: 'grey' },
+    RISK_OF_NO_FIXED_ABODE: { text: 'Risk of no fixed abode', colour: 'orange' },
+    SETTLED: { text: 'Settled', colour: 'green' },
+    TRANSIENT: { text: 'Transient', colour: 'pink' },
+  })[status]
+
+export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
+  const summaries = caseData?.accommodationSummaries
+  const status = accommodationStatusTag(summaries?.caseAccommodationStatus)
+
+  if (!status) return undefined
+
+  const date = summaries.caseAccommodationStatusDate
+  if (!date) return { status }
+
+  const prefix = daysUntil(date) < 0 ? 'Since' : 'From'
+
+  return { status, dateText: `${prefix} ${formatDate(date)} (${formatDate(date, 'days for/in')})` }
+}
+
+export const accommodationCell = (
+  cellType: 'current' | 'next',
+  accommodation?: AccommodationSummaryDto,
+  status?: AccommodationSummariesDto['caseAccommodationStatus'],
+): string =>
   accommodation
     ? renderMacro('accommodationCell', {
         cellType,
         accommodationType: accommodationType(accommodation),
         addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
         ...accommodation,
+        caseStatus: status,
       })
     : ''
 

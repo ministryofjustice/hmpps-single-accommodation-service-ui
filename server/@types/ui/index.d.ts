@@ -69,7 +69,7 @@ export type GetCasesQuery = {
 }
 
 export interface IndexRequest extends Request {
-  query: GetCasesQuery
+  query: GetCasesQuery & { peopleType?: 'nfarisk' | 'housed' }
 }
 
 export type DividerItem = {

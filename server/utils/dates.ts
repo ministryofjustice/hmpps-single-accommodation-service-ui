@@ -40,7 +40,7 @@ export const formatDate = (
   if (format === 'age') return `${calculateAge(date)}`
 
   if (format?.startsWith('days')) {
-    const days = Math.ceil((new Date(date.substring(0, 10)).getTime() - Date.now()) / (1000 * 3600 * 24))
+    const days = daysUntil(date)
     const daysLabel = Math.abs(days) === 1 ? 'day' : 'days'
 
     if (days === 0 && format !== 'days') return 'today'
@@ -124,3 +124,6 @@ export const getTodayUtcDate = (): Date => {
 
 export const getTodayLocal = (): string =>
   new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0]
+
+export const daysUntil = (date: string): number =>
+  Math.ceil((new Date(date.substring(0, 10)).getTime() - Date.now()) / (1000 * 3600 * 24))

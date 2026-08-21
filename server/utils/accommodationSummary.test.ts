@@ -1,10 +1,16 @@
 import { AccommodationAddressDetails, AccommodationSummaryDto } from '@sas/api'
-import { accommodationSummariesFactory, accommodationSummaryFactory, addressFactory } from '../testutils/factories'
+import {
+  accommodationSummariesFactory,
+  accommodationSummaryFactory,
+  addressFactory,
+  caseFactory,
+} from '../testutils/factories'
 import {
   accommodationCard,
   accommodationCell,
   accommodationHistoryRows,
   accommodationHistoryTable,
+  accommodationStatusCell,
   accommodationSummaryAddress,
   noFixedAbodeAlert,
 } from './accommodationSummary'
@@ -59,12 +65,36 @@ describe('accommodationSummary', () => {
         ['Null', null],
       ]
 
-      it.skip.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
-        expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
+      it.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
+        const caseData = caseFactory.build({
+          accommodationSummaries: {
+            caseAccommodationStatus: undefined,
+            caseAccommodationStatusDate: undefined,
+            currentAccommodation: cellType === 'current' ? accommodation : null,
+            nextAccommodation: cellType === 'next' ? accommodation : null,
+          },
+        })
+        expect(accommodationCell(cellType, caseData)).toMatchSnapshot()
       })
 
       it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {
         expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
+      })
+
+      it('hides the From date for a settled or transient next accommodation', () => {
+        const caseData = caseFactory.build({
+          accommodationSummaries: {
+            caseAccommodationStatus: 'SETTLED',
+            caseAccommodationStatusDate: undefined,
+            currentAccommodation: null,
+            nextAccommodation: accommodationSummaryFactory.next('2026-02-03').build(),
+          },
+        })
+        expect(accommodationCell('next', caseData)).not.toContain('From')
+      })
+
+      it('returns an empty cell for a limited access case', () => {
+        expect(accommodationCell(cellType, caseFactory.limitedAccess().build())).toEqual('')
       })
     })
   })
@@ -175,6 +205,52 @@ describe('accommodationSummary', () => {
         nextAccommodation: null,
       })
       expect(noFixedAbodeAlert(accommodationSummaries)).toEqual({ status: 'RISK_OF_NO_FIXED_ABODE', date: null })
+    })
+  })
+
+  describe('accommodationStatusCell', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2025-12-10'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it.each([
+      ['no accommodation summaries', undefined, undefined],
+      ['no case status', accommodationSummariesFactory.build({ caseAccommodationStatus: undefined }), undefined],
+      [
+        'a no fixed abode status',
+        accommodationSummariesFactory.nfa().build(),
+        { status: { text: 'No fixed abode', colour: 'grey' } },
+      ],
+      [
+        'a risk of no fixed abode status',
+        accommodationSummariesFactory.riskOfNfa().build({ caseAccommodationStatusDate: '2025-12-20' }),
+        {
+          status: { text: 'Risk of no fixed abode', colour: 'orange' },
+          dateText: 'From 20 December 2025 (in 10 days)',
+        },
+      ],
+      [
+        'a confirmed settled accommodation',
+        accommodationSummariesFactory.confirmed().build({
+          caseAccommodationStatus: 'SETTLED',
+          caseAccommodationStatusDate: '2025-12-01',
+        }),
+        { status: { text: 'Settled', colour: 'green' }, dateText: 'Since 1 December 2025 (for 9 days)' },
+      ],
+      [
+        'an upcoming confirmed transient accommodation',
+        accommodationSummariesFactory.confirmedUpcoming().build({
+          caseAccommodationStatus: 'TRANSIENT',
+          caseAccommodationStatusDate: '2025-12-20',
+        }),
+        { status: { text: 'Transient', colour: 'pink' }, dateText: 'From 20 December 2025 (in 10 days)' },
+      ],
+    ])('returns the expected status cell for %s', (_, accommodationSummaries, expected) => {
+      expect(accommodationStatusCell(caseFactory.build({ accommodationSummaries }))).toEqual(expected)
     })
   })
 })

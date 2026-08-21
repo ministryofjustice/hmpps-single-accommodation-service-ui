@@ -9,7 +9,7 @@
       <span class="govuk-hint">{{ context.addressLine1 }}</span>
     {% endif -%}
   {%- else -%}
-    {%- if context.cellType !== 'current' and context.startDate %}
+    {%- if context.cellType !== 'current' and context.startDate and context.caseStatus !== 'SETTLED' and context.caseStatus !== 'TRANSIENT' %}
       <br />
       <span class="govuk-hint">From {{ context.startDate | date }}</span>
     {% endif -%}

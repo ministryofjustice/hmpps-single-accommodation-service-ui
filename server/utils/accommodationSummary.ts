@@ -128,20 +128,22 @@ export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
   return { status, dateText: `${prefix} ${formatDate(date)} (${formatDate(date, 'days for/in')})` }
 }
 
-export const accommodationCell = (
-  cellType: 'current' | 'next',
-  accommodation?: AccommodationSummaryDto,
-  status?: AccommodationSummariesDto['caseAccommodationStatus'],
-): string =>
-  accommodation
-    ? renderMacro('accommodationCell', {
-        cellType,
-        accommodationType: accommodationType(accommodation),
-        addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
-        ...accommodation,
-        caseStatus: status,
-      })
-    : ''
+export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDto): string => {
+  if (caseData.userAccess !== 'FULL') return ''
+
+  const summaries = caseData.accommodationSummaries
+  const accommodation = cellType === 'current' ? summaries?.currentAccommodation : summaries?.nextAccommodation
+
+  if (!accommodation) return cellType === 'current' ? 'No accommodation' : 'None'
+
+  return renderMacro('accommodationCell', {
+    cellType,
+    accommodationType: accommodationType(accommodation),
+    addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
+    ...accommodation,
+    caseStatus: summaries?.caseAccommodationStatus,
+  })
+}
 
 const accommodationSummaryStatusTag = (status: AccommodationStatusDto): StatusTag => ({
   text: status.description,

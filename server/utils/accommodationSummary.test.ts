@@ -65,12 +65,36 @@ describe('accommodationSummary', () => {
         ['Null', null],
       ]
 
-      it.skip.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
-        expect(accommodationCell(cellType, accommodation)).toMatchSnapshot()
+      it.each(testCases)('renders a formatted cell for a %s accommodation', (_, accommodation) => {
+        const caseData = caseFactory.build({
+          accommodationSummaries: {
+            caseAccommodationStatus: undefined,
+            caseAccommodationStatusDate: undefined,
+            currentAccommodation: cellType === 'current' ? accommodation : null,
+            nextAccommodation: cellType === 'next' ? accommodation : null,
+          },
+        })
+        expect(accommodationCell(cellType, caseData)).toMatchSnapshot()
       })
 
       it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {
         expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
+      })
+
+      it('hides the From date for a settled or transient next accommodation', () => {
+        const caseData = caseFactory.build({
+          accommodationSummaries: {
+            caseAccommodationStatus: 'SETTLED',
+            caseAccommodationStatusDate: undefined,
+            currentAccommodation: null,
+            nextAccommodation: accommodationSummaryFactory.next('2026-02-03').build(),
+          },
+        })
+        expect(accommodationCell('next', caseData)).not.toContain('From')
+      })
+
+      it('returns an empty cell for a limited access case', () => {
+        expect(accommodationCell(cellType, caseFactory.limitedAccess().build())).toEqual('')
       })
     })
   })

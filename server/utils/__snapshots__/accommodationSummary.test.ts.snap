@@ -151,6 +151,55 @@ exports[`accommodationSummary accommodation history accommodationHistoryTable ma
   </div>"
 `;
 
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS2 accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Current accommodation</span>
+
+  CAS2 accommodation of 13 weeks or more
+      <br />
+      <span class="govuk-hint">Until 3 February 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a CAS3 accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Current accommodation</span>
+
+  CAS3
+      <br />
+      <span class="govuk-hint">Until 31 July 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a No type accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Current accommodation</span>
+
+  Unknown
+      <br />
+      <span class="govuk-hint">Until 23 May 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Null accommodation 1`] = `"No accommodation"`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Private address accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Current accommodation</span>
+
+  Living in the home of a friend, family member or partner: settled
+      <br />
+      <span class="govuk-hint">Until 10 September 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Private and proposed accommodation accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Current accommodation</span>
+
+  Living in the home of a friend, family member or partner: settled
+      <br />
+      <span class="govuk-hint">Until 10 September 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation renders a formatted cell for a Undefined accommodation 1`] = `"No accommodation"`;
+
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
@@ -226,6 +275,55 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 `;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Undefined accommodation 1`] = `undefined`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS2 accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Next accommodation</span>
+
+  CAS2 accommodation of 13 weeks or more
+      <br />
+      <span class="govuk-hint">From 3 February 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS3 accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Next accommodation</span>
+
+  CAS3
+      <br />
+      <span class="govuk-hint">From 31 July 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a No type accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Next accommodation</span>
+
+  Unknown
+      <br />
+      <span class="govuk-hint">From 23 May 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Null accommodation 1`] = `"None"`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Private address accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Next accommodation</span>
+
+  Living in the home of a friend, family member or partner: settled
+      <br />
+      <span class="govuk-hint">From 10 September 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Private and proposed accommodation accommodation 1`] = `
+"<span class="sas-table__cell-header" aria-hidden="true">Next accommodation</span>
+
+  Living in the home of a friend, family member or partner: settled
+      <br />
+      <span class="govuk-hint">From 10 September 2026</span>
+    "
+`;
+
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Undefined accommodation 1`] = `"None"`;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {

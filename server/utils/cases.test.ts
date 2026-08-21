@@ -134,14 +134,13 @@ describe('cases utilities', () => {
 
       it('returns a formatted row with accommodation and status columns', () => {
         const cases = caseFactory.settled().buildList(1)
-        const { currentAccommodation, nextAccommodation, caseAccommodationStatus } = cases[0].accommodationSummaries
         const accommodationStatus = accommodationStatusCell(cases[0])
 
         expect(casesToRows(cases)).toEqual([
           [
             { html: personCell(cases[0]) },
-            { html: accommodationCell('current', currentAccommodation, caseAccommodationStatus) || 'No accommodation' },
-            { html: accommodationCell('next', nextAccommodation, caseAccommodationStatus) || 'None' },
+            { html: accommodationCell('current', cases[0]) },
+            { html: accommodationCell('next', cases[0]) },
             { html: accommodationStatus ? statusCell(accommodationStatus) : '' },
           ],
         ])

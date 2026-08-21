@@ -1,7 +1,6 @@
-import { test as base } from '@playwright/test'
+import { test as base, expect } from '@playwright/test'
 import { TestOptions } from '@sas/e2e'
 
-// eslint-disable-next-line import/prefer-default-export
 export const test = base.extend<TestOptions>({
   users: {
     probation: {
@@ -15,3 +14,10 @@ export const test = base.extend<TestOptions>({
     },
   },
 })
+
+export { expect }
+
+// Users
+// API clients
+// Page objects
+// Services

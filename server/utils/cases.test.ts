@@ -175,6 +175,14 @@ describe('cases utilities', () => {
           ],
         ])
       })
+
+      it('renders fallback values when accommodation summaries is undefined', () => {
+        const cases = caseFactory.buildList(1, { accommodationSummaries: undefined })
+
+        expect(casesToRows(cases)).toEqual([
+          [{ html: personCell(cases[0]) }, { html: 'No accommodation' }, { html: 'None' }, { html: '' }],
+        ])
+      })
     })
   })
 

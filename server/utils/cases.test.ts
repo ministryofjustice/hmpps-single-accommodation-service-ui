@@ -2,6 +2,7 @@ import { CaseDto } from '@sas/api'
 import {
   caseAssignedTo,
   casesResultsSummary,
+  casesTabs,
   casesToRows,
   personCell,
   queryToFilters,
@@ -385,32 +386,41 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('updateQueryParams', () => {
-    it('adds a query param', () => {
-      expect(updateQueryParams('/baseurl?one=1', { foo: 'bar' })).toEqual('/baseurl?one=1&foo=bar')
-    })
-    it('updates an existing query param', () => {
-      expect(updateQueryParams('/baseurl?foo=bar', { foo: 'baz' })).toEqual('/baseurl?foo=baz')
-    })
-
-    it('leaves existing query params unchanged', () => {
-      expect(updateQueryParams('/baseurl?foo=bar&baz=qux', { quux: 'quuz' })).toEqual(
-        '/baseurl?foo=bar&baz=qux&quux=quuz',
-      )
+  describe('casesTabs', () => {
+    it('returns both tabs with the nfarisk tab selected', () => {
+      expect(casesTabs('/', 'nfarisk')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=nfarisk', selected: true },
+        { text: 'Settled housing secured', href: '/?peopleType=housed', selected: false },
+      ])
     })
 
-    it.each(['', false, null, undefined])('removes a query param when its value is set to %s', newValue => {
-      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: newValue })).toEqual('/baseurl?bar=baz')
+    it('returns both tabs with the housed tab selected', () => {
+      expect(casesTabs('/', 'housed')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=nfarisk', selected: false },
+        { text: 'Settled housing secured', href: '/?peopleType=housed', selected: true },
+      ])
     })
 
-    it('only returns the path when there are no query parameters left', () => {
-      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: null, bar: null })).toEqual('/baseurl')
+    it('preserves existing filters in the tab hrefs', () => {
+      expect(casesTabs('/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one', 'nfarisk')).toEqual([
+        {
+          text: 'Housing support needed',
+          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=nfarisk',
+          selected: true,
+        },
+        {
+          text: 'Settled housing secured',
+          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=housed',
+          selected: false,
+        },
+      ])
     })
-  })
 
-  describe('removeQueryParam', () => {
-    it('removes the given query parameter from the query string', () => {
-      expect(removeQueryParam('/baseurl?foo=bar&bar=baz', 'foo')).toEqual('/baseurl?bar=baz')
+    it('replaces an existing peopleType param rather than duplicating it', () => {
+      expect(casesTabs('/?peopleType=housed&searchTerm=foo', 'housed')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=nfarisk&searchTerm=foo', selected: false },
+        { text: 'Settled housing secured', href: '/?peopleType=housed&searchTerm=foo', selected: true },
+      ])
     })
   })
 })

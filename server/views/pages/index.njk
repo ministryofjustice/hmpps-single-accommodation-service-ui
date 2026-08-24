@@ -28,6 +28,7 @@
         <h2 class="govuk-heading-l">{{ 'Housing support needed' if peopleType === 'nfarisk' else 'Settled housing secured' }}</h2>
     {% endif %}
       <form method="get" class="sas-filters govuk-!-margin-bottom-8">
+        <input type="hidden" name="peopleType" value="{{ peopleType }}" />
         <div class="govuk-grid-row">
           <div class="{{ 'govuk-grid-column-one-half' if caseListV2 else 'govuk-grid-column-full' }}">
             {{

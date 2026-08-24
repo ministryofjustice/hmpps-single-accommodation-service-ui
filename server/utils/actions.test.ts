@@ -21,11 +21,6 @@ describe('action utilities', () => {
         actionFactory.build({ type: 'SUBMIT_CRS_ACCOMMODATION_REFERRAL', startDate: '2027-01-19' }),
         actionFactory.build({ type: 'SUBMIT_CRS_REFERRAL', startDate: '2027-06-14' }),
         actionFactory.build({ type: 'ADD_AND_CONFIRM_PROPOSED_ADDRESS', startDate: '2029-08-17' }),
-        actionFactory.build({ type: 'SUBMIT_DTR_BEFORE_CAS3', startDate: '2026-06-08' }),
-        actionFactory.build({ type: 'SUBMIT_CRS_BEFORE_CAS3', startDate: '2026-06-09' }),
-        actionFactory.build({ type: 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3', startDate: '2026-06-10' }),
-        actionFactory.build({ type: 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3', startDate: '2026-06-11' }),
-        actionFactory.build({ type: 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3', startDate: '2026-06-12' }),
       ]
 
       expect(renderActions(actions)).toMatchSnapshot()

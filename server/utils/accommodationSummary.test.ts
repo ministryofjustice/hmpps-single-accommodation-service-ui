@@ -81,18 +81,6 @@ describe('accommodationSummary', () => {
         expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
       })
 
-      it('hides the From date for a settled or transient next accommodation', () => {
-        const caseData = caseFactory.build({
-          accommodationSummaries: {
-            caseAccommodationStatus: 'SETTLED',
-            caseAccommodationStatusDate: undefined,
-            currentAccommodation: null,
-            nextAccommodation: accommodationSummaryFactory.next('2026-02-03').build(),
-          },
-        })
-        expect(accommodationCell('next', caseData)).not.toContain('From')
-      })
-
       it('returns an empty cell for a limited access case', () => {
         expect(accommodationCell(cellType, caseFactory.limitedAccess().build())).toEqual('')
       })

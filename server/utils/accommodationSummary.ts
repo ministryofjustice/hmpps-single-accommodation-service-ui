@@ -140,6 +140,7 @@ export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDt
     cellType,
     accommodationType: accommodationType(accommodation),
     addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
+    isPrivate: isPrivateAccommodation(accommodation.type),
     ...accommodation,
     caseStatus: summaries?.caseAccommodationStatus,
   })
@@ -169,3 +170,8 @@ export const accommodationHistoryRows = (history?: AccommodationSummaryDto[]): T
 
 export const accommodationHistoryTable = (history: AccommodationSummaryDto[], hasApiError?: boolean): string =>
   renderMacro('accommodationHistoryTable', { rows: accommodationHistoryRows(history), hasApiError })
+
+const privateAccommodationCodes = ['A01A', 'A01C', 'A01D', 'A07A', 'A07B']
+
+export const isPrivateAccommodation = (type?: AccommodationSummaryDto['type']): boolean =>
+  Boolean(type?.code && privateAccommodationCodes.includes(type.code))

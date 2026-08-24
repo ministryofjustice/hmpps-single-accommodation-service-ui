@@ -1,9 +1,9 @@
-import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto } from '@sas/api'
+import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { StatusTag } from '@sas/ui'
+import { StatusCell, StatusTag } from '@sas/ui'
 import { htmlContent, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
-import { formatDate } from './dates'
+import { daysUntil, formatDate } from './dates'
 import { renderMacro, statusTag } from './macros'
 import uiPaths from '../paths/ui'
 
@@ -106,15 +106,45 @@ export const noFixedAbodeAlert = (accommodationSummary?: AccommodationSummariesD
   }
 }
 
-export const accommodationCell = (cellType: 'current' | 'next', accommodation?: AccommodationSummaryDto): string =>
-  accommodation
-    ? renderMacro('accommodationCell', {
-        cellType,
-        accommodationType: accommodationType(accommodation),
-        addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
-        ...accommodation,
-      })
-    : ''
+const accommodationStatusTag = (status?: AccommodationSummariesDto['caseAccommodationStatus']): StatusTag =>
+  ({
+    NO_FIXED_ABODE: { text: 'No fixed abode', colour: 'grey' },
+    RISK_OF_NO_FIXED_ABODE: { text: 'Risk of no fixed abode', colour: 'orange' },
+    SETTLED: { text: 'Settled', colour: 'green' },
+    TRANSIENT: { text: 'Transient', colour: 'pink' },
+  })[status]
+
+export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
+  const summaries = caseData?.accommodationSummaries
+  const status = accommodationStatusTag(summaries?.caseAccommodationStatus)
+
+  if (!status) return undefined
+
+  const date = summaries.caseAccommodationStatusDate
+  if (!date) return { status }
+
+  const prefix = daysUntil(date) < 0 ? 'Since' : 'From'
+
+  return { status, dateText: `${prefix} ${formatDate(date)} (${formatDate(date, 'days for/in')})` }
+}
+
+export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDto): string => {
+  if (caseData.userAccess !== 'FULL') return ''
+
+  const summaries = caseData.accommodationSummaries
+  const accommodation = cellType === 'current' ? summaries?.currentAccommodation : summaries?.nextAccommodation
+
+  if (!accommodation) return cellType === 'current' ? 'No accommodation' : 'None'
+
+  return renderMacro('accommodationCell', {
+    cellType,
+    accommodationType: accommodationType(accommodation),
+    addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
+    isPrivate: isPrivateAccommodation(accommodation.type),
+    ...accommodation,
+    caseStatus: summaries?.caseAccommodationStatus,
+  })
+}
 
 const accommodationSummaryStatusTag = (status: AccommodationStatusDto): StatusTag => ({
   text: status.description,
@@ -140,3 +170,8 @@ export const accommodationHistoryRows = (history?: AccommodationSummaryDto[]): T
 
 export const accommodationHistoryTable = (history: AccommodationSummaryDto[], hasApiError?: boolean): string =>
   renderMacro('accommodationHistoryTable', { rows: accommodationHistoryRows(history), hasApiError })
+
+const privateAccommodationCodes = ['A01A', 'A01C', 'A01D', 'A07A', 'A07B']
+
+export const isPrivateAccommodation = (type?: AccommodationSummaryDto['type']): boolean =>
+  Boolean(type?.code && privateAccommodationCodes.includes(type.code))

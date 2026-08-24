@@ -3,7 +3,7 @@
 
   {{ context.accommodationType }}
 
-  {%- if context.arrangementType === 'PRIVATE' -%}
+  {%- if context.isPrivate -%}
     {%- if context.addressLine1 %}
       <br />
       <span class="govuk-hint">{{ context.addressLine1 }}</span>

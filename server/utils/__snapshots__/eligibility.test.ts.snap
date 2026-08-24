@@ -313,11 +313,11 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
 }
 `;
 
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed status card 1`] = `
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET due to DTR status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to add DTR referral details before you can make a CAS3 referral.",
-  "inactive": false,
+  "inactive": true,
   "links": undefined,
   "status": {
     "colour": "grey",
@@ -326,11 +326,11 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed s
 }
 `;
 
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS needed status card 1`] = `
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET due to Male CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
-  "inactive": false,
+  "inactive": true,
   "links": undefined,
   "status": {
     "colour": "grey",
@@ -339,11 +339,11 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS nee
 }
 `;
 
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DTR and CRS needed status card 1`] = `
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET due to Male DTR and CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
-  "inactive": false,
+  "inactive": true,
   "links": undefined,
   "status": {
     "colour": "grey",
@@ -352,11 +352,11 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DT
 }
 `;
 
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS needed status card 1`] = `
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET due to NonMale CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
-  "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
-  "inactive": false,
+  "hint": "You need to submit a CRS referral before you can make a CAS3 referral.",
+  "inactive": true,
   "links": undefined,
   "status": {
     "colour": "grey",
@@ -365,11 +365,24 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS n
 }
 `;
 
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, both DTR and CRS needed status card 1`] = `
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET due to NonMale DTR and CRS needed status card 1`] = `
 {
   "heading": "CAS3 (transitional accommodation)",
-  "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
-  "inactive": false,
+  "hint": "You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.",
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET with null action status card 1`] = `
+{
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": undefined,
+  "inactive": true,
   "links": undefined,
   "status": {
     "colour": "grey",

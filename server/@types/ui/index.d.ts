@@ -66,10 +66,11 @@ export type GetCasesQuery = {
   searchTerm?: string
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
   teamCode?: string
+  peopleType?: 'nfarisk' | 'housed'
 }
 
 export interface IndexRequest extends Request {
-  query: GetCasesQuery & { peopleType?: 'nfarisk' | 'housed' }
+  query: GetCasesQuery
 }
 
 export type DividerItem = {

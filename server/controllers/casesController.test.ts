@@ -16,7 +16,8 @@ import {
 } from '../testutils/factories'
 import {
   caseAssignedTo,
-  casesResultsSummary, casesTableColumns,
+  casesResultsSummary,
+  casesTableColumns,
   casesTabs,
   casesToRows,
   queryToFilters,
@@ -103,7 +104,7 @@ describe('casesController', () => {
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {})
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'nfarisk' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
         tabs: casesTabs(request.originalUrl, 'nfarisk'),
@@ -134,6 +135,7 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
+        peopleType: 'housed',
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {

@@ -54,9 +54,9 @@ export default class CasesController {
         data: { teams, cases },
       } = await collectApiResponses({
         teams: this.userService.getTeams(token),
-        cases: this.casesService.getCases(token, query),
+        cases: this.casesService.getCases(token, { ...query, peopleType }),
       })
-      const filters = queryToFilters(query, req.url, teams)
+      const filters = queryToFilters(query, req.originalUrl, teams)
 
       const currentUsername = query.teamCode ? username : undefined
 

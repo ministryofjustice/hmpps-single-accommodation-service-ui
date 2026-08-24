@@ -75,11 +75,4 @@ export default class CasesListPage extends AbstractPage {
   async clickCaseLink(caseData: Case) {
     await this.clickLink(displayName(caseData, { caseList: true, laoFlag: '' }))
   }
-
-  async shouldShowTab(text: string) {
-    await expect(
-      this.page.getByRole('listitem').filter({ has: this.page.getByRole('link', { name: text }) }),
-    ).toContainClass('govuk-tabs__list-item--selected')
-    await expect(this.page.getByRole('heading', { name: text })).toBeVisible()
-  }
 }

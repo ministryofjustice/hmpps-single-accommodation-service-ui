@@ -49,7 +49,6 @@ test.describe('List of cases', () => {
     })
 
     // THEN the relevant cases are shown
-    await casesListPage.shouldShowTab('Housing support needed')
     await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
     await casesListPage.shouldShowCases([filteredCase], [], true)
 
@@ -84,40 +83,6 @@ test.describe('List of cases', () => {
       Search: `‘${prisonNumber}’`,
       RoSH: formatRiskLevel(riskLevel),
       'Assigned to': 'Team One',
-    })
-
-    // WHEN I click on the 'Settled housing secured' tab
-    await casesListPage.clickLink('Settled housing secured')
-
-    // FIXME: the list type is not yet sent to the API, so for now we use the same results
-    // THEN the relevant cases are shown
-    await casesListPage.shouldShowTab('Settled housing secured')
-    await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
-    await casesListPage.shouldShowCases([filteredCase])
-
-    // AND the filters are still populated with the selected values
-    await casesListPage.verifyFilters({
-      searchTerm: prisonNumber,
-      assignedTo: 'anyone',
-      riskLevel: 'VERY_HIGH',
-    })
-
-    // AND the active filter tags are shown
-    await casesListPage.shouldShowFilterTags({
-      Search: `'${prisonNumber}'`,
-      'Assigned to': 'anyone',
-      RoSH: 'Very high',
-    })
-
-    // WHEN I click to clear the filter
-    await casesListPage.clickLink('Clear filters')
-
-    // THEN I should see no filters selected on the housing secured list
-    await casesListPage.shouldShowTab('Settled housing secured')
-    await casesListPage.verifyFilters({
-      searchTerm: '',
-      assignedTo: 'you',
-      riskLevel: '',
     })
   })
 

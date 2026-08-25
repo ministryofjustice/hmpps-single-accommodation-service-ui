@@ -16,7 +16,7 @@ const stubApiError = (urlPattern: string, method: 'GET' | 'POST' = 'GET', status
   stubFor({
     request: {
       method,
-      urlPattern,
+      urlPathPattern: urlPattern,
     },
     response: {
       status,

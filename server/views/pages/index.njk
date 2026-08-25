@@ -12,9 +12,23 @@
 {% block content %}
   <h1 class="govuk-heading-xl">Accommodation case list</h1>
 
-  <div class="govuk-grid-row">
-    <div class="{{ 'govuk-grid-column-full' if caseListV2 else 'govuk-grid-column-one-half-from-desktop' }}">
+  {% if not caseListV2 %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half-from-desktop">
+  {% else %}
+    <div class="govuk-tabs">
+      <ul class="govuk-tabs__list">
+        {% for tab in tabs %}
+          <li class="govuk-tabs__list-item {% if tab.selected %}govuk-tabs__list-item--selected{% endif %}">
+            <a class="govuk-tabs__tab" href="{{ tab.href }}">{{ tab.text }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="govuk-tabs__panel">
+        <h2 class="govuk-heading-l">{{ 'Housing support needed' if peopleType === 'nfarisk' else 'Settled housing secured' }}</h2>
+    {% endif %}
       <form method="get" class="sas-filters govuk-!-margin-bottom-8">
+        <input type="hidden" name="peopleType" value="{{ peopleType }}" />
         <div class="govuk-grid-row">
           <div class="{{ 'govuk-grid-column-one-half' if caseListV2 else 'govuk-grid-column-full' }}">
             {{
@@ -73,7 +87,7 @@
             {% endfor %}
           </ul>
           <p class="govuk-!-margin-bottom-1">
-            <a class="govuk-link govuk-link--no-visited-state" href="/">Clear filters</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="/?peopleType={{ peopleType }}">Clear filters</a>
           </p>
         </div>
       {% else %}

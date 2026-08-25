@@ -14,7 +14,14 @@ import {
   proposedAccommodationFactory,
   referralFactory,
 } from '../testutils/factories'
-import { caseAssignedTo, casesResultsSummary, casesTableColumns, casesToRows, queryToFilters } from '../utils/cases'
+import {
+  caseAssignedTo,
+  casesResultsSummary,
+  casesTableColumns,
+  casesTabs,
+  casesToRows,
+  queryToFilters,
+} from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -59,7 +66,7 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', url: '/' })
+    request = mock<Request>({ id: 'request-id', originalUrl: '/' })
   })
 
   describe('index', () => {
@@ -97,9 +104,11 @@ describe('casesController', () => {
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {})
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'nfarisk' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
+        tabs: casesTabs(request.originalUrl, 'nfarisk'),
+        peopleType: 'nfarisk',
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases),
@@ -116,8 +125,9 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
+        peopleType: 'housed',
       }
-      request.url = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH'
+      request.originalUrl = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH'
 
       await casesController.index()(request, response, next)
 
@@ -125,12 +135,15 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
+        peopleType: 'housed',
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
+        tabs: casesTabs(request.originalUrl, 'housed'),
+        peopleType: 'housed',
         resultsSummary: casesResultsSummary(cases),
-        filters: queryToFilters(request.query, request.url, teams),
+        filters: queryToFilters(request.query, request.originalUrl, teams),
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases, 'user1'),
         query: request.query,

@@ -7,14 +7,15 @@
 
 {% set pageTitle = "Case list" %}
 {% set mainClasses = "govuk-body" %}
-{% set caseListV2 = featureFlags.caseListV2 %}
+{% set caseListV2 = featureFlags.caseListV2 or caseListV2Tabs %}
+{% set caseListV2Tabs = featureFlags.caseListV2Tabs %}
 
 {% block content %}
   <h1 class="govuk-heading-xl">Accommodation case list</h1>
 
-  {% if not caseListV2 %}
+  {% if not caseListV2Tabs %}
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half-from-desktop">
+      <div class="{{ 'govuk-grid-column-full' if caseListV2 else 'govuk-grid-column-one-half-from-desktop' }}">
   {% else %}
     <div class="govuk-tabs">
       <ul class="govuk-tabs__list">

@@ -1,5 +1,6 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import { mock } from 'jest-mock-extended'
+import { IndexRequest } from '@sas/ui'
 import CasesController from './casesController'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
@@ -27,11 +28,12 @@ import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import * as backLinksUtils from '../utils/backlinks'
 import { breadcrumbs } from '../utils/breadcrumbs'
+import config from '../config'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
 
-  let request: Request
+  let request: IndexRequest
   const response = mock<Response>({
     locals: { user: { token: TEST_TOKEN, username: 'user1', userId: 'user-id-1', displayName: 'Jane Doe' } },
   })
@@ -59,7 +61,7 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', url: '/' })
+    request = mock<IndexRequest>({ id: 'request-id', url: '/' })
   })
 
   describe('index', () => {
@@ -76,6 +78,18 @@ describe('casesController', () => {
         { value: 'MEDIUM', text: 'Medium' },
         { value: 'LOW', text: 'Low' },
       ],
+      currentAccommodationOptions: config.flags.caseListV2_currentAccommodationFilter
+        ? [
+            { value: '', text: 'All' },
+            { value: 'NONE', text: 'No accommodation' },
+            { value: 'CAS1', text: 'Approved premises (CAS1)' },
+            { value: 'CAS3', text: 'CAS3' },
+            { value: 'IMMIGRATION', text: 'Immigration detention' },
+            { value: 'PRISON', text: 'Prison' },
+            { value: 'PRIVATE_TRANSIENT', text: 'Private address: Transient' },
+            { value: 'PRIVATE_SETTLED', text: 'Private address: Settled' },
+          ]
+        : null,
     }
 
     beforeEach(() => {
@@ -116,8 +130,9 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
+        currentAccommodation: config.flags.caseListV2_currentAccommodationFilter ? 'CAS1' : null,
       }
-      request.url = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH'
+      request.url = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH&currentAccommodation=CAS1'
 
       await casesController.index()(request, response, next)
 
@@ -125,6 +140,7 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
+        currentAccommodation: config.flags.caseListV2_currentAccommodationFilter ? 'CAS1' : null,
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {

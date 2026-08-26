@@ -4,6 +4,7 @@ import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
 import { displayName } from '../../../server/utils/cases'
+import config from '../../../server/config'
 
 export default class CasesListPage extends AbstractPage {
   readonly casesRows: Locator
@@ -50,17 +51,21 @@ export default class CasesListPage extends AbstractPage {
     }
   }
 
-  async applyFilters({ searchTerm, teamName, riskLevel }: Record<string, string>) {
+  async applyFilters({ searchTerm, teamName, riskLevel, currentAccommodation }: Record<string, string>) {
     if (searchTerm) await this.completeInputByLabel('Search by name, CRN or prison number', searchTerm)
     if (teamName) await this.selectOptionByLabel('Assigned to', teamName)
     if (riskLevel) await this.selectOptionByLabel('RoSH', riskLevel)
+    if (config.flags.caseListV2_currentAccommodationFilter)
+      await this.selectOptionByLabel('Current Accommodation', currentAccommodation)
     await this.clickButton('Apply filters')
   }
 
-  async verifyFilters({ searchTerm, teamCode, riskLevel }: Record<string, string>) {
+  async verifyFilters({ searchTerm, teamCode, riskLevel, currentAccommodation }: Record<string, string>) {
     await this.verifyTextInput('Search by name, CRN or prison number', searchTerm)
     await this.verifySelectInput('Assigned to', teamCode)
     await this.verifySelectInput('RoSH', riskLevel)
+    if (config.flags.caseListV2_currentAccommodationFilter)
+      await this.verifySelectInput('Current Accommodation', currentAccommodation)
   }
 
   async shouldShowFilterTags(filters: Record<string, string>) {

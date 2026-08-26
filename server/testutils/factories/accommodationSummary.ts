@@ -5,14 +5,14 @@ import addressFactory from './accommodationAddressDetails'
 import crnFactory from '../crn'
 import accommodationTypesJson from '../../../wiremock/fixtures/referenceData/accommodationTypes.json'
 
-const accommodationStatusFactory = Factory.define<AccommodationTypeDto>(() =>
+const accommodationStatusFactory = Factory.define<AccommodationStatusDto>(() =>
   faker.helpers.arrayElement([
     { code: 'M', description: 'Main' },
     { code: 'P', description: 'Previous' },
   ]),
 )
 
-const accommodationTypesFactory = Factory.define<AccommodationStatusDto>(() =>
+const accommodationTypesFactory = Factory.define<AccommodationTypeDto>(() =>
   faker.helpers.arrayElement(accommodationTypesJson.map(type => ({ code: type.code, description: type.name }))),
 )
 

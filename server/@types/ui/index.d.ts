@@ -1,5 +1,6 @@
 import {
   AccommodationAddressDetails,
+  CaseDto as Case,
   ProposedAccommodationDetailCommand,
   ProposedAccommodationDto,
   UpstreamFailureDto,
@@ -64,9 +65,12 @@ export type MultiPageFormData = {
 
 export type GetCasesQuery = {
   searchTerm?: string
-  riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+  riskLevel?: Case['riskLevel']
   teamCode?: string
+  currentAccommodation?: currentAccommodationFilterTypes
 }
+export type currentAccommodationFilterTypes =
+  'NONE' | 'CAS1' | 'CAS3' | 'IMMIGRATION' | 'PRISON' | 'PRIVATE_TRANSIENT' | 'PRIVATE_SETTLED'
 
 export interface IndexRequest extends Request {
   query: GetCasesQuery

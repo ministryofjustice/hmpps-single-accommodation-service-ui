@@ -8,6 +8,7 @@
 {% set pageTitle = "Case list" %}
 {% set mainClasses = "govuk-body" %}
 {% set caseListV2 = featureFlags.caseListV2 %}
+{% set currentAccommodationFilter_enabled = featureFlags.caseListV2_currentAccommodationFilter %}
 
 {% block content %}
   <h1 class="govuk-heading-xl">Accommodation case list</h1>
@@ -51,6 +52,21 @@
               })
             }}
           </div>
+        {% if currentAccommodationFilter_enabled === true %}
+                  <div class="govuk-grid-column-one-quarter">
+                    {{
+                      govukSelect({
+                        label: {
+                          text: 'Current Accommodation'
+                        },
+                        name: 'currentAccommodation',
+                        value: query.currentAccommodation,
+                        items: currentAccommodationOptions
+                      })
+                    }}
+                  </div>
+                </div>
+                      {% endif %}
         </div>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">

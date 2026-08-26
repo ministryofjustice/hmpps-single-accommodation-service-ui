@@ -1,6 +1,6 @@
 import { CaseAction, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, SelectOption } from '@sas/ui'
+import { currentAccommodationFilterTypes, GetCasesQuery, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
 import { renderMacro, statusCell } from './macros'
 import { renderActions } from './actions'
@@ -8,15 +8,21 @@ import { staffName } from './staff'
 import config from '../config'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 
-export const formatRiskLevel = (level?: Case['riskLevel']) => {
-  return (
-    {
-      LOW: 'Low',
-      MEDIUM: 'Medium',
-      HIGH: 'High',
-      VERY_HIGH: 'Very high',
-    }[level] || 'Unknown'
-  )
+export const riskLevelFilterMap: Record<Case['riskLevel'], string> = {
+  VERY_HIGH: 'Very high',
+  HIGH: 'High',
+  MEDIUM: 'Medium',
+  LOW: 'Low',
+}
+
+export const currentAccommodationFilterMap: Record<currentAccommodationFilterTypes, string> = {
+  NONE: 'No accommodation',
+  CAS1: 'Approved premises (CAS1)',
+  CAS3: 'CAS3',
+  IMMIGRATION: 'Immigration detention',
+  PRISON: 'Prison',
+  PRIVATE_TRANSIENT: 'Private address: Transient',
+  PRIVATE_SETTLED: 'Private address: Settled', // (only visible on the settled tab when implemented)
 }
 
 export const casesResultsSummary = (cases: Case[]): string => {
@@ -41,7 +47,16 @@ export const queryToFilters = (
   }
 
   if (query?.riskLevel)
-    filters.push({ text: `RoSH: ${formatRiskLevel(query.riskLevel)}`, href: removeQueryParam(currentUrl, 'riskLevel') })
+    filters.push({
+      text: `RoSH: ${riskLevelFilterMap[query.riskLevel]}`,
+      href: removeQueryParam(currentUrl, 'riskLevel'),
+    })
+
+  if (query?.currentAccommodation && config.flags.caseListV2_currentAccommodationFilter)
+    filters.push({
+      text: `Current accommodation: ${currentAccommodationFilterMap[query.currentAccommodation]}`,
+      href: removeQueryParam(currentUrl, 'currentAccommodation'),
+    })
 
   return filters
 }

@@ -238,27 +238,38 @@ describe('cases utilities', () => {
         { text: 'RoSH: High', href: '/?teamCode=team-two-code&searchTerm=CRN123' },
       ])
     })
-
-    it.each([
+    const filterTagCases: Array<[string, Record<string, string>, string, Array<{ text: string; href: string }>]> = [
       [
         'teamCode',
-        { teamCode: 'team-one-code' } as const,
+        { teamCode: 'team-one-code' },
         '/?teamCode=team-one-code&riskLevel=HIGH',
         [{ text: 'Assigned to: Team One', href: '/?riskLevel=HIGH' }],
       ],
       [
         'riskLevel',
-        { riskLevel: 'VERY_HIGH' } as const,
+        { riskLevel: 'VERY_HIGH' },
         '/?teamCode=team-one-code&riskLevel=VERY_HIGH',
         [{ text: 'RoSH: Very high', href: '/?teamCode=team-one-code' }],
       ],
       [
         'searchTerm',
-        { searchTerm: 'CRN123' } as const,
+        { searchTerm: 'CRN123' },
         '/?searchTerm=CRN123&riskLevel=LOW',
         [{ text: 'Search: ‘CRN123’', href: '/?riskLevel=LOW' }],
       ],
-    ])('includes a filter tag when %s is set', (_, query, url, expected) => {
+      ...(config.flags.caseListV2_currentAccommodationFilter
+        ? [
+            [
+              'currentAccommodation',
+              { currentAccommodation: 'CAS1' },
+              '/?currentAccommodation=CAS1&riskLevel=LOW',
+              [{ text: 'Current accommodation: Approved premises (CAS1)', href: '/?riskLevel=LOW' }],
+            ] as [string, Record<string, string>, string, Array<{ text: string; href: string }>],
+          ]
+        : []),
+    ]
+
+    it.each(filterTagCases)('includes a filter tag when %s is set', (_, query, url, expected) => {
       expect(queryToFilters(query, url, teams)).toEqual(expected)
     })
   })

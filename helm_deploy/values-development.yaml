@@ -28,6 +28,7 @@ generic-service:
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
     HIDE_SET_AS_CURRENT_ADDRESS: "false"
     CASE_LIST_V2_ENABLED: "false"
+    CURRENT_ACCOMMODATION_FILTER_ENABLED: 'false'
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises-nonprod

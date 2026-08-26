@@ -22,6 +22,7 @@ import type { Services } from './services'
 import config from './config'
 import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedirect'
 import { getCaseListUrl } from './utils/backlinks'
+import { getActivePage } from './utils/navigation'
 import setUpSentryProcessor from './middleware/setUpSentryProcessor'
 
 export default function createApp(services: Services): express.Application {
@@ -45,6 +46,7 @@ export default function createApp(services: Services): express.Application {
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')
     res.locals.caseListUrl = getCaseListUrl(req)
+    res.locals.activePage = getActivePage(req.path)
     next()
   })
   app.use(setUpFrontendComponents())

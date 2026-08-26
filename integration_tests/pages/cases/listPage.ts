@@ -49,7 +49,7 @@ export default class CasesListPage extends AbstractPage {
         await expect(row).toContainText(person.tierScore as string)
         await expect(row).toContainText(formatDate(person.dateOfBirth as string))
 
-        for (const accommodation of accommodations) {
+        for await (const accommodation of accommodations) {
           await expect(row).toContainText(accommodationType(accommodation))
         }
       } else {
@@ -57,7 +57,7 @@ export default class CasesListPage extends AbstractPage {
         await expect(row).not.toContainText('Tier')
         await expect(row).not.toContainText('Date of birth')
 
-        for (const accommodation of accommodations) {
+        for await (const accommodation of accommodations) {
           await expect(row).not.toContainText(accommodationType(accommodation))
         }
       }

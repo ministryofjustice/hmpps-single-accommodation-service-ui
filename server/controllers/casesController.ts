@@ -10,8 +10,8 @@ import {
   queryToFilters,
   displayName,
   assignedToOptions,
-  riskLevelFilterMap,
-  currentAccommodationFilterMap,
+  riskLevelOptions,
+  currentAccommodationOptions,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -68,21 +68,9 @@ export default class CasesController {
         query,
         filters,
         assignedToOptions: assignedToOptions(userFullName, teams),
-        riskLevelOptions: [
-          { value: '', text: 'All' },
-          ...Object.entries(riskLevelFilterMap).map(([key, label]) => ({
-            value: key,
-            text: label,
-          })),
-        ],
+        riskLevelOptions: riskLevelOptions(),
         currentAccommodationOptions: config.flags.caseListV2_currentAccommodationFilter
-          ? [
-              { value: '', text: 'All' },
-              ...Object.entries(currentAccommodationFilterMap).map(([key, label]) => ({
-                value: key,
-                text: label,
-              })),
-            ]
+          ? currentAccommodationOptions()
           : null,
       })
     }

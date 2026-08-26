@@ -8,28 +8,39 @@ import { staffName } from './staff'
 import config from '../config'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 
-export const riskLevelFilterMap: Record<Case['riskLevel'], string> = {
+const RISK_LEVEL_LABELS: Record<Case['riskLevel'], string> = {
   VERY_HIGH: 'Very high',
   HIGH: 'High',
   MEDIUM: 'Medium',
   LOW: 'Low',
 }
+export const riskLevelOptions = (): SelectOption[] => [
+  { value: '', text: 'All' },
+  ...Object.entries(RISK_LEVEL_LABELS).map(([value, text]) => ({ value, text })),
+]
 
-export const currentAccommodationFilterMap: Record<currentAccommodationFilterTypes, string> = {
+export const formatRiskLevel = (level?: string): string =>
+  level && level in RISK_LEVEL_LABELS ? RISK_LEVEL_LABELS[level as keyof typeof RISK_LEVEL_LABELS] : 'Unknown Risk'
+
+const CURRENT_ACCOMMODATION_LABELS: Record<currentAccommodationFilterTypes, string> = {
   NONE: 'No accommodation',
   CAS1: 'Approved premises (CAS1)',
   CAS3: 'CAS3',
   IMMIGRATION: 'Immigration detention',
   PRISON: 'Prison',
   PRIVATE_TRANSIENT: 'Private address: Transient',
-  PRIVATE_SETTLED: 'Private address: Settled', // (only visible on the settled tab when implemented)
 }
 
-export const casesResultsSummary = (cases: Case[]): string => {
-  const summary = `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
+export const currentAccommodationOptions = (): SelectOption[] => [
+  { value: '', text: 'All' },
+  ...Object.entries(CURRENT_ACCOMMODATION_LABELS).map(([value, text]) => ({ value, text })),
+]
 
-  return summary
-}
+export const formatCurrentAccommodation = (currentAccommodation?: currentAccommodationFilterTypes): string =>
+  currentAccommodation ? CURRENT_ACCOMMODATION_LABELS[currentAccommodation] : 'Unknown Accommodation'
+
+export const casesResultsSummary = (cases: Case[]): string =>
+  `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
 
 export const queryToFilters = (
   query: GetCasesQuery,
@@ -45,16 +56,16 @@ export const queryToFilters = (
     const teamName = teams?.find(team => team.code === query.teamCode)?.name
     filters.push({ text: `Assigned to: ${teamName || 'Unknown team'}`, href: removeQueryParam(currentUrl, 'teamCode') })
   }
-
-  if (query?.riskLevel)
+  if (query?.riskLevel) {
     filters.push({
-      text: `RoSH: ${riskLevelFilterMap[query.riskLevel]}`,
+      text: `RoSH: ${formatRiskLevel(query.riskLevel)}`,
       href: removeQueryParam(currentUrl, 'riskLevel'),
     })
+  }
 
   if (query?.currentAccommodation && config.flags.caseListV2_currentAccommodationFilter)
     filters.push({
-      text: `Current accommodation: ${currentAccommodationFilterMap[query.currentAccommodation]}`,
+      text: `Current accommodation: ${formatCurrentAccommodation(query.currentAccommodation)}`,
       href: removeQueryParam(currentUrl, 'currentAccommodation'),
     })
 

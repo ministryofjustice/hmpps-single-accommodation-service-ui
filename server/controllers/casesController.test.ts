@@ -87,7 +87,7 @@ describe('casesController', () => {
             { value: 'IMMIGRATION', text: 'Immigration detention' },
             { value: 'PRISON', text: 'Prison' },
             { value: 'PRIVATE_TRANSIENT', text: 'Private address: Transient' },
-            { value: 'PRIVATE_SETTLED', text: 'Private address: Settled' },
+            // { value: 'PRIVATE_SETTLED', text: 'Private address: Settled' },
           ]
         : null,
     }

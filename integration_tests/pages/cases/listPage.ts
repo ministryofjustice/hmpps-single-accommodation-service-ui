@@ -55,7 +55,7 @@ export default class CasesListPage extends AbstractPage {
     if (searchTerm) await this.completeInputByLabel('Search by name, CRN or prison number', searchTerm)
     if (teamName) await this.selectOptionByLabel('Assigned to', teamName)
     if (riskLevel) await this.selectOptionByLabel('RoSH', riskLevel)
-    if (config.flags.caseListV2_currentAccommodationFilter)
+    if (config.flags.caseListV2_currentAccommodationFilter && currentAccommodation)
       await this.selectOptionByLabel('Current Accommodation', currentAccommodation)
     await this.clickButton('Apply filters')
   }
@@ -64,7 +64,7 @@ export default class CasesListPage extends AbstractPage {
     await this.verifyTextInput('Search by name, CRN or prison number', searchTerm)
     await this.verifySelectInput('Assigned to', teamCode)
     await this.verifySelectInput('RoSH', riskLevel)
-    if (config.flags.caseListV2_currentAccommodationFilter)
+    if (config.flags.caseListV2_currentAccommodationFilter && currentAccommodation)
       await this.verifySelectInput('Current Accommodation', currentAccommodation)
   }
 

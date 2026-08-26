@@ -69,8 +69,8 @@ export type GetCasesQuery = {
   teamCode?: string
   currentAccommodation?: currentAccommodationFilterTypes
 }
-export type currentAccommodationFilterTypes =
-  'NONE' | 'CAS1' | 'CAS3' | 'IMMIGRATION' | 'PRISON' | 'PRIVATE_TRANSIENT' | 'PRIVATE_SETTLED'
+
+export type currentAccommodationFilterTypes = 'NONE' | 'CAS1' | 'CAS3' | 'IMMIGRATION' | 'PRISON' | 'PRIVATE_TRANSIENT' // | 'PRIVATE_SETTLED'
 
 export interface IndexRequest extends Request {
   query: GetCasesQuery

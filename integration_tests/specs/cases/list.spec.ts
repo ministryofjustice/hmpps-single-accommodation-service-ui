@@ -7,7 +7,7 @@ import LaoAccessPage from '../../pages/cases/laoAccessPage'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import { stubCaseListPage } from '../../helpers/caseListPage'
 import { stubProfilePage } from '../../helpers/profilePage'
-import { currentAccommodationFilterMap } from '../../../server/utils/cases'
+import { formatCurrentAccommodation } from '../../../server/utils/cases'
 import config from '../../../server/config'
 
 test.describe('List of cases', () => {
@@ -140,11 +140,11 @@ test.describe('List of cases', () => {
 
       // AND the active filter tags are shown
       await casesListPage.shouldShowFilterTags({
-        'Current accommodation': currentAccommodationFilterMap.CAS1,
+        'Current accommodation': formatCurrentAccommodation(currentAccommodation),
       })
     })
 
-    test('team code and current accommodation (CAS3 from A17)', async ({ page }) => {
+    test('team code, risk and current accommodation', async ({ page }) => {
       const accommodationSummary = accommodationSummaryFactory.build({
         startDate: undefined,
         endDate: undefined,
@@ -160,8 +160,10 @@ test.describe('List of cases', () => {
       filteredCase.accommodationSummaries = { currentAccommodation: accommodationSummary }
       const currentAccommodation = 'CAS3'
       const teamCode = teams[0].code
+      const riskLevel = 'HIGH'
       await casesApi.stubGetCases([filteredCase], {
         teamCode,
+        riskLevel,
         currentAccommodation,
       })
 
@@ -176,6 +178,7 @@ test.describe('List of cases', () => {
       // WHEN I filter the results
       await casesListPage.applyFilters({
         teamName: 'Team One',
+        riskLevel: 'High',
         currentAccommodation,
       })
 
@@ -187,14 +190,15 @@ test.describe('List of cases', () => {
       await casesListPage.verifyFilters({
         searchTerm: '',
         teamCode,
-        riskLevel: '',
+        riskLevel,
         currentAccommodation,
       })
 
       // AND the active filter tags are shown
       await casesListPage.shouldShowFilterTags({
         'Assigned to': 'Team One',
-        'Current accommodation': currentAccommodationFilterMap.CAS3,
+        RoSH: 'High',
+        'Current accommodation': formatCurrentAccommodation(currentAccommodation),
       })
 
       // WHEN I click on a case
@@ -212,7 +216,8 @@ test.describe('List of cases', () => {
       // AND the active filter tags are shown
       await casesListPage.shouldShowFilterTags({
         'Assigned to': 'Team One',
-        'Current accommodation': currentAccommodationFilterMap.CAS3,
+        RoSH: 'High',
+        'Current accommodation': formatCurrentAccommodation(currentAccommodation),
       })
     })
   })

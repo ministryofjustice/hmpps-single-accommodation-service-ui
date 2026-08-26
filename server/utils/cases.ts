@@ -8,7 +8,7 @@ import { staffName } from './staff'
 import config from '../config'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 
-const RISK_LEVEL_LABELS: Record<Case['riskLevel'], string> = {
+const RISK_LEVEL_LABELS: Record<NonNullable<Case['riskLevel']>, string> = {
   VERY_HIGH: 'Very high',
   HIGH: 'High',
   MEDIUM: 'Medium',
@@ -37,7 +37,9 @@ export const currentAccommodationOptions = (): SelectOption[] => [
 ]
 
 export const formatCurrentAccommodation = (currentAccommodation?: currentAccommodationFilterTypes): string =>
-  currentAccommodation ? CURRENT_ACCOMMODATION_LABELS[currentAccommodation] : 'Unknown Accommodation'
+  currentAccommodation && currentAccommodation in CURRENT_ACCOMMODATION_LABELS
+    ? CURRENT_ACCOMMODATION_LABELS[currentAccommodation]
+    : 'Unknown Accommodation'
 
 export const casesResultsSummary = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`

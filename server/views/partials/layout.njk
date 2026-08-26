@@ -2,6 +2,7 @@
 
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {% block head %}
   {% include "./applicationInsightsScript.njk" %}
@@ -16,18 +17,22 @@
 
 {% block govukHeader %}
   {{ feComponents.header | safe }}
-  <section aria-label="Service information" class="govuk-service-navigation"
-    data-module="govuk-service-navigation">
-    <div class="govuk-width-container">
-      <div class="govuk-service-navigation__container">
-        <span class="govuk-service-navigation__service-name">
-          <a href="/" class="govuk-service-navigation__link">
-            {{ applicationName }}
-          </a>
-        </span>
-      </div>
-    </div>
-  </section>
+  {{ govukServiceNavigation({
+    serviceName: "Find and manage accommodation",
+    serviceUrl: "/",
+    navigation: [
+      {
+        href: paths.cases.index(),
+        text: "Case list",
+        active: activePage == "caseList"
+      },
+      {
+        href: paths.cases.search(),
+        text: "Search",
+        active: activePage == "search"
+      }
+    ]
+  }) }}
 
   {% set phaseBannerHtml %}
     Help us improve the Accommodation service. <a href="{{ supportLinks.feedbackForm }}" target="_blank" rel="noreferrer noopener">Complete this survey (opens in new tab)</a>

@@ -49,10 +49,6 @@ class ApiResponseFactory extends Factory<ApiResponse> {
     return this.buildResponse<ApiResponseDtoListCaseDto>(cases || caseFactory.buildList(2))
   }
 
-  caseListV2(cases?: CaseDto[]) {
-    return this.buildResponse<ApiResponseDtoListCaseDto>(cases || caseFactory.settled().buildList(2))
-  }
-
   case(caseDto?: CaseDto) {
     return this.buildResponse<ApiResponseDtoCaseDto>(caseDto || caseFactory.build())
   }

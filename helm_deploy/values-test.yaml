@@ -28,6 +28,7 @@ generic-service:
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
     HIDE_SET_AS_CURRENT_ADDRESS: "true"
     CASE_LIST_V2_ENABLED: "false"
+    CASE_LIST_V2_TABS_ENABLED: "false"
     CAS_EXTRA_DETAILS_ENABLED: "false"
 
 generic-prometheus-alerts:

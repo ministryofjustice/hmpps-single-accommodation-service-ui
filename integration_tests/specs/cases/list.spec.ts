@@ -39,7 +39,7 @@ test.describe('List of cases', () => {
 
     // AND all the cases should be shown
     await casesListPage.shouldShowResultsSummary('25 people')
-    await casesListPage.shouldShowCases(cases, [])
+    await casesListPage.shouldShowCases(cases, ['Name', 'Current accommodation', 'Next accommodation', 'Status'])
 
     // WHEN I filter the results
     await casesListPage.applyFilters({
@@ -50,7 +50,7 @@ test.describe('List of cases', () => {
 
     // THEN the relevant cases are shown
     await casesListPage.shouldShowResultsSummary(`Showing 1 person`)
-    await casesListPage.shouldShowCases([filteredCase], [], true)
+    await casesListPage.shouldShowCases([filteredCase], ['Name', 'Current accommodation', 'Next accommodation', 'Status'], true)
 
     // AND the filters are populated with the selected values
     await casesListPage.verifyFilters({
@@ -97,7 +97,7 @@ test.describe('List of cases', () => {
 
     // THEN I should see the Case list
     const casesListPage = await CasesListPage.verifyOnPage(page)
-    await casesListPage.shouldShowCases(cases, [])
+    await casesListPage.shouldShowCases(cases, ['Name', 'Current accommodation', 'Next accommodation', 'Status'])
 
     // WHEN I click on a Limited access offender link
     await casesListPage.clickCaseLink(cases[2])

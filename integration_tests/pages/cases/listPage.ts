@@ -4,6 +4,7 @@ import AbstractPage from '../abstractPage'
 import { formatDate } from '../../../server/utils/dates'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
 import { displayName } from '../../../server/utils/cases'
+import { accommodationType, accommodationStatusCell } from '../../../server/utils/accommodationSummary'
 
 export default class CasesListPage extends AbstractPage {
   readonly casesRows: Locator
@@ -38,14 +39,32 @@ export default class CasesListPage extends AbstractPage {
         await expect(row).not.toContainText('Assigned to')
       }
 
+      const accommodations = [
+        person.accommodationSummaries?.currentAccommodation,
+        person.accommodationSummaries?.nextAccommodation,
+      ].filter(Boolean)
+
       if (person.userAccess !== 'LIMITED') {
         await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
         await expect(row).toContainText(person.tierScore as string)
         await expect(row).toContainText(formatDate(person.dateOfBirth as string))
+
+        for (const accommodation of accommodations) {
+          await expect(row).toContainText(accommodationType(accommodation))
+        }
       } else {
         await expect(row).not.toContainText('RoSH')
         await expect(row).not.toContainText('Tier')
         await expect(row).not.toContainText('Date of birth')
+
+        for (const accommodation of accommodations) {
+          await expect(row).not.toContainText(accommodationType(accommodation))
+        }
+      }
+
+      const status = accommodationStatusCell(person)
+      if (status) {
+        await expect(row).toContainText(status.status.text)
       }
     }
   }

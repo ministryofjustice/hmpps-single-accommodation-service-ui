@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AccommodationSummariesDto } from './AccommodationSummariesDto'
 import type { AssignedToDto } from './AssignedToDto'
-import type { CaseAction } from './CaseAction'
 export type CaseDto = {
   forename?: string | null
   middleNames?: string | null
@@ -16,7 +16,7 @@ export type CaseDto = {
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
   pncReference?: string | null
   assignedTo?: AssignedToDto | null
-  actions: Array<CaseAction>
   userAccess: 'LIMITED' | 'FULL' | 'UNKNOWN'
   limitedAccess?: boolean | null
+  accommodationSummaries?: AccommodationSummariesDto | null
 }

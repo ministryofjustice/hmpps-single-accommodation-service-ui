@@ -1,6 +1,7 @@
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { AccommodationAddressDetails } from '@sas/api'
+import { ukPostcode } from './ukPostcode'
 
 class AccommodationAddressDetailsFactory extends Factory<AccommodationAddressDetails> {
   minimal() {
@@ -28,7 +29,7 @@ export default AccommodationAddressDetailsFactory.define(() => {
   const buildingNumber = buildingName ? undefined : faker.location.buildingNumber()
 
   return {
-    postcode: faker.location.zipCode(),
+    postcode: ukPostcode(),
     subBuildingName,
     buildingName,
     buildingNumber,

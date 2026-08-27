@@ -2,9 +2,11 @@ import { CaseAction, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
-import { renderMacro } from './macros'
+import { renderMacro, statusCell } from './macros'
 import { renderActions } from './actions'
 import { staffName } from './staff'
+import config from '../config'
+import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -17,11 +19,24 @@ export const formatRiskLevel = (level?: Case['riskLevel']) => {
   )
 }
 
-export const casesResultsSummary = (cases: Case[]): string => {
-  const summary = `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
+export const casesTabs = (
+  url: string,
+  peopleType: 'nfarisk' | 'housed',
+): { text: string; href: string; selected?: boolean }[] => [
+  {
+    text: 'Housing support needed',
+    href: updateQueryParams(url, { peopleType: 'nfarisk' }),
+    selected: peopleType === 'nfarisk',
+  },
+  {
+    text: 'Settled housing secured',
+    href: updateQueryParams(url, { peopleType: 'housed' }),
+    selected: peopleType === 'housed',
+  },
+]
 
-  return summary
-}
+export const casesResultsSummary = (cases: Case[]): string =>
+  `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
 
 export const queryToFilters = (
   query: GetCasesQuery,
@@ -44,10 +59,20 @@ export const queryToFilters = (
   return filters
 }
 
-const removeQueryParam = (url: string, param: string): string => {
+export const removeQueryParam = (url: string, param: string): string => updateQueryParams(url, { [param]: undefined })
+
+export const updateQueryParams = (url: string, updateParams: Record<string, unknown>): string => {
   const [path, search] = url.split('?')
   const params = new URLSearchParams(search)
-  params.delete(param)
+
+  for (const [key, value] of Object.entries(updateParams)) {
+    if (!value) {
+      params.delete(key)
+    } else {
+      params.set(key, String(value))
+    }
+  }
+
   const queryString = params.toString()
 
   return queryString ? `${path}?${queryString}` : path
@@ -66,12 +91,23 @@ export const actionsCell = (actions: CaseAction[]): string =>
 export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[] =>
   cases.map(c => {
     const assignedToText = currentUsername ? caseAssignedTo(c, currentUsername) : undefined
-
-    return [htmlContent(personCell(c, assignedToText))]
+    if (!config.flags.caseListV2) {
+      return [htmlContent(personCell(c, assignedToText))]
+    }
+    const accommodationStatus = accommodationStatusCell(c)
+    return [
+      htmlContent(personCell(c, assignedToText)),
+      htmlContent(accommodationCell('current', c)),
+      htmlContent(accommodationCell('next', c)),
+      htmlContent(accommodationStatus ? statusCell(accommodationStatus) : ''),
+    ]
   })
 
 export const casesTableColumns = () => {
-  return [{ text: 'Name' }]
+  if (!config.flags.caseListV2) {
+    return [{ text: 'Name' }]
+  }
+  return [{ text: 'Name' }, { text: 'Current accommodation' }, { text: 'Next accommodation' }, { text: 'Status' }]
 }
 
 export const caseAssignedTo = (c: Case, username: string): string => {

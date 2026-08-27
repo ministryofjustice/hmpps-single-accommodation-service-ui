@@ -4,6 +4,7 @@ import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
 import { formatDate } from './dates'
+import config from '../config'
 
 export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   const { serviceStatus, url } = serviceResult || {}
@@ -84,7 +85,7 @@ const headingForService = (service: 'cas1' | 'cas3') => {
 const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): string => {
   const { serviceStatus, failureReasons, action } = serviceResult || {}
 
-  if (serviceStatus === 'CANNOT_START_YET') {
+  if (serviceStatus === 'CANNOT_START_YET' && config.flags.casExtraDetails) {
     if (failureReasons.includes('DTR_REFERRAL_EXPIRED')) {
       // TODO: Handle MALE/NON_MALE CRS needed
       if (failureReasons.includes('CRS_NOT_SUBMITTED')) {

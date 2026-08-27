@@ -29,4 +29,5 @@ export type AccommodationReferralDto = {
   placementAddress?: string | null
   placementStatus?: string | null
   uiUrl?: string | null
+  withdrawalReason?: string | null
 }

@@ -10,6 +10,7 @@ import {
   queryToFilters,
   displayName,
   assignedToOptions,
+  casesTabs,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -45,6 +46,7 @@ export default class CasesController {
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
+      const { peopleType = 'nfarisk' } = query
 
       setCaseListUrl(req)
 
@@ -52,13 +54,15 @@ export default class CasesController {
         data: { teams, cases },
       } = await collectApiResponses({
         teams: this.userService.getTeams(token),
-        cases: this.casesService.getCases(token, query),
+        cases: this.casesService.getCases(token, { ...query, peopleType }),
       })
-      const filters = queryToFilters(query, req.url, teams)
+      const filters = queryToFilters(query, req.originalUrl, teams)
 
       const currentUsername = query.teamCode ? username : undefined
 
       return res.render('pages/index', {
+        peopleType,
+        tabs: casesTabs(req.originalUrl, peopleType),
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases, currentUsername),

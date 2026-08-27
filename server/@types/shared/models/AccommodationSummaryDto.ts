@@ -12,4 +12,5 @@ export type AccommodationSummaryDto = {
   address: AccommodationAddressDetails
   status?: AccommodationStatusDto | null
   type?: AccommodationTypeDto | null
+  proposedAccommodationId?: string | null
 }

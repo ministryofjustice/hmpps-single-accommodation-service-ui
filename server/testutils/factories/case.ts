@@ -7,7 +7,7 @@ import tier from '../tier'
 import riskLevel from '../riskLevel'
 import pncReference from '../pncReference'
 import assignedUserFactory from './assignedUser'
-import actionFactory from './action'
+import accommodationSummariesFactory from './accommodationSummaries'
 
 class CaseFactory extends Factory<Case> {
   limitedAccess() {
@@ -22,7 +22,6 @@ class CaseFactory extends Factory<Case> {
       riskLevel: null,
       pncReference: null,
       assignedTo: assignedUserFactory.build(),
-      actions: [],
       userAccess: 'LIMITED',
       limitedAccess: null,
     })
@@ -31,6 +30,24 @@ class CaseFactory extends Factory<Case> {
   unknownAccess() {
     return this.limitedAccess().params({
       userAccess: 'UNKNOWN',
+    })
+  }
+
+  settled() {
+    return this.params({
+      accommodationSummaries: accommodationSummariesFactory.confirmed().build(),
+    })
+  }
+
+  riskOfNfa() {
+    return this.params({
+      accommodationSummaries: accommodationSummariesFactory.riskOfNfa().build(),
+    })
+  }
+
+  nfa() {
+    return this.params({
+      accommodationSummaries: accommodationSummariesFactory.nfa().build(),
     })
   }
 }
@@ -47,8 +64,8 @@ export default CaseFactory.define(() => {
     riskLevel: riskLevel(),
     pncReference: pncReference(),
     assignedTo: assignedUserFactory.build(),
-    actions: actionFactory.buildList(faker.number.int({ min: 0, max: 3 })),
     userAccess: 'FULL' as const,
     limitedAccess: false,
+    accommodationSummaries: accommodationSummariesFactory.build(),
   }
 })

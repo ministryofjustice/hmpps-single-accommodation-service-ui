@@ -15,7 +15,6 @@ import {
 } from './dutyToRefer'
 import * as validationUtils from './validation'
 import {
-  actionFactory,
   assignedUserFactory,
   auditRecordFactory,
   caseFactory,
@@ -161,10 +160,6 @@ describe('duty to refer utils', () => {
       surname: 'Smith',
       dateOfBirth: '1990-01-15',
       prisonNumber: 'A1234BC',
-      actions: [
-        actionFactory.build({ type: 'SUBMIT_CRS_REFERRAL', startDate: '2026-11-01' }),
-        actionFactory.build({ type: 'START_APPROVED_PREMISE_APPLICATION', startDate: null }),
-      ],
     })
 
     it('formats case data without duty to refer', () => {

@@ -2,15 +2,21 @@ import { CaseDto } from '@sas/api'
 import {
   caseAssignedTo,
   casesResultsSummary,
+  casesTabs,
   casesToRows,
   personCell,
   queryToFilters,
   actionsCell,
   displayName,
   assignedToOptions,
+  updateQueryParams,
+  removeQueryParam,
 } from './cases'
+import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
+import { statusCell } from './macros'
 import { actionFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
 import * as staffUtils from './staff'
+import config from '../config'
 
 describe('cases utilities', () => {
   beforeEach(() => {
@@ -110,26 +116,76 @@ describe('cases utilities', () => {
   })
 
   describe('casesToRows', () => {
+    beforeEach(() => {
+      config.flags.caseListV2 = false
+    })
+
     it('returns formatted rows for a given list of cases', () => {
       const cases = caseFactory.buildList(1)
 
       expect(casesToRows(cases)).toEqual([[{ html: personCell(cases[0]) }]])
     })
 
-    it('returns a formatted row for a case assigned to the current user', () => {
-      const cases = caseFactory.buildList(1, {
-        assignedTo: assignedUserFactory.build({ username: 'CURRENT_USER', forename: 'Jane', surname: 'Doe' }),
+    describe('when the case list v2 flag is enabled', () => {
+      beforeEach(() => {
+        config.flags.caseListV2 = true
       })
 
-      expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'You (Jane Doe)'))
-    })
-
-    it('returns a formatted row for a case assigned to another user', () => {
-      const cases = caseFactory.buildList(1, {
-        assignedTo: assignedUserFactory.build({ username: 'ANOTHER_USER', forename: 'Dave', surname: 'Grant' }),
+      afterEach(() => {
+        jest.restoreAllMocks()
       })
 
-      expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'Dave Grant'))
+      it('returns a formatted row with accommodation and status columns', () => {
+        const cases = caseFactory.settled().buildList(1)
+        const accommodationStatus = accommodationStatusCell(cases[0])
+
+        expect(casesToRows(cases)).toEqual([
+          [
+            { html: personCell(cases[0]) },
+            { html: accommodationCell('current', cases[0]) },
+            { html: accommodationCell('next', cases[0]) },
+            { html: accommodationStatus ? statusCell(accommodationStatus) : '' },
+          ],
+        ])
+      })
+
+      it('returns a formatted row for a case assigned to the current user', () => {
+        const cases = caseFactory.buildList(1, {
+          assignedTo: assignedUserFactory.build({ username: 'CURRENT_USER', forename: 'Jane', surname: 'Doe' }),
+        })
+
+        expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'You (Jane Doe)'))
+      })
+
+      it('returns a formatted row for a case assigned to another user', () => {
+        const cases = caseFactory.buildList(1, {
+          assignedTo: assignedUserFactory.build({ username: 'ANOTHER_USER', forename: 'Dave', surname: 'Grant' }),
+        })
+
+        expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'Dave Grant'))
+      })
+
+      it('renders "None" for both accommodation columns when a case is no fixed abode', () => {
+        const cases = caseFactory.nfa().buildList(1)
+        const accommodationStatus = accommodationStatusCell(cases[0])
+
+        expect(casesToRows(cases)).toEqual([
+          [
+            { html: personCell(cases[0]) },
+            { html: 'No accommodation' },
+            { html: 'None' },
+            { html: statusCell(accommodationStatus) },
+          ],
+        ])
+      })
+
+      it('renders fallback values when accommodation summaries is undefined', () => {
+        const cases = caseFactory.buildList(1, { accommodationSummaries: undefined })
+
+        expect(casesToRows(cases)).toEqual([
+          [{ html: personCell(cases[0]) }, { html: 'No accommodation' }, { html: 'None' }, { html: '' }],
+        ])
+      })
     })
   })
 
@@ -297,6 +353,73 @@ describe('cases utilities', () => {
         { value: '', text: 'You (A. Smith)' },
         { value: 'team-one-code', text: 'Team One' },
         { value: 'team-two-code', text: 'Team Two' },
+      ])
+    })
+  })
+
+  describe('updateQueryParams', () => {
+    it('adds a query param', () => {
+      expect(updateQueryParams('/baseurl?one=1', { foo: 'bar' })).toEqual('/baseurl?one=1&foo=bar')
+    })
+    it('updates an existing query param', () => {
+      expect(updateQueryParams('/baseurl?foo=bar', { foo: 'baz' })).toEqual('/baseurl?foo=baz')
+    })
+
+    it('leaves existing query params unchanged', () => {
+      expect(updateQueryParams('/baseurl?foo=bar&baz=qux', { quux: 'quuz' })).toEqual(
+        '/baseurl?foo=bar&baz=qux&quux=quuz',
+      )
+    })
+
+    it.each(['', false, null, undefined])('removes a query param when its value is set to %s', newValue => {
+      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: newValue })).toEqual('/baseurl?bar=baz')
+    })
+
+    it('only returns the path when there are no query parameters left', () => {
+      expect(updateQueryParams('/baseurl?foo=bar&bar=baz', { foo: null, bar: null })).toEqual('/baseurl')
+    })
+  })
+
+  describe('removeQueryParam', () => {
+    it('removes the given query parameter from the query string', () => {
+      expect(removeQueryParam('/baseurl?foo=bar&bar=baz', 'foo')).toEqual('/baseurl?bar=baz')
+    })
+  })
+
+  describe('casesTabs', () => {
+    it('returns both tabs with the nfarisk tab selected', () => {
+      expect(casesTabs('/', 'nfarisk')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=nfarisk', selected: true },
+        { text: 'Settled housing secured', href: '/?peopleType=housed', selected: false },
+      ])
+    })
+
+    it('returns both tabs with the housed tab selected', () => {
+      expect(casesTabs('/', 'housed')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=nfarisk', selected: false },
+        { text: 'Settled housing secured', href: '/?peopleType=housed', selected: true },
+      ])
+    })
+
+    it('preserves existing filters in the tab hrefs', () => {
+      expect(casesTabs('/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one', 'nfarisk')).toEqual([
+        {
+          text: 'Housing support needed',
+          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=nfarisk',
+          selected: true,
+        },
+        {
+          text: 'Settled housing secured',
+          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=housed',
+          selected: false,
+        },
+      ])
+    })
+
+    it('replaces an existing peopleType param rather than duplicating it', () => {
+      expect(casesTabs('/?peopleType=housed&searchTerm=foo', 'housed')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=nfarisk&searchTerm=foo', selected: false },
+        { text: 'Settled housing secured', href: '/?peopleType=housed&searchTerm=foo', selected: true },
       ])
     })
   })

@@ -6,7 +6,7 @@ export default class AddPropAddressPage {
   async expectPage() {
     await expect(
       this.page.getByRole('heading', {
-        name: 'What is the address',
+        name: 'Find an address',
         level: 1,
       }),
     ).toBeVisible()

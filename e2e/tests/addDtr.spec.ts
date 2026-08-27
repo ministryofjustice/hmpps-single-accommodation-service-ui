@@ -99,9 +99,10 @@ test('Previous DTR referral is withdrawn when a new referral is added', async ({
 
   // AND the first referral appears in referral history as withdrawn
   await caseDetailsPage.expectDtrReferralInHistory({
-    referredBy: 'You (SAS TestUser)',
+    referredBy: 'You (SAS TestUserE2E)',
     status: 'Withdrawn',
     submissionDate: '15 July 2026',
     localAuthority: 'Aberdeen City',
+    reason: 'Replaced by a new referral',
   })
 })

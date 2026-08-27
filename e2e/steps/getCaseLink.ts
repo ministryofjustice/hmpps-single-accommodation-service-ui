@@ -10,7 +10,6 @@ import { refreshUntil } from '../utils/refreshUntil'
 // eslint-disable-next-line import/prefer-default-export
 export const getCaseLink = async (page: Page, caseData: TestCase) => {
   const [forename, surname] = caseData.name.split(' ')
-
   const caseLink = page.getByRole('link', { name: `${surname}, ${forename}` })
 
   await refreshUntil(page, () => expect(caseLink).toBeVisible(), {

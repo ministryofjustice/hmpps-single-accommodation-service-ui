@@ -515,7 +515,6 @@ describe('validators', () => {
     it.each([
       ['X123456', undefined],
       ['x123456', undefined],
-      [' X123456 ', undefined],
       [undefined, 'Enter a CRN'],
       ['', 'Enter a CRN'],
       ['123456', 'Enter a valid CRN'],

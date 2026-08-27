@@ -151,7 +151,7 @@ export const assignedToOptions = (fullName: string, teams: Team[]): SelectOption
 
 export const validateSearchCrn = (req: Request, crn?: string) => {
   const errors: Record<string, string> = {
-    crn: validateCrn(crn),
+    searchTerm: validateCrn(crn),
   }
   return validateAndFlashErrors(req, errors)
 }

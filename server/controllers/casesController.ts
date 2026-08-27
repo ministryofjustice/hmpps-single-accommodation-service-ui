@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
+import { CaseDto } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import {
@@ -29,7 +30,6 @@ import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import { setCaseListUrl } from '../utils/backlinks'
 import { breadcrumbs } from '../utils/breadcrumbs'
-import { CaseDto } from '@sas/api'
 
 export default class CasesController {
   constructor(
@@ -93,7 +93,7 @@ export default class CasesController {
           const { data: casesData } = await this.casesService.getCases(token, { ...req.query })
           cases = casesData
         } catch {
-          addErrorToFlash(req, 'searchTerm', 'There is a problem, Enter a valid CRN')
+          addErrorToFlash(req, 'searchTerm', 'Enter a valid CRN')
         }
       }
 

@@ -11,13 +11,14 @@ import {
   displayName,
   assignedToOptions,
   casesTabs,
+  validateSearchCrn,
+  searchResultsSummary,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
-import uiPaths from '../paths/ui'
-import { addErrorToFlash } from '../utils/validation'
+import { addErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
@@ -28,6 +29,7 @@ import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import { setCaseListUrl } from '../utils/backlinks'
 import { breadcrumbs } from '../utils/breadcrumbs'
+import { CaseDto } from '@sas/api'
 
 export default class CasesController {
   constructor(
@@ -81,13 +83,29 @@ export default class CasesController {
   }
 
   search(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      const { crn } = req.query
-      if (!crn) {
-        addErrorToFlash(req, 'crn', 'Enter a CRN')
-        return res.redirect(uiPaths.cases.index({}))
+    return async (req: IndexRequest, res: Response) => {
+      const { searchTerm } = req.query
+      let cases: CaseDto[] = []
+
+      if (searchTerm && validateSearchCrn(req, searchTerm)) {
+        try {
+          const { token } = res.locals.user
+          const { data: casesData } = await this.casesService.getCases(token, { ...req.query })
+          cases = casesData
+        } catch {
+          addErrorToFlash(req, 'searchTerm', 'There is a problem, Enter a valid CRN')
+        }
       }
-      return res.redirect(uiPaths.cases.show({ crn: crn as string }))
+
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
+      return res.render('pages/search', {
+        crn: searchTerm,
+        resultsSummary: searchResultsSummary(searchTerm, cases),
+        casesTableColumns: casesTableColumns(),
+        casesRows: casesToRows(cases),
+        errors,
+        errorSummary,
+      })
     }
   }
 

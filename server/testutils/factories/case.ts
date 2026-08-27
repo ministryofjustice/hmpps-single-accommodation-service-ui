@@ -66,5 +66,6 @@ export default CaseFactory.define(() => {
     assignedTo: assignedUserFactory.build(),
     userAccess: 'FULL' as const,
     limitedAccess: false,
+    accommodationSummaries: accommodationSummariesFactory.build(),
   }
 })

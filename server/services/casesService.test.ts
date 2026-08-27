@@ -39,4 +39,16 @@ describe('CasesService', () => {
     expect(casesClient.getCase).toHaveBeenCalledWith(token, crn)
     expect(result).toEqual(response)
   })
+
+  it('should call searchByCrn on the api client with the correct parameters and return the case', async () => {
+    const response = apiResponseFactory.case()
+    const { crn } = response.data
+
+    casesClient.searchByCrn.mockResolvedValue(response)
+
+    const result = await casesService.searchByCrn(token, crn)
+
+    expect(casesClient.searchByCrn).toHaveBeenCalledWith(token, crn)
+    expect(result).toEqual(response)
+  })
 })

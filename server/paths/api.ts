@@ -9,6 +9,7 @@ const dutyToReferPath = casePath.path('dtr')
 export default {
   cases: {
     index: path('/case-list'),
+    search: path('/search/:crn'),
     show: casePath,
     accommodation: {
       summary: accommodationPath.path('summary'),

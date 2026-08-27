@@ -6,6 +6,7 @@ import CasesService from '../services/casesService'
 import {
   casesResultsSummary,
   casesToRows,
+  caseToRows,
   caseAssignedTo,
   casesTableColumns,
   queryToFilters,
@@ -85,13 +86,18 @@ export default class CasesController {
   search(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { searchTerm } = req.query
-      let cases: CaseDto[] = []
+      let caseData: CaseDto | null = null
 
-      if (searchTerm && validateSearchCrn(req, searchTerm)) {
+      await this.auditService.logPageView(Page.CASES_SEARCH, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      if (searchTerm != null && validateSearchCrn(req, searchTerm)) {
         try {
           const { token } = res.locals.user
-          const { data: casesData } = await this.casesService.getCases(token, { ...req.query })
-          cases = casesData
+          const { data } = await this.casesService.searchByCrn(token, searchTerm)
+          caseData = data
         } catch {
           addErrorToFlash(req, 'searchTerm', 'Enter a valid CRN')
         }
@@ -100,9 +106,9 @@ export default class CasesController {
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       return res.render('pages/search', {
         crn: searchTerm,
-        resultsSummary: searchResultsSummary(searchTerm, cases),
+        resultsSummary: !errors.length ? searchResultsSummary(searchTerm, caseData) : undefined,
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
+        casesRows: caseToRows(caseData),
         errors,
         errorSummary,
       })

@@ -2,6 +2,7 @@ import HmppsAuditClient, { AuditEvent } from '../data/hmppsAuditClient'
 
 export enum Page {
   CASES_LIST = 'CASES_LIST',
+  CASES_SEARCH = 'CASES_SEARCH',
   CASE_PROFILE_TRACKER = 'CASE_PROFILE_TRACKER',
 
   ADD_PROPOSED_ADDRESS_LOOKUP = 'ADD_PROPOSED_ADDRESS_LOOKUP',

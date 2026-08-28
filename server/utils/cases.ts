@@ -41,7 +41,7 @@ export const casesResultsSummary = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
 
 export const searchResultsSummary = (searchTerm?: string, caseData?: Case): string | undefined =>
-  searchTerm ? `${caseData ? "Result for '" : "0 results for '"}${searchTerm}'` : undefined
+  searchTerm ? `${caseData ? `Result for ‘${searchTerm}’` : `0 results for ‘${searchTerm}’`}` : undefined
 
 export const queryToFilters = (
   query: GetCasesQuery,
@@ -108,8 +108,7 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
     ]
   })
 
-export const caseToRows = (caseData: Case): TableRow[] =>
-  caseData ? casesToRows([caseData]) : []
+export const caseToRows = (caseData: Case): TableRow[] => (caseData ? casesToRows([caseData]) : [])
 
 export const casesTableColumns = () => {
   if (!config.flags.caseListV2) {

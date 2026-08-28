@@ -14,7 +14,7 @@ test.describe('Find a person', () => {
     await stubCaseListPage(cases)
     const searchCase = cases[0]
 
-    await casesApi.stubSearchByCrn(searchCase)
+    await casesApi.stubSearchByCrn(searchCase.crn, searchCase)
     await casesApi.stubGetCases(cases)
 
     await stubProfilePage({ crn: searchCase.crn, caseData: searchCase })
@@ -60,6 +60,7 @@ test.describe('Find a person', () => {
     const cases = [...Array(25)].map(() => caseFactory.build())
     await stubCaseListPage(cases)
     const searchTerm = 'X111111'
+    await casesApi.stubSearchByCrn(searchTerm)
 
     // WHEN I sign in
     await login(page)

@@ -51,22 +51,16 @@ export default {
   stubGetReferralHistory500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.referrals({ crn })),
   stubGetReferralHistoryUpstreamFailure: (crn: string): SuperAgentRequest =>
     stubApiUpstreamFailure(apiPaths.cases.referrals({ crn })),
-  stubSearchByCrn: (caseData?: Case): SuperAgentRequest => {
-    const searchCase = caseData || caseFactory.build()
-    return stubFor({
+  stubSearchByCrn: (crn: string, caseData?: Case): SuperAgentRequest =>
+    stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.search({ crn: searchCase.crn }),
+        urlPattern: apiPaths.cases.search({ crn }),
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.case(searchCase),
+        jsonBody: { data: caseData ?? null, upstreamFailures: [] },
       },
-    })
-  },
-  stubSearchByCrn404: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.search({ crn }), 'GET', 404),
-  stubSearchByCrn500: (crn: string): SuperAgentRequest => stubApiError(apiPaths.cases.search({ crn })),
-  stubSearchByCrnUpstreamFailure: (crn: string): SuperAgentRequest =>
-    stubApiUpstreamFailure(apiPaths.cases.search({ crn })),
+    }),
 }

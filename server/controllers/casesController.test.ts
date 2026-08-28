@@ -20,6 +20,7 @@ import {
   casesTableColumns,
   casesTabs,
   casesToRows,
+  caseToRows,
   queryToFilters,
 } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
@@ -164,6 +165,10 @@ describe('casesController', () => {
 
       await casesController.search()(request, response, next)
 
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.CASES_SEARCH, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
       expect(casesService.getCases).not.toHaveBeenCalled()
       expect(response.render).toHaveBeenCalledWith('pages/search', {
         casesRows: [],
@@ -177,18 +182,35 @@ describe('casesController', () => {
 
     it('renders the search page when a valid CRN is provided', async () => {
       request.query = { searchTerm: 'X123456' }
-      casesService.getCases.mockResolvedValue(apiResponseFactory.caseList([]))
+      const caseData = caseFactory.build({ crn: 'X123456' })
+      casesService.searchByCrn.mockResolvedValue(apiResponseFactory.case(caseData))
+      await casesController.search()(request, response, next)
+
+      expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
+      expect(response.render).toHaveBeenCalledWith('pages/search', {
+        casesRows: caseToRows(caseData),
+        casesTableColumns: casesTableColumns(),
+        crn: 'X123456',
+        errors: {},
+        errorSummary: [],
+        resultsSummary: `Result for ‘X123456’`,
+      })
+    })
+
+    it('renders a 0 results summary when a valid CRN returns no case', async () => {
+      request.query = { searchTerm: 'X123456' }
+      casesService.searchByCrn.mockResolvedValue({ data: null, upstreamFailures: [] })
 
       await casesController.search()(request, response, next)
 
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { searchTerm: 'X123456' })
+      expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
       expect(response.render).toHaveBeenCalledWith('pages/search', {
         casesRows: [],
         casesTableColumns: casesTableColumns(),
         crn: 'X123456',
         errors: {},
         errorSummary: [],
-        resultsSummary: "0 results for 'X123456'",
+        resultsSummary: `0 results for ‘X123456’`,
       })
     })
 
@@ -211,31 +233,7 @@ describe('casesController', () => {
         crn: 'not-a-crn',
         errors,
         errorSummary,
-        resultsSummary: "0 results for 'not-a-crn'",
-      })
-    })
-
-    it('shows an error summary when the API call fails for a valid CRN', async () => {
-      request.query = { searchTerm: 'X123456' }
-      casesService.getCases.mockRejectedValue(new Error('bad request'))
-      const errors = { searchTerm: { text: 'Enter a valid CRN' } }
-      const errorSummary = [{ text: 'Enter a valid CRN', href: '#searchTerm' }]
-      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput: {} })
-
-      await casesController.search()(request, response, next)
-
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { searchTerm: 'X123456' })
-      expect(request.flash).toHaveBeenCalledWith(
-        'errors',
-        JSON.stringify({ searchTerm: { text: 'Enter a valid CRN' } }),
-      )
-      expect(response.render).toHaveBeenCalledWith('pages/search', {
-        casesRows: [],
-        casesTableColumns: casesTableColumns(),
-        crn: 'X123456',
-        errors,
-        errorSummary,
-        resultsSummary: "0 results for 'X123456'",
+        resultsSummary: `0 results for ‘not-a-crn’`,
       })
     })
   })

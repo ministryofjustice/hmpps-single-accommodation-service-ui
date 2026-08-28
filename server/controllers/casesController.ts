@@ -20,7 +20,7 @@ import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
-import { addErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import { fetchErrorsAndUserInput } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
@@ -94,13 +94,9 @@ export default class CasesController {
       })
 
       if (searchTerm != null && validateSearchCrn(req, searchTerm)) {
-        try {
-          const { token } = res.locals.user
-          const { data } = await this.casesService.searchByCrn(token, searchTerm)
-          caseData = data
-        } catch {
-          addErrorToFlash(req, 'searchTerm', 'Enter a valid CRN')
-        }
+        const { token } = res.locals.user
+        const { data } = await this.casesService.searchByCrn(token, searchTerm)
+        caseData = data
       }
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)

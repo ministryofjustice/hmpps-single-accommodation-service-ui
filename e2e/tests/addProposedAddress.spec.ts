@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../test'
 import { signIn } from '../steps/signIn'
 import CaseDetailsPage from '../pages/caseDetailsPage'
@@ -35,50 +34,36 @@ test('Can add and confirm a proposed address', async ({
 
   // AND I enter the address details
   const addPropAddressPage = new AddPropAddressPage(page)
-  await addPropAddressPage.expectPage()
+  await addPropAddressPage.expectPageToBeDisplayed()
   await addPropAddressPage.enterAddress(propertyNameOrNumber, postcode)
-
-  // // Pause before clicking Find address
-  // await page.pause()
-
   await addPropAddressPage.findAddress()
-  await expect(page).not.toHaveURL(/\/not-authorised/)
-
-  // console.log('URL after Find address:', page.url())
-  //
-  // console.log(
-  //   'Page heading after Find address:',
-  //   await page.getByRole('heading', { level: 1 }).first().textContent(),
-  // )
-  //
-  // await page.pause()
 
   // AND I confirm the selected address
   const selectAddressPage = new SelectAddressPage(page)
-  await selectAddressPage.expectPage()
+  await selectAddressPage.expectPageToBeDisplayed()
   await selectAddressPage.continue()
 
   // AND I select the living arrangement
   const livingArrangementPage = new LivingArrangementPage(page)
-  await livingArrangementPage.expectPage()
+  await livingArrangementPage.expectPageToBeDisplayed()
   await livingArrangementPage.selectLivingArrangement('Owner of the property')
   await livingArrangementPage.continue()
 
   // AND I mark the address checks as passed
   const addressStatusCheckPage = new AddressStatusCheckPage(page)
-  await addressStatusCheckPage.expectPage()
+  await addressStatusCheckPage.expectPageToBeDisplayed()
   await addressStatusCheckPage.selectPassed()
   await addressStatusCheckPage.continue()
 
   // AND I confirm the address as the next address
   const confirmAddressPage = new ConfirmAddressPage(page)
-  await confirmAddressPage.expectPage()
+  await confirmAddressPage.expectPageToBeDisplayed()
   await confirmAddressPage.confirmAddress()
   await confirmAddressPage.continue()
 
   // THEN I save the proposed address
   const checkAnswersPage = new CheckAnswersPage(page)
-  await checkAnswersPage.expectPage()
+  await checkAnswersPage.expectPageToBeDisplayed()
   await checkAnswersPage.save()
 
   // THEN I should return to the case details page and see the confirmed proposed address
@@ -92,7 +77,7 @@ test('Can add and confirm a proposed address', async ({
 
   // AND I confirm the person has moved into this address
   const confirmCurrentAddressPage = new ConfirmCurrentAddressPage(page)
-  await confirmCurrentAddressPage.expectPage()
+  await confirmCurrentAddressPage.expectPageToBeDisplayed()
   await confirmCurrentAddressPage.confirmCurrentAddress()
 
   // THEN I should see the address in Current accommodation

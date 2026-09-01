@@ -3,7 +3,7 @@ import { expect, Page } from '@playwright/test'
 export default class SelectAddressPage {
   constructor(private readonly page: Page) {}
 
-  async expectPage() {
+  async expectPageToBeDisplayed() {
     await expect(
       this.page.getByRole('heading', {
         name: 'Confirm address',

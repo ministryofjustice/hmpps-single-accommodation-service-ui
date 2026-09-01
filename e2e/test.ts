@@ -16,8 +16,3 @@ export const test = base.extend<TestOptions>({
 })
 
 export { expect }
-
-// Users
-// API clients
-// Page objects
-// Services

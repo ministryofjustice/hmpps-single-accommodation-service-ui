@@ -8,6 +8,7 @@ export const serviceStatusTag = (status?: ServiceResult['serviceStatus']): Statu
     NOT_ELIGIBLE: { text: 'Not eligible', colour: 'grey' },
     CANNOT_START_YET: { text: 'Cannot start yet', colour: 'grey' },
     UPCOMING: { text: 'Upcoming', colour: 'yellow' },
+    STARTED: { text: 'Started', colour: 'green' },
     NOT_STARTED: { text: 'Not started', colour: 'orange' },
     NOT_SUBMITTED: { text: 'Not submitted', colour: 'red' },
     INFO_REQUESTED: { text: 'Info requested', colour: 'yellow' },

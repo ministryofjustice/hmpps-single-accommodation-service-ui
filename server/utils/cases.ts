@@ -108,7 +108,7 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
     ]
   })
 
-export const caseToRows = (caseData: Case): TableRow[] => (caseData ? casesToRows([caseData]) : [])
+export const caseToRows = (caseData: Case | null): TableRow[] => (caseData ? casesToRows([caseData]) : [])
 
 export const casesTableColumns = () => {
   if (!config.flags.caseListV2) {

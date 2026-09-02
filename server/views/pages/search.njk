@@ -45,6 +45,9 @@
     <div class="govuk-grid-column-full-from-desktop">
       {% if resultsSummary %}
         <h2 id="case-list-summary" class="govuk-heading-m govuk-!-margin-top-6">{{ resultsSummary }}</h2>
+        {% if not casesRows.length %}
+          <p>Check the details and try again.</p>
+        {% endif %}
       {% endif %}
       {% if casesRows and casesRows.length %}
         {{

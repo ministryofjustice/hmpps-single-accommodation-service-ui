@@ -18,7 +18,7 @@
 {% block govukHeader %}
   {{ feComponents.header | safe }}
   {{ govukServiceNavigation({
-    serviceName: "Find and manage accommodation",
+    serviceName: applicationName,
     serviceUrl: "/",
     navigation: [
       {

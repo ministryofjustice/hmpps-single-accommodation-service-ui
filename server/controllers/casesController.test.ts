@@ -233,7 +233,7 @@ describe('casesController', () => {
         crn: 'not-a-crn',
         errors,
         errorSummary,
-        resultsSummary: `0 results for ‘not-a-crn’`,
+        resultsSummary: undefined,
       })
     })
   })

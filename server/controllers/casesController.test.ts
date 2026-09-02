@@ -197,6 +197,24 @@ describe('casesController', () => {
       })
     })
 
+    it('renders the search page when a CRN is saved in session', async () => {
+      request.query = {}
+      request.session.searchTerm = 'X123456'
+      const caseData = caseFactory.build({ crn: 'X123456' })
+      casesService.searchByCrn.mockResolvedValue(apiResponseFactory.case(caseData))
+
+      await casesController.search()(request, response, next)
+
+      expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          crn: 'X123456',
+          resultsSummary: `Result for ‘X123456’`,
+        }),
+      )
+    })
+
     it('renders a 0 results summary when a valid CRN returns no case', async () => {
       request.query = { searchTerm: 'X123456' }
       casesService.searchByCrn.mockResolvedValue({ data: null, upstreamFailures: [] })

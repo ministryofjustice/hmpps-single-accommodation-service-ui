@@ -7,6 +7,7 @@ import crsServiceResultFactory from './crsServiceResult'
 
 export default Factory.define<EligibilityDto>(() => {
   const cas1 = { serviceResult: serviceResultFactory.build() }
+  const cas2 = { serviceResult: serviceResultFactory.build() }
   const cas3 = { serviceResult: serviceResultFactory.build() }
   const crs = crsServiceResultFactory.build()
   const dtr = dtrServiceResultFactory.build()
@@ -14,8 +15,9 @@ export default Factory.define<EligibilityDto>(() => {
 
   return {
     crn: crn(),
-    caseActions: [cas1, cas3, crs, dtr, pa].flatMap(result => result.serviceResult.action).filter(Boolean),
+    caseActions: [cas1, cas2, cas3, crs, dtr, pa].flatMap(result => result.serviceResult.action).filter(Boolean),
     cas1,
+    cas2,
     cas3,
     crs,
     dtr,

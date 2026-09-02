@@ -8,6 +8,7 @@ export type ServiceResult = {
     | 'NOT_REQUIRED'
     | 'NOT_ELIGIBLE'
     | 'UPCOMING'
+    | 'STARTED'
     | 'NOT_STARTED'
     | 'NOT_SUBMITTED'
     | 'INFO_REQUESTED'
@@ -34,7 +35,13 @@ export type ServiceResult = {
   action?: CaseAction | null
   link?: string | null
   url?: string | null
-  linkType?: 'CAS1_START_APPLICATION' | 'CAS1_VIEW_APPLICATION' | 'CAS3_START_REFERRAL' | 'CAS3_VIEW_REFERRAL'
+  linkType?:
+    | 'CAS1_START_APPLICATION'
+    | 'CAS1_VIEW_APPLICATION'
+    | 'CAS2_START_APPLICATION'
+    | 'CAS2_VIEW_APPLICATION'
+    | 'CAS3_START_REFERRAL'
+    | 'CAS3_VIEW_REFERRAL'
   failureReasons: Array<
     | 'S_TIER'
     | 'MALE_NOT_HIGH_RISK_TIER'

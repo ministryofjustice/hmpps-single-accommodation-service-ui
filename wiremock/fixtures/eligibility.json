@@ -8,6 +8,12 @@
         "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
       }
     },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+      }
+    },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
@@ -69,6 +75,12 @@
         }
       }
     },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "UPCOMING",
+        "failureReasons": []
+      }
+    },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "UPCOMING",
@@ -127,6 +139,13 @@
         "url": "https://cas1/start"
       }
     },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://cas2/start"
+      }
+    },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "NOT_STARTED",
@@ -170,6 +189,13 @@
         "serviceStatus": "SUBMITTED",
         "failureReasons": [],
         "url": "https://cas1/view"
+      }
+    },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "failureReasons": [],
+        "url": "https://cas2/view"
       }
     },
     "cas3": {
@@ -229,6 +255,13 @@
         "url": "https://cas1/start-new"
       }
     },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "APPLICATION_REJECTED",
+        "failureReasons": [],
+        "url": "https://cas2/start-new"
+      }
+    },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "REJECTED",
@@ -281,6 +314,13 @@
         "serviceStatus": "INFO_REQUESTED",
         "failureReasons": [],
         "url": "https://cas1/view"
+      }
+    },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "INFO_REQUESTED",
+        "failureReasons": [],
+        "url": "https://cas2/view"
       }
     },
     "cas3": {
@@ -340,6 +380,13 @@
         "url": "https://cas1/view"
       }
     },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "SUBMITTED",
+        "failureReasons": [],
+        "url": "https://cas2/view"
+      }
+    },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "BOOKING_CONFIRMED",
@@ -393,6 +440,13 @@
         "url": "https://cas1/create-new-placement-request"
       }
     },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://cas2/start"
+      }
+    },
     "cas3": {
       "serviceResult": {
         "serviceStatus": "BOOKING_CANCELLED",
@@ -427,6 +481,12 @@
     "crn": "L247269",
     "caseActions": [],
     "cas1": {
+      "serviceResult": {
+        "serviceStatus": "NOT_ELIGIBLE",
+        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+      }
+    },
+    "cas2": {
       "serviceResult": {
         "serviceStatus": "NOT_ELIGIBLE",
         "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
@@ -474,6 +534,13 @@
         "serviceStatus": "PLACEMENT_REQUEST_NOT_STARTED",
         "failureReasons": [],
         "url": "https://cas1/create-placement-request"
+      }
+    },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://cas2/start"
       }
     },
     "cas3": {

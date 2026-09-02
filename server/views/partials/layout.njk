@@ -17,10 +17,8 @@
 
 {% block govukHeader %}
   {{ feComponents.header | safe }}
-  {{ govukServiceNavigation({
-    serviceName: applicationName,
-    serviceUrl: "/",
-    navigation: [
+  {% if featureFlags.caseListV2 %}
+    {% set navigation = [
       {
         href: paths.cases.index(),
         text: "Case list",
@@ -31,7 +29,14 @@
         text: "Search",
         active: activePage == "search"
       }
-    ]
+    ] %}
+  {% else %}
+    {% set navigation = [] %}
+  {% endif %}
+  {{ govukServiceNavigation({
+    serviceName: applicationName,
+    serviceUrl: "/",
+    navigation: navigation
   }) }}
 
   {% set phaseBannerHtml %}

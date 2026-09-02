@@ -62,19 +62,12 @@ export default class CaseDetailsPage {
     await expect(this.crsCard().locator('.govuk-tag')).toHaveText(status)
   }
 
-  async expectStartCrsReferralLink() {
+  async expectStartCrsReferralLink(crsUrl: string) {
     const startReferralLink = this.crsCard().getByRole('link', {
       name: 'Start referral',
     })
 
     await expect(startReferralLink).toBeVisible()
-
-    const crsUrl = process.env.SAS_E2E_CRS_URL
-
-    if (!crsUrl) {
-      throw new Error('SAS_E2E_CRS_URL is not configured')
-    }
-
     await expect(startReferralLink).toHaveAttribute('href', crsUrl)
   }
 

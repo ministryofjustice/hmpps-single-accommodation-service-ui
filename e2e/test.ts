@@ -13,6 +13,9 @@ export const test = base.extend<TestOptions>({
       name: process.env.SAS_E2E_BASE_CASE_NAME,
     },
   },
+  serviceUrls: {
+    crs: process.env.SAS_E2E_CRS_URL,
+  },
 })
 
 export { expect }

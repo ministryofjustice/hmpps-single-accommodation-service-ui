@@ -3,7 +3,12 @@ import { signIn } from '../steps/signIn'
 import { getCaseLink } from '../steps/getCaseLink'
 import CaseDetailsPage from '../pages/caseDetailsPage'
 
-test.skip('CRS status is Not required', async ({ page, users: { probation: probationUser }, cases: { BASE_CASE } }) => {
+test.skip('CRS status is Not required', async ({
+  page,
+  users: { probation: probationUser },
+  cases: { BASE_CASE },
+  serviceUrls: { crs },
+}) => {
   // GIVEN I sign in as a probation user
   await signIn(page, probationUser)
 
@@ -18,5 +23,5 @@ test.skip('CRS status is Not required', async ({ page, users: { probation: proba
   await caseDetailsPage.expectCrsStatus('Not required')
 
   // AND the Start referral link should point to the CRS service
-  await caseDetailsPage.expectStartCrsReferralLink()
+  await caseDetailsPage.expectStartCrsReferralLink(crs)
 })

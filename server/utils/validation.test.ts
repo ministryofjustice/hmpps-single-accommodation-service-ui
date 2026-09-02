@@ -20,6 +20,7 @@ import {
   validateDateNotBefore,
   validateDateField,
   validatePostcode,
+  validateCrn,
   validateDateWithinLastXMonths,
 } from './validation'
 
@@ -507,6 +508,21 @@ describe('validators', () => {
       ['M23', 'Enter a valid UK postcode'],
     ])('returns the expected error for value %s', (value, expected) => {
       expect(validatePostcode(value)).toBe(expected)
+    })
+  })
+
+  describe('validateCrn', () => {
+    it.each([
+      ['X123456', undefined],
+      ['x123456', undefined],
+      [undefined, 'Enter a CRN'],
+      ['', 'Enter a CRN'],
+      ['123456', 'Enter a valid CRN'],
+      ['XX12345', 'Enter a valid CRN'],
+      ['X12345', 'Enter a valid CRN'],
+      ['X1234567', 'Enter a valid CRN'],
+    ])('returns the expected error for value %s', (value, expected) => {
+      expect(validateCrn(value)).toBe(expected)
     })
   })
 })

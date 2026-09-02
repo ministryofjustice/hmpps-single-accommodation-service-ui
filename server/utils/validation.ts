@@ -90,6 +90,8 @@ export const validateAndFlashErrors = (
 
 const isValidUKPostcode = (postcode: string): boolean => /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i.test(postcode)
 
+const isValidCrn = (crn: string): boolean => /^[a-z]\d{6}$/i.test(crn)
+
 const aOrAn = (noun: string): string => (/^[aeiou]/i.test(noun) ? 'an' : 'a')
 
 const isBlank = (value: string | undefined): boolean => !value
@@ -226,4 +228,9 @@ export const validateDateField = (parts: DateFieldParts, label: string, yearLabe
 export const validatePostcode = (value: string | undefined): string | undefined => {
   if (!value) return 'Enter a UK postcode'
   return isValidUKPostcode(value) ? undefined : 'Enter a valid UK postcode'
+}
+
+export const validateCrn = (value: string | undefined): string | undefined => {
+  if (!value) return 'Enter a CRN'
+  return isValidCrn(value) ? undefined : 'Enter a valid CRN'
 }

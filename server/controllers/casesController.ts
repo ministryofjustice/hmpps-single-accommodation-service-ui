@@ -1,23 +1,26 @@
 import { Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
+import { CaseDto } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import {
   casesResultsSummary,
   casesToRows,
+  caseToRows,
   caseAssignedTo,
   casesTableColumns,
   queryToFilters,
   displayName,
   assignedToOptions,
   casesTabs,
+  validateSearchCrn,
+  searchResultsSummary,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import DutyToReferService from '../services/dutyToReferService'
-import uiPaths from '../paths/ui'
-import { addErrorToFlash } from '../utils/validation'
+import { fetchErrorsAndUserInput } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
 import { referralHistoryRows } from '../utils/referrals'
@@ -81,13 +84,33 @@ export default class CasesController {
   }
 
   search(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      const { crn } = req.query
-      if (!crn) {
-        addErrorToFlash(req, 'crn', 'Enter a CRN')
-        return res.redirect(uiPaths.cases.index({}))
+    return async (req: IndexRequest, res: Response) => {
+      const searchTerm = req.query.searchTerm ?? req.session.searchTerm
+      delete req.session.searchTerm
+      let caseData: CaseDto | null = null
+
+      await this.auditService.logPageView(Page.CASES_SEARCH, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const isValidSearchCrn = searchTerm != null && validateSearchCrn(req, searchTerm)
+      if (isValidSearchCrn) {
+        req.session.searchTerm = searchTerm
+        const { token } = res.locals.user
+        const { data } = await this.casesService.searchByCrn(token, searchTerm)
+        caseData = data
       }
-      return res.redirect(uiPaths.cases.show({ crn: crn as string }))
+
+      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
+      return res.render('pages/search', {
+        crn: searchTerm,
+        resultsSummary: isValidSearchCrn ? searchResultsSummary(searchTerm, caseData) : undefined,
+        casesTableColumns: casesTableColumns(),
+        casesRows: caseToRows(caseData),
+        errors,
+        errorSummary,
+      })
     }
   }
 

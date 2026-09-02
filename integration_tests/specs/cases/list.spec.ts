@@ -77,7 +77,7 @@ test.describe('List of cases', () => {
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, filteredCase)
 
     // WHEN I click on the Case list link
-    await profileTrackerPage.clickLink('Case list')
+    await profileTrackerPage.clickLink('Case list', page.locator('.govuk-breadcrumbs'))
 
     // THEN I should see the Case list page again
     await CasesListPage.verifyOnPage(page)

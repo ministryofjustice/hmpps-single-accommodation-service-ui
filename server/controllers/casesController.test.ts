@@ -20,6 +20,7 @@ import {
   casesTableColumns,
   casesTabs,
   casesToRows,
+  caseToRows,
   queryToFilters,
 } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
@@ -33,6 +34,7 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import * as backLinksUtils from '../utils/backlinks'
+import * as validationUtils from '../utils/validation'
 import { breadcrumbs } from '../utils/breadcrumbs'
 
 describe('casesController', () => {
@@ -147,6 +149,109 @@ describe('casesController', () => {
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases, 'user1'),
         query: request.query,
+      })
+    })
+  })
+
+  describe('search', () => {
+    beforeEach(() => {
+      jest
+        .spyOn(validationUtils, 'fetchErrorsAndUserInput')
+        .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
+    })
+
+    it('renders the search page', async () => {
+      request.query = {}
+
+      await casesController.search()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.CASES_SEARCH, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
+      expect(casesService.getCases).not.toHaveBeenCalled()
+      expect(response.render).toHaveBeenCalledWith('pages/search', {
+        casesRows: [],
+        casesTableColumns: casesTableColumns(),
+        crn: undefined,
+        errors: {},
+        errorSummary: [],
+        resultsSummary: undefined,
+      })
+    })
+
+    it('renders the search page when a valid CRN is provided', async () => {
+      request.query = { searchTerm: 'X123456' }
+      const caseData = caseFactory.build({ crn: 'X123456' })
+      casesService.searchByCrn.mockResolvedValue(apiResponseFactory.case(caseData))
+      await casesController.search()(request, response, next)
+
+      expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
+      expect(response.render).toHaveBeenCalledWith('pages/search', {
+        casesRows: caseToRows(caseData),
+        casesTableColumns: casesTableColumns(),
+        crn: 'X123456',
+        errors: {},
+        errorSummary: [],
+        resultsSummary: `Result for ‘X123456’`,
+      })
+    })
+
+    it('renders the search page when a CRN is saved in session', async () => {
+      request.query = {}
+      request.session.searchTerm = 'X123456'
+      const caseData = caseFactory.build({ crn: 'X123456' })
+      casesService.searchByCrn.mockResolvedValue(apiResponseFactory.case(caseData))
+
+      await casesController.search()(request, response, next)
+
+      expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          crn: 'X123456',
+          resultsSummary: `Result for ‘X123456’`,
+        }),
+      )
+    })
+
+    it('renders a 0 results summary when a valid CRN returns no case', async () => {
+      request.query = { searchTerm: 'X123456' }
+      casesService.searchByCrn.mockResolvedValue({ data: null, upstreamFailures: [] })
+
+      await casesController.search()(request, response, next)
+
+      expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
+      expect(response.render).toHaveBeenCalledWith('pages/search', {
+        casesRows: [],
+        casesTableColumns: casesTableColumns(),
+        crn: 'X123456',
+        errors: {},
+        errorSummary: [],
+        resultsSummary: `0 results for ‘X123456’`,
+      })
+    })
+
+    it('renders a validation error when the CRN is invalid', async () => {
+      request.query = { searchTerm: 'not-a-crn' }
+      const errors = { searchTerm: { text: 'Enter a valid CRN' } }
+      const errorSummary = [{ text: 'Enter a valid CRN', href: '#searchTerm' }]
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput: {} })
+
+      await casesController.search()(request, response, next)
+
+      expect(request.flash).toHaveBeenCalledWith(
+        'errors',
+        JSON.stringify({ searchTerm: { text: 'Enter a valid CRN' } }),
+      )
+      expect(casesService.getCases).not.toHaveBeenCalled()
+      expect(response.render).toHaveBeenCalledWith('pages/search', {
+        casesRows: [],
+        casesTableColumns: casesTableColumns(),
+        crn: 'not-a-crn',
+        errors,
+        errorSummary,
+        resultsSummary: undefined,
       })
     })
   })

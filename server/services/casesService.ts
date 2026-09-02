@@ -11,4 +11,8 @@ export default class CasesService {
   getCase(token: string, crn: string) {
     return this.casesClient.getCase(token, crn)
   }
+
+  searchByCrn(token: string, crn: string) {
+    return this.casesClient.searchByCrn(token, crn)
+  }
 }

@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import { CaseAction, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, SelectOption } from '@sas/ui'
@@ -7,6 +8,7 @@ import { renderActions } from './actions'
 import { staffName } from './staff'
 import config from '../config'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
+import { validateAndFlashErrors, validateCrn } from './validation'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -37,6 +39,9 @@ export const casesTabs = (
 
 export const casesResultsSummary = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
+
+export const searchResultsSummary = (searchTerm?: string, caseData?: Case): string | undefined =>
+  searchTerm ? `${caseData ? `Result for ‘${searchTerm}’` : `0 results for ‘${searchTerm}’`}` : undefined
 
 export const queryToFilters = (
   query: GetCasesQuery,
@@ -103,6 +108,8 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
     ]
   })
 
+export const caseToRows = (caseData: Case | null): TableRow[] => (caseData ? casesToRows([caseData]) : [])
+
 export const casesTableColumns = () => {
   if (!config.flags.caseListV2) {
     return [{ text: 'Name' }]
@@ -143,3 +150,10 @@ export const assignedToOptions = (fullName: string, teams: Team[]): SelectOption
   { text: `You (${initialiseName(fullName)})`, value: '' },
   ...teams.map(t => ({ text: t.name, value: t.code })),
 ]
+
+export const validateSearchCrn = (req: Request, crn?: string) => {
+  const errors: Record<string, string> = {
+    searchTerm: validateCrn(crn),
+  }
+  return validateAndFlashErrors(req, errors)
+}

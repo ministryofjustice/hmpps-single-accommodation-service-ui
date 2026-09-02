@@ -70,4 +70,11 @@ export default class CasesClient extends RestClient {
       asUser(token),
     )
   }
+
+  searchByCrn(token: string, crn: string) {
+    return this.get<ApiResponseDtoCaseDto>(
+      { path: apiPaths.cases.search({ crn }), timeout: config.timeoutOverrides.sasCasesApi },
+      asUser(token),
+    )
+  }
 }

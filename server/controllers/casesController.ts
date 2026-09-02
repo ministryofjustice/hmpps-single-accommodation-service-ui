@@ -85,7 +85,8 @@ export default class CasesController {
 
   search(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      const { searchTerm } = req.query
+      const searchTerm = req.query.searchTerm ?? req.session.searchTerm
+      delete req.session.searchTerm
       let caseData: CaseDto | null = null
 
       await this.auditService.logPageView(Page.CASES_SEARCH, {
@@ -95,6 +96,7 @@ export default class CasesController {
 
       const isValidSearchCrn = searchTerm != null && validateSearchCrn(req, searchTerm)
       if (isValidSearchCrn) {
+        req.session.searchTerm = searchTerm
         const { token } = res.locals.user
         const { data } = await this.casesService.searchByCrn(token, searchTerm)
         caseData = data

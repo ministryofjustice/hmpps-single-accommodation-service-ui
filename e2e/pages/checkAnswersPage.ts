@@ -1,0 +1,18 @@
+import { expect, Page } from '@playwright/test'
+
+export default class CheckAnswersPage {
+  constructor(private readonly page: Page) {}
+
+  async expectPageToBeDisplayed() {
+    await expect(
+      this.page.getByRole('heading', {
+        name: 'Check your answers before adding the address',
+        level: 1,
+      }),
+    ).toBeVisible()
+  }
+
+  async save() {
+    await this.page.getByRole('button', { name: 'Save' }).click()
+  }
+}

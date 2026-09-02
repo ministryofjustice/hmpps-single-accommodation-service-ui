@@ -72,6 +72,7 @@ jobs:
           SAS_E2E_PROBATION_USER_USERNAME: ${{ secrets.E2E_SAS_E2E_PROBATION_USER_USERNAME }}
           SAS_E2E_PROBATION_USER_PASSWORD: ${{ secrets.E2E_SAS_E2E_PROBATION_USER_PASSWORD }}
           SAS_E2E_BASE_CASE_NAME: ${{ env.BASE_CASE_NAME }}
+          SAS_E2E_CRS_URL: https://find-and-refer-intervention-dev.hmpps.service.justice.gov.uk
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
       - name: Teardown data

@@ -6,8 +6,15 @@ declare module '@sas/e2e' {
 
   type UserType = 'probation'
 
+  type TestCase = {
+    name: string
+  }
+
   type TestOptions = {
     users: Record<UserType, UserLoginDetails>
-    cases: Record<string, { name: string }>
+    cases: Record<string, TestCase>
+    serviceUrls: {
+      crs: string
+    }
   }
 }

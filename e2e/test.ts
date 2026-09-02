@@ -1,7 +1,6 @@
-import { test as base } from '@playwright/test'
+import { test as base, expect } from '@playwright/test'
 import { TestOptions } from '@sas/e2e'
 
-// eslint-disable-next-line import/prefer-default-export
 export const test = base.extend<TestOptions>({
   users: {
     probation: {
@@ -14,4 +13,9 @@ export const test = base.extend<TestOptions>({
       name: process.env.SAS_E2E_BASE_CASE_NAME,
     },
   },
+  serviceUrls: {
+    crs: process.env.SAS_E2E_CRS_URL,
+  },
 })
+
+export { expect }

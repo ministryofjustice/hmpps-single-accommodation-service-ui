@@ -69,10 +69,13 @@ export default class CaseDetailsPage {
 
     await expect(startReferralLink).toBeVisible()
 
-    await expect(startReferralLink).toHaveAttribute(
-      'href',
-      'https://find-and-refer-intervention-dev.hmpps.service.justice.gov.uk',
-    )
+    const crsUrl = process.env.SAS_E2E_CRS_URL
+
+    if (!crsUrl) {
+      throw new Error('SAS_E2E_CRS_URL is not configured')
+    }
+
+    await expect(startReferralLink).toHaveAttribute('href', crsUrl)
   }
 
   async clickStartCrsReferral() {

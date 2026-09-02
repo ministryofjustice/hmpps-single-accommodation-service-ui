@@ -1,6 +1,5 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% extends "partials/layout.njk" %}
@@ -22,7 +21,7 @@
       <form method="get" class="govuk-!-margin-bottom-0">
         {{
           govukInput({
-            label: { text: 'Find a person', classes: "govuk-label--l" },
+            label: { text: 'Find a person', classes: "govuk-label--l", isPageHeading: true },
             hint: { text: 'Search by CRN' },
             name: 'searchTerm',
             value: crn,

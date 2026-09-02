@@ -93,7 +93,8 @@ export default class CasesController {
         correlationId: req.id,
       })
 
-      if (searchTerm != null && validateSearchCrn(req, searchTerm)) {
+      const isValidSearchCrn = searchTerm != null && validateSearchCrn(req, searchTerm)
+      if (isValidSearchCrn) {
         const { token } = res.locals.user
         const { data } = await this.casesService.searchByCrn(token, searchTerm)
         caseData = data
@@ -102,7 +103,7 @@ export default class CasesController {
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       return res.render('pages/search', {
         crn: searchTerm,
-        resultsSummary: !errors.length ? searchResultsSummary(searchTerm, caseData) : undefined,
+        resultsSummary: isValidSearchCrn ? searchResultsSummary(searchTerm, caseData) : undefined,
         casesTableColumns: casesTableColumns(),
         casesRows: caseToRows(caseData),
         errors,

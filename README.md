@@ -42,6 +42,25 @@ docker compose up -d
 npm run start:dev
 ```
 
+### Running against a locally running SAS API
+
+You can also run the local service against a locally running SAS API and the externally running dev HMPPS Auth service.
+
+You will need to uncomment #HMPPS_AUTH_URL in your `.env` file:
+
+```dotenv
+# Uncomment the following to run the local app against the dev environment
+#SAS_API_URL=https://single-accommodation-service-api-dev.hmpps.service.justice.gov.uk
+HMPPS_AUTH_URL='https://sign-in-dev.hmpps.service.justice.gov.uk/auth'
+#SAS_ALLOWED_ROLES='ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER'
+```
+
+Then start the local service as normal:
+
+```shell
+npm run start:dev
+```
+
 ### Running against the dev stack
 
 You can also run the local service against the dev external service (HMPPS Auth and SAS API). You will need to uncomment the relevant lines in your `.env` file:
@@ -75,16 +94,6 @@ The JSON Wiremock fixtures are located in `wiremock/fixtures`. These should most
 
 ```shell
 ts-node wiremock/generateData.ts
-```
-
-### Running against a containerised local stack
-
-_**NOTE:** this method is not maintained and is only provided for reference purposes._
-
-First, bring up the local stack:
-
-```shell
-docker compose up --scale=app=0
 ```
 
 You can then start the SAS UI service:

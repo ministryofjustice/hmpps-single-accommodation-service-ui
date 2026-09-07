@@ -97,11 +97,11 @@ export default class CasesController {
 
       const isValidSearchCrn = searchTerm != null && validateSearchCrn(req, searchTerm)
       if (isValidSearchCrn) {
-        req.session.searchTerm = searchTerm
         const { token } = res.locals.user
         try {
           const { data } = await this.casesService.searchByCrn(token, searchTerm)
           caseData = data
+          req.session.searchTerm = searchTerm
         } catch (error) {
           if ((error as SanitisedError).responseStatus !== 404) {
             throw error

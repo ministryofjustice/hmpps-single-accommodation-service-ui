@@ -40,8 +40,8 @@ export const casesTabs = (
 export const casesResultsSummary = (cases: Case[]): string =>
   `${cases.length} ${cases.length === 1 ? 'person' : 'people'}`
 
-export const searchResultsSummary = (searchTerm?: string, caseData?: Case): string | undefined =>
-  searchTerm ? `${caseData ? `Result for ‘${searchTerm}’` : `0 results for ‘${searchTerm}’`}` : undefined
+export const searchResultsSummary = (searchTerm: string, caseData: Case | null): string =>
+  caseData ? `Result for ‘${searchTerm}’` : `0 results for ‘${searchTerm}’`
 
 export const queryToFilters = (
   query: GetCasesQuery,

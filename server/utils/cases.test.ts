@@ -11,6 +11,7 @@ import {
   assignedToOptions,
   updateQueryParams,
   removeQueryParam,
+  searchResultsSummary,
 } from './cases'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { statusCell } from './macros'
@@ -421,6 +422,16 @@ describe('cases utilities', () => {
         { text: 'Housing support needed', href: '/?peopleType=nfarisk&searchTerm=foo', selected: false },
         { text: 'Settled housing secured', href: '/?peopleType=housed&searchTerm=foo', selected: true },
       ])
+    })
+  })
+
+  describe('searchResultsSummary', () => {
+    it('returns result summary when case returned', () => {
+      expect(searchResultsSummary('X123456', caseFactory.build())).toBe('Result for ‘X123456’')
+    })
+
+    it('returns 0 results when case not found', () => {
+      expect(searchResultsSummary('X123456', null)).toBe('0 results for ‘X123456’')
     })
   })
 })

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import CasesController from './casesController'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
@@ -215,9 +216,11 @@ describe('casesController', () => {
       )
     })
 
-    it('renders a 0 results summary when a valid CRN returns no case', async () => {
+    it('renders a 0 results summary when a valid CRN returns a 404', async () => {
       request.query = { searchTerm: 'X123456' }
-      casesService.searchByCrn.mockResolvedValue({ data: null, upstreamFailures: [] })
+      const notFoundError: SanitisedError = new Error('Not found')
+      notFoundError.responseStatus = 404
+      casesService.searchByCrn.mockRejectedValue(notFoundError)
 
       await casesController.search()(request, response, next)
 
@@ -253,6 +256,17 @@ describe('casesController', () => {
         errorSummary,
         resultsSummary: undefined,
       })
+    })
+
+    it('throws an error when a valid CRN returns a non 404 error', async () => {
+      request.query = { searchTerm: 'X123456' }
+      const serverError: SanitisedError = new Error('Server error')
+      serverError.responseStatus = 500
+      casesService.searchByCrn.mockRejectedValue(serverError)
+
+      await expect(casesController.search()(request, response, next)).rejects.toThrow(serverError)
+
+      expect(response.render).not.toHaveBeenCalled()
     })
   })
 

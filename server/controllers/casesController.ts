@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { IndexRequest } from '@sas/ui'
 import { CaseDto } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
@@ -98,8 +99,14 @@ export default class CasesController {
       if (isValidSearchCrn) {
         req.session.searchTerm = searchTerm
         const { token } = res.locals.user
-        const { data } = await this.casesService.searchByCrn(token, searchTerm)
-        caseData = data
+        try {
+          const { data } = await this.casesService.searchByCrn(token, searchTerm)
+          caseData = data
+        } catch (error) {
+          if ((error as SanitisedError).responseStatus !== 404) {
+            throw error
+          }
+        }
       }
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)

@@ -306,7 +306,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects with a generic error if there are no results', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({ addresses: [], exactMatch: false })
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({ addresses: [], nameOrNumberMatched: false })
 
       request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
 
@@ -318,7 +318,10 @@ describe('proposedAddressesController', () => {
     })
 
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({ addresses: lookupResults, exactMatch: true })
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({
+        addresses: lookupResults,
+        nameOrNumberMatched: true,
+      })
 
       request.body = { nameOrNumber: '123', postcode: 'F45 6RT' }
 
@@ -328,7 +331,7 @@ describe('proposedAddressesController', () => {
       expect(controller.formData.update).toHaveBeenCalledTimes(2)
       expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
         lookupResults,
-        exactMatch: true,
+        nameOrNumberMatched: true,
       })
     })
   })
@@ -340,7 +343,7 @@ describe('proposedAddressesController', () => {
         postcode,
         lookupResults,
         address,
-        exactMatch: true,
+        nameOrNumberMatched: true,
       })
 
       await controller.selectAddress()(request, response, next)
@@ -349,7 +352,7 @@ describe('proposedAddressesController', () => {
         crn: 'CRN123',
         nameOrNumber,
         postcode,
-        exactMatch: true,
+        nameOrNumberMatched: true,
         addresses: lookupResultsItems(lookupResults, address.uprn),
         errors: {},
         errorSummary: [],

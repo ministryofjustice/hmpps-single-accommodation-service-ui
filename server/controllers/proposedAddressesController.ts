@@ -197,17 +197,15 @@ export default class ProposedAddressesController {
       const errorRedirect = validateLookupFromSession(req, proposedAddressFormSessionData)
       if (errorRedirect) return res.redirect(errorRedirect)
 
-      const { addresses: lookupResults, exactMatch } = await this.osDataHubService.getByNameOrNumberAndPostcode(
-        nameOrNumber,
-        postcode,
-      )
+      const { addresses: lookupResults, nameOrNumberMatched } =
+        await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
 
       if (!lookupResults.length) {
         addGenericErrorToFlash(req, 'No address found. Check details')
         return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
       }
 
-      await this.formData.update(crn, session, { lookupResults, exactMatch })
+      await this.formData.update(crn, session, { lookupResults, nameOrNumberMatched })
       return res.redirect(uiPaths.proposedAddresses.selectAddress({ crn: req.params.crn }))
     }
   }
@@ -224,7 +222,7 @@ export default class ProposedAddressesController {
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       if (!proposedAddressFormSessionData) return res.redirect(uiPaths.cases.show({ crn }))
 
-      const { nameOrNumber, postcode, lookupResults, address, exactMatch } = proposedAddressFormSessionData
+      const { nameOrNumber, postcode, lookupResults, address, nameOrNumberMatched } = proposedAddressFormSessionData
       if (!lookupResults) return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
@@ -241,7 +239,7 @@ export default class ProposedAddressesController {
         crn,
         nameOrNumber,
         postcode,
-        exactMatch,
+        nameOrNumberMatched,
         addresses: lookupResultsItems(lookupResults, address?.uprn),
         errors,
         errorSummary,

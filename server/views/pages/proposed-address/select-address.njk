@@ -29,14 +29,14 @@
   </legend>
 
   <div class="govuk-inset-text govuk-inset-text--previous-answers">
+    {% if nameOrNumberMatched === false %}
+      <p class="govuk-body govuk-!-margin-bottom-2">No exact matches.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2">Showing results for:</p>
+    {% endif %}
     <dl>
-      {% if not exactMatch %}
-        <p class="govuk-body govuk-!-margin-bottom-2">No exact matches.</p>
-        <p class="govuk-body govuk-!-margin-bottom-2">Showing results for:</p>
-      {% endif %}
       <dt>UK postcode</dt>
       <dd>{{ postcode }}</dd>
-      {% if nameOrNumber and exactMatch %}
+      {% if nameOrNumber and nameOrNumberMatched !== false %}
         <dt>Property name or number</dt>
         <dd>{{ nameOrNumber }}</dd>
       {% endif %}

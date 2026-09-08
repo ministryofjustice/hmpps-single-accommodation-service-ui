@@ -29,6 +29,19 @@
   {{
     govukInput({
       label: {
+        text: 'UK postcode'
+      },
+      classes: 'govuk-input--width-10',
+      name: 'postcode',
+      id: 'postcode',
+      value: postcode,
+      errorMessage: errors.postcode
+    })
+  }}
+
+  {{
+    govukInput({
+      label: {
         text: 'Property name or number'
       },
       hint: {
@@ -39,19 +52,6 @@
       id: 'nameOrNumber',
       value: nameOrNumber,
       errorMessage: errors.nameOrNumber
-    })
-  }}
-
-  {{
-    govukInput({
-      label: {
-        text: 'UK postcode'
-      },
-      classes: 'govuk-input--width-10',
-      name: 'postcode',
-      id: 'postcode',
-      value: postcode,
-      errorMessage: errors.postcode
     })
   }}
 {% endblock %}

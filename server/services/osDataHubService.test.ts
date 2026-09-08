@@ -32,11 +32,28 @@ describe('osDataHubService', () => {
 
       osDataHubClient.getByPostcode.mockResolvedValue(apiResponse)
 
-      const addresses = await osDataHubService.getByNameOrNumberAndPostcode('19', 'M210BP')
+      const results = await osDataHubService.getByNameOrNumberAndPostcode('19', 'M210BP')
 
       expect(osDataHubClient.getByPostcode).toHaveBeenCalledWith('M210BP')
 
-      expect(addresses).toEqual(expectedResult)
+      expect(results).toEqual({ addresses: expectedResult, exactMatch: true })
+    })
+
+    it('returns all results and flags no exact match when the name or number matches nothing', async () => {
+      const apiResponse: OsDataHubResponse = {
+        header: {},
+        results: [
+          { DPA: { ADDRESS: '199, M21 0BP', BUILDING_NUMBER: '199', UPRN: '001' } },
+          { DPA: { ADDRESS: '23, M21 0BP', BUILDING_NUMBER: '23', UPRN: '002' } },
+        ] as OsDataHubResult[],
+      }
+      const expectedResult = apiResponse.results.map(resultToAddressDetails)
+
+      osDataHubClient.getByPostcode.mockResolvedValue(apiResponse)
+
+      const results = await osDataHubService.getByNameOrNumberAndPostcode('no match', 'M210BP')
+
+      expect(results).toEqual({ addresses: expectedResult, exactMatch: false })
     })
 
     it('returns an empty array if no results are found', async () => {
@@ -46,9 +63,9 @@ describe('osDataHubService', () => {
 
       osDataHubClient.getByPostcode.mockResolvedValue(apiResponse)
 
-      const addresses = await osDataHubService.getByNameOrNumberAndPostcode('19', 'M210BP')
+      const result = await osDataHubService.getByNameOrNumberAndPostcode('19', 'M210BP')
 
-      expect(addresses).toEqual([])
+      expect(result).toEqual({ addresses: [], exactMatch: false })
     })
   })
 })

@@ -30,10 +30,16 @@
 
   <div class="govuk-inset-text govuk-inset-text--previous-answers">
     <dl>
-      <dt>Property name or number</dt>
-      <dd>{{ nameOrNumber }}</dd>
+      {% if not exactMatch %}
+        <p class="govuk-body govuk-!-margin-bottom-2">No exact matches.</p>
+        <p class="govuk-body govuk-!-margin-bottom-2">Showing results for:</p>
+      {% endif %}
       <dt>UK postcode</dt>
       <dd>{{ postcode }}</dd>
+      {% if nameOrNumber and exactMatch %}
+        <dt>Property name or number</dt>
+        <dd>{{ nameOrNumber }}</dd>
+      {% endif %}
     </dl>
 
     <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.lookup({crn: crn}) }}">Change</a>

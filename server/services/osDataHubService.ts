@@ -8,13 +8,13 @@ export default class OsDataHubService {
   async getByNameOrNumberAndPostcode(
     nameOrNumber: string,
     postcode: string,
-  ): Promise<{ addresses: AccommodationAddressDetails[]; exactMatch: boolean }> {
+  ): Promise<{ addresses: AccommodationAddressDetails[]; nameOrNumberMatched: boolean }> {
     const { results = [] } = await this.osDataHubClient.getByPostcode(postcode)
 
     const filteredResults = filterResultsByNameOrNumber(results, nameOrNumber)
-    const exactMatch = filteredResults.length > 0
-    const matchedResults = exactMatch ? filteredResults : results
+    const nameOrNumberMatched = filteredResults.length > 0
+    const matchedResults = nameOrNumberMatched ? filteredResults : results
 
-    return { addresses: matchedResults.map(resultToAddressDetails), exactMatch }
+    return { addresses: matchedResults.map(resultToAddressDetails), nameOrNumberMatched }
   }
 }

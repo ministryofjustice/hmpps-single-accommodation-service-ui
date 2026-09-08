@@ -36,7 +36,7 @@ describe('osDataHubService', () => {
 
       expect(osDataHubClient.getByPostcode).toHaveBeenCalledWith('M210BP')
 
-      expect(results).toEqual({ addresses: expectedResult, exactMatch: true })
+      expect(results).toEqual({ addresses: expectedResult, nameOrNumberMatched: true })
     })
 
     it('returns all results and flags no exact match when the name or number matches nothing', async () => {
@@ -53,7 +53,7 @@ describe('osDataHubService', () => {
 
       const results = await osDataHubService.getByNameOrNumberAndPostcode('no match', 'M210BP')
 
-      expect(results).toEqual({ addresses: expectedResult, exactMatch: false })
+      expect(results).toEqual({ addresses: expectedResult, nameOrNumberMatched: false })
     })
 
     it('returns an empty array if no results are found', async () => {
@@ -65,7 +65,7 @@ describe('osDataHubService', () => {
 
       const result = await osDataHubService.getByNameOrNumberAndPostcode('19', 'M210BP')
 
-      expect(result).toEqual({ addresses: [], exactMatch: false })
+      expect(result).toEqual({ addresses: [], nameOrNumberMatched: false })
     })
   })
 })

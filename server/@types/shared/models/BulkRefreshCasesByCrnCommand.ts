@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 
-export type Cas2ApplicationSummaryDto = {
-  id: string
-  status?: string | null
+export type BulkRefreshCasesByCrnCommand = {
+  crns: Array<string>
+  dryRun: boolean
 }

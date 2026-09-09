@@ -36,7 +36,7 @@ test.describe('error handling', () => {
     await login(page)
 
     await expect(
-      page.locator('h1', { hasText: 'You do not have permission to access the Accommodation service' }),
+      page.locator('h1', { hasText: 'You do not have permission to access the Find and manage accommodation service' }),
     ).toBeVisible()
 
     await expect(page.getByRole('link', { name: 'Accommodation service Private Beta Teams channel' })).toHaveAttribute(

@@ -92,4 +92,30 @@ describeClient('CasesClient', provider => {
     const response = await casesClient.getCase('test-user-token', crn)
     expect(response).toEqual(body)
   })
+
+  it('should make a GET request to /search/:crn using user token and return the response body', async () => {
+    const body = apiResponseFactory.case()
+    const {
+      data: { crn },
+    } = body
+
+    await provider.addInteraction({
+      state: `Case with CRN ${crn} exists for user`,
+      uponReceiving: 'a request to search for a user case by CRN',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.search({ crn }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+
+    const response = await casesClient.searchByCrn('test-user-token', crn)
+    expect(response).toEqual(body)
+  })
 })

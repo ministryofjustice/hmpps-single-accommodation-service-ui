@@ -17,6 +17,12 @@
   color: govuk-colour("black", $variant: "tint-25");
 }
 
+.govuk-service-navigation__item .govuk-service-navigation__link {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+
 /**
  * Yellow tag uses `tint-50` from v6.1.0 of GOVUK Frontend [1], which we consider too vivid for our purpose.
  * We therefore revert the yellow tag to the default tint of 80%.

@@ -34,7 +34,7 @@
           <div class="{{ 'govuk-grid-column-one-half' if caseListV2 else 'govuk-grid-column-full' }}">
             {{
               govukInput({
-                label: { text: 'Search by name, CRN or prison number' },
+                label: { text: 'Filter by name, CRN or prison number' },
                 name: 'searchTerm',
                 value: query.searchTerm
               })

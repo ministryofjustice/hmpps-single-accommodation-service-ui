@@ -65,7 +65,7 @@ test.describe('List of cases', () => {
 
     // AND the active filter tags are shown
     await casesListPage.shouldShowFilterTags({
-      Search: `‘${prisonNumber}’`,
+      '': `‘${prisonNumber}’`,
       RoSH: formatRiskLevel(riskLevel),
       'Assigned to': 'Team One',
     })
@@ -84,7 +84,7 @@ test.describe('List of cases', () => {
 
     // AND the active filter tags are shown
     await casesListPage.shouldShowFilterTags({
-      Search: `‘${prisonNumber}’`,
+      '': `‘${prisonNumber}’`,
       RoSH: formatRiskLevel(riskLevel),
       'Assigned to': 'Team One',
     })

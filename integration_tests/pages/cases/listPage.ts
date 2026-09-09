@@ -70,14 +70,14 @@ export default class CasesListPage extends AbstractPage {
   }
 
   async applyFilters({ searchTerm, teamName, riskLevel }: Record<string, string>) {
-    if (searchTerm) await this.completeInputByLabel('Search by name, CRN or prison number', searchTerm)
+    if (searchTerm) await this.completeInputByLabel('Filter by name, CRN or prison number', searchTerm)
     if (teamName) await this.selectOptionByLabel('Assigned to', teamName)
     if (riskLevel) await this.selectOptionByLabel('RoSH', riskLevel)
     await this.clickButton('Apply filters')
   }
 
   async verifyFilters({ searchTerm, teamCode, riskLevel }: Record<string, string>) {
-    await this.verifyTextInput('Search by name, CRN or prison number', searchTerm)
+    await this.verifyTextInput('Filter by name, CRN or prison number', searchTerm)
     await this.verifySelectInput('Assigned to', teamCode)
     await this.verifySelectInput('RoSH', riskLevel)
   }
@@ -85,7 +85,7 @@ export default class CasesListPage extends AbstractPage {
   async shouldShowFilterTags(filters: Record<string, string>) {
     for await (const [key, value] of Object.entries(filters)) {
       if (value) {
-        const filterText = `${key}: ${value}`
+        const filterText = key ? `${key}: ${value}` : value
         await expect(this.page.getByRole('link', { name: filterText })).toBeVisible()
       }
     }

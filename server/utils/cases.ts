@@ -51,7 +51,7 @@ export const queryToFilters = (
   const filters: { text: string; href: string }[] = []
 
   if (query?.searchTerm)
-    filters.push({ text: `Search: ‘${query.searchTerm}’`, href: removeQueryParam(currentUrl, 'searchTerm') })
+    filters.push({ text: `‘${query.searchTerm}’`, href: removeQueryParam(currentUrl, 'searchTerm') })
 
   if (query?.teamCode) {
     const teamName = teams?.find(team => team.code === query.teamCode)?.name

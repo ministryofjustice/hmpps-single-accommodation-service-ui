@@ -1,7 +1,8 @@
 @use "govuk-frontend/dist/govuk" as *;
 
+// was originally 600px but reduced to 510px to account for the report banner on all pages
 .govuk-main-wrapper {
-  min-height: 600px;
+  min-height: 510px;
 }
 
 .govuk-tag--no-wrap {

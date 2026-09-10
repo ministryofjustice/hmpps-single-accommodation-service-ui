@@ -70,7 +70,7 @@ describe('eligibilityStatusCard', () => {
         title: 'UPCOMING',
         result: {
           serviceStatus: 'UPCOMING',
-          action: { type: 'START_APPROVED_PREMISE_APPLICATION', startDate: '2026-11-08' },
+          action: { type: 'START_APPROVED_PREMISE_APPLICATION', startDate: '2026-11-08', service: 'CAS1' },
         },
       },
       {
@@ -167,7 +167,10 @@ describe('eligibilityStatusCard', () => {
       },
       {
         title: 'UPCOMING',
-        result: { serviceStatus: 'UPCOMING', action: { type: 'START_CAS3_REFERRAL', startDate: '2026-12-15' } },
+        result: {
+          serviceStatus: 'UPCOMING',
+          action: { type: 'START_CAS3_REFERRAL', startDate: '2026-12-15', service: 'CAS3' },
+        },
       },
       {
         title: 'NOT_STARTED',

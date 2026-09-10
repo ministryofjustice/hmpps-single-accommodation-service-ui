@@ -48,7 +48,10 @@ describe('duty to refer utils', () => {
       { title: 'NOT_REQUIRED', result: { serviceStatus: 'NOT_REQUIRED' } },
       {
         title: 'UPCOMING',
-        result: { serviceStatus: 'UPCOMING', action: { type: 'SUBMIT_DTR_REFERRAL', startDate: '2026-02-23' } },
+        result: {
+          serviceStatus: 'UPCOMING',
+          action: { type: 'SUBMIT_DTR_REFERRAL', startDate: '2026-02-23', service: 'DTR' },
+        },
       },
       { title: 'NOT_STARTED', result: { serviceStatus: 'NOT_STARTED' } },
       { title: 'SUBMITTED', result: { serviceStatus: 'SUBMITTED' }, submission },

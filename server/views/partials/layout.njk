@@ -3,8 +3,6 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
-{% set maintenanceMode = featureFlags.maintenanceMode %}
-
 {% block head %}
   {% include "./applicationInsightsScript.njk" %}
 

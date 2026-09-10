@@ -46,23 +46,28 @@
     "caseActions": [
       {
         "type": "START_APPROVED_PREMISE_APPLICATION",
-        "startDate": "2027-06-08"
+        "startDate": "2027-06-08",
+        "service": "CAS1"
       },
       {
         "type": "START_CAS3_REFERRAL",
-        "startDate": "2026-12-15"
+        "startDate": "2026-12-15",
+        "service": "CAS3"
       },
       {
         "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL",
-        "startDate": "2027-03-25"
+        "startDate": "2027-03-25",
+        "service": "CRS"
       },
       {
         "type": "SUBMIT_DTR_REFERRAL",
-        "startDate": "2026-02-23"
+        "startDate": "2026-02-23",
+        "service": "DTR"
       },
       {
         "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null
+        "startDate": null,
+        "service": "PA"
       }
     ],
     "cas1": {
@@ -71,7 +76,8 @@
         "failureReasons": [],
         "action": {
           "type": "START_APPROVED_PREMISE_APPLICATION",
-          "startDate": "2027-06-08"
+          "startDate": "2027-06-08",
+          "service": "CAS1"
         }
       }
     },
@@ -87,7 +93,8 @@
         "failureReasons": [],
         "action": {
           "type": "START_CAS3_REFERRAL",
-          "startDate": "2026-12-15"
+          "startDate": "2026-12-15",
+          "service": "CAS3"
         }
       }
     },
@@ -97,7 +104,8 @@
         "failureReasons": [],
         "action": {
           "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL",
-          "startDate": "2027-03-25"
+          "startDate": "2027-03-25",
+          "service": "CRS"
         }
       },
       "commissionedRehabilitativeServices": null
@@ -108,7 +116,8 @@
         "failureReasons": [],
         "action": {
           "type": "SUBMIT_DTR_REFERRAL",
-          "startDate": "2026-02-23"
+          "startDate": "2026-02-23",
+          "service": "DTR"
         }
       },
       "submission": null
@@ -119,7 +128,8 @@
         "failureReasons": [],
         "action": {
           "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null
+          "startDate": null,
+          "service": "PA"
         }
       }
     }
@@ -127,10 +137,10 @@
   "T274481": {
     "crn": "T274481",
     "caseActions": [
-      { "type": "START_APPROVED_PREMISE_APPLICATION" },
-      { "type": "START_CAS3_REFERRAL" },
-      { "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL" },
-      { "type": "SUBMIT_DTR_REFERRAL" }
+      { "type": "START_APPROVED_PREMISE_APPLICATION", "service": "CAS1" },
+      { "type": "START_CAS3_REFERRAL", "service": "CAS3" },
+      { "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL", "service": "CRS" },
+      { "type": "SUBMIT_DTR_REFERRAL", "service": "DTR" }
     ],
     "cas1": {
       "serviceResult": {
@@ -181,7 +191,8 @@
     "caseActions": [
       {
         "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null
+        "startDate": null,
+        "service": "PA"
       }
     ],
     "cas1": {
@@ -240,7 +251,8 @@
         "failureReasons": [],
         "action": {
           "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null
+          "startDate": null,
+          "service": "PA"
         }
       }
     }
@@ -306,7 +318,8 @@
     "caseActions": [
       {
         "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null
+        "startDate": null,
+        "service": "PA"
       }
     ],
     "cas1": {
@@ -365,7 +378,8 @@
         "failureReasons": [],
         "action": {
           "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null
+          "startDate": null,
+          "service": "PA"
         }
       }
     }
@@ -526,7 +540,8 @@
     "caseActions": [
       {
         "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null
+        "startDate": null,
+        "service": "PA"
       }
     ],
     "cas1": {
@@ -571,7 +586,8 @@
         "failureReasons": [],
         "action": {
           "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null
+          "startDate": null,
+          "service": "PA"
         }
       }
     }

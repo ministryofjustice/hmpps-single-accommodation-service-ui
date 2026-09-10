@@ -17,7 +17,10 @@ const types: Readonly<CaseAction['type'][]> = [
   'ADD_AND_CONFIRM_PROPOSED_ADDRESS',
 ]
 
+const serviceTypes: Readonly<CaseAction['service'][]> = ['CAS1', 'CAS2', 'CAS3', 'DTR', 'CRS', 'PA']
+
 export default Factory.define<CaseAction>(() => ({
   type: faker.helpers.arrayElement(types),
   startDate: faker.helpers.maybe(() => faker.date.future({ years: 2 }).toISOString().split('T')[0]),
+  service: faker.helpers.arrayElement(serviceTypes),
 }))

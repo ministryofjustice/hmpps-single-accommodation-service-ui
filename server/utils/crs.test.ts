@@ -24,7 +24,7 @@ describe('CRS utilities', () => {
         title: 'UPCOMING',
         result: {
           serviceStatus: 'UPCOMING',
-          action: { type: 'SUBMIT_CRS_ACCOMMODATION_REFERRAL', startDate: '2027-03-25' },
+          action: { type: 'SUBMIT_CRS_ACCOMMODATION_REFERRAL', startDate: '2027-03-25', service: 'CRS' },
         },
       },
       { title: 'NOT_STARTED', result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' } },

@@ -19,4 +19,5 @@ export type CaseAction = {
     | 'SUBMIT_CRS_REFERRAL'
     | 'ADD_AND_CONFIRM_PROPOSED_ADDRESS'
   startDate?: string | null
+  service: 'CAS1' | 'CAS2' | 'CAS3' | 'DTR' | 'CRS' | 'PA'
 }

@@ -5,7 +5,7 @@
 import type { StaffDetailsDto } from './StaffDetailsDto'
 export type AccommodationReferralDto = {
   id: string
-  type: 'CAS1' | 'CAS3' | 'DTR'
+  type: 'CAS1' | 'CAS2' | 'CAS3' | 'DTR' | 'CRS' | 'PA'
   status:
     | 'ACCEPTED'
     | 'REJECTED'

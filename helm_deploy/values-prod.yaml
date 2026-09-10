@@ -26,6 +26,7 @@ generic-service:
     CASE_LIST_V2_ENABLED: "false"
     CASE_LIST_V2_TABS_ENABLED: "false"
     CAS_EXTRA_DETAILS_ENABLED: "false"
+    CAS2_ENABLED: "false"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-approved-premises

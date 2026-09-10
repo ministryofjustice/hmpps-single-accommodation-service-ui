@@ -60,6 +60,18 @@ export default class AddProposedAddressPage extends AbstractPage {
     }
   }
 
+  async shouldShowNoExactMatchSelectAddressForm(postcode: string, expectedCount: number) {
+    await expect(this.page.getByRole('heading', { level: 1 })).toHaveText(`${expectedCount} addresses found`)
+
+    await expect(this.page.getByText('No exact matches.')).toBeVisible()
+    await expect(this.page.getByText('Showing results for:')).toBeVisible()
+
+    await expect(this.page.locator('dt:text("UK postcode") + dd')).toHaveText(postcode)
+    await expect(this.page.locator('dt:text("Property name or number")')).toHaveCount(0)
+
+    await expect(this.page.getByRole('group', { name: 'Select an address' })).toBeVisible()
+  }
+
   async shouldShowConfirmAddressForm(addressLines: string[]) {
     await expect(this.page.getByRole('heading', { level: 1 })).toHaveText('Confirm address')
 

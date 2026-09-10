@@ -34,6 +34,7 @@ describe('OS DataHub utils', () => {
       ['st sidewell', [results[10]]],
       ['st. sidewells', [results[10]]],
       [undefined, results],
+      ['no matching value', []],
     ])(`returns results for name or number "%s"`, (nameOrNumber, expected) => {
       expect(filterResultsByNameOrNumber(results, nameOrNumber)).toEqual(expected)
     })

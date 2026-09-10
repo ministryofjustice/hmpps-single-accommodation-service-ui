@@ -294,7 +294,6 @@ describe('proposedAddressesController', () => {
       await controller.saveLookup()(request, response, next)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
-        nameOrNumber: 'Enter a property name or number',
         postcode: 'Enter a UK postcode',
       })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
@@ -307,7 +306,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects with a generic error if there are no results', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([])
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({ addresses: [], nameOrNumberMatched: false })
 
       request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
 
@@ -319,7 +318,10 @@ describe('proposedAddressesController', () => {
     })
 
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue(lookupResults)
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({
+        addresses: lookupResults,
+        nameOrNumberMatched: true,
+      })
 
       request.body = { nameOrNumber: '123', postcode: 'F45 6RT' }
 
@@ -329,6 +331,7 @@ describe('proposedAddressesController', () => {
       expect(controller.formData.update).toHaveBeenCalledTimes(2)
       expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
         lookupResults,
+        nameOrNumberMatched: true,
       })
     })
   })
@@ -340,6 +343,7 @@ describe('proposedAddressesController', () => {
         postcode,
         lookupResults,
         address,
+        nameOrNumberMatched: true,
       })
 
       await controller.selectAddress()(request, response, next)
@@ -348,6 +352,7 @@ describe('proposedAddressesController', () => {
         crn: 'CRN123',
         nameOrNumber,
         postcode,
+        nameOrNumberMatched: true,
         addresses: lookupResultsItems(lookupResults, address.uprn),
         errors: {},
         errorSummary: [],

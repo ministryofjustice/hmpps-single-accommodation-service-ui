@@ -57,16 +57,18 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
   })[status] || { text: 'Unknown' }
 
 export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
-  return (referrals ?? []).filter(referral => config.flags.cas2Enabled || referral.type !== 'CAS2').map(referral => {
-    const { status, type, id, uiUrl } = referral
+  return (referrals ?? [])
+    .filter(referral => config.flags.cas2Enabled || referral.type !== 'CAS2')
+    .map(referral => {
+      const { status, type, id, uiUrl } = referral
 
-    return [
-      htmlContent(tableTextCell('Referral type', referralStatusType(type, status))),
-      htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
-      htmlContent(statusCell(referralStatusCell(referral))),
-      htmlContent(linksCell(referralLinksForType(type, id, crn, uiUrl))),
-    ]
-  })
+      return [
+        htmlContent(tableTextCell('Referral type', referralStatusType(type, status))),
+        htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
+        htmlContent(statusCell(referralStatusCell(referral))),
+        htmlContent(linksCell(referralLinksForType(type, id, crn, uiUrl))),
+      ]
+    })
 }
 
 export const referralStatusCell = (referral: Referral): StatusCell => {

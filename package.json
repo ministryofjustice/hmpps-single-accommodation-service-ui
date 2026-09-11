@@ -172,7 +172,7 @@
     "start-server-and-test": "^3.0.12",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.12",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   },
   "overrides": {
     "@playwright/test": "1.62.1",

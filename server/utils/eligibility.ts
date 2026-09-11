@@ -4,7 +4,6 @@ import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
 import { formatDate } from './dates'
-import config from '../config'
 
 export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   const { serviceStatus, url } = serviceResult || {}
@@ -83,33 +82,26 @@ const headingForService = (service: 'cas1' | 'cas3') => {
 }
 
 const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): string => {
-  const { serviceStatus, failureReasons, action } = serviceResult || {}
+  const { serviceStatus, blockingStatusReason, action } = serviceResult || {}
 
-  if (serviceStatus === 'CANNOT_START_YET' && config.flags.casExtraDetails) {
-    if (failureReasons.includes('DTR_REFERRAL_EXPIRED')) {
-      // TODO: Handle MALE/NON_MALE CRS needed
-      if (failureReasons.includes('CRS_NOT_SUBMITTED')) {
-        return 'You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.'
-      }
-      // if (failureReasons.includes('MALE_CRS_NOT_SUBMITTED')) {
-      //   return 'You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.'
-      // }
-      // if (failureReasons.includes('NON_MALE_CRS_NOT_SUBMITTED')) {
-      //   return 'You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.'
-      // }
-      return 'You need to add DTR referral details before you can make a CAS3 referral.'
-    }
+  if (serviceStatus === 'CANNOT_START_YET' && service === 'cas3') {
+    const requirementTemplate = (requirement: string) =>
+      `You need to ${requirement} before you can make a CAS3 referral.`
 
-    // TODO: Handle MALE/NON_MALE CRS needed
-    if (failureReasons.includes('CRS_NOT_SUBMITTED')) {
-      return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
+    switch (blockingStatusReason) {
+      case 'SUBMIT_CRS_BEFORE_CAS3':
+        return requirementTemplate('submit a CRS referral')
+      case 'SUBMIT_DTR_BEFORE_CAS3':
+        return requirementTemplate('add DTR referral details')
+      case 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3':
+        return requirementTemplate('add DTR referral details and submit a CRS referral')
+      case 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3':
+        return requirementTemplate('submit a CRS accommodation referral')
+      case 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3':
+        return requirementTemplate('add DTR referral details and submit a CRS accommodation referral')
+      default:
+        return ''
     }
-    // if (failureReasons.includes('MALE_CRS_NOT_SUBMITTED')) {
-    //   return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
-    // }
-    // if (failureReasons.includes('NON_MALE_CRS_NOT_SUBMITTED')) {
-    //   return 'You need to submit a CRS accommodation referral before you can make a CAS3 referral.'
-    // }
   }
 
   if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas1') {

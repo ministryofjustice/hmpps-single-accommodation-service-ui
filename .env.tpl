@@ -16,6 +16,9 @@ CLIENT_CREDS_CLIENT_SECRET=clientsecret
 # Credentials for OS Data Hub API calls for address lookup
 OS_DATAHUB_API_KEY='k8s://hmpps-single-accommodation-service-ui/OS_DATAHUB_API_KEY'
 
+# URLs for external services
+COMPONENT_API_URL=https://probation-frontend-components-dev.hmpps.service.justice.gov.uk
+
 # Uncomment the following to run the local app against the dev environment
 #SAS_API_URL=https://single-accommodation-service-api-dev.hmpps.service.justice.gov.uk
 #HMPPS_AUTH_URL='https://sign-in-dev.hmpps.service.justice.gov.uk/auth'

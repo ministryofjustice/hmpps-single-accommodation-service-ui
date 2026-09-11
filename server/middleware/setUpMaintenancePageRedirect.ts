@@ -20,6 +20,8 @@ export default function setUpMaintenancePageRedirect(): Router {
         .filter(Boolean) || []
     const maintenanceMode = config.flags.maintenanceMode && !allowedUsernames.includes(res.locals?.user?.username)
 
+    res.locals.maintenanceMode = maintenanceMode
+
     if (maintenanceMode && !allowedPaths.includes(req.path)) {
       return res.redirect(302, paths.static.maintenance({}))
     }

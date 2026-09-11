@@ -1,5 +1,4 @@
 {% extends "govuk/template.njk" %}
-
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
@@ -8,42 +7,42 @@
   {% include "./applicationInsightsScript.njk" %}
 
   {% for css in feComponents.cssIncludes %}
-      <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
   {% endfor %}
-  <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
+  <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet" />
 {% endblock %}
 
 {% block pageTitle %}{{ "Error: " if errorSummary | length }}{{ pageTitle }}{{ ' - ' if pageTitle }}{{ applicationName }}{% endblock %}
 
 {% block govukHeader %}
   {{ feComponents.header | safe }}
+
+  {% set navigation = [] %}
+  {% if not maintenanceMode %}
+    {%
+      set navigation = [
+        { href: paths.cases.index(), text: "Case list", active: activePage == "caseList" },
+        { href: paths.cases.search(), text: "Search", active: activePage == "search" }
+      ]
+    %}
+  {% endif %}
+
   {{ govukServiceNavigation({
     serviceName: applicationName,
     serviceUrl: "/",
-    navigation: [
-      {
-        href: paths.cases.index(),
-        text: "Case list",
-        active: activePage == "caseList"
-      },
-      {
-        href: paths.cases.search(),
-        text: "Search",
-        active: activePage == "search"
-      }
-    ]
+    navigation: navigation
   }) }}
 
-  {% set phaseBannerHtml %}
-    Help us improve the Accommodation service. <a href="{{ supportLinks.feedbackForm }}" target="_blank" rel="noreferrer noopener">Complete this survey (opens in new tab)</a>
-  {% endset %}
+  {% if not maintenanceMode %}
+    {% set phaseBannerHtml %}
+      Help us improve the Accommodation service. <a href="{{ supportLinks.feedbackForm }}" target="_blank" rel="noreferrer noopener">Complete this survey (opens in new tab)</a>
+    {% endset %}
 
-  {{ govukPhaseBanner({
-    tag: {
-      text: "Pilot"
-    },
-    html: phaseBannerHtml
-  }) }}
+    {{ govukPhaseBanner({
+      tag: { text: "Pilot" },
+      html: phaseBannerHtml
+    }) }}
+  {% endif %}
 {% endblock %}
 
 {% block bodyStart %}{% endblock %}
@@ -56,12 +55,13 @@
       })
     }}
   {% endif %}
-
   {% include "components/_messages.njk" %}
 {% endblock %}
 
 {% block containerEnd %}
-  {% include "components/_reportBanner.njk" %}
+  {% if not maintenanceMode %}
+    {% include "components/_reportBanner.njk" %}
+  {% endif %}
 {% endblock %}
 
 {% block govukFooter %}
@@ -74,6 +74,6 @@
 
 {% block extraScripts %}
   {% for js in feComponents.jsIncludes %}
-      <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+    <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
   {% endfor %}
 {% endblock %}

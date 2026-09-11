@@ -48,6 +48,7 @@ export interface StatusCard {
   inactive?: boolean
   hint?: string
   details?: SummaryListRow[]
+  content?: TextOrHtmlContent[]
   status?: StatusTag
   links?: Link[]
 }

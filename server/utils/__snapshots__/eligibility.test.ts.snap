@@ -2,6 +2,7 @@
 
 exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -20,6 +21,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
 
 exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -39,6 +41,7 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -57,6 +60,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": "This could be because of risk levels or suitability for a move on at this time.",
   "inactive": true,
@@ -70,6 +74,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] =
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -89,6 +94,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = 
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -108,6 +114,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] 
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -126,6 +133,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -144,6 +152,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -162,6 +171,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -180,6 +190,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -198,6 +209,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -216,6 +228,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
 
 exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -235,6 +248,7 @@ exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
 
 exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": "Start referral from 8 November 2026 (in 100 days).",
   "inactive": false,
@@ -248,6 +262,7 @@ exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
 
 exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
 {
+  "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -259,8 +274,33 @@ exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
 }
 `;
 
+exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = `
+{
+  "content": [
+    {
+      "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
+    },
+  ],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": "CAS2 accommodation is now available for more people.",
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start",
+      "text": "Start application",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "Bedspace details are sent by email",
   "inactive": false,
@@ -279,6 +319,7 @@ exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1
 
 exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -297,6 +338,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 
 
 exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -315,6 +357,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -328,6 +371,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed s
 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS needed status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -341,6 +385,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS nee
 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DTR and CRS needed status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -354,6 +399,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DT
 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS needed status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -367,6 +413,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS n
 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, both DTR and CRS needed status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -380,6 +427,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, both 
 
 exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": true,
@@ -393,6 +441,7 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] =
 
 exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -412,6 +461,7 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = 
 
 exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -431,6 +481,7 @@ exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
 
 exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -450,6 +501,7 @@ exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
 
 exports[`eligibilityStatusCard for cas3 renders a UPCOMING status card 1`] = `
 {
+  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "Start referral from 15 December 2026 (in 137 days).",
   "inactive": false,
@@ -539,6 +591,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     },
   },
   {
+    "content": undefined,
     "heading": "Approved premises (CAS1)",
     "hint": undefined,
     "inactive": false,
@@ -555,6 +608,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     },
   },
   {
+    "content": undefined,
     "heading": "CAS3 (transitional accommodation)",
     "hint": undefined,
     "inactive": false,

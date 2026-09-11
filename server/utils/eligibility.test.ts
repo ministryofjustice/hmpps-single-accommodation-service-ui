@@ -1,5 +1,6 @@
 import { ServiceResult } from '@sas/api'
 import { eligibilityStatusCard, eligibilityToEligibilityCards, linksForService } from './eligibility'
+import config from '../config'
 import {
   crsServiceResultFactory,
   crsSubmissionFactory,
@@ -60,7 +61,7 @@ describe('linksForService', () => {
 
 describe('eligibilityStatusCard', () => {
   // See: https://hmpps-single-accommodation-service-prototype-main.apps.live.cloud-platform.service.justice.gov.uk/10-0/_statuses?r=t
-  const testCases: Record<'cas1' | 'cas3', { title: string; result: Partial<ServiceResult> }[]> = {
+  const testCases: Record<'cas1' | 'cas2' | 'cas3', { title: string; result: Partial<ServiceResult> }[]> = {
     cas1: [
       {
         title: 'NOT_ELIGIBLE',
@@ -135,6 +136,12 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'WITHDRAWN', url: 'https://example.com/start' },
       },
     ],
+    cas2: [
+      {
+        title: 'NOT_STARTED',
+        result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' },
+      },
+    ],
     cas3: [
       {
         title: 'NOT_ELIGIBLE',
@@ -207,7 +214,7 @@ describe('eligibilityStatusCard', () => {
     jest.useRealTimers()
   })
 
-  describe.each(['cas1', 'cas3'] as const)('for %s', service => {
+  describe.each(['cas1', 'cas2', 'cas3'] as const)('for %s', service => {
     it.each(testCases[service])('renders a $title status card', ({ result }) => {
       const serviceResult = serviceResultFactory.build({
         serviceStatus: 'NOT_REQUIRED',
@@ -227,6 +234,7 @@ describe('eligibilityToEligibilityCards', () => {
 
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date('2026-01-21'))
+    config.flags.cas2Enabled = false
   })
 
   afterEach(() => {
@@ -243,6 +251,25 @@ describe('eligibilityToEligibilityCards', () => {
     expect(cards[1].heading).toContain('Commissioned Rehabilitative Services (CRS)')
     expect(cards[2].heading).toContain('Approved premises (CAS1)')
     expect(cards[3].heading).toContain('CAS3 (transitional accommodation)')
+  })
+
+  describe('when the cas2 flag is enabled', () => {
+    beforeEach(() => {
+      config.flags.cas2Enabled = true
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('includes the CAS2 card', () => {
+      const eligibility = eligibilityFactory.build({ crn })
+
+      const cards = eligibilityToEligibilityCards(eligibility, crn)
+
+      expect(cards).toHaveLength(5)
+      expect(cards[3].heading).toContain('Short-term accommodation (CAS2)')
+    })
   })
 
   it('returns an array of eligibility card objects', () => {

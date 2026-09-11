@@ -12,6 +12,8 @@ exports[`Macros Status Card renders a basic status card 1`] = `
         
 
         
+
+        
       </div>
 
       
@@ -53,6 +55,8 @@ exports[`Macros Status Card renders a status card with full information 1`] = `
 </dl>
 
         
+
+        
       </div>
 
       
@@ -89,6 +93,8 @@ exports[`Macros Status Card renders an inactive status card 1`] = `
 
     <div class="sas-card__footer">
       <div class="sas-card__content">
+        
+
         
 
         

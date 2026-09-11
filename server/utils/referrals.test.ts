@@ -1,7 +1,12 @@
 import { referralFactory } from '../testutils/factories'
 import { referralHistoryRows, referralHistoryTable } from './referrals'
+import config from '../config'
 
 describe('referrals utilities', () => {
+  beforeEach(() => {
+    config.flags.cas2Enabled = false
+  })
+
   const referral1 = referralFactory.build({
     id: '123456',
     type: 'CAS1',
@@ -43,6 +48,24 @@ describe('referrals utilities', () => {
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {
       expect(referralHistoryRows(referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
+    })
+
+    it('filters out CAS2 referrals when the feature flag is disabled', () => {
+      const cas2Referral = referralFactory.build({ type: 'CAS2' })
+
+      expect(referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(4)
+    })
+
+    describe('when the cas2 flag is enabled', () => {
+      beforeEach(() => {
+        config.flags.cas2Enabled = true
+      })
+
+      it('includes CAS2 referrals', () => {
+        const cas2Referral = referralFactory.build({ type: 'CAS2' })
+
+        expect(referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(5)
+      })
     })
   })
 

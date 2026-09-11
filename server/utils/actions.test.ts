@@ -17,7 +17,11 @@ describe('action utilities', () => {
         actionFactory.build({ type: 'CREATE_PLACEMENT', service: 'CAS1', startDate: null }),
         actionFactory.build({ type: 'PROVIDE_INFORMATION', service: 'CAS1', startDate: '2026-06-06' }),
         actionFactory.build({ type: 'START_APPROVED_PREMISE_APPLICATION', service: 'CAS1', startDate: '2026-06-07' }),
-        actionFactory.build({ type: 'CONTINUE_APPROVED_PREMISE_APPLICATION', service: 'CAS1', startDate: '2026-07-06' }),
+        actionFactory.build({
+          type: 'CONTINUE_APPROVED_PREMISE_APPLICATION',
+          service: 'CAS1',
+          startDate: '2026-07-06',
+        }),
         actionFactory.build({ type: 'START_CAS3_REFERRAL', service: 'CAS3', startDate: '2026-07-29' }),
         actionFactory.build({ type: 'REPLY_TO_CAS3_BEDSPACE_OFFER', service: 'CAS3', startDate: '2026-08-06' }),
       ]

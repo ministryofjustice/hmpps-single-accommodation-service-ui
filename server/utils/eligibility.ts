@@ -1,10 +1,12 @@
 import { EligibilityDto, ServiceResult } from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
+import { TextOrHtmlContent } from '@govuk/ui'
 import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
 import { formatDate } from './dates'
 import config from '../config'
+import { htmlContent } from './utils'
 
 export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   const { serviceStatus, url } = serviceResult || {}
@@ -37,6 +39,19 @@ export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   }
 }
 
+export const linksForCas2Status = (serviceResult?: ServiceResult) => {
+  const { serviceStatus, url } = serviceResult || {}
+
+  const link: Omit<Link, 'text'> = { href: url, external: true }
+
+  switch (serviceStatus) {
+    case 'NOT_STARTED':
+      return [{ text: 'Start application', ...link }]
+    default:
+      return undefined
+  }
+}
+
 export const linksForCas3Status = (serviceResult?: ServiceResult) => {
   const { serviceStatus, url } = serviceResult || {}
 
@@ -60,10 +75,12 @@ export const linksForCas3Status = (serviceResult?: ServiceResult) => {
   }
 }
 
-export const linksForService = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): Link[] => {
+export const linksForService = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): Link[] => {
   switch (service) {
     case 'cas1':
       return linksForCas1Status(serviceResult)
+    case 'cas2':
+      return linksForCas2Status(serviceResult)
     case 'cas3':
       return linksForCas3Status(serviceResult)
     default:
@@ -71,10 +88,12 @@ export const linksForService = (service: 'cas1' | 'cas3', serviceResult?: Servic
   }
 }
 
-const headingForService = (service: 'cas1' | 'cas3') => {
+const headingForService = (service: 'cas1' | 'cas2' | 'cas3') => {
   switch (service) {
     case 'cas1':
       return 'Approved premises (CAS1)'
+    case 'cas2':
+      return 'Short-term accommodation (CAS2)'
     case 'cas3':
       return 'CAS3 (transitional accommodation)'
     default:
@@ -82,7 +101,7 @@ const headingForService = (service: 'cas1' | 'cas3') => {
   }
 }
 
-const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): string => {
+const hintForServiceResult = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): string => {
   const { serviceStatus, failureReasons, action } = serviceResult || {}
 
   if (serviceStatus === 'CANNOT_START_YET' && config.flags.casExtraDetails) {
@@ -124,24 +143,57 @@ const hintForServiceResult = (service: 'cas1' | 'cas3', serviceResult?: ServiceR
     return 'Bedspace details are sent by email'
   }
 
+  if (serviceStatus === 'NOT_STARTED' && service === 'cas2') {
+    return 'CAS2 accommodation is now available for more people.'
+  }
+
   return undefined
 }
 
-export const eligibilityStatusCard = (service: 'cas1' | 'cas3', serviceResult?: ServiceResult): StatusCard => {
+const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
+  const { serviceStatus } = serviceResult ?? {}
+
+  switch (serviceStatus) {
+    case 'NOT_STARTED':
+      return [
+        htmlContent(
+          '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
+        ),
+      ]
+    default:
+      return undefined
+  }
+}
+
+const contentForService = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): TextOrHtmlContent[] => {
+  switch (service) {
+    case 'cas2':
+      return contentForCas2Status(serviceResult)
+    case 'cas1':
+    case 'cas3':
+    default:
+      return undefined
+  }
+}
+
+export const eligibilityStatusCard = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): StatusCard => {
   const { serviceStatus } = serviceResult ?? {}
 
   return {
     heading: headingForService(service),
     inactive: serviceStatus === 'NOT_ELIGIBLE',
     hint: hintForServiceResult(service, serviceResult),
+    content: contentForService(service, serviceResult),
     status: serviceStatusTag(serviceStatus),
     links: linksForService(service, serviceResult),
   }
 }
 
-export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] => [
-  dutyToReferStatusCard(crn, eligibility.dtr),
-  crsStatusCard(eligibility.crs),
-  eligibilityStatusCard('cas1', eligibility.cas1.serviceResult),
-  eligibilityStatusCard('cas3', eligibility.cas3.serviceResult),
-]
+export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] =>
+  [
+    dutyToReferStatusCard(crn, eligibility.dtr),
+    crsStatusCard(eligibility.crs),
+    eligibilityStatusCard('cas1', eligibility.cas1.serviceResult),
+    config.flags.cas2Enabled ? eligibilityStatusCard('cas2', eligibility.cas2.serviceResult) : undefined,
+    eligibilityStatusCard('cas3', eligibility.cas3.serviceResult),
+  ].filter(Boolean)

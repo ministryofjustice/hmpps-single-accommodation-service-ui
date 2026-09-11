@@ -24,6 +24,16 @@
             })
           }}
         {% endif %}
+
+        {% if cardData.content | length %}
+          {% for item in cardData.content %}
+            {% if item.html %}
+              {{ item.html | safe }}
+            {% else %}
+              <p class="govuk-!-margin-bottom-1">{{ item.text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </div>
 
       {% if cardData.links | length %}

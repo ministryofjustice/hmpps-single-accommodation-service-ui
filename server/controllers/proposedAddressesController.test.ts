@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ProposedAddressFormData } from '@sas/ui'
 import { ProposedAccommodationDto } from '@sas/api'
 import ProposedAddressesController from './proposedAddressesController'
@@ -305,7 +306,7 @@ describe('proposedAddressesController', () => {
       })
     })
 
-    it('redirects with a generic error if there are no results', async () => {
+    it('redirects with a lookup error if there are no results', async () => {
       osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({ addresses: [], nameOrNumberMatched: false })
 
       request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
@@ -315,6 +316,20 @@ describe('proposedAddressesController', () => {
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'No address found. Check details')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
+    })
+
+    it('shows a postcode validation error when OS Data Hub returns a bad request', async () => {
+      const badRequestError: SanitisedError = new Error('Bad request')
+      badRequestError.responseStatus = 400
+      osDataHubService.getByNameOrNumberAndPostcode.mockRejectedValue(badRequestError)
+      request.body = { nameOrNumber: '123', postcode: 'AA12BC' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        postcode: 'Enter a valid UK postcode',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
     })
 
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {

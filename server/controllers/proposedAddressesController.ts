@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ProposedAddressFormPage } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
@@ -197,8 +198,19 @@ export default class ProposedAddressesController {
       const errorRedirect = validateLookupFromSession(req, proposedAddressFormSessionData)
       if (errorRedirect) return res.redirect(errorRedirect)
 
-      const { addresses: lookupResults, nameOrNumberMatched } =
-        await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
+      let lookupResult
+      try {
+        lookupResult = await this.osDataHubService.getByNameOrNumberAndPostcode(nameOrNumber, postcode)
+      } catch (error) {
+        if ((error as SanitisedError).responseStatus === 400) {
+          validateAndFlashErrors(req, { postcode: 'Enter a valid UK postcode' })
+          return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
+        }
+
+        throw error
+      }
+
+      const { addresses: lookupResults, nameOrNumberMatched } = lookupResult
 
       if (!lookupResults.length) {
         addGenericErrorToFlash(req, 'No address found. Check details')

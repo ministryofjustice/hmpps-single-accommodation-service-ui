@@ -74,18 +74,23 @@ export const referralHistoryRows = (referrals?: Referral[], username?: string, c
 export const referralStatusCell = (referral: Referral): StatusCell => {
   const { status, type, date } = referral
 
-  if (type === 'DTR') {
-    return {
-      status: referralStatusTag(status, type),
-      dateText: `Submitted on ${formatDate(date)}`,
-      details: getDtrReferralDetails(referral),
-    }
-  }
-
   return {
     status: referralStatusTag(status, type),
-    dateText: formatDate(date),
-    details: type === 'CAS1' ? getCas1ReferralDetails(referral, status) : getCas3ReferralDetails(referral, status),
+    dateText: type === 'DTR' ? `Submitted on ${formatDate(date)}` : formatDate(date),
+    details: getReferralDetails(referral),
+  }
+}
+
+const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
+  switch (referral.type) {
+    case 'DTR':
+      return getDtrReferralDetails(referral)
+    case 'CAS1':
+      return getCas1ReferralDetails(referral, referral.status)
+    case 'CAS3':
+      return getCas3ReferralDetails(referral, referral.status)
+    default:
+      return []
   }
 }
 

@@ -104,8 +104,8 @@ describe('cases utilities', () => {
   describe('actionsCell macro', () => {
     it('renders a formatted cell for a given list of actions', () => {
       const actions = [
-        actionFactory.build({ type: 'ADD_DTR_REFERRAL_DETAILS', startDate: null }),
-        actionFactory.build({ type: 'SUBMIT_CRS_REFERRAL', startDate: '2026-07-23' }),
+        actionFactory.build({ service: 'DTR', type: 'ADD_DTR_REFERRAL_DETAILS', startDate: null }),
+        actionFactory.build({ service: 'CRS', type: 'SUBMIT_CRS_REFERRAL', startDate: '2026-07-23' }),
       ]
 
       expect(actionsCell(actions)).toMatchSnapshot()

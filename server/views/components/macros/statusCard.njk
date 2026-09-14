@@ -2,7 +2,14 @@
 {%- from "components/macros/statusTag.njk" import statusTag %}
 
 {%- macro statusCard(cardData) -%}
-  <article class="sas-card{{ ' sas-card--inactive' if cardData.inactive else '' }}">
+  {%- set cardClass = '' %}
+  {%- if cardData.inactive %}
+    {%- set cardClass = ' sas-card--inactive' %}
+  {%- elseif cardData.blocked %}
+    {%- set cardClass = ' sas-card--blocked' %}
+  {%- endif %}
+
+  <article class="sas-card{{ cardClass }}">
     <header class="sas-card__head">
       <h3 class="govuk-heading-m">{{ cardData.heading }}</h3>
       {% if cardData.status -%}

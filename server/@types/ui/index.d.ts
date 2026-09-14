@@ -46,6 +46,7 @@ export interface StatusCell {
 export interface StatusCard {
   heading: string
   inactive?: boolean
+  blocked?: boolean
   hint?: string
   details?: SummaryListRow[]
   content?: TextOrHtmlContent[]

@@ -175,6 +175,7 @@ export const eligibilityStatusCard = (service: 'cas1' | 'cas2' | 'cas3', service
   return {
     heading: headingForService(service),
     inactive: serviceStatus === 'NOT_ELIGIBLE',
+    blocked: serviceStatus === 'CANNOT_START_YET',
     hint: hintForServiceResult(service, serviceResult),
     content: contentForService(service, serviceResult),
     status: serviceStatusTag(serviceStatus),

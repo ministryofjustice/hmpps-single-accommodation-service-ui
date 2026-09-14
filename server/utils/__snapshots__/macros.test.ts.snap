@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Macros Status Card renders a basic status card 1`] = `
-"<article class="sas-card">
+"
+
+  <article class="sas-card">
     <header class="sas-card__head">
       <h3 class="govuk-heading-m">Foo</h3>
       
@@ -22,7 +24,9 @@ exports[`Macros Status Card renders a basic status card 1`] = `
 `;
 
 exports[`Macros Status Card renders a status card with full information 1`] = `
-"<article class="sas-card">
+"
+
+  <article class="sas-card">
     <header class="sas-card__head">
       <h3 class="govuk-heading-m">Foo</h3>
       <strong class="govuk-tag govuk-tag--red govuk-tag--no-wrap">Bar</strong>
@@ -85,7 +89,9 @@ exports[`Macros Status Card renders a status card with full information 1`] = `
 `;
 
 exports[`Macros Status Card renders an inactive status card 1`] = `
-"<article class="sas-card sas-card--inactive">
+"
+
+  <article class="sas-card sas-card--inactive">
     <header class="sas-card__head">
       <h3 class="govuk-heading-m">Foo</h3>
       

@@ -16,6 +16,10 @@
   }
 }
 
+.sas-card__hint {
+  margin-bottom: govuk-spacing(0);
+}
+
 .sas-card--block {
   border-width: 0;
   background: govuk-colour('black', $variant: 'tint-95');

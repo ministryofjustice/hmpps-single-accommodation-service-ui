@@ -7,6 +7,7 @@ import { htmlContent, textContent } from './utils'
 import { outcomeReasonSummaryLabels, withdrawReasonLabels } from './dutyToRefer'
 import { formatDate } from './dates'
 import uiPaths from '../paths/ui'
+import config from '../config'
 
 export const referralStatusType = (type?: Referral['type'], status?: string): string => {
   switch (type) {
@@ -56,33 +57,40 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
   })[status] || { text: 'Unknown' }
 
 export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
-  return (referrals ?? []).map(referral => {
-    const { status, type, id, uiUrl } = referral
+  return (referrals ?? [])
+    .filter(referral => config.flags.cas2Enabled || referral.type !== 'CAS2')
+    .map(referral => {
+      const { status, type, id, uiUrl } = referral
 
-    return [
-      htmlContent(tableTextCell('Referral type', referralStatusType(type, status))),
-      htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
-      htmlContent(statusCell(referralStatusCell(referral))),
-      htmlContent(linksCell(referralLinksForType(type, id, crn, uiUrl))),
-    ]
-  })
+      return [
+        htmlContent(tableTextCell('Referral type', referralStatusType(type, status))),
+        htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
+        htmlContent(statusCell(referralStatusCell(referral))),
+        htmlContent(linksCell(referralLinksForType(type, id, crn, uiUrl))),
+      ]
+    })
 }
 
 export const referralStatusCell = (referral: Referral): StatusCell => {
   const { status, type, date } = referral
 
-  if (type === 'DTR') {
-    return {
-      status: referralStatusTag(status, type),
-      dateText: `Submitted on ${formatDate(date)}`,
-      details: getDtrReferralDetails(referral),
-    }
-  }
-
   return {
     status: referralStatusTag(status, type),
-    dateText: formatDate(date),
-    details: type === 'CAS1' ? getCas1ReferralDetails(referral, status) : getCas3ReferralDetails(referral, status),
+    dateText: type === 'DTR' ? `Submitted on ${formatDate(date)}` : formatDate(date),
+    details: getReferralDetails(referral),
+  }
+}
+
+const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
+  switch (referral.type) {
+    case 'DTR':
+      return getDtrReferralDetails(referral)
+    case 'CAS1':
+      return getCas1ReferralDetails(referral, referral.status)
+    case 'CAS3':
+      return getCas3ReferralDetails(referral, referral.status)
+    default:
+      return []
   }
 }
 

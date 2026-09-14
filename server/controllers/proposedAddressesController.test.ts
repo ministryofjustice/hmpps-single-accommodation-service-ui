@@ -124,6 +124,7 @@ describe('proposedAddressesController', () => {
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    jest.spyOn(validationUtils, 'addErrorToFlash')
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
     jest.spyOn(validationUtils, 'addUserInputToFlash')
 
@@ -313,7 +314,7 @@ describe('proposedAddressesController', () => {
 
       await controller.saveLookup()(request, response, next)
 
-      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'No address found. Check details')
+      expect(validationUtils.addErrorToFlash).toHaveBeenCalledWith(request, 'lookup', 'No address found. Check details')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
     })

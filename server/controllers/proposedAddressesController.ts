@@ -213,7 +213,7 @@ export default class ProposedAddressesController {
       const { addresses: lookupResults, nameOrNumberMatched } = lookupResult
 
       if (!lookupResults.length) {
-        addGenericErrorToFlash(req, 'No address found. Check details')
+        addErrorToFlash(req, 'lookup', 'No address found. Check details')
         return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
       }
 

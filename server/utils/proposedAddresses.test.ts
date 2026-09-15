@@ -354,13 +354,11 @@ describe('Proposed addresses utilities', () => {
     describe('validateLookupFromSession', () => {
       it('sets errors and returns a redirect link to lookup when data is invalid', () => {
         const invalidLookup: ProposedAddressFormData = {
-          nameOrNumber: '',
           postcode: '',
         }
 
         expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
-          nameOrNumber: 'Enter a property name or number',
           postcode: 'Enter a UK postcode',
         })
       })

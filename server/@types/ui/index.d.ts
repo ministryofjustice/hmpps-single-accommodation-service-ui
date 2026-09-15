@@ -28,6 +28,7 @@ export type ProposedAddressFormData = Partial<ProposedAccommodationDetailCommand
   nameOrNumber?: string
   postcode?: string
   lookupResults?: AccommodationAddressDetails[] | null
+  nameOrNumberMatched?: boolean
 }
 
 export type ProposedAddressDisplayStatus = 'CONFIRMED' | ProposedAccommodationDto['verificationStatus']

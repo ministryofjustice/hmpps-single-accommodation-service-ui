@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ProposedAddressFormData } from '@sas/ui'
 import { ProposedAccommodationDto } from '@sas/api'
 import ProposedAddressesController from './proposedAddressesController'
@@ -123,6 +124,7 @@ describe('proposedAddressesController', () => {
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
+    jest.spyOn(validationUtils, 'addErrorToFlash')
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
     jest.spyOn(validationUtils, 'addUserInputToFlash')
 
@@ -294,7 +296,6 @@ describe('proposedAddressesController', () => {
       await controller.saveLookup()(request, response, next)
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
-        nameOrNumber: 'Enter a property name or number',
         postcode: 'Enter a UK postcode',
       })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
@@ -306,20 +307,37 @@ describe('proposedAddressesController', () => {
       })
     })
 
-    it('redirects with a generic error if there are no results', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue([])
+    it('redirects with a lookup error if there are no results', async () => {
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({ addresses: [], nameOrNumberMatched: false })
 
       request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
 
       await controller.saveLookup()(request, response, next)
 
-      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'No address found. Check details')
+      expect(validationUtils.addErrorToFlash).toHaveBeenCalledWith(request, 'lookup', 'No address found. Check details')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
     })
 
+    it('shows a postcode validation error when OS Data Hub returns a bad request', async () => {
+      const badRequestError: SanitisedError = new Error('Bad request')
+      badRequestError.responseStatus = 400
+      osDataHubService.getByNameOrNumberAndPostcode.mockRejectedValue(badRequestError)
+      request.body = { nameOrNumber: '123', postcode: 'AA12BC' }
+
+      await controller.saveLookup()(request, response, next)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        postcode: 'Enter a valid UK postcode',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
+    })
+
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
-      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue(lookupResults)
+      osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({
+        addresses: lookupResults,
+        nameOrNumberMatched: true,
+      })
 
       request.body = { nameOrNumber: '123', postcode: 'F45 6RT' }
 
@@ -329,6 +347,7 @@ describe('proposedAddressesController', () => {
       expect(controller.formData.update).toHaveBeenCalledTimes(2)
       expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
         lookupResults,
+        nameOrNumberMatched: true,
       })
     })
   })
@@ -340,6 +359,7 @@ describe('proposedAddressesController', () => {
         postcode,
         lookupResults,
         address,
+        nameOrNumberMatched: true,
       })
 
       await controller.selectAddress()(request, response, next)
@@ -348,6 +368,7 @@ describe('proposedAddressesController', () => {
         crn: 'CRN123',
         nameOrNumber,
         postcode,
+        nameOrNumberMatched: true,
         addresses: lookupResultsItems(lookupResults, address.uprn),
         errors: {},
         errorSummary: [],

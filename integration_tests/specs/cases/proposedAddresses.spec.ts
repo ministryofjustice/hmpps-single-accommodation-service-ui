@@ -335,7 +335,6 @@ test.describe('add proposed address', () => {
 
     // Then I should see errors
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
-      nameOrNumber: 'Enter a property name or number',
       postcode: 'Enter a UK postcode',
     })
 
@@ -377,6 +376,16 @@ test.describe('add proposed address', () => {
 
     // Then I should see an error
     await addProposedAddressPage.shouldShowGenericErrorMessage('No address found. Check details')
+
+    // When I search with a name or number that matches none of the results
+    await addProposedAddressPage.completeLookupForm('no matching value', 'M21 0BP')
+    await addProposedAddressPage.clickButton('Find address')
+
+    // Then I should see all postcode results with a no exact match message
+    await addProposedAddressPage.shouldShowNoExactMatchSelectAddressForm('M21 0BP', osDataHubApiResponse.results.length)
+
+    // When I click to change postcode
+    await addProposedAddressPage.clickLink('Change')
 
     // When I change the postcode to one with one result
     await addProposedAddressPage.completeLookupForm('19a', 'M21 0BP')

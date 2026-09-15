@@ -1,4 +1,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Find an address" %}
@@ -18,40 +20,51 @@
 {% endblock %}
 
 {% block formContent %}
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-    <h1 class="govuk-fieldset__heading">Find an address</h1>
-  </legend>
-
-  {% if not hideManualAddressEntry %}
-    <p>If it does not have a UK postcode, select 'Enter address manually'.</p>
-  {% endif %}
-
-  {{
-    govukInput({
-      label: {
-        text: 'Property name or number'
+  <div class="govuk-form-group{{ ' govuk-form-group--error' if errors.lookup }}">
+    {% call govukFieldset({
+      legend: {
+        text: 'Find an address',
+        classes: 'govuk-fieldset__legend--l',
+        isPageHeading: true
       },
-      hint: {
-        text: 'For example, 116, The Mill or Flat 37a'
-      },
-      classes: 'govuk-input--width-20',
-      name: 'nameOrNumber',
-      id: 'nameOrNumber',
-      value: nameOrNumber,
-      errorMessage: errors.nameOrNumber
-    })
-  }}
+      describedBy: 'lookup-error' if errors.lookup
+    }) %}
+      {% if not hideManualAddressEntry %}
+        <p>If it does not have a UK postcode, select 'Enter address manually'.</p>
+      {% endif %}
 
-  {{
-    govukInput({
-      label: {
-        text: 'UK postcode'
-      },
-      classes: 'govuk-input--width-10',
-      name: 'postcode',
-      id: 'postcode',
-      value: postcode,
-      errorMessage: errors.postcode
-    })
-  }}
+      {% if errors.lookup %}
+        {{ govukErrorMessage({ text: errors.lookup.text, id: 'lookup-error' }) }}
+      {% endif %}
+
+      {{
+        govukInput({
+          label: {
+            text: 'UK postcode'
+          },
+          classes: 'govuk-input--width-10' + (' govuk-input--error' if errors.lookup),
+          name: 'postcode',
+          id: 'lookup' if errors.lookup else 'postcode',
+          value: postcode,
+          errorMessage: errors.postcode
+        })
+      }}
+
+      {{
+        govukInput({
+          label: {
+            text: 'Property name or number'
+          },
+          hint: {
+            text: 'For example, 116, The Mill or Flat 37a'
+          },
+          classes: 'govuk-input--width-20' + (' govuk-input--error' if errors.lookup),
+          name: 'nameOrNumber',
+          id: 'nameOrNumber',
+          value: nameOrNumber,
+          errorMessage: errors.nameOrNumber
+        })
+      }}
+    {% endcall %}
+  </div>
 {% endblock %}

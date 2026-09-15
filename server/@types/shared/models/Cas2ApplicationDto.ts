@@ -2,8 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Cas2ApplicationSummaryDto } from './Cas2ApplicationSummaryDto'
+import type { Cas2SubmittedApplicationSummaryDto } from './Cas2SubmittedApplicationSummaryDto'
 export type Cas2ApplicationDto = {
   uiUrl: string
-  application: Cas2ApplicationSummaryDto
+  id: string
+  submittedApplication?: Cas2SubmittedApplicationSummaryDto | null
 }

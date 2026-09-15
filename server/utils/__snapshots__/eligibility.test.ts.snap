@@ -15,6 +15,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
     },
   ],
   "status": {
+    "colour": "orange",
     "text": "Application rejected",
   },
 }
@@ -56,6 +57,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
     },
   ],
   "status": {
+    "colour": "orange",
     "text": "Not arrived",
   },
 }
@@ -112,7 +114,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] 
     },
   ],
   "status": {
-    "colour": "red",
+    "colour": "orange",
     "text": "Not submitted",
   },
 }
@@ -133,6 +135,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
     },
   ],
   "status": {
+    "colour": "green",
     "text": "Placement booked",
   },
 }
@@ -153,6 +156,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
     },
   ],
   "status": {
+    "colour": "orange",
     "text": "Placement cancelled",
   },
 }
@@ -173,6 +177,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
     },
   ],
   "status": {
+    "colour": "orange",
     "text": "Placement request not started",
   },
 }
@@ -193,6 +198,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
     },
   ],
   "status": {
+    "colour": "orange",
     "text": "Placement request rejected",
   },
 }
@@ -213,6 +219,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
     },
   ],
   "status": {
+    "colour": "yellow",
     "text": "Placement request submitted",
   },
 }
@@ -233,6 +240,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
     },
   ],
   "status": {
+    "colour": "orange",
     "text": "Placement request withdrawn",
   },
 }
@@ -329,6 +337,7 @@ exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1
     },
   ],
   "status": {
+    "colour": "orange",
     "text": "Bedspace offered",
   },
 }
@@ -349,6 +358,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 
     },
   ],
   "status": {
+    "colour": "grey",
     "text": "Booking cancelled",
   },
 }
@@ -369,6 +379,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
     },
   ],
   "status": {
+    "colour": "green",
     "text": "Booking confirmed",
   },
 }
@@ -500,7 +511,7 @@ exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
     },
   ],
   "status": {
-    "colour": "red",
+    "colour": "orange",
     "text": "Rejected",
   },
 }

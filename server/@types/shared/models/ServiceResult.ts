@@ -5,6 +5,8 @@
 import type { CaseAction } from './CaseAction'
 export type ServiceResult = {
   serviceStatus:
+    | 'UNKNOWN'
+    | 'OFFER_DECLINED_OR_WITHDRAWN'
     | 'NOT_REQUIRED'
     | 'NOT_ELIGIBLE'
     | 'UPCOMING'
@@ -32,6 +34,13 @@ export type ServiceResult = {
     | 'ACCEPTED'
     | 'NOT_ACCEPTED'
     | 'CANNOT_START_YET'
+    | 'MORE_INFORMATION_NEEDED'
+    | 'AWAITING_DECISION'
+    | 'ON_WAITING_LIST'
+    | 'PLACE_OFFERED'
+    | 'OFFER_ACCEPTED'
+    | 'CANCELLED'
+    | 'AWAITING_ARRIVAL'
   action?: CaseAction | null
   link?: string | null
   url?: string | null

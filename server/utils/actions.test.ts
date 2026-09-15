@@ -35,7 +35,7 @@ describe('action utilities', () => {
 
     it('filters out CAS2 actions', () => {
       const actions = [
-        actionFactory.build({ type: 'START_CAS2_APPLICATION', service: 'CAS2', startDate: '2026-06-07' }),
+        actionFactory.build({ type: 'START_CAS2_REFERRAL', service: 'CAS2', startDate: '2026-06-07' }),
         actionFactory.build({ type: 'START_APPROVED_PREMISE_APPLICATION', service: 'CAS1', startDate: '2026-06-07' }),
       ]
 
@@ -53,7 +53,7 @@ describe('action utilities', () => {
 
       it('includes CAS2 actions', () => {
         const actions = [
-          actionFactory.build({ type: 'START_CAS2_APPLICATION', service: 'CAS2', startDate: '2026-06-07' }),
+          actionFactory.build({ type: 'START_CAS2_REFERRAL', service: 'CAS2', startDate: '2026-06-07' }),
           actionFactory.build({ type: 'START_APPROVED_PREMISE_APPLICATION', service: 'CAS1', startDate: '2026-06-07' }),
         ]
 

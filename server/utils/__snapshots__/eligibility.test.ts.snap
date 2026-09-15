@@ -2,6 +2,7 @@
 
 exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -21,6 +22,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
 
 exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -41,6 +43,7 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -60,6 +63,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": "This could be because of risk levels or suitability for a move on at this time.",
@@ -74,6 +78,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] =
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -94,6 +99,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = 
 
 exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -114,6 +120,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] 
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -133,6 +140,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -152,6 +160,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -171,6 +180,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -190,6 +200,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -209,6 +220,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -228,6 +240,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
 
 exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -248,6 +261,7 @@ exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
 
 exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": "Start referral from 8 November 2026 (in 100 days).",
@@ -262,6 +276,7 @@ exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
 
 exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -276,6 +291,7 @@ exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
 
 exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = `
 {
+  "blocked": false,
   "content": [
     {
       "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
@@ -300,6 +316,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = 
 
 exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "Bedspace details are sent by email",
@@ -319,6 +336,7 @@ exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1
 
 exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
@@ -338,6 +356,7 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 
 
 exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
@@ -355,11 +374,42 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
 }
 `;
 
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS accommodation needed status card 1`] = `
+{
+  "blocked": true,
+  "content": undefined,
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS needed status card 1`] = `
+{
+  "blocked": true,
+  "content": undefined,
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "You need to submit a CRS referral before you can make a CAS3 referral.",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Cannot start yet",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed status card 1`] = `
 {
+  "blocked": true,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to add DTR referral details before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -369,11 +419,12 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed s
 }
 `;
 
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS needed status card 1`] = `
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and CRS accommodation needed status card 1`] = `
 {
+  "blocked": true,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -383,39 +434,12 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, CRS nee
 }
 `;
 
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, men, both DTR and CRS needed status card 1`] = `
+exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and CRS needed status card 1`] = `
 {
+  "blocked": true,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
-  "inactive": false,
-  "links": undefined,
-  "status": {
-    "colour": "grey",
-    "text": "Cannot start yet",
-  },
-}
-`;
-
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, CRS needed status card 1`] = `
-{
-  "content": undefined,
-  "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
-  "inactive": false,
-  "links": undefined,
-  "status": {
-    "colour": "grey",
-    "text": "Cannot start yet",
-  },
-}
-`;
-
-exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, both DTR and CRS needed status card 1`] = `
-{
-  "content": undefined,
-  "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.",
   "inactive": false,
   "links": undefined,
   "status": {
@@ -427,6 +451,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, women, both 
 
 exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
@@ -441,6 +466,7 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] =
 
 exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
@@ -461,6 +487,7 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = 
 
 exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
@@ -481,6 +508,7 @@ exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
 
 exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
@@ -501,6 +529,7 @@ exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
 
 exports[`eligibilityStatusCard for cas3 renders a UPCOMING status card 1`] = `
 {
+  "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "Start referral from 15 December 2026 (in 137 days).",
@@ -591,6 +620,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     },
   },
   {
+    "blocked": false,
     "content": undefined,
     "heading": "Approved premises (CAS1)",
     "hint": undefined,
@@ -608,6 +638,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     },
   },
   {
+    "blocked": false,
     "content": undefined,
     "heading": "CAS3 (transitional accommodation)",
     "hint": undefined,

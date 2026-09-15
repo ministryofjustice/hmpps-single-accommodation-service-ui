@@ -20,6 +20,7 @@ export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
       return [{ text: 'Continue application', ...link }]
     case 'APPLICATION_REJECTED':
       return [{ text: 'Start new application', ...link }]
+    case 'ARRIVED':
     case 'SUBMITTED':
     case 'INFO_REQUESTED':
     case 'PLACEMENT_BOOKED':

@@ -1,5 +1,14 @@
-import { ServiceResult } from '@sas/api'
-import { eligibilityStatusCard, eligibilityToEligibilityCards, linksForService } from './eligibility'
+import { Cas1ServiceResult, ServiceResult } from '@sas/api'
+import { Link, StatusCard } from '@sas/ui'
+import {
+  cas1StatusCard,
+  cas2StatusCard,
+  cas3StatusCard,
+  eligibilityToEligibilityCards,
+  linksForCas1Status,
+  linksForCas2Status,
+  linksForCas3Status,
+} from './eligibility'
 import config from '../config'
 import {
   crsServiceResultFactory,
@@ -9,6 +18,12 @@ import {
 } from '../testutils/factories'
 
 describe('linksForService', () => {
+  const linkBuilders: Record<'cas1' | 'cas2' | 'cas3', (serviceResult?: ServiceResult) => Link[]> = {
+    cas1: linksForCas1Status,
+    cas2: linksForCas2Status,
+    cas3: linksForCas3Status,
+  }
+
   const testCases = [
     { service: 'cas1', status: 'NOT_STARTED', expected: ['Start application'] },
     { service: 'cas1', status: 'NOT_SUBMITTED', expected: ['Continue application'] },
@@ -43,12 +58,12 @@ describe('linksForService', () => {
       status,
       expected,
     }: {
-      service: 'cas1' | 'cas3'
+      service: 'cas1' | 'cas2' | 'cas3'
       status: ServiceResult['serviceStatus']
       expected: string[]
     }) => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status, url: 'https://example.com' })
-      const links = linksForService(service, serviceResult)
+      const links = linkBuilders[service](serviceResult)
 
       if (expected === undefined) {
         expect(links).toBeUndefined()
@@ -214,6 +229,12 @@ describe('eligibilityStatusCard', () => {
   })
 
   describe.each(['cas1', 'cas2', 'cas3'] as const)('for %s', service => {
+    const cardBuilders: Record<'cas1' | 'cas2' | 'cas3', (result: Cas1ServiceResult) => StatusCard> = {
+      cas1: cas1StatusCard,
+      cas2: cas2StatusCard,
+      cas3: cas3StatusCard,
+    }
+
     it.each(testCases[service])('renders a $title status card', ({ result }) => {
       const serviceResult = serviceResultFactory.build({
         serviceStatus: 'NOT_REQUIRED',
@@ -223,7 +244,7 @@ describe('eligibilityStatusCard', () => {
         ...result,
       })
 
-      expect(eligibilityStatusCard(service, serviceResult)).toMatchSnapshot()
+      expect(cardBuilders[service]({ serviceResult })).toMatchSnapshot()
     })
   })
 })

@@ -10,7 +10,6 @@ const serviceStatuses: Array<ServiceResult['serviceStatus']> = [
   'REJECTED',
   'WITHDRAWN',
   'SUBMITTED',
-  'CONFIRMED',
 ]
 
 const dtrStatuses: Array<ServiceResult['serviceStatus']> = [

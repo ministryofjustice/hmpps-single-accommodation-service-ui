@@ -26,6 +26,7 @@ describe('linksForService', () => {
     { service: 'cas1', status: 'UPCOMING', expected: undefined },
     { service: 'cas3', status: 'NOT_STARTED', expected: ['Start referral'] },
     { service: 'cas3', status: 'SUBMITTED', expected: ['View referral'] },
+    { service: 'cas3', status: 'NOT_SUBMITTED', expected: ['Continue referral'] },
     { service: 'cas3', status: 'BEDSPACE_OFFERED', expected: ['View referral'] },
     { service: 'cas3', status: 'BOOKING_CONFIRMED', expected: ['View referral'] },
     { service: 'cas3', status: 'BOOKING_CANCELLED', expected: ['View referral'] },

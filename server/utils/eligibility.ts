@@ -65,6 +65,8 @@ export const linksForCas3Status = (serviceResult?: ServiceResult) => {
     case 'BOOKING_CONFIRMED':
     case 'BOOKING_CANCELLED':
       return [{ text: 'View referral', ...link }]
+    case 'NOT_SUBMITTED':
+      return [{ text: 'Continue referral', ...link }]
     case 'REJECTED':
       return [{ text: 'Start new referral', ...link }]
     case 'CANNOT_START_YET':

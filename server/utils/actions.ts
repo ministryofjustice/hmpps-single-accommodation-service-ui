@@ -16,7 +16,7 @@ export const actionsMap: Record<CaseAction['type'], string> = {
   REPLY_TO_CAS3_BEDSPACE_OFFER: 'Reply to CAS3 bedspace offer',
   START_APPROVED_PREMISE_APPLICATION: 'Start an approved premises (CAS1) application',
   START_CAS3_REFERRAL: 'Start a CAS3 referral',
-  CONTINUE_CAS3_REFERRAL: 'Continue a CAS3 referral',
+  CONTINUE_CAS3_REFERRAL: 'Continue CAS3 referral',
   SUBMIT_CRS_ACCOMMODATION_REFERRAL: 'Submit a CRS accommodation referral',
   SUBMIT_CRS_REFERRAL: 'Submit a CRS referral',
   SUBMIT_DTR_REFERRAL: 'Submit a DTR referral',

@@ -654,7 +654,13 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "heading": "CAS3 (transitional accommodation)",
     "hint": undefined,
     "inactive": false,
-    "links": undefined,
+    "links": [
+      {
+        "external": true,
+        "href": "https://example.com/view-referral",
+        "text": "Continue referral",
+      },
+    ],
     "status": {
       "colour": "orange",
       "text": "Not submitted",

@@ -281,7 +281,7 @@ describe('eligibilityToEligibilityCards', () => {
       },
       cas3: {
         serviceResult: serviceResultFactory.build({
-          serviceStatus: 'CONFIRMED',
+          serviceStatus: 'NOT_SUBMITTED',
           url: 'https://example.com/view-referral',
         }),
       },

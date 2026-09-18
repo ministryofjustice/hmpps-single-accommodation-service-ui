@@ -656,8 +656,8 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
     "inactive": false,
     "links": undefined,
     "status": {
-      "colour": "green",
-      "text": "Confirmed",
+      "colour": "orange",
+      "text": "Not submitted",
     },
   },
 ]

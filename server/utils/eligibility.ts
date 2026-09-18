@@ -130,6 +130,10 @@ const hintForServiceResult = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?:
     return 'This could be because of risk levels or suitability for a move on at this time.'
   }
 
+  if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas3') {
+    return 'Not at risk of homelessness.'
+  }
+
   if (serviceStatus === 'UPCOMING' && action?.startDate) {
     return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
   }

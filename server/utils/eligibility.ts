@@ -179,14 +179,17 @@ const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementP
       return requestForPlacement?.expectedArrivalDate
         ? `Not arrived (due ${formatDate(requestForPlacement.expectedArrivalDate)})`
         : 'Not arrived'
+
+    default:
+      break
   }
 
   switch (requestForPlacement?.status) {
     case 'REQUEST_WITHDRAWN':
-      return `Request withdrawn${requestForPlacement.withdrawalDate ? ` (${formatDate(requestForPlacement.withdrawalDate)})` : ''}. Reason: ${cas1WithdrawalReasonLabels[requestForPlacement.withdrawalReason] || 'Unknown'}`
+      return `Request withdrawn${requestForPlacement.withdrawalDate ? ` (${formatDate(requestForPlacement.withdrawalDate)})` : ''}. Reason: ${cas1WithdrawalReasonLabels[requestForPlacement.withdrawalReason] ?? 'Unknown'}`
 
     case 'REQUEST_REJECTED':
-      return `Request rejected. Reason: ${requestForPlacement.rejectionReason || 'Unknown'}`
+      return `Request rejected. Reason: ${requestForPlacement.rejectionReason ?? 'Unknown'}`
 
     default:
       return undefined
@@ -200,7 +203,7 @@ const contentForCas1Status = (
   const { serviceStatus } = serviceResult ?? {}
 
   switch (serviceStatus) {
-    case 'PLACEMENT_REQUEST_NOT_STARTED':
+    case 'PLACEMENT_REQUEST_NOT_STARTED': {
       const { placementHistory } = cas1Application ?? {}
       if (!placementHistory?.length) return undefined
       const history = placementHistory.map(placementHistoryText).filter((entry): entry is string => entry !== undefined)
@@ -208,6 +211,7 @@ const contentForCas1Status = (
       if (!history.length) return undefined
 
       return [htmlContent(govukDetailsList(`${history.length} previous placements on this application`, history))]
+    }
     default:
       return undefined
   }

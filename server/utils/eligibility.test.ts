@@ -365,20 +365,20 @@ describe('cas1 status card', () => {
           ],
         }
 
-        const content = cas1StatusCard({
+        const { content } = cas1StatusCard({
           serviceResult,
           cas1Application: application,
-        }).content
+        })
 
         expect(JSON.stringify(content)).toContain('5 previous placements on this application')
         expect(content).toMatchSnapshot()
       })
 
       it('does not render placement history when empty', () => {
-        const content = cas1StatusCard({
+        const { content } = cas1StatusCard({
           serviceResult,
           cas1Application,
-        }).content
+        })
 
         expect(content).toBeUndefined()
       })

@@ -144,7 +144,9 @@ describe('Macros', () => {
 
   describe('govukDetailsList', () => {
     it('renders a details component with escaped list items', () => {
-      expect(govukDetailsList('Previous placements', ['A normal item', '<script>alert("escaped!")</script>'])).toMatchSnapshot()
+      expect(
+        govukDetailsList('Previous placements', ['A normal item', '<script>alert("escaped!")</script>']),
+      ).toMatchSnapshot()
     })
   })
 

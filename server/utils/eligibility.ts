@@ -1,4 +1,12 @@
-import { Cas1ServiceResult, Cas2ServiceResult, Cas3ServiceResult, EligibilityDto, ServiceResult } from '@sas/api'
+import {
+  Cas1ApplicationDto,
+  Cas1PlacementPairDto,
+  Cas1ServiceResult,
+  Cas2ServiceResult,
+  Cas3ServiceResult,
+  EligibilityDto,
+  ServiceResult,
+} from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
 import { SummaryListRow, TextOrHtmlContent } from '@govuk/ui'
 import { dutyToReferStatusCard } from './dutyToRefer'
@@ -8,6 +16,7 @@ import { formatDate, formatDateAndDaysAgo } from './dates'
 import config from '../config'
 import { htmlContent } from './utils'
 import { summaryListRow } from './summaryListRow'
+import { govukDetails } from './macros'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -158,6 +167,58 @@ const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined =>
   return upcomingStartHint(serviceResult)
 }
 
+const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementPairDto): string | undefined => {
+  switch (placement?.status) {
+    case 'DEPARTED':
+      if (placement.actualArrivalDate && placement.actualDepartureDate) {
+        return `Departed (${formatDate(placement.actualArrivalDate)} to ${formatDate(placement.actualDepartureDate)})`
+      }
+      return 'Departed'
+
+    case 'NOT_ARRIVED':
+      return requestForPlacement?.expectedArrivalDate
+        ? `Not arrived (due ${formatDate(requestForPlacement.expectedArrivalDate)})`
+        : 'Not arrived'
+  }
+
+  switch (requestForPlacement?.status) {
+    case 'REQUEST_WITHDRAWN':
+      return `Request withdrawn${requestForPlacement.withdrawalDate ? ` (${formatDate(requestForPlacement.withdrawalDate)})` : ''}. Reason: ${cas1WithdrawalReasonLabels[requestForPlacement.withdrawalReason] || 'Unknown'}`
+
+    case 'REQUEST_REJECTED':
+      return `Request rejected. Reason: ${requestForPlacement.rejectionReason || 'Unknown'}`
+
+    default:
+      return undefined
+  }
+}
+
+const contentForCas1Status = (
+  serviceResult?: ServiceResult,
+  cas1Application?: Cas1ApplicationDto,
+): TextOrHtmlContent[] => {
+  const { serviceStatus } = serviceResult ?? {}
+
+  switch (serviceStatus) {
+    case 'PLACEMENT_REQUEST_NOT_STARTED':
+      const { placementHistory } = cas1Application ?? {}
+      if (!placementHistory?.length) return undefined
+      const history = placementHistory.map(placementHistoryText).filter((entry): entry is string => entry !== undefined)
+      const placementCount = history.length
+
+      if (!history.length) return undefined
+
+      const content = `
+        <ul class="govuk-list govuk-list--bullet">
+          ${history.map(entry => `<li>${entry}</li>`).join('')}
+        </ul>
+      `
+      return [htmlContent(govukDetails(`${placementCount} previous placements on this application`, content))]
+    default:
+      return undefined
+  }
+}
+
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
   const { serviceStatus } = serviceResult ?? {}
 
@@ -182,7 +243,7 @@ const placementDurationText = (durationDays?: number | null): string | undefined
 
 const detailsForCas1Status = (
   serviceResult?: ServiceResult,
-  cas1Application?: Cas1ServiceResult['cas1Application'],
+  cas1Application?: Cas1ApplicationDto,
 ): SummaryListRow[] => {
   const { serviceStatus } = serviceResult ?? {}
   const { application, assessment, requestForPlacement, placement } = cas1Application ?? {}
@@ -281,6 +342,7 @@ export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceRe
   hint: hintForCas1Status(serviceResult),
   links: linksForCas1Status(serviceResult),
   details: detailsForCas1Status(serviceResult, cas1Application),
+  content: contentForCas1Status(serviceResult, cas1Application),
 })
 
 export const cas2StatusCard = ({ serviceResult }: Cas2ServiceResult): StatusCard => ({

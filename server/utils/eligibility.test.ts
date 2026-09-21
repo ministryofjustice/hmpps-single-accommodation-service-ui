@@ -249,7 +249,7 @@ describe('eligibilityStatusCard', () => {
   })
 })
 
-describe('cas1 status card details', () => {
+describe('cas1 status card', () => {
   const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
     uiUrl: 'https://example.com/application',
     id: 'application-id',
@@ -281,21 +281,6 @@ describe('cas1 status card details', () => {
     },
   }
 
-  const detailStatuses: ServiceResult['serviceStatus'][] = [
-    'NOT_SUBMITTED',
-    'SUBMITTED',
-    'INFO_REQUESTED',
-    'APPLICATION_REJECTED',
-    'PLACEMENT_BOOKED',
-    'ARRIVED',
-    'NOT_ARRIVED',
-    'PLACEMENT_CANCELLED',
-    'PLACEMENT_REQUEST_NOT_STARTED',
-    'PLACEMENT_REQUEST_SUBMITTED',
-    'PLACEMENT_REQUEST_REJECTED',
-    'PLACEMENT_REQUEST_WITHDRAWN',
-  ]
-
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date('2026-08-01'))
   })
@@ -304,10 +289,100 @@ describe('cas1 status card details', () => {
     jest.useRealTimers()
   })
 
-  it.each(detailStatuses)('renders detail rows for a %s status', status => {
-    const serviceResult = serviceResultFactory.build({ serviceStatus: status })
+  describe('details', () => {
+    const detailStatuses: ServiceResult['serviceStatus'][] = [
+      'NOT_SUBMITTED',
+      'SUBMITTED',
+      'INFO_REQUESTED',
+      'APPLICATION_REJECTED',
+      'PLACEMENT_BOOKED',
+      'ARRIVED',
+      'NOT_ARRIVED',
+      'PLACEMENT_CANCELLED',
+      'PLACEMENT_REQUEST_NOT_STARTED',
+      'PLACEMENT_REQUEST_SUBMITTED',
+      'PLACEMENT_REQUEST_REJECTED',
+      'PLACEMENT_REQUEST_WITHDRAWN',
+    ]
 
-    expect(cas1StatusCard({ serviceResult, cas1Application }).details).toMatchSnapshot()
+    it.each(detailStatuses)('renders detail rows for a %s status', status => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: status })
+
+      expect(cas1StatusCard({ serviceResult, cas1Application }).details).toMatchSnapshot()
+    })
+  })
+
+  describe('content', () => {
+    const serviceResult = serviceResultFactory.build({
+      serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED',
+    })
+
+    describe('placement history', () => {
+      it('renders previous placements', () => {
+        const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
+          ...cas1Application,
+          placementHistory: [
+            {
+              dateApplied: '2026-06-01',
+              requestForPlacement: {
+                status: 'REQUEST_WITHDRAWN',
+                withdrawalDate: '2026-06-20',
+                withdrawalReason: 'CHANGE_IN_CIRCUMSTANCES',
+              },
+            },
+            {
+              dateApplied: '2026-05-01',
+              placement: {
+                status: 'DEPARTED',
+                actualArrivalDate: '2026-05-20',
+                actualDepartureDate: '2026-06-20',
+              },
+            },
+            {
+              dateApplied: '2026-05-01',
+              requestForPlacement: {
+                expectedArrivalDate: '2026-05-21',
+              },
+              placement: {
+                status: 'NOT_ARRIVED',
+              },
+            },
+            {
+              dateApplied: '2026-04-01',
+              requestForPlacement: {
+                status: 'REQUEST_WITHDRAWN',
+                withdrawalDate: '2026-04-20',
+                withdrawalReason: 'NO_CAPACITY',
+              },
+            },
+            {
+              dateApplied: '2026-03-30',
+              requestForPlacement: {
+                status: 'REQUEST_REJECTED',
+                rejectionReason: 'Placement unsuitable',
+              },
+            },
+          ],
+        }
+
+        const content = cas1StatusCard({
+          serviceResult,
+          cas1Application: application,
+        }).content
+
+        expect(JSON.stringify(content)).toContain('5 previous placements on this application')
+        expect(content).toMatchSnapshot()
+      })
+
+      it('does not render placement history when empty', () => {
+        const content = cas1StatusCard({
+          serviceResult,
+          cas1Application,
+        }).content
+
+        expect(content).toBeUndefined()
+      })
+    })
   })
 })
 

@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`cas1 status card content placement history renders previous placements 1`] = `
+[
+  {
+    "html": "<details class="govuk-details govuk-!-margin-bottom-1">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      5 previous placements on this application
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    
+        &lt;ul class=&quot;govuk-list govuk-list--bullet&quot;&gt;
+          &lt;li&gt;Request withdrawn (20 June 2026). Reason: Their circumstances changed&lt;/li&gt;&lt;li&gt;Departed (20 May 2026 to 20 June 2026)&lt;/li&gt;&lt;li&gt;Not arrived (due 21 May 2026)&lt;/li&gt;&lt;li&gt;Request withdrawn (20 April 2026). Reason: There&#39;s no capacity&lt;/li&gt;&lt;li&gt;Request rejected. Reason: Placement unsuitable&lt;/li&gt;
+        &lt;/ul&gt;
+      
+  </div>
+</details>
+",
+  },
+]
+`;
+
 exports[`cas1 status card details renders detail rows for a APPLICATION_REJECTED status 1`] = `
 [
   {
@@ -343,6 +365,7 @@ exports[`cas1 status card details renders detail rows for a SUBMITTED status 1`]
 exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -389,6 +412,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
 exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -427,6 +451,7 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
 exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -473,6 +498,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
 exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": "This could be because of risk levels or suitability for a move on at this time.",
@@ -488,6 +514,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] =
 exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -509,6 +536,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = 
 exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -547,6 +575,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -593,6 +622,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -647,6 +677,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -685,6 +716,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -739,6 +771,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -785,6 +818,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
 exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -839,6 +873,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
 exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [
     {
       "key": {
@@ -877,6 +912,7 @@ exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
 exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": "Start referral from 8 November 2026 (in 100 days).",
@@ -892,6 +928,7 @@ exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
 exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
 {
   "blocked": false,
+  "content": undefined,
   "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
@@ -1226,6 +1263,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
   },
   {
     "blocked": false,
+    "content": undefined,
     "details": [],
     "heading": "Approved premises (CAS1)",
     "hint": undefined,

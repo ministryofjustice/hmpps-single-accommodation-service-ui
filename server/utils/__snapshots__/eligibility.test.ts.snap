@@ -21,7 +21,7 @@ exports[`cas1 status card content placement history renders previous placements 
       
         <li>Not arrived (due 21 May 2026)</li>
       
-        <li>Request withdrawn (20 April 2026). Reason: There&#39;s no capacity</li>
+        <li>Cancelled. Reason: No longer needed</li>
       
         <li>Request rejected. Reason: Placement unsuitable</li>
       

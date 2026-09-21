@@ -175,6 +175,12 @@ const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementP
       }
       return 'Departed'
 
+    case 'CANCELLED':
+      if (placement.cancellationReason) {
+        return `Cancelled. Reason: ${placement.cancellationReason ?? 'Unknown'}`
+      }
+      return 'Cancelled'
+
     case 'NOT_ARRIVED':
       return requestForPlacement?.expectedArrivalDate
         ? `Not arrived (due ${formatDate(requestForPlacement.expectedArrivalDate)})`

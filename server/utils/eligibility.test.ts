@@ -349,10 +349,9 @@ describe('cas1 status card', () => {
             },
             {
               dateApplied: '2026-04-01',
-              requestForPlacement: {
-                status: 'REQUEST_WITHDRAWN',
-                withdrawalDate: '2026-04-20',
-                withdrawalReason: 'NO_CAPACITY',
+              placement: {
+                status: 'CANCELLED',
+                cancellationReason: 'No longer needed',
               },
             },
             {

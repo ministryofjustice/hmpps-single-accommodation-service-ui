@@ -3,7 +3,9 @@
 exports[`cas1 status card content placement history renders previous placements 1`] = `
 [
   {
-    "html": "<details class="govuk-details govuk-!-margin-bottom-1">
+    "html": "
+
+  <details class="govuk-details govuk-!-margin-bottom-1">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
       5 previous placements on this application
@@ -11,10 +13,20 @@ exports[`cas1 status card content placement history renders previous placements 
   </summary>
   <div class="govuk-details__text">
     
-        &lt;ul class=&quot;govuk-list govuk-list--bullet&quot;&gt;
-          &lt;li&gt;Request withdrawn (20 June 2026). Reason: Their circumstances changed&lt;/li&gt;&lt;li&gt;Departed (20 May 2026 to 20 June 2026)&lt;/li&gt;&lt;li&gt;Not arrived (due 21 May 2026)&lt;/li&gt;&lt;li&gt;Request withdrawn (20 April 2026). Reason: There&#39;s no capacity&lt;/li&gt;&lt;li&gt;Request rejected. Reason: Placement unsuitable&lt;/li&gt;
-        &lt;/ul&gt;
+    <ul class="govuk-list govuk-list--bullet">
       
+        <li>Request withdrawn (20 June 2026). Reason: Their circumstances changed</li>
+      
+        <li>Departed (20 May 2026 to 20 June 2026)</li>
+      
+        <li>Not arrived (due 21 May 2026)</li>
+      
+        <li>Request withdrawn (20 April 2026). Reason: There&#39;s no capacity</li>
+      
+        <li>Request rejected. Reason: Placement unsuitable</li>
+      
+    </ul>
+  
   </div>
 </details>
 ",

@@ -16,7 +16,7 @@ import { formatDate, formatDateAndDaysAgo } from './dates'
 import config from '../config'
 import { htmlContent } from './utils'
 import { summaryListRow } from './summaryListRow'
-import { govukDetails } from './macros'
+import { govukDetailsList } from './macros'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -204,16 +204,10 @@ const contentForCas1Status = (
       const { placementHistory } = cas1Application ?? {}
       if (!placementHistory?.length) return undefined
       const history = placementHistory.map(placementHistoryText).filter((entry): entry is string => entry !== undefined)
-      const placementCount = history.length
 
       if (!history.length) return undefined
 
-      const content = `
-        <ul class="govuk-list govuk-list--bullet">
-          ${history.map(entry => `<li>${entry}</li>`).join('')}
-        </ul>
-      `
-      return [htmlContent(govukDetails(`${placementCount} previous placements on this application`, content))]
+      return [htmlContent(govukDetailsList(`${history.length} previous placements on this application`, history))]
     default:
       return undefined
   }

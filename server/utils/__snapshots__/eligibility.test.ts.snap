@@ -384,7 +384,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
         "text": "Decision",
       },
       "value": {
-        "text": "Reject",
+        "text": "Reject, Not enough detail",
       },
     },
     {
@@ -392,7 +392,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
         "text": "Submitted",
       },
       "value": {
-        "text": "",
+        "text": "2 June 2026 (59 days ago)",
       },
     },
     {
@@ -400,7 +400,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
         "text": "Submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
   ],
@@ -431,7 +431,7 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
         "text": "Submitted",
       },
       "value": {
-        "text": "",
+        "text": "2 June 2026 (59 days ago)",
       },
     },
     {
@@ -439,7 +439,7 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
         "text": "Submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
   ],
@@ -470,7 +470,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
         "text": "Expected arrival",
       },
       "value": {
-        "text": "",
+        "text": "9 September 2026 (in 40 days)",
       },
     },
     {
@@ -478,7 +478,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
         "text": "Request submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
     {
@@ -486,7 +486,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
         "text": "Application expires",
       },
       "value": {
-        "text": "",
+        "text": "29 January 2027",
       },
     },
   ],
@@ -555,7 +555,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] 
         "text": "Application started",
       },
       "value": {
-        "text": "",
+        "text": "1 June 2026 (60 days ago)",
       },
     },
     {
@@ -563,7 +563,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] 
         "text": "Started by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
   ],
@@ -594,7 +594,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
         "text": "Expected arrival",
       },
       "value": {
-        "text": "",
+        "text": "9 September 2026 (in 40 days)",
       },
     },
     {
@@ -602,7 +602,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
         "text": "Duration",
       },
       "value": {
-        "text": "",
+        "text": "8 weeks",
       },
     },
     {
@@ -610,7 +610,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
         "text": "Request submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
   ],
@@ -641,7 +641,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
         "text": "Cancellation reason",
       },
       "value": {
-        "text": "",
+        "text": "Over capacity",
       },
     },
     {
@@ -649,7 +649,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
         "text": "Expected arrival",
       },
       "value": {
-        "text": "",
+        "text": "9 September 2026 (in 40 days)",
       },
     },
     {
@@ -657,7 +657,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
         "text": "Request submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
     {
@@ -665,7 +665,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
         "text": "Application expires",
       },
       "value": {
-        "text": "",
+        "text": "29 January 2027",
       },
     },
   ],
@@ -696,7 +696,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
         "text": "Submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
     {
@@ -704,7 +704,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
         "text": "Application expires",
       },
       "value": {
-        "text": "",
+        "text": "29 January 2027",
       },
     },
   ],
@@ -735,7 +735,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
         "text": "Rejection reason",
       },
       "value": {
-        "text": "",
+        "text": "Over capacity",
       },
     },
     {
@@ -743,7 +743,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
         "text": "Request submitted",
       },
       "value": {
-        "text": "",
+        "text": "10 June 2026 (51 days ago)",
       },
     },
     {
@@ -751,7 +751,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
         "text": "Request submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
     {
@@ -759,7 +759,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
         "text": "Application expires",
       },
       "value": {
-        "text": "",
+        "text": "29 January 2027",
       },
     },
   ],
@@ -790,7 +790,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
         "text": "Request submitted",
       },
       "value": {
-        "text": "",
+        "text": "10 June 2026 (51 days ago)",
       },
     },
     {
@@ -798,7 +798,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
         "text": "Request submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
     {
@@ -806,7 +806,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
         "text": "Application expires",
       },
       "value": {
-        "text": "",
+        "text": "29 January 2027",
       },
     },
   ],
@@ -837,7 +837,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
         "text": "Withdrawal reason",
       },
       "value": {
-        "text": "",
+        "text": "There was an error in the request",
       },
     },
     {
@@ -845,7 +845,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
         "text": "Request submitted",
       },
       "value": {
-        "text": "",
+        "text": "10 June 2026 (51 days ago)",
       },
     },
     {
@@ -853,7 +853,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
         "text": "Request submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
     {
@@ -861,7 +861,7 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
         "text": "Application expires",
       },
       "value": {
-        "text": "",
+        "text": "29 January 2027",
       },
     },
   ],
@@ -892,7 +892,7 @@ exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
         "text": "Submitted",
       },
       "value": {
-        "text": "",
+        "text": "2 June 2026 (59 days ago)",
       },
     },
     {
@@ -900,7 +900,7 @@ exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
         "text": "Submitted by",
       },
       "value": {
-        "text": "",
+        "text": "Joe Bloggs",
       },
     },
   ],

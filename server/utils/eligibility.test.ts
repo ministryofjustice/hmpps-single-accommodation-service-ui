@@ -17,6 +17,37 @@ import {
   serviceResultFactory,
 } from '../testutils/factories'
 
+const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
+  uiUrl: 'https://example.com/application',
+  id: 'application-id',
+  applicationStatus: 'AWAITING_ASSESSMENT',
+  placementHistory: [],
+  application: {
+    id: 'application-summary-id',
+    status: 'AWAITING_ASSESSMENT',
+    createdAt: '2026-06-01',
+    createdBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+    submittedAt: '2026-06-02',
+    expiresAt: '2027-01-29',
+  },
+  assessment: { decision: 'REJECTED', rejectionRationale: 'Not enough detail' },
+  requestForPlacement: {
+    status: 'REQUEST_SUBMITTED',
+    submittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+    submittedAt: '2026-06-10',
+    rejectionReason: 'Over capacity',
+    withdrawalReason: 'ERROR_IN_PLACEMENT_REQUEST',
+    expectedArrivalDate: '2026-09-09',
+    durationDays: 56,
+  },
+  placement: {
+    status: 'ARRIVED',
+    actualArrivalDate: '2026-09-01',
+    actualDepartureDate: '2026-10-27',
+    cancellationReason: 'Over capacity',
+  },
+}
+
 describe('linksForService', () => {
   const linkBuilders: Record<'cas1' | 'cas2' | 'cas3', (serviceResult?: ServiceResult) => Link[]> = {
     cas1: linksForCas1Status,
@@ -229,10 +260,10 @@ describe('eligibilityStatusCard', () => {
   })
 
   describe.each(['cas1', 'cas2', 'cas3'] as const)('for %s', service => {
-    const cardBuilders: Record<'cas1' | 'cas2' | 'cas3', (result: Cas1ServiceResult) => StatusCard> = {
-      cas1: cas1StatusCard,
-      cas2: cas2StatusCard,
-      cas3: cas3StatusCard,
+    const cardBuilders: Record<'cas1' | 'cas2' | 'cas3', (result: ServiceResult) => StatusCard> = {
+      cas1: result => cas1StatusCard({ serviceResult: result, cas1Application }),
+      cas2: result => cas2StatusCard({ serviceResult: result }),
+      cas3: result => cas3StatusCard({ serviceResult: result }),
     }
 
     it.each(testCases[service])('renders a $title status card', ({ result }) => {
@@ -244,43 +275,12 @@ describe('eligibilityStatusCard', () => {
         ...result,
       })
 
-      expect(cardBuilders[service]({ serviceResult })).toMatchSnapshot()
+      expect(cardBuilders[service](serviceResult)).toMatchSnapshot()
     })
   })
 })
 
 describe('cas1 status card', () => {
-  const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
-    uiUrl: 'https://example.com/application',
-    id: 'application-id',
-    applicationStatus: 'AWAITING_ASSESSMENT',
-    placementHistory: [],
-    application: {
-      id: 'application-summary-id',
-      status: 'AWAITING_ASSESSMENT',
-      createdAt: '2026-06-01',
-      createdBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
-      submittedAt: '2026-06-02',
-      expiresAt: '2027-01-29',
-    },
-    assessment: { decision: 'REJECTED', rejectionRationale: 'Not enough detail' },
-    requestForPlacement: {
-      status: 'REQUEST_SUBMITTED',
-      submittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
-      submittedAt: '2026-06-10',
-      rejectionReason: 'Over capacity',
-      withdrawalReason: 'ERROR_IN_PLACEMENT_REQUEST',
-      expectedArrivalDate: '2026-09-09',
-      durationDays: 56,
-    },
-    placement: {
-      status: 'ARRIVED',
-      actualArrivalDate: '2026-09-01',
-      actualDepartureDate: '2026-10-27',
-      cancellationReason: 'Over capacity',
-    },
-  }
-
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date('2026-08-01'))
   })

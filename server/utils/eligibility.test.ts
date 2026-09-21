@@ -249,6 +249,68 @@ describe('eligibilityStatusCard', () => {
   })
 })
 
+describe('cas1 status card details', () => {
+  const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
+    uiUrl: 'https://example.com/application',
+    id: 'application-id',
+    applicationStatus: 'AWAITING_ASSESSMENT',
+    placementHistory: [],
+    application: {
+      id: 'application-summary-id',
+      status: 'AWAITING_ASSESSMENT',
+      createdAt: '2026-06-01',
+      createdBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+      submittedAt: '2026-06-02',
+      expiresAt: '2027-01-29',
+    },
+    assessment: { decision: 'REJECTED', rejectionRationale: 'Not enough detail' },
+    requestForPlacement: {
+      status: 'REQUEST_SUBMITTED',
+      submittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+      submittedAt: '2026-06-10',
+      rejectionReason: 'Over capacity',
+      withdrawalReason: 'ERROR_IN_PLACEMENT_REQUEST',
+      expectedArrivalDate: '2026-09-09',
+      durationDays: 56,
+    },
+    placement: {
+      status: 'ARRIVED',
+      actualArrivalDate: '2026-09-01',
+      actualDepartureDate: '2026-10-27',
+      cancellationReason: 'Over capacity',
+    },
+  }
+
+  const detailStatuses: ServiceResult['serviceStatus'][] = [
+    'NOT_SUBMITTED',
+    'SUBMITTED',
+    'INFO_REQUESTED',
+    'APPLICATION_REJECTED',
+    'PLACEMENT_BOOKED',
+    'ARRIVED',
+    'NOT_ARRIVED',
+    'PLACEMENT_CANCELLED',
+    'PLACEMENT_REQUEST_NOT_STARTED',
+    'PLACEMENT_REQUEST_SUBMITTED',
+    'PLACEMENT_REQUEST_REJECTED',
+    'PLACEMENT_REQUEST_WITHDRAWN',
+  ]
+
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-08-01'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  it.each(detailStatuses)('renders detail rows for a %s status', status => {
+    const serviceResult = serviceResultFactory.build({ serviceStatus: status })
+
+    expect(cas1StatusCard({ serviceResult, cas1Application }).details).toMatchSnapshot()
+  })
+})
+
 describe('eligibilityToEligibilityCards', () => {
   const crn = 'X123456'
 

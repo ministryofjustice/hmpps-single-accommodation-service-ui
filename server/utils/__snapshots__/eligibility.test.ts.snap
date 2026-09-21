@@ -1,5 +1,345 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`cas1 status card details renders detail rows for a APPLICATION_REJECTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Decision",
+    },
+    "value": {
+      "text": "Reject, Not enough detail",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "2 June 2026 (60 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a ARRIVED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Arrival date",
+    },
+    "value": {
+      "text": "1 September 2026 (in 31 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Expected departure",
+    },
+    "value": {
+      "text": "27 October 2026 (in 87 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a INFO_REQUESTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "2 June 2026 (60 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a NOT_ARRIVED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Expected arrival",
+    },
+    "value": {
+      "text": "9 September 2026 (in 39 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a NOT_SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Application started",
+    },
+    "value": {
+      "text": "1 June 2026 (61 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Started by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_BOOKED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Expected arrival",
+    },
+    "value": {
+      "text": "9 September 2026 (in 39 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Duration",
+    },
+    "value": {
+      "text": "8 weeks",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_CANCELLED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Cancellation reason",
+    },
+    "value": {
+      "text": "Over capacity",
+    },
+  },
+  {
+    "key": {
+      "text": "Expected arrival",
+    },
+    "value": {
+      "text": "9 September 2026 (in 39 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_NOT_STARTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_REJECTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Rejection reason",
+    },
+    "value": {
+      "text": "Over capacity",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted",
+    },
+    "value": {
+      "text": "10 June 2026 (52 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Request submitted",
+    },
+    "value": {
+      "text": "10 June 2026 (52 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_WITHDRAWN status 1`] = `
+[
+  {
+    "key": {
+      "text": "Withdrawal reason",
+    },
+    "value": {
+      "text": "There was an error in the request",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted",
+    },
+    "value": {
+      "text": "10 June 2026 (52 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "2 June 2026 (60 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
 exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status card 1`] = `
 {
   "blocked": false,

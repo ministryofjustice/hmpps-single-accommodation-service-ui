@@ -245,12 +245,10 @@ const placementDurationText = (durationDays?: number | null): string | undefined
   return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
 }
 
-const detailsForCas1Status = (
-  serviceResult?: ServiceResult,
-  cas1Application?: Cas1ApplicationDto,
-): SummaryListRow[] => {
+const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Cas1ApplicationDto): SummaryListRow[] => {
   const { serviceStatus } = serviceResult ?? {}
-  const { application, assessment, requestForPlacement, placement } = cas1Application ?? {}
+  if (!cas1Application) return []
+  const { application, assessment, requestForPlacement, placement } = cas1Application
 
   const submittedRow = () => summaryListRow('Submitted', formatDateAndDaysAgo(application?.submittedAt ?? undefined))
   const submittedByRow = () => summaryListRow('Submitted by', application?.createdBy?.name)

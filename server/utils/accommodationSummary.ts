@@ -111,7 +111,7 @@ const accommodationStatusTag = (status?: AccommodationSummariesDto['caseAccommod
     NO_FIXED_ABODE: { text: 'No fixed abode', colour: 'grey' },
     RISK_OF_NO_FIXED_ABODE: { text: 'Risk of no fixed abode', colour: 'orange' },
     SETTLED: { text: 'Settled', colour: 'green' },
-    TRANSIENT: { text: 'Transient', colour: 'pink' },
+    TRANSIENT: { text: 'Transient', colour: 'purple' },
   })[status]
 
 export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {

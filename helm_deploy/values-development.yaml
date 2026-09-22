@@ -28,7 +28,7 @@ generic-service:
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
     HIDE_SET_AS_CURRENT_ADDRESS: "false"
     CASE_LIST_V2_ENABLED: "true"
-    CASE_LIST_V2_TABS_ENABLED: "false"
+    CASE_LIST_V2_TABS_ENABLED: "true"
     CAS_EXTRA_DETAILS_ENABLED: "true"
     CAS2_ENABLED: "true"
 

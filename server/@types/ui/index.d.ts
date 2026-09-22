@@ -69,7 +69,7 @@ export type GetCasesQuery = {
   searchTerm?: string
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
   teamCode?: string
-  peopleType?: 'nfarisk' | 'housed'
+  peopleType?: 'NFA_RISK' | 'HOUSED'
 }
 
 export interface IndexRequest extends Request {

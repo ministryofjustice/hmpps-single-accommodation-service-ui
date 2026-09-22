@@ -388,39 +388,39 @@ describe('cases utilities', () => {
   })
 
   describe('casesTabs', () => {
-    it('returns both tabs with the nfarisk tab selected', () => {
-      expect(casesTabs('/', 'nfarisk')).toEqual([
-        { text: 'Housing support needed', href: '/?peopleType=nfarisk', selected: true },
-        { text: 'Settled housing secured', href: '/?peopleType=housed', selected: false },
+    it('returns both tabs with the NFA_RISK tab selected', () => {
+      expect(casesTabs('/', 'NFA_RISK')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=NFA_RISK', selected: true },
+        { text: 'Settled housing secured', href: '/?peopleType=HOUSED', selected: false },
       ])
     })
 
-    it('returns both tabs with the housed tab selected', () => {
-      expect(casesTabs('/', 'housed')).toEqual([
-        { text: 'Housing support needed', href: '/?peopleType=nfarisk', selected: false },
-        { text: 'Settled housing secured', href: '/?peopleType=housed', selected: true },
+    it('returns both tabs with the HOUSED tab selected', () => {
+      expect(casesTabs('/', 'HOUSED')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=NFA_RISK', selected: false },
+        { text: 'Settled housing secured', href: '/?peopleType=HOUSED', selected: true },
       ])
     })
 
     it('preserves existing filters in the tab hrefs', () => {
-      expect(casesTabs('/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one', 'nfarisk')).toEqual([
+      expect(casesTabs('/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one', 'NFA_RISK')).toEqual([
         {
           text: 'Housing support needed',
-          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=nfarisk',
+          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=NFA_RISK',
           selected: true,
         },
         {
           text: 'Settled housing secured',
-          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=housed',
+          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=HOUSED',
           selected: false,
         },
       ])
     })
 
     it('replaces an existing peopleType param rather than duplicating it', () => {
-      expect(casesTabs('/?peopleType=housed&searchTerm=foo', 'housed')).toEqual([
-        { text: 'Housing support needed', href: '/?peopleType=nfarisk&searchTerm=foo', selected: false },
-        { text: 'Settled housing secured', href: '/?peopleType=housed&searchTerm=foo', selected: true },
+      expect(casesTabs('/?peopleType=HOUSED&searchTerm=foo', 'HOUSED')).toEqual([
+        { text: 'Housing support needed', href: '/?peopleType=NFA_RISK&searchTerm=foo', selected: false },
+        { text: 'Settled housing secured', href: '/?peopleType=HOUSED&searchTerm=foo', selected: true },
       ])
     })
   })

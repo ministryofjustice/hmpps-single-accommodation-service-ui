@@ -23,17 +23,17 @@ export const formatRiskLevel = (level?: Case['riskLevel']) => {
 
 export const casesTabs = (
   url: string,
-  peopleType: 'nfarisk' | 'housed',
+  peopleType: 'NFA_RISK' | 'HOUSED',
 ): { text: string; href: string; selected?: boolean }[] => [
   {
     text: 'Housing support needed',
-    href: updateQueryParams(url, { peopleType: 'nfarisk' }),
-    selected: peopleType === 'nfarisk',
+    href: updateQueryParams(url, { peopleType: 'NFA_RISK' }),
+    selected: peopleType === 'NFA_RISK',
   },
   {
     text: 'Settled housing secured',
-    href: updateQueryParams(url, { peopleType: 'housed' }),
-    selected: peopleType === 'housed',
+    href: updateQueryParams(url, { peopleType: 'HOUSED' }),
+    selected: peopleType === 'HOUSED',
   },
 ]
 

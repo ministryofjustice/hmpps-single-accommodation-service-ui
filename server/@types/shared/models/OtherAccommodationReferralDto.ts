@@ -6,6 +6,6 @@ import type { OtherAccommodationReferralSubmissionDto } from './OtherAccommodati
 export type OtherAccommodationReferralDto = {
   caseId: string
   crn: string
-  status: 'SUBMITTED'
+  status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED'
   submission: OtherAccommodationReferralSubmissionDto
 }

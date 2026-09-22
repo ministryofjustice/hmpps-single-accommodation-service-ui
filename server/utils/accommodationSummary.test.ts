@@ -235,7 +235,7 @@ describe('accommodationSummary', () => {
           caseAccommodationStatus: 'TRANSIENT',
           caseAccommodationStatusDate: '2025-12-20',
         }),
-        { status: { text: 'Transient', colour: 'pink' }, dateText: 'From 20 December 2025 (in 10 days)' },
+        { status: { text: 'Transient', colour: 'purple' }, dateText: 'From 20 December 2025 (in 10 days)' },
       ],
     ])('returns the expected status cell for %s', (_, accommodationSummaries, expected) => {
       expect(accommodationStatusCell(caseFactory.build({ accommodationSummaries }))).toEqual(expected)

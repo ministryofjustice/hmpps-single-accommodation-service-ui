@@ -20,6 +20,7 @@ type Macro =
   | 'timelineProposedAddress'
   | 'actionsCell'
   | 'govukDetails'
+  | 'govukDetailsList'
   | 'textBlock'
 
 export const renderMacro = <T>(macroName: Macro, context: T): string =>
@@ -40,5 +41,8 @@ export const tierScoreTag = (tierScore: CaseDto['tierScore']) => renderMacro('ti
 export const statusCard = (cardData: StatusCard) => renderMacro('statusCard', cardData)
 
 export const govukDetails = (summaryText: string, text: string) => renderMacro('govukDetails', { summaryText, text })
+
+export const govukDetailsList = (summaryText: string, items: string[]) =>
+  renderMacro('govukDetailsList', { summaryText, items })
 
 export const textBlock = (text?: string) => renderMacro('textBlock', text)

@@ -1,5 +1,14 @@
-import { ServiceResult } from '@sas/api'
-import { eligibilityStatusCard, eligibilityToEligibilityCards, linksForService } from './eligibility'
+import { Cas1ServiceResult, ServiceResult } from '@sas/api'
+import { Link, StatusCard } from '@sas/ui'
+import {
+  cas1StatusCard,
+  cas2StatusCard,
+  cas3StatusCard,
+  eligibilityToEligibilityCards,
+  linksForCas1Status,
+  linksForCas2Status,
+  linksForCas3Status,
+} from './eligibility'
 import config from '../config'
 import {
   crsServiceResultFactory,
@@ -8,7 +17,44 @@ import {
   serviceResultFactory,
 } from '../testutils/factories'
 
+const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
+  uiUrl: 'https://example.com/application',
+  id: 'application-id',
+  applicationStatus: 'AWAITING_ASSESSMENT',
+  placementHistory: [],
+  application: {
+    id: 'application-summary-id',
+    status: 'AWAITING_ASSESSMENT',
+    createdAt: '2026-06-01',
+    createdBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+    submittedAt: '2026-06-02',
+    expiresAt: '2027-01-29',
+  },
+  assessment: { decision: 'REJECTED', rejectionRationale: 'Not enough detail' },
+  requestForPlacement: {
+    status: 'REQUEST_SUBMITTED',
+    submittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+    submittedAt: '2026-06-10',
+    rejectionReason: 'Over capacity',
+    withdrawalReason: 'ERROR_IN_PLACEMENT_REQUEST',
+    expectedArrivalDate: '2026-09-09',
+    durationDays: 56,
+  },
+  placement: {
+    status: 'ARRIVED',
+    actualArrivalDate: '2026-09-01',
+    actualDepartureDate: '2026-10-27',
+    cancellationReason: 'Over capacity',
+  },
+}
+
 describe('linksForService', () => {
+  const linkBuilders: Record<'cas1' | 'cas2' | 'cas3', (serviceResult?: ServiceResult) => Link[]> = {
+    cas1: linksForCas1Status,
+    cas2: linksForCas2Status,
+    cas3: linksForCas3Status,
+  }
+
   const testCases = [
     { service: 'cas1', status: 'NOT_STARTED', expected: ['Start application'] },
     { service: 'cas1', status: 'NOT_SUBMITTED', expected: ['Continue application'] },
@@ -43,12 +89,12 @@ describe('linksForService', () => {
       status,
       expected,
     }: {
-      service: 'cas1' | 'cas3'
+      service: 'cas1' | 'cas2' | 'cas3'
       status: ServiceResult['serviceStatus']
       expected: string[]
     }) => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status, url: 'https://example.com' })
-      const links = linksForService(service, serviceResult)
+      const links = linkBuilders[service](serviceResult)
 
       if (expected === undefined) {
         expect(links).toBeUndefined()
@@ -214,6 +260,12 @@ describe('eligibilityStatusCard', () => {
   })
 
   describe.each(['cas1', 'cas2', 'cas3'] as const)('for %s', service => {
+    const cardBuilders: Record<'cas1' | 'cas2' | 'cas3', (result: ServiceResult) => StatusCard> = {
+      cas1: result => cas1StatusCard({ serviceResult: result, cas1Application }),
+      cas2: result => cas2StatusCard({ serviceResult: result }),
+      cas3: result => cas3StatusCard({ serviceResult: result }),
+    }
+
     it.each(testCases[service])('renders a $title status card', ({ result }) => {
       const serviceResult = serviceResultFactory.build({
         serviceStatus: 'NOT_REQUIRED',
@@ -223,7 +275,112 @@ describe('eligibilityStatusCard', () => {
         ...result,
       })
 
-      expect(eligibilityStatusCard(service, serviceResult)).toMatchSnapshot()
+      expect(cardBuilders[service](serviceResult)).toMatchSnapshot()
+    })
+  })
+})
+
+describe('cas1 status card', () => {
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-08-01'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  describe('details', () => {
+    const detailStatuses: ServiceResult['serviceStatus'][] = [
+      'NOT_SUBMITTED',
+      'SUBMITTED',
+      'INFO_REQUESTED',
+      'APPLICATION_REJECTED',
+      'PLACEMENT_BOOKED',
+      'ARRIVED',
+      'NOT_ARRIVED',
+      'PLACEMENT_CANCELLED',
+      'PLACEMENT_REQUEST_NOT_STARTED',
+      'PLACEMENT_REQUEST_SUBMITTED',
+      'PLACEMENT_REQUEST_REJECTED',
+      'PLACEMENT_REQUEST_WITHDRAWN',
+    ]
+
+    it.each(detailStatuses)('renders detail rows for a %s status', status => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: status })
+
+      expect(cas1StatusCard({ serviceResult, cas1Application }).details).toMatchSnapshot()
+    })
+  })
+
+  describe('content', () => {
+    const serviceResult = serviceResultFactory.build({
+      serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED',
+    })
+
+    describe('placement history', () => {
+      it('renders previous placements', () => {
+        const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
+          ...cas1Application,
+          placementHistory: [
+            {
+              dateApplied: '2026-06-01',
+              requestForPlacement: {
+                status: 'REQUEST_WITHDRAWN',
+                withdrawalDate: '2026-06-20',
+                withdrawalReason: 'CHANGE_IN_CIRCUMSTANCES',
+              },
+            },
+            {
+              dateApplied: '2026-05-01',
+              placement: {
+                status: 'DEPARTED',
+                actualArrivalDate: '2026-05-20',
+                actualDepartureDate: '2026-06-20',
+              },
+            },
+            {
+              dateApplied: '2026-05-01',
+              requestForPlacement: {
+                expectedArrivalDate: '2026-05-21',
+              },
+              placement: {
+                status: 'NOT_ARRIVED',
+              },
+            },
+            {
+              dateApplied: '2026-04-01',
+              placement: {
+                status: 'CANCELLED',
+                cancellationReason: 'No longer needed',
+              },
+            },
+            {
+              dateApplied: '2026-03-30',
+              requestForPlacement: {
+                status: 'REQUEST_REJECTED',
+                rejectionReason: 'Placement unsuitable',
+              },
+            },
+          ],
+        }
+
+        const { content } = cas1StatusCard({
+          serviceResult,
+          cas1Application: application,
+        })
+
+        expect(JSON.stringify(content)).toContain('5 previous placements on this application')
+        expect(content).toMatchSnapshot()
+      })
+
+      it('does not render placement history when empty', () => {
+        const { content } = cas1StatusCard({
+          serviceResult,
+          cas1Application,
+        })
+
+        expect(content).toBeUndefined()
+      })
     })
   })
 })

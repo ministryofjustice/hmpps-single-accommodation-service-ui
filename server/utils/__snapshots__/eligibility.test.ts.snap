@@ -1,9 +1,409 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`cas1 status card content placement history renders previous placements 1`] = `
+[
+  {
+    "html": "
+
+  <details class="govuk-details govuk-!-margin-bottom-1">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      5 previous placements on this application
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    
+    <ul class="govuk-list govuk-list--bullet">
+      
+        <li>Request withdrawn (20 June 2026). Reason: Their circumstances changed</li>
+      
+        <li>Departed (20 May 2026 to 20 June 2026)</li>
+      
+        <li>Not arrived (due 21 May 2026)</li>
+      
+        <li>Cancelled. Reason: No longer needed</li>
+      
+        <li>Request rejected. Reason: Placement unsuitable</li>
+      
+    </ul>
+  
+  </div>
+</details>
+",
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a APPLICATION_REJECTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Decision",
+    },
+    "value": {
+      "text": "Reject, Not enough detail",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "2 June 2026 (60 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a ARRIVED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Arrival date",
+    },
+    "value": {
+      "text": "1 September 2026 (in 31 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Expected departure",
+    },
+    "value": {
+      "text": "27 October 2026 (in 87 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a INFO_REQUESTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "2 June 2026 (60 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a NOT_ARRIVED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Expected arrival",
+    },
+    "value": {
+      "text": "9 September 2026 (in 39 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a NOT_SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Application started",
+    },
+    "value": {
+      "text": "1 June 2026 (61 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Started by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_BOOKED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Expected arrival",
+    },
+    "value": {
+      "text": "9 September 2026 (in 39 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Duration",
+    },
+    "value": {
+      "text": "8 weeks",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_CANCELLED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Cancellation reason",
+    },
+    "value": {
+      "text": "Over capacity",
+    },
+  },
+  {
+    "key": {
+      "text": "Expected arrival",
+    },
+    "value": {
+      "text": "9 September 2026 (in 39 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_NOT_STARTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_REJECTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Rejection reason",
+    },
+    "value": {
+      "text": "Over capacity",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted",
+    },
+    "value": {
+      "text": "10 June 2026 (52 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Request submitted",
+    },
+    "value": {
+      "text": "10 June 2026 (52 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a PLACEMENT_REQUEST_WITHDRAWN status 1`] = `
+[
+  {
+    "key": {
+      "text": "Withdrawal reason",
+    },
+    "value": {
+      "text": "There was an error in the request",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted",
+    },
+    "value": {
+      "text": "10 June 2026 (52 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Request submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Application expires",
+    },
+    "value": {
+      "text": "29 January 2027",
+    },
+  },
+]
+`;
+
+exports[`cas1 status card details renders detail rows for a SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "2 June 2026 (60 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
 exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status card 1`] = `
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Decision",
+      },
+      "value": {
+        "text": "Reject, Not enough detail",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted",
+      },
+      "value": {
+        "text": "2 June 2026 (59 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -25,6 +425,24 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Submitted",
+      },
+      "value": {
+        "text": "2 June 2026 (59 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -46,6 +464,32 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ARRIVED status card 1`] = 
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Expected arrival",
+      },
+      "value": {
+        "text": "9 September 2026 (in 40 days)",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+    {
+      "key": {
+        "text": "Application expires",
+      },
+      "value": {
+        "text": "29 January 2027",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -67,6 +511,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] =
 {
   "blocked": false,
   "content": undefined,
+  "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": "This could be because of risk levels or suitability for a move on at this time.",
   "inactive": true,
@@ -82,6 +527,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_STARTED status card 1`] = 
 {
   "blocked": false,
   "content": undefined,
+  "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -103,6 +549,24 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_SUBMITTED status card 1`] 
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Application started",
+      },
+      "value": {
+        "text": "1 June 2026 (60 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Started by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -124,6 +588,32 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_BOOKED status card 1
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Expected arrival",
+      },
+      "value": {
+        "text": "9 September 2026 (in 40 days)",
+      },
+    },
+    {
+      "key": {
+        "text": "Duration",
+      },
+      "value": {
+        "text": "8 weeks",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -145,6 +635,40 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_CANCELLED status car
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Cancellation reason",
+      },
+      "value": {
+        "text": "Over capacity",
+      },
+    },
+    {
+      "key": {
+        "text": "Expected arrival",
+      },
+      "value": {
+        "text": "9 September 2026 (in 40 days)",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+    {
+      "key": {
+        "text": "Application expires",
+      },
+      "value": {
+        "text": "29 January 2027",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -166,6 +690,24 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_NOT_STARTED 
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+    {
+      "key": {
+        "text": "Application expires",
+      },
+      "value": {
+        "text": "29 January 2027",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -187,6 +729,40 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_REJECTED sta
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Rejection reason",
+      },
+      "value": {
+        "text": "Over capacity",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted",
+      },
+      "value": {
+        "text": "10 June 2026 (51 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+    {
+      "key": {
+        "text": "Application expires",
+      },
+      "value": {
+        "text": "29 January 2027",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -208,6 +784,32 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_SUBMITTED st
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Request submitted",
+      },
+      "value": {
+        "text": "10 June 2026 (51 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+    {
+      "key": {
+        "text": "Application expires",
+      },
+      "value": {
+        "text": "29 January 2027",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -229,6 +831,40 @@ exports[`eligibilityStatusCard for cas1 renders a PLACEMENT_REQUEST_WITHDRAWN st
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Withdrawal reason",
+      },
+      "value": {
+        "text": "There was an error in the request",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted",
+      },
+      "value": {
+        "text": "10 June 2026 (51 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Request submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+    {
+      "key": {
+        "text": "Application expires",
+      },
+      "value": {
+        "text": "29 January 2027",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -250,6 +886,24 @@ exports[`eligibilityStatusCard for cas1 renders a SUBMITTED status card 1`] = `
 {
   "blocked": false,
   "content": undefined,
+  "details": [
+    {
+      "key": {
+        "text": "Submitted",
+      },
+      "value": {
+        "text": "2 June 2026 (59 days ago)",
+      },
+    },
+    {
+      "key": {
+        "text": "Submitted by",
+      },
+      "value": {
+        "text": "Joe Bloggs",
+      },
+    },
+  ],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -271,6 +925,7 @@ exports[`eligibilityStatusCard for cas1 renders a UPCOMING status card 1`] = `
 {
   "blocked": false,
   "content": undefined,
+  "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": "Start referral from 8 November 2026 (in 100 days).",
   "inactive": false,
@@ -286,6 +941,7 @@ exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
 {
   "blocked": false,
   "content": undefined,
+  "details": [],
   "heading": "Approved premises (CAS1)",
   "hint": undefined,
   "inactive": false,
@@ -325,7 +981,6 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = 
 exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "Bedspace details are sent by email",
   "inactive": false,
@@ -346,7 +1001,6 @@ exports[`eligibilityStatusCard for cas3 renders a BEDSPACE_OFFERED status card 1
 exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -367,7 +1021,6 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CANCELLED status card 
 exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -388,7 +1041,6 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS accommodation needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
   "inactive": false,
@@ -403,7 +1055,6 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS accommod
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to submit a CRS referral before you can make a CAS3 referral.",
   "inactive": false,
@@ -418,7 +1069,6 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS needed s
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to add DTR referral details before you can make a CAS3 referral.",
   "inactive": false,
@@ -433,7 +1083,6 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed s
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and CRS accommodation needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
   "inactive": false,
@@ -448,7 +1097,6 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and CRS needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.",
   "inactive": false,
@@ -463,7 +1111,6 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and
 exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "Not at risk of homelessness.",
   "inactive": true,
@@ -478,7 +1125,6 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] =
 exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -499,7 +1145,6 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = 
 exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -520,7 +1165,6 @@ exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
 exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
@@ -541,7 +1185,6 @@ exports[`eligibilityStatusCard for cas3 renders a SUBMITTED status card 1`] = `
 exports[`eligibilityStatusCard for cas3 renders a UPCOMING status card 1`] = `
 {
   "blocked": false,
-  "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
   "hint": "Start referral from 15 December 2026 (in 137 days).",
   "inactive": false,
@@ -633,6 +1276,7 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
   {
     "blocked": false,
     "content": undefined,
+    "details": [],
     "heading": "Approved premises (CAS1)",
     "hint": undefined,
     "inactive": false,
@@ -650,7 +1294,6 @@ exports[`eligibilityToEligibilityCards returns an array of eligibility card obje
   },
   {
     "blocked": false,
-    "content": undefined,
     "heading": "CAS3 (transitional accommodation)",
     "hint": undefined,
     "inactive": false,

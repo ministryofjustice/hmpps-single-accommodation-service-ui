@@ -465,7 +465,7 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] =
   "blocked": false,
   "content": undefined,
   "heading": "CAS3 (transitional accommodation)",
-  "hint": undefined,
+  "hint": "Not at risk of homelessness.",
   "inactive": true,
   "links": undefined,
   "status": {

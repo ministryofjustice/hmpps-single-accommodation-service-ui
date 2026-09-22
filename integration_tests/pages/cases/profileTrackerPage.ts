@@ -23,6 +23,7 @@ import PageWithCaseDetails from './pageWithCaseDetails'
 import { accommodationType, settledTag } from '../../../server/utils/accommodationSummary'
 import { actionsMap } from '../../../server/utils/actions'
 import { displayName } from '../../../server/utils/cases'
+import config from '../../../server/config'
 
 export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
@@ -46,15 +47,17 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
 
   async shouldShowNextActions(actions: CaseAction[]) {
     const nextActionsCard = this.page.locator('.sas-card--block', { hasText: 'Next actions' })
+    const visibleActions = actions.filter(action => !(action.service === 'CAS2' && !config.flags.cas2Enabled))
 
-    for await (const action of actions) {
-      const actionElement = nextActionsCard.getByRole('listitem').nth(actions.indexOf(action))
+    for await (const action of visibleActions) {
+      const actionElement = nextActionsCard.getByRole('listitem').nth(visibleActions.indexOf(action))
       await expect(actionElement).toContainText(actionsMap[action.type])
       if (action.startDate) {
         const datetimeElement = actionElement.getByRole('time')
         await expect(datetimeElement).toContainText(formatDate(action.startDate, 'days ago/in'))
         await expect(datetimeElement).toHaveAttribute('datetime', action.startDate)
         await expect(datetimeElement).toHaveAttribute('title', formatDate(action.startDate))
+        await expect(nextActionsCard.getByRole('listitem')).toHaveCount(visibleActions.length)
       }
     }
   }

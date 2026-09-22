@@ -156,6 +156,30 @@ exports[`Macros govukDetails renders a details component with the given summary 
 "
 `;
 
+exports[`Macros govukDetailsList renders a details component with escaped list items 1`] = `
+"
+
+  <details class="govuk-details govuk-!-margin-bottom-1">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Previous placements
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    
+    <ul class="govuk-list govuk-list--bullet">
+      
+        <li>A normal item</li>
+      
+        <li>&lt;script&gt;alert(&quot;escaped!&quot;)&lt;/script&gt;</li>
+      
+    </ul>
+  
+  </div>
+</details>
+"
+`;
+
 exports[`Macros riskLevelTag renders a risk level tag for risk level HIGH 1`] = `
 "<div class="sas-risk-tag sas-risk-tag--high">
       <dt>RoSH</dt>

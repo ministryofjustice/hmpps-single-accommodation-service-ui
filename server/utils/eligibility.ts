@@ -1,12 +1,37 @@
-import { EligibilityDto, ServiceResult } from '@sas/api'
+import {
+  Cas1ApplicationDto,
+  Cas1PlacementPairDto,
+  Cas1ServiceResult,
+  Cas2ServiceResult,
+  Cas3ServiceResult,
+  EligibilityDto,
+  ServiceResult,
+} from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
-import { TextOrHtmlContent } from '@govuk/ui'
+import { SummaryListRow, TextOrHtmlContent } from '@govuk/ui'
 import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
-import { formatDate } from './dates'
+import { formatDate, formatDateAndDaysAgo } from './dates'
 import config from '../config'
 import { htmlContent } from './utils'
+import { summaryListRow } from './summaryListRow'
+import { govukDetailsList } from './macros'
+
+const cas1WithdrawalReasonLabels: Record<string, string> = {
+  DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
+  ALTERNATIVE_PROVISION_IDENTIFIED: 'Another provision has been identified',
+  CHANGE_IN_CIRCUMSTANCES: 'Their circumstances changed',
+  CHANGE_IN_RELEASE_DECISION: 'The release decision changed',
+  NO_CAPACITY_DUE_TO_LOST_BED: "There's no capacity due to a lost bed",
+  NO_CAPACITY_DUE_TO_PLACEMENT_PRIORITISATION: "There's no capacity due to placement prioritisation",
+  NO_CAPACITY: "There's no capacity",
+  ERROR_IN_PLACEMENT_REQUEST: 'There was an error in the request',
+  WITHDRAWN_BY_PP: 'Withdrawn by the probation practitioner',
+  RELATED_APPLICATION_WITHDRAWN: 'The related application was withdrawn',
+  RELATED_PLACEMENT_REQUEST_WITHDRAWN: 'The related placement request was withdrawn',
+  RELATED_PLACEMENT_APPLICATION_WITHDRAWN: 'The related placement application was withdrawn',
+}
 
 export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   const { serviceStatus, url } = serviceResult || {}
@@ -20,6 +45,7 @@ export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
       return [{ text: 'Continue application', ...link }]
     case 'APPLICATION_REJECTED':
       return [{ text: 'Start new application', ...link }]
+    case 'ARRIVED':
     case 'SUBMITTED':
     case 'INFO_REQUESTED':
     case 'PLACEMENT_BOOKED':
@@ -77,36 +103,41 @@ export const linksForCas3Status = (serviceResult?: ServiceResult) => {
   }
 }
 
-export const linksForService = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): Link[] => {
-  switch (service) {
-    case 'cas1':
-      return linksForCas1Status(serviceResult)
-    case 'cas2':
-      return linksForCas2Status(serviceResult)
-    case 'cas3':
-      return linksForCas3Status(serviceResult)
-    default:
-      return undefined
+const upcomingStartHint = (serviceResult?: ServiceResult): string | undefined => {
+  const { serviceStatus, action } = serviceResult ?? {}
+
+  if (serviceStatus === 'UPCOMING' && action?.startDate) {
+    return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
   }
+
+  return undefined
 }
 
-const headingForService = (service: 'cas1' | 'cas2' | 'cas3') => {
-  switch (service) {
-    case 'cas1':
-      return 'Approved premises (CAS1)'
-    case 'cas2':
-      return 'Short-term accommodation (CAS2)'
-    case 'cas3':
-      return 'CAS3 (transitional accommodation)'
-    default:
-      return undefined
+const hintForCas1Status = (serviceResult?: ServiceResult): string | undefined => {
+  const { serviceStatus, failureReasons } = serviceResult ?? {}
+
+  if (serviceStatus === 'NOT_ELIGIBLE') {
+    if (failureReasons.includes('MALE_NOT_HIGH_RISK_TIER') || failureReasons.includes('NON_MALE_NOT_HIGH_RISK_TIER'))
+      return 'Tier not eligible for this level of supervision.'
   }
+
+  return upcomingStartHint(serviceResult)
 }
 
-const hintForServiceResult = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): string => {
-  const { serviceStatus, blockingStatusReason, failureReasons, action } = serviceResult || {}
+const hintForCas2Status = (serviceResult?: ServiceResult): string | undefined => {
+  const { serviceStatus } = serviceResult ?? {}
 
-  if (serviceStatus === 'CANNOT_START_YET' && service === 'cas3') {
+  if (serviceStatus === 'NOT_STARTED') {
+    return 'CAS2 accommodation is now available for more people.'
+  }
+
+  return upcomingStartHint(serviceResult)
+}
+
+const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined => {
+  const { serviceStatus, blockingStatusReason } = serviceResult ?? {}
+
+  if (serviceStatus === 'CANNOT_START_YET') {
     const requirementTemplate = (requirement: string) =>
       `You need to ${requirement} before you can make a CAS3 referral.`
 
@@ -126,28 +157,71 @@ const hintForServiceResult = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?:
     }
   }
 
-  if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas1') {
-    if (failureReasons.includes('MALE_NOT_HIGH_RISK_TIER') || failureReasons.includes('NON_MALE_NOT_HIGH_RISK_TIER'))
-      return 'Tier not eligible for this level of supervision.'
-  }
-
-  if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas3') {
+  if (serviceStatus === 'NOT_ELIGIBLE') {
     return 'Not at risk of homelessness.'
-  }
-
-  if (serviceStatus === 'UPCOMING' && action?.startDate) {
-    return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
   }
 
   if (serviceStatus === 'BEDSPACE_OFFERED') {
     return 'Bedspace details are sent by email'
   }
 
-  if (serviceStatus === 'NOT_STARTED' && service === 'cas2') {
-    return 'CAS2 accommodation is now available for more people.'
+  return upcomingStartHint(serviceResult)
+}
+
+const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementPairDto): string | undefined => {
+  switch (placement?.status) {
+    case 'DEPARTED':
+      if (placement.actualArrivalDate && placement.actualDepartureDate) {
+        return `Departed (${formatDate(placement.actualArrivalDate)} to ${formatDate(placement.actualDepartureDate)})`
+      }
+      return 'Departed'
+
+    case 'CANCELLED':
+      if (placement.cancellationReason) {
+        return `Cancelled. Reason: ${placement.cancellationReason ?? 'Unknown'}`
+      }
+      return 'Cancelled'
+
+    case 'NOT_ARRIVED':
+      return requestForPlacement?.expectedArrivalDate
+        ? `Not arrived (due ${formatDate(requestForPlacement.expectedArrivalDate)})`
+        : 'Not arrived'
+
+    default:
+      break
   }
 
-  return undefined
+  switch (requestForPlacement?.status) {
+    case 'REQUEST_WITHDRAWN':
+      return `Request withdrawn${requestForPlacement.withdrawalDate ? ` (${formatDate(requestForPlacement.withdrawalDate)})` : ''}. Reason: ${cas1WithdrawalReasonLabels[requestForPlacement.withdrawalReason] ?? 'Unknown'}`
+
+    case 'REQUEST_REJECTED':
+      return `Request rejected. Reason: ${requestForPlacement.rejectionReason ?? 'Unknown'}`
+
+    default:
+      return undefined
+  }
+}
+
+const contentForCas1Status = (
+  serviceResult?: ServiceResult,
+  cas1Application?: Cas1ApplicationDto,
+): TextOrHtmlContent[] => {
+  const { serviceStatus } = serviceResult ?? {}
+
+  switch (serviceStatus) {
+    case 'PLACEMENT_REQUEST_NOT_STARTED': {
+      const { placementHistory } = cas1Application ?? {}
+      if (!placementHistory?.length) return undefined
+      const history = placementHistory.map(placementHistoryText).filter((entry): entry is string => entry !== undefined)
+
+      if (!history.length) return undefined
+
+      return [htmlContent(govukDetailsList(`${history.length} previous placements on this application`, history))]
+    }
+    default:
+      return undefined
+  }
 }
 
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
@@ -165,36 +239,135 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
   }
 }
 
-const contentForService = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): TextOrHtmlContent[] => {
-  switch (service) {
-    case 'cas2':
-      return contentForCas2Status(serviceResult)
-    case 'cas1':
-    case 'cas3':
+const placementDurationText = (durationDays?: number | null): string | undefined => {
+  if (durationDays == null) return undefined
+
+  const weeks = durationDays / 7
+  return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
+}
+
+const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Cas1ApplicationDto): SummaryListRow[] => {
+  const { serviceStatus } = serviceResult ?? {}
+  if (!cas1Application) return []
+  const { application, assessment, requestForPlacement, placement } = cas1Application
+
+  const submittedRow = () => summaryListRow('Submitted', formatDateAndDaysAgo(application?.submittedAt ?? undefined))
+  const submittedByRow = () => summaryListRow('Submitted by', application?.createdBy?.name)
+  const expiresRow = () => summaryListRow('Application expires', formatDate(application?.expiresAt ?? undefined))
+  const requestSubmittedRow = () =>
+    summaryListRow('Request submitted', formatDateAndDaysAgo(requestForPlacement?.submittedAt ?? undefined))
+  const requestSubmittedByRow = () => summaryListRow('Request submitted by', requestForPlacement?.submittedBy?.name)
+
+  switch (serviceStatus) {
+    case 'NOT_SUBMITTED':
+      return [
+        summaryListRow('Application started', formatDateAndDaysAgo(application?.createdAt)),
+        summaryListRow('Started by', application?.createdBy?.name),
+      ]
+    case 'SUBMITTED':
+    case 'INFO_REQUESTED':
+      return [submittedRow(), submittedByRow()]
+    case 'APPLICATION_REJECTED':
+      return [
+        summaryListRow(
+          'Decision',
+          assessment?.rejectionRationale ? `Reject, ${assessment.rejectionRationale}` : 'Reject',
+        ),
+        submittedRow(),
+        submittedByRow(),
+      ]
+    case 'PLACEMENT_BOOKED':
+      return [
+        summaryListRow('Expected arrival', formatDateAndDaysAgo(requestForPlacement?.expectedArrivalDate ?? undefined)),
+        summaryListRow('Duration', placementDurationText(requestForPlacement?.durationDays)),
+        requestSubmittedByRow(),
+      ]
+    case 'ARRIVED':
+      return [
+        summaryListRow('Arrival date', formatDateAndDaysAgo(placement?.actualArrivalDate ?? undefined)),
+        summaryListRow('Expected departure', formatDateAndDaysAgo(placement?.actualDepartureDate ?? undefined)),
+        requestSubmittedByRow(),
+      ]
+    case 'NOT_ARRIVED':
+      return [
+        summaryListRow('Expected arrival', formatDateAndDaysAgo(requestForPlacement?.expectedArrivalDate ?? undefined)),
+        requestSubmittedByRow(),
+        expiresRow(),
+      ]
+    case 'PLACEMENT_CANCELLED':
+      return [
+        summaryListRow('Cancellation reason', placement?.cancellationReason ?? undefined),
+        summaryListRow('Expected arrival', formatDateAndDaysAgo(requestForPlacement?.expectedArrivalDate ?? undefined)),
+        requestSubmittedByRow(),
+        expiresRow(),
+      ]
+    case 'PLACEMENT_REQUEST_NOT_STARTED':
+      return [submittedByRow(), expiresRow()]
+    case 'PLACEMENT_REQUEST_SUBMITTED':
+      return [requestSubmittedRow(), requestSubmittedByRow(), expiresRow()]
+    case 'PLACEMENT_REQUEST_REJECTED':
+      return [
+        summaryListRow('Rejection reason', requestForPlacement?.rejectionReason ?? undefined),
+        requestSubmittedRow(),
+        requestSubmittedByRow(),
+        expiresRow(),
+      ]
+    case 'PLACEMENT_REQUEST_WITHDRAWN':
+      return [
+        summaryListRow(
+          'Withdrawal reason',
+          requestForPlacement?.withdrawalReason
+            ? (cas1WithdrawalReasonLabels[requestForPlacement.withdrawalReason] ?? requestForPlacement.withdrawalReason)
+            : undefined,
+        ),
+        requestSubmittedRow(),
+        requestSubmittedByRow(),
+        expiresRow(),
+      ]
     default:
-      return undefined
+      return []
   }
 }
 
-export const eligibilityStatusCard = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): StatusCard => {
+const statusFields = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
   const { serviceStatus } = serviceResult ?? {}
 
   return {
-    heading: headingForService(service),
     inactive: serviceStatus === 'NOT_ELIGIBLE',
     blocked: serviceStatus === 'CANNOT_START_YET',
-    hint: hintForServiceResult(service, serviceResult),
-    content: contentForService(service, serviceResult),
     status: serviceStatusTag(serviceStatus),
-    links: linksForService(service, serviceResult),
   }
 }
+
+export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceResult): StatusCard => ({
+  heading: 'Approved premises (CAS1)',
+  ...statusFields(serviceResult),
+  hint: hintForCas1Status(serviceResult),
+  links: linksForCas1Status(serviceResult),
+  details: detailsForCas1Status(serviceResult, cas1Application),
+  content: contentForCas1Status(serviceResult, cas1Application),
+})
+
+export const cas2StatusCard = ({ serviceResult }: Cas2ServiceResult): StatusCard => ({
+  heading: 'Short-term accommodation (CAS2)',
+  ...statusFields(serviceResult),
+  hint: hintForCas2Status(serviceResult),
+  links: linksForCas2Status(serviceResult),
+  content: contentForCas2Status(serviceResult),
+})
+
+export const cas3StatusCard = ({ serviceResult }: Cas3ServiceResult): StatusCard => ({
+  heading: 'CAS3 (transitional accommodation)',
+  ...statusFields(serviceResult),
+  hint: hintForCas3Status(serviceResult),
+  links: linksForCas3Status(serviceResult),
+})
 
 export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] =>
   [
     dutyToReferStatusCard(crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),
-    eligibilityStatusCard('cas1', eligibility.cas1.serviceResult),
-    config.flags.cas2Enabled ? eligibilityStatusCard('cas2', eligibility.cas2.serviceResult) : undefined,
-    eligibilityStatusCard('cas3', eligibility.cas3.serviceResult),
+    cas1StatusCard(eligibility.cas1),
+    config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2) : undefined,
+    cas3StatusCard(eligibility.cas3),
   ].filter(Boolean)

@@ -513,7 +513,7 @@ exports[`eligibilityStatusCard for cas1 renders a NOT_ELIGIBLE status card 1`] =
   "content": undefined,
   "details": [],
   "heading": "Approved premises (CAS1)",
-  "hint": "This could be because of risk levels or suitability for a move on at this time.",
+  "hint": "Tier not eligible for this level of supervision.",
   "inactive": true,
   "links": undefined,
   "status": {

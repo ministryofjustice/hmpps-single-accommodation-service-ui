@@ -114,10 +114,11 @@ const upcomingStartHint = (serviceResult?: ServiceResult): string | undefined =>
 }
 
 const hintForCas1Status = (serviceResult?: ServiceResult): string | undefined => {
-  const { serviceStatus } = serviceResult ?? {}
+  const { serviceStatus, failureReasons } = serviceResult ?? {}
 
   if (serviceStatus === 'NOT_ELIGIBLE') {
-    return 'This could be because of risk levels or suitability for a move on at this time.'
+    if (failureReasons.includes('MALE_NOT_HIGH_RISK_TIER') || failureReasons.includes('NON_MALE_NOT_HIGH_RISK_TIER'))
+      return 'Tier not eligible for this level of supervision.'
   }
 
   return upcomingStartHint(serviceResult)

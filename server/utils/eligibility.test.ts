@@ -112,7 +112,7 @@ describe('eligibilityStatusCard', () => {
     cas1: [
       {
         title: 'NOT_ELIGIBLE',
-        result: { serviceStatus: 'NOT_ELIGIBLE' },
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['MALE_NOT_HIGH_RISK_TIER'] },
       },
       {
         title: 'UPCOMING',

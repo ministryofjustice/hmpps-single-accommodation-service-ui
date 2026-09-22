@@ -104,7 +104,7 @@ const headingForService = (service: 'cas1' | 'cas2' | 'cas3') => {
 }
 
 const hintForServiceResult = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?: ServiceResult): string => {
-  const { serviceStatus, blockingStatusReason, action } = serviceResult || {}
+  const { serviceStatus, blockingStatusReason, failureReasons, action } = serviceResult || {}
 
   if (serviceStatus === 'CANNOT_START_YET' && service === 'cas3') {
     const requirementTemplate = (requirement: string) =>
@@ -127,7 +127,8 @@ const hintForServiceResult = (service: 'cas1' | 'cas2' | 'cas3', serviceResult?:
   }
 
   if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas1') {
-    return 'This could be because of risk levels or suitability for a move on at this time.'
+    if (failureReasons.includes('MALE_NOT_HIGH_RISK_TIER') || failureReasons.includes('NON_MALE_NOT_HIGH_RISK_TIER'))
+      return 'Tier not eligible for this level of supervision.'
   }
 
   if (serviceStatus === 'NOT_ELIGIBLE' && service === 'cas3') {

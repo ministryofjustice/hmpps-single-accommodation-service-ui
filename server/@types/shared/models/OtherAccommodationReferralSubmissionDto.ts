@@ -9,9 +9,16 @@ export type OtherAccommodationReferralSubmissionDto = {
   referenceNumber?: string | null
   submissionDate: string
   createdBy: string
-  createdByUsername?: string | null
+  createdByUsername: string
   createdAt: string
   organisationName?: string | null
   website?: string | null
   submissionNote?: string | null
+  outcomeReason?:
+    | 'ACCEPTED_BY_ORGANISATION'
+    | 'ACCEPTED_WITH_ACCOMMODATION_PLACEMENT'
+    | 'PERSON_NOT_SUITABLE'
+    | 'NO_CAPACITY'
+    | 'ANOTHER_REASON'
+  outcomeNote?: string | null
 }

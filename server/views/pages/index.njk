@@ -26,7 +26,7 @@
         {% endfor %}
       </ul>
       <div class="govuk-tabs__panel">
-        <h2 class="govuk-heading-l">{{ 'Housing support needed' if peopleType === 'nfarisk' else 'Settled housing secured' }}</h2>
+        <h2 class="govuk-heading-l">{{ 'Housing support needed' if peopleType === 'NFA_RISK' else 'Settled housing secured' }}</h2>
     {% endif %}
       <form method="get" class="sas-filters govuk-!-margin-bottom-8">
         <input type="hidden" name="peopleType" value="{{ peopleType }}" />

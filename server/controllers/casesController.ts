@@ -50,7 +50,7 @@ export default class CasesController {
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
-      const { peopleType = 'nfarisk' } = query
+      const { peopleType = 'NFA_RISK' } = query
 
       setCaseListUrl(req)
 

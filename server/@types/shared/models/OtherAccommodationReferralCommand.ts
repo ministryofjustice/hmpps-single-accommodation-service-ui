@@ -6,8 +6,15 @@ export type OtherAccommodationReferralCommand = {
   localAuthorityAreaId: string
   submissionDate: string
   referenceNumber?: string | null
-  status: 'SUBMITTED'
+  status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED'
   organisationName?: string | null
   website?: string | null
   submissionNote?: string | null
+  outcomeReason?:
+    | 'ACCEPTED_BY_ORGANISATION'
+    | 'ACCEPTED_WITH_ACCOMMODATION_PLACEMENT'
+    | 'PERSON_NOT_SUITABLE'
+    | 'NO_CAPACITY'
+    | 'ANOTHER_REASON'
+  outcomeNote?: string | null
 }

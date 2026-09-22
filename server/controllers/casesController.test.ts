@@ -107,11 +107,11 @@ describe('casesController', () => {
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
-      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'nfarisk' })
+      expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
-        tabs: casesTabs(request.originalUrl, 'nfarisk'),
-        peopleType: 'nfarisk',
+        tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
+        peopleType: 'NFA_RISK',
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases),
@@ -128,7 +128,7 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
-        peopleType: 'housed',
+        peopleType: 'HOUSED',
       }
       request.originalUrl = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH'
 
@@ -138,13 +138,13 @@ describe('casesController', () => {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
-        peopleType: 'housed',
+        peopleType: 'HOUSED',
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
-        tabs: casesTabs(request.originalUrl, 'housed'),
-        peopleType: 'housed',
+        tabs: casesTabs(request.originalUrl, 'HOUSED'),
+        peopleType: 'HOUSED',
         resultsSummary: casesResultsSummary(cases),
         filters: queryToFilters(request.query, request.originalUrl, teams),
         casesTableColumns: casesTableColumns(),

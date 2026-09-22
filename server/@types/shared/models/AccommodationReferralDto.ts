@@ -18,9 +18,16 @@ export type AccommodationReferralDto = {
     | 'REQUEST_REJECTED'
     | 'REQUEST_WITHDRAWN'
     | 'ARCHIVED'
+    | 'MORE_INFORMATION_REQUESTED'
+    | 'PLACE_OFFERED'
+    | 'AWAITING_ARRIVAL'
+    | 'AWAITING_DECISION'
+    | 'ON_WAITING_LIST'
+    | 'OFFER_DECLINED_OR_WITHDRAWN'
   assessmentStatus?: string | null
   requestForPlacementStatus?: string | null
   date: string
+  applicationLastUpdatedDate?: string | null
   referralRejectionReason?: string | null
   referralRejectionReasonDetail?: string | null
   localAuthorityArea?: string | null

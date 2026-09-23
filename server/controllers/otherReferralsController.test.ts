@@ -56,7 +56,7 @@ describe('OtherReferralsController', () => {
       })
       expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
       expect(response.render).toHaveBeenCalledWith('pages/other-referrals/submission', {
-        pageTitle: 'Add other accommodation referral details',
+        pageTitle: 'Add external referral details',
         backLinkHref: '/cases/CRN123',
         crn: 'CRN123',
         tableRows: summaryListRows(caseData),

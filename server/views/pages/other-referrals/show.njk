@@ -1,0 +1,120 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/timeline/macro.njk" import mojTimeline %}
+{% from "components/macros/errorSummary.njk" import showErrorSummary %}
+{% from "components/macros/caseDetails.njk" import caseDetails %}
+
+{% set pageTitle = "Other referral" %}
+{% set mainClasses = "sas-profile-page" %}
+
+{% block content %}
+  {{ showErrorSummary(errorSummary) }}
+
+  {{ caseDetails(displayName, caseData, assignedTo) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">{{ referral.submission.organisationName }}</h1>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <section>
+        {% if active %}
+          <div class="govuk-button-group govuk-!-padding-bottom-4">
+            {% if outcomeDetailRows.length == 0 %}
+              {{
+                govukButton({
+                    text: "Add outcome",
+                    href: paths.dutyToRefer.outcome({ crn: crn, id: referralId }),
+                    preventDoubleClick: true
+                })
+              }}
+            {% endif %}
+
+          </div>
+        {% endif %}
+        {% if outcomeDetailRows.length > 0 %}
+          {{
+            govukSummaryList({
+                card: {
+                  title: {
+                    text: "Outcome"
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: paths.dutyToRefer.outcome({ crn: crn, id: referralId }),
+                        classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
+                        text: "Change"
+                      }
+                    ]
+                  }
+                },
+                rows: outcomeDetailRows
+            })
+          }}
+        {% endif %}
+        {{
+          govukSummaryList({
+              card: {
+                title: {
+                  text: "Referral details"
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.otherReferrals.edit({ crn: crn, id: referralId }),
+                      classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
+                      text: "Change"
+                    }
+                  ]
+                }
+              },
+              rows: submissionDetailRows
+          })
+        }}
+      </section>
+      <section class="govuk-!-margin-top-4 govuk-!-margin-bottom-4">
+        <form action="{{ currentUrl }}" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {{
+            govukTextarea({
+            name: "note",
+            label: {
+                text: "Add note",
+                classes: "govuk-label--s"
+            },
+            classes: "govuk-!-width-two-thirds",
+            value: note,
+            errorMessage: errors.note
+            })
+          }}
+
+          {{
+            govukButton({
+            text: "Add note",
+            preventDoubleClick: true,
+            classes: "govuk-button--secondary"
+            })
+          }}
+        </form>
+      </section>
+    </div>
+
+    <section class="govuk-grid-column-one-third-from-desktop">
+      <h2 class="govuk-heading-m">Events timeline</h2>
+
+      {{
+        mojTimeline({
+            headingLevel: 3,
+            items: timeline
+        })
+      }}
+    </section>
+  </div>
+{% endblock %}

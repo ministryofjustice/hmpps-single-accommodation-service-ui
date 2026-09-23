@@ -64,6 +64,21 @@
 
       <section class="govuk-!-margin-top-8">
         <header class="sas-section__header">
+          <h3 class="govuk-heading-m govuk-!-margin-bottom-4">External referrals</h3>
+          <a
+            href="{{ paths.otherReferrals.submission({ crn: caseData.crn }) }}"
+            class="govuk-link govuk-link--no-visited-state govuk-body"
+          >Add details</a>
+        </header>
+        <p>Add details of applications made to other providers, such as charities, voluntary organisations and housing associations.</p>
+
+        {% for card in otherReferralCards %}
+          {{ statusCard(card) }}
+        {% endfor %}
+      </section>
+
+      <section class="govuk-!-margin-top-8">
+        <header class="sas-section__header">
           <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Proposed addresses</h2>
           <a
             href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}"

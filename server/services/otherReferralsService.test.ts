@@ -31,6 +31,7 @@ describe('OtherReferralsService', () => {
     expect(result).toEqual(response)
   })
 
+
   it('should call submit on the api client with otherReferral command data and return its result', async () => {
     const command = otherAccommodationReferralCommandFactory.build()
     const otherReferral = otherAccommodationReferralFactory.submitted().build({ crn })

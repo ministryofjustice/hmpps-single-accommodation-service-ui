@@ -55,6 +55,7 @@ const dutyToReferController = mock<DutyToReferController>({
 const otherReferralsController = mock<OtherReferralsController>({
   submission: mockHandler,
   saveSubmission: mockHandler,
+  show: mockHandler,
 })
 
 const staticController = mock<StaticController>({

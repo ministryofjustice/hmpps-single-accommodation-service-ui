@@ -11,6 +11,7 @@ import {
   ApiResponseDtoListAccommodationSummaryDto,
   ApiResponseDtoListAuditRecordDto,
   ApiResponseDtoListCaseDto,
+  ApiResponseDtoListOtherAccommodationReferralDto,
   ApiResponseDtoListProposedAccommodationDto,
   ApiResponseDtoListReferenceDataDto,
   ApiResponseDtoProposedAccommodationDto,
@@ -61,6 +62,10 @@ class ApiResponseFactory extends Factory<ApiResponse> {
 
   otherReferral(referral?: OtherAccommodationReferralDto) {
     return this.buildResponse<ApiResponseDtoOtherAccommodationReferralDto>(referral)
+  }
+
+  otherReferrals(referrals?: Array<OtherAccommodationReferralDto>) {
+    return this.buildResponse<ApiResponseDtoListOtherAccommodationReferralDto>(referrals)
   }
 
   eligibility(eligibility?: EligibilityDto) {

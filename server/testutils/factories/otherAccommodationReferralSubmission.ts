@@ -20,6 +20,5 @@ export default OtherAccommodationReferralSubmissionFactory.define(() => {
     createdByUsername: faker.internet.username(),
     createdBy: faker.person.fullName(),
     createdAt: faker.date.recent().toISOString(),
-    localAuthority: faker.string.uuid() as unknown as LocalAuthorityDto, // TODO: Remove
   }
 })

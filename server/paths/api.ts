@@ -24,8 +24,10 @@ export default {
       notes: dutyToReferPath.path(':id/notes'),
     },
     otherReferrals: {
+      search: otherReferralsPath.path('search'),
       show: otherReferralsPath.path(':id'),
       submit: otherReferralsPath,
+      update: otherReferralsPath.path(':id'),
       timeline: otherReferralsPath.path(':id/timline'),
       notes: otherReferralsPath.path(':id/notes'),
     },

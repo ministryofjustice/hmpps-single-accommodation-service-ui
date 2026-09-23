@@ -1,13 +1,16 @@
 import { Request, RequestHandler, Response } from 'express'
 import { OtherAccommodationReferralCommand } from '@sas/api'
 import uiPaths from '../paths/ui'
-import { summaryListRows } from '../utils/dutyToRefer'
 import CasesService from '../services/casesService'
 import AuditService, { Page } from '../services/auditService'
 import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import OtherReferralsService from '../services/otherReferralsService'
 import { dateInputToIsoDate } from '../utils/dates'
 import { validateSubmission, submissionFormValues } from '../utils/otherReferrals'
+import { validateSubmission, submissionFormValues, detailsSummaryListRows } from '../utils/otherReferrals'
+import { breadcrumbs } from '../utils/breadcrumbs'
+import { caseAssignedTo, displayName } from '../utils/cases'
+import { summaryListRows } from '../utils/dutyToRefer'
 
 export type SubmissionFlow = 'add' | 'edit'
 
@@ -17,6 +20,42 @@ export default class OtherReferralsController {
     private readonly otherReferralsService: OtherReferralsService,
     private readonly casesService: CasesService,
   ) {}
+
+  show(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { username, token } = res.locals.user
+
+      await this.auditService.logPageView(Page.DUTY_TO_REFER_DETAILS, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const [{ data: caseData }, { data: referral }] = await Promise.all([
+        this.casesService.getCase(token, crn),
+        this.otherReferralsService.getOtherReferralBySubmissionId(token, crn, id),
+      ])
+
+      const submissionDetailRows = detailsSummaryListRows(referral)
+
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+
+      return res.render('pages/other-referrals/show', {
+        breadcrumbs: breadcrumbs(req, caseData),
+        crn,
+        referralId: id,
+        displayName: displayName(caseData),
+        caseData,
+        referral,
+        assignedTo: caseAssignedTo(caseData, username),
+        submissionDetailRows,
+        status: referral?.status,
+        ...userInput,
+        errors,
+        errorSummary,
+      })
+    }
+  }
 
   submission(flow: SubmissionFlow): RequestHandler {
     return async (req: Request, res: Response) => {
@@ -41,7 +80,7 @@ export default class OtherReferralsController {
       const pageTitleAction = { add: 'Add', addNew: 'Add new', edit: 'Edit' }[flow]
 
       return res.render('pages/other-referrals/submission', {
-        pageTitle: `${pageTitleAction} other accommodation referral details`,
+        pageTitle: `${pageTitleAction} external referral details`,
         backLinkHref,
         crn,
         tableRows,
@@ -79,10 +118,21 @@ export default class OtherReferralsController {
           // phone,
           submissionNote,
         }
+
+        if (id) {
+          const { data: referral } = await this.otherReferralsService.getOtherReferralBySubmissionId(token, crn, id)
+          if (referral.status !== 'SUBMITTED') {
+            submission.status = referral.status
+          }
+          await this.otherReferralsService.update(token, crn, id, submission)
+
+          req.flash('success', 'Referral details changed')
+          return res.redirect(uiPaths.otherReferrals.show({ crn, id }))
+        }
+
         await this.otherReferralsService.submit(token, crn, submission)
 
         req.flash('success', 'Referral details added')
-
         return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')

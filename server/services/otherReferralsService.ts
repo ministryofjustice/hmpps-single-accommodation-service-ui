@@ -11,4 +11,12 @@ export default class OtherReferralsService {
   submit(token: string, crn: string, data: OtherAccommodationReferralCommand) {
     return this.otherReferralsClient.submit(token, crn, data)
   }
+
+  update(token: string, crn: string, id: string, data: OtherAccommodationReferralCommand) {
+    return this.otherReferralsClient.update(token, crn, id, data)
+  }
+
+  search(token: string, crn: string) {
+    return this.otherReferralsClient.search(token, crn)
+  }
 }

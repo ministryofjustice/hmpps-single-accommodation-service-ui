@@ -32,6 +32,8 @@ import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import { setCaseListUrl } from '../utils/backlinks'
 import { breadcrumbs } from '../utils/breadcrumbs'
+import OtherReferralsService from '../services/otherReferralsService'
+import { otherReferralCards } from '../utils/otherReferrals'
 
 export default class CasesController {
   constructor(
@@ -43,6 +45,7 @@ export default class CasesController {
     private readonly proposedAddressesService: ProposedAddressesService,
     private readonly accommodationService: AccommodationService,
     private readonly userService: UserService,
+    private readonly otherReferralsService: OtherReferralsService,
   ) {}
 
   index(): RequestHandler {
@@ -142,6 +145,7 @@ export default class CasesController {
         proposedAddresses: this.proposedAddressesService.getProposedAddresses(token, crn),
         accommodationHistory: this.accommodationService.getAccommodationHistory(token, crn),
         accommodationSummaries: this.accommodationService.getAccommodationSummary(token, crn),
+        otherReferrals: this.otherReferralsService.search(token, crn),
       })
 
       return res.render('pages/show', {
@@ -159,6 +163,7 @@ export default class CasesController {
         proposedAddresses: data.proposedAddresses.proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),
         failedChecksAddresses: data.proposedAddresses.failedChecks.map(proposedAddressStatusCard),
+        otherReferralCards: otherReferralCards(data.otherReferrals),
       })
     }
   }

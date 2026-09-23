@@ -15,9 +15,7 @@ export default defineConfig<TestOptions>({
   retries: process.env.CI ? 2 : 0,
   maxFailures: process.env.CI ? 3 : 1,
   workers: 2,
-  reporter: process.env.CI
-    ? [['list'], ['github'], ['html', { outputFolder: '../test_results/e2e/report', open: 'never' }]]
-    : [['html', { outputFolder: '../test_results/e2e/report' }]],
+  reporter: [['list'], ['html', { outputFolder: '../test_results/e2e/report' }]],
   outputDir: '../test_results/e2e/artefacts',
   timeout: process.env.CI ? 5 * 60 * 1000 : 2 * 60 * 1000,
   use: {

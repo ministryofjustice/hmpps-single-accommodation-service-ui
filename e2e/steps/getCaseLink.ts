@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   minutesToMilliseconds,
@@ -12,11 +12,9 @@ export const getCaseLink = async (page: Page, caseData: TestCase) => {
   const [forename, surname] = caseData.name.split(' ')
   const caseLink = page.getByRole('link', { name: `${surname}, ${forename}` })
 
-  await test.step(`Wait for case link to appear: ${surname}, ${forename}`, async () => {
-    await refreshUntil(page, () => expect(caseLink).toBeVisible(), {
-      timeout: minutesToMilliseconds(11),
-      intervals: [secondsToMilliseconds(15)],
-    })
+  await refreshUntil(page, () => expect(caseLink).toBeVisible(), {
+    timeout: minutesToMilliseconds(11),
+    intervals: [secondsToMilliseconds(15)],
   })
 
   return { caseLink, forename, surname }

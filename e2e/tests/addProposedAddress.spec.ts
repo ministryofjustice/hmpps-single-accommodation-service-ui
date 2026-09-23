@@ -80,7 +80,7 @@ test('Can add and confirm a proposed address', async ({
   await confirmCurrentAddressPage.expectPageToBeDisplayed()
   await confirmCurrentAddressPage.confirmCurrentAddress()
 
-  await page.waitForTimeout(3000) // wait for 3 seconds to make sure current accommodation is updated
+  await page.waitForTimeout(4000) // wait for 4 seconds to make sure current accommodation is updated
   await page.reload()
 
   // THEN I should see the address in Current accommodation

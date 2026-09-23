@@ -21,6 +21,7 @@ export type { ApiResponseDtoListAccommodationReferralDto } from './models/ApiRes
 export type { ApiResponseDtoListAccommodationSummaryDto } from './models/ApiResponseDtoListAccommodationSummaryDto'
 export type { ApiResponseDtoListAuditRecordDto } from './models/ApiResponseDtoListAuditRecordDto'
 export type { ApiResponseDtoListCaseDto } from './models/ApiResponseDtoListCaseDto'
+export type { ApiResponseDtoListOtherAccommodationReferralDto } from './models/ApiResponseDtoListOtherAccommodationReferralDto'
 export type { ApiResponseDtoListProposedAccommodationDto } from './models/ApiResponseDtoListProposedAccommodationDto'
 export type { ApiResponseDtoListReferenceDataDto } from './models/ApiResponseDtoListReferenceDataDto'
 export type { ApiResponseDtoListTeam } from './models/ApiResponseDtoListTeam'

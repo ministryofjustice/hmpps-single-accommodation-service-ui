@@ -1,4 +1,4 @@
-import { ProposedAddressFormData } from '@sas/ui'
+import { GetProposedAddressesQuery, ProposedAddressFormData } from '@sas/ui'
 import {
   NoteCommand,
   ProposedAccommodationArrivalCommand,
@@ -14,6 +14,7 @@ export default class ProposedAddressesService {
   async getProposedAddresses(
     token: string,
     crn: string,
+    query?: GetProposedAddressesQuery,
   ): Promise<{
     upstreamFailures?: UpstreamFailureDto[]
     data: {
@@ -21,7 +22,7 @@ export default class ProposedAddressesService {
       failedChecks: ProposedAccommodationDto[]
     }
   }> {
-    const { data, upstreamFailures } = await this.proposedAddressesClient.getProposedAddresses(token, crn)
+    const { data, upstreamFailures } = await this.proposedAddressesClient.getProposedAddresses(token, crn, query)
 
     return {
       upstreamFailures,

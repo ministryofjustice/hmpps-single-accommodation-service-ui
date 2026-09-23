@@ -202,6 +202,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {
+  "addAddressLink": "/cases/X123456/current-address/select",
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-02-03",
@@ -217,6 +218,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a CAS3 accommodation 1`] = `
 {
+  "addAddressLink": "/cases/X123456/current-address/select",
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-07-31",
@@ -232,6 +234,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a No type accommodation 1`] = `
 {
+  "addAddressLink": "/cases/X123456/current-address/select",
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-05-23",
@@ -246,6 +249,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Private address accommodation 1`] = `
 {
+  "addAddressLink": "/cases/X123456/current-address/select",
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-09-10",
@@ -261,6 +265,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a Private and proposed accommodation accommodation 1`] = `
 {
+  "addAddressLink": "/cases/L489936/current-address/select",
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "current",
   "endDate": "2026-09-10",
@@ -327,6 +332,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {
+  "addAddressLink": undefined,
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
@@ -342,6 +348,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS3 accommodation 1`] = `
 {
+  "addAddressLink": undefined,
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
@@ -357,6 +364,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a No type accommodation 1`] = `
 {
+  "addAddressLink": undefined,
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
@@ -371,6 +379,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Private address accommodation 1`] = `
 {
+  "addAddressLink": undefined,
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,
@@ -386,6 +395,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a Private and proposed accommodation accommodation 1`] = `
 {
+  "addAddressLink": undefined,
   "address": "9 Foo Bar<br />Foocity<br />FO0 1BA",
   "cardType": "next",
   "endDate": undefined,

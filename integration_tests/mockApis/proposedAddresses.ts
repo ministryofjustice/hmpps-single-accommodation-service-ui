@@ -9,7 +9,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.proposedAddresses.index({ crn }),
+        urlPathPattern: apiPaths.cases.proposedAddresses.index({ crn }),
       },
       response: {
         status: 200,

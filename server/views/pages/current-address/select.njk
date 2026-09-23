@@ -1,0 +1,26 @@
+{% extends "pages/current-address/layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = "What is the new current address?" %}
+{% set formAction = paths.currentAddress.select({ crn: crn }) %}
+
+{% block formContent %}
+  {{
+    govukRadios({
+        name: "proposedAddressId",
+        fieldset: {
+            legend: {
+                text: pageHeading,
+                classes: "govuk-fieldset__legend--l",
+                isPageHeading: true
+            }
+        },
+        hint: {
+            text: "Addresses that have previously failed checks will not show here."
+        },
+        items: items,
+        errorMessage: errors.proposedAddressId
+    })
+  }}
+{% endblock %}

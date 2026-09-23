@@ -41,7 +41,7 @@ test('Create data for Base Case', async ({ page }) => {
   console.log('OK \n----------')
 
   console.log('Creating address...')
-  const address = buildAddress()
+  const address = buildAddress('Previous')
   await createAddress(page, crn, address)
   console.log('OK \n----------')
 

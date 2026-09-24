@@ -5,6 +5,7 @@ const accommodationPath = casePath.path('accommodations')
 const proposedAddressesPath = casePath.path('proposed-accommodations')
 const proposedAddressPath = proposedAddressesPath.path(':id')
 const dutyToReferPath = casePath.path('dtr')
+const otherReferralsPath = casePath.path('other-accommodation-referral')
 
 export default {
   cases: {
@@ -21,6 +22,12 @@ export default {
       submit: dutyToReferPath,
       timeline: dutyToReferPath.path(':id/timeline'),
       notes: dutyToReferPath.path(':id/notes'),
+    },
+    otherReferrals: {
+      show: otherReferralsPath.path(':id'),
+      submit: otherReferralsPath,
+      timeline: otherReferralsPath.path(':id/timline'),
+      notes: otherReferralsPath.path(':id/notes'),
     },
     eligibility: casePath.path('eligibility'),
     referrals: casePath.path('applications'),

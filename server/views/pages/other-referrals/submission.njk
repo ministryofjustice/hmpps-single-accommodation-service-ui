@@ -1,0 +1,111 @@
+{% extends "pages/other-referrals/layout.njk" %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% block formContent %}
+
+  {{
+    govukInput({
+      label: {
+        text: 'Organisation name',
+        classes: 'govuk-!-font-weight-bold govuk-label--s'
+      },
+      hint: {
+        text: "For example, St Mungo's or The Forward Trust"
+      },
+      classes: 'govuk-!-width-full',
+      name: 'organisationName',
+      id: 'organisationName',
+      value: formValues.organisationName,
+      errorMessage: errors.organisationName
+    })
+  }}
+  {{
+    govukDateInput({
+        id: "submissionDate",
+        namePrefix: "submissionDate",
+        fieldset: {
+            legend: {
+                text: "Submission date",
+                classes: "govuk-fieldset__legend--s"
+            }
+        },
+        hint: {
+            text: "For example, 27 3 2025"
+        },
+        errorMessage: errors.submissionDate,
+        items: dateFieldValues("submissionDate", formValues, errors)
+    })
+  }}
+  {{
+    govukInput({
+        label: {
+            text: 'Reference number (optional)',
+            classes: 'govuk-!-font-weight-bold govuk-label--s'
+        },
+        classes: 'govuk-!-width-full',
+        name: 'referenceNumber',
+        id: 'referenceNumber',
+        value: formValues.referenceNumber,
+        errorMessage: errors.referenceNumber
+    })
+  }}
+
+  {{
+  govukInput({
+    label: {
+      text: 'Email (optional)',
+      classes: 'govuk-!-font-weight-bold govuk-label--s'
+    },
+    classes: 'govuk-!-width-full',
+    name: 'email',
+    id: 'email',
+    value: formValues.email,
+    errorMessage: errors.email
+  })
+  }}
+
+  {{
+  govukInput({
+    label: {
+      text: 'Phone number (optional)',
+      classes: 'govuk-!-font-weight-bold govuk-label--s'
+    },
+    classes: 'govuk-!-width-full',
+    name: 'phone',
+    id: 'phone',
+    value: formValues.phone,
+    errorMessage: errors.phone
+  })
+  }}
+
+  {{
+  govukInput({
+    label: {
+      text: 'Website (optional)',
+      classes: 'govuk-!-font-weight-bold govuk-label--s'
+    },
+    classes: 'govuk-!-width-full',
+    name: 'website',
+    id: 'website',
+    value: formValues.website,
+    errorMessage: errors.website
+  })
+  }}
+  {{
+    govukTextarea({
+        name: "submissionNote",
+        label: {
+            text: "Notes (optional)",
+            classes: "govuk-label--s"
+        },
+        hint: {
+          text: 'Do not include sensitive personal details or risk assessment notes.'
+        },
+        classes: "govuk-!-width-full",
+        value: formValues.submissionNote,
+        errorMessage: errors.submissionNote
+    })
+  }}
+{% endblock %}

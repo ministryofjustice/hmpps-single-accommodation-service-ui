@@ -3,6 +3,7 @@ import { path } from 'static-path'
 const casesPath = path('/cases')
 const proposedAddressesPath = casesPath.path(':crn/proposed-addresses')
 const dutyToReferPath = casesPath.path(':crn/dtr')
+const otherReferralsPath = casesPath.path(':crn/other-referrals')
 
 export default {
   cases: {
@@ -17,6 +18,11 @@ export default {
     edit: dutyToReferPath.path(':id/edit'),
     outcome: dutyToReferPath.path(':id/outcome'),
     withdraw: dutyToReferPath.path(':id/withdraw'),
+  },
+  otherReferrals: {
+    show: otherReferralsPath.path(':id/details'),
+    submission: otherReferralsPath.path('submission'),
+    edit: otherReferralsPath.path(':id/edit'),
   },
   proposedAddresses: {
     show: proposedAddressesPath.path(':id/details'),

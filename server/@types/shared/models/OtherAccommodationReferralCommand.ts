@@ -3,7 +3,6 @@
 /* tslint:disable */
 
 export type OtherAccommodationReferralCommand = {
-  localAuthorityAreaId: string
   submissionDate: string
   referenceNumber?: string | null
   status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED'

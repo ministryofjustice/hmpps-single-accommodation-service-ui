@@ -1,4 +1,5 @@
 {% from "moj/components/alert/macro.njk" import mojAlert %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {%- from "components/macros/statusTag.njk" import statusTag %}
 
@@ -44,6 +45,17 @@
         <p>
           <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ context.link }}">View address details</a>
         </p>
+      {% endif %}
+
+      {% if context.addAddressLink -%}
+        {{
+          govukButton({
+              text: "Add a new address",
+              href: context.addAddressLink,
+              classes: "govuk-button--secondary govuk-!-margin-bottom-0",
+              preventDoubleClick: true
+          })
+        }}
       {% endif %}
     </div>
   {% endif %}

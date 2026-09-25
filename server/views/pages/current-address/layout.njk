@@ -1,0 +1,48 @@
+{% extends "partials/layout.njk" %}
+
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block containerStart %}
+  {{
+    govukBackLink({
+        text: "Back",
+        href: backLinkHref
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      {% if errorSummary and errorSummary.length %}
+        {{
+          govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          })
+        }}
+      {% endif %}
+
+      <form action="{{ formAction }}" method="post">
+        <fieldset class="govuk-fieldset">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% block formContent %}{% endblock %}
+        </fieldset>
+        <div class="govuk-button-group">
+          {{
+            govukButton({
+                text: "Continue",
+                preventDoubleClick: true
+            })
+          }}
+        </div>
+        <p>
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ cancelLinkHref }}">Cancel</a>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}

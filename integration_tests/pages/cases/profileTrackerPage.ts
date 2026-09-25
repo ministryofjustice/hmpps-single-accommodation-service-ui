@@ -62,6 +62,10 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
   }
 
+  async clickAddNewCurrentAddress() {
+    await this.getCard('Current accommodation').getByRole('button', { name: 'Add a new address' }).click()
+  }
+
   async shouldNotShowNextActionsCard() {
     await expect(this.page.locator('.sas-card', { hasText: 'Next actions' })).toHaveCount(0)
   }

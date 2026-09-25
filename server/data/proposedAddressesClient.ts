@@ -1,4 +1,5 @@
 import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { GetProposedAddressesQuery } from '@sas/ui'
 import {
   ApiResponseDtoListAuditRecordDto,
   ApiResponseDtoListProposedAccommodationDto,
@@ -16,10 +17,11 @@ export default class ProposedAddressesClient extends RestClient {
     super('Proposed addresses client', config.apis.sasApi, logger, authenticationClient)
   }
 
-  async getProposedAddresses(token: string, crn: string) {
+  async getProposedAddresses(token: string, crn: string, query?: GetProposedAddressesQuery) {
     return this.get<ApiResponseDtoListProposedAccommodationDto>(
       {
         path: apiPaths.cases.proposedAddresses.index({ crn }),
+        query,
       },
       asUser(token),
     )

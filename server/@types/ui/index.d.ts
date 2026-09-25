@@ -72,6 +72,10 @@ export type GetCasesQuery = {
   peopleType?: 'NFA_RISK' | 'HOUSED'
 }
 
+export type GetProposedAddressesQuery = {
+  excludeVerificationFailed?: boolean
+}
+
 export interface IndexRequest extends Request {
   query: GetCasesQuery
 }
@@ -81,7 +85,8 @@ export type DividerItem = {
 }
 
 export type RadioItem = {
-  text: string
+  text?: string
+  html?: string
   value: string
   checked?: boolean
   conditional?: {

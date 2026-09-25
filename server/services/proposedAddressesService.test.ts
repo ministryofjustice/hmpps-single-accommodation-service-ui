@@ -42,13 +42,23 @@ describe('ProposedAddressesService', () => {
 
       const result = await proposedAddressesService.getProposedAddresses(token, crn)
 
-      expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn)
+      expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn, undefined)
       expect(result).toEqual({
         upstreamFailures: [],
         data: {
           proposed: [passedChecksAddress, notCheckedAddress, confirmedAddress],
           failedChecks: [failedChecksAddress],
         },
+      })
+    })
+
+    it('should pass the query through to the api client', async () => {
+      proposedAddressesClient.getProposedAddresses.mockResolvedValue(apiResponseFactory.proposedAddresses([]))
+
+      await proposedAddressesService.getProposedAddresses(token, crn, { excludeVerificationFailed: true })
+
+      expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn, {
+        excludeVerificationFailed: true,
       })
     })
   })

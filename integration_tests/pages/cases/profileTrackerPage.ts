@@ -7,6 +7,7 @@ import {
   AccommodationSummaryDto,
   ProposedAccommodationDto,
   CaseAction,
+  OtherAccommodationReferralDto,
 } from '@sas/api'
 import { formatDate } from '../../../server/utils/dates'
 import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
@@ -24,6 +25,7 @@ import { accommodationType, settledTag } from '../../../server/utils/accommodati
 import { actionsMap } from '../../../server/utils/actions'
 import { displayName } from '../../../server/utils/cases'
 import config from '../../../server/config'
+import { otherReferralCards } from '../../../server/utils/otherReferrals'
 
 export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
@@ -222,5 +224,20 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
         'This information is currently unavailable. Try again later.',
       )
     }
+  }
+
+  async shouldShowExternalReferralCards(referrals: Array<OtherAccommodationReferralDto>) {
+    const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
+    await expect(section.getByRole('paragraph')).toHaveText(
+      'Add details of applications made to other providers, such as charities, voluntary organisations and housing associations.',
+    )
+    for await (const referral of referrals) {
+      await this.shouldShowCard(referral.submission.organisationName, otherReferralCards([referral])[0])
+    }
+  }
+
+  async viewReferralDetails() {
+    const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
+    await this.clickLink('View details', section)
   }
 }

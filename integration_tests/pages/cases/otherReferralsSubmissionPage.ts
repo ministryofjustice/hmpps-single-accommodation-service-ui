@@ -13,7 +13,7 @@ export default class OtherReferralsSubmissionPage extends AbstractPage {
 
   static async visit(page: Page, caseData: Case): Promise<OtherReferralsSubmissionPage> {
     await page.goto(paths.otherReferrals.submission({ crn: caseData.crn }))
-    return OtherReferralsSubmissionPage.verifyOnPage(page, 'Add other accommodation referral details')
+    return OtherReferralsSubmissionPage.verifyOnPage(page, 'Add external referral details')
   }
 
   async shouldShowCaseSummary(caseData: Case) {

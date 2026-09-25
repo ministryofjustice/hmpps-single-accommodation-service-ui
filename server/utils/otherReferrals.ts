@@ -97,4 +97,3 @@ export const detailsSummaryListRows = (referral: OtherAccommodationReferralDto =
   rows.push(summaryListRow('Note', submissionNote, { type: 'textBlock', noValue: 'No notes added' }))
   return rows
 }
-

@@ -18,7 +18,31 @@ describeClient('OtherReferralsClient', provider => {
     client = new OtherReferralsClient(mockAuthenticationClient)
   })
 
-  it('should make a GET request to /cases/{crn}/other-accommodation-referral/{id} using user token and return the response body', async () => {
+  it('search - should make a get request to /cases/{crn}/other-accommodation-referral/search and return response', async () => {
+    const referrals = otherAccommodationReferralFactory.submitted().buildList(2)
+    const body = apiResponseFactory.otherReferrals(referrals)
+    const crn = crnFactory()
+
+    await provider.addInteraction({
+      state: `external referrals exist with`,
+      uponReceiving: 'a request to get all external referrals for a crn',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.otherReferrals.search({ crn }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+    const response = await client.search('test-user-token', crn)
+    expect(response).toEqual(body)
+  })
+
+  it('should make a GET request to /cases/{crn}/other-accommodation-referral/{id} and return the response body', async () => {
     const referral = otherAccommodationReferralFactory.submitted().build()
     const body = apiResponseFactory.otherReferral(referral)
     const {

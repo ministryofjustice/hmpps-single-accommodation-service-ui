@@ -15,6 +15,7 @@ describe('OtherReferralsService', () => {
 
   const token = 'test-user-token'
   const crn = crnFactory()
+  const id = '1234'
 
   beforeEach(() => {
     service = new OtherReferralsService(client)
@@ -31,8 +32,7 @@ describe('OtherReferralsService', () => {
     expect(result).toEqual(response)
   })
 
-
-  it('should call submit on the api client with otherReferral command data and return its result', async () => {
+  it('should call submit on the api client with otherReferral command', async () => {
     const command = otherAccommodationReferralCommandFactory.build()
     const otherReferral = otherAccommodationReferralFactory.submitted().build({ crn })
     client.submit.mockResolvedValue(otherReferral)
@@ -41,5 +41,13 @@ describe('OtherReferralsService', () => {
 
     expect(client.submit).toHaveBeenCalledWith(token, crn, command)
     expect(result).toEqual(otherReferral)
+  })
+
+  it('should call update on the api client with otherReferral command', async () => {
+    const command = otherAccommodationReferralCommandFactory.build()
+
+    await service.update(token, crn, id, command)
+
+    expect(client.update).toHaveBeenCalledWith(token, crn, id, command)
   })
 })

@@ -5,7 +5,6 @@ import {
   OtherAccommodationReferralCommand,
   ApiResponseDtoOtherAccommodationReferralDto,
   ApiResponseDtoListOtherAccommodationReferralDto,
-
 } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker/locale/en_GB'
-import { LocalAuthorityDto, OtherAccommodationReferralSubmissionDto } from '@sas/api'
+import { OtherAccommodationReferralSubmissionDto } from '@sas/api'
 import { Factory } from 'fishery'
 
 class OtherAccommodationReferralSubmissionFactory extends Factory<OtherAccommodationReferralSubmissionDto> {

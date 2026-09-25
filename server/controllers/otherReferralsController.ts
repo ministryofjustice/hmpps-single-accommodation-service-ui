@@ -6,7 +6,6 @@ import AuditService, { Page } from '../services/auditService'
 import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import OtherReferralsService from '../services/otherReferralsService'
 import { dateInputToIsoDate } from '../utils/dates'
-import { validateSubmission, submissionFormValues } from '../utils/otherReferrals'
 import { validateSubmission, submissionFormValues, detailsSummaryListRows } from '../utils/otherReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
@@ -26,7 +25,7 @@ export default class OtherReferralsController {
       const { crn, id } = req.params
       const { username, token } = res.locals.user
 
-      await this.auditService.logPageView(Page.DUTY_TO_REFER_DETAILS, {
+      await this.auditService.logPageView(Page.EXTERNAL_REFFERALS_DETAILS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })

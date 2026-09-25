@@ -114,7 +114,7 @@
     "connect-flash": "^0.1.1",
     "connect-redis": "^10.0.0",
     "csrf-sync": "^4.2.1",
-    "dotenv": "17.4.2",
+    "dotenv": "18.0.0",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "govuk-frontend": "6.1.0",

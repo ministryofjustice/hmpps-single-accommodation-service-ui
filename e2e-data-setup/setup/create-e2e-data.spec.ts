@@ -3,9 +3,14 @@ import { test } from '@playwright/test'
 import { login as loginDelius } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login'
 import { createOffender } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/create-offender'
 import { deliusPerson } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person'
+import {
+  buildAddress,
+  createAddress,
+} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/address/create-address'
 import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
 import {
   createAndBookPrisoner,
+  releasePrisoner,
   updateCustodyDates,
 } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/api/dps/prison-api'
 import {
@@ -35,6 +40,11 @@ test('Create data for Base Case', async ({ page }) => {
   appendToFile(crn, 'CRN.txt')
   console.log('OK \n----------')
 
+  console.log('Creating address...')
+  const address = buildAddress('Previous')
+  await createAddress(page, crn, address)
+  console.log('OK \n----------')
+
   console.log('Creating custodial event...')
   await createCustodialEvent(page, { crn, allocation: { team: TEST_TEAM } })
   console.log('OK \n----------')
@@ -62,5 +72,9 @@ test('Create data for Base Case', async ({ page }) => {
     crn,
     allocation: { staff: TEST_STAFF, team: TEST_TEAM },
   })
+  console.log('OK \n----------')
+
+  console.log('Releasing prisoner...')
+  await releasePrisoner(nomisId)
   console.log('OK \n----------')
 })

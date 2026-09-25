@@ -1,4 +1,4 @@
-import { Cas1ServiceResult, ServiceResult } from '@sas/api'
+import { Cas1ServiceResult, Cas3ServiceResult, ServiceResult } from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
 import {
   cas1StatusCard,
@@ -46,6 +46,23 @@ const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
     actualDepartureDate: '2026-10-27',
     cancellationReason: 'Over capacity',
   },
+}
+
+const cas3Application: NonNullable<Cas3ServiceResult['cas3Application']> = {
+  id: 'cas3-application-id',
+  applicationStatus: 'SUBMITTED',
+  uiUrl: 'https://example.com/referral',
+  applicationSubmittedDate: '2026-06-02',
+  applicationSubmittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+  bookingProvisionalOfferSentDate: '2026-06-15',
+  premises: {
+    addressLine1: '1 Test Street',
+    town: 'Leeds',
+    postcode: 'LS1 1AA',
+    startDate: '2026-09-01',
+    endDate: '2026-10-27',
+  },
+  previousBookings: [],
 }
 
 describe('linksForService', () => {
@@ -233,6 +250,10 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'SUBMITTED', url: 'https://example.com/view' },
       },
       {
+        title: 'ARRIVED',
+        result: { serviceStatus: 'ARRIVED', url: 'https://example.com/view' },
+      },
+      {
         title: 'REJECTED',
         result: { serviceStatus: 'REJECTED', url: 'https://example.com/start-new' },
       },
@@ -377,6 +398,80 @@ describe('cas1 status card', () => {
         const { content } = cas1StatusCard({
           serviceResult,
           cas1Application,
+        })
+
+        expect(content).toBeUndefined()
+      })
+    })
+  })
+})
+
+describe('cas3 status card', () => {
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-08-01'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  describe('details', () => {
+    const detailStatuses: ServiceResult['serviceStatus'][] = [
+      'NOT_STARTED',
+      'SUBMITTED',
+      'REJECTED',
+      'BEDSPACE_OFFERED',
+      'BOOKING_CONFIRMED',
+      'BOOKING_CANCELLED',
+      'ARRIVED',
+    ]
+
+    it.each(detailStatuses)('renders detail rows for a %s status', status => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: status })
+
+      expect(cas3StatusCard({ serviceResult, cas3Application }).details).toMatchSnapshot()
+    })
+  })
+
+  describe('content', () => {
+    const serviceResult = serviceResultFactory.build({
+      serviceStatus: 'BEDSPACE_OFFERED',
+    })
+
+    describe('previous bookings', () => {
+      it('renders previous bookings', () => {
+        const application: NonNullable<Cas3ServiceResult['cas3Application']> = {
+          ...cas3Application,
+          previousBookings: [
+            {
+              bookingStatus: 'CANCELLED',
+              cancellation: {
+                cancellationDate: '2026-06-20',
+                cancellationReason: 'No longer needed',
+              },
+            },
+            {
+              bookingStatus: 'CANCELLED',
+              cancellation: {
+                cancellationReason: 'No longer needed',
+              },
+            },
+          ],
+        }
+
+        const { content } = cas3StatusCard({
+          serviceResult,
+          cas3Application: application,
+        })
+
+        expect(JSON.stringify(content)).toContain('2 previous bookings on this application')
+        expect(content).toMatchSnapshot()
+      })
+
+      it('does not render previous bookings when empty', () => {
+        const { content } = cas3StatusCard({
+          serviceResult,
+          cas3Application,
         })
 
         expect(content).toBeUndefined()

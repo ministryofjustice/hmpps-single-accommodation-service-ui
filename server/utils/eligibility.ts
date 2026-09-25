@@ -429,6 +429,12 @@ const detailsForCas3Status = (
         ),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
+    case 'ARRIVED':
+      return [
+        summaryListRow('Arrival date', cas3Application?.premises.startDate ?? undefined),
+        summaryListRow('Expected departure date', cas3Application?.premises.endDate ?? undefined),
+        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+      ]
     default:
       return []
   }

@@ -13,6 +13,7 @@ import {
 } from '../utils/validation'
 import { getPageBackLink } from '../utils/backlinks'
 import { getTodayLocal } from '../utils/dates'
+import logger from '../../logger'
 
 export default class CurrentAddressController {
   constructor(
@@ -75,9 +76,13 @@ export default class CurrentAddressController {
       }
 
       try {
-        await this.proposedAddressesService.submitArrival(token, crn, proposedAddressId, {
+        const arrival = {
           arrivalDate: getTodayLocal(),
-        })
+          arrivalMethod: 'WITHOUT_VERIFICATION' as const,
+        }
+        // TEMP: remove once arrivalMethod is verified
+        logger.info(`[TEMP] arrival ${crn}/${proposedAddressId} ${JSON.stringify(arrival)}`)
+        await this.proposedAddressesService.submitArrival(token, crn, proposedAddressId, arrival)
         req.flash('success', 'Current address changed')
         return res.redirect(uiPaths.cases.show({ crn }))
       } catch {

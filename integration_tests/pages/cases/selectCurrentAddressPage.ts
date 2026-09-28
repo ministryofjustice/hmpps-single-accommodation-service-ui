@@ -74,6 +74,6 @@ export default class SelectCurrentAddressPage extends AbstractPage {
       apiPaths.cases.proposedAddresses.arrival({ crn: this.caseData.crn, id: proposedAddress.id }),
     )
 
-    expect(requestBody).toEqual({ arrivalDate: getTodayLocal() })
+    expect(requestBody).toEqual({ arrivalDate: getTodayLocal(), arrivalMethod: 'WITHOUT_VERIFICATION' })
   }
 }

@@ -101,6 +101,7 @@ describe('currentAddressController', () => {
 
       expect(proposedAddressesService.submitArrival).toHaveBeenCalledWith('token-1', 'CRN123', proposedAddress.id, {
         arrivalDate: '2026-06-29',
+        arrivalMethod: 'WITHOUT_VERIFICATION',
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Current address changed')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))

@@ -1,11 +1,6 @@
 import { addressFactory, proposedAccommodationFactory } from '../testutils/factories'
 import config from '../config'
-import {
-  deliusAddressHistoryUrl,
-  NEW_ADDRESS_OPTION,
-  proposedAddressItems,
-  sortAddressesAlphabetically,
-} from './currentAddress'
+import { deliusAddressHistoryUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from './currentAddress'
 
 describe('currentAddress', () => {
   const firstAddress = proposedAccommodationFactory.build({
@@ -25,18 +20,9 @@ describe('currentAddress', () => {
     }),
   })
 
-  describe('sortAddressesAlphabetically', () => {
-    it('sorts the addresses A-Z without mutating the original list', () => {
-      const addresses = [secondAddress, firstAddress]
-
-      expect(sortAddressesAlphabetically(addresses)).toEqual([firstAddress, secondAddress])
-      expect(addresses).toEqual([secondAddress, firstAddress])
-    })
-  })
-
   describe('proposedAddressItems', () => {
-    it('returns the addresses A-Z followed by an option to add a new address', () => {
-      expect(proposedAddressItems([secondAddress, firstAddress])).toEqual([
+    it('returns the addresses followed by an option to add a new address', () => {
+      expect(proposedAddressItems([firstAddress, secondAddress])).toEqual([
         { value: firstAddress.id, html: '1 London Street<br />London<br />SW1A 1AA', checked: false },
         { value: secondAddress.id, html: '2 London Street<br />London<br />SW1A 1AA', checked: false },
         { divider: 'or' },
@@ -45,7 +31,7 @@ describe('currentAddress', () => {
     })
 
     it('checks the previously selected proposed address', () => {
-      expect(proposedAddressItems([secondAddress, firstAddress], secondAddress.id)).toEqual([
+      expect(proposedAddressItems([firstAddress, secondAddress], secondAddress.id)).toEqual([
         expect.objectContaining({ value: firstAddress.id, checked: false }),
         expect.objectContaining({ value: secondAddress.id, checked: true }),
         { divider: 'or' },

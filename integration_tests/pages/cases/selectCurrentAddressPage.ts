@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test'
 import { CaseDto, ProposedAccommodationDto } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { addressLines } from '../../../server/utils/addresses'
-import { NEW_ADDRESS_OPTION, sortAddressesAlphabetically } from '../../../server/utils/currentAddress'
+import { NEW_ADDRESS_OPTION } from '../../../server/utils/currentAddress'
 import { displayName } from '../../../server/utils/cases'
 import { getMatchingRequests, verifyPost } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
@@ -24,19 +24,18 @@ export default class SelectCurrentAddressPage extends AbstractPage {
 
   async shouldShowHint() {
     await expect(this.page.locator('#proposedAddressId-hint')).toHaveText(
-      'Addresses that have previously failed checks will not show here.',
+      'Addresses that have failed checks will not show here.',
     )
   }
 
   async shouldShowProposedAddresses(proposedAddresses: ProposedAccommodationDto[]) {
-    const sortedAddresses = sortAddressesAlphabetically(proposedAddresses)
     const radioValues = await this.page
       .locator('input[name="proposedAddressId"]')
       .evaluateAll(radios => radios.map(radio => (radio as HTMLInputElement).value))
 
-    expect(radioValues).toEqual([...sortedAddresses.map(address => address.id), NEW_ADDRESS_OPTION])
+    expect(radioValues).toEqual([...proposedAddresses.map(address => address.id), NEW_ADDRESS_OPTION])
 
-    for await (const address of sortedAddresses) {
+    for await (const address of proposedAddresses) {
       const label = this.page.locator(`label[for="${await this.radio(address.id).getAttribute('id')}"]`)
 
       for await (const line of addressLines(address.address)) {

@@ -9,6 +9,8 @@ export type OtherAccommodationReferralCommand = {
   organisationName?: string | null
   website?: string | null
   submissionNote?: string | null
+  email?: string | null
+  phoneNumber?: string | null
   outcomeReason?:
     | 'ACCEPTED_BY_ORGANISATION'
     | 'ACCEPTED_WITH_ACCOMMODATION_PLACEMENT'

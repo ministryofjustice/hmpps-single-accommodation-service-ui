@@ -45,6 +45,7 @@ import { radioItems } from '../utils/utils'
 import { collectApiResponses } from '../utils/apiResponses'
 import { getTodayLocal } from '../utils/dates'
 import { breadcrumbs } from '../utils/breadcrumbs'
+import logger from '../../logger'
 
 interface EditRequest extends Request {
   params: {
@@ -586,9 +587,13 @@ export default class ProposedAddressesController {
       const { token } = res.locals.user
 
       try {
-        await this.proposedAddressesService.submitArrival(token, crn, id, {
+        const arrival = {
           arrivalDate: getTodayLocal(),
-        })
+          arrivalMethod: 'STANDARD' as const,
+        }
+        // TODO TEMP: remove once arrivalMethod is verified and is on dev(!)
+        logger.info(`[TEMP] arrival ${crn}/${id} ${JSON.stringify(arrival)}`)
+        await this.proposedAddressesService.submitArrival(token, crn, id, arrival)
         req.flash('success', 'Current address updated')
         return res.redirect(uiPaths.cases.show({ crn }))
       } catch {

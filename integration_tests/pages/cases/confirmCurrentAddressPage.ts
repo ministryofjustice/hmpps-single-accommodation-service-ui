@@ -33,6 +33,7 @@ export default class ConfirmCurrentAddressPage extends AbstractPage {
 
     expect(requestBody).toEqual({
       arrivalDate: getTodayLocal(),
+      arrivalMethod: 'STANDARD',
     })
   }
 }

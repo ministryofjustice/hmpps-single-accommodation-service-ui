@@ -120,7 +120,7 @@
     "govuk-frontend": "6.1.0",
     "helmet": "^8.3.0",
     "http-errors": "^2.0.1",
-    "jest-pact": "^0.13.0",
+    "jest-pact": "^0.14.0",
     "jwt-decode": "^4.0.0",
     "nocache": "^4.0.0",
     "nunjucks": "^3.2.4",

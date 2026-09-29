@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ProposedAddressFormPage } from '@sas/ui'
+import { ProposedAccommodationArrivalCommand } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from '../utils/multiPageFormManager'
@@ -45,7 +46,6 @@ import { radioItems } from '../utils/utils'
 import { collectApiResponses } from '../utils/apiResponses'
 import { getTodayLocal } from '../utils/dates'
 import { breadcrumbs } from '../utils/breadcrumbs'
-import logger from '../../logger'
 
 interface EditRequest extends Request {
   params: {
@@ -587,12 +587,10 @@ export default class ProposedAddressesController {
       const { token } = res.locals.user
 
       try {
-        const arrival = {
+        const arrival: ProposedAccommodationArrivalCommand = {
           arrivalDate: getTodayLocal(),
-          arrivalMethod: 'STANDARD' as const,
+          arrivalMethod: 'STANDARD',
         }
-        // TODO TEMP: remove once arrivalMethod is verified and is on dev(!)
-        logger.info(`[TEMP] arrival ${crn}/${id} ${JSON.stringify(arrival)}`)
         await this.proposedAddressesService.submitArrival(token, crn, id, arrival)
         req.flash('success', 'Current address updated')
         return res.redirect(uiPaths.cases.show({ crn }))

@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { ProposedAccommodationArrivalCommand } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import ProposedAddressesService from '../services/proposedAddressesService'
@@ -13,7 +14,6 @@ import {
 } from '../utils/validation'
 import { getPageBackLink } from '../utils/backlinks'
 import { getTodayLocal } from '../utils/dates'
-import logger from '../../logger'
 
 export default class CurrentAddressController {
   constructor(
@@ -76,12 +76,10 @@ export default class CurrentAddressController {
       }
 
       try {
-        const arrival = {
+        const arrival: ProposedAccommodationArrivalCommand = {
           arrivalDate: getTodayLocal(),
-          arrivalMethod: 'WITHOUT_VERIFICATION' as const,
+          arrivalMethod: 'WITHOUT_VERIFICATION',
         }
-        // TEMP: remove once arrivalMethod is verified
-        logger.info(`[TEMP] arrival ${crn}/${proposedAddressId} ${JSON.stringify(arrival)}`)
         await this.proposedAddressesService.submitArrival(token, crn, proposedAddressId, arrival)
         req.flash('success', 'Current address changed')
         return res.redirect(uiPaths.cases.show({ crn }))

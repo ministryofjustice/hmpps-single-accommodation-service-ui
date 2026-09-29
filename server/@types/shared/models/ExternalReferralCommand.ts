@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 
-export type OtherAccommodationReferralCommand = {
+export type ExternalReferralCommand = {
   submissionDate: string
   referenceNumber?: string | null
   status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED'

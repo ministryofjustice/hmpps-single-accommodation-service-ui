@@ -70,9 +70,9 @@ test.describe('change the current address', () => {
     const selectPage = await SelectCurrentAddressPage.verifyOnPage(page, caseData)
     await selectPage.checkProposedAddressesApiCalledExcludingFailedChecks()
 
-    // And I should see the remaining proposed addresses, A-Z
+    // And I should see the remaining proposed addresses
     await selectPage.shouldShowHint()
-    await selectPage.shouldShowProposedAddresses([firstAddress, secondAddress])
+    await selectPage.shouldShowProposedAddresses([secondAddress, firstAddress])
     await selectPage.shouldNotShowProposedAddress(failedChecks)
 
     const backLink = paths.cases.show({ crn })

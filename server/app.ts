@@ -3,6 +3,7 @@ import express from 'express'
 
 import createError from 'http-errors'
 import * as Sentry from '@sentry/node'
+import { telemetryMiddleware } from '@ministryofjustice/hmpps-azure-telemetry'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -42,6 +43,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpAuthentication())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(telemetryMiddleware.addUserMetadataToTelemetry())
   app.use(setUpMaintenancePageRedirect())
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')

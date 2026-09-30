@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { OtherAccommodationReferralSubmissionDto } from './OtherAccommodationReferralSubmissionDto'
-export type OtherAccommodationReferralDto = {
+import type { ExternalReferralSubmissionDto } from './ExternalReferralSubmissionDto'
+export type ExternalReferralDto = {
   caseId: string
   crn: string
   status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED'
-  submission: OtherAccommodationReferralSubmissionDto
+  submission: ExternalReferralSubmissionDto
 }

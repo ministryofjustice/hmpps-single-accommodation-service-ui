@@ -102,7 +102,7 @@
     "@ministryofjustice/hmpps-probation-frontend-components": "1.1.1",
     "@ministryofjustice/hmpps-rest-client": "2.2.0",
     "@opentelemetry/api": "1.9.0",
-    "@pact-foundation/pact": "16.5.0",
+    "@pact-foundation/pact": "17.1.4",
     "@pactflow/openapi-pact-comparator": "^2.3.1",
     "@playwright/test": "1.63.0",
     "@sentry/node": "10.75.0",
@@ -120,7 +120,7 @@
     "govuk-frontend": "6.1.0",
     "helmet": "^8.3.0",
     "http-errors": "^2.0.1",
-    "jest-pact": "^0.13.0",
+    "jest-pact": "^0.14.0",
     "jwt-decode": "^4.0.0",
     "nocache": "^4.0.0",
     "nunjucks": "^3.2.4",
@@ -178,6 +178,7 @@
     "@playwright/test": "1.63.0",
     "playwright-core": "1.63.0",
     "@opentelemetry/core": "2.11.0",
+    "moment": "^2.31.0",
     "proxy-addr": "2.0.8"
   }
 }

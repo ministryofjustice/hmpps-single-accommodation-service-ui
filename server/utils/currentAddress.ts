@@ -18,5 +18,5 @@ export const proposedAddressItems = (
   { value: NEW_ADDRESS_OPTION, text: 'Add a new address', checked: selectedValue === NEW_ADDRESS_OPTION },
 ]
 
-export const deliusAddressHistoryUrl = (crn: string): string =>
+export const deliusAddressAndAccommodationUrl = (crn: string): string =>
   `${config.deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=AddressandAccommodation&CRN=${encodeURIComponent(crn)}`

@@ -9,7 +9,7 @@ import * as backlinks from '../utils/backlinks'
 import * as validationUtils from '../utils/validation'
 import { apiResponseFactory, caseFactory, proposedAccommodationFactory } from '../testutils/factories'
 import { displayName } from '../utils/cases'
-import { deliusAddressHistoryUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from '../utils/currentAddress'
+import { deliusAddressAndAccommodationUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from '../utils/currentAddress'
 
 describe('currentAddressController', () => {
   let request: Request
@@ -150,7 +150,7 @@ describe('currentAddressController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/current-address/new', {
         backLinkHref: uiPaths.cases.show({ crn: 'CRN123' }),
         displayName: displayName(caseData),
-        deliusLink: deliusAddressHistoryUrl('CRN123'),
+        deliusLink: deliusAddressAndAccommodationUrl('CRN123'),
       })
     })
   })

@@ -10,6 +10,7 @@ import ProposedAddressesService from './proposedAddressesService'
 import OsDataHubService from './osDataHubService'
 import AccommodationService from './accommodationService'
 import UserService from './userService'
+import OtherReferralsService from './otherReferralsService'
 
 export const services = () => {
   const {
@@ -20,6 +21,7 @@ export const services = () => {
     referralsClient,
     eligibilityClient,
     dutyToReferClient,
+    otherReferralsClient,
     proposedAddressesClient,
     osDataHubClient,
     accommodationClient,
@@ -34,6 +36,7 @@ export const services = () => {
     referralsService: new ReferralsService(referralsClient),
     eligibilityService: new EligibilityService(eligibilityClient),
     dutyToReferService: new DutyToReferService(dutyToReferClient),
+    otherReferralsService: new OtherReferralsService(otherReferralsClient),
     proposedAddressesService: new ProposedAddressesService(proposedAddressesClient),
     osDataHubService: new OsDataHubService(osDataHubClient),
     accommodationService: new AccommodationService(accommodationClient),

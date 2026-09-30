@@ -68,7 +68,7 @@ test.describe('change the current address', () => {
 
     // Then the addresses should have been requested without the ones that failed their checks
     const selectPage = await SelectCurrentAddressPage.verifyOnPage(page, caseData)
-    await selectPage.checkProposedAddressesApiCalledExcludingFailedChecks()
+    await selectPage.checkProposedAddressesApiCalledWithoutQueryParameters()
 
     // And I should see the remaining proposed addresses
     await selectPage.shouldShowHint()

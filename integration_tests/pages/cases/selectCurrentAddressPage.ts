@@ -56,11 +56,10 @@ export default class SelectCurrentAddressPage extends AbstractPage {
     await this.page.getByRole('radio', { name: 'Add a new address' }).check()
   }
 
-  async checkProposedAddressesApiCalledExcludingFailedChecks() {
+  async checkProposedAddressesApiCalledWithoutQueryParameters() {
     const { body } = await getMatchingRequests({
       method: 'GET',
       urlPath: apiPaths.cases.proposedAddresses.index({ crn: this.caseData.crn }),
-      queryParameters: { excludeVerificationFailed: { equalTo: 'true' } },
     })
 
     expect(body.requests).not.toHaveLength(0)

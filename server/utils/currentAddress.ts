@@ -19,4 +19,4 @@ export const proposedAddressItems = (
 ]
 
 export const deliusAddressHistoryUrl = (crn: string): string =>
-  `${config.deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=AddressHistory&CRN=${encodeURIComponent(crn)}`
+  `${config.deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=AddressandAccommodation&CRN=${encodeURIComponent(crn)}`

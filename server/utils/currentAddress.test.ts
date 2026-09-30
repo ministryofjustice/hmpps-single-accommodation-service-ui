@@ -51,7 +51,7 @@ describe('currentAddress', () => {
   describe('deliusAddressHistoryUrl', () => {
     it('returns a deep link to the address history for the case in nDelius', () => {
       expect(deliusAddressHistoryUrl('X123456')).toEqual(
-        `${config.deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=AddressHistory&CRN=X123456`,
+        `${config.deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=AddressandAccommodation&CRN=X123456`,
       )
     })
   })

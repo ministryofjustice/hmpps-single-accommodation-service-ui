@@ -23,9 +23,7 @@ export default class SelectCurrentAddressPage extends AbstractPage {
   }
 
   async shouldShowHint() {
-    await expect(this.page.locator('#proposedAddressId-hint')).toHaveText(
-      'Addresses that have failed checks will not show here.',
-    )
+    await expect(this.page.locator('#proposedAddressId-hint')).toHaveText('Only confirmed addresses will show here.')
   }
 
   async shouldShowProposedAddresses(proposedAddresses: ProposedAccommodationDto[]) {

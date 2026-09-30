@@ -1,0 +1,30 @@
+{% extends "partials/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageTitle = "Add a new current address" %}
+
+{% block containerStart %}
+  {{
+    govukBackLink({
+        text: "Back",
+        href: backLinkHref
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">Add a new current address</h1>
+
+      <p class="govuk-body">Record a new current address for {{ displayName }} in nDelius.</p>
+
+      <p class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="{{ deliusLink }}" target="_blank" rel="noreferrer noopener">
+          Go to nDelius (opens in new tab)
+        </a>
+      </p>
+    </div>
+  </div>
+{% endblock %}

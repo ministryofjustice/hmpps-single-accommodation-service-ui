@@ -11,6 +11,7 @@ import {
 } from './eligibility'
 import config from '../config'
 import {
+  accommodationSummaryFactory,
   crsServiceResultFactory,
   crsSubmissionFactory,
   eligibilityFactory,
@@ -276,6 +277,27 @@ describe('eligibilityStatusCard', () => {
       })
 
       expect(cardBuilders[service](serviceResult)).toMatchSnapshot()
+    })
+  })
+
+  describe('cas2 NOT_STARTED', () => {
+    const url = 'https://example.gov.uk/start'
+
+    it('should show content for people in AP', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_STARTED', url })
+      const accommodation = accommodationSummaryFactory.build({
+        type: { description: 'Approved premises', code: 'A02' },
+      })
+
+      const card = cas2StatusCard({ serviceResult }, accommodation)
+      expect(card).toMatchSnapshot()
+    })
+
+    it('should show content for people not in AP', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_STARTED', url })
+
+      const card = cas2StatusCard({ serviceResult })
+      expect(card).toMatchSnapshot()
     })
   })
 })

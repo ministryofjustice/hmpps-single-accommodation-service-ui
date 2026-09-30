@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test'
 import { CaseDto } from '@sas/api'
 import AbstractPage from '../abstractPage'
-import { deliusAddressHistoryUrl } from '../../../server/utils/currentAddress'
+import { deliusAddressAndAccommodationUrl } from '../../../server/utils/currentAddress'
 import { displayName } from '../../../server/utils/cases'
 
 export default class AddCurrentAddressPage extends AbstractPage {
@@ -20,7 +20,7 @@ export default class AddCurrentAddressPage extends AbstractPage {
     ).toBeVisible()
 
     const link = this.page.getByRole('link', { name: 'Go to nDelius (opens in new tab)' })
-    await expect(link).toHaveAttribute('href', deliusAddressHistoryUrl(this.caseData.crn))
+    await expect(link).toHaveAttribute('href', deliusAddressAndAccommodationUrl(this.caseData.crn))
     await expect(link).toHaveAttribute('target', '_blank')
   }
 }

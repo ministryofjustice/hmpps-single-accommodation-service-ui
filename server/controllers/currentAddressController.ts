@@ -5,7 +5,7 @@ import CasesService from '../services/casesService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
 import { displayName } from '../utils/cases'
-import { deliusAddressHistoryUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from '../utils/currentAddress'
+import { deliusAddressAndAccommodationUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from '../utils/currentAddress'
 import {
   addGenericErrorToFlash,
   fetchErrorsAndUserInput,
@@ -108,7 +108,7 @@ export default class CurrentAddressController {
           uiPaths.currentAddress.select.pattern,
         ]),
         displayName: displayName(caseData),
-        deliusLink: deliusAddressHistoryUrl(crn),
+        deliusLink: deliusAddressAndAccommodationUrl(crn),
       })
     }
   }

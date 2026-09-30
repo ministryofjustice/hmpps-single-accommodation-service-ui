@@ -1,6 +1,6 @@
 import { addressFactory, proposedAccommodationFactory } from '../testutils/factories'
 import config from '../config'
-import { deliusAddressHistoryUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from './currentAddress'
+import { deliusAddressAndAccommodationUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from './currentAddress'
 
 describe('currentAddress', () => {
   const firstAddress = proposedAccommodationFactory.build({
@@ -48,9 +48,9 @@ describe('currentAddress', () => {
     })
   })
 
-  describe('deliusAddressHistoryUrl', () => {
-    it('returns a deep link to the address history for the case in nDelius', () => {
-      expect(deliusAddressHistoryUrl('X123456')).toEqual(
+  describe('deliusAddressAndAccommodationUrl', () => {
+    it('returns a deep link to the address and accommodation section for the case in nDelius', () => {
+      expect(deliusAddressAndAccommodationUrl('X123456')).toEqual(
         `${config.deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=AddressandAccommodation&CRN=X123456`,
       )
     })

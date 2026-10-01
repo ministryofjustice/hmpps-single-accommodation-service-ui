@@ -10,6 +10,7 @@ import casesApi from '../mockApis/cases'
 import eligibilityApi from '../mockApis/eligibility'
 import proposedAddressesApi from '../mockApis/proposedAddresses'
 import accommodationApi from '../mockApis/accommodation'
+import externalReferralsApi from '../mockApis/externalReferrals'
 
 // eslint-disable-next-line import/prefer-default-export
 export const stubProfilePage = async ({
@@ -35,4 +36,5 @@ export const stubProfilePage = async ({
   await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, proposedAddresses)
   await accommodationApi.stubGetAccommodationHistory(crn, accommodationHistory)
   await accommodationApi.stubGetAccommodationSummary(crn, accommodationSummaries)
+  await externalReferralsApi.stubListExternalReferral(crn, [])
 }

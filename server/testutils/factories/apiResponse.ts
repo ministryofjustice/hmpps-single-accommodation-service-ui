@@ -11,6 +11,7 @@ import {
   ApiResponseDtoListAccommodationSummaryDto,
   ApiResponseDtoListAuditRecordDto,
   ApiResponseDtoListCaseDto,
+  ApiResponseDtoListExternalReferralDto,
   ApiResponseDtoListProposedAccommodationDto,
   ApiResponseDtoListReferenceDataDto,
   ApiResponseDtoProposedAccommodationDto,
@@ -18,6 +19,7 @@ import {
   CaseDto,
   DutyToReferDto,
   EligibilityDto,
+  ExternalReferralDto,
   ProposedAccommodationDto,
   ReferenceDataDto,
   UpstreamFailureDto,
@@ -33,6 +35,7 @@ import accommodationSummaryFactory from './accommodationSummary'
 import accommodationSummariesFactory from './accommodationSummaries'
 import proposedAccommodationFactory from './proposedAccommodation'
 import upstreamFailureFactory from './upstreamFailure'
+import { ApiResponseDtoExternalReferralDto } from '../../@types/shared/models/ApiResponseDtoExternalReferralDto'
 
 class ApiResponseFactory extends Factory<ApiResponse> {
   buildResponse<T extends ApiResponse>(data: T['data']) {
@@ -55,6 +58,14 @@ class ApiResponseFactory extends Factory<ApiResponse> {
 
   dutyToRefer(dtr?: DutyToReferDto) {
     return this.buildResponse<ApiResponseDtoDutyToReferDto>(dtr || dutyToReferFactory.build())
+  }
+
+  externalReferral(referral?: ExternalReferralDto) {
+    return this.buildResponse<ApiResponseDtoExternalReferralDto>(referral)
+  }
+
+  externalReferrals(referrals?: Array<ExternalReferralDto>) {
+    return this.buildResponse<ApiResponseDtoListExternalReferralDto>(referrals)
   }
 
   eligibility(eligibility?: EligibilityDto) {

@@ -94,6 +94,8 @@ const isValidCrn = (crn: string): boolean => /^[a-z]\d{6}$/i.test(crn)
 
 const aOrAn = (noun: string): string => (/^[aeiou]/i.test(noun) ? 'an' : 'a')
 
+const isValidEmail = (email: string): boolean => /^[\w-+.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)
+
 const isBlank = (value: string | undefined): boolean => !value
 
 const validateRequired = (
@@ -233,4 +235,12 @@ export const validatePostcode = (value: string | undefined): string | undefined 
 export const validateCrn = (value: string | undefined): string | undefined => {
   if (!value) return 'Enter a CRN'
   return isValidCrn(value) ? undefined : 'Enter a valid CRN'
+}
+
+export const validateEmail = (value: string): string | undefined => {
+  return !value || isValidEmail(value) ? undefined : 'Enter a valid Email address'
+}
+
+export const validatePhoneNumber = (value: string): string | undefined => {
+  return !value || value.length <= 35 ? undefined : 'Enter a UK phone number'
 }

@@ -61,7 +61,9 @@ describe('currentAddressController', () => {
         who: 'user1',
         correlationId: 'request-id',
       })
-      expect(proposedAddressesService.getProposedAddresses).toHaveBeenCalledWith('token-1', 'CRN123')
+      expect(proposedAddressesService.getProposedAddresses).toHaveBeenCalledWith('token-1', 'CRN123', {
+        confirmedOnly: true,
+      })
       expect(response.render).toHaveBeenCalledWith('pages/current-address/select', {
         crn: 'CRN123',
         backLinkHref: uiPaths.cases.show({ crn: 'CRN123' }),

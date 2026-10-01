@@ -27,6 +27,7 @@ const proposedAddress = (
   proposedAccommodationFactory.build({
     crn,
     verificationStatus,
+    nextAccommodationStatus: verificationStatus === 'PASSED' ? 'YES' : undefined,
     address: addressFactory
       .minimal()
       .build({ buildingNumber, thoroughfareName, postTown: 'Oxford', postcode: 'OX1 1CD' }),
@@ -43,6 +44,11 @@ const startJourney = async (page: Page, proposedAddresses: ProposedAccommodation
       currentAccommodation: accommodationSummaryFactory.current().build({ crn }),
     }),
   })
+  await proposedAddressesApi.stubGetProposedAddressesByCrn(
+    crn,
+    proposedAddresses.filter(address => address.nextAccommodationStatus === 'YES'),
+    true,
+  )
 
   for await (const address of proposedAddresses) {
     await proposedAddressesApi.stubSubmitArrival(crn, address.id)
@@ -66,13 +72,14 @@ test.describe('change the current address', () => {
     // When I start changing the current address
     const profileTrackerPage = await startJourney(page, [secondAddress, firstAddress, failedChecks])
 
-    // Then the addresses should have been requested without the ones that failed their checks
+    // Then only confirmed addresses should have been requested
     const selectPage = await SelectCurrentAddressPage.verifyOnPage(page, caseData)
-    await selectPage.checkProposedAddressesApiCalledWithoutQueryParameters()
+    await selectPage.checkProposedAddressesApiCalledWithConfirmedOnly()
 
-    // And I should see the remaining proposed addresses
+    // And I should see only the confirmed proposed address
     await selectPage.shouldShowHint()
-    await selectPage.shouldShowProposedAddresses([secondAddress, firstAddress])
+    await selectPage.shouldShowProposedAddresses([firstAddress])
+    await selectPage.shouldNotShowProposedAddress(secondAddress)
     await selectPage.shouldNotShowProposedAddress(failedChecks)
 
     const backLink = paths.cases.show({ crn })

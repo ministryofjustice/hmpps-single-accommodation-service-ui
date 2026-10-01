@@ -55,10 +55,10 @@ describe('ProposedAddressesService', () => {
     it('should pass the query through to the api client', async () => {
       proposedAddressesClient.getProposedAddresses.mockResolvedValue(apiResponseFactory.proposedAddresses([]))
 
-      await proposedAddressesService.getProposedAddresses(token, crn, { excludeVerificationFailed: true })
+      await proposedAddressesService.getProposedAddresses(token, crn, { confirmedOnly: true })
 
       expect(proposedAddressesClient.getProposedAddresses).toHaveBeenCalledWith(token, crn, {
-        excludeVerificationFailed: true,
+        confirmedOnly: true,
       })
     })
   })

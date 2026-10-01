@@ -74,6 +74,7 @@ export type GetCasesQuery = {
 
 export type GetProposedAddressesQuery = {
   excludeVerificationFailed?: boolean
+  confirmedOnly?: boolean
 }
 
 export interface IndexRequest extends Request {

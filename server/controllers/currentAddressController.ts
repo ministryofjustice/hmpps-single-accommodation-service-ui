@@ -29,7 +29,7 @@ export default class CurrentAddressController {
 
       const [{ data: caseData }, { data: proposedAddresses }] = await Promise.all([
         this.casesService.getCase(token, crn),
-        this.proposedAddressesService.getProposedAddresses(token, crn),
+        this.proposedAddressesService.getProposedAddresses(token, crn, { confirmedOnly: true }),
       ])
 
       if (!proposedAddresses.proposed.length) {

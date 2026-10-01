@@ -1,8 +1,6 @@
 import { test } from '@playwright/test'
 import { AuditRecordDto, CaseDto, DutyToReferDto } from '@sas/api'
-import accommodationApi from '../../mockApis/accommodation'
 import casesApi from '../../mockApis/cases'
-import proposedAddressesApi from '../../mockApis/proposedAddresses'
 import dutyToReferApi from '../../mockApis/dutyToRefer'
 import eligibilityApi from '../../mockApis/eligibility'
 import referenceDataApi from '../../mockApis/referenceData'
@@ -26,6 +24,7 @@ import {
   dutyToReferToDtrServiceResult,
 } from '../../../server/utils/dutyToRefer'
 import { displayName } from '../../../server/utils/cases'
+import { stubProfilePage } from '../../helpers/profilePage'
 
 const crn = 'X123456'
 const setupStubs = async ({
@@ -36,8 +35,6 @@ const setupStubs = async ({
   initialDutyToRefer?: DutyToReferDto
 } = {}) => {
   const caseData = initialCaseData || caseFactory.build({ crn })
-  await casesApi.stubGetCases([caseData])
-  await casesApi.stubGetCaseByCrn(crn, caseData)
   if (initialDutyToRefer?.submission?.id) {
     await dutyToReferApi.stubGetDtrBySubmissionId(crn, initialDutyToRefer.submission.id, initialDutyToRefer)
   }
@@ -47,12 +44,8 @@ const setupStubs = async ({
       ? dutyToReferToDtrServiceResult(initialDutyToRefer)
       : dtrServiceResultFactory.notStarted().build(),
   })
-  await eligibilityApi.stubGetEligibilityByCrn(crn, eligibility)
-  await casesApi.stubGetReferralHistory(crn, [])
-  await proposedAddressesApi.stubGetProposedAddressesByCrn(crn, [])
-  await accommodationApi.stubGetAccommodationHistory(crn, [])
+  await stubProfilePage({ crn, caseData, eligibility })
   await referenceDataApi.stubGetLocalAuthorities()
-  await accommodationApi.stubGetAccommodationSummary(crn, undefined)
   await userApi.stubGetTeams()
   return { caseData, eligibility }
 }

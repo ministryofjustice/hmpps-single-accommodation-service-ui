@@ -2,13 +2,9 @@ import { test } from '@playwright/test'
 import { AuditRecordDto, CaseDto, ProposedAccommodationDto } from '@sas/api'
 import { ProposedAddressFormData } from '@sas/ui'
 import { faker } from '@faker-js/faker'
-import accommodationApi from '../../mockApis/accommodation'
-import casesApi from '../../mockApis/cases'
 import proposedAddressesApi from '../../mockApis/proposedAddresses'
-import eligibilityApi from '../../mockApis/eligibility'
 import osDataHubApi from '../../mockApis/osDataHubApi'
 import referenceDataApi from '../../mockApis/referenceData'
-import userApi from '../../mockApis/user'
 import { login } from '../../testUtils'
 import {
   addressFactory,
@@ -28,18 +24,13 @@ import { accommodationTypes } from '../../../server/testutils/factories/proposed
 import ConfirmCurrentAddressPage from '../../pages/cases/confirmCurrentAddressPage'
 import paths from '../../../server/paths/ui'
 import { displayName } from '../../../server/utils/cases'
+import { stubProfilePage } from '../../helpers/profilePage'
 
 const setupCase = async () => {
   const caseData = caseFactory.build()
   const { crn } = caseData
+  await stubProfilePage({ crn, caseData })
 
-  await casesApi.stubGetCases([caseData])
-  await userApi.stubGetTeams()
-  await casesApi.stubGetCaseByCrn(crn, caseData)
-  await eligibilityApi.stubGetEligibilityByCrn(crn, undefined)
-  await casesApi.stubGetReferralHistory(crn, [])
-  await accommodationApi.stubGetAccommodationSummary(crn, undefined)
-  await accommodationApi.stubGetAccommodationHistory(crn, [])
   await referenceDataApi.stubGetAccommodationTypes()
 
   return caseData

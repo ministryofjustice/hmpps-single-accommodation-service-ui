@@ -12,6 +12,7 @@ import {
   apiResponseFactory,
   caseFactory,
   eligibilityFactory,
+  externalReferralFactory,
   proposedAccommodationFactory,
   referralFactory,
 } from '../testutils/factories'
@@ -37,6 +38,8 @@ import { renderActions } from '../utils/actions'
 import * as backLinksUtils from '../utils/backlinks'
 import * as validationUtils from '../utils/validation'
 import { breadcrumbs } from '../utils/breadcrumbs'
+import ExternalReferralsService from '../services/externalReferralsService'
+import { externalReferralCards } from '../utils/externalReferrals'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -55,6 +58,7 @@ describe('casesController', () => {
   const proposedAddressesService = mock<ProposedAddressesService>()
   const accommodationService = mock<AccommodationService>()
   const userService = mock<UserService>()
+  const externalReferralsService = mock<ExternalReferralsService>()
 
   const casesController = new CasesController(
     auditService,
@@ -65,6 +69,7 @@ describe('casesController', () => {
     proposedAddressesService,
     accommodationService,
     userService,
+    externalReferralsService,
   )
 
   beforeEach(() => {
@@ -287,6 +292,7 @@ describe('casesController', () => {
       const failedChecks = proposedAccommodationFactory.buildList(1, { verificationStatus: 'FAILED' })
       const accommodationHistory = accommodationSummaryFactory.buildListSequential(2)
       const accommodationSummaries = accommodationSummariesFactory.build()
+      const externalReferrals = externalReferralFactory.buildList(2)
 
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.referralHistory(referralHistory))
@@ -298,6 +304,7 @@ describe('casesController', () => {
       accommodationService.getAccommodationSummary.mockResolvedValue(
         apiResponseFactory.accommodationSummaries(accommodationSummaries),
       )
+      externalReferralsService.search.mockResolvedValue(apiResponseFactory.externalReferrals(externalReferrals))
 
       await casesController.show()(request, response, next)
 
@@ -310,6 +317,7 @@ describe('casesController', () => {
       expect(eligibilityService.getEligibility).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(proposedAddressesService.getProposedAddresses).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(accommodationService.getAccommodationHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
+      expect(externalReferralsService.search).toHaveBeenCalledWith(TEST_TOKEN, crn)
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
         breadcrumbs: breadcrumbs(request),
@@ -326,6 +334,7 @@ describe('casesController', () => {
         proposedAddresses: proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
         failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),
+        externalReferralCards: externalReferralCards(externalReferrals),
       })
     })
 

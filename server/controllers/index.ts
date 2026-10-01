@@ -3,6 +3,7 @@ import CasesController from './casesController'
 import DutyToReferController from './dutyToReferController'
 import ProposedAddressesController from './proposedAddressesController'
 import StaticController from './staticController'
+import ExternalReferralsController from './externalReferralsController'
 
 export const controllers = (services: Services) => ({
   casesController: new CasesController(
@@ -14,6 +15,7 @@ export const controllers = (services: Services) => ({
     services.proposedAddressesService,
     services.accommodationService,
     services.userService,
+    services.externalReferralsService,
   ),
   proposedAddressesController: new ProposedAddressesController(
     services.auditService,
@@ -27,6 +29,11 @@ export const controllers = (services: Services) => ({
     services.dutyToReferService,
     services.casesService,
     services.referenceDataService,
+  ),
+  externalReferralsController: new ExternalReferralsController(
+    services.auditService,
+    services.externalReferralsService,
+    services.casesService,
   ),
   staticController: new StaticController(),
 })

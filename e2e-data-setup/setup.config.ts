@@ -21,7 +21,7 @@ export const setupConfig: PlaywrightTestConfig = {
   globalTimeout: 15 * 60 * 1000, // 15 minutes
   use: {
     trace: 'off',
-    video: 'off',
+    video: 'on',
     screenshot: 'only-on-failure',
     actionTimeout: 30 * 1000, // 30 seconds
     navigationTimeout: 30 * 1000, // 30 seconds

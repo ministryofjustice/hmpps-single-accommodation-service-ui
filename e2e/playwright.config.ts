@@ -8,6 +8,18 @@ config({
   quiet: true,
 })
 
+// Pick up any values produced locally by `npm run test:e2e:data:setup` (e.g. BASE_CASE_NAME),
+config({
+  path: 'tmp/TEST_ENV.txt',
+  override: true,
+  quiet: true,
+})
+
+if (process.env.BASE_CASE_NAME) {
+  process.env.SAS_E2E_BASE_CASE_NAME = process.env.BASE_CASE_NAME
+}
+
+const chromeDesktop = devices['Desktop Chrome']
 export default defineConfig<TestOptions>({
   testDir: './',
   fullyParallel: true,
@@ -21,9 +33,28 @@ export default defineConfig<TestOptions>({
   use: {
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 10 * 1000,
-    navigationTimeout: 30 * 1000,
-    ...devices['Desktop Chrome'],
-    baseURL: process.env.E2E_BASE_URL || 'http://localhost:3000',
   },
+  projects: [
+    {
+      name: 'local',
+      use: {
+        ...chromeDesktop,
+        baseURL: 'http://localhost:3000',
+      },
+    },
+    {
+      name: 'dev',
+      use: {
+        ...chromeDesktop,
+        baseURL: 'https://single-accommodation-service-dev.hmpps.service.justice.gov.uk/',
+      },
+    },
+    {
+      name: 'test',
+      use: {
+        ...chromeDesktop,
+        baseURL: 'https://single-accommodation-service-test.hmpps.service.justice.gov.uk/',
+      },
+    },
+  ],
 })

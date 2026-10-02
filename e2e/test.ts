@@ -2,6 +2,8 @@ import { test as base, expect } from '@playwright/test'
 import { TestOptions } from '@sas/e2e'
 
 export const test = base.extend<TestOptions>({
+  // Indicates whether an OASys assessment is required for the test user, use test.use({ requiresOasys: true }) to enable it.
+  requiresOasys: [false, { option: true }],
   users: {
     probation: {
       username: process.env.SAS_E2E_PROBATION_USER_USERNAME,

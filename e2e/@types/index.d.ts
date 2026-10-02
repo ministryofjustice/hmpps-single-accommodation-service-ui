@@ -11,6 +11,7 @@ declare module '@sas/e2e' {
   }
 
   type TestOptions = {
+    requiresOasys: boolean
     users: Record<UserType, UserLoginDetails>
     cases: Record<string, TestCase>
     serviceUrls: {

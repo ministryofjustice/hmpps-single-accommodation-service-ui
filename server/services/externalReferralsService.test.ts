@@ -1,6 +1,11 @@
 import ExternalReferralsService from './externalReferralsService'
 import ExternalReferralsClient from '../data/externalReferralsClient'
-import { apiResponseFactory, externalReferralCommandFactory, externalReferralFactory } from '../testutils/factories'
+import {
+  apiResponseFactory,
+  auditRecordFactory,
+  externalReferralCommandFactory,
+  externalReferralFactory,
+} from '../testutils/factories'
 import crnFactory from '../testutils/crn'
 
 jest.mock('../data/externalReferralsClient')
@@ -45,5 +50,16 @@ describe('ExternalReferralsService', () => {
     await service.update(token, crn, id, command)
 
     expect(client.update).toHaveBeenCalledWith(token, crn, id, command)
+  })
+
+  it('should call getTimeline on the api client and return the result', async () => {
+    const timeline = auditRecordFactory.buildList(2)
+    const response = apiResponseFactory.auditRecords(timeline)
+    client.getTimeline.mockResolvedValue(response)
+
+    const result = await service.getTimeline(token, crn, id)
+
+    expect(client.getTimeline).toHaveBeenCalledWith(token, crn, id)
+    expect(result).toEqual(response)
   })
 })

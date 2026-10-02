@@ -1,8 +1,8 @@
 import { Request } from 'express'
-import { ExternalReferralDto } from '@sas/api'
+import { AuditRecordDto, ExternalReferralDto, FieldChange, ServiceResult } from '@sas/api'
 import { StatusCard, StatusTag } from '@sas/ui'
-import { SummaryListRow } from '@govuk/ui'
-import { dateFieldParts, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
+import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
+import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import {
   validateAndFlashErrors,
   validateDateField,
@@ -16,7 +16,26 @@ import {
 
 import paths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
-import { statusTag } from './macros'
+import { renderMacro, statusTag, textBlock } from './macros'
+import { serviceStatusTag } from './statusTag'
+import { timelineEntry } from './timeline'
+import { staffName } from './staff'
+import { htmlContent, textContent } from './utils'
+
+type FieldDefinition = {
+  label: string
+  format: 'text' | 'date' | 'textarea'
+}
+
+const fieldMapping: Record<string, FieldDefinition> = {
+  referenceNumber: { label: 'Reference number', format: 'text' },
+  submissionDate: { label: 'Submission date', format: 'date' },
+  phoneNumber: { label: 'Phone number', format: 'text' },
+  website: { label: 'Website', format: 'text' },
+  email: { label: 'Email address', format: 'text' },
+  organisationName: { label: 'Organisation', format: 'text' },
+  submissionNote: { label: 'Submission note', format: 'textarea' },
+}
 
 export const validateSubmission = (req: Request) => {
   const { organisationName, referenceNumber, submissionNote, email, phoneNumber } = req.body
@@ -103,4 +122,43 @@ export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined
   rows.push(summaryListRow('Website', website, { noValue: 'No website added' }))
   rows.push(summaryListRow('Note', submissionNote, { type: 'textBlock', noValue: 'No notes added' }))
   return rows
+}
+
+export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
+  const { type, changes } = auditRecord
+
+  const changeValues = changes
+    .map(({ field, value }) => {
+      const def = fieldMapping[field]
+      if (!def) return undefined
+      if (!value) return type === 'UPDATE' ? { value: textContent(`${fieldMapping[field].label} removed`) } : undefined
+
+      let content: TextOrHtmlContent = textContent(value)
+      if (def.format === 'date') content = textContent(formatDate(value))
+      if (def.format === 'textarea') content = htmlContent(textBlock(value))
+
+      return { label: def.label, value: content }
+    })
+    .filter(Boolean)
+
+  const flatChanges = changes.reduce(
+    (acc, change) => {
+      acc[change.field] = change
+      return acc
+    },
+    {} as Record<string, FieldChange>,
+  )
+
+  const statusChange = flatChanges.status?.value as unknown as ServiceResult['serviceStatus']
+  const isChange = type === 'UPDATE'
+  const label = isChange ? 'Referral details changed' : 'Referral details added'
+
+  const html = renderMacro('timelineEntry', {
+    type,
+    status: statusChange ? serviceStatusTag(statusChange) : undefined,
+    values: changeValues,
+    isChange,
+  })
+
+  return timelineEntry(label, html, auditRecord.commitDate, staffName(auditRecord.authorDetails, currentUsername))
 }

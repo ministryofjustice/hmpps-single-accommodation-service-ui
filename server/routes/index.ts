@@ -3,6 +3,7 @@ import { Services } from '../services'
 import { controllers } from '../controllers'
 import uiPaths from '../paths/ui'
 import proposedAddressesRoutes from './proposedAddresses'
+import currentAddressRoutes from './currentAddress'
 import dutyToReferRoutes from './dutyToRefer'
 import externalReferralsRoutes from './externalReferrals'
 
@@ -11,9 +12,10 @@ export default function routes(services: Services): Router {
   const {
     casesController,
     proposedAddressesController,
+    currentAddressController,
     dutyToReferController,
-    staticController,
     externalReferralsController,
+    staticController,
   } = controllers(services)
 
   router.get(uiPaths.cases.index.pattern, casesController.index())
@@ -21,6 +23,7 @@ export default function routes(services: Services): Router {
   router.get(uiPaths.cases.show.pattern, casesController.show())
 
   proposedAddressesRoutes(router, proposedAddressesController)
+  currentAddressRoutes(router, currentAddressController)
   dutyToReferRoutes(router, dutyToReferController)
   externalReferralsRoutes(router, externalReferralsController)
 

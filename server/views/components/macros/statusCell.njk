@@ -4,14 +4,14 @@
   <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
   {{ statusTag(context.status) }}
   {%- if context.dateText %}
-    <p class="sas-status__date">{{ context.dateText }}</p>
+    <p class="govuk-!-margin-bottom-1 govuk-!-margin-top-1 govuk-hint">{{ context.dateText }}</p>
   {%- endif %}
   {%- if context.details %}
     {% for detail in context.details %}
       {% if detail.html %}
         {{ detail.html | safe }}
       {% else %}
-        <p class="govuk-!-margin-bottom-1">{{ detail.text }}</p>
+        <p class="govuk-!-margin-bottom-1 govuk-hint">{{ detail.text }}</p>
       {% endif %}
     {% endfor %}
   {%- endif %}

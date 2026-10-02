@@ -130,7 +130,11 @@ export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
 
   const prefix = daysUntil(date) < 0 ? 'Since' : 'From'
 
-  return { status, dateText: `${prefix} ${formatDate(date)} (${formatDate(date, 'days for/in')})` }
+  return {
+    status,
+    dateText: `${prefix} ${formatDate(date)}`,
+    details: [textContent(`(${formatDate(date, 'days for/in')})`)],
+  }
 }
 
 export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDto): string => {

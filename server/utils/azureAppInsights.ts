@@ -5,18 +5,10 @@ import {
   ModifiableSpan,
 } from '@ministryofjustice/hmpps-azure-telemetry'
 import { SpanFilterFn, SpanInfo } from '@ministryofjustice/hmpps-azure-telemetry/src/main'
-import { context } from '@opentelemetry/api'
-import { SentryContextManager } from '@sentry/node'
 import applicationInfoSupplier from '../applicationInfo'
 
-// Must be registered before initialiseTelemetry: OTel only honours the first global
-// context manager, and the telemetry library registers a plain AsyncLocalStorageContextManager
-// during provider.register(). SentryContextManager extends that same class, so AppInsights
-// context propagation is unchanged, but Sentry's per-request isolation scopes survive.
-const contextManager = new SentryContextManager()
-contextManager.enable()
-context.setGlobalContextManager(contextManager)
-
+// Sentry v11 reads isolation scopes from the context manager installed by initialiseTelemetry,
+// so no manual context manager registration is needed.
 const applicationInfo = applicationInfoSupplier()
 
 const filterSentry: SpanFilterFn = (span: SpanInfo) => !span.attributes['sentry.op']

@@ -109,7 +109,7 @@
     "@pact-foundation/pact": "17.1.4",
     "@pactflow/openapi-pact-comparator": "^2.3.1",
     "@playwright/test": "1.63.0",
-    "@sentry/node": "10.75.0",
+    "@sentry/node": "11.0.0",
     "accessible-autocomplete": "3.0.1",
     "body-parser": "^2.3.0",
     "bunyan": "^1.8.15",

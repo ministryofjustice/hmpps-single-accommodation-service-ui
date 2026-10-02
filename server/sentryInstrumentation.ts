@@ -16,7 +16,7 @@ if (config.sentry.dsn) {
     environment: config.environment,
     release: applicationInfo.gitRef,
     integrations: [Sentry.expressIntegration(), Sentry.httpIntegration({ disableIncomingRequestSpans: true })],
-    skipOpenTelemetrySetup: true,
+    enableOpenTelemetrySetup: true,
     tracesSampler: ({ name }) => {
       if (name.includes('ping') || name.includes('health') || name.includes('assets')) {
         return 0

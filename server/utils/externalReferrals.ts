@@ -18,7 +18,7 @@ import paths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
 import { renderMacro, statusTag, textBlock } from './macros'
 import { serviceStatusTag } from './statusTag'
-import { timelineEntry } from './timeline'
+import { noteTimelineEntry, timelineEntry } from './timeline'
 import { staffName } from './staff'
 import { htmlContent, textContent } from './utils'
 
@@ -53,6 +53,15 @@ export const validateSubmission = (req: Request) => {
   }
 
   return validateAndFlashErrors(req, errors, ['submissionDate'])
+}
+
+export const validateNote = (req: Request) => {
+  const { note } = req.body
+  const errors: Record<string, string> = {
+    note: validateMandatoryText(note, 'note') || validateMaxLength(note, 'Notes', 4000),
+  }
+
+  return validateAndFlashErrors(req, errors)
 }
 
 export const submissionFormValues = (referral: ExternalReferralDto | undefined): Record<string, string> => {
@@ -126,6 +135,8 @@ export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined
 
 export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
   const { type, changes } = auditRecord
+
+  if (type === 'NOTE') return noteTimelineEntry(auditRecord, currentUsername)
 
   const changeValues = changes
     .map(({ field, value }) => {

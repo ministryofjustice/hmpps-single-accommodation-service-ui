@@ -62,4 +62,13 @@ describe('ExternalReferralsService', () => {
     expect(client.getTimeline).toHaveBeenCalledWith(token, crn, id)
     expect(result).toEqual(response)
   })
+
+  it('should call the client to add a note', async () => {
+    const note = 'Test note'
+    client.addNote.mockResolvedValue()
+
+    await service.addNote(token, crn, id, note)
+
+    expect(client.addNote).toHaveBeenCalledWith(token, crn, id, note)
+  })
 })

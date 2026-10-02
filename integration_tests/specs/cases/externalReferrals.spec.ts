@@ -1,4 +1,5 @@
 import { test } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 import { auditRecordFactory, caseFactory, externalReferralFactory } from '../../../server/testutils/factories'
 import externalReferralsApi from '../../mockApis/externalReferrals'
 import { login } from '../../testUtils'
@@ -18,7 +19,8 @@ const setupStubs = async () => {
   await externalReferralsApi.stubUpdateExternalReferral(referral)
   await externalReferralsApi.stubGetExternalReferralBySubmissionId(referral)
   await externalReferralsApi.stubListExternalReferral(crn, [referral])
-  await externalReferralsApi.stubExternalreferralTimeline(crn, referral.submission.id, referralTimeline)
+  await externalReferralsApi.stubExternalReferralTimeline(crn, referral.submission.id, referralTimeline)
+  await externalReferralsApi.stubExternalReferralAddNote(crn, referral.submission.id)
 
   return { caseData, referral, referralTimeline }
 }
@@ -67,7 +69,9 @@ test.describe('external referrals', () => {
     await submissionPage.checkApiCalled(referral, 'submit')
   })
 
-  test('should allow user see referrals on the tracker page and view their details', async ({ page }) => {
+  test('should allow the user to see referrals on the tracker page and view and edit their details', async ({
+    page,
+  }) => {
     // Given I have stubbed the API responses
     const { caseData, referral, referralTimeline } = await setupStubs()
     // And I am logged in
@@ -114,5 +118,46 @@ test.describe('external referrals', () => {
       { ...referral, submission: { ...referral.submission, referenceNumber: '5678' } },
       'update',
     )
+  })
+
+  test('should allow user to add a timeline note', async ({ page }) => {
+    // Given I have stubbed the API responses
+    const noteText = faker.lorem.paragraph()
+    const noteEvent = auditRecordFactory.build({ type: 'NOTE', changes: [{ field: 'note', value: noteText }] })
+    const { caseData, referral, referralTimeline } = await setupStubs()
+    // And I am logged in
+    await login(page)
+
+    // When I visit the referral details page
+    const detailsPage = await ExternalReferralsDetailsPage.visit(page, caseData, referral)
+
+    // And I should see the referral details
+    await detailsPage.shouldShowSubmissionDetails()
+
+    // When I click the 'Add note' button
+    await detailsPage.clickButton('Add note')
+
+    // Then I should see validation errors
+    await detailsPage.shouldShowErrorMessagesForFields({ note: 'Enter a note' })
+
+    // When I enter some note text and submit
+    await detailsPage.completeInputByLabel('Add note', noteText)
+    await externalReferralsApi.stubExternalReferralTimeline(crn, referral.submission.id, [
+      noteEvent,
+      ...referralTimeline,
+    ])
+    await detailsPage.clickButton('Add note')
+
+    // Then I should be on the details page again.
+    await ExternalReferralsDetailsPage.verifyOnPage(page, referral)
+
+    // And I should see a confirmation banner
+    await detailsPage.shouldShowBanner('Success', 'Note added')
+
+    // And the new note should be at the top of the timeline
+    await detailsPage.shouldShowTimelineEntry(externalReferralTimelineEntry(noteEvent))
+
+    // And the API should have been called with the note
+    await detailsPage.checkNoteApiCalled(referral, noteText)
   })
 })

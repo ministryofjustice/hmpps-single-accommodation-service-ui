@@ -11,6 +11,7 @@ import {
   submissionFormValues,
   detailsSummaryListRows,
   externalReferralTimelineEntry,
+  validateNote,
 } from '../utils/externalReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
@@ -147,6 +148,31 @@ export default class ExternalReferralsController {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
         return res.redirect(errorRedirect)
       }
+    }
+  }
+
+  addNote(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+      const { note } = req.body
+
+      await this.auditService.logPageView(Page.EXTERNAL_REFFERALS_ADD_NOTE, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      if (!validateNote(req)) {
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
+      }
+
+      try {
+        await this.externalReferralsService.addNote(token, crn, id, note)
+        req.flash('success', 'Note added')
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')
+      }
+      return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
     }
   }
 

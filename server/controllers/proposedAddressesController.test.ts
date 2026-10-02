@@ -1081,6 +1081,7 @@ describe('proposedAddressesController', () => {
 
       expect(proposedAddressesService.submitArrival).toHaveBeenCalledWith('token-1', 'CRN123', proposedAddress.id, {
         arrivalDate: '2026-06-29',
+        arrivalMethod: 'STANDARD',
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Current address updated')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
@@ -1093,6 +1094,7 @@ describe('proposedAddressesController', () => {
 
       expect(proposedAddressesService.submitArrival).toHaveBeenCalledWith('token-1', 'CRN123', proposedAddress.id, {
         arrivalDate: '2026-06-29',
+        arrivalMethod: 'STANDARD',
       })
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
         request,

@@ -27,9 +27,10 @@ describe('accommodationSummary', () => {
 
     describe.each(['current', 'next'])('for %s accommodation', (cellType: 'current' | 'next') => {
       const summaryFactory = (date: string) =>
-        cellType === 'current'
+        (cellType === 'current'
           ? accommodationSummaryFactory.current(date, '2025-12-01')
           : accommodationSummaryFactory.next(date)
+        ).params({ crn: 'X123456' })
 
       const address: AccommodationAddressDetails = addressFactory.minimal().build({
         buildingNumber: '9',

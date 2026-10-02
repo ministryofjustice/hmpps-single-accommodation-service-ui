@@ -1149,6 +1149,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = 
       "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
     },
   ],
+  "details": [],
   "heading": "Short-term accommodation (CAS2)",
   "hint": "CAS2 accommodation is now available for more people.",
   "inactive": false,

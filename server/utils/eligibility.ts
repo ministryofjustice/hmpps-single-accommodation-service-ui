@@ -2,6 +2,7 @@ import {
   Cas1ApplicationDto,
   Cas1PlacementPairDto,
   Cas1ServiceResult,
+  Cas2ApplicationDto,
   Cas2ServiceResult,
   Cas3ApplicationDto,
   Cas3ExternalPreviousBookingDto,
@@ -76,6 +77,20 @@ export const linksForCas2Status = (serviceResult?: ServiceResult) => {
   switch (serviceStatus) {
     case 'NOT_STARTED':
       return [{ text: 'Start application', ...link }]
+    case 'NOT_SUBMITTED':
+    case 'MORE_INFORMATION_NEEDED':
+      return [{ text: 'Continue application', ...link }]
+    case 'SUBMITTED':
+    case 'AWAITING_DECISION':
+    case 'ON_WAITING_LIST':
+    case 'PLACE_OFFERED':
+    case 'OFFER_ACCEPTED':
+    case 'AWAITING_ARRIVAL':
+      return [{ text: 'View application', ...link }]
+    case 'OFFER_DECLINED_OR_WITHDRAWN':
+    case 'CANCELLED':
+    case 'WITHDRAWN':
+      return [{ text: 'Start new application', ...link }]
     default:
       return undefined
   }
@@ -299,6 +314,52 @@ const contentForCas3Status = (
   }
 }
 
+const detailsForCas2Status = (
+  serviceResult: ServiceResult,
+  cas2Application?: Cas2ApplicationDto | null,
+): SummaryListRow[] => {
+  if (!cas2Application) return []
+  const { createdAt, createdBy, submittedApplication } = cas2Application
+
+  const submittedRow = () =>
+    summaryListRow(
+      'Submitted',
+      submittedApplication?.submittedAt ? formatDateAndDaysAgo(submittedApplication.submittedAt) : undefined,
+    )
+  const submittedByRow = () => summaryListRow('Submitted by', createdBy.name)
+
+  switch (serviceResult.serviceStatus) {
+    case 'NOT_SUBMITTED':
+      return [
+        summaryListRow('Application started', formatDateAndDaysAgo(createdAt)),
+        summaryListRow('Started by', createdBy.name),
+      ]
+    case 'MORE_INFORMATION_NEEDED':
+    case 'SUBMITTED':
+    case 'AWAITING_DECISION':
+    case 'ON_WAITING_LIST':
+    case 'PLACE_OFFERED':
+    case 'OFFER_ACCEPTED':
+    case 'AWAITING_ARRIVAL':
+    case 'WITHDRAWN':
+      return [submittedRow(), submittedByRow()]
+    case 'OFFER_DECLINED_OR_WITHDRAWN':
+      return [
+        summaryListRow('Reason', submittedApplication?.offerDeclinedReason ?? undefined),
+        submittedRow(),
+        submittedByRow(),
+      ]
+    case 'CANCELLED':
+      return [
+        summaryListRow('Reason', submittedApplication?.cancelledReason ?? undefined),
+        submittedRow(),
+        submittedByRow(),
+      ]
+    default:
+      return []
+  }
+}
+
 const placementDurationText = (durationDays?: number | null): string | undefined => {
   if (durationDays == null) return undefined
 
@@ -463,11 +524,12 @@ export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceRe
   content: contentForCas1Status(serviceResult, cas1Application),
 })
 
-export const cas2StatusCard = ({ serviceResult }: Cas2ServiceResult): StatusCard => ({
+export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceResult): StatusCard => ({
   heading: 'Short-term accommodation (CAS2)',
   ...statusFields(serviceResult),
   hint: hintForCas2Status(serviceResult),
   links: linksForCas2Status(serviceResult),
+  details: detailsForCas2Status(serviceResult, cas2Application),
   content: contentForCas2Status(serviceResult),
 })
 

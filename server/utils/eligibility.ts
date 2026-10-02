@@ -3,6 +3,8 @@ import {
   Cas1PlacementPairDto,
   Cas1ServiceResult,
   Cas2ServiceResult,
+  Cas3ApplicationDto,
+  Cas3ExternalPreviousBookingDto,
   Cas3ServiceResult,
   EligibilityDto,
   ServiceResult,
@@ -17,6 +19,7 @@ import config from '../config'
 import { htmlContent } from './utils'
 import { summaryListRow } from './summaryListRow'
 import { govukDetailsList } from './macros'
+import { formatAddress } from './addresses'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -168,6 +171,27 @@ const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined =>
   return upcomingStartHint(serviceResult)
 }
 
+const bookingHistoryText = (booking?: Cas3ExternalPreviousBookingDto): string | undefined => {
+  if (!booking) return undefined
+
+  switch (booking.bookingStatus) {
+    case 'CANCELLED': {
+      const { cancellation } = booking
+      const formattedDate = cancellation?.cancellationDate ? formatDate(cancellation.cancellationDate) : ''
+
+      if (cancellation?.cancellationReason) {
+        return formattedDate
+          ? `Booking cancelled ${formattedDate}. Reason: ${cancellation.cancellationReason}`
+          : `Booking cancelled. Reason: ${cancellation.cancellationReason}`
+      }
+
+      return 'Booking cancelled'
+    }
+    default:
+      return undefined
+  }
+}
+
 const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementPairDto): string | undefined => {
   switch (placement?.status) {
     case 'DEPARTED':
@@ -217,7 +241,14 @@ const contentForCas1Status = (
 
       if (!history.length) return undefined
 
-      return [htmlContent(govukDetailsList(`${history.length} previous placements on this application`, history))]
+      return [
+        htmlContent(
+          govukDetailsList(
+            `${history.length} previous placement${history.length === 1 ? '' : 's'} on this application`,
+            history,
+          ),
+        ),
+      ]
     }
     default:
       return undefined
@@ -234,6 +265,35 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
           '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
         ),
       ]
+    default:
+      return undefined
+  }
+}
+
+const contentForCas3Status = (
+  serviceResult?: ServiceResult,
+  cas3Application?: Cas3ApplicationDto,
+): TextOrHtmlContent[] => {
+  const { serviceStatus } = serviceResult ?? {}
+
+  switch (serviceStatus) {
+    case 'BEDSPACE_OFFERED':
+    case 'SUBMITTED': {
+      const { previousBookings } = cas3Application ?? {}
+      if (!previousBookings?.length) return undefined
+      const history = previousBookings.map(bookingHistoryText).filter((entry): entry is string => entry !== undefined)
+
+      if (!history.length) return undefined
+
+      return [
+        htmlContent(
+          govukDetailsList(
+            `${history.length} previous booking${history.length === 1 ? '' : 's'} on this application`,
+            history,
+          ),
+        ),
+      ]
+    }
     default:
       return undefined
   }
@@ -329,6 +389,57 @@ const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Ca
   }
 }
 
+const detailsForCas3Status = (
+  serviceResult?: ServiceResult,
+  cas3Application?: Cas3ApplicationDto,
+): SummaryListRow[] => {
+  const { serviceStatus } = serviceResult ?? {}
+  if (!cas3Application) return []
+  switch (serviceStatus) {
+    case 'SUBMITTED':
+      return [
+        summaryListRow('Submitted', cas3Application?.applicationSubmittedDate ?? undefined),
+        summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+      ]
+    case 'REJECTED':
+      return [
+        summaryListRow('Rejection reason', cas3Application?.applicationRejectedReason ?? undefined),
+        summaryListRow('Submitted', cas3Application?.applicationSubmittedDate ?? undefined),
+        summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+      ]
+    case 'BEDSPACE_OFFERED':
+      return [
+        summaryListRow('Provisional offer sent', cas3Application?.bookingProvisionalOfferSentDate ?? undefined),
+        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+      ]
+    case 'BOOKING_CONFIRMED': {
+      const { premises } = cas3Application ?? {}
+      return [
+        summaryListRow('Address', formatAddress(premises) ?? undefined),
+        summaryListRow('Booking dates', `${formatDate(premises.startDate)} to ${formatDate(premises.endDate)}`),
+        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+      ]
+    }
+    case 'BOOKING_CANCELLED':
+      return [
+        // summaryListRow('Cancellation reason', cas3Application?.bookingCancelledReason ?? undefined), // TODO Cas3ApplicationDto needs a cancellation reason
+        summaryListRow(
+          'Booking dates',
+          `${formatDate(cas3Application?.premises.startDate)} to ${formatDate(cas3Application?.premises.endDate)}`,
+        ),
+        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+      ]
+    case 'ARRIVED':
+      return [
+        summaryListRow('Arrival date', cas3Application?.premises.startDate ?? undefined),
+        summaryListRow('Expected departure date', cas3Application?.premises.endDate ?? undefined),
+        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+      ]
+    default:
+      return []
+  }
+}
+
 const statusFields = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
   const { serviceStatus } = serviceResult ?? {}
 
@@ -356,11 +467,13 @@ export const cas2StatusCard = ({ serviceResult }: Cas2ServiceResult): StatusCard
   content: contentForCas2Status(serviceResult),
 })
 
-export const cas3StatusCard = ({ serviceResult }: Cas3ServiceResult): StatusCard => ({
+export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceResult): StatusCard => ({
   heading: 'CAS3 (transitional accommodation)',
   ...statusFields(serviceResult),
   hint: hintForCas3Status(serviceResult),
+  details: detailsForCas3Status(serviceResult, cas3Application),
   links: linksForCas3Status(serviceResult),
+  content: contentForCas3Status(serviceResult, cas3Application),
 })
 
 export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] =>

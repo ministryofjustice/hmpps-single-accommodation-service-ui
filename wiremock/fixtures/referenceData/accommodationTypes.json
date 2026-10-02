@@ -63,5 +63,10 @@
     "id": "62c300d5-9dae-45a4-9bdc-127a7fc4c69e",
     "name": "Transient or short-term accommodation",
     "code": "A03"
+  },
+  {
+    "id": "a3ada054-6f45-4eae-afb2-83989f02b8b3",
+    "name": "Approved premises",
+    "code": "A02"
   }
 ]

@@ -1,4 +1,5 @@
 import {
+  AccommodationSummaryDto,
   Cas1ApplicationDto,
   Cas1PlacementPairDto,
   Cas1ServiceResult,
@@ -16,7 +17,7 @@ import { formatDate, formatDateAndDaysAgo } from './dates'
 import config from '../config'
 import { htmlContent } from './utils'
 import { summaryListRow } from './summaryListRow'
-import { govukDetailsList } from './macros'
+import { bulletList, govukDetailsList } from './macros'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -125,12 +126,6 @@ const hintForCas1Status = (serviceResult?: ServiceResult): string | undefined =>
 }
 
 const hintForCas2Status = (serviceResult?: ServiceResult): string | undefined => {
-  const { serviceStatus } = serviceResult ?? {}
-
-  if (serviceStatus === 'NOT_STARTED') {
-    return 'CAS2 accommodation is now available for more people.'
-  }
-
   return upcomingStartHint(serviceResult)
 }
 
@@ -224,16 +219,34 @@ const contentForCas1Status = (
   }
 }
 
-const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
+const contentForCas2Status = (
+  serviceResult?: ServiceResult,
+  accommodation?: AccommodationSummaryDto | null,
+): TextOrHtmlContent[] => {
   const { serviceStatus } = serviceResult ?? {}
+
+  const buildContent = (conditions: string) => {
+    return [
+      htmlContent(conditions),
+      htmlContent(
+        '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
+      ),
+    ]
+  }
 
   switch (serviceStatus) {
     case 'NOT_STARTED':
-      return [
-        htmlContent(
-          '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
-        ),
-      ]
+      if (accommodation?.type?.code === 'A02') {
+        return buildContent('<p class="govuk-!-margin-bottom-0">Available as a move-on from Approved Premises.</p>')
+      }
+
+      return buildContent(
+        bulletList('Available in these circumstances:', [
+          'Homeless at conditional release date',
+          'Homeless at end of fixed-term recall',
+          'As part of risk-assessed recall review',
+        ]),
+      )
     default:
       return undefined
   }
@@ -348,12 +361,15 @@ export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceRe
   content: contentForCas1Status(serviceResult, cas1Application),
 })
 
-export const cas2StatusCard = ({ serviceResult }: Cas2ServiceResult): StatusCard => ({
+export const cas2StatusCard = (
+  { serviceResult }: Cas2ServiceResult,
+  accommodation?: AccommodationSummaryDto | null,
+): StatusCard => ({
   heading: 'Short-term accommodation (CAS2)',
   ...statusFields(serviceResult),
   hint: hintForCas2Status(serviceResult),
   links: linksForCas2Status(serviceResult),
-  content: contentForCas2Status(serviceResult),
+  content: contentForCas2Status(serviceResult, accommodation),
 })
 
 export const cas3StatusCard = ({ serviceResult }: Cas3ServiceResult): StatusCard => ({
@@ -363,11 +379,15 @@ export const cas3StatusCard = ({ serviceResult }: Cas3ServiceResult): StatusCard
   links: linksForCas3Status(serviceResult),
 })
 
-export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] =>
+export const eligibilityToEligibilityCards = (
+  eligibility: EligibilityDto,
+  crn: string,
+  accommodation?: AccommodationSummaryDto | null,
+): StatusCard[] =>
   [
     dutyToReferStatusCard(crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),
     cas1StatusCard(eligibility.cas1),
-    config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2) : undefined,
+    config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2, accommodation) : undefined,
     cas3StatusCard(eligibility.cas3),
   ].filter(Boolean)

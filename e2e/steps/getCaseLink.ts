@@ -13,7 +13,7 @@ export const getCaseLink = async (page: Page, caseData: TestCase) => {
   const caseLink = page.getByRole('link', { name: `${surname}, ${forename}` })
 
   await refreshUntil(page, () => expect(caseLink).toBeVisible(), {
-    timeout: minutesToMilliseconds(11),
+    timeout: minutesToMilliseconds(2),
     intervals: [secondsToMilliseconds(15)],
   })
 

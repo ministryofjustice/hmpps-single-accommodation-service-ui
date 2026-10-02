@@ -6,7 +6,12 @@ import AuditService, { Page } from '../services/auditService'
 import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { dateInputToIsoDate } from '../utils/dates'
-import { validateSubmission, submissionFormValues, detailsSummaryListRows } from '../utils/externalReferrals'
+import {
+  validateSubmission,
+  submissionFormValues,
+  detailsSummaryListRows,
+  externalReferralTimelineEntry,
+} from '../utils/externalReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { summaryListRows } from '../utils/dutyToRefer'
@@ -30,9 +35,10 @@ export default class ExternalReferralsController {
         correlationId: req.id,
       })
 
-      const [{ data: caseData }, { data: referral }] = await Promise.all([
+      const [{ data: caseData }, { data: referral }, { data: auditRecords }] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.externalReferralsService.getExternalReferralBySubmissionId(token, crn, id),
+        this.externalReferralsService.getTimeline(token, crn, id),
       ])
 
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
@@ -47,6 +53,7 @@ export default class ExternalReferralsController {
         assignedTo: caseAssignedTo(caseData, username),
         submissionDetailRows: detailsSummaryListRows(referral),
         status: referral?.status,
+        timeline: auditRecords.map(record => externalReferralTimelineEntry(record, username)),
         ...userInput,
         errors,
         errorSummary,

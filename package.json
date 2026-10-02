@@ -140,7 +140,7 @@
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "1.296.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "1.285.0",
     "@tsconfig/node24": "^24.0.5",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",

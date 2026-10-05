@@ -219,7 +219,8 @@ describe('accommodationSummary', () => {
         accommodationSummariesFactory.riskOfNfa().build({ caseAccommodationStatusDate: '2025-12-20' }),
         {
           status: { text: 'Risk of no fixed abode', colour: 'orange' },
-          dateText: 'From 20 December 2025 (in 10 days)',
+          dateText: 'From 20 December 2025',
+          details: [{ html: '<span class="govuk-hint">(in 10 days)</span>' }],
         },
       ],
       [
@@ -228,7 +229,11 @@ describe('accommodationSummary', () => {
           caseAccommodationStatus: 'SETTLED',
           caseAccommodationStatusDate: '2025-12-01',
         }),
-        { status: { text: 'Settled', colour: 'green' }, dateText: 'Since 1 December 2025 (for 9 days)' },
+        {
+          status: { text: 'Settled', colour: 'green' },
+          dateText: 'Since 1 December 2025',
+          details: [{ html: '<span class="govuk-hint">(for 9 days)</span>' }],
+        },
       ],
       [
         'an upcoming confirmed transient accommodation',
@@ -236,7 +241,11 @@ describe('accommodationSummary', () => {
           caseAccommodationStatus: 'TRANSIENT',
           caseAccommodationStatusDate: '2025-12-20',
         }),
-        { status: { text: 'Transient', colour: 'purple' }, dateText: 'From 20 December 2025 (in 10 days)' },
+        {
+          status: { text: 'Transient', colour: 'purple' },
+          dateText: 'From 20 December 2025',
+          details: [{ html: '<span class="govuk-hint">(in 10 days)</span>' }],
+        },
       ],
     ])('returns the expected status cell for %s', (_, accommodationSummaries, expected) => {
       expect(accommodationStatusCell(caseFactory.build({ accommodationSummaries }))).toEqual(expected)

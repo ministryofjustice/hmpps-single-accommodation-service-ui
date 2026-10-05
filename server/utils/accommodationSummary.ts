@@ -1,7 +1,7 @@
 import { AccommodationStatusDto, AccommodationSummariesDto, AccommodationSummaryDto, CaseDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { StatusCell, StatusTag } from '@sas/ui'
-import { htmlContent, textContent } from './utils'
+import { htmlContent, noValueHtml, textContent } from './utils'
 import { addressLines, formatAddress } from './addresses'
 import { daysUntil, formatDate } from './dates'
 import { renderMacro, statusTag } from './macros'
@@ -133,7 +133,7 @@ export const accommodationStatusCell = (caseData?: CaseDto): StatusCell => {
   return {
     status,
     dateText: `${prefix} ${formatDate(date)}`,
-    details: [textContent(`(${formatDate(date, 'days for/in')})`)],
+    details: [htmlContent(noValueHtml(`(${formatDate(date, 'days for/in')})`, 'govuk-hint'))],
   }
 }
 

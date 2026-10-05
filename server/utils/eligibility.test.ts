@@ -62,6 +62,7 @@ const cas3Application: NonNullable<Cas3ServiceResult['cas3Application']> = {
     startDate: '2026-09-01',
     endDate: '2026-10-27',
   },
+  cancellation: { cancellationReason: 'No longer needed' },
   previousBookings: [],
 }
 

@@ -456,6 +456,14 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CANCELLED st
 [
   {
     "key": {
+      "text": "Cancellation reason",
+    },
+    "value": {
+      "text": "No longer needed",
+    },
+  },
+  {
+    "key": {
       "text": "Booking dates",
     },
     "value": {

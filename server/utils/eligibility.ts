@@ -420,15 +420,19 @@ const detailsForCas3Status = (
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     }
-    case 'BOOKING_CANCELLED':
+    case 'BOOKING_CANCELLED': {
+      const { cancellation, premises, applicationSubmittedBy } = cas3Application
+      const bookingDates =
+        premises?.startDate && premises.endDate
+          ? `${formatDate(premises.startDate)} to ${formatDate(premises.endDate)}`
+          : undefined
+
       return [
-        // summaryListRow('Cancellation reason', cas3Application?.bookingCancelledReason ?? undefined), // TODO Cas3ApplicationDto needs a cancellation reason
-        summaryListRow(
-          'Booking dates',
-          `${formatDate(cas3Application?.premises.startDate)} to ${formatDate(cas3Application?.premises.endDate)}`,
-        ),
-        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+        summaryListRow('Cancellation reason', cancellation?.cancellationReason ?? undefined),
+        summaryListRow('Booking dates', bookingDates),
+        summaryListRow('Referral submitted by', applicationSubmittedBy?.name ?? undefined),
       ]
+    }
     case 'ARRIVED':
       return [
         summaryListRow('Arrival date', cas3Application?.premises.startDate ?? undefined),

@@ -145,17 +145,31 @@ Ensure you have created local dotenv files first:
 ```shell
 npm run generate-dotenv-files
 ```
+To generate a new user to use for the tests first run:
+
+```shell
+npm run test:e2e:data:setup
+```
+To teardown any created test users:
+
+```shell
+npm run test:e2e:data:teardown
+```
 
 The tests can be run headless with:
 
 ```shell
-npm run test:e2e
+npm run test:e2e:local
+npm run test:e2e:dev
+npm run test:e2e:test
 ```
 
 To run the tests in the PlayWright UI:
 
 ```shell
-npm run test:e2e:ui
+npm run test:e2e:local:ui
+npm run test:e2e:dev:ui
+npm run test:e2e:test:ui
 ```
 
 #### E2E tests environment variables on GitHub

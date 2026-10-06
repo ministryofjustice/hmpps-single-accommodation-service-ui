@@ -308,7 +308,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
     "
 `;
 
-exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Null accommodation 1`] = `null`;
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Null accommodation 1`] = `""`;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Private address accommodation 1`] = `
 "<span class="sas-table__cell-header" aria-hidden="true">Next accommodation</span>
@@ -328,7 +328,7 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
     "
 `;
 
-exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Undefined accommodation 1`] = `null`;
+exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a Undefined accommodation 1`] = `""`;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation returns a context card object for a CAS2 accommodation 1`] = `
 {

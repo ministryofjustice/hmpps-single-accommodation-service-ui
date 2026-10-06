@@ -143,7 +143,7 @@ export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDt
   const summaries = caseData.accommodationSummaries
   const accommodation = cellType === 'current' ? summaries?.currentAccommodation : summaries?.nextAccommodation
 
-  if (!accommodation) return cellType === 'current' ? 'No accommodation' : null
+  if (!accommodation) return cellType === 'current' ? 'No accommodation' : ''
 
   return renderMacro('accommodationCell', {
     cellType,

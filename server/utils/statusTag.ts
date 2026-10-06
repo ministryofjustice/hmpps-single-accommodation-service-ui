@@ -16,7 +16,7 @@ export const serviceStatusTag = (status?: ServiceResult['serviceStatus']): Statu
     NOT_SUBMITTED: { text: 'Not submitted', colour: 'orange' },
     INFO_REQUESTED: { text: 'Info requested', colour: 'yellow' },
     REJECTED: { text: 'Rejected', colour: 'orange' },
-    WITHDRAWN: { text: 'Withdrawn', colour: 'grey' },
+    WITHDRAWN: { text: 'Withdrawn', colour: 'orange' },
     SUBMITTED: { text: 'Submitted', colour: 'yellow' },
     PLACEMENT_BOOKED: { text: 'Placement booked', colour: 'green' },
     CONFIRMED: { text: 'Confirmed', colour: 'green' },

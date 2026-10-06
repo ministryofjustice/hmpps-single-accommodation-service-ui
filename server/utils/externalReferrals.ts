@@ -1,6 +1,6 @@
 import { Request } from 'express'
-import { AuditRecordDto, ExternalReferralDto, ServiceResult } from '@sas/api'
-import { StatusCard, StatusTag } from '@sas/ui'
+import { RadioItem, StatusCard, StatusTag } from '@sas/ui'
+import { AuditRecordDto, CaseDto, ExternalReferralDto, ServiceResult } from '@sas/api'
 import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
 import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import {
@@ -12,6 +12,7 @@ import {
   validateMandatoryText,
   validateMaxLength,
   validatePhoneNumber,
+  validateRadioButton,
 } from './validation'
 
 import paths from '../paths/ui'
@@ -20,7 +21,8 @@ import { renderMacro, statusTag, textBlock } from './macros'
 import { serviceStatusTag } from './statusTag'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { staffName } from './staff'
-import { htmlContent, textContent } from './utils'
+import { htmlContent, textContent, radioItems } from './utils'
+import { caseSummaryListRows } from './cases'
 
 type FieldDefinition = {
   label: string
@@ -28,13 +30,14 @@ type FieldDefinition = {
 }
 
 const fieldMapping: Record<string, FieldDefinition> = {
+  organisationName: { label: 'Organisation', format: 'text' },
   referenceNumber: { label: 'Reference number', format: 'text' },
   submissionDate: { label: 'Submission date', format: 'date' },
   phoneNumber: { label: 'Phone number', format: 'text' },
   website: { label: 'Website', format: 'text' },
   email: { label: 'Email address', format: 'text' },
-  organisationName: { label: 'Organisation', format: 'text' },
-  submissionNote: { label: 'Submission note', format: 'textarea' },
+  submissionNote: { label: 'Notes', format: 'textarea' },
+  outcomeNote: { label: 'Notes', format: 'textarea' },
 }
 
 export const validateSubmission = (req: Request) => {
@@ -129,11 +132,13 @@ export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined
   rows.push(summaryListRow('Phone number', phoneNumber, { noValue: 'No number added' }))
   rows.push(summaryListRow('Email', email, { noValue: 'No email added' }))
   rows.push(summaryListRow('Website', website, { noValue: 'No website added' }))
-  rows.push(summaryListRow('Note', submissionNote, { type: 'textBlock', noValue: 'No notes added' }))
+  rows.push(summaryListRow('Notes', submissionNote, { type: 'textBlock', noValue: 'No notes added' }))
   return rows
 }
 
 export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
+  type ServiceStatus = ServiceResult['serviceStatus']
+
   const { type, changes } = auditRecord
 
   if (type === 'NOTE') return noteTimelineEntry(auditRecord, currentUsername)
@@ -152,16 +157,66 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
     })
     .filter(Boolean)
 
-  const statusChange = changes.find(({ field }) => field === 'status')?.value as ServiceResult['serviceStatus']
-  const isChange = type === 'UPDATE'
-  const label = isChange ? 'Referral details changed' : 'Referral details added'
+  const fieldChange = (fieldName: string) => changes.find(({ field }) => field === fieldName)
+
+  const { value: newStatus, oldValue: oldStatus } = (fieldChange('status') || {}) as {
+    value: ServiceStatus
+    oldValue: ServiceStatus
+  }
+  const isOutcome = (newStatus && newStatus !== 'SUBMITTED') || fieldChange('outcomeNote')
+  const isChange = isOutcome ? !newStatus || oldStatus !== 'SUBMITTED' : type === 'UPDATE'
+  const label = `${isOutcome ? 'Outcome' : 'Referral'} details ${isChange ? 'changed' : 'added'}`
 
   const html = renderMacro('timelineEntry', {
     type,
-    status: statusChange ? serviceStatusTag(statusChange) : undefined,
+    status: newStatus ? serviceStatusTag(newStatus) : undefined,
     values: changeValues,
     isChange,
   })
 
   return timelineEntry(label, html, auditRecord.commitDate, staffName(auditRecord.authorDetails, currentUsername))
+}
+
+export const outcomeReasonLabels: Partial<Record<ExternalReferralDto['status'], string>> = {
+  ACCEPTED: 'Accepted',
+  REJECTED: 'Rejected',
+}
+
+export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDto) => {
+  const rows = caseSummaryListRows(caseData)
+  if (referral) {
+    rows.push(summaryListRow('Organisation', referral.submission.organisationName))
+    rows.push(summaryListRow('Date submitted', formatDateAndDaysAgo(referral.submission.submissionDate)))
+  }
+
+  return rows
+}
+
+export const outcomeRadioItems = (outcomeReason: ExternalReferralDto['status']): Array<RadioItem> => {
+  const html = "<p class='govuk-body'>Once you have address details, add them as a 'Proposed address'.</p>"
+  return radioItems(outcomeReasonLabels, outcomeReason).map(item =>
+    item.value === 'ACCEPTED' ? { ...item, conditional: { html } } : item,
+  )
+}
+
+export const validateOutcome = (req: Request) => {
+  const { outcomeStatus, outcomeNote } = req.body
+  const errors: Record<string, string> = {
+    outcomeStatus: validateRadioButton(outcomeStatus, 'external referral status'),
+    outcomeNote: validateMaxLength(outcomeNote, 'Notes', 4000),
+  }
+
+  return validateAndFlashErrors(req, errors)
+}
+
+export const outcomeDetailsSummaryListRows = (referral: ExternalReferralDto) => {
+  const { status, submission: { outcomeNote } = {} } = referral
+  if (status === 'SUBMITTED') {
+    return []
+  }
+
+  return [
+    summaryListRow('Status', statusTag(serviceStatusTag(status as ServiceResult['serviceStatus'])), { type: 'html' }),
+    summaryListRow('Notes', outcomeNote, { type: 'textBlock', noValue: 'No notes added' }),
+  ]
 }

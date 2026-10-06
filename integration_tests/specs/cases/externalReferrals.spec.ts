@@ -8,19 +8,23 @@ import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import ExternalReferralsDetailsPage from '../../pages/cases/externalReferralsDetailsPage'
 import { stubProfilePage } from '../../helpers/profilePage'
 import { externalReferralTimelineEntry } from '../../../server/utils/externalReferrals'
+import userApi from '../../mockApis/user'
+import casesApi from '../../mockApis/cases'
 
 const crn = 'X123456'
 const setupStubs = async () => {
-  const referral = externalReferralFactory.build({ crn })
+  const referral = externalReferralFactory.submitted().build({ crn })
   const caseData = caseFactory.build({ crn })
   const referralTimeline = auditRecordFactory.buildList(2)
   await stubProfilePage({ crn, caseData })
+  await casesApi.stubGetCases([caseData])
   await externalReferralsApi.stubSubmitExternalReferral(crn)
   await externalReferralsApi.stubUpdateExternalReferral(referral)
   await externalReferralsApi.stubGetExternalReferralBySubmissionId(referral)
   await externalReferralsApi.stubListExternalReferral(crn, [referral])
   await externalReferralsApi.stubExternalReferralTimeline(crn, referral.submission.id, referralTimeline)
   await externalReferralsApi.stubExternalReferralAddNote(crn, referral.submission.id)
+  await userApi.stubGetTeams()
 
   return { caseData, referral, referralTimeline }
 }
@@ -69,11 +73,9 @@ test.describe('external referrals', () => {
     await submissionPage.checkApiCalled(referral, 'submit')
   })
 
-  test('should allow the user to see referrals on the tracker page and view and edit their details', async ({
-    page,
-  }) => {
+  test('should allow user see referrals on the tracker page and view/edit their details', async ({ page }) => {
     // Given I have stubbed the API responses
-    const { caseData, referral, referralTimeline } = await setupStubs()
+    const { caseData, referralTimeline, referral } = await setupStubs()
     // And I am logged in
     await login(page)
 
@@ -159,5 +161,75 @@ test.describe('external referrals', () => {
 
     // And the API should have been called with the note
     await detailsPage.checkNoteApiCalled(referral, noteText)
+  })
+
+  test('should allow user to add and edit an outcome to a referral', async ({ page }) => {
+    // Given I have stubbed the API responses
+    const { caseData, referral } = await setupStubs()
+    // And I am logged in
+    await login(page)
+
+    // When I visit the person tracker page
+    const trackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // And I select 'view details' on a referral card
+    await trackerPage.clickViewReferralDetails()
+    const detailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, referral)
+
+    // When I click the add outcome button
+    await detailsPage.clickButton('Add outcome')
+
+    // Then I am on the add outcome page
+    const outcomePage = await ExternalReferralsSubmissionPage.verifyOnPage(page, 'Add external referral outcome')
+    await outcomePage.shouldShowReferralSummary(referral, caseData)
+
+    // When I submit the empty form, I see errors
+    await outcomePage.clickButton('Save and continue')
+    await outcomePage.shouldShowErrorMessagesForFields({ outcomeStatus: 'Select an external referral status' })
+
+    // When I complete the form and submit
+    const updatedReferral = await outcomePage.completeOutcomeForm(referral)
+    await outcomePage.clickButton('Save and continue')
+
+    // Then I should be on the details page with a success banner
+    const updatedDetailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, updatedReferral)
+    await updatedDetailsPage.shouldShowBanner(
+      'Success',
+      'Outcome details added If the organisation has shared a possible address, add it as a proposed address.',
+    )
+
+    // When I update the stub and reload
+    await externalReferralsApi.stubGetExternalReferralBySubmissionId(updatedReferral)
+    await page.reload()
+
+    // Then I should see the outcome summary
+    await updatedDetailsPage.shouldShowOutcomeDetails()
+
+    // And the api should have been called with the update
+    await outcomePage.checkApiCalled(updatedReferral, 'update')
+
+    // When I try to edit the outcome
+    await detailsPage.clickLink('Change', detailsPage.getSummaryCard('Outcome'))
+
+    // Then I should be on the edit outcome page
+    const editPage = await ExternalReferralsSubmissionPage.verifyOnPage(page, 'Edit external referral outcome')
+    await editPage.shouldShowReferralSummary(updatedReferral, caseData)
+
+    // When I change the outcome and submit
+    const rejectedReferral = await editPage.completeOutcomeForm(referral, 'Rejected')
+    await outcomePage.clickButton('Save and continue')
+
+    // Then I should see the changes success banner
+    await updatedDetailsPage.shouldShowBanner('Success', 'Outcome details changed')
+
+    // When I update the stub and reload
+    await externalReferralsApi.stubGetExternalReferralBySubmissionId(rejectedReferral)
+    await page.reload()
+
+    // Then I am on the details page again with updates applied
+    const rejectedDetailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, rejectedReferral)
+
+    // And I should see the updated outcome summary
+    await rejectedDetailsPage.shouldShowOutcomeDetails()
   })
 })

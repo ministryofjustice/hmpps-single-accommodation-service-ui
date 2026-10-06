@@ -181,8 +181,12 @@ export default class AbstractPage {
     await this.shouldShowStatusTag(statusCell.status, container)
 
     if (statusCell.dateText) {
-      const date = (container || this.page).locator('p.sas-status__date')
+      const date = (container || this.page).locator('span.govuk-hint')
       await expect(date).toContainText(statusCell.dateText)
+    }
+    if (statusCell.dateDescription) {
+      const date = (container || this.page).locator('span.govuk-hint')
+      await expect(date).toContainText(statusCell.dateDescription)
     }
 
     if (statusCell.details) {

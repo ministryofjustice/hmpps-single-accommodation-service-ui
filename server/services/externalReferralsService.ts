@@ -1,4 +1,4 @@
-import { ExternalReferralCommand } from '@sas/api'
+import { ExternalReferralCommand, ExternalReferralWithdrawalDto } from '@sas/api'
 import { ExternalReferralsClient } from '../data'
 
 export default class ExternalReferralsService {
@@ -26,5 +26,9 @@ export default class ExternalReferralsService {
 
   saveNote(token: string, crn: string, id: string, note: string) {
     return this.externalReferralsClient.saveNote(token, crn, id, note)
+  }
+
+  withdrawal(token: string, crn: string, id: string, withdrawal: ExternalReferralWithdrawalDto) {
+    return this.externalReferralsClient.withdrawal(token, crn, id, withdrawal)
   }
 }

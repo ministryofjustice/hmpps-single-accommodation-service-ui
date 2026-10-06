@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test'
-import { CaseDto as Case, ExternalReferralCommand, ExternalReferralDto } from '@sas/api'
+import { CaseDto as Case, ExternalReferralCommand, ExternalReferralDto, ExternalReferralWithdrawalDto } from '@sas/api'
 import { faker } from '@faker-js/faker'
 import AbstractPage from '../abstractPage'
 import { displayName } from '../../../server/utils/cases'
@@ -7,6 +7,7 @@ import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/da
 import paths from '../../../server/paths/ui'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
+import { withdrawalReasonLabels } from '../../../server/utils/externalReferrals'
 
 export default class ExternalReferralsSubmissionPage extends AbstractPage {
   constructor(page: Page, expectedHeader: string) {
@@ -67,6 +68,19 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
     }
   }
 
+  async completeWithdrawalForm(referral: ExternalReferralDto, reasonLabel = 'Placement complete') {
+    const note: string = faker.lorem.paragraph()
+    await this.selectRadioByLabel(reasonLabel)
+    await this.completeInputByLabel('Notes (optional)', note)
+    return {
+      ...referral,
+      withdrawalReason: Object.keys(withdrawalReasonLabels).find(
+        key => withdrawalReasonLabels[key] === reasonLabel,
+      ) as ExternalReferralWithdrawalDto['withdrawalReason'],
+      withdrawalNote: note,
+    }
+  }
+
   async checkApiCalled(referral: ExternalReferralDto, method: 'submit' | 'update' = 'submit') {
     const {
       crn,
@@ -106,5 +120,20 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
     }
 
     expect(requestBody).toEqual(expectedBody)
+  }
+
+  async checkWithdrawalApiCalled(referral: ExternalReferralDto) {
+    const {
+      crn,
+      withdrawalReason,
+      withdrawalNote,
+      submission: { id },
+    } = referral
+    const postBody = await verifyPost(apiPaths.cases.externalReferrals.withdrawal({ crn, id }))
+
+    expect(postBody).toEqual({
+      withdrawalReason,
+      withdrawalNote,
+    })
   }
 }

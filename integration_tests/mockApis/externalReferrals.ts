@@ -82,4 +82,17 @@ export default {
         jsonBody: {},
       },
     }),
+
+  stubExternalReferralWithdraw: (crn: string, id: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.cases.externalReferrals.withdrawal({ crn, id }),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    }),
 }

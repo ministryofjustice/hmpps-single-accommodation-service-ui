@@ -30,6 +30,7 @@ export default {
       update: externalReferralsPath.path(':id'),
       timeline: externalReferralsPath.path(':id/timeline'),
       notes: externalReferralsPath.path(':id/notes'),
+      withdrawal: externalReferralsPath.path(':id/withdrawal'),
     },
     eligibility: casePath.path('eligibility'),
     referrals: casePath.path('applications'),

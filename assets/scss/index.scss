@@ -1,8 +1,7 @@
-@use "govuk-frontend/dist/govuk/index" with (
+@use "@ministryofjustice/frontend/moj/all" with (
   $govuk-global-styles: true,
-  $govuk-page-width: 1280px
+  $moj-page-width: 1280px
 );
-@use "@ministryofjustice/frontend/moj/all";
 @use '@ministryofjustice/hmpps-probation-frontend-components/dist/assets/footer';
 @use '@ministryofjustice/hmpps-probation-frontend-components/dist/assets/header';
 
@@ -19,7 +18,6 @@
 @use './components/filters';
 @use './components/previous-answers';
 @use './components/moj/api-error';
-@use './components/status-cell';
 @use './components/text-block';
 @use './components/report-banner';
 @use './overrides/local';

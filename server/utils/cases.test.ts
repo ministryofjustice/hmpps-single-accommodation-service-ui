@@ -174,7 +174,7 @@ describe('cases utilities', () => {
           [
             { html: personCell(cases[0]) },
             { html: 'No accommodation' },
-            { html: 'None' },
+            { html: '' },
             { html: statusCell(accommodationStatus) },
           ],
         ])
@@ -184,7 +184,7 @@ describe('cases utilities', () => {
         const cases = caseFactory.buildList(1, { accommodationSummaries: undefined })
 
         expect(casesToRows(cases)).toEqual([
-          [{ html: personCell(cases[0]) }, { html: 'No accommodation' }, { html: 'None' }, { html: '' }],
+          [{ html: personCell(cases[0]) }, { html: 'No accommodation' }, { html: '' }, { html: '' }],
         ])
       })
     })

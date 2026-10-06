@@ -88,6 +88,42 @@ export default class CaseDetailsPage {
     await expect(this.cas1Card().locator('.govuk-tag')).toHaveText(status)
   }
 
+  cas2Card() {
+    return this.serviceCard('Short-term accommodation (CAS2)')
+  }
+
+  async expectCas2Status(status: string) {
+    await expect(this.cas2Card()).toBeVisible()
+    await expect(this.cas2Card().locator('.govuk-tag')).toHaveText(status)
+  }
+
+  async clickCas2Link(action: string) {
+    await this.cas2Card().getByRole('link', { name: action }).click()
+  }
+
+  async expectCas2Hint(hintText: string) {
+    await expect(this.cas2Card().locator('.sas-card__hint')).toHaveText(hintText)
+  }
+
+  cas2Action() {
+    return this.page.waitForEvent('popup')
+  }
+
+  private async expectCas2Popup(url: RegExp) {
+    const cas2Page = await this.page.waitForEvent('popup')
+    await expect(cas2Page).toHaveURL(url)
+    return cas2Page
+  }
+
+  async expectCas2Redirect() {
+    const cas2Page = await this.expectCas2Popup(/\/new-cohorts\/applications\/before-you-start$/)
+    await expect(cas2Page.getByRole('heading', { name: 'Apply for short-term accommodation (CAS2)' })).toBeVisible()
+  }
+
+  async expectCas2Application() {
+    await this.expectCas2Popup(/\/assess\/applications$/)
+  }
+
   cas3Card() {
     return this.serviceCard('CAS3 (transitional accommodation)')
   }

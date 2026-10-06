@@ -66,6 +66,16 @@ describe('Macros', () => {
       expect(statusCell(cell)).toMatchSnapshot()
     })
 
+    it('renders a status cell with date description', () => {
+      const cell: StatusCell = {
+        status: { text: 'Foo' },
+        dateText: 'Submitted 5 days ago',
+        dateDescription: '(For 5 days)',
+      }
+
+      expect(statusCell(cell)).toMatchSnapshot()
+    })
+
     it('renders a status cell with details', () => {
       const cell: StatusCell = {
         status: { text: 'Foo' },

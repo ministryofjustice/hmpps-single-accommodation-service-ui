@@ -41,6 +41,7 @@ export interface StatusTag {
 export interface StatusCell {
   status: StatusTag
   dateText?: string
+  dateDescription?: string
   details?: Array<TextOrHtmlContent>
 }
 

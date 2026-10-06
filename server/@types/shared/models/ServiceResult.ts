@@ -14,6 +14,7 @@ export type ServiceResult = {
     | 'CAS2_NOT_STARTED_COMMUNITY'
     | 'CAS2_NOT_STARTED_PRISON'
     | 'CAS2_NOT_STARTED_CAS1'
+    | 'CAS2_NOT_STARTED_CAS2'
     | 'NOT_SUBMITTED'
     | 'INFO_REQUESTED'
     | 'COMPLETED'

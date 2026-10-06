@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { CaseAction, CaseDto as Case, Team } from '@sas/api'
+import { CaseAction, CaseDto, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, IndexRequest, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
@@ -8,6 +8,8 @@ import { renderActions } from './actions'
 import { staffName } from './staff'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { validateAndFlashErrors, validateCrn } from './validation'
+import { summaryListRow } from './summaryListRow'
+import { formatDateAndAge } from './dates'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -184,4 +186,18 @@ export const setupCaseList = (
     ],
   }
 }
+
 export type caseSettingsType = ReturnType<typeof setupCaseList>
+
+export const caseSummaryListRows = (caseData: CaseDto) => {
+  const rows = [
+    summaryListRow('Name', displayName(caseData)),
+    summaryListRow('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
+    summaryListRow('CRN', caseData.crn),
+  ]
+  if (caseData.prisonNumber) {
+    rows.push(summaryListRow('Prison number', caseData.prisonNumber))
+  }
+
+  return rows
+}

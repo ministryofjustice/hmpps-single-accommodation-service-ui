@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import { ExternalReferralCommand } from '@sas/api'
+import { ExternalReferralCommand, ExternalReferralDto } from '@sas/api'
 import uiPaths from '../paths/ui'
 import CasesService from '../services/casesService'
 import AuditService, { Page } from '../services/auditService'
@@ -12,10 +12,13 @@ import {
   detailsSummaryListRows,
   externalReferralTimelineEntry,
   validateNote,
+  summaryListRows,
+  validateOutcome,
+  outcomeDetailsSummaryListRows,
+  outcomeRadioItems,
 } from '../utils/externalReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
-import { summaryListRows } from '../utils/dutyToRefer'
 
 export type SubmissionFlow = 'add' | 'edit'
 
@@ -55,6 +58,9 @@ export default class ExternalReferralsController {
         submissionDetailRows: detailsSummaryListRows(referral),
         status: referral?.status,
         timeline: auditRecords.map(record => externalReferralTimelineEntry(record, username)),
+        outcomeDetailRows: outcomeDetailsSummaryListRows(referral),
+        outcomePath: uiPaths.externalReferrals.outcome({ crn, id }),
+        editPath: uiPaths.externalReferrals.edit({ crn, id }),
         ...userInput,
         errors,
         errorSummary,
@@ -74,7 +80,7 @@ export default class ExternalReferralsController {
         correlationId: req.id,
       })
 
-      const { tableRows, referral } = await this.getSubmissionPageData(token, crn, id)
+      const { caseData, referral } = await this.getSubmissionPageData(token, crn, id)
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       const formValues = {
@@ -88,7 +94,7 @@ export default class ExternalReferralsController {
         pageTitle: `${pageTitleAction} external referral details`,
         backLinkHref,
         crn,
-        tableRows,
+        tableRows: summaryListRows(caseData),
         errors,
         errorSummary,
         formValues,
@@ -111,29 +117,21 @@ export default class ExternalReferralsController {
       }
 
       const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
+      const referral = await this.getReferral(token, crn, id)
 
       try {
         const submission: ExternalReferralCommand = {
-          status: 'SUBMITTED',
+          ...this.preFillCommand(referral),
           submissionDate,
-          referenceNumber,
+          referenceNumber: referenceNumber || undefined,
           organisationName,
-          website,
-          email,
-          phoneNumber,
-          submissionNote,
+          website: website || undefined,
+          email: email || undefined,
+          phoneNumber: phoneNumber || undefined,
+          submissionNote: submissionNote || undefined,
         }
 
         if (id) {
-          const { data: referral } = await this.externalReferralsService.getExternalReferralBySubmissionId(
-            token,
-            crn,
-            id,
-          )
-          if (referral.status !== 'SUBMITTED') {
-            submission.status = referral.status
-          }
-
           await this.externalReferralsService.update(token, crn, id, submission)
 
           req.flash('success', 'Referral details changed')
@@ -162,13 +160,12 @@ export default class ExternalReferralsController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-
       if (!validateNote(req)) {
         return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
       }
 
       try {
-        await this.externalReferralsService.addNote(token, crn, id, note)
+        await this.externalReferralsService.saveNote(token, crn, id, note)
         req.flash('success', 'Note added')
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')
@@ -178,14 +175,113 @@ export default class ExternalReferralsController {
     }
   }
 
-  private async getSubmissionPageData(token: string, crn: string, id?: string) {
-    const [{ data: caseData }, { data: referral } = {}] = await Promise.all([
-      this.casesService.getCase(token, crn),
+  outcome(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const {
+        id: correlationId,
+        params: { crn, id },
+      } = req
+      const { token, username } = res.locals.user
+
+      await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_OUTCOME, {
+        who: username,
+        correlationId,
+      })
+
+      const { caseData, referral } = await this.getSubmissionPageData(token, crn, id)
+
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+      const outcomeStatus: ExternalReferralDto['status'] = userInput?.outcomeStatus ?? referral?.status
+
+      return res.render('pages/external-referrals/outcome', {
+        pageTitle: `${referral.status === 'SUBMITTED' ? 'Add' : 'Edit'} external referral outcome`,
+        backLinkHref: uiPaths.externalReferrals.show({ crn, id }),
+        crn,
+        tableRows: summaryListRows(caseData, referral),
+        statusItems: outcomeRadioItems(outcomeStatus),
+        errors,
+        errorSummary,
+        outcomeNote: referral.submission.outcomeNote,
+        ...userInput,
+      })
+    }
+  }
+
+  saveOutcome(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+      const { outcomeStatus, outcomeNote } = req.body
+      const errorRedirect = uiPaths.externalReferrals.outcome({ crn, id })
+
+      if (!validateOutcome(req)) {
+        return res.redirect(errorRedirect)
+      }
+
+      const referral = await this.getReferral(token, crn, id)
+      try {
+        await this.externalReferralsService.update(token, crn, id, {
+          ...this.preFillCommand(referral),
+          status: outcomeStatus,
+          outcomeNote: outcomeNote || undefined,
+        })
+
+        const flash: { heading: string; body: string } = {
+          heading: referral.status !== 'SUBMITTED' ? 'Outcome details changed' : 'Outcome details added',
+          body:
+            (outcomeStatus as ExternalReferralDto['status']) === 'ACCEPTED'
+              ? `If the organisation has shared a possible address, <a href="${uiPaths.proposedAddresses.start({ crn })}">add it as a proposed address</a>.`
+              : undefined,
+        }
+
+        req.flash('success', flash)
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
+        addUserInputToFlash(req)
+        return res.redirect(errorRedirect)
+      }
+    }
+  }
+
+  private async getReferral(token: string, crn: string, id?: string) {
+    return (await this.getSubmissionPageData(token, crn, id, false)).referral
+  }
+
+  private async getSubmissionPageData(token: string, crn: string, id?: string, getCase = true) {
+    const [{ data: caseData } = {}, { data: referral } = {}] = await Promise.all([
+      getCase ? this.casesService.getCase(token, crn) : undefined,
       id ? this.externalReferralsService.getExternalReferralBySubmissionId(token, crn, id) : undefined,
     ])
 
-    const tableRows = summaryListRows(caseData)
+    return { referral, caseData }
+  }
 
-    return { tableRows, referral }
+  private preFillCommand(referral: ExternalReferralDto): ExternalReferralCommand {
+    const {
+      status,
+      submission: {
+        submissionDate,
+        referenceNumber,
+        organisationName,
+        website,
+        phoneNumber,
+        email,
+        submissionNote,
+        outcomeNote,
+      } = {},
+    } = referral || {}
+
+    return {
+      submissionDate,
+      status: status || 'SUBMITTED',
+      referenceNumber,
+      organisationName,
+      website,
+      email,
+      phoneNumber,
+      submissionNote,
+      outcomeNote,
+    }
   }
 }

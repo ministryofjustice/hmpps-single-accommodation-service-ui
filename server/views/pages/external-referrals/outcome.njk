@@ -1,0 +1,32 @@
+{% extends "pages/external-referrals/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block formContent %}
+  {{
+    govukRadios({
+      id: "outcomeStatus",
+      name: "outcomeStatus",
+      fieldset: {
+        legend: {
+          text: "What is the status of the application?",
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      items: statusItems,
+      errorMessage: errors.outcomeStatus
+    })
+  }}
+
+  {{
+    govukTextarea({
+      name: "outcomeNote",
+      label: {
+        text: "Notes (optional)",
+        classes: "govuk-label--s"
+      },
+      value: outcomeNote,
+      errorMessage: errors.outcomeNote
+    })
+  }}
+{% endblock %}

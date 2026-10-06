@@ -10,7 +10,7 @@ import {
 } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
 import { Link, StatusCard, TimelineValue } from '@sas/ui'
-import { dateFieldParts, formatDate, formatDateAndAge, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
+import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import uiPaths from '../paths/ui'
 import {
   validateAndFlashErrors,
@@ -28,7 +28,7 @@ import { serviceStatusTag } from './statusTag'
 import { summaryListRow } from './summaryListRow'
 import { htmlContent, noValueHtml, textContent } from './utils'
 import { staffName } from './staff'
-import { displayName } from './cases'
+import { caseSummaryListRows } from './cases'
 
 const REFERENCE_REMOVED_LABEL = 'Reference removed'
 const NOTE_REMOVED_LABEL = 'Note removed'
@@ -96,14 +96,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
 }
 
 export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto = undefined) => {
-  const rows = [
-    summaryListRow('Name', displayName(caseData)),
-    summaryListRow('Date of birth', formatDateAndAge(caseData.dateOfBirth)),
-    summaryListRow('CRN', caseData.crn),
-  ]
-  if (caseData.prisonNumber) {
-    rows.push(summaryListRow('Prison number', caseData.prisonNumber))
-  }
+  const rows = caseSummaryListRows(caseData)
   if (dutyToRefer) {
     rows.push(summaryListRow('Local authority', dutyToRefer.submission.localAuthority.localAuthorityAreaName))
     rows.push(

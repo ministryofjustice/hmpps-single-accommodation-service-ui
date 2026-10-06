@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 
-export type OtherAccommodationReferralSubmissionDto = {
+export type ExternalReferralSubmissionDto = {
   id: string
   referenceNumber?: string | null
   submissionDate: string

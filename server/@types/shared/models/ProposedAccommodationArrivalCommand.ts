@@ -4,4 +4,5 @@
 
 export type ProposedAccommodationArrivalCommand = {
   arrivalDate: string
+  arrivalMethod?: 'STANDARD' | 'WITHOUT_VERIFICATION'
 }

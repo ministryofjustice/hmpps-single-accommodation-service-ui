@@ -5,11 +5,16 @@ import apiPaths from '../../server/paths/api'
 import { apiResponseFactory, auditRecordFactory } from '../../server/testutils/factories'
 
 export default {
-  stubGetProposedAddressesByCrn: (crn: string, proposedAddresses?: ProposedAccommodationDto[]): SuperAgentRequest =>
+  stubGetProposedAddressesByCrn: (
+    crn: string,
+    proposedAddresses?: ProposedAccommodationDto[],
+    confirmedOnly = false,
+  ): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.proposedAddresses.index({ crn }),
+        urlPathPattern: apiPaths.cases.proposedAddresses.index({ crn }),
+        ...(confirmedOnly && { queryParameters: { confirmedOnly: { equalTo: 'true' } } }),
       },
       response: {
         status: 200,

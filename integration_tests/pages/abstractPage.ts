@@ -63,7 +63,7 @@ export default class AbstractPage {
   }
 
   async completeInputByLabel(label: string, value: string) {
-    await this.page.getByRole('textbox', { name: label }).fill(value)
+    await this.page.getByRole('textbox', { name: label }).fill(value ?? '')
   }
 
   async completeDateInputByLabel(label: string, value: string) {

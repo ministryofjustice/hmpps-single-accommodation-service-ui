@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { faker } from '@faker-js/faker'
 import { mock } from 'jest-mock-extended'
 import { ErrorMessages, ErrorSummary } from '@sas/ui'
 import {
@@ -22,6 +23,8 @@ import {
   validatePostcode,
   validateCrn,
   validateDateWithinLastXMonths,
+  validateEmail,
+  validatePhoneNumber,
 } from './validation'
 
 describe('fetchErrorsAndUserInput', () => {
@@ -523,6 +526,28 @@ describe('validators', () => {
       ['X1234567', 'Enter a valid CRN'],
     ])('returns the expected error for value %s', (value, expected) => {
       expect(validateCrn(value)).toBe(expected)
+    })
+  })
+
+  describe('validateEmail', () => {
+    it.each([
+      ['', undefined],
+      ['ann.elk@justice.gov.uk', undefined],
+      ['a-valid.complex.email+1@address.co.uk', undefined],
+      ['simple@email.com', undefined],
+      ['not-valid', 'Enter a valid Email address'],
+    ])('returns the expected error for value %s', (value, expected) => {
+      expect(validateEmail(value)).toBe(expected)
+    })
+  })
+
+  describe('validatePhoneNumber', () => {
+    it.each([
+      ['', undefined],
+      [faker.string.alphanumeric({ length: 35 }), undefined],
+      [faker.string.alphanumeric({ length: 36 }), 'Enter a UK phone number'],
+    ])('returns the expected error for value %s', (value, expected) => {
+      expect(validatePhoneNumber(value)).toBe(expected)
     })
   })
 })

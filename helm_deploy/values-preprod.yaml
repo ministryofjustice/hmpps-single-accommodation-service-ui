@@ -22,6 +22,7 @@ generic-service:
     AUDIT_ENABLED: "false"
     COMPONENT_API_URL: "https://probation-frontend-components-preprod.hmpps.service.justice.gov.uk"
     OS_DATAHUB_API_URL: "https://api.os.uk"
+    DELIUS_URL: "https://ndelius.pre-prod.probation.service.justice.gov.uk"
     SAS_ALLOWED_ROLES: "ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER"
     MAINTENANCE_MODE: "false"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"

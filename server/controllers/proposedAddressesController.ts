@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ProposedAddressFormPage } from '@sas/ui'
+import { ProposedAccommodationArrivalCommand } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import MultiPageFormManager from '../utils/multiPageFormManager'
@@ -586,9 +587,11 @@ export default class ProposedAddressesController {
       const { token } = res.locals.user
 
       try {
-        await this.proposedAddressesService.submitArrival(token, crn, id, {
+        const arrival: ProposedAccommodationArrivalCommand = {
           arrivalDate: getTodayLocal(),
-        })
+          arrivalMethod: 'STANDARD',
+        }
+        await this.proposedAddressesService.submitArrival(token, crn, id, arrival)
         req.flash('success', 'Current address updated')
         return res.redirect(uiPaths.cases.show({ crn }))
       } catch {

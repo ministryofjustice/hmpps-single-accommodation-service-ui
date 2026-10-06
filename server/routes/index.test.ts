@@ -5,8 +5,10 @@ import { appWithAllRoutes, user } from './testutils/appSetup'
 import logger from '../../logger'
 import CasesController from '../controllers/casesController'
 import ProposedAddressesController from '../controllers/proposedAddressesController'
+import CurrentAddressController from '../controllers/currentAddressController'
 import DutyToReferController from '../controllers/dutyToReferController'
 import StaticController from '../controllers/staticController'
+import ExternalReferralsController from '../controllers/externalReferralsController'
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -40,6 +42,12 @@ const proposedAddressesController = mock<ProposedAddressesController>({
   saveArrival: mockHandler,
 })
 
+const currentAddressController = mock<CurrentAddressController>({
+  select: mockHandler,
+  saveSelect: mockHandler,
+  addNew: mockHandler,
+})
+
 const dutyToReferController = mock<DutyToReferController>({
   show: mockHandler,
   submission: mockHandler,
@@ -51,6 +59,12 @@ const dutyToReferController = mock<DutyToReferController>({
   saveWithdrawal: mockHandler,
 })
 
+const externalReferralsController = mock<ExternalReferralsController>({
+  submission: mockHandler,
+  saveSubmission: mockHandler,
+  show: mockHandler,
+})
+
 const staticController = mock<StaticController>({
   maintenance: mockHandler,
 })
@@ -59,8 +73,10 @@ jest.mock('../controllers', () => ({
   controllers: () => ({
     casesController,
     proposedAddressesController,
+    currentAddressController,
     dutyToReferController,
     staticController,
+    externalReferralsController,
   }),
 }))
 

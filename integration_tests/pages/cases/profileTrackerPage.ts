@@ -7,6 +7,7 @@ import {
   AccommodationSummaryDto,
   ProposedAccommodationDto,
   CaseAction,
+  ExternalReferralDto,
 } from '@sas/api'
 import { formatDate } from '../../../server/utils/dates'
 import { eligibilityToEligibilityCards } from '../../../server/utils/eligibility'
@@ -24,6 +25,7 @@ import { accommodationType, settledTag } from '../../../server/utils/accommodati
 import { actionsMap } from '../../../server/utils/actions'
 import { displayName } from '../../../server/utils/cases'
 import config from '../../../server/config'
+import { externalReferralCards } from '../../../server/utils/externalReferrals'
 
 export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
@@ -60,6 +62,10 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
         await expect(nextActionsCard.getByRole('listitem')).toHaveCount(visibleActions.length)
       }
     }
+  }
+
+  async clickAddNewCurrentAddress() {
+    await this.getCard('Current accommodation').getByRole('button', { name: 'Add a new address' }).click()
   }
 
   async shouldNotShowNextActionsCard() {
@@ -222,5 +228,25 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
         'This information is currently unavailable. Try again later.',
       )
     }
+  }
+
+  async shouldShowExternalReferralCards(referrals: Array<ExternalReferralDto>) {
+    const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
+    await expect(section.getByRole('paragraph')).toHaveText(
+      'Add details of applications made to other providers, such as charities, voluntary organisations and housing associations.',
+    )
+    for await (const referral of referrals) {
+      await this.shouldShowCard(referral.submission.organisationName, externalReferralCards([referral])[0])
+    }
+  }
+
+  async clickViewReferralDetails() {
+    const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
+    await this.clickLink('View details', section)
+  }
+
+  async clickAddExternalReferralLink() {
+    const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
+    await this.clickLink('Add details', section)
   }
 }

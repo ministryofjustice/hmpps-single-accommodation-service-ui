@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { test } from '../test'
 import { signIn } from '../steps/signIn'
 import CaseDetailsPage from '../pages/caseDetailsPage'
@@ -19,6 +20,15 @@ test('Can add and confirm a proposed address', async ({
   // GIVEN I sign in as a probation user
   await signIn(page, probationUser)
 
+  // WHEN the expected case is not on the default tab
+  const [expectedForename, expectedSurname] = BASE_CASE.name.split(' ')
+  const expectedCase = page.getByRole('link', { name: `${expectedSurname}, ${expectedForename}` })
+
+  try {
+    await expect(expectedCase).toBeVisible({ timeout: 5000 })
+  } catch {
+    await page.getByRole('link', { name: 'Settled housing secured' }).click()
+  }
   // AND I open the relevant case
   const { caseLink } = await getCaseLink(page, BASE_CASE)
   await caseLink.click()

@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { OtherAccommodationReferralDto } from './OtherAccommodationReferralDto'
+import type { ExternalReferralDto } from './ExternalReferralDto'
 import type { UpstreamFailureDto } from './UpstreamFailureDto'
-export type ApiResponseDtoOtherAccommodationReferralDto = {
-  data: OtherAccommodationReferralDto
+export type ApiResponseDtoListExternalReferralDto = {
+  data: Array<ExternalReferralDto>
   upstreamFailures: Array<UpstreamFailureDto>
 }

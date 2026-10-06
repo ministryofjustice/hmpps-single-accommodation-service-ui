@@ -32,6 +32,8 @@ import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
 import { setCaseListUrl } from '../utils/backlinks'
 import { breadcrumbs } from '../utils/breadcrumbs'
+import ExternalReferralsService from '../services/externalReferralsService'
+import { externalReferralCards } from '../utils/externalReferrals'
 
 export default class CasesController {
   constructor(
@@ -43,6 +45,7 @@ export default class CasesController {
     private readonly proposedAddressesService: ProposedAddressesService,
     private readonly accommodationService: AccommodationService,
     private readonly userService: UserService,
+    private readonly externalReferralsService: ExternalReferralsService,
   ) {}
 
   index(): RequestHandler {
@@ -142,6 +145,7 @@ export default class CasesController {
         proposedAddresses: this.proposedAddressesService.getProposedAddresses(token, crn),
         accommodationHistory: this.accommodationService.getAccommodationHistory(token, crn),
         accommodationSummaries: this.accommodationService.getAccommodationSummary(token, crn),
+        externalReferrals: this.externalReferralsService.search(token, crn),
       })
 
       return res.render('pages/show', {
@@ -155,12 +159,11 @@ export default class CasesController {
         nextAccommodationCard: accommodationCard('next', data.accommodationSummaries?.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', data.accommodationSummaries?.currentAccommodation),
         referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),
-        eligibilityCards: data.eligibility
-          ? eligibilityToEligibilityCards(data.eligibility, crn, data.accommodationSummaries?.currentAccommodation)
-          : [],
+        eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn) : [],
         proposedAddresses: data.proposedAddresses.proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),
         failedChecksAddresses: data.proposedAddresses.failedChecks.map(proposedAddressStatusCard),
+        externalReferralCards: externalReferralCards(data.externalReferrals),
       })
     }
   }

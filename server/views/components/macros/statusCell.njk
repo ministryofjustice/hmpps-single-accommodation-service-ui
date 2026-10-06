@@ -1,10 +1,21 @@
 {%- from "components/macros/statusTag.njk" import statusTag %}
 
 {%- macro statusCell(context) -%}
+<div>
   <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-  {{ statusTag(context.status) }}
+</div>
+<div>
+  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+    {{ statusTag(context.status) }}
+  </span>
   {%- if context.dateText %}
-    <p class="sas-status__date">{{ context.dateText }}</p>
+    <span class="govuk-table-span">
+    <span class="govuk-hint">{{ context.dateText }}</span>
+    {%- if context.dateDescription %}
+      <br />
+      <span class="govuk-hint">{{ context.dateDescription }}</span>
+    {%- endif %}
+  </span>
   {%- endif %}
   {%- if context.details %}
     {% for detail in context.details %}
@@ -15,4 +26,5 @@
       {% endif %}
     {% endfor %}
   {%- endif %}
+</div>
 {%- endmacro -%}

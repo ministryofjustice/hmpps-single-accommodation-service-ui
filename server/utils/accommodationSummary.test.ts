@@ -220,7 +220,7 @@ describe('accommodationSummary', () => {
         {
           status: { text: 'Risk of no fixed abode', colour: 'orange' },
           dateText: 'From 20 December 2025',
-          details: [{ html: '<span class="govuk-hint">(in 10 days)</span>' }],
+          dateDescription: '(in 10 days)',
         },
       ],
       [
@@ -232,7 +232,7 @@ describe('accommodationSummary', () => {
         {
           status: { text: 'Settled', colour: 'green' },
           dateText: 'Since 1 December 2025',
-          details: [{ html: '<span class="govuk-hint">(for 9 days)</span>' }],
+          dateDescription: '(for 9 days)',
         },
       ],
       [
@@ -244,7 +244,7 @@ describe('accommodationSummary', () => {
         {
           status: { text: 'Transient', colour: 'purple' },
           dateText: 'From 20 December 2025',
-          details: [{ html: '<span class="govuk-hint">(in 10 days)</span>' }],
+          dateDescription: '(in 10 days)',
         },
       ],
     ])('returns the expected status cell for %s', (_, accommodationSummaries, expected) => {

@@ -6,6 +6,10 @@
   margin-bottom: govuk-spacing(3);
 }
 
+.sas-card__hint {
+  margin-bottom: govuk-spacing(0);
+}
+
 .sas-card--inactive {
   & h3 {
     @include govuk-font($size: 19, $weight: 'regular');
@@ -14,10 +18,12 @@
   & .sas-card__hint {
     @extend .govuk-hint;
   }
-}
 
-.sas-card__hint {
-  margin-bottom: govuk-spacing(0);
+  & .sas-card__content {
+    p, li {
+      color: govuk-colour('black', $variant: 'tint-25');
+    }
+  }
 }
 
 .sas-card--blocked {

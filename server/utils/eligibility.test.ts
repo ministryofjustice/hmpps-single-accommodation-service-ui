@@ -215,8 +215,16 @@ describe('eligibilityStatusCard', () => {
     ],
     cas2: [
       {
-        title: 'NOT_STARTED',
-        result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' },
+        title: 'NOT_STARTED in community',
+        result: { serviceStatus: 'CAS2_NOT_STARTED_COMMUNITY', url: 'https://example.com/start' },
+      },
+      {
+        title: 'NOT_STARTED in prison',
+        result: { serviceStatus: 'CAS2_NOT_STARTED_PRISON', url: 'https://example.com/start' },
+      },
+      {
+        title: 'NOT_STARTED in AP',
+        result: { serviceStatus: 'CAS2_NOT_STARTED_CAS1', url: 'https://example.com/start' },
       },
       {
         title: 'NOT_SUBMITTED',
@@ -361,14 +369,21 @@ describe('eligibilityStatusCard', () => {
     const url = 'https://example.gov.uk/start'
 
     it('should show content for people in AP', () => {
-      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_STARTED', url })
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'CAS2_NOT_STARTED_CAS1', url })
 
       const card = cas2StatusCard({ serviceResult })
       expect(card).toMatchSnapshot()
     })
 
-    it('should show content for people not in AP', () => {
-      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_STARTED', url })
+    it('should show content for people in community', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'CAS2_NOT_STARTED_COMMUNITY', url })
+
+      const card = cas2StatusCard({ serviceResult })
+      expect(card).toMatchSnapshot()
+    })
+
+    it('should show content for people in prison', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'CAS2_NOT_STARTED_PRISON', url })
 
       const card = cas2StatusCard({ serviceResult })
       expect(card).toMatchSnapshot()
@@ -588,7 +603,7 @@ describe('cas2 status card', () => {
 
   describe('content', () => {
     it('renders the find out more link when not started', () => {
-      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' })
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'CAS2_NOT_STARTED_PRISON' })
 
       expect(cas2StatusCard({ serviceResult }).content).toMatchSnapshot()
     })

@@ -80,6 +80,7 @@ export const linksForCas2Status = (serviceResult?: ServiceResult) => {
     case 'CAS2_NOT_STARTED_PRISON':
       return [{ text: 'Start application', ...link }]
     case 'CAS2_NOT_STARTED_COMMUNITY':
+    case 'CAS2_NOT_STARTED_CAS2':
       return [{ text: 'Start referral', ...link }]
     case 'NOT_SUBMITTED':
     case 'MORE_INFORMATION_NEEDED':
@@ -293,9 +294,10 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
         cas2Link,
       ]
     case 'CAS2_NOT_STARTED_COMMUNITY':
+    case 'CAS2_NOT_STARTED_CAS2':
       return [
         htmlContent(
-          bulletList('Available for: ', ['Alternative to custodial recall', 'Intensive supervision court order']),
+          bulletList('Available for:', ['Alternative to custodial recall', 'Intensive supervision court order']),
         ),
       ]
     default:
@@ -538,7 +540,7 @@ const statusFieldsForCas2 = (serviceResult?: ServiceResult): Pick<StatusCard, 'i
 
   const fields = statusFields(serviceResult)
 
-  if (serviceStatus === 'CAS2_NOT_STARTED_COMMUNITY') {
+  if (serviceStatus === 'CAS2_NOT_STARTED_COMMUNITY' || serviceStatus === 'CAS2_NOT_STARTED_CAS2') {
     fields.inactive = true
   }
 

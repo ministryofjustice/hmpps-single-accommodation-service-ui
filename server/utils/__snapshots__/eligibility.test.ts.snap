@@ -855,12 +855,42 @@ exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people i
 }
 `;
 
+exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people in cas2 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Alternative to custodial recall</li>
+      <li>Intensive supervision court order</li>
+      </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.gov.uk/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "text": "",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people in community 1`] = `
 {
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-!-margin-bottom-1">Available for: </p>
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -1692,12 +1722,42 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in AP status card 
 }
 `;
 
+exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in cas2 status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Alternative to custodial recall</li>
+      <li>Intensive supervision court order</li>
+      </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "text": "",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in community status card 1`] = `
 {
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-!-margin-bottom-1">Available for: </p>
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>

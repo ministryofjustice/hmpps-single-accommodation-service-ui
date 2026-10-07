@@ -219,6 +219,10 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'CAS2_NOT_STARTED_COMMUNITY', url: 'https://example.com/start' },
       },
       {
+        title: 'NOT_STARTED in cas2',
+        result: { serviceStatus: 'CAS2_NOT_STARTED_CAS2', url: 'https://example.com/start' },
+      },
+      {
         title: 'NOT_STARTED in prison',
         result: { serviceStatus: 'CAS2_NOT_STARTED_PRISON', url: 'https://example.com/start' },
       },
@@ -377,6 +381,13 @@ describe('eligibilityStatusCard', () => {
 
     it('should show content for people in community', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'CAS2_NOT_STARTED_COMMUNITY', url })
+
+      const card = cas2StatusCard({ serviceResult })
+      expect(card).toMatchSnapshot()
+    })
+
+    it('should show content for people in cas2', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'CAS2_NOT_STARTED_CAS2', url })
 
       const card = cas2StatusCard({ serviceResult })
       expect(card).toMatchSnapshot()

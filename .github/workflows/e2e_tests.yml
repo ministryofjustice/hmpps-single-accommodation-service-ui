@@ -75,6 +75,19 @@ jobs:
           SAS_E2E_CRS_URL: https://find-and-refer-intervention-dev.hmpps.service.justice.gov.uk
         run: npm run test:e2e:dev -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
+      - name: Publish Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: './ctrf/*.json'
+          summary-delta-report: true
+          insights-report: true
+          fail-rate-report: true
+          slowest-report: true
+          upload-artifact: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+
       - name: Teardown data
         if: always()
         run: npm run test:e2e:data:teardown

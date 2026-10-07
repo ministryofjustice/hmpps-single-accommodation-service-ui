@@ -42,6 +42,19 @@ jobs:
           SAS_E2E_PROBATION_USER_PASSWORD: ${{ secrets.E2E_USER_SAS_USER_PP_PASSWORD }}
         run: npm run test:e2e:smoke
 
+      - name: Publish Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: './ctrf/*.json'
+          summary-delta-report: true
+          insights-report: true
+          fail-rate-report: true
+          slowest-report: true
+          upload-artifact: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

@@ -22,6 +22,7 @@ type Macro =
   | 'govukDetails'
   | 'govukDetailsList'
   | 'textBlock'
+  | 'bulletList'
 
 export const renderMacro = <T>(macroName: Macro, context: T): string =>
   nunjucksInline().renderString(
@@ -46,3 +47,6 @@ export const govukDetailsList = (summaryText: string, items: string[]) =>
   renderMacro('govukDetailsList', { summaryText, items })
 
 export const textBlock = (text?: string) => renderMacro('textBlock', text)
+
+export const bulletList = (summaryText: string, items: string[], ordered?: boolean) =>
+  renderMacro('bulletList', { summaryText, items, ordered: ordered ?? false })

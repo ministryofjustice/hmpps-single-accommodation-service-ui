@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test'
 import { ExternalReferralDto } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import { formatDateAndDaysAgo } from '../../../server/utils/dates'
-import { serviceStatusTag } from '../../../server/utils/statusTag'
+import { externalReferralStatusTag } from '../../../server/utils/externalReferrals'
 
 export default class ExternalReferralsDetailsPage extends AbstractPage {
   constructor(
@@ -20,7 +20,7 @@ export default class ExternalReferralsDetailsPage extends AbstractPage {
       submission: { submissionDate, referenceNumber, website },
     } = this.referral
 
-    await this.shouldShowSummaryItem('Status', serviceStatusTag(status).text)
+    await this.shouldShowSummaryItem('Status', externalReferralStatusTag(status).text)
     await this.shouldShowSummaryItem('Submitted on', formatDateAndDaysAgo(submissionDate))
     await this.shouldShowSummaryItem('Reference number', referenceNumber)
     await this.shouldShowSummaryItem('Website', website)

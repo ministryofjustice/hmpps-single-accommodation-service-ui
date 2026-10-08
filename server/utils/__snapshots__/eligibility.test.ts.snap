@@ -377,6 +377,15 @@ exports[`cas1 status card details renders detail rows for a SUBMITTED status 1`]
 exports[`cas2 status card content renders the find out more link when not started 1`] = `
 [
   {
+    "html": "<p class="govuk-!-margin-bottom-1">Available in these circumstances:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Homeless at conditional release date</li>
+      <li>Homeless at end of fixed-term recall</li>
+      <li>As part of risk-assessed recall review</li>
+      </ul>",
+  },
+  {
     "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
   },
 ]
@@ -815,6 +824,130 @@ exports[`cas3 status card details renders detail rows for a SUBMITTED status 1`]
     },
   },
 ]
+`;
+
+exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people in AP 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-0">Available as a move-on from Approved Premises.</p>",
+    },
+    {
+      "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.gov.uk/start",
+      "text": "Start application",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people in cas2 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Alternative to custodial recall</li>
+      <li>Intensive supervision court order</li>
+      </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.gov.uk/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "text": "",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people in community 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Alternative to custodial recall</li>
+      <li>Intensive supervision court order</li>
+      </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.gov.uk/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "text": "",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people in prison 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available in these circumstances:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Homeless at conditional release date</li>
+      <li>Homeless at end of fixed-term recall</li>
+      <li>As part of risk-assessed recall review</li>
+      </ul>",
+    },
+    {
+      "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.gov.uk/start",
+      "text": "Start application",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
 `;
 
 exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status card 1`] = `
@@ -1560,17 +1693,115 @@ exports[`eligibilityStatusCard for cas2 renders a MORE_INFORMATION_NEEDED status
 }
 `;
 
-exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = `
+exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in AP status card 1`] = `
 {
   "blocked": false,
   "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-0">Available as a move-on from Approved Premises.</p>",
+    },
     {
       "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
     },
   ],
   "details": [],
   "heading": "Short-term accommodation (CAS2)",
-  "hint": "CAS2 accommodation is now available for more people.",
+  "hint": undefined,
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start",
+      "text": "Start application",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in cas2 status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Alternative to custodial recall</li>
+      <li>Intensive supervision court order</li>
+      </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "text": "",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in community status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available for:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Alternative to custodial recall</li>
+      <li>Intensive supervision court order</li>
+      </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "text": "",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in prison status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-!-margin-bottom-1">Available in these circumstances:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Homeless at conditional release date</li>
+      <li>Homeless at end of fixed-term recall</li>
+      <li>As part of risk-assessed recall review</li>
+      </ul>",
+    },
+    {
+      "html": "<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
   "inactive": false,
   "links": [
     {

@@ -19,7 +19,7 @@ import { formatDate, formatDateAndDaysAgo } from './dates'
 import config from '../config'
 import { htmlContent } from './utils'
 import { summaryListRow } from './summaryListRow'
-import { govukDetailsList } from './macros'
+import { bulletList, govukDetailsList } from './macros'
 import { formatAddress } from './addresses'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
@@ -76,7 +76,12 @@ export const linksForCas2Status = (serviceResult?: ServiceResult) => {
 
   switch (serviceStatus) {
     case 'NOT_STARTED':
+    case 'CAS2_NOT_STARTED_CAS1':
+    case 'CAS2_NOT_STARTED_PRISON':
       return [{ text: 'Start application', ...link }]
+    case 'CAS2_NOT_STARTED_COMMUNITY':
+    case 'CAS2_NOT_STARTED_CAS2':
+      return [{ text: 'Start referral', ...link }]
     case 'NOT_SUBMITTED':
     case 'MORE_INFORMATION_NEEDED':
       return [{ text: 'Continue application', ...link }]
@@ -143,12 +148,6 @@ const hintForCas1Status = (serviceResult?: ServiceResult): string | undefined =>
 }
 
 const hintForCas2Status = (serviceResult?: ServiceResult): string | undefined => {
-  const { serviceStatus } = serviceResult ?? {}
-
-  if (serviceStatus === 'NOT_STARTED') {
-    return 'CAS2 accommodation is now available for more people.'
-  }
-
   return upcomingStartHint(serviceResult)
 }
 
@@ -273,11 +272,32 @@ const contentForCas1Status = (
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
   const { serviceStatus } = serviceResult ?? {}
 
+  const cas2Link = htmlContent(
+    '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
+  )
+
   switch (serviceStatus) {
-    case 'NOT_STARTED':
+    case 'CAS2_NOT_STARTED_CAS1':
+      return [
+        htmlContent('<p class="govuk-!-margin-bottom-0">Available as a move-on from Approved Premises.</p>'),
+        cas2Link,
+      ]
+    case 'CAS2_NOT_STARTED_PRISON':
       return [
         htmlContent(
-          '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
+          bulletList('Available in these circumstances:', [
+            'Homeless at conditional release date',
+            'Homeless at end of fixed-term recall',
+            'As part of risk-assessed recall review',
+          ]),
+        ),
+        cas2Link,
+      ]
+    case 'CAS2_NOT_STARTED_COMMUNITY':
+    case 'CAS2_NOT_STARTED_CAS2':
+      return [
+        htmlContent(
+          bulletList('Available for:', ['Alternative to custodial recall', 'Intensive supervision court order']),
         ),
       ]
     default:
@@ -515,6 +535,18 @@ const statusFields = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive
   }
 }
 
+const statusFieldsForCas2 = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
+  const { serviceStatus } = serviceResult ?? {}
+
+  const fields = statusFields(serviceResult)
+
+  if (serviceStatus === 'CAS2_NOT_STARTED_COMMUNITY' || serviceStatus === 'CAS2_NOT_STARTED_CAS2') {
+    fields.inactive = true
+  }
+
+  return fields
+}
+
 export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceResult): StatusCard => ({
   heading: 'Approved premises (CAS1)',
   ...statusFields(serviceResult),
@@ -526,11 +558,11 @@ export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceRe
 
 export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceResult): StatusCard => ({
   heading: 'Short-term accommodation (CAS2)',
-  ...statusFields(serviceResult),
+  ...statusFieldsForCas2(serviceResult),
   hint: hintForCas2Status(serviceResult),
   links: linksForCas2Status(serviceResult),
-  details: detailsForCas2Status(serviceResult, cas2Application),
   content: contentForCas2Status(serviceResult),
+  details: detailsForCas2Status(serviceResult, cas2Application),
 })
 
 export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceResult): StatusCard => ({

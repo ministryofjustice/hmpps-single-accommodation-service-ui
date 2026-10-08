@@ -1,0 +1,21 @@
+{%- macro bulletList(context) -%}
+  {%- set itemsHtml -%}
+    {%- for item in context.items %}
+      <li>{{ item }}</li>
+    {%- endfor %}
+  {%- endset -%}
+
+  <p class="govuk-!-margin-bottom-1">{{ context.summaryText }}</p>
+
+  {%- if context.items.length > 0 -%}
+    {%- if context.ordered %}
+      <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+        {{ itemsHtml | safe }}
+      </ol>
+    {% else %}
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        {{ itemsHtml | safe }}
+      </ul>
+    {%- endif -%}
+  {%- endif -%}
+{%- endmacro -%}

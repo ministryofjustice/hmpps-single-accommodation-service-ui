@@ -44,6 +44,7 @@ const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
     status: 'ARRIVED',
     actualArrivalDate: '2026-09-01',
     actualDepartureDate: '2026-10-27',
+    expectedDepartureDate: '2026-10-27',
     cancellationReason: 'Over capacity',
   },
 }

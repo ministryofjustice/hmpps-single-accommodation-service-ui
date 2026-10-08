@@ -5,7 +5,7 @@ exports[`cas1 status card content placement history renders previous placements 
   {
     "html": "
 
-  <details class="govuk-details govuk-!-margin-bottom-1">
+  <details class="govuk-details govuk-!-margin-bottom-1 govuk-!-font-size-16">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
       5 previous placements on this application
@@ -13,7 +13,7 @@ exports[`cas1 status card content placement history renders previous placements 
   </summary>
   <div class="govuk-details__text">
     
-    <ul class="govuk-list govuk-list--bullet">
+    <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16">
       
         <li>Request withdrawn (20 June 2026). Reason: Their circumstances changed</li>
       
@@ -643,7 +643,7 @@ exports[`cas3 status card content previous bookings renders previous bookings 1`
   {
     "html": "
 
-  <details class="govuk-details govuk-!-margin-bottom-1">
+  <details class="govuk-details govuk-!-margin-bottom-1 govuk-!-font-size-16">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
       2 previous bookings on this application
@@ -651,7 +651,7 @@ exports[`cas3 status card content previous bookings renders previous bookings 1`
   </summary>
   <div class="govuk-details__text">
     
-    <ul class="govuk-list govuk-list--bullet">
+    <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16">
       
         <li>Booking cancelled 20 June 2026. Reason: No longer needed</li>
       

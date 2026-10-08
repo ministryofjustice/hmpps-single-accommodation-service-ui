@@ -2,12 +2,12 @@
 
 {%- macro govukDetailsList(context) -%}
   {% set listHtml %}
-    <ul class="govuk-list govuk-list--bullet">
+    <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16">
       {% for item in context.items %}
         <li>{{ item }}</li>
       {% endfor %}
     </ul>
   {% endset %}
 
-  {{ govukDetailsComponent({ summaryText: context.summaryText, text: listHtml | safe, classes: 'govuk-!-margin-bottom-1' }) }}
+  {{ govukDetailsComponent({ summaryText: context.summaryText, text: listHtml | safe, classes: 'govuk-!-margin-bottom-1 govuk-!-font-size-16' }) }}
 {%- endmacro -%}

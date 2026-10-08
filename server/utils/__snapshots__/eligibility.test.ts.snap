@@ -2314,7 +2314,7 @@ exports[`eligibilityStatusCard for cas3 renders a REJECTED status card 1`] = `
     },
   ],
   "status": {
-    "colour": "orange",
+    "colour": "grey",
     "text": "Rejected",
   },
 }

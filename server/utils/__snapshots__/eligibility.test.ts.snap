@@ -752,7 +752,7 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CONFIRMED st
       "text": "Address",
     },
     "value": {
-      "text": "LS1 1AA",
+      "text": "1 Test Street, Leeds, LS1 1AA",
     },
   },
   {

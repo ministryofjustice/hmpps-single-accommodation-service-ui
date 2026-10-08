@@ -20,7 +20,7 @@ import config from '../config'
 import { htmlContent } from './utils'
 import { summaryListRow } from './summaryListRow'
 import { bulletList, govukDetailsList } from './macros'
-import { formatAddress } from './addresses'
+import { cas3PremisesToAccommodationAddress, formatAddress } from './addresses'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -498,8 +498,10 @@ const detailsForCas3Status = (
       ]
     case 'BOOKING_CONFIRMED': {
       const { premises } = cas3Application ?? {}
+      const address = cas3PremisesToAccommodationAddress(premises)
+
       return [
-        summaryListRow('Address', formatAddress(premises) ?? undefined),
+        summaryListRow('Address', address ? formatAddress(address) : undefined),
         summaryListRow('Booking dates', `${formatDate(premises.startDate)} to ${formatDate(premises.endDate)}`),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]

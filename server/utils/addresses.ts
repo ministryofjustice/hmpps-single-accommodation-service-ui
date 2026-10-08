@@ -1,4 +1,4 @@
-import { AccommodationAddressDetails } from '@sas/api'
+import { AccommodationAddressDetails, Cas3PremisesSummaryDto } from '@sas/api'
 
 export const addressLines = (
   address: AccommodationAddressDetails = {},
@@ -27,3 +27,16 @@ export const addressLines = (
 
 export const formatAddress = (address: AccommodationAddressDetails, separator = ', '): string =>
   addressLines(address).join(separator)
+
+export const cas3PremisesToAccommodationAddress = (
+  premises?: Cas3PremisesSummaryDto | null,
+): AccommodationAddressDetails | undefined => {
+  if (!premises) return undefined
+
+  return {
+    buildingName: premises.addressLine1,
+    subBuildingName: premises.addressLine2,
+    postTown: premises.town,
+    postcode: premises.postcode,
+  }
+}

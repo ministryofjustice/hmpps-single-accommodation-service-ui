@@ -673,7 +673,7 @@ exports[`cas3 status card details renders detail rows for a ARRIVED status 1`] =
       "text": "Arrival date",
     },
     "value": {
-      "text": "2026-09-01",
+      "text": "1 September 2026 (in 31 days)",
     },
   },
   {
@@ -681,7 +681,7 @@ exports[`cas3 status card details renders detail rows for a ARRIVED status 1`] =
       "text": "Expected departure date",
     },
     "value": {
-      "text": "2026-10-27",
+      "text": "27 October 2026 (in 87 days)",
     },
   },
   {
@@ -702,7 +702,7 @@ exports[`cas3 status card details renders detail rows for a BEDSPACE_OFFERED sta
       "text": "Provisional offer sent",
     },
     "value": {
-      "text": "2026-06-15",
+      "text": "15 June 2026 (47 days ago)",
     },
   },
   {
@@ -791,7 +791,7 @@ exports[`cas3 status card details renders detail rows for a REJECTED status 1`] 
       "text": "Submitted",
     },
     "value": {
-      "text": "2026-06-02",
+      "text": "2 June 2026 (60 days ago)",
     },
   },
   {
@@ -812,7 +812,7 @@ exports[`cas3 status card details renders detail rows for a SUBMITTED status 1`]
       "text": "Submitted",
     },
     "value": {
-      "text": "2026-06-02",
+      "text": "2 June 2026 (60 days ago)",
     },
   },
   {

@@ -479,18 +479,21 @@ const detailsForCas3Status = (
   switch (serviceStatus) {
     case 'SUBMITTED':
       return [
-        summaryListRow('Submitted', cas3Application?.applicationSubmittedDate ?? undefined),
+        summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
         summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     case 'REJECTED':
       return [
         summaryListRow('Rejection reason', cas3Application?.applicationRejectedReason ?? undefined),
-        summaryListRow('Submitted', cas3Application?.applicationSubmittedDate ?? undefined),
+        summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
         summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     case 'BEDSPACE_OFFERED':
       return [
-        summaryListRow('Provisional offer sent', cas3Application?.bookingProvisionalOfferSentDate ?? undefined),
+        summaryListRow(
+          'Provisional offer sent',
+          formatDateAndDaysAgo(cas3Application?.bookingProvisionalOfferSentDate ?? undefined),
+        ),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     case 'BOOKING_CONFIRMED': {
@@ -516,8 +519,8 @@ const detailsForCas3Status = (
     }
     case 'ARRIVED':
       return [
-        summaryListRow('Arrival date', cas3Application?.premises.startDate ?? undefined),
-        summaryListRow('Expected departure date', cas3Application?.premises.endDate ?? undefined),
+        summaryListRow('Arrival date', formatDateAndDaysAgo(cas3Application?.premises.startDate ?? undefined)),
+        summaryListRow('Expected departure date', formatDateAndDaysAgo(cas3Application?.premises.endDate ?? undefined)),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     default:

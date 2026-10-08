@@ -6,6 +6,6 @@ import type { ExternalReferralSubmissionDto } from './ExternalReferralSubmission
 export type ExternalReferralDto = {
   caseId: string
   crn: string
-  status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED'
+  status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED' | 'COMPLETED' | 'ARCHIVED'
   submission: ExternalReferralSubmissionDto
 }

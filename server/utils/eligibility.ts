@@ -272,15 +272,13 @@ const contentForCas1Status = (
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
   const { serviceStatus } = serviceResult ?? {}
 
-  const cas2Link = htmlContent(
-    '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
-  )
+  const cas2MoreInfo = htmlContent('<p class="govuk-body">For more guidance on CAS2 eligibility, see EQuiP.</p>')
 
   switch (serviceStatus) {
     case 'CAS2_NOT_STARTED_CAS1':
       return [
         htmlContent('<p class="govuk-!-margin-bottom-0">Available as a move-on from Approved Premises.</p>'),
-        cas2Link,
+        cas2MoreInfo,
       ]
     case 'CAS2_NOT_STARTED_PRISON':
       return [
@@ -291,7 +289,7 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
             'As part of risk-assessed recall review',
           ]),
         ),
-        cas2Link,
+        cas2MoreInfo,
       ]
     case 'CAS2_NOT_STARTED_COMMUNITY':
     case 'CAS2_NOT_STARTED_CAS2':

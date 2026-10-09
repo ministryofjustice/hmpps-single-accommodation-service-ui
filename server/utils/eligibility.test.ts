@@ -613,7 +613,7 @@ describe('cas2 status card', () => {
   })
 
   describe('content', () => {
-    it('renders the find out more link when not started', () => {
+    it('renders the more guidance content when not started', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'CAS2_NOT_STARTED_PRISON' })
 
       expect(cas2StatusCard({ serviceResult }).content).toMatchSnapshot()

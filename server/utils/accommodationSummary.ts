@@ -30,6 +30,7 @@ export const accommodationType = (accommodation: AccommodationSummaryDto): strin
       A08C: 'Homeless - Shelter/Emergency Hostel/Campsite',
       A16: 'Awaiting Assessment',
       A17: 'CAS3',
+      HMP: type?.description ?? 'Unknown',
     }[type?.code] || 'Unknown'
   )
 }

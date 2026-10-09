@@ -25,6 +25,7 @@ export type { ApiResponseDtoListCaseDto } from './models/ApiResponseDtoListCaseD
 export type { ApiResponseDtoListExternalReferralDto } from './models/ApiResponseDtoListExternalReferralDto'
 export type { ApiResponseDtoListProposedAccommodationDto } from './models/ApiResponseDtoListProposedAccommodationDto'
 export type { ApiResponseDtoListReferenceDataDto } from './models/ApiResponseDtoListReferenceDataDto'
+export type { ApiResponseDtoListString } from './models/ApiResponseDtoListString'
 export type { ApiResponseDtoListTeam } from './models/ApiResponseDtoListTeam'
 export type { ApiResponseDtoProposedAccommodationDto } from './models/ApiResponseDtoProposedAccommodationDto'
 export type { ApiResponseDtoReplayFailedInboxEventsResponse } from './models/ApiResponseDtoReplayFailedInboxEventsResponse'

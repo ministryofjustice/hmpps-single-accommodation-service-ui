@@ -238,9 +238,18 @@ export const validateCrn = (value: string | undefined): string | undefined => {
 }
 
 export const validateEmail = (value: string): string | undefined => {
-  return !value || isValidEmail(value) ? undefined : 'Enter a valid Email address'
+  return !value || isValidEmail(value) ? undefined : 'Enter a valid email address'
 }
 
 export const validatePhoneNumber = (value: string): string | undefined => {
-  return !value || value.length <= 35 ? undefined : 'Enter a UK phone number'
+  return !value?.length ||
+    /^((((\+44\s?)|0)\d{2,5})|(\(0\d{2,5}\)))?\s*(\d{4,8})(\s?(ext\.?|#)\s?\d{1,4})?$/.test(value)
+    ? undefined
+    : 'Enter a UK phone number'
+}
+
+export const validateUrl = (value: string): string | undefined => {
+  return !value?.length || /^(https?:\/\/)?[-A-Za-z0-9+&@#/%=~_|!:,.;]+[.][-A-Za-z0-9+&@#/%=~_.|?]+$/.test(value)
+    ? undefined
+    : 'Enter a valid website address'
 }

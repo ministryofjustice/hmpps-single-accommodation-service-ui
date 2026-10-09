@@ -18,7 +18,7 @@ export default ExternalReferralSubmissionFactory.define(() => {
     submissionDate: faker.date.recent({ days: 180 }).toISOString().split('T')[0],
     website: faker.internet.url(),
     email: faker.internet.email(),
-    phoneNumber: faker.phone.number(),
+    phoneNumber: faker.phone.number({ style: 'mobile' }),
     createdByUsername: faker.internet.username(),
     createdBy: faker.person.fullName(),
     createdAt: faker.date.recent().toISOString(),

@@ -12,6 +12,7 @@ import {
   validateMandatoryText,
   validateMaxLength,
   validatePhoneNumber,
+  validateUrl,
 } from './validation'
 
 import paths from '../paths/ui'
@@ -19,7 +20,7 @@ import { summaryListRow } from './summaryListRow'
 import { statusTag } from './macros'
 
 export const validateSubmission = (req: Request) => {
-  const { organisationName, referenceNumber, submissionNote, email, phoneNumber } = req.body
+  const { organisationName, referenceNumber, submissionNote, email, phoneNumber, website } = req.body
   const submissionDateParts = dateFieldParts(req.body, 'submissionDate')
   const errors: Record<string, string> = {
     organisationName: validateMandatoryText(organisationName, 'organisation name'),
@@ -31,6 +32,7 @@ export const validateSubmission = (req: Request) => {
     submissionNote: validateMaxLength(submissionNote, 'Notes', 4000),
     email: validateEmail(email),
     phoneNumber: validatePhoneNumber(phoneNumber),
+    website: validateUrl(website),
   }
 
   return validateAndFlashErrors(req, errors, ['submissionDate'])
@@ -64,9 +66,9 @@ const cardDetails = (referral: ExternalReferralDto): Array<SummaryListRow> => {
   } = referral
 
   return [
+    summaryListRow('Reference', referenceNumber || 'No reference added'),
     summaryListRow('Submitted', formatDateAndDaysAgo(submissionDate)),
     summaryListRow('Submitted by', createdBy),
-    summaryListRow('Reference', referenceNumber ?? 'no reference added'),
   ]
 }
 

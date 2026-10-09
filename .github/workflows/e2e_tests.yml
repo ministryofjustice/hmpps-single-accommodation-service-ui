@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  # Required by ctrf-io/github-test-reporter to upload/fetch historical CTRF artifacts
   actions: read
 
 jobs:
@@ -81,7 +80,7 @@ jobs:
         if: always()
         run: npm run test:e2e:data:teardown
 
-      - name: Publish E2E test report with historical pass rate
+      - name: Publish E2E test report
         if: ${{ !cancelled() }}
         uses: ctrf-io/github-test-reporter@7974087018bf4857cf5a9d78723e152038c3fa31 # v1
         with:

@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   smoke_test:
@@ -41,6 +42,19 @@ jobs:
           SAS_E2E_PROBATION_USER_USERNAME: ${{ secrets.E2E_USER_SAS_USER_PP_USERNAME }}
           SAS_E2E_PROBATION_USER_PASSWORD: ${{ secrets.E2E_USER_SAS_USER_PP_PASSWORD }}
         run: npm run test:e2e:smoke
+
+      - name: Publish smoke test report
+        if: ${{ !cancelled() }}
+        uses: ctrf-io/github-test-reporter@7974087018bf4857cf5a9d78723e152038c3fa31 # v1
+        with:
+          report-path: './test_results/e2e/ctrf/*.json'
+          summary-report: true
+          fail-rate-report: true
+          flaky-rate-report: true
+          upload-artifact: true
+          fetch-previous-results: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

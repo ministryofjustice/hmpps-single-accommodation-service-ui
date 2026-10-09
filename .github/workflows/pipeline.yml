@@ -112,6 +112,9 @@ jobs:
     name: "Smoke test 🔥"
     needs:
       - deploy_dev
+    permissions:
+      contents: read
+      actions: read
     uses: ./.github/workflows/smoke_test.yml
     secrets: inherit
 

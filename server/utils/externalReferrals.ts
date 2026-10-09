@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { ExternalReferralDto } from '@sas/api'
-import { StatusCard } from '@sas/ui'
+import { StatusCard, StatusTag } from '@sas/ui'
 import { SummaryListRow } from '@govuk/ui'
 import { dateFieldParts, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import {
@@ -17,7 +17,6 @@ import {
 import paths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
 import { statusTag } from './macros'
-import { serviceStatusTag } from './statusTag'
 
 export const validateSubmission = (req: Request) => {
   const { organisationName, referenceNumber, submissionNote, email, phoneNumber } = req.body
@@ -71,12 +70,21 @@ const cardDetails = (referral: ExternalReferralDto): Array<SummaryListRow> => {
   ]
 }
 
+export const externalReferralStatusTag = (status?: ExternalReferralDto['status']): StatusTag =>
+  ({
+    SUBMITTED: { text: 'Submitted', colour: 'yellow' },
+    REJECTED: { text: 'Rejected', colour: 'orange' },
+    ACCEPTED: { text: 'Accepted', colour: 'green' },
+    COMPLETED: { text: 'Completed', colour: 'green' },
+    ARCHIVED: { text: 'Archived', colour: 'grey' },
+  })[status] || { text: 'Unknown' }
+
 export const externalReferralCards = (referrals?: ExternalReferralDto[]): Array<StatusCard> => {
   return (referrals ?? []).map(referral => ({
     heading: referral.submission?.organisationName,
     links: cardLinks(referral),
     details: cardDetails(referral),
-    status: serviceStatusTag(referral.status),
+    status: externalReferralStatusTag(referral.status),
   }))
 }
 
@@ -86,7 +94,7 @@ export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined
     referral || {}
 
   if (status === 'SUBMITTED') {
-    rows.push(summaryListRow('Status', statusTag(serviceStatusTag(status)), { type: 'html' }))
+    rows.push(summaryListRow('Status', statusTag(externalReferralStatusTag(status)), { type: 'html' }))
   }
   rows.push(summaryListRow('Submitted on', submissionDate ? formatDateAndDaysAgo(submissionDate) : ''))
   rows.push(summaryListRow('Reference number', referenceNumber, { noValue: 'No reference added' }))

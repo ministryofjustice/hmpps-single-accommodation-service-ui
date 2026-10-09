@@ -42,7 +42,7 @@ exports[`Macros Status Card renders a status card with full information 1`] = `
           
 
   
-<dl class="govuk-summary-list sas-card-summary-list govuk-summary-list--no-border">
+<dl class="govuk-summary-list sas-card-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0">
 
   
   <div class="govuk-summary-list__row">
@@ -195,7 +195,7 @@ exports[`Macros govukDetails renders a details component with the given summary 
 exports[`Macros govukDetailsList renders a details component with escaped list items 1`] = `
 "
 
-  <details class="govuk-details govuk-!-margin-bottom-1">
+  <details class="govuk-details govuk-!-margin-bottom-1 govuk-!-font-size-16">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
       Previous placements
@@ -203,7 +203,7 @@ exports[`Macros govukDetailsList renders a details component with escaped list i
   </summary>
   <div class="govuk-details__text">
     
-    <ul class="govuk-list govuk-list--bullet">
+    <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16">
       
         <li>A normal item</li>
       

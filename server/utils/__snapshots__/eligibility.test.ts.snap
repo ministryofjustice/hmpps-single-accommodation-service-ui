@@ -5,7 +5,7 @@ exports[`cas1 status card content placement history renders previous placements 
   {
     "html": "
 
-  <details class="govuk-details govuk-!-margin-bottom-1">
+  <details class="govuk-details govuk-!-margin-bottom-1 govuk-!-font-size-16">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
       5 previous placements on this application
@@ -13,7 +13,7 @@ exports[`cas1 status card content placement history renders previous placements 
   </summary>
   <div class="govuk-details__text">
     
-    <ul class="govuk-list govuk-list--bullet">
+    <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16">
       
         <li>Request withdrawn (20 June 2026). Reason: Their circumstances changed</li>
       
@@ -643,7 +643,7 @@ exports[`cas3 status card content previous bookings renders previous bookings 1`
   {
     "html": "
 
-  <details class="govuk-details govuk-!-margin-bottom-1">
+  <details class="govuk-details govuk-!-margin-bottom-1 govuk-!-font-size-16">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
       2 previous bookings on this application
@@ -651,7 +651,7 @@ exports[`cas3 status card content previous bookings renders previous bookings 1`
   </summary>
   <div class="govuk-details__text">
     
-    <ul class="govuk-list govuk-list--bullet">
+    <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16">
       
         <li>Booking cancelled 20 June 2026. Reason: No longer needed</li>
       
@@ -673,7 +673,7 @@ exports[`cas3 status card details renders detail rows for a ARRIVED status 1`] =
       "text": "Arrival date",
     },
     "value": {
-      "text": "2026-09-01",
+      "text": "1 September 2026 (in 31 days)",
     },
   },
   {
@@ -681,7 +681,7 @@ exports[`cas3 status card details renders detail rows for a ARRIVED status 1`] =
       "text": "Expected departure date",
     },
     "value": {
-      "text": "2026-10-27",
+      "text": "27 October 2026 (in 87 days)",
     },
   },
   {
@@ -702,7 +702,7 @@ exports[`cas3 status card details renders detail rows for a BEDSPACE_OFFERED sta
       "text": "Provisional offer sent",
     },
     "value": {
-      "text": "2026-06-15",
+      "text": "15 June 2026 (47 days ago)",
     },
   },
   {
@@ -752,7 +752,7 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CONFIRMED st
       "text": "Address",
     },
     "value": {
-      "text": "LS1 1AA",
+      "text": "1 Test Street, Leeds, LS1 1AA",
     },
   },
   {
@@ -791,7 +791,7 @@ exports[`cas3 status card details renders detail rows for a REJECTED status 1`] 
       "text": "Submitted",
     },
     "value": {
-      "text": "2026-06-02",
+      "text": "2 June 2026 (60 days ago)",
     },
   },
   {
@@ -812,7 +812,7 @@ exports[`cas3 status card details renders detail rows for a SUBMITTED status 1`]
       "text": "Submitted",
     },
     "value": {
-      "text": "2026-06-02",
+      "text": "2 June 2026 (60 days ago)",
     },
   },
   {

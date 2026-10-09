@@ -119,6 +119,9 @@ jobs:
     name: "E2E Tests 🧪"
     needs:
       - deploy_dev
+    permissions:
+      contents: read
+      actions: read
     uses: ./.github/workflows/e2e_tests.yml
     secrets: inherit
 

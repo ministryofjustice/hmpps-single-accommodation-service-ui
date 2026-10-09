@@ -22,6 +22,7 @@
     {%
       set navigation = [
         { href: paths.cases.index(), text: "Case list", active: activePage == "caseList" },
+        { href: paths.customList.createList(), text: "Custom list", active: activePage == "customList" },
         { href: paths.cases.search(), text: "Search", active: activePage == "search" }
       ]
     %}

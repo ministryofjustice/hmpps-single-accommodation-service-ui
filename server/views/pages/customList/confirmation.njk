@@ -1,0 +1,42 @@
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Confirmation" %}
+{% set mainClasses = "govuk-body" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      {% if errorSummary and errorSummary.length %}
+        {{
+          govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          })
+        }}
+      {% endif %}
+{% call govukPanel({
+  titleText: "CRNs added
+"
+}) %}
+  {{ crns }} CRNs added
+{% endcall %}
+
+      <form method="get" class="govuk-!-margin-bottom-0">
+      <h2 class="govuk-heading-m">What happens next</h2>
+      <p>The CRNs are now available in a custom list.</p>
+      {{
+        govukButton({
+            text: "View list",
+            preventDoubleClick: true,
+            href: showHref
+        })
+      }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

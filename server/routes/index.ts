@@ -6,6 +6,7 @@ import proposedAddressesRoutes from './proposedAddresses'
 import currentAddressRoutes from './currentAddress'
 import dutyToReferRoutes from './dutyToRefer'
 import externalReferralsRoutes from './externalReferrals'
+import customListRoutes from './customList'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -15,6 +16,7 @@ export default function routes(services: Services): Router {
     currentAddressController,
     dutyToReferController,
     externalReferralsController,
+    customListController,
     staticController,
   } = controllers(services)
 
@@ -26,6 +28,7 @@ export default function routes(services: Services): Router {
   currentAddressRoutes(router, currentAddressController)
   dutyToReferRoutes(router, dutyToReferController)
   externalReferralsRoutes(router, externalReferralsController)
+  customListRoutes(router, customListController)
 
   router.get(uiPaths.static.maintenance.pattern, staticController.maintenance())
 

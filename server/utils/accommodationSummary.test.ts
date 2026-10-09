@@ -6,6 +6,7 @@ import {
   caseFactory,
 } from '../testutils/factories'
 import {
+  accommodationType,
   accommodationCard,
   accommodationCell,
   accommodationHistoryRows,
@@ -249,6 +250,16 @@ describe('accommodationSummary', () => {
       ],
     ])('returns the expected status cell for %s', (_, accommodationSummaries, expected) => {
       expect(accommodationStatusCell(caseFactory.build({ accommodationSummaries }))).toEqual(expected)
+    })
+  })
+
+  describe('accommodationType', () => {
+    it('uses the description for prison accommodation', () => {
+      const accommodation = accommodationSummaryFactory.build({
+        type: { code: 'HMP', description: 'HMP Example' },
+      })
+
+      expect(accommodationType(accommodation)).toBe('HMP Example')
     })
   })
 })

@@ -5,6 +5,7 @@ const proposedAddressesPath = casesPath.path(':crn/proposed-addresses')
 const currentAddressPath = casesPath.path(':crn/current-address')
 const dutyToReferPath = casesPath.path(':crn/dtr')
 const externalReferralsPath = casesPath.path(':crn/external-referrals')
+const customListPath = path('/custom-list')
 
 export default {
   cases: {
@@ -48,5 +49,11 @@ export default {
   static: {
     notAuthorised: path('/not-authorised'),
     maintenance: path('/maintenance'),
+  },
+  customList: {
+    index:customListPath,
+    createList: customListPath.path('create-list'),
+    addCrns: customListPath.path('add-crns'),
+    show: customListPath.path('show'),
   },
 }

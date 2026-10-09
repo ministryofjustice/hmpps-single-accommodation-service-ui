@@ -27,7 +27,12 @@ export default defineConfig<TestOptions>({
   retries: process.env.CI ? 2 : 0,
   maxFailures: process.env.CI ? 3 : 1,
   workers: 2,
-  reporter: [['list'], ['html', { outputFolder: '../test_results/e2e/report' }]],
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: '../test_results/e2e/report' }],
+    // CTRF report consumed by ctrf-io/github-test-reporter to track historical pass rate / flaky tests
+    ['playwright-ctrf-json-reporter', { outputDir: '../test_results/e2e/ctrf', outputFile: 'ctrf-report.json' }],
+  ],
   outputDir: '../test_results/e2e/artefacts',
   timeout: process.env.CI ? 5 * 60 * 1000 : 2 * 60 * 1000,
   use: {

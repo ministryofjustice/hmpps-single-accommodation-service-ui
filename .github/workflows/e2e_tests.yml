@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: read
+  # Required by ctrf-io/github-test-reporter to upload/fetch historical CTRF artifacts
+  actions: read
 
 jobs:
   e2e_test:
@@ -78,6 +80,19 @@ jobs:
       - name: Teardown data
         if: always()
         run: npm run test:e2e:data:teardown
+
+      - name: Publish E2E test report with historical pass rate
+        if: ${{ !cancelled() }}
+        uses: ctrf-io/github-test-reporter@7974087018bf4857cf5a9d78723e152038c3fa31 # v1
+        with:
+          report-path: './test_results/e2e/ctrf/*.json'
+          summary-report: true
+          fail-rate-report: true
+          flaky-rate-report: true
+          upload-artifact: true
+          fetch-previous-results: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

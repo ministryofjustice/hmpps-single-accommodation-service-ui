@@ -426,7 +426,7 @@ const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Ca
     case 'ARRIVED':
       return [
         summaryListRow('Arrival date', formatDateAndDaysAgo(placement?.actualArrivalDate ?? undefined)),
-        summaryListRow('Expected departure', formatDateAndDaysAgo(placement?.actualDepartureDate ?? undefined)),
+        summaryListRow('Expected departure', formatDateAndDaysAgo(placement?.expectedDepartureDate ?? undefined)),
         requestSubmittedByRow(),
       ]
     case 'NOT_ARRIVED':

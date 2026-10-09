@@ -8,7 +8,6 @@ class ExternalReferralFactory extends Factory<ExternalReferralDto> {
   submitted() {
     return this.params({
       status: 'SUBMITTED',
-      submission: externalReferralSubmissionFactory.submitted().build(),
     })
   }
 }

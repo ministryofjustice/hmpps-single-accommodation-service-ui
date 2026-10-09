@@ -6,10 +6,11 @@ import * as validationUtils from './validation'
 import {
   detailsSummaryListRows,
   externalReferralCards,
+  externalReferralTimelineEntry,
   submissionFormValues,
   validateSubmission,
 } from './externalReferrals'
-import { externalReferralFactory, externalReferralSubmissionFactory } from '../testutils/factories'
+import { auditRecordFactory, externalReferralFactory, externalReferralSubmissionFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
 
 describe('externalReferrals utils', () => {
@@ -196,6 +197,54 @@ describe('externalReferrals utils', () => {
         email,
         submissionNote,
       })
+    })
+  })
+
+  describe('timelineEntry', () => {
+    beforeEach(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-10-01T15:23:06'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    it('renders a referral creation event', () => {
+      const auditRecord = auditRecordFactory.build({
+        type: 'CREATE',
+        changes: [
+          { field: 'submissionDate', value: '2026-09-23' },
+          { field: 'organisationName', value: 'Org' },
+          { field: 'referenceNumber', value: '1234' },
+        ],
+      })
+      const result = externalReferralTimelineEntry(auditRecord)
+
+      expect(result.html).toMatch(/Submission date:\s*23 September 2026/)
+      expect(result.html).toMatch(/Organisation:\s*Org/)
+      expect(result.html).toMatch(/Reference number:\s*1234/)
+      expect(result.label.text).toEqual('Referral details added')
+      expect(result.datetime.timestamp).toEqual(auditRecord.commitDate)
+      expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
+    })
+
+    it('renders a referral update event', () => {
+      const auditRecord = auditRecordFactory.build({
+        type: 'UPDATE',
+        changes: [
+          { field: 'email', value: 'mail@test.com' },
+          { field: 'phoneNumber', value: '01234567' },
+          { field: 'submissionNote', value: 'Submission note' },
+        ],
+      })
+      const result = externalReferralTimelineEntry(auditRecord)
+
+      expect(result.html).toMatch(/Email address changed to\s*mail@test.com/)
+      expect(result.html).toMatch(/Phone number changed to\s*01234567/)
+      expect(result.html).toMatch(/Submission note changed to:\s*<div class="sas-text-block">Submission note<\/div>/)
+      expect(result.label.text).toEqual('Referral details changed')
+      expect(result.datetime.timestamp).toEqual(auditRecord.commitDate)
+      expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
     })
   })
 })

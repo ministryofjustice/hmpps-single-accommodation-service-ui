@@ -1,23 +1,26 @@
 import { test } from '@playwright/test'
-import { caseFactory, externalReferralFactory } from '../../../server/testutils/factories'
+import { auditRecordFactory, caseFactory, externalReferralFactory } from '../../../server/testutils/factories'
 import externalReferralsApi from '../../mockApis/externalReferrals'
 import { login } from '../../testUtils'
 import ExternalReferralsSubmissionPage from '../../pages/cases/externalReferralsSubmissionPage'
 import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
 import ExternalReferralsDetailsPage from '../../pages/cases/externalReferralsDetailsPage'
 import { stubProfilePage } from '../../helpers/profilePage'
+import { externalReferralTimelineEntry } from '../../../server/utils/externalReferrals'
 
 const crn = 'X123456'
 const setupStubs = async () => {
   const referral = externalReferralFactory.build({ crn })
   const caseData = caseFactory.build({ crn })
+  const referralTimeline = auditRecordFactory.buildList(2)
   await stubProfilePage({ crn, caseData })
   await externalReferralsApi.stubSubmitExternalReferral(crn)
   await externalReferralsApi.stubUpdateExternalReferral(referral)
   await externalReferralsApi.stubGetExternalReferralBySubmissionId(referral)
   await externalReferralsApi.stubListExternalReferral(crn, [referral])
+  await externalReferralsApi.stubExternalreferralTimeline(crn, referral.submission.id, referralTimeline)
 
-  return { caseData, referral }
+  return { caseData, referral, referralTimeline }
 }
 
 test.describe('external referrals', () => {
@@ -66,7 +69,7 @@ test.describe('external referrals', () => {
 
   test('should allow user see referrals on the tracker page and view their details', async ({ page }) => {
     // Given I have stubbed the API responses
-    const { caseData, referral } = await setupStubs()
+    const { caseData, referral, referralTimeline } = await setupStubs()
     // And I am logged in
     await login(page)
 
@@ -84,6 +87,13 @@ test.describe('external referrals', () => {
 
     // And I should see the referral details
     await detailsPage.shouldShowSubmissionDetails()
+
+    // And I should see the timeline entries
+    await Promise.all(
+      referralTimeline.map((auditRecord, index) =>
+        detailsPage.shouldShowTimelineEntry(externalReferralTimelineEntry(auditRecord), index),
+      ),
+    )
 
     // When I click the change link
     await detailsPage.clickLink('Change')

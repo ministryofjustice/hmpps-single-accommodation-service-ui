@@ -5,6 +5,7 @@ import {
   ExternalReferralCommand,
   ApiResponseDtoExternalReferralDto,
   ApiResponseDtoListExternalReferralDto,
+  ApiResponseDtoListAuditRecordDto,
 } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
@@ -47,6 +48,13 @@ export default class ExternalReferralsClient extends RestClient {
         path: apiPaths.cases.externalReferrals.update({ crn, id }),
         data: externalReferral,
       },
+      asUser(token),
+    )
+  }
+
+  async getTimeline(token: string, crn: string, id: string) {
+    return this.get<ApiResponseDtoListAuditRecordDto>(
+      { path: apiPaths.cases.externalReferrals.timeline({ crn, id }) },
       asUser(token),
     )
   }

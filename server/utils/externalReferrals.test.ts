@@ -85,10 +85,11 @@ describe('externalReferrals utils', () => {
         'submissionDate-day': '1',
         'submissionDate-month': '2',
         'submissionDate-year': '2025',
-        phoneNumber: faker.string.alphanumeric({ length: 40 }),
-        email: 'in-valid-email',
+        phoneNumber: '123',
+        email: 'invalid-email',
         submissionNote: faker.string.alphanumeric({ length: 4001 }),
         referenceNumber: faker.string.alphanumeric({ length: 256 }),
+        website: 'invalid-website',
       }
 
       const result = validateSubmission(req)
@@ -96,10 +97,11 @@ describe('externalReferrals utils', () => {
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(
         req,
         {
-          email: 'Enter a valid Email address',
+          email: 'Enter a valid email address',
           phoneNumber: 'Enter a UK phone number',
           submissionNote: 'Notes must be 4,000 characters or less',
           referenceNumber: 'Reference number must be 255 characters or less',
+          website: 'Enter a valid website address',
         },
         ['submissionDate'],
       )
@@ -107,6 +109,7 @@ describe('externalReferrals utils', () => {
       expect(result).toBe(false)
     })
   })
+
   describe('details lists', () => {
     const referral = externalReferralFactory.build({
       status: 'SUBMITTED',
@@ -124,6 +127,7 @@ describe('externalReferrals utils', () => {
         id: 'submission-id',
       },
     })
+
     describe('externalReferralCards', () => {
       beforeEach(() => {
         jest.useFakeTimers().setSystemTime(new Date('2026-06-18'))
@@ -132,13 +136,14 @@ describe('externalReferrals utils', () => {
       afterEach(() => {
         jest.useRealTimers()
       })
+
       it('should render a set of referral status cards for the person tracker page', () => {
         expect(externalReferralCards([referral])).toEqual([
           {
             details: [
+              { key: { text: 'Reference' }, value: { text: 'REF' } },
               { key: { text: 'Submitted' }, value: { text: '13 June 2026 (5 days ago)' } },
               { key: { text: 'Submitted by' }, value: { text: 'created-by' } },
-              { key: { text: 'Reference' }, value: { text: 'REF' } },
             ],
             heading: 'Org Name',
             links: [
@@ -151,6 +156,22 @@ describe('externalReferrals utils', () => {
             status: { colour: 'yellow', text: 'Submitted' },
           },
         ])
+      })
+
+      it('should render a default value if no reference is provided', () => {
+        expect(
+          externalReferralCards([
+            { ...referral, submission: { ...referral.submission, referenceNumber: undefined } },
+          ])[0],
+        ).toEqual(
+          expect.objectContaining({
+            details: [
+              { key: { text: 'Reference' }, value: { text: 'No reference added' } },
+              { key: { text: 'Submitted' }, value: { text: '13 June 2026 (5 days ago)' } },
+              { key: { text: 'Submitted by' }, value: { text: 'created-by' } },
+            ],
+          }),
+        )
       })
     })
 

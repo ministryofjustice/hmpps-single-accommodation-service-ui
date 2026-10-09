@@ -1,0 +1,50 @@
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Add CRNs" %}
+{% set mainClasses = "govuk-body" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      {% if errorSummary and errorSummary.length %}
+        {{
+          govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          })
+        }}
+      {% endif %}
+      <form method="post" class="govuk-!-margin-bottom-0">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        {{
+          govukTextarea({
+          name: "crnList",
+          label: {
+              text: "Add CRNs",
+              classes: "govuk-label--l"
+          },
+          hint: {
+              text: "Enter multiple CRNs. Separate each entry with a space, comma or line break."
+          },
+          classes: "govuk-!-width-two-thirds",
+          value: crnList,
+          errorMessage: errors.message
+          })
+        }}
+      <br>
+        <div class="govuk-button-group">
+          {{
+            govukButton({
+                text: "Save and continue",
+                preventDoubleClick: true
+            })
+          }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

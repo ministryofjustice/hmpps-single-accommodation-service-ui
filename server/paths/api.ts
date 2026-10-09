@@ -48,4 +48,8 @@ export default {
   user: {
     teams: path('/user/teams'),
   },
+  customList: {
+    add: path('/case-list/custom'),
+    get: path('/case-list/custom'),
+  },
 }

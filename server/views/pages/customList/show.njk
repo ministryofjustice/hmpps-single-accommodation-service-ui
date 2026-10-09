@@ -6,7 +6,9 @@
 {% set mainClasses = "govuk-body" %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl">Accommodation case list</h1>
-
+<div class="govuk-row">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Custom list</h1>
+      <p><a class="govuk-link govuk-link--no-visited-state" href={{changeListHref}}>Change list</a></p>
+      </div>
   {{ caseList(peopleType, tabs, resultsSummary, casesTableColumns, casesRows, query, filters, assignedToOptions, riskLevelOptions) }}
 {% endblock %}

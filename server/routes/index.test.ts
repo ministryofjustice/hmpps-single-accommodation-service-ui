@@ -9,6 +9,7 @@ import CurrentAddressController from '../controllers/currentAddressController'
 import DutyToReferController from '../controllers/dutyToReferController'
 import StaticController from '../controllers/staticController'
 import ExternalReferralsController from '../controllers/externalReferralsController'
+import CustomListController from "../controllers/customListController";
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -70,6 +71,13 @@ const staticController = mock<StaticController>({
   maintenance: mockHandler,
 })
 
+const customListController = mock<CustomListController>({
+  customList: mockHandler,
+  addCrns: mockHandler,
+  submitCrnList: mockHandler,
+  show: mockHandler,
+})
+
 jest.mock('../controllers', () => ({
   controllers: () => ({
     casesController,
@@ -78,6 +86,7 @@ jest.mock('../controllers', () => ({
     dutyToReferController,
     staticController,
     externalReferralsController,
+    customListController,
   }),
 }))
 
@@ -101,6 +110,42 @@ describe('Routing', () => {
       .expect(() => {
         expect(casesController.index).toHaveBeenCalled()
       })
+  })
+
+  describe('Custom List', () => {
+
+    it('GET /custom-list should render', async () => {
+      await request(app)
+        .get('/custom-list')
+        .expect(200)
+        .expect(() => {
+          expect(customListController.customList).toHaveBeenCalled()
+        })
+    })
+    it('GET /custom-list/add-crns should render', async () => {
+      await request(app)
+        .get('/custom-list/add-crns')
+        .expect(200)
+        .expect(() => {
+          expect(customListController.addCrns).toHaveBeenCalled()
+        })
+    })
+    it('POST /custom-list/add-crns should render', async () => {
+      await request(app)
+        .post('/custom-list/add-crns')
+        .expect(200)
+        .expect(() => {
+          expect(customListController.addCrns).toHaveBeenCalled()
+        })
+    })
+    it('GET /custom-list/show should render', async () => {
+      await request(app)
+        .get('/custom-list/show')
+        .expect(200)
+        .expect(() => {
+          expect(customListController.show).toHaveBeenCalled()
+        })
+    })
   })
 })
 

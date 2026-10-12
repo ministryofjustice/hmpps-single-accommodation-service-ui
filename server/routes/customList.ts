@@ -8,7 +8,7 @@ export default function customListRoutes(
   customListController: CustomListController,
 
 ): void {
-  router.get(uiPaths.customList.createList.pattern, customListController.createList())
+  router.get(uiPaths.customList.index.pattern, customListController.customList())
   router.get(uiPaths.customList.addCrns.pattern, customListController.addCrns())
   router.post(uiPaths.customList.addCrns.pattern, customListController.submitCrnList())
   router.get(uiPaths.customList.show.pattern, customListController.show())

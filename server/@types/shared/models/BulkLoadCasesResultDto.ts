@@ -2,14 +2,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BulkLoadCasesErrorDto } from './BulkLoadCasesErrorDto';
+import type { BulkLoadCasesErrorDto } from './BulkLoadCasesErrorDto'
 export type BulkLoadCasesResultDto = {
-    dryRun: boolean;
-    teamsProcessed: number;
-    crnsFound: number;
-    casesAlreadyPresent: number;
-    casesCreated: number;
-    refreshesRequested: number;
-    errors: Array<BulkLoadCasesErrorDto>;
-};
-
+  dryRun: boolean
+  teamsProcessed: number
+  crnsFound: number
+  casesAlreadyPresent: number
+  casesCreated: number
+  refreshesRequested: number
+  errors: Array<BulkLoadCasesErrorDto>
+}

@@ -3,33 +3,32 @@
 /* tslint:disable */
 /* eslint-disable */
 export type Attachment = {
-    /**
-     * The number of the attachment which will match any corresponding reference in the content section
-     */
-    attachmentNumber: number;
-    /**
-     * The name or description of the attachment which will be included in the report
-     */
-    name: string;
-    /**
-     * The content type of the attachment
-     */
-    contentType: string;
-    /**
-     * The url to be used to download the attachment file
-     */
-    url: string;
-    /**
-     * The size of the attachment file in bytes
-     */
-    filesize?: number | null;
-    /**
-     * The filename of attachment file
-     */
-    filename: string;
-    /**
-     * The additional headers to use when calling the url for fetching this attachment
-     */
-    headers?: any[] | null;
-};
-
+  /**
+   * The number of the attachment which will match any corresponding reference in the content section
+   */
+  attachmentNumber: number
+  /**
+   * The name or description of the attachment which will be included in the report
+   */
+  name: string
+  /**
+   * The content type of the attachment
+   */
+  contentType: string
+  /**
+   * The url to be used to download the attachment file
+   */
+  url: string
+  /**
+   * The size of the attachment file in bytes
+   */
+  filesize?: number | null
+  /**
+   * The filename of attachment file
+   */
+  filename: string
+  /**
+   * The additional headers to use when calling the url for fetching this attachment
+   */
+  headers?: any[] | null
+}

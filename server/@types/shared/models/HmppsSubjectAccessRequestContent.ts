@@ -3,13 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 export type HmppsSubjectAccessRequestContent = {
-    /**
-     * The content of the subject access request response
-     */
-    content: any;
-    /**
-     * The details of any attachments for the subject access request response
-     */
-    attachments?: any[] | null;
-};
-
+  /**
+   * The content of the subject access request response
+   */
+  content: any
+  /**
+   * The details of any attachments for the subject access request response
+   */
+  attachments?: any[] | null
+}

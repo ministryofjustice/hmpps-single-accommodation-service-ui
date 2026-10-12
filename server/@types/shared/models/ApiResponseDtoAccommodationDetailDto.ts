@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AccommodationDetailDto } from './AccommodationDetailDto'
-import type { UpstreamFailureDto } from './UpstreamFailureDto'
+import type { AccommodationDetailDto } from './AccommodationDetailDto';
+import type { UpstreamFailureDto } from './UpstreamFailureDto';
 export type ApiResponseDtoAccommodationDetailDto = {
-  data: AccommodationDetailDto
-  upstreamFailures: Array<UpstreamFailureDto>
-}
+    data: AccommodationDetailDto;
+    upstreamFailures: Array<UpstreamFailureDto>;
+};
+

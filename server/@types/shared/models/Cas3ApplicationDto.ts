@@ -2,20 +2,21 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Cas3ExternalPreviousBookingCancellationDto } from './Cas3ExternalPreviousBookingCancellationDto'
-import type { Cas3PremisesSummaryDto } from './Cas3PremisesSummaryDto'
-import type { Cas3StaffDto } from './Cas3StaffDto'
+import type { Cas3ExternalPreviousBookingCancellationDto } from './Cas3ExternalPreviousBookingCancellationDto';
+import type { Cas3PremisesSummaryDto } from './Cas3PremisesSummaryDto';
+import type { Cas3StaffDto } from './Cas3StaffDto';
 export type Cas3ApplicationDto = {
-  id: string
-  applicationStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'REQUESTED_FURTHER_INFORMATION' | 'REJECTED'
-  applicationSubmittedDate?: string | null
-  applicationSubmittedBy?: Cas3StaffDto | null
-  applicationRejectedReason?: string | null
-  assessmentStatus?: 'UNALLOCATED' | 'IN_REVIEW' | 'READY_TO_PLACE' | 'CLOSED' | 'REJECTED'
-  bookingStatus?: 'PROVISIONAL' | 'CONFIRMED' | 'ARRIVED' | 'NOT_MINUS_ARRIVED' | 'DEPARTED' | 'CANCELLED' | 'CLOSED'
-  cancellation?: Cas3ExternalPreviousBookingCancellationDto | null
-  bookingProvisionalOfferSentDate?: string | null
-  previousBookings?: any[] | null
-  premises?: Cas3PremisesSummaryDto | null
-  uiUrl: string
-}
+    id: string;
+    applicationStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'REQUESTED_FURTHER_INFORMATION' | 'REJECTED';
+    applicationSubmittedDate?: string | null;
+    applicationSubmittedBy?: (Cas3StaffDto | null);
+    applicationRejectedReason?: string | null;
+    assessmentStatus?: 'UNALLOCATED' | 'IN_REVIEW' | 'READY_TO_PLACE' | 'CLOSED' | 'REJECTED';
+    bookingStatus?: 'PROVISIONAL' | 'CONFIRMED' | 'ARRIVED' | 'NOT_MINUS_ARRIVED' | 'DEPARTED' | 'CANCELLED' | 'CLOSED';
+    cancellation?: (Cas3ExternalPreviousBookingCancellationDto | null);
+    bookingProvisionalOfferSentDate?: string | null;
+    previousBookings?: any[] | null;
+    premises?: (Cas3PremisesSummaryDto | null);
+    uiUrl: string;
+};
+

@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BulkRefreshCasesResultDto } from './BulkRefreshCasesResultDto'
-import type { UpstreamFailureDto } from './UpstreamFailureDto'
+import type { BulkRefreshCasesResultDto } from './BulkRefreshCasesResultDto';
+import type { UpstreamFailureDto } from './UpstreamFailureDto';
 export type ApiResponseDtoBulkRefreshCasesResultDto = {
-  data: BulkRefreshCasesResultDto
-  upstreamFailures: Array<UpstreamFailureDto>
-}
+    data: BulkRefreshCasesResultDto;
+    upstreamFailures: Array<UpstreamFailureDto>;
+};
+

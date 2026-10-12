@@ -2,11 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { DtrSubmissionDto } from './DtrSubmissionDto'
+import type { DtrSubmissionDto } from './DtrSubmissionDto';
 export type DutyToReferDto = {
-  caseId: string
-  crn: string
-  status: 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED' | 'WITHDRAWN'
-  submission?: DtrSubmissionDto | null
-  active?: boolean | null
-}
+    caseId: string;
+    crn: string;
+    status: 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED' | 'WITHDRAWN';
+    submission?: (DtrSubmissionDto | null);
+    active?: boolean | null;
+};
+

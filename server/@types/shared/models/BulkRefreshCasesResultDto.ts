@@ -1,11 +1,12 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
 export type BulkRefreshCasesResultDto = {
-  dryRun: boolean
-  crnsRequested: number
-  casesFound: number
-  refreshesRequested: number
-  crnsNotFound: Array<string>
-}
+    dryRun: boolean;
+    crnsRequested: number;
+    casesFound: number;
+    refreshesRequested: number;
+    crnsNotFound: Array<string>;
+};
+

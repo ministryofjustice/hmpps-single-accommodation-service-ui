@@ -10,11 +10,7 @@ import {
   casesToRows,
   queryToFilters,
 } from '../utils/cases'
-import {
-  addErrorToFlash,
-  addUserInputToFlash,
-  fetchErrorsAndUserInput,
-} from '../utils/validation'
+import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import {  setCaseListUrl } from '../utils/backlinks'
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
@@ -35,13 +31,9 @@ export default class CustomListController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-
-      const { errors, errorSummary } = fetchErrorsAndUserInput(req)
-
+// using href here instead of hard coding makes it easier to change
       return res.render('pages/customList/createList', {
         addCrnsHref: uiPaths.customList.addCrns.pattern,
-        errors,
-        errorSummary,
       })
     }
   }
@@ -51,8 +43,8 @@ export default class CustomListController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-
-      return res.render('pages/customList/addCrns')
+      const {  userInput } = fetchErrorsAndUserInput(req)
+      return res.render('pages/customList/addCrns', { crnList:userInput.crnList })
     }
   }
   show(): RequestHandler {
@@ -62,13 +54,14 @@ export default class CustomListController {
 
       const { query } = req
       const { peopleType = 'NFA_RISK' } = query
+      // this all could still be refactored with shared code.
       setCaseListUrl(req)
 
       const {
         data: { teams, cases },
       } = await collectApiResponses({
         teams: this.userService.getTeams(token),
-        cases: this.casesService.getCases(token, { ...query, peopleType }),
+        cases: this.customListService.getCustomList(token),
       })
       const filters = queryToFilters(query, req.originalUrl, teams)
 
@@ -97,10 +90,9 @@ export default class CustomListController {
     return async (req: IndexRequest, res: Response) => {
       const { token } = res.locals.user
       addUserInputToFlash(req)
-      const input: string[] = (req.body.crnList = req.body.crnList.length ? req.body.crnList.split(' ') : [])
+      const input: string[] = (req.body.crnList = req.body.crnList.length ? req.body.crnList.split(',') : [])
       try {
         await this.customListService.addCustomList(token, input)
-        req.flash('success', 'CRN list added')
         return res.render('pages/customList/confirmation', {
           crns: req.body.crnList.length,
           showHref: uiPaths.customList.show.pattern,
@@ -114,28 +106,8 @@ export default class CustomListController {
           error: error.data.userMessage,
           errors,
           errorSummary,
-          userInput,
         })
       }
     }
   }
-  // submit(): RequestHandler {
-  //   return async (req: Request, res: Response) => {
-  //     const { token } = res.locals.user
-  //     const proposedAddressFormSessionData = this.formData.get(req.params.crn, req.session)
-  //     const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
-  //     if (redirect) return res.redirect(redirect)
-  //
-  //     try {
-  //       await this.proposedAddressesService.submit(token, req.params.crn, proposedAddressFormSessionData)
-  //
-  //       await this.formData.remove(req.params.crn, req.session)
-  //       req.flash('success', 'Private address added')
-  //       return res.redirect(uiPaths.cases.show({ crn: req.params.crn }))
-  //     } catch {
-  //       addErrorToFlash(req, 'checkYourAnswers', 'There was an error saving the address')
-  //       return res.redirect(uiPaths.proposedAddresses.checkYourAnswers({ crn: req.params.crn }))
-  //     }
-  //   }
-  // }
 }

@@ -52,7 +52,6 @@ export default {
   },
   customList: {
     index:customListPath,
-    createList: customListPath.path('create-list'),
     addCrns: customListPath.path('add-crns'),
     show: customListPath.path('show'),
   },

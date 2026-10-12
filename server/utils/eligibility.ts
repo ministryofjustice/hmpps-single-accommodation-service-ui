@@ -17,7 +17,7 @@ import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
 import { formatDate, formatDateAndDaysAgo } from './dates'
 import config from '../config'
-import { htmlContent } from './utils'
+import { htmlContent, textContent } from './utils'
 import { summaryListRow } from './summaryListRow'
 import { bulletList, govukDetailsList } from './macros'
 import { cas3PremisesToAccommodationAddress, formatAddress } from './addresses'
@@ -152,27 +152,7 @@ const hintForCas2Status = (serviceResult?: ServiceResult): string | undefined =>
 }
 
 const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined => {
-  const { serviceStatus, blockingStatusReason } = serviceResult ?? {}
-
-  if (serviceStatus === 'CANNOT_START_YET') {
-    const requirementTemplate = (requirement: string) =>
-      `You need to ${requirement} before you can make a CAS3 referral.`
-
-    switch (blockingStatusReason) {
-      case 'SUBMIT_CRS_BEFORE_CAS3':
-        return requirementTemplate('submit a CRS referral')
-      case 'SUBMIT_DTR_BEFORE_CAS3':
-        return requirementTemplate('add DTR referral details')
-      case 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3':
-        return requirementTemplate('add DTR referral details and submit a CRS referral')
-      case 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3':
-        return requirementTemplate('submit a CRS accommodation referral')
-      case 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3':
-        return requirementTemplate('add DTR referral details and submit a CRS accommodation referral')
-      default:
-        return ''
-    }
-  }
+  const { serviceStatus } = serviceResult ?? {}
 
   if (serviceStatus === 'NOT_ELIGIBLE') {
     return 'Not at risk of homelessness.'
@@ -310,6 +290,40 @@ const contentForCas3Status = (
   const { serviceStatus } = serviceResult ?? {}
 
   switch (serviceStatus) {
+    case 'CANNOT_START_YET': {
+      const { blockingStatusReason } = serviceResult ?? {}
+      const requirementTemplate = (requirement: string) =>
+        `You need to ${requirement} before you can make a CAS3 referral.`
+
+      switch (blockingStatusReason) {
+        case 'SUBMIT_CRS_BEFORE_CAS3':
+          return [textContent(requirementTemplate('submit a CRS referral'))]
+        case 'SUBMIT_DTR_BEFORE_CAS3':
+          return [textContent(requirementTemplate('add DTR referral details'))]
+        case 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3':
+          return [
+            htmlContent(
+              bulletList('Before you can make a CAS3 referral, you need to:', [
+                'Add DTR referral details',
+                'Submit a CRS referral',
+              ]),
+            ),
+          ]
+        case 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3':
+          return [textContent(requirementTemplate('submit a CRS accommodation referral'))]
+        case 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3':
+          return [
+            htmlContent(
+              bulletList('Before you can make a CAS3 referral, you need to:', [
+                'Add DTR referral details',
+                'Submit a CRS accommodation referral',
+              ]),
+            ),
+          ]
+        default:
+          return undefined
+      }
+    }
     case 'BEDSPACE_OFFERED':
     case 'SUBMITTED': {
       const { previousBookings } = cas3Application ?? {}

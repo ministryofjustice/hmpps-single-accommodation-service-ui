@@ -89,11 +89,9 @@ test.describe('external referrals', () => {
     await detailsPage.shouldShowSubmissionDetails()
 
     // And I should see the timeline entries
-    await Promise.all(
-      referralTimeline.map((auditRecord, index) =>
-        detailsPage.shouldShowTimelineEntry(externalReferralTimelineEntry(auditRecord), index),
-      ),
-    )
+    for await (const [index, entry] of referralTimeline.entries()) {
+      await detailsPage.shouldShowTimelineEntry(externalReferralTimelineEntry(entry), index)
+    }
 
     // When I click the change link
     await detailsPage.clickLink('Change')

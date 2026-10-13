@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { AuditRecordDto, ExternalReferralDto, FieldChange, ServiceResult } from '@sas/api'
+import { AuditRecordDto, ExternalReferralDto, ServiceResult } from '@sas/api'
 import { StatusCard, StatusTag } from '@sas/ui'
 import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
 import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
@@ -141,15 +141,7 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
     })
     .filter(Boolean)
 
-  const flatChanges = changes.reduce(
-    (acc, change) => {
-      acc[change.field] = change
-      return acc
-    },
-    {} as Record<string, FieldChange>,
-  )
-
-  const statusChange = flatChanges.status?.value as unknown as ServiceResult['serviceStatus']
+  const statusChange = changes.find(({ field }) => field === 'status')?.value as ServiceResult['serviceStatus']
   const isChange = type === 'UPDATE'
   const label = isChange ? 'Referral details changed' : 'Referral details added'
 

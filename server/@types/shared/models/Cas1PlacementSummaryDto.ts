@@ -7,6 +7,7 @@ export type Cas1PlacementSummaryDto = {
   status?: 'ARRIVED' | 'UPCOMING' | 'DEPARTED' | 'NOT_ARRIVED' | 'CANCELLED'
   actualArrivalDate?: string | null
   actualDepartureDate?: string | null
+  expectedDepartureDate?: string | null
   cancellationReason?: string | null
   premises?: Cas1PremisesSummaryDto | null
 }

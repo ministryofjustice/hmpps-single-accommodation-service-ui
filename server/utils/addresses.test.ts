@@ -1,7 +1,7 @@
 import { AccommodationAddressDetails } from '@sas/api'
 import { addressFactory } from '../testutils/factories'
 
-import { addressLines, formatAddress } from './addresses'
+import { addressLines, cas3PremisesToAccommodationAddress, formatAddress } from './addresses'
 
 describe('addresses utilities', () => {
   describe('addressLines', () => {
@@ -104,6 +104,28 @@ describe('addresses utilities', () => {
 
     it('returns an empty string for an undefined address', () => {
       expect(formatAddress(undefined)).toEqual('')
+    })
+  })
+
+  describe('cas3PremisesToAccommodationAddress', () => {
+    it('maps CAS3 premises address fields to accommodation address fields', () => {
+      expect(
+        cas3PremisesToAccommodationAddress({
+          addressLine1: '14 Oakfield Road',
+          addressLine2: 'Oakham',
+          town: 'Rutland',
+          postcode: 'LE15 6HU',
+        }),
+      ).toEqual({
+        buildingName: '14 Oakfield Road',
+        subBuildingName: 'Oakham',
+        postTown: 'Rutland',
+        postcode: 'LE15 6HU',
+      })
+    })
+
+    it('returns undefined when premises are missing', () => {
+      expect(cas3PremisesToAccommodationAddress()).toBeUndefined()
     })
   })
 })

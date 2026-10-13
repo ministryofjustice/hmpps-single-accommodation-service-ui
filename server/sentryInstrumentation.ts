@@ -15,6 +15,14 @@ if (config.sentry.dsn) {
     dsn: config.sentry.dsn,
     environment: config.environment,
     release: applicationInfo.gitRef,
+    dataCollection: {
+      userInfo: false,
+      cookies: false,
+      httpHeaders: false,
+      httpBodies: [],
+      urlQueryParams: false,
+      stackFrameVariables: false,
+    },
     integrations: [Sentry.expressIntegration(), Sentry.httpIntegration({ disableIncomingRequestSpans: true })],
     enableOpenTelemetrySetup: true,
     tracesSampler: ({ name }) => {

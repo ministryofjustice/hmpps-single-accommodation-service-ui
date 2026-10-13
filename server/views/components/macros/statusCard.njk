@@ -26,7 +26,7 @@
         {% if cardData.details | length %}
           {{
             govukSummaryList({
-              classes: 'sas-card-summary-list govuk-summary-list--no-border',
+              classes: 'sas-card-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0',
               rows: cardData.details
             })
           }}

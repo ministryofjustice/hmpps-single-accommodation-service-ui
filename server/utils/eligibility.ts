@@ -20,7 +20,7 @@ import config from '../config'
 import { htmlContent } from './utils'
 import { summaryListRow } from './summaryListRow'
 import { bulletList, govukDetailsList } from './macros'
-import { formatAddress } from './addresses'
+import { cas3PremisesToAccommodationAddress, formatAddress } from './addresses'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -272,15 +272,13 @@ const contentForCas1Status = (
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
   const { serviceStatus } = serviceResult ?? {}
 
-  const cas2Link = htmlContent(
-    '<a class="govuk-body govuk-link govuk-link--no-visited-state" href="#" target="_blank" rel="noreferrer noopener">Find out more about CAS2 (opens in new tab)</a>',
-  )
+  const cas2MoreInfo = htmlContent('<p class="govuk-body">For more guidance on CAS2 eligibility, see EQuiP.</p>')
 
   switch (serviceStatus) {
     case 'CAS2_NOT_STARTED_CAS1':
       return [
         htmlContent('<p class="govuk-!-margin-bottom-0">Available as a move-on from Approved Premises.</p>'),
-        cas2Link,
+        cas2MoreInfo,
       ]
     case 'CAS2_NOT_STARTED_PRISON':
       return [
@@ -291,7 +289,7 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
             'As part of risk-assessed recall review',
           ]),
         ),
-        cas2Link,
+        cas2MoreInfo,
       ]
     case 'CAS2_NOT_STARTED_COMMUNITY':
     case 'CAS2_NOT_STARTED_CAS2':
@@ -479,24 +477,29 @@ const detailsForCas3Status = (
   switch (serviceStatus) {
     case 'SUBMITTED':
       return [
-        summaryListRow('Submitted', cas3Application?.applicationSubmittedDate ?? undefined),
+        summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
         summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     case 'REJECTED':
       return [
         summaryListRow('Rejection reason', cas3Application?.applicationRejectedReason ?? undefined),
-        summaryListRow('Submitted', cas3Application?.applicationSubmittedDate ?? undefined),
+        summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
         summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     case 'BEDSPACE_OFFERED':
       return [
-        summaryListRow('Provisional offer sent', cas3Application?.bookingProvisionalOfferSentDate ?? undefined),
+        summaryListRow(
+          'Provisional offer sent',
+          formatDateAndDaysAgo(cas3Application?.bookingProvisionalOfferSentDate ?? undefined),
+        ),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     case 'BOOKING_CONFIRMED': {
       const { premises } = cas3Application ?? {}
+      const address = cas3PremisesToAccommodationAddress(premises)
+
       return [
-        summaryListRow('Address', formatAddress(premises) ?? undefined),
+        summaryListRow('Address', address ? formatAddress(address) : undefined),
         summaryListRow('Booking dates', `${formatDate(premises.startDate)} to ${formatDate(premises.endDate)}`),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
@@ -516,8 +519,8 @@ const detailsForCas3Status = (
     }
     case 'ARRIVED':
       return [
-        summaryListRow('Arrival date', cas3Application?.premises.startDate ?? undefined),
-        summaryListRow('Expected departure date', cas3Application?.premises.endDate ?? undefined),
+        summaryListRow('Arrival date', formatDateAndDaysAgo(cas3Application?.premises.startDate ?? undefined)),
+        summaryListRow('Expected departure date', formatDateAndDaysAgo(cas3Application?.premises.endDate ?? undefined)),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     default:

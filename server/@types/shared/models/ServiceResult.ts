@@ -57,9 +57,7 @@ export type ServiceResult = {
     | 'S_TIER'
     | 'MALE_NOT_HIGH_RISK_TIER'
     | 'NON_MALE_NOT_HIGH_RISK_TIER'
-    | 'SEX_DATA_NOT_AVAILABLE'
     | 'INVALID_CURRENT_ACCOMMODATION_TYPE'
-    | 'CRS_NOT_SUBMITTED'
     | 'CRS_NOT_SUBMITTED_MALE'
     | 'CRS_NOT_SUBMITTED_NON_MALE'
     | 'HAS_NEXT_ACCOMMODATION'
@@ -67,6 +65,7 @@ export type ServiceResult = {
     | 'SUITABLE_CAS1_APPLICATION'
     | 'SUITABLE_CAS3_APPLICATION'
     | 'IS_SETTLED'
+    | 'UNDER_18'
   >
   blockingStatusReason?:
     | 'SUBMIT_DTR_BEFORE_CAS3'

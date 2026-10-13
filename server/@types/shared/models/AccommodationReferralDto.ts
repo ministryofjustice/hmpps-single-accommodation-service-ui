@@ -5,7 +5,7 @@
 import type { StaffDetailsDto } from './StaffDetailsDto'
 export type AccommodationReferralDto = {
   id: string
-  type: 'CAS1' | 'CAS2' | 'CAS3' | 'DTR' | 'CRS' | 'PA'
+  type: 'CAS1' | 'CAS2' | 'CAS3' | 'DTR' | 'CRS' | 'PA' | 'ER'
   status:
     | 'ACCEPTED'
     | 'REJECTED'
@@ -24,6 +24,8 @@ export type AccommodationReferralDto = {
     | 'AWAITING_DECISION'
     | 'ON_WAITING_LIST'
     | 'OFFER_DECLINED_OR_WITHDRAWN'
+    | 'SUBMITTED'
+    | 'COMPLETED'
   assessmentStatus?: string | null
   requestForPlacementStatus?: string | null
   date: string
@@ -37,4 +39,5 @@ export type AccommodationReferralDto = {
   placementStatus?: string | null
   uiUrl?: string | null
   withdrawalReason?: string | null
+  withdrawalNote?: string | null
 }

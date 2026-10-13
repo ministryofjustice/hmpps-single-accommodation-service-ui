@@ -9,7 +9,7 @@ import CurrentAddressController from '../controllers/currentAddressController'
 import DutyToReferController from '../controllers/dutyToReferController'
 import StaticController from '../controllers/staticController'
 import ExternalReferralsController from '../controllers/externalReferralsController'
-import CustomListController from "../controllers/customListController";
+import CustomListController from '../controllers/customListController'
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -113,7 +113,6 @@ describe('Routing', () => {
   })
 
   describe('Custom List', () => {
-
     it('GET /custom-list should render', async () => {
       await request(app)
         .get('/custom-list')

@@ -24,7 +24,6 @@ describe('CustomListService', () => {
     expect(result).toEqual(response)
   })
   it('should call addCustomList on the api client and return the result', async () => {
-    const response = apiResponseFactory.build()
     const crnList = ['X123456', 'X654321']
     customListClient.addCustomList.mockReturnValue(Promise.resolve(null))
 

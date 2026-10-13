@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { CaseAction, CaseDto as Case, Team } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, SelectOption } from '@sas/ui'
+import { GetCasesQuery, IndexRequest, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
 import { renderMacro, statusCell } from './macros'
 import { renderActions } from './actions'
@@ -153,3 +153,35 @@ export const validateSearchCrn = (req: Request, crn?: string) => {
   }
   return validateAndFlashErrors(req, errors)
 }
+
+export const setupCaseList = (
+  req: IndexRequest,
+  teams: Team[],
+  username: string,
+  cases: Case[],
+  userFullName: string,
+) => {
+  const { query } = req
+  const { peopleType = 'NFA_RISK' } = query
+  const filters = queryToFilters(query, req.originalUrl, teams)
+
+  const currentUsername = query.teamCode ? username : undefined
+  return {
+    peopleType,
+    tabs: casesTabs(req.originalUrl, peopleType),
+    resultsSummary: casesResultsSummary(cases),
+    casesTableColumns: casesTableColumns(),
+    casesRows: casesToRows(cases, currentUsername),
+    query,
+    filters,
+    assignedToOptions: assignedToOptions(userFullName, teams),
+    riskLevelOptions: [
+      { value: '', text: 'All' },
+      { value: 'VERY_HIGH', text: 'Very high' },
+      { value: 'HIGH', text: 'High' },
+      { value: 'MEDIUM', text: 'Medium' },
+      { value: 'LOW', text: 'Low' },
+    ],
+  }
+}
+export type caseSettingsType = ReturnType<typeof setupCaseList>

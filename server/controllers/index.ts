@@ -44,7 +44,6 @@ export const controllers = (services: Services) => ({
   ),
   customListController: new CustomListController(
     services.auditService,
-    services.casesService,
     services.customListService,
     services.userService,
   ),

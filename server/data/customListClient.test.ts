@@ -50,7 +50,7 @@ describeClient('CustomListClient', provider => {
       },
       willRespondWith: {
         status: 201,
-        body: null
+        body: null,
       },
     })
 

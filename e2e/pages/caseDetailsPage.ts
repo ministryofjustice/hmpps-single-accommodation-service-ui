@@ -97,6 +97,21 @@ export default class CaseDetailsPage {
     await expect(this.cas2Card().locator('.govuk-tag')).toHaveText(status)
   }
 
+  async expectSubmissionInfo() {
+    await expect(this.cas2Card()).toContainText('Submitted')
+    await expect(this.cas2Card()).toContainText('Submitted by')
+    await expect(this.cas2Card()).toContainText(/\d{1,2} \w+ \d{4}/)
+  }
+
+  async expectDeclineReason(reason: string) {
+    await expect(this.cas2Card()).toContainText('Reason')
+    await expect(this.cas2Card()).toContainText(reason)
+  }
+
+  async expectArrivalInformation() {
+    await expect(this.cas2Card()).toContainText('Marked as arrived by')
+  }
+
   async clickCas2Link(action: string) {
     await this.cas2Card().getByRole('link', { name: action }).click()
   }

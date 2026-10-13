@@ -29,7 +29,7 @@ test.skip('CAS2 status is Submitted', async ({ page, users: { probation: probati
   await signIn(page, probationUser)
 
   // AND I navigate to a submitted CAS2 application
-  await page.goto(`/cases/Y070559`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -43,8 +43,8 @@ test.skip('CAS2 status is Submitted', async ({ page, users: { probation: probati
   // WHEN I click the View application link for CAS2
   await caseDetailsPage.clickCas2Link('View application')
 
-  // THEN I should be redirected to the start CAS2 application page
-  await caseDetailsPage.expectCas2Redirect()
+  // THEN I should be redirected to the CAS2 application page
+  await caseDetailsPage.expectCas2Application()
 })
 
 test.skip('CAS2 status is Not submitted', async ({ page, users: { probation: probationUser } }) => {
@@ -52,7 +52,7 @@ test.skip('CAS2 status is Not submitted', async ({ page, users: { probation: pro
   await signIn(page, probationUser)
 
   // AND I navigate to a submitted CAS2 application
-  await page.goto(`/cases/Y070559`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -63,11 +63,11 @@ test.skip('CAS2 status is Not submitted', async ({ page, users: { probation: pro
   // AND I should see the submission information
   await caseDetailsPage.expectSubmissionInfo()
 
-  // WHEN I click the View application link for CAS2
+  // WHEN I click the Continue application link for CAS2
   await caseDetailsPage.clickCas2Link('Continue application')
 
-  // THEN I should be redirected to the start CAS2 application page
-  await caseDetailsPage.expectCas2Redirect()
+  // THEN I should be redirected to the CAS2 application page
+  await caseDetailsPage.expectCas2Application()
 })
 
 test.skip('CAS2 status is More information needed', async ({ page, users: { probation: probationUser } }) => {
@@ -75,7 +75,7 @@ test.skip('CAS2 status is More information needed', async ({ page, users: { prob
   await signIn(page, probationUser)
 
   // AND I navigate to a submitted CAS2 application
-  await page.goto(`/cases/Y066736`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -98,7 +98,7 @@ test.skip('CAS2 status is Withdrawn', async ({ page, users: { probation: probati
   await signIn(page, probationUser)
 
   // AND I navigate to a withdrawn CAS2 application
-  await page.goto(`/cases/Y070559`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -121,7 +121,7 @@ test.skip('CAS2 status is Awaiting decision', async ({ page, users: { probation:
   await signIn(page, probationUser)
 
   // AND I navigate to an awaiting decision CAS2 application
-  await page.goto(`/cases/Y068127`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -144,7 +144,7 @@ test.skip('CAS2 status is On waiting list', async ({ page, users: { probation: p
   await signIn(page, probationUser)
 
   // AND I navigate to an on waiting list CAS2 application
-  await page.goto(`/cases/Y068128`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -167,7 +167,7 @@ test.skip('CAS2 status is Awaiting arrival', async ({ page, users: { probation: 
   await signIn(page, probationUser)
 
   // AND I navigate to an awaiting arrival CAS2 application
-  await page.goto(`/cases/Y068129`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -190,7 +190,7 @@ test.skip('CAS2 status is Place offered', async ({ page, users: { probation: pro
   await signIn(page, probationUser)
 
   // AND I navigate to a place offered CAS2 application
-  await page.goto(`/cases/Y068132`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -213,7 +213,7 @@ test.skip('CAS2 status is Offer accepted', async ({ page, users: { probation: pr
   await signIn(page, probationUser)
 
   // AND I navigate to an offer accepted CAS2 application
-  await page.goto(`/cases/Y068130`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -236,7 +236,7 @@ test.skip('CAS2 status is Offer declined or withdrawn', async ({ page, users: { 
   await signIn(page, probationUser)
 
   // AND I navigate to an offer declined or withdrawn CAS2 application
-  await page.goto(`/cases/Y068131`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)
@@ -260,7 +260,7 @@ test.skip('CAS2 status is Arrived', async ({ page, users: { probation: probation
   await signIn(page, probationUser)
 
   // AND I navigate to an arrived CAS2 application
-  await page.goto(`/cases/Y068133`)
+  await page.goto(`/cases/XXXXX`)
 
   // WHEN I view the case details page
   const caseDetailsPage = new CaseDetailsPage(page)

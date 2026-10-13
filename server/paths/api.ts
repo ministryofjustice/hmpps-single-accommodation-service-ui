@@ -28,7 +28,7 @@ export default {
       show: externalReferralsPath.path(':id'),
       submit: externalReferralsPath,
       update: externalReferralsPath.path(':id'),
-      timeline: externalReferralsPath.path(':id/timline'),
+      timeline: externalReferralsPath.path(':id/timeline'),
       notes: externalReferralsPath.path(':id/notes'),
     },
     eligibility: casePath.path('eligibility'),

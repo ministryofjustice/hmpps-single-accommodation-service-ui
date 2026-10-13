@@ -1,5 +1,5 @@
 import type { SuperAgentRequest } from 'superagent'
-import { ExternalReferralDto } from '@sas/api'
+import { type AuditRecordDto, ExternalReferralDto } from '@sas/api'
 import { stubFor } from './wiremock'
 import apiPaths from '../../server/paths/api'
 import { apiResponseFactory, externalReferralFactory } from '../../server/testutils/factories'
@@ -54,6 +54,19 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: apiResponseFactory.externalReferrals(list),
+      },
+    }),
+
+  stubExternalreferralTimeline: (crn: string, id: string, timeline: Array<AuditRecordDto>): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: apiPaths.cases.externalReferrals.timeline({ crn, id }),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: apiResponseFactory.auditRecords(timeline),
       },
     }),
 }

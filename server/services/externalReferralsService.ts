@@ -19,4 +19,8 @@ export default class ExternalReferralsService {
   search(token: string, crn: string) {
     return this.externalReferralsClient.search(token, crn)
   }
+
+  async getTimeline(token: string, crn: string, id: string) {
+    return this.externalReferralsClient.getTimeline(token, crn, id)
+  }
 }

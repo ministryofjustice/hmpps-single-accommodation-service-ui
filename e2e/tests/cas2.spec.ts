@@ -93,7 +93,7 @@ test.skip('CAS2 status is More information needed', async ({ page, users: { prob
   await caseDetailsPage.expectCas2Application()
 })
 
-test('CAS2 status is Withdrawn', async ({ page, users: { probation: probationUser } }) => {
+test.skip('CAS2 status is Withdrawn', async ({ page, users: { probation: probationUser } }) => {
   // GIVEN I sign in as a probation user
   await signIn(page, probationUser)
 

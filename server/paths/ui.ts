@@ -51,8 +51,9 @@ export default {
     maintenance: path('/maintenance'),
   },
   customList: {
-    index:customListPath,
+    index: customListPath,
     addCrns: customListPath.path('add-crns'),
+    confirmation: customListPath.path('confirmation'),
     show: customListPath.path('show'),
   },
 }

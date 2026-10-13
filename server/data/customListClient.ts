@@ -1,9 +1,9 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import { ApiResponseDtoListCaseDto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
-import {ApiResponseDtoListCaseDto} from "@sas/api";
 
 export default class CustomListClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -62,6 +62,7 @@ export default class CustomListClient extends RestClient {
       asUser(token),
     )
   }
+
   getCustomList(token: string) {
     return this.get<ApiResponseDtoListCaseDto>({ path: apiPaths.customList({}) }, asUser(token))
   }

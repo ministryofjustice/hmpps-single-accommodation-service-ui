@@ -377,7 +377,7 @@ exports[`cas1 status card details renders detail rows for a SUBMITTED status 1`]
 exports[`cas2 status card content renders the more guidance content when not started 1`] = `
 [
   {
-    "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available in these circumstances:</p>
+    "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available in these circumstances:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Homeless at conditional release date</li>
@@ -860,7 +860,7 @@ exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people i
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -890,7 +890,7 @@ exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people i
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -920,7 +920,7 @@ exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people i
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available in these circumstances:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available in these circumstances:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Homeless at conditional release date</li>
@@ -1727,7 +1727,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in cas2 status car
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -1757,7 +1757,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in community statu
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -1787,7 +1787,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in prison status c
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available in these circumstances:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available in these circumstances:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Homeless at conditional release date</li>
@@ -2245,7 +2245,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and
   "blocked": true,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Before you can make a CAS3 referral, you need to:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Before you can make a CAS3 referral, you need to:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Add DTR referral details</li>
@@ -2270,7 +2270,7 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and
   "blocked": true,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Before you can make a CAS3 referral, you need to:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Before you can make a CAS3 referral, you need to:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Add DTR referral details</li>

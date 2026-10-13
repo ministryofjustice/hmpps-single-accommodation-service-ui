@@ -16,7 +16,7 @@ generic-service:
     SAS_CASES_API_TIMEOUT_RESPONSE: 5000
     SAS_CASES_API_TIMEOUT_DEADLINE: 10000
     ENVIRONMENT: prod
-    AUDIT_ENABLED: "false"
+    AUDIT_ENABLED: "true"
     COMPONENT_API_URL: "https://probation-frontend-components.hmpps.service.justice.gov.uk"
     OS_DATAHUB_API_URL: "https://api.os.uk"
     DELIUS_URL: "https://ndelius.probation.service.justice.gov.uk"

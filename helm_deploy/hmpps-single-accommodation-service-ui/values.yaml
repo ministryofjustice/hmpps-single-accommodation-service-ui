@@ -3,7 +3,7 @@ generic-service:
   productId: 'HMPPS554' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
-  # serviceAccountName: "hmpps-single-accommodation-service-ui"
+  serviceAccountName: "hmpps-single-accommodation-service-account"
 
   replicaCount: 4
 
@@ -32,7 +32,7 @@ generic-service:
     REDIS_TLS_ENABLED: 'true'
     TOKEN_VERIFICATION_ENABLED: 'true'
     AUDIT_SQS_REGION: 'eu-west-2'
-    AUDIT_SERVICE_NAME: 'HMPPS554' # Your audit service name
+    AUDIT_SERVICE_NAME: 'hmpps-single-accommodation-service-ui'
     LOG_LEVEL: 'info'
     MAINTENANCE_MODE: 'false'
     HIDE_MANUAL_ADDRESS_ENTRY: 'true'
@@ -63,8 +63,8 @@ generic-service:
       SENTRY_DSN: 'SENTRY_DSN'
     # This secret will need to be created in your namespace (note it isn't in hmpps-templates-dev)
     # IRSA configuration in your namespace will also be required, and then uncomment serviceAccountName above.
-    # sqs-hmpps-audit-secret:
-    #   AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
 
   allowlist:
     groups:

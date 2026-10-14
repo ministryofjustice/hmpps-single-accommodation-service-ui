@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
+import { TimelineEntry } from '@govuk/ui'
 import AuditService, { Page } from '../services/auditService'
 import * as validationUtils from '../utils/validation'
 import CasesService from '../services/casesService'
 import ExternalReferralsController from './externalReferralsController'
-import { apiResponseFactory, caseFactory, externalReferralFactory } from '../testutils/factories'
+import { apiResponseFactory, auditRecordFactory, caseFactory, externalReferralFactory } from '../testutils/factories'
 import ExternalReferralsService from '../services/externalReferralsService'
 import uiPaths from '../paths/ui'
 
@@ -32,6 +33,8 @@ describe('ExternalReferralsController', () => {
     crn,
   })
 
+  const timeLine = auditRecordFactory.buildList(2)
+
   let controller: ExternalReferralsController
   beforeEach(() => {
     jest.clearAllMocks()
@@ -53,6 +56,11 @@ describe('ExternalReferralsController', () => {
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
     jest.spyOn(validationUtils, 'addUserInputToFlash')
+    jest.spyOn(utils, 'externalReferralTimelineEntry').mockReturnValue({} as TimelineEntry)
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   describe('show', () => {
@@ -63,6 +71,7 @@ describe('ExternalReferralsController', () => {
       externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
         apiResponseFactory.externalReferral(referral),
       )
+      externalReferralsService.getTimeline.mockResolvedValue(apiResponseFactory.auditRecords(timeLine))
     })
 
     it('renders the referral details page', async () => {
@@ -72,6 +81,8 @@ describe('ExternalReferralsController', () => {
         who: 'user1',
         correlationId: 'request-id',
       })
+
+      expect(utils.externalReferralTimelineEntry).toHaveBeenCalledWith(timeLine[1], 'user1')
 
       expect(response.render).toHaveBeenCalledWith('pages/external-referrals/show', {
         breadcrumbs: breadcrumbs(request, caseData),
@@ -83,6 +94,7 @@ describe('ExternalReferralsController', () => {
         referral,
         submissionDetailRows: detailsSummaryListRows(referral),
         status: referral.status,
+        timeline: [{}, {}],
         errors: {},
         errorSummary: [],
       })
@@ -225,12 +237,19 @@ describe('ExternalReferralsController', () => {
     })
 
     it('redirects to submission page when the API call fails', async () => {
-      externalReferralsService.submit.mockRejectedValue(new Error('API error'))
-      externalReferralsService.update.mockRejectedValue(new Error('API error'))
+      const errorFunc = () => {
+        throw new Error('API error')
+      }
+      externalReferralsService.submit.mockImplementation(errorFunc)
+      externalReferralsService.update.mockImplementation(errorFunc)
 
       await controller.saveSubmission('add')(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/external-referrals/submission')
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
+        request,
+        'There was a problem saving the submission details. Please try again.',
+      )
     })
   })
 })

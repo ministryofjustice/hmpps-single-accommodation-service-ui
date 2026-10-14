@@ -2,7 +2,12 @@ import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { faker } from '@faker-js/faker/locale/en'
 import describeClient from '../testutils/describeClient'
 import ExternalReferralsClient from './externalReferralsClient'
-import { apiResponseFactory, externalReferralCommandFactory, externalReferralFactory } from '../testutils/factories'
+import {
+  apiResponseFactory,
+  auditRecordFactory,
+  externalReferralCommandFactory,
+  externalReferralFactory,
+} from '../testutils/factories'
 import apiPaths from '../paths/api'
 import crnFactory from '../testutils/crn'
 
@@ -117,5 +122,31 @@ describeClient('ExternalReferralsClient', provider => {
 
     const response = await client.update('test-user-token', crn, id, command)
     expect(response).toEqual({})
+  })
+
+  it('should GET from external-referrals/timeline and receive the response', async () => {
+    const crn = crnFactory()
+    const id = faker.string.uuid()
+    const timeLine = auditRecordFactory.buildList(2)
+    const body = apiResponseFactory.auditRecords(timeLine)
+
+    await provider.addInteraction({
+      state: `External referral exists and has timeline entries`,
+      uponReceiving: 'a request to get the timeline of an External Referral for a user case by CRN',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.cases.externalReferrals.timeline({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+
+    const response = await client.getTimeline('test-user-token', crn, id)
+    expect(response).toEqual(body)
   })
 })

@@ -377,7 +377,7 @@ exports[`cas1 status card details renders detail rows for a SUBMITTED status 1`]
 exports[`cas2 status card content renders the more guidance content when not started 1`] = `
 [
   {
-    "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available in these circumstances:</p>
+    "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available in these circumstances:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Homeless at conditional release date</li>
@@ -860,7 +860,7 @@ exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people i
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -890,7 +890,7 @@ exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people i
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -920,7 +920,7 @@ exports[`eligibilityStatusCard cas2 NOT_STARTED should show content for people i
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available in these circumstances:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available in these circumstances:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Homeless at conditional release date</li>
@@ -1727,7 +1727,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in cas2 status car
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -1757,7 +1757,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in community statu
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available for:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available for:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Alternative to custodial recall</li>
@@ -1787,7 +1787,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED in prison status c
   "blocked": false,
   "content": [
     {
-      "html": "<p class="govuk-body govuk-!-margin-bottom-1">Available in these circumstances:</p>
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Available in these circumstances:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
       <li>Homeless at conditional release date</li>
@@ -2183,10 +2183,14 @@ exports[`eligibilityStatusCard for cas3 renders a BOOKING_CONFIRMED status card 
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS accommodation needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
+  "content": [
+    {
+      "text": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
+    },
+  ],
   "details": [],
   "heading": "CAS3 (transitional accommodation)",
-  "hint": "You need to submit a CRS accommodation referral before you can make a CAS3 referral.",
+  "hint": undefined,
   "inactive": false,
   "links": undefined,
   "status": {
@@ -2199,10 +2203,14 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS accommod
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
+  "content": [
+    {
+      "text": "You need to submit a CRS referral before you can make a CAS3 referral.",
+    },
+  ],
   "details": [],
   "heading": "CAS3 (transitional accommodation)",
-  "hint": "You need to submit a CRS referral before you can make a CAS3 referral.",
+  "hint": undefined,
   "inactive": false,
   "links": undefined,
   "status": {
@@ -2215,10 +2223,14 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, CRS needed s
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
+  "content": [
+    {
+      "text": "You need to add DTR referral details before you can make a CAS3 referral.",
+    },
+  ],
   "details": [],
   "heading": "CAS3 (transitional accommodation)",
-  "hint": "You need to add DTR referral details before you can make a CAS3 referral.",
+  "hint": undefined,
   "inactive": false,
   "links": undefined,
   "status": {
@@ -2231,10 +2243,19 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, DTR needed s
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and CRS accommodation needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
+  "content": [
+    {
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Before you can make a CAS3 referral, you need to:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Add DTR referral details</li>
+      <li>Submit a CRS accommodation referral</li>
+      </ul>",
+    },
+  ],
   "details": [],
   "heading": "CAS3 (transitional accommodation)",
-  "hint": "You need to add DTR referral details and submit a CRS accommodation referral before you can make a CAS3 referral.",
+  "hint": undefined,
   "inactive": false,
   "links": undefined,
   "status": {
@@ -2247,10 +2268,19 @@ exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and
 exports[`eligibilityStatusCard for cas3 renders a CANNOT_START_YET, both DTR and CRS needed status card 1`] = `
 {
   "blocked": true,
-  "content": undefined,
+  "content": [
+    {
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Before you can make a CAS3 referral, you need to:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Add DTR referral details</li>
+      <li>Submit a CRS referral</li>
+      </ul>",
+    },
+  ],
   "details": [],
   "heading": "CAS3 (transitional accommodation)",
-  "hint": "You need to add DTR referral details and submit a CRS referral before you can make a CAS3 referral.",
+  "hint": undefined,
   "inactive": false,
   "links": undefined,
   "status": {

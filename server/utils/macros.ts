@@ -17,6 +17,7 @@ type Macro =
   | 'accommodationCell'
   | 'tableTextCell'
   | 'timelineDutyToRefer'
+  | 'timelineEntry'
   | 'timelineProposedAddress'
   | 'actionsCell'
   | 'govukDetails'

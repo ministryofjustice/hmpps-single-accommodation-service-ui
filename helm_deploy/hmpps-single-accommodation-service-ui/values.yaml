@@ -3,7 +3,7 @@ generic-service:
   productId: 'HMPPS554' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
-  serviceAccountName: "hmpps-single-accommodation-service-ui"
+  serviceAccountName: "hmpps-single-accommodation-service-account"
 
   replicaCount: 4
 

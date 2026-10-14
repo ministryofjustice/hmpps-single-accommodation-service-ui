@@ -31,39 +31,7 @@ describe('customListController', () => {
     request = mock<Request>({ id: 'request-id', originalUrl: '/' })
   })
 
-  describe('index', () => {
-    it('renders the show custom list page', async () => {
-      await customListController.customList()(request, response, next)
-
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_INDEX, {
-        who: user.username,
-        correlationId: 'request-id',
-      })
-      expect(response.render).toHaveBeenCalledWith('pages/customList/index', {
-        addCrnsHref: '/custom-list/add-crns',
-      })
-    })
-  })
-  describe('addCrns', () => {
-    it.each([null, 'CRN1,CRN2'])('renders the add crns page when list is: %s', async crnList => {
-      jest
-        .spyOn(validationUtils, 'fetchErrorsAndUserInput')
-        .mockReturnValue({ errors: {}, errorSummary: [], userInput: { crnList } })
-
-      await customListController.addCrns()(request, response, next)
-
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_ADD_CRNS, {
-        who: user.username,
-        correlationId: 'request-id',
-      })
-      expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
-        crnList,
-        errorSummary: [],
-        errors: {},
-      })
-    })
-  })
-  describe('show', () => {
+  describe('customList', () => {
     const teams = [{ code: 'team-code', name: 'Team Name' }]
     const baseContext = {
       assignedToOptions: [
@@ -83,11 +51,24 @@ describe('customListController', () => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
     })
 
-    it('renders the show custom list page', async () => {
+    it('renders the create custom list page when no list already exits', async () => {
+      customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList([]))
+      await customListController.customList()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_INDEX, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
+      expect(response.render).toHaveBeenCalledWith('pages/customList/index', {
+        addCrnsHref: '/custom-list/add-crns',
+      })
+    })
+
+    it('renders the custom list page when a list already exists', async () => {
       const cases = caseFactory.buildList(3)
       customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(cases))
       request.query = {}
-      await customListController.show()(request, response, next)
+      await customListController.customList()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_SHOW, {
         who: user.username,
@@ -110,6 +91,25 @@ describe('customListController', () => {
       })
     })
   })
+  describe('addCrns', () => {
+    it.each([null, 'CRN1,CRN2'])('renders the add crns page when list is: %s', async crnList => {
+      jest
+        .spyOn(validationUtils, 'fetchErrorsAndUserInput')
+        .mockReturnValue({ errors: {}, errorSummary: [], userInput: { crnList } })
+
+      await customListController.addCrns()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_ADD_CRNS, {
+        who: user.username,
+        correlationId: 'request-id',
+      })
+      expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
+        crnList,
+        errorSummary: [],
+        errors: {},
+      })
+    })
+  })
   describe('submitCrnList', () => {
     it('renders the confirmation page on successful submission', async () => {
       const crnList = 'CRN1,CRN2'
@@ -118,7 +118,7 @@ describe('customListController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/customList/confirmation', {
         crns: 2,
-        showHref: uiPaths.customList.show.pattern,
+        showHref: uiPaths.customList.index.pattern,
       })
     })
     it('renders the addCrns page with errors on unsuccessful submission', async () => {

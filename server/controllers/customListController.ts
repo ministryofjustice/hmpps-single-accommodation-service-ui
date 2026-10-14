@@ -16,13 +16,25 @@ export default class CustomListController {
   ) {}
 
   customList(): RequestHandler {
-    return async (req: Request, res: Response) => {
-      await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, {
-        who: res.locals.user.username,
-        correlationId: req.id,
+    return async (req: IndexRequest, res: Response) => {
+      const { token, username, displayName: userFullName } = res.locals.user
+      const eventDetails = { who: username, correlationId: req.id }
+      const {
+        data: { teams, cases },
+      } = await collectApiResponses({
+        teams: this.userService.getTeams(token),
+        cases: this.customListService.getCustomList(token),
       })
-      return res.render('pages/customList/index', {
-        addCrnsHref: uiPaths.customList.addCrns.pattern,
+      if (cases.length === 0) {
+        await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, eventDetails)
+        return res.render('pages/customList/index', {
+          addCrnsHref: uiPaths.customList.addCrns.pattern,
+        })
+      }
+      await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
+      return res.render('pages/customList/show', {
+        changeListHref: uiPaths.customList.addCrns.pattern,
+        ...setupCaseList(req, teams, username, cases, userFullName),
       })
     }
   }
@@ -51,7 +63,7 @@ export default class CustomListController {
         await this.customListService.addCustomList(token, req.body.crnList)
         return res.render('pages/customList/confirmation', {
           crns: req.body.crnList.length,
-          showHref: uiPaths.customList.show.pattern,
+          showHref: uiPaths.customList.index.pattern,
         })
       } catch (error) {
         const errorMessage = error.data.developerMessage ? error.data.developerMessage : error.message
@@ -70,7 +82,6 @@ export default class CustomListController {
   show(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { token, username, displayName: userFullName } = res.locals.user
-      await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, { who: username, correlationId: req.id })
 
       const {
         data: { teams, cases },
@@ -78,7 +89,16 @@ export default class CustomListController {
         teams: this.userService.getTeams(token),
         cases: this.customListService.getCustomList(token),
       })
-
+      if (!cases) {
+        await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, {
+          who: res.locals.user.username,
+          correlationId: req.id,
+        })
+        return res.render('pages/customList/index', {
+          addCrnsHref: uiPaths.customList.addCrns.pattern,
+        })
+      }
+      await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, { who: username, correlationId: req.id })
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
         ...setupCaseList(req, teams, username, cases, userFullName),

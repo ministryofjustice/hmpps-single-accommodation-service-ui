@@ -292,4 +292,9 @@ export default class AbstractPage {
       config.supportLinks.accessRequest,
     )
   }
+
+  async shouldShowPanel(titleText: string, bodyText: string, container?: Locator) {
+    await expect((container || this.page).locator('.govuk-panel__title', { hasText: titleText })).toBeVisible()
+    await expect((container || this.page).locator('.govuk-panel__body', { hasText: bodyText })).toBeVisible()
+  }
 }

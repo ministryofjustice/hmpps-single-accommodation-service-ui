@@ -75,7 +75,6 @@ const customListController = mock<CustomListController>({
   customList: mockHandler,
   addCrns: mockHandler,
   submitCrnList: mockHandler,
-  show: mockHandler,
 })
 
 jest.mock('../controllers', () => ({
@@ -135,14 +134,6 @@ describe('Routing', () => {
         .expect(200)
         .expect(() => {
           expect(customListController.addCrns).toHaveBeenCalled()
-        })
-    })
-    it('GET /custom-list/show should render', async () => {
-      await request(app)
-        .get('/custom-list/show')
-        .expect(200)
-        .expect(() => {
-          expect(customListController.show).toHaveBeenCalled()
         })
     })
   })

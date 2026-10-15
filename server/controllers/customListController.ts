@@ -3,7 +3,7 @@ import { IndexRequest } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import { setupCaseList } from '../utils/cases'
-import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import { addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import CustomListService from '../services/customListService'
@@ -57,7 +57,7 @@ export default class CustomListController {
   submitCrnList(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { token } = res.locals.user
-      const crnList = req.body.crnList.length ? req.body.crnList.split(',') : []
+      const crnList = req.body?.crnList?.length ? req.body.crnList.split(',') : []
       try {
         await this.customListService.addCustomList(token, crnList)
         const crnTotalText = crnList.length

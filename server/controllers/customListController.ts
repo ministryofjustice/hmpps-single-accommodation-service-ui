@@ -70,8 +70,10 @@ export default class CustomListController {
       } catch (error) {
         const errorMessage = error.data?.developerMessage ? error.data.developerMessage : error.message
         return res.render('pages/customList/addCrns', {
-          crnList: crnList,
-          errorSummary: [{ text: errorMessage, href: 'crnList' }],
+          crnList,
+          backLinkHref: uiPaths.customList.index.pattern,
+          errorSummary: [{ text: errorMessage, href: '#crnList' }],
+          errorMessage: {text: errorMessage}
         })
       }
     }

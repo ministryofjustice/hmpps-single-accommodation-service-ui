@@ -138,8 +138,10 @@ describe('customListController', () => {
       await customListController.submitCrnList()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
+        backLinkHref: '/custom-list',
         crnList: crnListToArray,
-        errorSummary: [{ text: 'Dev error', href: 'crnList' }],
+        errorSummary: [{ text: 'Dev error', href: '#crnList' }],
+        errorMessage: { text: 'Dev error' },
       })
     })
   })

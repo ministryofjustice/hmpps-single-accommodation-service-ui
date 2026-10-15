@@ -61,6 +61,7 @@ test.describe('custom list', () => {
 
   test('should allow a user to view an existing custom list and edit it', async ({ page }) => {
     const cases = [caseFactory.build({ crn: 'X123456' }), caseFactory.build({ crn: 'X654321' })]
+    const newCases = [caseFactory.build({ crn: 'X123456' }), caseFactory.build({ crn: 'X987654' })]
     const teams = [{ code: 'team-one-code', name: 'Team One' }]
 
     await customListApi.stubSubmitCustomList()
@@ -78,29 +79,6 @@ test.describe('custom list', () => {
 
     // WHEN I navigate to the custom list page
     await casesListPage.clickLink('Custom list')
-
-    // THEN I should see the Custom case list
-    const customListPage = await CustomListPage.verifyOnPage(page)
-
-    // WHEN I click the change list link
-    await customListPage.clickLink('Change list')
-
-    // THEN I should see the create custom list page
-    const createListPage = await CreateListPage.verifyOnPage(page)
-
-    // WHEN I add CRNs to the list
-    await createListPage.completeInputByLabel('Add CRNs', 'X123456,X654321')
-    // AND I click the submit buttom
-    await createListPage.clickButton('Save and continue')
-
-    // THEN the API should be called with the correct CRNs
-    await createListPage.checkApiCalled(['X123456', 'X654321'])
-    // AND I should see the confirmation panel
-    await createListPage.shouldShowPanel('CRNs added', '2 CRNs added')
-    await customListApi.stubGetCustomList(cases)
-
-    // WHEN I click the view list button
-    await createListPage.clickButton('View list')
 
     // THEN I should see the custom case list page
     const showCaseListPage = await ShowCaseListPage.verifyOnPage(page)
@@ -126,7 +104,7 @@ test.describe('custom list', () => {
     await addCrnsPage.checkApiCalled(['X123456', 'X987654'])
     // AND I should see the confirmation panel
     await addCrnsPage.shouldShowPanel('CRNs added', '2 CRNs added')
-    await customListApi.stubGetCustomList(cases)
+    await customListApi.stubGetCustomList(newCases)
 
     // WHEN I click the view list button
     await addCrnsPage.clickButton('View list')
@@ -136,6 +114,6 @@ test.describe('custom list', () => {
     // AND I should see the change list link
     await showCaseListPage.shouldShowLink('Change list', '/custom-list/add-crns')
     // AND I should see the list of cases
-    await showCaseListPage.shouldShowCases(cases)
+    await showCaseListPage.shouldShowCases(newCases)
   })
 })

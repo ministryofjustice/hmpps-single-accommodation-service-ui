@@ -105,19 +105,21 @@ describe('customListController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
         crnList,
-        errorSummary: [],
-        errors: {},
+        backLinkHref: uiPaths.customList.index.pattern,
       })
     })
   })
   describe('submitCrnList', () => {
-    it('renders the confirmation page on successful submission', async () => {
-      const crnList = 'CRN1,CRN2'
+    it.each([
+      ['CRN1,CRN2', 2],
+      ['CRN1', 1],
+    ])('renders the confirmation page on successful submission', async (crnList, crnTotal) => {
       request.body = { crnList }
       await customListController.submitCrnList()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/customList/confirmation', {
-        crns: 2,
+        crnAddedText: crnTotal > 1 ? 'CRNs added' : 'CRN added',
+        crnTotalText: crnTotal,
         showHref: uiPaths.customList.index.pattern,
       })
     })
@@ -127,18 +129,17 @@ describe('customListController', () => {
       serverError.data = { developerMessage: 'Dev error', userMessage: 'Server error' }
       customListService.addCustomList.mockRejectedValue(serverError)
       const crnList = 'CRN1,CRN2'
+      const crnListToArray = ['CRN1','CRN2']
       request.body = { crnList }
       jest
         .spyOn(validationUtils, 'fetchErrorsAndUserInput')
-        .mockReturnValue({ errors: serverError, errorSummary: [''], userInput: { crnList } })
+        .mockReturnValue({ errors: serverError, errorSummary: [{ text: 'Dev error', href: 'crnList' }], userInput: { crnList } })
 
       await customListController.submitCrnList()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
-        crnList,
-        error: 'Server error',
-        errors: serverError,
-        errorSummary: [''],
+        crnList: crnListToArray,
+        errorSummary: [{ text: 'Dev error', href: 'crnList' }],
       })
     })
   })

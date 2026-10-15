@@ -16,16 +16,17 @@ import { summaryListRows } from '../utils/dutyToRefer'
 import { detailsSummaryListRows } from '../utils/externalReferrals'
 
 describe('ExternalReferralsController', () => {
+  const id = '123'
+  const crn = 'CRN123'
+  const token = 'token-1'
+
   let request: Request
-  const response = mock<Response>({ locals: { user: { username: 'user1', token: 'token-1' } } })
+  const response = mock<Response>({ locals: { user: { username: 'user1', token } } })
   const next = mock<NextFunction>()
 
   const auditService = mock<AuditService>()
   const casesService = mock<CasesService>()
   const externalReferralsService = mock<ExternalReferralsService>()
-
-  const id = '123'
-  const crn = 'CRN123'
 
   const caseData = caseFactory.build({
     forename: 'James',
@@ -77,7 +78,7 @@ describe('ExternalReferralsController', () => {
     it('renders the referral details page', async () => {
       await controller.show()(request, response, next)
 
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFFERALS_DETAILS, {
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_DETAILS, {
         who: 'user1',
         correlationId: 'request-id',
       })
@@ -123,11 +124,11 @@ describe('ExternalReferralsController', () => {
     it('renders the submission page for a first referral', async () => {
       await controller.submission('add')(request, response, next)
 
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFFERALS_SUBMISSION, {
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_SUBMISSION, {
         who: 'user1',
         correlationId: 'request-id',
       })
-      expect(casesService.getCase).toHaveBeenCalledWith('token-1', 'CRN123')
+      expect(casesService.getCase).toHaveBeenCalledWith(token, crn)
       expect(response.render).toHaveBeenCalledWith('pages/external-referrals/submission', {
         pageTitle: 'Add external referral details',
         backLinkHref: '/cases/CRN123',
@@ -197,7 +198,7 @@ describe('ExternalReferralsController', () => {
       externalReferralsService.submit.mockResolvedValue(referral)
       await controller.saveSubmission('add')(request, response, next)
 
-      expect(externalReferralsService.submit).toHaveBeenCalledWith('token-1', crn, {
+      expect(externalReferralsService.submit).toHaveBeenCalledWith(token, crn, {
         status: 'SUBMITTED',
         submissionDate: '2025-06-15',
         ...referralData,
@@ -217,7 +218,7 @@ describe('ExternalReferralsController', () => {
 
       await controller.saveSubmission('edit')(request, response, next)
 
-      expect(externalReferralsService.update).toHaveBeenCalledWith('token-1', 'CRN123', referral.submission.id, {
+      expect(externalReferralsService.update).toHaveBeenCalledWith(token, crn, referral.submission.id, {
         status: 'SUBMITTED',
         submissionDate: '2025-06-15',
         ...referralData,
@@ -249,6 +250,48 @@ describe('ExternalReferralsController', () => {
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
         request,
         'There was a problem saving the submission details. Please try again.',
+      )
+    })
+  })
+
+  describe('addNote', () => {
+    const note = 'note text'
+    const detailsPagePath = uiPaths.externalReferrals.show({ crn, id })
+
+    it('adds note then redirects to the referral details page', async () => {
+      request.params.id = id
+      request.body = { note }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(detailsPagePath)
+      expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
+      expect(externalReferralsService.addNote).toHaveBeenCalledWith(token, crn, id, note)
+    })
+
+    it('redirects with error if there is no note', async () => {
+      request.params.id = id
+      request.body = { note: '' }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(detailsPagePath)
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        note: 'Enter a note',
+      })
+    })
+
+    it('redirects if the API errors', async () => {
+      externalReferralsService.addNote.mockRejectedValue(new Error())
+      request.params.id = id
+      request.body = { note }
+
+      await controller.saveNote()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(detailsPagePath)
+      expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(
+        request,
+        'There was a problem saving the note. Please try again.',
       )
     })
   })

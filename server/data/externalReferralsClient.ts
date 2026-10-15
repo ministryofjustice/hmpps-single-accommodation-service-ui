@@ -58,4 +58,14 @@ export default class ExternalReferralsClient extends RestClient {
       asUser(token),
     )
   }
+
+  addNote(token: string, crn: string, id: string, note: string) {
+    return this.post<void>(
+      {
+        path: apiPaths.cases.externalReferrals.notes({ crn, id }),
+        data: { note },
+      },
+      asUser(token),
+    )
+  }
 }

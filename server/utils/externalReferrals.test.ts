@@ -9,6 +9,7 @@ import {
   externalReferralTimelineEntry,
   submissionFormValues,
   validateSubmission,
+  validateNote,
 } from './externalReferrals'
 import { auditRecordFactory, externalReferralFactory, externalReferralSubmissionFactory } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
@@ -108,6 +109,42 @@ describe('externalReferrals utils', () => {
       expect(result).toBe(false)
     })
   })
+
+  describe('validateNote', () => {
+    beforeEach(() => {
+      jest.spyOn(validationUtils, 'validateAndFlashErrors')
+      req = mock<Request>({
+        body: { note: '' },
+      })
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('returns error if note is empty', () => {
+      validateNote(req)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, { note: 'Enter a note' })
+    })
+
+    it('returns error if note is too long', () => {
+      req.body.note = faker.string.sample(4001)
+
+      validateNote(req)
+
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+        note: 'Notes must be 4,000 characters or less',
+      })
+    })
+
+    it('passes valid note', () => {
+      req.body.note = 'Valid note'
+      validateNote(req)
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {})
+    })
+  })
+
   describe('details lists', () => {
     const referral = externalReferralFactory.build({
       status: 'SUBMITTED',

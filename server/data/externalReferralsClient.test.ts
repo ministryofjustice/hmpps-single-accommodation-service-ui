@@ -149,4 +149,28 @@ describeClient('ExternalReferralsClient', provider => {
     const response = await client.getTimeline('test-user-token', crn, id)
     expect(response).toEqual(body)
   })
+
+  it('should make a POST request to external-referrals/notes to add a note', async () => {
+    const crn = crnFactory()
+    const id = faker.string.uuid()
+    const note = faker.lorem.lines(2)
+
+    await provider.addInteraction({
+      state: `Note can be added to exernal referal CRN ${crn}, id ${id}`,
+      uponReceiving: 'a request to add a note to an External Referral',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.externalReferrals.notes({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: { note },
+      },
+      willRespondWith: {
+        status: 201,
+      },
+    })
+
+    await client.addNote('test-user-token', crn, id, note)
+  })
 })

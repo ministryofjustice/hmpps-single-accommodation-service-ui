@@ -24,7 +24,6 @@ generic-service:
     MAINTENANCE_MODE: "true"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
     CASE_LIST_V2_ENABLED: "false"
-    CASE_LIST_V2_TABS_ENABLED: "false"
     CAS2_ENABLED: "false"
 
 generic-prometheus-alerts:

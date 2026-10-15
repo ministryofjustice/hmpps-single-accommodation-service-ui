@@ -130,7 +130,6 @@ export default {
     maintenanceModeAllowlist: get('MAINTENANCE_MODE_ALLOWLIST', ''),
     hideManualAddressEntry: get('HIDE_MANUAL_ADDRESS_ENTRY', 'false') === 'true',
     caseListV2: get('CASE_LIST_V2_ENABLED', 'false') === 'true',
-    caseListV2Tabs: get('CASE_LIST_V2_TABS_ENABLED', 'false') === 'true',
     cas2Enabled: get('CAS2_ENABLED', 'false') === 'true',
   },
   timeoutOverrides: {

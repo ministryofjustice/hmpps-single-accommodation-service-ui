@@ -27,7 +27,6 @@ generic-service:
     LOG_LEVEL: 'debug'
     MAINTENANCE_MODE: "false"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
-    CASE_LIST_V2_ENABLED: "true"
     CAS2_ENABLED: "false"
 
 generic-prometheus-alerts:

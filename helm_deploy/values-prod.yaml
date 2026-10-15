@@ -23,7 +23,6 @@ generic-service:
     SAS_ALLOWED_ROLES: "ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER"
     MAINTENANCE_MODE: "true"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
-    CASE_LIST_V2_ENABLED: "false"
     CAS2_ENABLED: "false"
 
 generic-prometheus-alerts:

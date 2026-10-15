@@ -31,6 +31,8 @@ export default class CustomListController {
           addCrnsHref: uiPaths.customList.addCrns.pattern,
         })
       }
+      req.body = { crnList: cases.map(c => c.crn).join(',') }
+      addUserInputToFlash(req)
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
@@ -38,18 +40,16 @@ export default class CustomListController {
       })
     }
   }
-
   addCrns(): RequestHandler {
     return async (req: Request, res: Response) => {
       await this.auditService.logPageView(Page.CUSTOM_LIST_ADD_CRNS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+      const {  userInput } = fetchErrorsAndUserInput(req)
       return res.render('pages/customList/addCrns', {
         crnList: userInput.crnList,
-        errors,
-        errorSummary,
+        backLinkHref: uiPaths.customList.index.pattern,
       })
     }
   }
@@ -57,52 +57,23 @@ export default class CustomListController {
   submitCrnList(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { token } = res.locals.user
-      req.body.crnList = req.body.crnList.length ? req.body.crnList.split(',') : []
-      addUserInputToFlash(req)
+      const crnList = req.body.crnList.length ? req.body.crnList.split(',') : []
       try {
-        await this.customListService.addCustomList(token, req.body.crnList)
+        await this.customListService.addCustomList(token, crnList)
+        const crnTotalText = crnList.length
+        const crnAddedText = crnTotalText > 1 ? 'CRNs added' : 'CRN added'
         return res.render('pages/customList/confirmation', {
-          crns: req.body.crnList.length,
+          crnTotalText: crnTotalText,
+          crnAddedText: crnAddedText,
           showHref: uiPaths.customList.index.pattern,
         })
       } catch (error) {
-        const errorMessage = error.data.developerMessage ? error.data.developerMessage : error.message
-        addErrorToFlash(req, 'crnList', errorMessage)
-        const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+        const errorMessage = error.data?.developerMessage ? error.data.developerMessage : error.message
         return res.render('pages/customList/addCrns', {
-          crnList: userInput.crnList,
-          error: error.data.userMessage,
-          errors,
-          errorSummary,
+          crnList: crnList,
+          errorSummary: [{ text: errorMessage, href: 'crnList' }],
         })
       }
-    }
-  }
-
-  show(): RequestHandler {
-    return async (req: IndexRequest, res: Response) => {
-      const { token, username, displayName: userFullName } = res.locals.user
-
-      const {
-        data: { teams, cases },
-      } = await collectApiResponses({
-        teams: this.userService.getTeams(token),
-        cases: this.customListService.getCustomList(token),
-      })
-      if (!cases) {
-        await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, {
-          who: res.locals.user.username,
-          correlationId: req.id,
-        })
-        return res.render('pages/customList/index', {
-          addCrnsHref: uiPaths.customList.addCrns.pattern,
-        })
-      }
-      await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, { who: username, correlationId: req.id })
-      return res.render('pages/customList/show', {
-        changeListHref: uiPaths.customList.addCrns.pattern,
-        ...setupCaseList(req, teams, username, cases, userFullName),
-      })
     }
   }
 }

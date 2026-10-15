@@ -134,6 +134,7 @@ describe('Routing', () => {
         .expect(200)
         .expect(() => {
           expect(customListController.addCrns).toHaveBeenCalled()
+          expect(customListController.submitCrnList).toHaveBeenCalled()
         })
     })
   })

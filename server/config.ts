@@ -132,7 +132,6 @@ export default {
     hideSetAsCurrentAddress: get('HIDE_SET_AS_CURRENT_ADDRESS', 'false') === 'true',
     caseListV2: get('CASE_LIST_V2_ENABLED', 'false') === 'true',
     caseListV2Tabs: get('CASE_LIST_V2_TABS_ENABLED', 'false') === 'true',
-    casExtraDetails: get('CAS_EXTRA_DETAILS_ENABLED', 'false') === 'true',
     cas2Enabled: get('CAS2_ENABLED', 'false') === 'true',
   },
   timeoutOverrides: {

@@ -20,12 +20,11 @@
       {% endif %}
       {%
         call govukPanel({
-          titleText: "CRNs added
-        "
+          titleText: crnAddedText
         })
       %}
-        {{ crns }}
-        CRNs added
+        {{ crnTotalText }}
+        {{ crnAddedText }}
       {% endcall %}
 
       <form method="get" class="govuk-!-margin-bottom-0">

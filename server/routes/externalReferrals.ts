@@ -13,5 +13,5 @@ export default function externalReferralsRoutes(
   router.get(basePath.edit.pattern, externalReferralsController.submission('edit'))
   router.post(basePath.edit.pattern, externalReferralsController.saveSubmission('edit'))
 
-  router.post(basePath.show.pattern, externalReferralsController.addNote())
+  router.post(basePath.show.pattern, externalReferralsController.saveNote())
 }

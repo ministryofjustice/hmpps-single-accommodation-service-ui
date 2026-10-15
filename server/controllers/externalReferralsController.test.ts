@@ -78,7 +78,7 @@ describe('ExternalReferralsController', () => {
     it('renders the referral details page', async () => {
       await controller.show()(request, response, next)
 
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFFERALS_DETAILS, {
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_DETAILS, {
         who: 'user1',
         correlationId: 'request-id',
       })
@@ -124,7 +124,7 @@ describe('ExternalReferralsController', () => {
     it('renders the submission page for a first referral', async () => {
       await controller.submission('add')(request, response, next)
 
-      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFFERALS_SUBMISSION, {
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_SUBMISSION, {
         who: 'user1',
         correlationId: 'request-id',
       })
@@ -262,7 +262,7 @@ describe('ExternalReferralsController', () => {
       request.params.id = id
       request.body = { note }
 
-      await controller.addNote()(request, response, next)
+      await controller.saveNote()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(detailsPagePath)
       expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
@@ -273,7 +273,7 @@ describe('ExternalReferralsController', () => {
       request.params.id = id
       request.body = { note: '' }
 
-      await controller.addNote()(request, response, next)
+      await controller.saveNote()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(detailsPagePath)
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
@@ -286,7 +286,7 @@ describe('ExternalReferralsController', () => {
       request.params.id = id
       request.body = { note }
 
-      await controller.addNote()(request, response, next)
+      await controller.saveNote()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(detailsPagePath)
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(

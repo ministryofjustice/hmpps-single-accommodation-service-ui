@@ -63,7 +63,7 @@ const externalReferralsController = mock<ExternalReferralsController>({
   submission: mockHandler,
   saveSubmission: mockHandler,
   show: mockHandler,
-  addNote: mockHandler,
+  saveNote: mockHandler,
 })
 
 const staticController = mock<StaticController>({

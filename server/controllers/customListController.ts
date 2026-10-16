@@ -40,13 +40,14 @@ export default class CustomListController {
       })
     }
   }
+
   addCrns(): RequestHandler {
     return async (req: Request, res: Response) => {
       await this.auditService.logPageView(Page.CUSTOM_LIST_ADD_CRNS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-      const {  userInput } = fetchErrorsAndUserInput(req)
+      const { userInput } = fetchErrorsAndUserInput(req)
       return res.render('pages/customList/addCrns', {
         crnList: userInput.crnList,
         backLinkHref: uiPaths.customList.index.pattern,
@@ -63,8 +64,8 @@ export default class CustomListController {
         const crnTotalText = crnList.length
         const crnAddedText = crnTotalText > 1 ? 'CRNs added' : 'CRN added'
         return res.render('pages/customList/confirmation', {
-          crnTotalText: crnTotalText,
-          crnAddedText: crnAddedText,
+          crnTotalText,
+          crnAddedText,
           showHref: uiPaths.customList.index.pattern,
         })
       } catch (error) {
@@ -73,7 +74,7 @@ export default class CustomListController {
           crnList,
           backLinkHref: uiPaths.customList.index.pattern,
           errorSummary: [{ text: errorMessage, href: '#crnList' }],
-          errorMessage: {text: errorMessage}
+          errorMessage: { text: errorMessage },
         })
       }
     }

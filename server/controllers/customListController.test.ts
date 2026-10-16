@@ -129,11 +129,13 @@ describe('customListController', () => {
       serverError.data = { developerMessage: 'Dev error', userMessage: 'Server error' }
       customListService.addCustomList.mockRejectedValue(serverError)
       const crnList = 'CRN1,CRN2'
-      const crnListToArray = ['CRN1','CRN2']
+      const crnListToArray = ['CRN1', 'CRN2']
       request.body = { crnList }
-      jest
-        .spyOn(validationUtils, 'fetchErrorsAndUserInput')
-        .mockReturnValue({ errors: serverError, errorSummary: [{ text: 'Dev error', href: 'crnList' }], userInput: { crnList } })
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({
+        errors: serverError,
+        errorSummary: [{ text: 'Dev error', href: 'crnList' }],
+        userInput: { crnList },
+      })
 
       await customListController.submitCrnList()(request, response, next)
 

@@ -15,6 +15,7 @@ import OsDataHubClient from './osDataHubClient'
 import AccommodationClient from './accommodationClient'
 import UserClient from './userClient'
 import applicationInfoSupplier from '../applicationInfo'
+import CustomListClient from './customListClient'
 
 const applicationInfo = applicationInfoSupplier()
 
@@ -40,6 +41,7 @@ export const dataAccess = () => {
     osDataHubClient: new OsDataHubClient(),
     accommodationClient: new AccommodationClient(hmppsAuthClient),
     userClient: new UserClient(hmppsAuthClient),
+    customListClient: new CustomListClient(hmppsAuthClient),
   }
 }
 

@@ -5,17 +5,13 @@ import { CaseDto } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import {
-  casesResultsSummary,
-  casesToRows,
   caseToRows,
   caseAssignedTo,
   casesTableColumns,
-  queryToFilters,
   displayName,
-  assignedToOptions,
-  casesTabs,
   validateSearchCrn,
   searchResultsSummary,
+  setupCaseList,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -54,35 +50,18 @@ export default class CasesController {
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
       const { peopleType = 'NFA_RISK' } = query
-
       setCaseListUrl(req)
-
       const {
         data: { teams, cases },
       } = await collectApiResponses({
         teams: this.userService.getTeams(token),
         cases: this.casesService.getCases(token, { ...query, peopleType }),
       })
-      const filters = queryToFilters(query, req.originalUrl, teams)
-
-      const currentUsername = query.teamCode ? username : undefined
+      const caseListSettings = setupCaseList(req, teams, username, cases, userFullName)
 
       return res.render('pages/index', {
         peopleType,
-        tabs: casesTabs(req.originalUrl, peopleType),
-        resultsSummary: casesResultsSummary(cases),
-        casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases, currentUsername),
-        query,
-        filters,
-        assignedToOptions: assignedToOptions(userFullName, teams),
-        riskLevelOptions: [
-          { value: '', text: 'All' },
-          { value: 'VERY_HIGH', text: 'Very high' },
-          { value: 'HIGH', text: 'High' },
-          { value: 'MEDIUM', text: 'Medium' },
-          { value: 'LOW', text: 'Low' },
-        ],
+        ...caseListSettings,
       })
     }
   }

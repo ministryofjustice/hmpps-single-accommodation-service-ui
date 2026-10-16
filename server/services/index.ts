@@ -11,6 +11,7 @@ import OsDataHubService from './osDataHubService'
 import AccommodationService from './accommodationService'
 import UserService from './userService'
 import ExternalReferralsService from './externalReferralsService'
+import CustomListService from './customListService'
 
 export const services = () => {
   const {
@@ -26,6 +27,7 @@ export const services = () => {
     osDataHubClient,
     accommodationClient,
     userClient,
+    customListClient,
   } = dataAccess()
 
   return {
@@ -41,6 +43,7 @@ export const services = () => {
     osDataHubService: new OsDataHubService(osDataHubClient),
     accommodationService: new AccommodationService(accommodationClient),
     userService: new UserService(userClient),
+    customListService: new CustomListService(customListClient),
   }
 }
 

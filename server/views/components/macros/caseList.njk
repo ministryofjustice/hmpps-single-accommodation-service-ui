@@ -11,25 +11,22 @@
 {% set caseListV2Tabs = featureFlags.caseListV2Tabs %}
 
 {% macro caseList(peopleType, tabs, resultsSummary, casesTableColumns, casesRows, query, filters, assignedToOptions, riskLevelOptions ) %}
-  {% if not caseListV2Tabs %}
-    <div class="govuk-grid-row">
-      <div class="{{ 'govuk-grid-column-full' if caseListV2 else 'govuk-grid-column-one-half-from-desktop' }}">
-  {% else %}
-    <div class="govuk-tabs">
-      <ul class="govuk-tabs__list">
-        {% for tab in tabs %}
-          <li class="govuk-tabs__list-item {% if tab.selected %}govuk-tabs__list-item--selected{% endif %}">
-            <a class="govuk-tabs__tab" href="{{ tab.href }}">{{ tab.text }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-      <div class="govuk-tabs__panel">
-        <h2 class="govuk-heading-l">{{ 'Housing support needed' if peopleType === 'NFA_RISK' else 'Settled housing secured' }}</h2>
-    {% endif %}
+  <div class="govuk-tabs">
+    <ul class="govuk-tabs__list">
+      {% for tab in tabs %}
+        <li class="govuk-tabs__list-item {% if tab.selected %}govuk-tabs__list-item--selected{% endif %}">
+          <a class="govuk-tabs__tab" href="{{ tab.href }}">{{ tab.text }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="govuk-tabs__panel">
+      <h2 class="govuk-heading-l">
+        {{ 'Housing support needed' if peopleType === 'NFA_RISK' else 'Settled housing secured' }}
+      </h2>
       <form method="get" class="sas-filters govuk-!-margin-bottom-8">
         <input type="hidden" name="peopleType" value="{{ peopleType }}" />
         <div class="govuk-grid-row">
-          <div class="{{ 'govuk-grid-column-one-half' if caseListV2 else 'govuk-grid-column-full' }}">
+          <div class="govuk-grid-column-one-half">
             {{
               govukInput({
                 label: { text: 'Filter by name, CRN or prison number' },
@@ -40,7 +37,7 @@
           </div>
         </div>
         <div class="govuk-grid-row">
-          <div class="{{ 'govuk-grid-column-one-quarter' if caseListV2 else 'govuk-grid-column-one-half' }}">
+          <div class="govuk-grid-column-one-quarter">
             {{
               govukSelect({
                 label: {
@@ -52,7 +49,7 @@
               })
             }}
           </div>
-          <div class="{{ 'govuk-grid-column-one-quarter' if caseListV2 else 'govuk-grid-column-one-half' }}">
+          <div class="govuk-grid-column-one-quarter">
             {{
               govukSelect({
                 label: {

@@ -12,8 +12,7 @@ import uiPaths from '../paths/ui'
 import * as utils from '../utils/externalReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
-import { summaryListRows } from '../utils/dutyToRefer'
-import { detailsSummaryListRows } from '../utils/externalReferrals'
+import { detailsSummaryListRows, summaryListRows, outcomeDetailsSummaryListRows } from '../utils/externalReferrals'
 
 describe('ExternalReferralsController', () => {
   const id = '123'
@@ -65,17 +64,16 @@ describe('ExternalReferralsController', () => {
   })
 
   describe('show', () => {
-    const referral = externalReferralFactory.submitted().build({ crn })
-
     beforeEach(() => {
       request.params.id = id
-      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
-        apiResponseFactory.externalReferral(referral),
-      )
       externalReferralsService.getTimeline.mockResolvedValue(apiResponseFactory.auditRecords(timeLine))
     })
 
     it('renders the referral details page', async () => {
+      const submittedReferral = externalReferralFactory.submitted().build({ crn })
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(submittedReferral),
+      )
       await controller.show()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_DETAILS, {
@@ -92,13 +90,35 @@ describe('ExternalReferralsController', () => {
         displayName: displayName(caseData),
         caseData,
         assignedTo: caseAssignedTo(caseData, 'user1'),
-        referral,
-        submissionDetailRows: detailsSummaryListRows(referral),
-        status: referral.status,
+        referral: submittedReferral,
+        submissionDetailRows: detailsSummaryListRows(submittedReferral),
+        status: submittedReferral.status,
         timeline: [{}, {}],
+        editPath: '/cases/CRN123/external-referrals/123/edit',
+        outcomePath: '/cases/CRN123/external-referrals/123/outcome',
+        outcomeDetailRows: [],
         errors: {},
         errorSummary: [],
       })
+    })
+
+    it.each([
+      ['accepted', externalReferralFactory.accepted().build({ crn })],
+      ['rejected', externalReferralFactory.accepted().build({ crn })],
+    ])('renders the outcome details for an %s referral', async (_, referral) => {
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(referral),
+      )
+      await controller.show()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/external-referrals/show',
+        expect.objectContaining({
+          submissionDetailRows: detailsSummaryListRows(referral),
+          status: referral.status,
+          outcomeDetailRows: outcomeDetailsSummaryListRows(referral),
+        }),
+      )
     })
 
     it('shows errors', async () => {
@@ -132,12 +152,30 @@ describe('ExternalReferralsController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/external-referrals/submission', {
         pageTitle: 'Add external referral details',
         backLinkHref: '/cases/CRN123',
-        crn: 'CRN123',
+        crn,
         tableRows: summaryListRows(caseData),
         errors: {},
         errorSummary: [],
         formValues: {},
       })
+    })
+
+    it('renders the submission page to edit an existing referral', async () => {
+      request.params.id = id
+      await controller.submission('edit')(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_SUBMISSION, {
+        who: 'user1',
+        correlationId: 'request-id',
+      })
+      expect(casesService.getCase).toHaveBeenCalledWith(token, crn)
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/external-referrals/submission',
+        expect.objectContaining({
+          pageTitle: 'Edit external referral details',
+          backLinkHref: '/cases/CRN123/external-referrals/123/details',
+        }),
+      )
     })
 
     it('renders the submission page with errors and user input', async () => {
@@ -266,7 +304,7 @@ describe('ExternalReferralsController', () => {
 
       expect(response.redirect).toHaveBeenCalledWith(detailsPagePath)
       expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
-      expect(externalReferralsService.addNote).toHaveBeenCalledWith(token, crn, id, note)
+      expect(externalReferralsService.saveNote).toHaveBeenCalledWith(token, crn, id, note)
     })
 
     it('redirects with error if there is no note', async () => {
@@ -282,7 +320,7 @@ describe('ExternalReferralsController', () => {
     })
 
     it('redirects if the API errors', async () => {
-      externalReferralsService.addNote.mockRejectedValue(new Error())
+      externalReferralsService.saveNote.mockRejectedValue(new Error())
       request.params.id = id
       request.body = { note }
 
@@ -293,6 +331,151 @@ describe('ExternalReferralsController', () => {
         request,
         'There was a problem saving the note. Please try again.',
       )
+    })
+  })
+
+  describe('outcome', () => {
+    beforeEach(() => {
+      request.params.id = id
+    })
+
+    it('renders the page for a submitted referral', async () => {
+      const referral = externalReferralFactory.submitted().build({ crn })
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(referral),
+      )
+
+      await controller.outcome()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_OUTCOME, {
+        who: 'user1',
+        correlationId: 'request-id',
+      })
+      expect(casesService.getCase).toHaveBeenCalledWith(token, crn)
+      expect(externalReferralsService.getExternalReferralBySubmissionId).toHaveBeenCalledWith(token, crn, id)
+
+      expect(response.render).toHaveBeenCalledWith('pages/external-referrals/outcome', {
+        backLinkHref: '/cases/CRN123/external-referrals/123/details',
+        crn,
+        errorSummary: [],
+        errors: {},
+        statusItems: [
+          {
+            checked: false,
+            text: 'Accepted',
+            value: 'ACCEPTED',
+            conditional: {
+              html: "<p class='govuk-body'>Once you have address details, add them as a 'Proposed address'.</p>",
+            },
+          },
+          { checked: false, text: 'Rejected', value: 'REJECTED' },
+        ],
+        pageTitle: 'Add external referral outcome',
+        tableRows: summaryListRows(caseData, referral),
+      })
+    })
+
+    it('renders the page for a referral with an existing outcome', async () => {
+      const referral = externalReferralFactory.accepted().build({ crn })
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(referral),
+      )
+
+      await controller.outcome()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/external-referrals/outcome',
+        expect.objectContaining({
+          backLinkHref: '/cases/CRN123/external-referrals/123/details',
+          crn,
+          pageTitle: 'Edit external referral outcome',
+          tableRows: summaryListRows(caseData, referral),
+          outcomeNote: referral.submission.outcomeNote,
+        }),
+      )
+    })
+  })
+
+  describe('saveOutcome', () => {
+    const submittedReferral = externalReferralFactory.submitted().build()
+
+    beforeEach(() => {
+      jest.resetAllMocks()
+      jest.restoreAllMocks()
+
+      request = mock<Request>({
+        params: { crn, id },
+        body: {
+          outcomeStatus: 'ACCEPTED',
+          outcomeNote: 'Outcome notes',
+        },
+        flash: jest.fn(),
+      })
+    })
+
+    it('saves a new outcome and redirects to referral details', async () => {
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(submittedReferral),
+      )
+
+      await controller.saveOutcome()(request, response, next)
+
+      expect(externalReferralsService.update).toHaveBeenCalledWith(
+        token,
+        crn,
+        id,
+        expect.objectContaining({ status: 'ACCEPTED', outcomeNote: 'Outcome notes' }),
+      )
+      expect(request.flash).toHaveBeenCalledWith('success', {
+        body: 'If the organisation has shared a possible address, <a href="/cases/CRN123/proposed-addresses/start">add it as a proposed address</a>.',
+        heading: 'Outcome details added',
+      })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.show({ crn, id }))
+    })
+
+    it('accepts an existing rejected referral and redirects to referral details', async () => {
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(externalReferralFactory.rejected().build()),
+      )
+      request.body.outcomeStatus = 'ACCEPTED'
+
+      await controller.saveOutcome()(request, response, next)
+
+      expect(request.flash).toHaveBeenCalledWith('success', {
+        body: 'If the organisation has shared a possible address, <a href="/cases/CRN123/proposed-addresses/start">add it as a proposed address</a>.',
+        heading: 'Outcome details changed',
+      })
+    })
+
+    it('rejects an existing accepted outcome', async () => {
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(externalReferralFactory.accepted().build()),
+      )
+      request.body.outcomeStatus = 'REJECTED'
+
+      await controller.saveOutcome()(request, response, next)
+
+      expect(request.flash).toHaveBeenCalledWith('success', {
+        body: undefined,
+        heading: 'Outcome details changed',
+      })
+    })
+
+    it('redirects to outcome page if validation fails', async () => {
+      jest.spyOn(utils, 'validateOutcome').mockReturnValue(false)
+
+      await controller.saveOutcome()(request, response, next)
+
+      expect(externalReferralsService.update).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/external-referrals/123/outcome')
+    })
+
+    it('redirects to external referrals details page when the API call fails', async () => {
+      externalReferralsService.update.mockRejectedValue(new Error('API error'))
+
+      await controller.saveOutcome()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/external-referrals/123/outcome')
     })
   })
 })

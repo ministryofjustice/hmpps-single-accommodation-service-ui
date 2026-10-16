@@ -22,16 +22,30 @@ export default class ExternalReferralsDetailsPage extends AbstractPage {
   }
 
   async shouldShowSubmissionDetails() {
-    await expect(this.page.getByRole('heading', { name: 'Referral details', exact: true })).toBeVisible()
+    const card = this.getSummaryCard('Referral details')
+
     const {
       status,
-      submission: { submissionDate, referenceNumber, website },
+      submission: { submissionDate, referenceNumber, website, submissionNote },
+    } = this.referral
+    if (this.referral.status === 'SUBMITTED')
+      await this.shouldShowSummaryItem('Status', externalReferralStatusTag(status).text, card)
+    await this.shouldShowSummaryItem('Submitted on', formatDateAndDaysAgo(submissionDate), card)
+    await this.shouldShowSummaryItem('Reference number', referenceNumber, card)
+    await this.shouldShowSummaryItem('Website', website, card)
+    await this.shouldShowSummaryItem('Notes', submissionNote || 'No notes added', card)
+  }
+
+  async shouldShowOutcomeDetails() {
+    const card = this.getSummaryCard('Outcome')
+
+    const {
+      status,
+      submission: { outcomeNote },
     } = this.referral
 
-    await this.shouldShowSummaryItem('Status', externalReferralStatusTag(status).text)
-    await this.shouldShowSummaryItem('Submitted on', formatDateAndDaysAgo(submissionDate))
-    await this.shouldShowSummaryItem('Reference number', referenceNumber)
-    await this.shouldShowSummaryItem('Website', website)
+    await this.shouldShowSummaryItem('Status', externalReferralStatusTag(status).text, card)
+    await this.shouldShowSummaryItem('Notes', outcomeNote || 'No notes added', card)
   }
 
   async checkNoteApiCalled(referral: ExternalReferralDto, note: string) {

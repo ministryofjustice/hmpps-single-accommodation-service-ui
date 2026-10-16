@@ -23,20 +23,19 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <section>
-        {% if active %}
-          <div class="govuk-button-group govuk-!-padding-bottom-4">
+
             {% if outcomeDetailRows.length == 0 %}
+              <div class="govuk-button-group govuk-!-padding-bottom-4">
               {{
                 govukButton({
                     text: "Add outcome",
-                    href: paths.dutyToRefer.outcome({ crn: crn, id: referralId }),
+                    href: outcomePath,
                     preventDoubleClick: true
                 })
               }}
+          </div>
             {% endif %}
 
-          </div>
-        {% endif %}
         {% if outcomeDetailRows.length > 0 %}
           {{
             govukSummaryList({
@@ -47,7 +46,7 @@
                   actions: {
                     items: [
                       {
-                        href: paths.dutyToRefer.outcome({ crn: crn, id: referralId }),
+                        href: outcomePath,
                         classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
                         text: "Change"
                       }
@@ -67,7 +66,7 @@
                 actions: {
                   items: [
                     {
-                      href: paths.externalReferrals.edit({ crn: crn, id: referralId }),
+                      href: editPath,
                       classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
                       text: "Change"
                     }

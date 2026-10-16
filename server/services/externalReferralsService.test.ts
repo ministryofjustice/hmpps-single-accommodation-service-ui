@@ -52,6 +52,12 @@ describe('ExternalReferralsService', () => {
     expect(client.update).toHaveBeenCalledWith(token, crn, id, command)
   })
 
+  it('should call search on the api client with externalReferral command', async () => {
+    await service.search(token, crn)
+
+    expect(client.search).toHaveBeenCalledWith(token, crn)
+  })
+
   it('should call getTimeline on the api client and return the result', async () => {
     const timeline = auditRecordFactory.buildList(2)
     const response = apiResponseFactory.auditRecords(timeline)
@@ -65,10 +71,10 @@ describe('ExternalReferralsService', () => {
 
   it('should call the client to add a note', async () => {
     const note = 'Test note'
-    client.addNote.mockResolvedValue()
+    client.saveNote.mockResolvedValue()
 
-    await service.addNote(token, crn, id, note)
+    await service.saveNote(token, crn, id, note)
 
-    expect(client.addNote).toHaveBeenCalledWith(token, crn, id, note)
+    expect(client.saveNote).toHaveBeenCalledWith(token, crn, id, note)
   })
 })

@@ -76,7 +76,6 @@ const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: s
     case 'NOT_CHECKED_YET':
       return [{ text: 'Add checks', href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }) }, detailsLink]
     case 'CONFIRMED':
-      if (config.flags.hideSetAsCurrentAddress) return [detailsLink]
       return [{ text: 'Set as current address', href: uiPaths.proposedAddresses.arrival({ crn, id }) }, detailsLink]
     default:
       return [detailsLink]
@@ -375,10 +374,6 @@ export const nextActionButton = (proposedAddress: ProposedAccommodationDto): But
   }
   if (verificationStatus === 'PASSED') {
     if (nextAccommodationStatus === 'YES') {
-      if (config.flags.hideSetAsCurrentAddress) {
-        return undefined
-      }
-
       return {
         text: 'Set as current address',
         href: uiPaths.proposedAddresses.arrival({ crn, id }),

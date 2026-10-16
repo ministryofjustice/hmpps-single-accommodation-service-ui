@@ -360,7 +360,7 @@ const detailsForCas2Status = (
 const placementDurationText = (durationDays?: number | null): string | undefined => {
   if (durationDays == null) return undefined
 
-  const weeks = durationDays / 7
+  const weeks = Math.round(durationDays / 7)
   return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
 }
 

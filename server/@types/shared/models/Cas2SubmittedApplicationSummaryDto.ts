@@ -17,4 +17,5 @@ export type Cas2SubmittedApplicationSummaryDto = {
   offerDeclinedReason?: string | null
   cancelledReason?: string | null
   submittedAt: string
+  markedAsArrivedDateTime?: string | null
 }

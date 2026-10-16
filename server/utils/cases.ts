@@ -6,7 +6,6 @@ import { htmlContent, initialiseName } from './utils'
 import { renderMacro, statusCell } from './macros'
 import { renderActions } from './actions'
 import { staffName } from './staff'
-import config from '../config'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { validateAndFlashErrors, validateCrn } from './validation'
 import { summaryListRow } from './summaryListRow'
@@ -98,9 +97,6 @@ export const actionsCell = (actions: CaseAction[]): string =>
 export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[] =>
   cases.map(c => {
     const assignedToText = currentUsername ? caseAssignedTo(c, currentUsername) : undefined
-    if (!config.flags.caseListV2) {
-      return [htmlContent(personCell(c, assignedToText))]
-    }
     const accommodationStatus = accommodationStatusCell(c)
     return [
       htmlContent(personCell(c, assignedToText)),
@@ -112,12 +108,12 @@ export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[]
 
 export const caseToRows = (caseData: Case | null): TableRow[] => (caseData ? casesToRows([caseData]) : [])
 
-export const casesTableColumns = () => {
-  if (!config.flags.caseListV2) {
-    return [{ text: 'Name' }]
-  }
-  return [{ text: 'Name' }, { text: 'Current accommodation' }, { text: 'Next accommodation' }, { text: 'Status' }]
-}
+export const casesTableColumns = () => [
+  { text: 'Name' },
+  { text: 'Current accommodation' },
+  { text: 'Next accommodation' },
+  { text: 'Status' },
+]
 
 export const caseAssignedTo = (c: Case, username: string): string => {
   if (c.userAccess !== 'FULL') return ''

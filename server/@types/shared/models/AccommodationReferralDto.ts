@@ -40,4 +40,5 @@ export type AccommodationReferralDto = {
   uiUrl?: string | null
   withdrawalReason?: string | null
   withdrawalNote?: string | null
+  otherReason?: string | null
 }

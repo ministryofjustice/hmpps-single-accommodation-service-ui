@@ -78,33 +78,31 @@
           })
         }}
       </section>
-{#  TODO: Note functionality will be added shortly #}
-{#  <section class="govuk-!-margin-top-4 govuk-!-margin-bottom-4">#}
-{#        <form action="{{ currentUrl }}" method="post">#}
-{#          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />#}
+      <section class="govuk-!-margin-top-4 govuk-!-margin-bottom-4">
+        <form action="{{ currentUrl }}" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {{
+            govukTextarea({
+            name: "note",
+            label: {
+                text: "Add note",
+                classes: "govuk-label--s"
+            },
+            classes: "govuk-!-width-two-thirds",
+            value: note,
+            errorMessage: errors.note
+            })
+          }}
 
-{#          {{#}
-{#            govukTextarea({#}
-{#            name: "note",#}
-{#            label: {#}
-{#                text: "Add note",#}
-{#                classes: "govuk-label--s"#}
-{#            },#}
-{#            classes: "govuk-!-width-two-thirds",#}
-{#            value: note,#}
-{#            errorMessage: errors.note#}
-{#            })#}
-{#          }}#}
-
-{#          {{#}
-{#            govukButton({#}
-{#            text: "Add note",#}
-{#            preventDoubleClick: true,#}
-{#            classes: "govuk-button--secondary"#}
-{#            })#}
-{#          }}#}
-{#        </form>#}
-{#      </section>#}
+          {{
+            govukButton({
+            text: "Add note",
+            preventDoubleClick: true,
+            classes: "govuk-button--secondary"
+            })
+          }}
+        </form>
+      </section>
     </div>
 
     <section class="govuk-grid-column-one-third-from-desktop">

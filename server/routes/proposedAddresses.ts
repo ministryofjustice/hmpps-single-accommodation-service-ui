@@ -38,8 +38,6 @@ export default function proposedAddressesRoutes(
 
   router.get(uiPaths.proposedAddresses.cancel.pattern, proposedAddressesController.cancel())
 
-  if (!config.flags.hideSetAsCurrentAddress) {
-    router.get(uiPaths.proposedAddresses.arrival.pattern, proposedAddressesController.arrival())
-    router.post(uiPaths.proposedAddresses.arrival.pattern, proposedAddressesController.saveArrival())
-  }
+  router.get(uiPaths.proposedAddresses.arrival.pattern, proposedAddressesController.arrival())
+  router.post(uiPaths.proposedAddresses.arrival.pattern, proposedAddressesController.saveArrival())
 }

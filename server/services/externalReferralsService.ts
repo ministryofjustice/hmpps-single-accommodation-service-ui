@@ -23,4 +23,8 @@ export default class ExternalReferralsService {
   async getTimeline(token: string, crn: string, id: string) {
     return this.externalReferralsClient.getTimeline(token, crn, id)
   }
+
+  addNote(token: string, crn: string, id: string, note: string) {
+    return this.externalReferralsClient.addNote(token, crn, id, note)
+  }
 }

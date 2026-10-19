@@ -78,10 +78,9 @@ export const linksForCas2Status = (serviceResult?: ServiceResult) => {
     case 'NOT_STARTED':
     case 'CAS2_NOT_STARTED_CAS1':
     case 'CAS2_NOT_STARTED_PRISON':
-      return [{ text: 'Start application', ...link }]
     case 'CAS2_NOT_STARTED_COMMUNITY':
     case 'CAS2_NOT_STARTED_CAS2':
-      return [{ text: 'Start referral', ...link }]
+      return [{ text: 'Start application', ...link }]
     case 'NOT_SUBMITTED':
     case 'MORE_INFORMATION_NEEDED':
       return [{ text: 'Continue application', ...link }]
@@ -249,40 +248,6 @@ const contentForCas1Status = (
   }
 }
 
-const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
-  const { serviceStatus } = serviceResult ?? {}
-
-  const cas2MoreInfo = htmlContent('<p class="govuk-body">For more guidance on CAS2 eligibility, see EQuiP.</p>')
-
-  switch (serviceStatus) {
-    case 'CAS2_NOT_STARTED_CAS1':
-      return [
-        htmlContent('<p class="govuk-!-margin-bottom-0">Available as a move-on from Approved Premises.</p>'),
-        cas2MoreInfo,
-      ]
-    case 'CAS2_NOT_STARTED_PRISON':
-      return [
-        htmlContent(
-          bulletList('Available in these circumstances:', [
-            'Homeless at conditional release date',
-            'Homeless at end of fixed-term recall',
-            'As part of risk-assessed recall review',
-          ]),
-        ),
-        cas2MoreInfo,
-      ]
-    case 'CAS2_NOT_STARTED_COMMUNITY':
-    case 'CAS2_NOT_STARTED_CAS2':
-      return [
-        htmlContent(
-          bulletList('Available for:', ['Alternative to custodial recall', 'Intensive supervision court order']),
-        ),
-      ]
-    default:
-      return undefined
-  }
-}
-
 const contentForCas3Status = (
   serviceResult?: ServiceResult,
   cas3Application?: Cas3ApplicationDto,
@@ -395,7 +360,7 @@ const detailsForCas2Status = (
 const placementDurationText = (durationDays?: number | null): string | undefined => {
   if (durationDays == null) return undefined
 
-  const weeks = durationDays / 7
+  const weeks = Math.round(durationDays / 7)
   return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
 }
 
@@ -553,15 +518,7 @@ const statusFields = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive
 }
 
 const statusFieldsForCas2 = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
-  const { serviceStatus } = serviceResult ?? {}
-
-  const fields = statusFields(serviceResult)
-
-  if (serviceStatus === 'CAS2_NOT_STARTED_COMMUNITY' || serviceStatus === 'CAS2_NOT_STARTED_CAS2') {
-    fields.inactive = true
-  }
-
-  return fields
+  return statusFields(serviceResult)
 }
 
 export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceResult): StatusCard => ({
@@ -578,7 +535,6 @@ export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceRe
   ...statusFieldsForCas2(serviceResult),
   hint: hintForCas2Status(serviceResult),
   links: linksForCas2Status(serviceResult),
-  content: contentForCas2Status(serviceResult),
   details: detailsForCas2Status(serviceResult, cas2Application),
 })
 

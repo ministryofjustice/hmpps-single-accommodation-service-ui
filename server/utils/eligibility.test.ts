@@ -104,8 +104,8 @@ describe('linksForService', () => {
     { service: 'cas2', status: 'NOT_STARTED', expected: ['Start application'] },
     { service: 'cas2', status: 'CAS2_NOT_STARTED_CAS1', expected: ['Start application'] },
     { service: 'cas2', status: 'CAS2_NOT_STARTED_PRISON', expected: ['Start application'] },
-    { service: 'cas2', status: 'CAS2_NOT_STARTED_COMMUNITY', expected: ['Start referral'] },
-    { service: 'cas2', status: 'CAS2_NOT_STARTED_CAS2', expected: ['Start referral'] },
+    { service: 'cas2', status: 'CAS2_NOT_STARTED_COMMUNITY', expected: ['Start application'] },
+    { service: 'cas2', status: 'CAS2_NOT_STARTED_CAS2', expected: ['Start application'] },
     { service: 'cas2', status: 'NOT_SUBMITTED', expected: ['Continue application'] },
     { service: 'cas2', status: 'MORE_INFORMATION_NEEDED', expected: ['Continue application'] },
     { service: 'cas2', status: 'SUBMITTED', expected: ['View application'] },
@@ -450,6 +450,26 @@ describe('cas1 status card', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
       expect(cas1StatusCard({ serviceResult, cas1Application }).details).toMatchSnapshot()
+    })
+
+    it.each([
+      [10, '1 week'],
+      [11, '2 weeks'],
+    ])('rounds a %s-day placement duration to %s', (durationDays, expectedDuration) => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'PLACEMENT_BOOKED' })
+      const application = {
+        ...cas1Application,
+        requestForPlacement: { ...cas1Application.requestForPlacement, durationDays },
+      }
+
+      expect(cas1StatusCard({ serviceResult, cas1Application: application }).details).toEqual(
+        expect.arrayContaining([
+          {
+            key: { text: 'Duration' },
+            value: { text: expectedDuration },
+          },
+        ]),
+      )
     })
   })
 

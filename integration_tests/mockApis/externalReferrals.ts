@@ -57,7 +57,7 @@ export default {
       },
     }),
 
-  stubExternalreferralTimeline: (crn: string, id: string, timeline: Array<AuditRecordDto>): SuperAgentRequest =>
+  stubExternalReferralTimeline: (crn: string, id: string, timeline: Array<AuditRecordDto>): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
@@ -67,6 +67,19 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: apiResponseFactory.auditRecords(timeline),
+      },
+    }),
+
+  stubExternalReferralAddNote: (crn: string, id: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.cases.externalReferrals.notes({ crn, id }),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     }),
 }

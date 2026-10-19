@@ -3,7 +3,7 @@ import { ExternalReferralCommand } from '@sas/api'
 import uiPaths from '../paths/ui'
 import CasesService from '../services/casesService'
 import AuditService, { Page } from '../services/auditService'
-import { addGenericErrorToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import { addGenericErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { dateInputToIsoDate } from '../utils/dates'
 import {
@@ -11,6 +11,7 @@ import {
   submissionFormValues,
   detailsSummaryListRows,
   externalReferralTimelineEntry,
+  validateNote,
 } from '../utils/externalReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
@@ -30,7 +31,7 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { username, token } = res.locals.user
 
-      await this.auditService.logPageView(Page.EXTERNAL_REFFERALS_DETAILS, {
+      await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_DETAILS, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -68,7 +69,7 @@ export default class ExternalReferralsController {
 
       const backLinkHref = id ? uiPaths.externalReferrals.show({ crn, id }) : uiPaths.cases.show({ crn })
 
-      await this.auditService.logPageView(Page.EXTERNAL_REFFERALS_SUBMISSION, {
+      await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_SUBMISSION, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
@@ -145,8 +146,35 @@ export default class ExternalReferralsController {
         return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
+        addUserInputToFlash(req)
         return res.redirect(errorRedirect)
       }
+    }
+  }
+
+  saveNote(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+      const { note } = req.body
+
+      await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_ADD_NOTE, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      if (!validateNote(req)) {
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
+      }
+
+      try {
+        await this.externalReferralsService.addNote(token, crn, id, note)
+        req.flash('success', 'Note added')
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')
+        addUserInputToFlash(req)
+      }
+      return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
     }
   }
 

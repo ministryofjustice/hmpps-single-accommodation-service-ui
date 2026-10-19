@@ -451,6 +451,26 @@ describe('cas1 status card', () => {
 
       expect(cas1StatusCard({ serviceResult, cas1Application }).details).toMatchSnapshot()
     })
+
+    it.each([
+      [10, '1 week'],
+      [11, '2 weeks'],
+    ])('rounds a %s-day placement duration to %s', (durationDays, expectedDuration) => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'PLACEMENT_BOOKED' })
+      const application = {
+        ...cas1Application,
+        requestForPlacement: { ...cas1Application.requestForPlacement, durationDays },
+      }
+
+      expect(cas1StatusCard({ serviceResult, cas1Application: application }).details).toEqual(
+        expect.arrayContaining([
+          {
+            key: { text: 'Duration' },
+            value: { text: expectedDuration },
+          },
+        ]),
+      )
+    })
   })
 
   describe('content', () => {

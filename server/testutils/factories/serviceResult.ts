@@ -26,7 +26,6 @@ const crsStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_ELIGIBLE', 'NOT
 const paStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_ELIGIBLE', 'NOT_STARTED', 'COMPLETED']
 
 const allFailureReasons: ServiceResult['failureReasons'] = [
-  'S_TIER',
   'MALE_NOT_HIGH_RISK_TIER',
   'NON_MALE_NOT_HIGH_RISK_TIER',
   'INVALID_CURRENT_ACCOMMODATION_TYPE',

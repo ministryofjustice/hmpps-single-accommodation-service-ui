@@ -8,6 +8,7 @@ export declare module 'express-session' {
     pageReferers: Record<string, string>
     caseListUrl?: string
     searchTerm?: string
+    userProbationRegion?: { username: string; code: string | null }
   }
 }
 

@@ -1,12 +1,11 @@
-import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { asUser, AuthenticationClient } from '@ministryofjustice/hmpps-rest-client'
 import { ApiResponseDtoListAccommodationSummaryDto, ApiResponseDtoAccommodationSummariesDto } from '@sas/api'
-import config from '../config'
-import logger from '../../logger'
+import SasApiClient from './sasApiClient'
 import apiPaths from '../paths/api'
 
-export default class AccommodationClient extends RestClient {
+export default class AccommodationClient extends SasApiClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Accommodation client', config.apis.sasApi, logger, authenticationClient)
+    super('Accommodation client', authenticationClient)
   }
 
   async getAccommodationHistory(token: string, crn: string) {

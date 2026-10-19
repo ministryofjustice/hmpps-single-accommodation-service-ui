@@ -1,4 +1,4 @@
-import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { asUser } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import {
   DtrCommand,
@@ -7,13 +7,12 @@ import {
   NoteCommand,
   ApiResponseDtoListAuditRecordDto,
 } from '@sas/api'
-import config from '../config'
-import logger from '../../logger'
+import SasApiClient from './sasApiClient'
 import apiPaths from '../paths/api'
 
-export default class DutyToReferClient extends RestClient {
+export default class DutyToReferClient extends SasApiClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Duty to Refer client', config.apis.sasApi, logger, authenticationClient)
+    super('Duty to Refer client', authenticationClient)
   }
 
   getDtrBySubmissionId(token: string, crn: string, id: string) {

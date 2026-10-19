@@ -47,5 +47,6 @@ export default {
   referenceData: path('/reference-data'),
   user: {
     teams: path('/user/teams'),
+    me: path('/user/me'),
   },
 }

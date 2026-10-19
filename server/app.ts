@@ -10,6 +10,7 @@ import authorisationMiddleware from './middleware/authorisationMiddleware'
 import setUpAuthentication, { setUpAuthenticationErrorRoute } from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
+import setUpUserProbationRegion from './middleware/setUpUserProbationRegion'
 import setUpFrontendComponents from './middleware/setUpFrontendComponents'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpStaticResources from './middleware/setUpStaticResources'
@@ -42,6 +43,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpAuthentication())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(setUpUserProbationRegion(services.userService))
   app.use(setUpMaintenancePageRedirect())
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')

@@ -1,12 +1,11 @@
-import { RestClient, asUser } from '@ministryofjustice/hmpps-rest-client'
+import { asUser } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import config from '../config'
-import logger from '../../logger'
+import SasApiClient from './sasApiClient'
 import { HelloWorldData } from '../interfaces/helloWorldData'
 
-export default class SasClient extends RestClient {
+export default class SasClient extends SasApiClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Single Accommodation Service (SAS) API', config.apis.sasApi, logger, authenticationClient)
+    super('Single Accommodation Service (SAS) API', authenticationClient)
   }
 
   getHelloWorld(token: string): Promise<HelloWorldData> {

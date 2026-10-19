@@ -1,13 +1,12 @@
-import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { asUser } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { ApiResponseDtoListReferenceDataDto } from '@sas/api'
-import config from '../config'
-import logger from '../../logger'
+import SasApiClient from './sasApiClient'
 import apiPaths from '../paths/api'
 
-export default class ReferenceDataClient extends RestClient {
+export default class ReferenceDataClient extends SasApiClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Reference data client', config.apis.sasApi, logger, authenticationClient)
+    super('Reference data client', authenticationClient)
   }
 
   async getReferenceData(token: string, type: string) {

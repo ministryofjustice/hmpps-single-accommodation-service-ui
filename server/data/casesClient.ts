@@ -1,14 +1,14 @@
-import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { asUser } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { ApiResponseDtoCaseDto, ApiResponseDtoListCaseDto } from '@sas/api'
 import { GetCasesQuery } from '@sas/ui'
+import SasApiClient from './sasApiClient'
 import config from '../config'
-import logger from '../../logger'
 import apiPaths from '../paths/api'
 
-export default class CasesClient extends RestClient {
+export default class CasesClient extends SasApiClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Cases client', config.apis.sasApi, logger, authenticationClient)
+    super('Cases client', authenticationClient)
   }
 
   /**

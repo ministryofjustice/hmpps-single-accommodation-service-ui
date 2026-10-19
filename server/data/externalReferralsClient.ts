@@ -1,4 +1,4 @@
-import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { asUser } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import {
   ExternalReferralDto,
@@ -7,13 +7,12 @@ import {
   ApiResponseDtoListExternalReferralDto,
   ApiResponseDtoListAuditRecordDto,
 } from '@sas/api'
-import config from '../config'
-import logger from '../../logger'
+import SasApiClient from './sasApiClient'
 import apiPaths from '../paths/api'
 
-export default class ExternalReferralsClient extends RestClient {
+export default class ExternalReferralsClient extends SasApiClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Other Accommodation Referral client', config.apis.sasApi, logger, authenticationClient)
+    super('Other Accommodation Referral client', authenticationClient)
   }
 
   search(token: string, crn: string) {

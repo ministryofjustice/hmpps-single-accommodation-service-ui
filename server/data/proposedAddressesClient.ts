@@ -1,4 +1,4 @@
-import { asUser, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { asUser, AuthenticationClient } from '@ministryofjustice/hmpps-rest-client'
 import { GetProposedAddressesQuery } from '@sas/ui'
 import {
   ApiResponseDtoListAuditRecordDto,
@@ -8,13 +8,12 @@ import {
   ProposedAccommodationArrivalCommand,
   ProposedAccommodationDetailCommand,
 } from '@sas/api'
-import config from '../config'
-import logger from '../../logger'
+import SasApiClient from './sasApiClient'
 import apiPaths from '../paths/api'
 
-export default class ProposedAddressesClient extends RestClient {
+export default class ProposedAddressesClient extends SasApiClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Proposed addresses client', config.apis.sasApi, logger, authenticationClient)
+    super('Proposed addresses client', authenticationClient)
   }
 
   async getProposedAddresses(token: string, crn: string, query?: GetProposedAddressesQuery) {

@@ -11,10 +11,6 @@ export type ServiceResult = {
     | 'NOT_ELIGIBLE'
     | 'UPCOMING'
     | 'NOT_STARTED'
-    | 'CAS2_NOT_STARTED_COMMUNITY'
-    | 'CAS2_NOT_STARTED_PRISON'
-    | 'CAS2_NOT_STARTED_CAS1'
-    | 'CAS2_NOT_STARTED_CAS2'
     | 'NOT_SUBMITTED'
     | 'INFO_REQUESTED'
     | 'COMPLETED'
@@ -54,7 +50,6 @@ export type ServiceResult = {
     | 'CAS3_START_REFERRAL'
     | 'CAS3_VIEW_REFERRAL'
   failureReasons: Array<
-    | 'S_TIER'
     | 'MALE_NOT_HIGH_RISK_TIER'
     | 'NON_MALE_NOT_HIGH_RISK_TIER'
     | 'INVALID_CURRENT_ACCOMMODATION_TYPE'
@@ -66,6 +61,9 @@ export type ServiceResult = {
     | 'SUITABLE_CAS3_APPLICATION'
     | 'IS_SETTLED'
     | 'UNDER_18'
+    | 'IN_CAS2_ACCOMMODATION'
+    | 'IN_CAS3_ACCOMMODATION'
+    | 'IN_COMMUNITY'
   >
   blockingStatusReason?:
     | 'SUBMIT_DTR_BEFORE_CAS3'

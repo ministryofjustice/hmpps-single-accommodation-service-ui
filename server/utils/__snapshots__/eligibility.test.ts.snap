@@ -891,8 +891,8 @@ exports[`eligibilityStatusCard for cas1 renders a INFO_REQUESTED status card 1`]
     },
   ],
   "status": {
-    "colour": "yellow",
-    "text": "Info requested",
+    "colour": "orange",
+    "text": "Information requested",
   },
 }
 `;

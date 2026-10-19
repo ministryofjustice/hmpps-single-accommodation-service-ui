@@ -39,8 +39,8 @@ test.describe('custom list', () => {
 
     // WHEN I add CRNs to the list
     await createListPage.completeInputByLabel('Add CRNs', 'X123456,X654321')
-    // AND I click the submit buttom
-    await createListPage.clickButton('Save and continue')
+    // AND I click the submit button
+    await createListPage.clickButton('Submit')
 
     // THEN the API should be called with the correct CRNs
     await createListPage.checkApiCalled(['X123456', 'X654321'])
@@ -65,7 +65,6 @@ test.describe('custom list', () => {
     const teams = [{ code: 'team-one-code', name: 'Team One' }]
 
     await customListApi.stubSubmitCustomList()
-    await customListApi.stubGetCustomList(cases)
     await userApi.stubGetTeams(teams)
 
     // GIVEN a custom list already exists
@@ -97,8 +96,8 @@ test.describe('custom list', () => {
 
     // When I change a CRN on the list
     await addCrnsPage.completeInputByLabel('Add CRNs', 'X123456,X987654')
-    // AND I click the submit buttom
-    await addCrnsPage.clickButton('Save and continue')
+    // AND I click the submit button
+    await addCrnsPage.clickButton('Submit')
 
     // THEN the API should be called with the correct CRNs
     await addCrnsPage.checkApiCalled(['X123456', 'X987654'])

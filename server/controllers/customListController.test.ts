@@ -31,7 +31,7 @@ describe('customListController', () => {
     request = mock<Request>({ id: 'request-id', originalUrl: '/' })
   })
 
-  describe('customList', () => {
+  describe('index', () => {
     const teams = [{ code: 'team-code', name: 'Team Name' }]
     const baseContext = {
       assignedToOptions: [
@@ -53,7 +53,7 @@ describe('customListController', () => {
 
     it('renders the create custom list page when no list already exits', async () => {
       customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList([]))
-      await customListController.customList()(request, response, next)
+      await customListController.index()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_INDEX, {
         who: user.username,
@@ -68,7 +68,7 @@ describe('customListController', () => {
       const cases = caseFactory.buildList(3)
       customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(cases))
       request.query = {}
-      await customListController.customList()(request, response, next)
+      await customListController.index()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_SHOW, {
         who: user.username,
@@ -90,13 +90,28 @@ describe('customListController', () => {
         query: {},
       })
     })
+
+    it('stores the current custom list in flash when a list already exists', async () => {
+      const cases = [caseFactory.build({ crn: 'CRN1' }), caseFactory.build({ crn: 'CRN2' })]
+      customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(cases))
+      const addUserInputToFlash = jest.spyOn(validationUtils, 'addUserInputToFlash')
+
+      await customListController.index()(request, response, next)
+
+      expect(request.body).toEqual({ crnList: 'CRN1,CRN2' })
+      expect(addUserInputToFlash).toHaveBeenCalledWith(request)
+    })
   })
   describe('addCrns', () => {
     it.each([null, 'CRN1,CRN2'])('renders the add crns page when list is: %s', async crnList => {
+      const caseList = crnList ? [caseFactory.build({ crn: 'CRN1' }), caseFactory.build({ crn: 'CRN2' })] : []
+      const expectedCrnList = crnList || ''
+      customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(caseList))
+      const expectedError = new Error('Error Message')
+      const expectedErrorSummary = ['Error Summary']
       jest
         .spyOn(validationUtils, 'fetchErrorsAndUserInput')
-        .mockReturnValue({ errors: {}, errorSummary: [], userInput: { crnList } })
-
+        .mockReturnValue({ errors: expectedError, errorSummary: expectedErrorSummary, userInput: null })
       await customListController.addCrns()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_ADD_CRNS, {
@@ -104,8 +119,30 @@ describe('customListController', () => {
         correlationId: 'request-id',
       })
       expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
-        crnList,
+        crnList: expectedCrnList,
         backLinkHref: uiPaths.customList.index.pattern,
+        errorSummary: expectedErrorSummary,
+        errors: expectedError,
+      })
+    })
+
+    it('prefers flashed user input over the stored custom list', async () => {
+      customListService.getCustomList.mockResolvedValue(
+        apiResponseFactory.caseList([caseFactory.build({ crn: 'CRN1' }), caseFactory.build({ crn: 'CRN2' })]),
+      )
+      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({
+        errors: null,
+        errorSummary: [],
+        userInput: { crnList: 'CRN3\nCRN4' },
+      })
+
+      await customListController.addCrns()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
+        crnList: 'CRN3\nCRN4',
+        backLinkHref: uiPaths.customList.index.pattern,
+        errorSummary: [],
+        errors: null,
       })
     })
   })
@@ -113,37 +150,77 @@ describe('customListController', () => {
     it.each([
       ['CRN1,CRN2', 2],
       ['CRN1', 1],
-    ])('renders the confirmation page on successful submission', async (crnList, crnTotal) => {
+    ])('renders the confirmation page on successful submission: %s', async (crnList, crnTotal) => {
       request.body = { crnList }
+      const addUserInputToFlash = jest.spyOn(validationUtils, 'addUserInputToFlash')
+
       await customListController.submitCrnList()(request, response, next)
 
-      expect(response.render).toHaveBeenCalledWith('pages/customList/confirmation', {
-        crnAddedText: crnTotal > 1 ? 'CRNs added' : 'CRN added',
-        crnTotalText: crnTotal,
-        showHref: uiPaths.customList.index.pattern,
-      })
+      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, crnList.split(','))
+      expect(request.body).toEqual({ crnList })
+      expect(addUserInputToFlash).toHaveBeenCalledWith(request)
+      expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
     })
+
+    it('normalises CRNs separated by spaces, commas and line breaks', async () => {
+      request.body = { crnList: 'CRN1,\nCRN2  CRN3\n\nCRN4' }
+
+      await customListController.submitCrnList()(request, response, next)
+
+      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, ['CRN1', 'CRN2', 'CRN3', 'CRN4'])
+      expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=4`)
+    })
+
+    it('submits an empty list when no CRNs are provided', async () => {
+      request.body = { crnList: '' }
+
+      await customListController.submitCrnList()(request, response, next)
+
+      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, [])
+      expect(request.body).toEqual({ crnList: '' })
+      expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=0`)
+    })
+
     it('renders the addCrns page with errors on unsuccessful submission', async () => {
       const serverError: SanitisedError = new Error('Server error')
-      serverError.responseStatus = 500
-      serverError.data = { developerMessage: 'Dev error', userMessage: 'Server error' }
       customListService.addCustomList.mockRejectedValue(serverError)
       const crnList = 'CRN1,CRN2'
-      const crnListToArray = ['CRN1', 'CRN2']
       request.body = { crnList }
-      jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({
-        errors: serverError,
-        errorSummary: [{ text: 'Dev error', href: 'crnList' }],
-        userInput: { crnList },
-      })
 
+      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
       await customListController.submitCrnList()(request, response, next)
 
-      expect(response.render).toHaveBeenCalledWith('pages/customList/addCrns', {
-        backLinkHref: '/custom-list',
-        crnList: crnListToArray,
-        errorSummary: [{ text: 'Dev error', href: '#crnList' }],
-        errorMessage: { text: 'Dev error' },
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
+      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'Server error')
+    })
+
+    it('uses the API user message when submission fails with a sanitised error payload', async () => {
+      const serverError = {
+        message: 'Generic server error',
+        data: { userMessage: 'This list contains an invalid CRN' },
+      } as SanitisedError
+      customListService.addCustomList.mockRejectedValue(serverError)
+      request.body = { crnList: 'CRN1,CRN2' }
+
+      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
+      await customListController.submitCrnList()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
+      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'This list contains an invalid CRN')
+    })
+  })
+  describe('confirmation', () => {
+    it.each([
+      [1, 'CRN added'],
+      [2, 'CRNs added'],
+    ])('renders the confirmation page with correct wording for %i CRN(s)', async (crnTotalText, crnAddedText) => {
+      request.query = { t: crnTotalText.toString() }
+      await customListController.confirmation()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('pages/customList/confirmation', {
+        crnTotalText,
+        crnAddedText,
+        showHref: uiPaths.customList.index.pattern,
       })
     })
   })

@@ -72,9 +72,10 @@ const staticController = mock<StaticController>({
 })
 
 const customListController = mock<CustomListController>({
-  customList: mockHandler,
+  index: mockHandler,
   addCrns: mockHandler,
   submitCrnList: mockHandler,
+  confirmation: mockHandler,
 })
 
 jest.mock('../controllers', () => ({
@@ -117,7 +118,7 @@ describe('Routing', () => {
         .get('/custom-list')
         .expect(200)
         .expect(() => {
-          expect(customListController.customList).toHaveBeenCalled()
+          expect(customListController.index).toHaveBeenCalled()
         })
     })
     it('GET /custom-list/add-crns should render', async () => {
@@ -135,6 +136,14 @@ describe('Routing', () => {
         .expect(() => {
           expect(customListController.addCrns).toHaveBeenCalled()
           expect(customListController.submitCrnList).toHaveBeenCalled()
+        })
+    })
+    it('GET /custom-list/confirmation should render', async () => {
+      await request(app)
+        .get('/custom-list/confirmation')
+        .expect(200)
+        .expect(() => {
+          expect(customListController.confirmation).toHaveBeenCalled()
         })
     })
   })

@@ -3,7 +3,7 @@ import { IndexRequest } from '@sas/ui'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import { setupCaseList } from '../utils/cases'
-import { addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import CustomListService from '../services/customListService'
@@ -15,7 +15,7 @@ export default class CustomListController {
     private readonly userService: UserService,
   ) {}
 
-  customList(): RequestHandler {
+  index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { token, username, displayName: userFullName } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
@@ -43,14 +43,20 @@ export default class CustomListController {
 
   addCrns(): RequestHandler {
     return async (req: Request, res: Response) => {
+      const { token, username } = res.locals.user
       await this.auditService.logPageView(Page.CUSTOM_LIST_ADD_CRNS, {
-        who: res.locals.user.username,
+        who: username,
         correlationId: req.id,
       })
-      const { userInput } = fetchErrorsAndUserInput(req)
+      const casesDto = await this.customListService.getCustomList(token)
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+      const crnList = userInput?.crnList || casesDto.data.map(c => c.crn).join(',')
+
       return res.render('pages/customList/addCrns', {
-        crnList: userInput.crnList,
+        crnList,
         backLinkHref: uiPaths.customList.index.pattern,
+        errors,
+        errorSummary,
       })
     }
   }
@@ -58,25 +64,38 @@ export default class CustomListController {
   submitCrnList(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { token } = res.locals.user
-      const crnList = req.body?.crnList?.length ? req.body.crnList.split(',') : []
+      const crnList = req.body?.crnList?.length
+        ? req.body.crnList
+            .split(/[\s,]+/)
+            .map((crn: string) => crn.trim())
+            .filter(Boolean)
+        : []
+      const crnTotal = crnList.length
       try {
         await this.customListService.addCustomList(token, crnList)
-        const crnTotalText = crnList.length
-        const crnAddedText = crnTotalText > 1 ? 'CRNs added' : 'CRN added'
-        return res.render('pages/customList/confirmation', {
-          crnTotalText,
-          crnAddedText,
-          showHref: uiPaths.customList.index.pattern,
-        })
+        addUserInputToFlash(req)
+        return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
       } catch (error) {
-        const errorMessage = error.data?.developerMessage ? error.data.developerMessage : error.message
-        return res.render('pages/customList/addCrns', {
-          crnList,
-          backLinkHref: uiPaths.customList.index.pattern,
-          errorSummary: [{ text: errorMessage, href: '#crnList' }],
-          errorMessage: { text: errorMessage },
-        })
+        const errorMessage = error.data?.userMessage ? error.data.userMessage : error.message
+        addErrorToFlash(req, 'crnList', errorMessage)
+        return res.redirect(uiPaths.customList.addCrns.pattern)
       }
+    }
+  }
+
+  confirmation(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      await this.auditService.logPageView(Page.CUSTOM_LIST_CONFIRMATION, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+      const crnTotalText = Number(req.query.t)
+      const crnAddedText = crnTotalText > 1 ? 'CRNs added' : 'CRN added'
+      return res.render('pages/customList/confirmation', {
+        crnTotalText,
+        crnAddedText,
+        showHref: uiPaths.customList.index.pattern,
+      })
     }
   }
 }

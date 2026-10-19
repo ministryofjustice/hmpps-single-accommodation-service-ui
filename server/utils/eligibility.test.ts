@@ -284,6 +284,10 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'NOT_ELIGIBLE' },
       },
       {
+        title: 'NOT_ELIGIBLE, incorrect current accommodation',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['INVALID_CURRENT_ACCOMMODATION_TYPE'] },
+      },
+      {
         title: 'CANNOT_START_YET, DTR needed',
         result: { serviceStatus: 'CANNOT_START_YET', blockingStatusReason: 'SUBMIT_DTR_BEFORE_CAS3' },
       },

@@ -2053,6 +2053,22 @@ exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE status card 1`] =
 }
 `;
 
+exports[`eligibilityStatusCard for cas3 renders a NOT_ELIGIBLE, incorrect current accommodation status card 1`] = `
+{
+  "blocked": false,
+  "content": undefined,
+  "details": [],
+  "heading": "CAS3 (transitional accommodation)",
+  "hint": "Only for prison leavers, move on from Approved premises or CAS2.",
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas3 renders a NOT_STARTED status card 1`] = `
 {
   "blocked": false,

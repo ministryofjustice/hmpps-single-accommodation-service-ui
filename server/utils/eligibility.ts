@@ -147,9 +147,13 @@ const hintForCas2Status = (serviceResult?: ServiceResult): string | undefined =>
 }
 
 const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined => {
-  const { serviceStatus } = serviceResult ?? {}
+  const { serviceStatus, failureReasons } = serviceResult ?? {}
 
   if (serviceStatus === 'NOT_ELIGIBLE') {
+    if (failureReasons.includes('INVALID_CURRENT_ACCOMMODATION_TYPE')) {
+      return 'Only for prison leavers, move on from Approved premises or CAS2.'
+    }
+
     return 'Not at risk of homelessness.'
   }
 

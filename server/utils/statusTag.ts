@@ -15,7 +15,7 @@ export const serviceStatusTag = (status?: ServiceResult['serviceStatus']): Statu
     CAS2_NOT_STARTED_CAS2: { text: 'Not started', colour: 'orange' },
     CAS2_NOT_STARTED_PRISON: { text: 'Not started', colour: 'orange' },
     NOT_SUBMITTED: { text: 'Not submitted', colour: 'orange' },
-    INFO_REQUESTED: { text: 'Info requested', colour: 'yellow' },
+    INFO_REQUESTED: { text: 'Information requested', colour: 'orange' },
     REJECTED: { text: 'Rejected', colour: 'orange' },
     WITHDRAWN: { text: 'Withdrawn', colour: 'orange' },
     SUBMITTED: { text: 'Submitted', colour: 'yellow' },

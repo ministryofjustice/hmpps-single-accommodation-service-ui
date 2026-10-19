@@ -32,6 +32,7 @@ export default class CustomListController {
         })
       }
       req.body = { crnList: cases.map(c => c.crn).join(',') }
+      req.session.caseListUrl = req.originalUrl
       addUserInputToFlash(req)
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
@@ -48,10 +49,9 @@ export default class CustomListController {
         who: username,
         correlationId: req.id,
       })
-      const casesDto = await this.customListService.getCustomList(token)
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
-      const crnList = userInput?.crnList || casesDto.data.map(c => c.crn).join(',')
-
+      const crnList =
+        userInput?.crnList ?? (await this.customListService.getCustomList(token)).data.map(c => c.crn).join(',')
       return res.render('pages/customList/addCrns', {
         crnList,
         backLinkHref: uiPaths.customList.index.pattern,

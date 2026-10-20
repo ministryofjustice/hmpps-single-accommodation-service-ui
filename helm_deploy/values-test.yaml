@@ -30,4 +30,4 @@ generic-service:
     CAS2_ENABLED: "false"
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps-approved-premises-nonprod
+  targetApplication: hmpps-approved-premises-nonprod

@@ -45,7 +45,7 @@ jobs:
 
       - name: Publish smoke test report
         if: ${{ !cancelled() }}
-        uses: ctrf-io/github-test-reporter@7974087018bf4857cf5a9d78723e152038c3fa31 # v1
+        uses: ctrf-io/github-test-reporter@dbb08957b5b2af918b39136ab2c5532002c7649b # v1
         with:
           report-path: './test_results/e2e/ctrf/*.json'
           summary-report: true
@@ -58,7 +58,7 @@ jobs:
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: SAS-smoke-test-playwright-report
           path: test_results/e2e/report
@@ -67,7 +67,7 @@ jobs:
 
       - name: Upload Smoke test artefacts
         if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: SAS-smoke-test-artefacts
           path: test_results/e2e/artefacts

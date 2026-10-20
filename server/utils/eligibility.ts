@@ -76,10 +76,6 @@ export const linksForCas2Status = (serviceResult?: ServiceResult) => {
 
   switch (serviceStatus) {
     case 'NOT_STARTED':
-    case 'CAS2_NOT_STARTED_CAS1':
-    case 'CAS2_NOT_STARTED_PRISON':
-    case 'CAS2_NOT_STARTED_COMMUNITY':
-    case 'CAS2_NOT_STARTED_CAS2':
       return [{ text: 'Start application', ...link }]
     case 'NOT_SUBMITTED':
     case 'MORE_INFORMATION_NEEDED':
@@ -151,9 +147,13 @@ const hintForCas2Status = (serviceResult?: ServiceResult): string | undefined =>
 }
 
 const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined => {
-  const { serviceStatus } = serviceResult ?? {}
+  const { serviceStatus, failureReasons } = serviceResult ?? {}
 
   if (serviceStatus === 'NOT_ELIGIBLE') {
+    if (failureReasons.includes('INVALID_CURRENT_ACCOMMODATION_TYPE')) {
+      return 'Only for prison leavers, move on from Approved premises or CAS2.'
+    }
+
     return 'Not at risk of homelessness.'
   }
 

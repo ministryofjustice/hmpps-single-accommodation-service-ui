@@ -1,0 +1,13 @@
+{% from "components/macros/caseList.njk" import caseList %}
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Custom list" %}
+{% set mainClasses = "govuk-body" %}
+
+{% block content %}
+  <div class="govuk-row">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Custom list</h1>
+    <p><a class="govuk-link govuk-link--no-visited-state" href="{{ changeListHref }}">Change list</a></p>
+  </div>
+  {{ caseList(peopleType, tabs, resultsSummary, casesTableColumns, casesRows, query, filters, assignedToOptions, riskLevelOptions) }}
+{% endblock %}

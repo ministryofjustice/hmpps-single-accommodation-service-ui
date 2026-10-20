@@ -48,4 +48,5 @@ export default {
   user: {
     teams: path('/user/teams'),
   },
+  customList: path('/case-list/custom'),
 }

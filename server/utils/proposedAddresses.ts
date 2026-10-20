@@ -161,9 +161,13 @@ const formatStatusWithReason = (data: ProposedAddressFormData) => {
 }
 
 export const validateLookupFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+  const { nameOrNumber, postcode } = sessionData
   const errors: Record<string, string> = {
-    nameOrNumber: validateMaxLength(sessionData.nameOrNumber, 'Property name or number', 255),
-    postcode: validatePostcode(sessionData.postcode),
+    postcode: validatePostcode(postcode),
+    nameOrNumber:
+      !nameOrNumber && !postcode
+        ? 'Enter a property name or number'
+        : validateMaxLength(nameOrNumber, 'Property name or number', 255),
   }
   return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
 }

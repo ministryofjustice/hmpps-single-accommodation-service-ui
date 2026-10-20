@@ -327,6 +327,7 @@ test.describe('add proposed address', () => {
     // Then I should see errors
     await addProposedAddressPage.shouldShowErrorMessagesForFields({
       postcode: 'Enter a UK postcode',
+      nameOrNumber: 'Enter a property name or number',
     })
 
     // When I complete the form
@@ -366,7 +367,9 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.clickButton('Find address')
 
     // Then I should see an error
-    await addProposedAddressPage.shouldShowGenericErrorMessage('No address found. Check details')
+    await addProposedAddressPage.shouldShowErrorMessagesForFields({
+      postcode: 'Enter a valid UK postcode',
+    })
 
     // When I search with a name or number that matches none of the results
     await addProposedAddressPage.completeLookupForm('no matching value', 'M21 0BP')

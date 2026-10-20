@@ -26,4 +26,4 @@ generic-service:
     CAS2_ENABLED: "false"
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps-approved-premises
+  targetApplication: hmpps-single-accommodation-service-ui

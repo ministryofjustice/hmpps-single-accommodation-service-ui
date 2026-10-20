@@ -33,7 +33,7 @@ export default class CustomListController {
       }
       req.body = { crnList: cases.map(c => c.crn).join(',') }
       req.session.caseListUrl = req.originalUrl
-      addUserInputToFlash(req)
+      addUserInputToFlash(req)// TODO is this needed
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
@@ -73,7 +73,6 @@ export default class CustomListController {
       const crnTotal = crnList.length
       try {
         await this.customListService.addCustomList(token, crnList)
-        addUserInputToFlash(req)
         return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
       } catch (error) {
         const errorMessage = error.data?.userMessage ? error.data.userMessage : error.message

@@ -75,11 +75,51 @@ export default class CustomListController {
         await this.customListService.addCustomList(token, crnList)
         return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
       } catch (error) {
-        const errorMessage = error.data?.userMessage ? error.data.userMessage : error.message
+        const errorMessage = this.formatErrorMessage(error)
         addErrorToFlash(req, 'crnList', errorMessage)
         return res.redirect(uiPaths.customList.addCrns.pattern)
       }
     }
+  }
+
+  private extractCrnListFromUserMessage(userMessage: string): string[] {
+    const lastColonIndex = userMessage.lastIndexOf(': ')
+    if (lastColonIndex === -1) return []
+
+    return userMessage
+      .slice(lastColonIndex + 2)
+      .split(',')
+      .map(crn => crn.trim())
+      .filter(Boolean)
+  }
+
+  private pluraliseCrnList(crns: string[]): string {
+    if (crns.length === 0) return ''
+    if (crns.length === 1) return crns[0]
+    return `${crns.slice(0, -1).join(', ')} and ${crns[crns.length - 1]}`
+  }
+
+  formatErrorMessage(error): string {
+    if (error.responseStatus !== 400) {
+      return error.message || 'An unexpected error occurred'
+    }
+
+    const userMessage = error.data?.userMessage
+    if (!userMessage) {
+      return error.message || 'An unexpected error occurred'
+    }
+
+    const invalidCrns = this.extractCrnListFromUserMessage(userMessage)
+    const containsInvalidCrns = /invalidcrns/i.test(userMessage)
+    const listText = this.pluraliseCrnList(invalidCrns)
+
+    if (!containsInvalidCrns) {
+      return listText || userMessage
+    }
+
+    const invalidMessage = invalidCrns.length > 1 ? 'are not recognised CRNs' : 'is not a recognised CRN'
+
+    return `${listText} ${invalidMessage}`.trim()
   }
 
   confirmation(): RequestHandler {

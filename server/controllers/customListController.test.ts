@@ -190,22 +190,45 @@ describe('customListController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
       expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'Server error')
     })
+  })
+  describe('formatErrorMessage', () => {
+    it('formats two invalid CRNs without a comma before the final item', () => {
+      const error = {
+        responseStatus: 400,
+        data: { userMessage: 'invalidCrns: CRN1, CRN2' },
+      }
 
-    it('uses the API user message when submission fails with a sanitised error payload', async () => {
-      const serverError = {
-        message: 'Generic server error',
-        data: { userMessage: 'This list contains an invalid CRN' },
-      } as SanitisedError
-      customListService.addCustomList.mockRejectedValue(serverError)
-      request.body = { crnList: 'CRN1,CRN2' }
+      expect(customListController.formatErrorMessage(error)).toBe('CRN1 and CRN2 are not recognised CRNs')
+    })
 
-      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
-      await customListController.submitCrnList()(request, response, next)
+    it('formats three invalid CRNs with commas between earlier items and "and" before the final item', () => {
+      const error = {
+        responseStatus: 400,
+        data: { userMessage: 'invalidCrns: CRN1, CRN2, CRN3' },
+      }
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
-      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'This list contains an invalid CRN')
+      expect(customListController.formatErrorMessage(error)).toBe('CRN1, CRN2 and CRN3 are not recognised CRNs')
+    })
+
+    it('formats a single invalid CRN without a list separator', () => {
+      const error = {
+        responseStatus: 400,
+        data: { userMessage: 'invalidCrns: CRN1' },
+      }
+
+      expect(customListController.formatErrorMessage(error)).toBe('CRN1 is not a recognised CRN')
+    })
+
+    it('returns just the extracted list when the message does not mention invalid CRNs', () => {
+      const error = {
+        responseStatus: 400,
+        data: { userMessage: 'someone else: CRN1, CRN2' },
+      }
+
+      expect(customListController.formatErrorMessage(error)).toBe('CRN1 and CRN2')
     })
   })
+
   describe('confirmation', () => {
     it.each([
       [1, 'CRN added'],

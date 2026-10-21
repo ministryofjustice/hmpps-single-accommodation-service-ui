@@ -297,6 +297,7 @@ describe('proposedAddressesController', () => {
 
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         postcode: 'Enter a UK postcode',
+        nameOrNumber: 'Enter a property name or number',
       })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
@@ -307,14 +308,16 @@ describe('proposedAddressesController', () => {
       })
     })
 
-    it('redirects with a lookup error if there are no results', async () => {
+    it('redirects with a postcode error if there are no results', async () => {
       osDataHubService.getByNameOrNumberAndPostcode.mockResolvedValue({ addresses: [], nameOrNumberMatched: false })
 
       request.body = { nameOrNumber: '456', postcode: 'N0 0PE' }
 
       await controller.saveLookup()(request, response, next)
 
-      expect(validationUtils.addErrorToFlash).toHaveBeenCalledWith(request, 'lookup', 'No address found. Check details')
+      expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
+        postcode: 'Enter a valid UK postcode',
+      })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ crn: 'CRN123' }))
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
     })

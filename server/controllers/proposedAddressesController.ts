@@ -214,7 +214,7 @@ export default class ProposedAddressesController {
       const { addresses: lookupResults, nameOrNumberMatched } = lookupResult
 
       if (!lookupResults.length) {
-        addErrorToFlash(req, 'lookup', 'No address found. Check details')
+        validateAndFlashErrors(req, { postcode: 'Enter a valid UK postcode' })
         return res.redirect(uiPaths.proposedAddresses.lookup({ crn }))
       }
 

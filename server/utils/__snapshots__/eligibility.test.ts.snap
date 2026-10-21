@@ -41,7 +41,7 @@ exports[`cas1 status card details renders detail rows for a APPLICATION_REJECTED
       "text": "Decision",
     },
     "value": {
-      "text": "Reject, Not enough detail",
+      "text": "Not enough detail",
     },
   },
   {
@@ -821,7 +821,7 @@ exports[`eligibilityStatusCard for cas1 renders a APPLICATION_REJECTED status ca
         "text": "Decision",
       },
       "value": {
-        "text": "Reject, Not enough detail",
+        "text": "Not enough detail",
       },
     },
     {

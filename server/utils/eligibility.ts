@@ -387,10 +387,7 @@ const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Ca
       return [submittedRow(), submittedByRow()]
     case 'APPLICATION_REJECTED':
       return [
-        summaryListRow(
-          'Decision',
-          assessment?.rejectionRationale ? `Reject, ${assessment.rejectionRationale}` : 'Reject',
-        ),
+        summaryListRow('Decision', assessment?.rejectionRationale ? `${assessment.rejectionRationale}` : 'Reject'),
         submittedRow(),
         submittedByRow(),
       ]

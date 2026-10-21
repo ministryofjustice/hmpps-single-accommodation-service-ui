@@ -227,7 +227,7 @@ describe('externalReferrals utils', () => {
           },
           { key: { text: 'Email' }, value: { text: 'email@justice.gov.uk' } },
           { key: { text: 'Website' }, value: { text: 'Web.com' } },
-          { key: { text: 'Note' }, value: { html: '<div class="sas-text-block">Note</div>' } },
+          { key: { text: 'Notes' }, value: { html: '<div class="sas-text-block">Note</div>' } },
         ])
       })
     })
@@ -270,6 +270,7 @@ describe('externalReferrals utils', () => {
       const auditRecord = auditRecordFactory.build({
         type: 'CREATE',
         changes: [
+          { field: 'status', value: 'SUBMITTED' },
           { field: 'submissionDate', value: '2026-09-23' },
           { field: 'organisationName', value: 'Org' },
           { field: 'referenceNumber', value: '1234' },
@@ -277,6 +278,7 @@ describe('externalReferrals utils', () => {
       })
       const result = externalReferralTimelineEntry(auditRecord)
 
+      expect(result.html).toMatch(/<p><strong class="govuk-tag govuk-tag--yellow">Submitted<\/strong><\/p>/)
       expect(result.html).toMatch(/Submission date:\s*23 September 2026/)
       expect(result.html).toMatch(/Organisation:\s*Org/)
       expect(result.html).toMatch(/Reference number:\s*1234/)
@@ -298,9 +300,25 @@ describe('externalReferrals utils', () => {
 
       expect(result.html).toMatch(/Email address changed to\s*mail@test.com/)
       expect(result.html).toMatch(/Phone number changed to\s*01234567/)
-      expect(result.html).toMatch(/Submission note changed to:\s*<div class="sas-text-block">Submission note<\/div>/)
+      expect(result.html).toMatch(/Notes changed to:\s*<div class="sas-text-block">Submission note<\/div>/)
       expect(result.label.text).toEqual('Referral details changed')
       expect(result.datetime.timestamp).toEqual(auditRecord.commitDate)
+      expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
+    })
+
+    it('renders an add outcome event', () => {
+      const auditRecord = auditRecordFactory.build({
+        type: 'UPDATE',
+        changes: [
+          { field: 'status', value: 'ACCEPTED', oldValue: 'SUBMITTED' },
+          { field: 'outcomeNote', value: 'Outcome note' },
+        ],
+      })
+      const result = externalReferralTimelineEntry(auditRecord)
+
+      expect(result.label.text).toEqual('Outcome details added')
+      expect(result.html).toMatch(/<p><strong class="govuk-tag govuk-tag--green">Accepted<\/strong><\/p>/)
+      expect(result.html).toMatch(/Notes:\s*<div class="sas-text-block">Outcome note<\/div>/)
       expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
     })
   })

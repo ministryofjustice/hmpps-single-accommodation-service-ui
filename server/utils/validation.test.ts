@@ -554,10 +554,11 @@ describe('validation', () => {
         ['+44 123 123456', undefined],
         ['(020)12345678', undefined],
         ['(020) 12345678', undefined],
+        ['055 3218 5929', undefined],
         ['(020 12345678', 'Enter a UK phone number'],
         ['(120) 12345678', 'Enter a UK phone number'],
         ['44 7887726962 ext123', 'Enter a UK phone number'],
-        ['123456789', 'Enter a UK phone number'],
+        ['12341234567', 'Enter a UK phone number'],
 
         ['a0 1234123456', 'Enter a UK phone number'],
       ])('returns the expected error for value %s', (value, expected) => {

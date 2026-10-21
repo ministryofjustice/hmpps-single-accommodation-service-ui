@@ -1,8 +1,9 @@
 import { expect, Page } from '@playwright/test'
 import { CaseDto as Case, ExternalReferralCommand, ExternalReferralDto } from '@sas/api'
+import { faker } from '@faker-js/faker'
 import AbstractPage from '../abstractPage'
 import { displayName } from '../../../server/utils/cases'
-import { formatDateAndAge } from '../../../server/utils/dates'
+import { formatDateAndAge, formatDateAndDaysAgo } from '../../../server/utils/dates'
 import paths from '../../../server/paths/ui'
 import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
@@ -27,6 +28,12 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
     }
   }
 
+  async shouldShowReferralSummary(referral: ExternalReferralDto, caseData: Case) {
+    await this.shouldShowCaseSummary(caseData)
+    await this.shouldShowSummaryItem('Organisation', referral.submission.organisationName)
+    await this.shouldShowSummaryItem('Date submitted', formatDateAndDaysAgo(referral.submission.submissionDate))
+  }
+
   async completeSubmissionForm(referral: ExternalReferralDto) {
     const {
       submission: {
@@ -49,6 +56,17 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
     await this.completeInputByLabel('Notes (optional)', submissionNote)
   }
 
+  async completeOutcomeForm(referral: ExternalReferralDto, statusLabel = 'Accepted'): Promise<ExternalReferralDto> {
+    const outcomeNote: string = faker.lorem.paragraph()
+    await this.selectRadioByLabel(statusLabel)
+    await this.completeInputByLabel('Notes (optional)', outcomeNote)
+    return {
+      ...referral,
+      status: statusLabel === 'Accepted' ? 'ACCEPTED' : 'REJECTED',
+      submission: { ...referral.submission, outcomeNote },
+    }
+  }
+
   async checkApiCalled(referral: ExternalReferralDto, method: 'submit' | 'update' = 'submit') {
     const {
       crn,
@@ -62,12 +80,18 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
         email,
         phoneNumber,
         submissionNote,
+        outcomeNote,
       },
     } = referral
     const requestBody =
       method === 'submit'
         ? await verifyPost(apiPaths.cases.externalReferrals.submit({ crn }))
         : await verifyPut(apiPaths.cases.externalReferrals.update({ crn, id }))
+
+    // Get rid of empty strings in the request body
+    Object.keys(requestBody).forEach(key => {
+      requestBody[key] = requestBody[key] || undefined
+    })
 
     const expectedBody: ExternalReferralCommand = {
       organisationName,
@@ -77,7 +101,8 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
       website,
       email,
       phoneNumber,
-      submissionNote: submissionNote || '',
+      submissionNote,
+      outcomeNote,
     }
 
     expect(requestBody).toEqual(expectedBody)

@@ -171,6 +171,6 @@ describeClient('ExternalReferralsClient', provider => {
       },
     })
 
-    await client.addNote('test-user-token', crn, id, note)
+    await client.saveNote('test-user-token', crn, id, note)
   })
 })

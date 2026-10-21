@@ -243,7 +243,7 @@ export const validateEmail = (value: string): string | undefined => {
 
 export const validatePhoneNumber = (value: string): string | undefined => {
   return !value?.length ||
-    /^((((\+44\s?)|0)\d{2,5})|(\(0\d{2,5}\)))?\s*(\d{4,8})(\s?(ext\.?|#)\s?\d{1,4})?$/.test(value)
+    /^((((\+44\s?)|0)\d{2,5})|(\(0\d{2,5}\)))?\s*([\d\s]{4,10})(\s?(ext\.?|#)\s?\d{1,4})?$/.test(value)
     ? undefined
     : 'Enter a UK phone number'
 }

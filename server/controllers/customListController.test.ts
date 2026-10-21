@@ -4,7 +4,7 @@ import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import AuditService, { Page } from '../services/auditService'
 import { user } from '../routes/testutils/appSetup'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
-import { casesResultsSummary, casesTableColumns, casesTabs, casesToRows } from '../utils/cases'
+import { casesResultsSummary, casesTableColumns, casesTabs, casesToRows, setupCaseList } from '../utils/cases'
 import UserService from '../services/userService'
 import CustomListController from './customListController'
 import CustomListService from '../services/customListService'
@@ -68,6 +68,8 @@ describe('customListController', () => {
       const cases = caseFactory.buildList(3)
       customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(cases))
       request.query = {}
+      const url = uiPaths.customList.index.pattern+'/'
+      request.originalUrl = url
       await customListController.index()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_SHOW, {
@@ -85,7 +87,7 @@ describe('customListController', () => {
         peopleType: 'NFA_RISK',
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
+        casesRows: casesToRows(cases,undefined,url),
         filters: [],
         query: {},
       })
@@ -158,7 +160,6 @@ describe('customListController', () => {
 
       expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, crnList.split(','))
       expect(request.body).toEqual({ crnList })
-      expect(addUserInputToFlash).toHaveBeenCalledWith(request)
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
     })
 

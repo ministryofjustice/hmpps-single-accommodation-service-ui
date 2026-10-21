@@ -51,6 +51,7 @@ export default class CasesController {
       const { query } = req
       const { peopleType = 'NFA_RISK' } = query
       setCaseListUrl(req)
+      console.log('originalUrl', req.originalUrl)
       const {
         data: { teams, cases },
       } = await collectApiResponses({

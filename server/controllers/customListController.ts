@@ -7,6 +7,7 @@ import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '.
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import CustomListService from '../services/customListService'
+import { setCaseListUrl } from '../utils/backlinks'
 
 export default class CustomListController {
   constructor(
@@ -33,7 +34,8 @@ export default class CustomListController {
       }
       req.body = { crnList: cases.map(c => c.crn).join(',') }
       req.session.caseListUrl = req.originalUrl
-      addUserInputToFlash(req)// TODO is this needed
+      setCaseListUrl(req)
+      addUserInputToFlash(req)
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
@@ -89,6 +91,9 @@ export default class CustomListController {
         correlationId: req.id,
       })
       const crnTotalText = Number(req.query.t)
+      if (!crnTotalText) {
+        return res.redirect(uiPaths.customList.index.pattern)
+      }
       const crnAddedText = crnTotalText > 1 ? 'CRNs added' : 'CRN added'
       return res.render('pages/customList/confirmation', {
         crnTotalText,

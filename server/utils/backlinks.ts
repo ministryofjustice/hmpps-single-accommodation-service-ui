@@ -52,6 +52,8 @@ export const getCaseListUrl = (req: Request): string => req.session.caseListUrl 
 
 export const setCaseListUrl = (req: IndexRequest): void => {
   const search = new URLSearchParams(req.query).toString()
-
-  req.session.caseListUrl = `${uiPaths.cases.index({})}${search ? `?${search}` : ''}`
+          // console.log('query', req.query)
+          // console.log('setCaseListUrl', search)
+          // console.log('originalurl', req.originalUrl)
+  req.session.caseListUrl = `${req.originalUrl  }${search ? `?${search}` : ''}`
 }

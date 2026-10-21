@@ -8,7 +8,7 @@ import paths from '../paths/ui'
 export const breadcrumbs = (req: Request, caseData?: CaseDto) =>
   [
     {
-      text: 'Case list',
+      text: getCaseListUrl(req) == '/' ? 'Case list' : 'Custom list',
       href: getCaseListUrl(req),
     },
     caseData && {

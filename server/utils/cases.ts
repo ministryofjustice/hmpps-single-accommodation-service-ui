@@ -8,6 +8,7 @@ import { renderActions } from './actions'
 import { staffName } from './staff'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { validateAndFlashErrors, validateCrn } from './validation'
+import { getCaseListUrl, setCaseListUrl } from './backlinks'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -82,22 +83,24 @@ export const updateQueryParams = (url: string, updateParams: Record<string, unkn
   return queryString ? `${path}?${queryString}` : path
 }
 
-export const personCell = (caseData: Case, assignedToText?: string): string =>
-  renderMacro('personCell', {
+export const personCell = (caseData: Case, assignedToText?: string, caseListUrl?: string): string =>{
+    return renderMacro('personCell', {
     ...caseData,
     name: displayName(caseData, { laoFlag: '', caseList: true }),
     assignedToText,
+    caseListUrl,
   })
+}
 
 export const actionsCell = (actions: CaseAction[]): string =>
   renderMacro('actionsCell', { actions: renderActions(actions) })
 
-export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[] =>
+export const casesToRows = (cases: Case[], currentUsername?: string, caseListUrl?: string): TableRow[] =>
   cases.map(c => {
     const assignedToText = currentUsername ? caseAssignedTo(c, currentUsername) : undefined
     const accommodationStatus = accommodationStatusCell(c)
     return [
-      htmlContent(personCell(c, assignedToText)),
+      htmlContent(personCell(c, assignedToText, caseListUrl)),
       htmlContent(accommodationCell('current', c)),
       htmlContent(accommodationCell('next', c)),
       htmlContent(accommodationStatus ? statusCell(accommodationStatus) : ''),
@@ -164,6 +167,7 @@ export const setupCaseList = (
   const { query } = req
   const { peopleType = 'NFA_RISK' } = query
   const filters = queryToFilters(query, req.originalUrl, teams)
+  const caseListUrl = getCaseListUrl(req)
 
   const currentUsername = query.teamCode ? username : undefined
   return {
@@ -171,7 +175,7 @@ export const setupCaseList = (
     tabs: casesTabs(req.originalUrl, peopleType),
     resultsSummary: casesResultsSummary(cases),
     casesTableColumns: casesTableColumns(),
-    casesRows: casesToRows(cases, currentUsername),
+    casesRows: casesToRows(cases, currentUsername,caseListUrl),
     query,
     filters,
     assignedToOptions: assignedToOptions(userFullName, teams),

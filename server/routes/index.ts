@@ -28,7 +28,7 @@ export default function routes(services: Services): Router {
   currentAddressRoutes(router, currentAddressController)
   dutyToReferRoutes(router, dutyToReferController)
   externalReferralsRoutes(router, externalReferralsController)
-  customListRoutes(router, customListController)
+  customListRoutes(router, customListController,casesController)
 
   router.get(uiPaths.static.maintenance.pattern, staticController.maintenance())
 

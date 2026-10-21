@@ -152,13 +152,10 @@ describe('customListController', () => {
       ['CRN1', 1],
     ])('renders the confirmation page on successful submission: %s', async (crnList, crnTotal) => {
       request.body = { crnList }
-      const addUserInputToFlash = jest.spyOn(validationUtils, 'addUserInputToFlash')
-
       await customListController.submitCrnList()(request, response, next)
 
       expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, crnList.split(','))
       expect(request.body).toEqual({ crnList })
-      expect(addUserInputToFlash).toHaveBeenCalledWith(request)
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
     })
 

@@ -99,9 +99,10 @@ export default class CustomListController {
     return `${crns.slice(0, -1).join(', ')} and ${crns[crns.length - 1]}`
   }
 
-  formatErrorMessage(error): string {
+  //  eslint-disable-next-line @typescript-eslint/no-explicit-any
+  formatErrorMessage(error: any): string {
     if (error.responseStatus !== 400) {
-      return error.message || 'An unexpected error occurred'
+      return error.data?.userMessage || error.message || 'An unexpected error occurred'
     }
 
     const userMessage = error.data?.userMessage

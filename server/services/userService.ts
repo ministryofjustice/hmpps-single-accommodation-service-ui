@@ -6,4 +6,15 @@ export default class UserService {
   getTeams(token: string) {
     return this.userClient.getTeams(token)
   }
+
+  async getProbationAreaCode(token: string): Promise<string> {
+    const response = await this.userClient.getMe(token)
+    const probationAreaCode = response.data?.probationAreaCode
+
+    if (response.upstreamFailures.length || typeof probationAreaCode !== 'string' || !probationAreaCode.trim()) {
+      throw new Error('Unable to determine probation area from /user/me')
+    }
+
+    return probationAreaCode
+  }
 }

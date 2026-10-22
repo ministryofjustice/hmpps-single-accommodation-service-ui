@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import tokenVerification from './mockApis/tokenVerification'
 import hmppsAuth, { type UserToken } from './mockApis/hmppsAuth'
 import { resetStubs } from './mockApis/wiremock'
+import userApi from './mockApis/user'
 
 export { resetStubs }
 
@@ -19,6 +20,7 @@ export const login = async (
   { name, roles = DEFAULT_ROLES, active = true, authSource = 'nomis' }: UserToken & { active?: boolean } = {},
 ) => {
   await Promise.all([
+    userApi.stubGetMe(),
     hmppsAuth.favicon(),
     hmppsAuth.stubSignInPage(),
     hmppsAuth.stubSignOutPage(),

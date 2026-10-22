@@ -47,6 +47,7 @@ export default {
   },
   referenceData: path('/reference-data'),
   user: {
+    me: path('/user/me'),
     teams: path('/user/teams'),
   },
   customList: path('/case-list/custom'),

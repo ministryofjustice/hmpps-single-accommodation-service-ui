@@ -745,7 +745,7 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CONFIRMED st
       "text": "Booking dates",
     },
     "value": {
-      "text": "1 September 2026 to 27 October 2026",
+      "text": "1 September 2026 to 27 October 2026 (8 weeks)",
     },
   },
   {

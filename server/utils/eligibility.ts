@@ -15,7 +15,7 @@ import { SummaryListRow, TextOrHtmlContent } from '@govuk/ui'
 import { dutyToReferStatusCard } from './dutyToRefer'
 import { serviceStatusTag } from './statusTag'
 import { crsStatusCard } from './crs'
-import { formatDate, formatDateAndDaysAgo } from './dates'
+import { daysBetween, formatDate, formatDateAndDaysAgo } from './dates'
 import config from '../config'
 import { htmlContent, textContent } from './utils'
 import { summaryListRow } from './summaryListRow'
@@ -473,10 +473,14 @@ const detailsForCas3Status = (
     case 'BOOKING_CONFIRMED': {
       const { premises } = cas3Application ?? {}
       const address = cas3PremisesToAccommodationAddress(premises)
+      const duration = placementDurationText(daysBetween(premises?.startDate, premises?.endDate))
 
       return [
         summaryListRow('Address', address ? formatAddress(address) : undefined),
-        summaryListRow('Booking dates', `${formatDate(premises.startDate)} to ${formatDate(premises.endDate)}`),
+        summaryListRow(
+          'Booking dates',
+          `${formatDate(premises?.startDate)} to ${formatDate(premises?.endDate)}${duration ? ` (${duration})` : ''}`,
+        ),
         summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
       ]
     }

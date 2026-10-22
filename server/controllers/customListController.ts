@@ -1,9 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
+import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import { setupCaseList } from '../utils/cases'
-import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import CustomListService from '../services/customListService'
@@ -72,25 +74,40 @@ export default class CustomListController {
         : []
       const crnTotal = crnList.length
       try {
-        await this.customListService.addCustomList(token, crnList)
-        return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
+        if (this.isValidSubmission(req, crnList)) {
+          await this.customListService.addCustomList(token, crnList)
+          return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
+        }
       } catch (error) {
         const errorMessage = this.formatErrorMessage(error)
         addErrorToFlash(req, 'crnList', errorMessage)
-        return res.redirect(uiPaths.customList.addCrns.pattern)
       }
+      return res.redirect(uiPaths.customList.addCrns.pattern)
     }
   }
 
-  private extractCrnListFromUserMessage(userMessage: string): string[] {
-    const lastColonIndex = userMessage.lastIndexOf(': ')
-    if (lastColonIndex === -1) return []
+  isValidSubmission(req: IndexRequest, crnList: string[]): boolean {
+    if (crnList.length === 0 || crnList.length > 500) {
+      addErrorToFlash(req, 'crnList', 'Enter fewer than 500 CRNs')
+      return false
+    }
+    const invalidCrns = []
+    for (const crn of crnList) {
+      if (validateCrn(crn)) {
+        invalidCrns.push(crn)
+      }
+    }
+    if (invalidCrns.length > 0) {
+      const messageSuffix = invalidCrns.length > 1 ? 'are not valid CRN formats' : 'is not a valid CRN format'
 
-    return userMessage
-      .slice(lastColonIndex + 2)
-      .split(',')
-      .map(crn => crn.trim())
-      .filter(Boolean)
+      addErrorToFlash(
+        req,
+        'crnList',
+        `Enter a valid format for all CRNs. For example, D016821.  ${invalidCrns.join(', ')} ${messageSuffix}`,
+      )
+      return false
+    }
+    return true
   }
 
   private pluraliseCrnList(crns: string[]): string {
@@ -99,23 +116,20 @@ export default class CustomListController {
     return `${crns.slice(0, -1).join(', ')} and ${crns[crns.length - 1]}`
   }
 
-  //  eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formatErrorMessage(error: any): string {
-    if (error.responseStatus !== 400) {
-      return error.data?.userMessage || error.message || 'An unexpected error occurred'
-    }
-
-    const userMessage = error.data?.userMessage
-    if (!userMessage) {
-      return error.message || 'An unexpected error occurred'
-    }
-
-    const invalidCrns = this.extractCrnListFromUserMessage(userMessage)
-    const containsInvalidCrns = /invalidcrns/i.test(userMessage)
-    const listText = this.pluraliseCrnList(invalidCrns)
+  formatErrorMessage(error: SanitisedError<ErrorResponse>): string {
+    const { data } = error
+    const containsInvalidCrns = data?.errorCode === 'invalidCrns'
 
     if (!containsInvalidCrns) {
-      return listText || userMessage
+      return error.message
+    }
+    const { developerMessage } = data
+
+    const invalidCrns: string[] = developerMessage.split(',')
+
+    const listText = this.pluraliseCrnList(invalidCrns)
+    if (!containsInvalidCrns) {
+      return listText || developerMessage
     }
 
     const invalidMessage = invalidCrns.length > 1 ? 'are not recognised CRNs' : 'is not a recognised CRN'

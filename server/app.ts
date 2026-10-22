@@ -24,6 +24,7 @@ import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedir
 import { getCaseListUrl } from './utils/backlinks'
 import { getActivePage } from './utils/navigation'
 import setUpSentryProcessor from './middleware/setUpSentryProcessor'
+import setUpUserTelemetry from './middleware/setUpUserTelemetry'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -52,6 +53,7 @@ export default function createApp(services: Services): express.Application {
   })
   app.use(setUpFrontendComponents())
   app.use(authorisationMiddleware(config.allowedRoles))
+  app.use(setUpUserTelemetry(services.userService))
 
   app.use(routes(services))
 

@@ -174,7 +174,7 @@ const bookingHistoryText = (booking?: Cas3ExternalPreviousBookingDto): string | 
 
       if (cancellation?.cancellationReason) {
         return formattedDate
-          ? `Booking cancelled ${formattedDate}. Reason: ${cancellation.cancellationReason}`
+          ? `Booking cancelled (${formattedDate}). Reason: ${cancellation.cancellationReason}`
           : `Booking cancelled. Reason: ${cancellation.cancellationReason}`
       }
 

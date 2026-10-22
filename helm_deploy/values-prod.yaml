@@ -25,5 +25,9 @@ generic-service:
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
     CAS2_ENABLED: "false"
 
+  namespace_secrets:
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+
 generic-prometheus-alerts:
   targetApplication: hmpps-single-accommodation-service-ui

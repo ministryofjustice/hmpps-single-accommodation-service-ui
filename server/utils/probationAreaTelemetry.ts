@@ -1,7 +1,7 @@
 import { context, propagation, type Span } from '@opentelemetry/api'
 import type { ClientRequest, IncomingMessage } from 'http'
 
-export const probationAreaCodeKey = 'probationAreaCode'
+export const probationAreaCodeKey = 'requestIdentifier'
 
 export function createProbationAreaCodeRequestHook(sasApiUrl: string) {
   const sasApi = new URL(sasApiUrl)

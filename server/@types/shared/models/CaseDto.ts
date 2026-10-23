@@ -19,4 +19,5 @@ export type CaseDto = {
   userAccess: 'LIMITED' | 'FULL' | 'UNKNOWN'
   limitedAccess?: boolean | null
   accommodationSummaries?: AccommodationSummariesDto | null
+  sexualOffenceRegistrations: Array<'RSC' | 'ANSO' | 'ARSO' | 'RCHD' | 'SHPO' | 'CSEP' | 'ALT13' | 'ALT3' | 'SOPS'>
 }

@@ -19,6 +19,7 @@ import {
   externalReferralSubmissionFactory,
 } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
+import { ExternalReferralDto } from '../@types/shared/models/ExternalReferralDto'
 
 describe('externalReferrals utils', () => {
   let req: Request
@@ -198,6 +199,57 @@ describe('externalReferrals utils', () => {
             ],
             status: { colour: 'yellow', text: 'Submitted' },
           },
+        ])
+      })
+
+      it.each<[ExternalReferralDto[] | undefined]>([[undefined], [[]]])(
+        'should return no cards for referrals %p',
+        referrals => {
+          expect(externalReferralCards(referrals)).toEqual([])
+        },
+      )
+
+      it('should exclude referrals with a withdrawal reason', () => {
+        const withdrawnReferral: ExternalReferralDto = {
+          ...referral,
+          withdrawalReason: 'ANOTHER_REASON',
+        }
+
+        expect(externalReferralCards([withdrawnReferral])).toEqual([])
+      })
+
+      it('should preserve the original order of non-withdrawn referrals', () => {
+        const first: ExternalReferralDto = {
+          ...referral,
+          withdrawalReason: null,
+          submission: {
+            ...referral.submission,
+            organisationName: 'First organisation',
+          },
+        }
+
+        const second: ExternalReferralDto = {
+          ...referral,
+          withdrawalReason: null,
+          submission: {
+            ...referral.submission,
+            organisationName: 'Second organisation',
+          },
+        }
+
+        const third: ExternalReferralDto = {
+          ...referral,
+          withdrawalReason: null,
+          submission: {
+            ...referral.submission,
+            organisationName: 'Third organisation',
+          },
+        }
+
+        expect(externalReferralCards([first, second, third]).map(card => card.heading)).toEqual([
+          'First organisation',
+          'Second organisation',
+          'Third organisation',
         ])
       })
 

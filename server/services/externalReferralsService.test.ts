@@ -53,10 +53,15 @@ describe('ExternalReferralsService', () => {
     expect(client.update).toHaveBeenCalledWith(token, crn, id, command)
   })
 
-  it('should call search on the api client with externalReferral command', async () => {
-    await service.search(token, crn)
+  it('should call search on the api client once and return the response', async () => {
+    const response = apiResponseFactory.externalReferrals(externalReferralFactory.buildList(2))
+    client.search.mockResolvedValue(response)
 
+    const result = await service.search(token, crn)
+
+    expect(client.search).toHaveBeenCalledTimes(1)
     expect(client.search).toHaveBeenCalledWith(token, crn)
+    expect(result).toEqual(response)
   })
 
   it('should call getTimeline on the api client and return the result', async () => {

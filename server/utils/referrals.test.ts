@@ -62,9 +62,19 @@ describe('referrals utilities', () => {
       })
 
       it('includes CAS2 referrals', () => {
-        const cas2Referral = referralFactory.build({ type: 'CAS2' })
+        const cas2Referral = referralFactory.build({
+          id: '654321',
+          type: 'CAS2',
+          status: 'OFFER_DECLINED_OR_WITHDRAWN',
+          date: '2024-05-06',
+          uiUrl: 'https://example.com/cas2/654321',
+          referredBy: { username: 'jane_doe', name: 'Jane Doe' },
+        })
 
-        expect(referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(5)
+        const result = referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')
+
+        expect(result).toHaveLength(5)
+        expect(result).toMatchSnapshot()
       })
     })
   })

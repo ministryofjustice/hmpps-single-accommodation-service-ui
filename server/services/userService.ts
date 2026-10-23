@@ -7,14 +7,16 @@ export default class UserService {
     return this.userClient.getTeams(token)
   }
 
-  async getProbationAreaCode(token: string): Promise<string> {
+  async getUserLocationCode(token: string): Promise<string> {
     const response = await this.userClient.getMe(token)
-    const probationAreaCode = response.data?.probationAreaCode
+    const { data } = response
+    const userLocationCode =
+      data?.userType === 'NOMIS' ? data?.nomisUserDetails?.prisonCode : data?.deliusUserDetails?.probationAreaCode
 
-    if (response.upstreamFailures?.length || typeof probationAreaCode !== 'string' || !probationAreaCode.trim()) {
-      throw new Error('Unable to determine probation area from /users/me')
+    if (response.upstreamFailures?.length || typeof userLocationCode !== 'string' || !userLocationCode.trim()) {
+      throw new Error('Unable to determine user location from /users/me')
     }
 
-    return probationAreaCode
+    return userLocationCode
   }
 }

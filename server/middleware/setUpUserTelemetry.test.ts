@@ -39,7 +39,7 @@ describe('setUpUserTelemetry', () => {
       setImmediate(resolve)
     })
     res.json({
-      probationAreaCode: propagation.getBaggage(context.active())?.getEntry('requestIdentifier')?.value,
+      userLocationCode: propagation.getBaggage(context.active())?.getEntry('requestIdentifier')?.value,
       arbitrary: propagation.getBaggage(context.active())?.getEntry('arbitrary')?.value,
     })
   })
@@ -53,7 +53,7 @@ describe('setUpUserTelemetry', () => {
     exporter.reset()
     currentUser = { ...user }
     profileLookupBaggage = undefined
-    userService.getProbationAreaCode.mockImplementation(async () => {
+    userService.getUserLocationCode.mockImplementation(async () => {
       profileLookupBaggage = propagation.getBaggage(context.active())?.getEntry('requestIdentifier')?.value
       return 'London'
     })
@@ -69,9 +69,9 @@ describe('setUpUserTelemetry', () => {
   it('sets the request attribute and trusted baggage, clearing browser-supplied baggage', async () => {
     const response = await request(app).get('/').expect(200)
 
-    expect(response.body).toEqual({ probationAreaCode: 'London' })
+    expect(response.body).toEqual({ userLocationCode: 'London' })
     expect(profileLookupBaggage).toBeUndefined()
-    expect(userService.getProbationAreaCode).toHaveBeenCalledWith(user.token)
+    expect(userService.getUserLocationCode).toHaveBeenCalledWith(user.token)
     expect(exporter.getFinishedSpans()[0].attributes).toMatchObject({ requestIdentifier: 'London' })
     expect(propagation.getBaggage(context.active())).toBeUndefined()
   })
@@ -80,36 +80,36 @@ describe('setUpUserTelemetry', () => {
     const agent = request.agent(app)
 
     await agent.get('/').expect(200)
-    userService.getProbationAreaCode.mockResolvedValue('Wales')
+    userService.getUserLocationCode.mockResolvedValue('Wales')
     const response = await agent.get('/').expect(200)
 
-    expect(response.body).toEqual({ probationAreaCode: 'London' })
-    expect(userService.getProbationAreaCode).toHaveBeenCalledTimes(1)
+    expect(response.body).toEqual({ userLocationCode: 'London' })
+    expect(userService.getUserLocationCode).toHaveBeenCalledTimes(1)
   })
 
   it('fetches again for a new session', async () => {
     await request(app).get('/').expect(200)
     await request(app).get('/').expect(200)
 
-    expect(userService.getProbationAreaCode).toHaveBeenCalledTimes(2)
+    expect(userService.getUserLocationCode).toHaveBeenCalledTimes(2)
   })
 
   it.each(['username', 'authSource'] as const)('invalidates the cache when %s changes', async field => {
     const agent = request.agent(app)
     await agent.get('/').expect(200)
     currentUser = field === 'username' ? { ...user, username: 'another-user' } : { ...user, authSource: 'delius' }
-    userService.getProbationAreaCode.mockResolvedValue('Wales')
+    userService.getUserLocationCode.mockResolvedValue('Wales')
 
     const response = await agent.get('/').expect(200)
 
-    expect(response.body).toEqual({ probationAreaCode: 'Wales' })
-    expect(userService.getProbationAreaCode).toHaveBeenCalledTimes(2)
+    expect(response.body).toEqual({ userLocationCode: 'Wales' })
+    expect(userService.getUserLocationCode).toHaveBeenCalledTimes(2)
   })
 
   it('logs lookup failures, continues without baggage and retries on the next request', async () => {
     const agent = request.agent(app)
     const error = new Error('API unavailable')
-    userService.getProbationAreaCode.mockRejectedValueOnce(error)
+    userService.getUserLocationCode.mockRejectedValueOnce(error)
 
     const response = await agent.get('/').expect(200)
 
@@ -117,14 +117,14 @@ describe('setUpUserTelemetry', () => {
     expect(exporter.getFinishedSpans()[0].attributes.requestIdentifier).toBeUndefined()
     expect(logger.warn).toHaveBeenCalledWith(error, expect.stringContaining('will retry'))
     await agent.get('/').expect(200)
-    expect(userService.getProbationAreaCode).toHaveBeenCalledTimes(2)
+    expect(userService.getUserLocationCode).toHaveBeenCalledTimes(2)
   })
 
   it("does not reuse another identity's cached area when the new lookup fails", async () => {
     const agent = request.agent(app)
     await agent.get('/').expect(200)
     currentUser = { ...user, username: 'another-user' }
-    userService.getProbationAreaCode.mockRejectedValueOnce(new Error('API unavailable'))
+    userService.getUserLocationCode.mockRejectedValueOnce(new Error('API unavailable'))
 
     const response = await agent.get('/').expect(200)
 
@@ -132,7 +132,7 @@ describe('setUpUserTelemetry', () => {
   })
 
   it('isolates baggage between concurrent sessions', async () => {
-    userService.getProbationAreaCode
+    userService.getUserLocationCode
       .mockImplementationOnce(
         () =>
           new Promise(resolve => {
@@ -143,7 +143,7 @@ describe('setUpUserTelemetry', () => {
 
     const responses = await Promise.all([request(app).get('/'), request(app).get('/')])
 
-    expect(responses.map(response => response.body.probationAreaCode).sort()).toEqual(['London', 'Wales'])
+    expect(responses.map(response => response.body.userLocationCode).sort()).toEqual(['London', 'Wales'])
     expect(
       exporter
         .getFinishedSpans()

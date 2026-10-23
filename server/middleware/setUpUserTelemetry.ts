@@ -11,23 +11,23 @@ export default function setUpUserTelemetry(userService: UserService): RequestHan
       const { username, authSource, token } = res.locals.user
       let cached = req.session.userTelemetry
 
-      if (cached?.username !== username || cached?.authSource !== authSource || !cached?.probationAreaCode) {
+      if (cached?.username !== username || cached?.authSource !== authSource || !cached?.userLocationCode) {
         delete req.session.userTelemetry
 
         try {
-          const probationAreaCode = await userService.getProbationAreaCode(token)
-          cached = { username, authSource, probationAreaCode }
+          const userLocationCode = await userService.getUserLocationCode(token)
+          cached = { username, authSource, userLocationCode }
           req.session.userTelemetry = cached
         } catch (error) {
-          logger.warn(error, 'Unable to enrich telemetry with probation area; will retry on the next request')
+          logger.warn(error, 'Unable to enrich telemetry with user location; will retry on the next request')
           next()
           return
         }
       }
 
-      trace.getActiveSpan()?.setAttribute(probationAreaCodeKey, cached.probationAreaCode)
+      trace.getActiveSpan()?.setAttribute(probationAreaCodeKey, cached.userLocationCode)
       const baggage = propagation.createBaggage({
-        [probationAreaCodeKey]: { value: cached.probationAreaCode },
+        [probationAreaCodeKey]: { value: cached.userLocationCode },
       })
 
       context.with(propagation.setBaggage(context.active(), baggage), next)

@@ -105,21 +105,28 @@ Commit hooks have been set up to run linters, typecheck and unit tests on commit
 ### Probation region telemetry
 
 After authentication and authorisation, the UI calls `GET /users/me` with the user's token.
-The expected response is:
+The user's location code is their `prisonCode` (NOMIS users) or `probationAreaCode` (Delius users),
+selected by `userType`. The expected response is:
 
 ```json
 {
   "data": {
-    "teams": [{ "code": "TEAM_CODE", "name": "Team name" }],
-    "probationAreaCode": "London"
+    "userType": "DELIUS",
+    "username": "USER1",
+    "deliusUserDetails": {
+      "teams": [{ "code": "TEAM_CODE", "name": "Team name" }],
+      "probationAreaCode": "London"
+    }
   },
   "upstreamFailures": []
 }
 ```
 
-The probation area is cached in the existing server-side session, scoped to the authenticated
+NOMIS users instead return `nomisUserDetails.prisonCode`.
+
+The location code is cached in the existing server-side session, scoped to the authenticated
 username and auth source. It is refreshed on the next sign-in or after session expiry, not on
-every request. Failed lookups, upstream failures and missing/empty areas are logged and not
+every request. Failed lookups, upstream failures and missing/empty values are logged and not
 cached; the page continues without region enrichment and the next request retries.
 
 The UI request span and subsequent outgoing HTTP dependency spans have a `requestIdentifier`

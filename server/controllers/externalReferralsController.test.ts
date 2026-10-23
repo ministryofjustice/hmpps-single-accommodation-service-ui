@@ -511,7 +511,8 @@ describe('ExternalReferralsController', () => {
         errors: {},
         pageTitle: 'Move to referral history',
         tableRows: summaryListRows(caseData, referral, true),
-        withdrawalReasons: withdrawalReasonRadios(undefined),
+        withdrawalReasons: withdrawalReasonRadios(undefined, {}),
+        submitButtonText: 'Move to referral history',
       })
     })
   })
@@ -525,7 +526,6 @@ describe('ExternalReferralsController', () => {
         params: { crn, id },
         body: {
           withdrawalReason: 'NO_CAPACITY',
-          withdrawalNote: 'Withdrawal notes',
         },
         flash: jest.fn(),
       })
@@ -543,7 +543,7 @@ describe('ExternalReferralsController', () => {
         token,
         crn,
         id,
-        expect.objectContaining({ withdrawalReason: 'NO_CAPACITY', withdrawalNote: 'Withdrawal notes' }),
+        expect.objectContaining({ withdrawalReason: 'NO_CAPACITY' }),
       )
       expect(request.flash).toHaveBeenCalledWith('success', 'Moved to referral history')
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn }))

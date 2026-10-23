@@ -338,6 +338,19 @@ describe('Proposed addresses utilities', () => {
         expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
           postcode: 'Enter a UK postcode',
+          nameOrNumber: 'Enter a property name or number',
+        })
+      })
+
+      it('only sets a postcode error when the postcode is blank but a property name or number isthere', () => {
+        const invalidLookup: ProposedAddressFormData = {
+          nameOrNumber: '123',
+          postcode: '',
+        }
+
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
+        expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
+          postcode: 'Enter a UK postcode',
         })
       })
 

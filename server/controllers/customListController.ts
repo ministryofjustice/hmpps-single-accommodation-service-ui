@@ -1,7 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
-import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
-import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import { setupCaseList } from '../utils/cases'

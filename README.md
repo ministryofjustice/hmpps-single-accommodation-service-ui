@@ -129,7 +129,7 @@ username and auth source. It is refreshed on the next sign-in or after session e
 every request. Failed lookups, upstream failures and missing/empty values are logged and not
 cached; the page continues without region enrichment and the next request retries.
 
-The UI request span and subsequent outgoing HTTP dependency spans have a `requestIdentifier`
+The UI request span and subsequent outgoing HTTP dependency spans have a `userLocationCode`
 attribute. The existing OpenTelemetry HTTP instrumentation forwards it as W3C baggage to the
 configured SAS API origin only; it removes baggage from requests to other services.
 Browser-supplied baggage is discarded before the profile lookup. No REST client wrapper or
@@ -146,7 +146,7 @@ Query UI and API requests in Application Insights using:
 
 ```kusto
 requests
-| where tostring(customDimensions["requestIdentifier"]) == "London"
+| where tostring(customDimensions["userLocationCode"]) == "London"
 | project timestamp, cloud_RoleName, name, operation_Id, customDimensions
 ```
 

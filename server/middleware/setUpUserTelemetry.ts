@@ -2,7 +2,7 @@ import { context, propagation, trace, type Baggage } from '@opentelemetry/api'
 import type { RequestHandler } from 'express'
 import type UserService from '../services/userService'
 import logger from '../../logger'
-import { probationAreaCodeKey } from '../utils/probationAreaTelemetry'
+import { userLocationCodeKey } from '../utils/userLocationTelemetry'
 
 export default function setUpUserTelemetry(userService: UserService): RequestHandler {
   return (req, res, next) =>
@@ -21,9 +21,9 @@ export default function setUpUserTelemetry(userService: UserService): RequestHan
           req.session.userTelemetry = cached
         }
 
-        trace.getActiveSpan()?.setAttribute(probationAreaCodeKey, cached.userLocationCode)
+        trace.getActiveSpan()?.setAttribute(userLocationCodeKey, cached.userLocationCode)
         baggage = propagation.createBaggage({
-          [probationAreaCodeKey]: { value: cached.userLocationCode },
+          [userLocationCodeKey]: { value: cached.userLocationCode },
         })
       } catch (error) {
         logger.warn(error, 'Unable to enrich telemetry with user location; will retry on the next request')

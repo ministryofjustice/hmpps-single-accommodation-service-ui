@@ -9,7 +9,7 @@ import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
 import { SpanFilterFn, SpanInfo } from '@ministryofjustice/hmpps-azure-telemetry/src/main'
 import applicationInfoSupplier from '../applicationInfo'
 import config from '../config'
-import { createProbationAreaCodeRequestHook } from './probationAreaTelemetry'
+import { createUserLocationCodeRequestHook } from './userLocationTelemetry'
 
 // Sentry v11 reads isolation scopes from the context manager installed by initialiseTelemetry,
 // so no manual context manager registration is needed.
@@ -35,7 +35,7 @@ initialiseTelemetry({
       if (instrumentation instanceof HttpInstrumentation) {
         instrumentation.setConfig({
           ...instrumentation.getConfig(),
-          requestHook: createProbationAreaCodeRequestHook(config.apis.sasApi.url),
+          requestHook: createUserLocationCodeRequestHook(config.apis.sasApi.url),
         })
       }
       return instrumentation

@@ -27,7 +27,7 @@ describe('setUpUserTelemetry', () => {
     res.on('finish', () => span.end())
     res.locals.user = currentUser
     const browserBaggage = propagation.createBaggage({
-      requestIdentifier: { value: 'Untrusted' },
+      userLocationCode: { value: 'Untrusted' },
       arbitrary: { value: 'Discard me' },
     })
     context.with(propagation.setBaggage(trace.setSpan(context.active(), span), browserBaggage), next)
@@ -39,7 +39,7 @@ describe('setUpUserTelemetry', () => {
       setImmediate(resolve)
     })
     res.json({
-      userLocationCode: propagation.getBaggage(context.active())?.getEntry('requestIdentifier')?.value,
+      userLocationCode: propagation.getBaggage(context.active())?.getEntry('userLocationCode')?.value,
       arbitrary: propagation.getBaggage(context.active())?.getEntry('arbitrary')?.value,
     })
   })
@@ -54,7 +54,7 @@ describe('setUpUserTelemetry', () => {
     currentUser = { ...user }
     profileLookupBaggage = undefined
     userService.getUserLocationCode.mockImplementation(async () => {
-      profileLookupBaggage = propagation.getBaggage(context.active())?.getEntry('requestIdentifier')?.value
+      profileLookupBaggage = propagation.getBaggage(context.active())?.getEntry('userLocationCode')?.value
       return 'London'
     })
   })
@@ -72,7 +72,7 @@ describe('setUpUserTelemetry', () => {
     expect(response.body).toEqual({ userLocationCode: 'London' })
     expect(profileLookupBaggage).toBeUndefined()
     expect(userService.getUserLocationCode).toHaveBeenCalledWith(user.token)
-    expect(exporter.getFinishedSpans()[0].attributes).toMatchObject({ requestIdentifier: 'London' })
+    expect(exporter.getFinishedSpans()[0].attributes).toMatchObject({ userLocationCode: 'London' })
     expect(propagation.getBaggage(context.active())).toBeUndefined()
   })
 
@@ -114,7 +114,7 @@ describe('setUpUserTelemetry', () => {
     const response = await agent.get('/').expect(200)
 
     expect(response.body).toEqual({})
-    expect(exporter.getFinishedSpans()[0].attributes.requestIdentifier).toBeUndefined()
+    expect(exporter.getFinishedSpans()[0].attributes.userLocationCode).toBeUndefined()
     expect(logger.warn).toHaveBeenCalledWith(error, expect.stringContaining('will retry'))
     await agent.get('/').expect(200)
     expect(userService.getUserLocationCode).toHaveBeenCalledTimes(2)
@@ -147,7 +147,7 @@ describe('setUpUserTelemetry', () => {
     expect(
       exporter
         .getFinishedSpans()
-        .map(span => span.attributes.requestIdentifier)
+        .map(span => span.attributes.userLocationCode)
         .sort(),
     ).toEqual(['London', 'Wales'])
   })

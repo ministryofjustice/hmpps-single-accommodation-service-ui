@@ -104,7 +104,7 @@ Commit hooks have been set up to run linters, typecheck and unit tests on commit
 
 ### Probation region telemetry
 
-After authentication and authorisation, the UI calls `GET /user/me` with the user's token.
+After authentication and authorisation, the UI calls `GET /users/me` with the user's token.
 The expected response is:
 
 ```json
@@ -129,7 +129,7 @@ Browser-supplied baggage is discarded before the profile lookup. No REST client 
 per-client header changes are needed. Telemetry must be enabled with
 `APPLICATIONINSIGHTS_CONNECTION_STRING` (or `DEBUG_TELEMETRY=true` locally).
 
-The first `/user/me` lookup cannot carry a region that has not yet been returned. Authentication,
+The first `/users/me` lookup cannot carry a region that has not yet been returned. Authentication,
 health/static requests and other middleware that runs before enrichment are also not region-tagged.
 This enriches server-side telemetry, not the separate browser Application Insights SDK.
 

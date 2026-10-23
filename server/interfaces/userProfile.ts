@@ -7,5 +7,5 @@ export interface UserProfile {
 
 export interface UserProfileResponse {
   data: UserProfile
-  upstreamFailures: UpstreamFailureDto[]
+  upstreamFailures?: UpstreamFailureDto[]
 }

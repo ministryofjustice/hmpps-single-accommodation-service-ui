@@ -44,7 +44,7 @@ describe('userService', () => {
     } as UserProfileResponse)
 
     await expect(userService.getProbationAreaCode(token)).rejects.toThrow(
-      'Unable to determine probation area from /user/me',
+      'Unable to determine probation area from /users/me',
     )
   })
 
@@ -52,7 +52,7 @@ describe('userService', () => {
     userClient.getMe.mockResolvedValue(apiResponseFactory.withUpstreamFailures<UserProfileResponse>())
 
     await expect(userService.getProbationAreaCode(token)).rejects.toThrow(
-      'Unable to determine probation area from /user/me',
+      'Unable to determine probation area from /users/me',
     )
   })
 

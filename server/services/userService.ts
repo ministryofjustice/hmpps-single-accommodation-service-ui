@@ -11,8 +11,8 @@ export default class UserService {
     const response = await this.userClient.getMe(token)
     const probationAreaCode = response.data?.probationAreaCode
 
-    if (response.upstreamFailures.length || typeof probationAreaCode !== 'string' || !probationAreaCode.trim()) {
-      throw new Error('Unable to determine probation area from /user/me')
+    if (response.upstreamFailures?.length || typeof probationAreaCode !== 'string' || !probationAreaCode.trim()) {
+      throw new Error('Unable to determine probation area from /users/me')
     }
 
     return probationAreaCode

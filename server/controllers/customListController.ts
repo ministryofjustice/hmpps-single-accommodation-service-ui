@@ -122,13 +122,11 @@ export default class CustomListController {
   formatErrorMessage(error: SanitisedError<ErrorResponse>): string {
     const { data } = error
     const containsInvalidCrns = data?.errorCode === 'invalidCrns'
-
-    if (!containsInvalidCrns) {
+    const { userMessage } = data
+    const invalidCrns: string[] = userMessage?.split(',') || []
+    if (!containsInvalidCrns || invalidCrns.length === 0) {
       return error.message
     }
-    const { userMessage } = data
-
-    const invalidCrns: string[] = userMessage.split(',')
 
     const listText = this.pluraliseCrnList(invalidCrns)
 

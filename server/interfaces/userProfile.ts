@@ -1,11 +1,24 @@
 import type { Team, UpstreamFailureDto } from '@sas/api'
 
-export interface UserProfile {
+export type UserType = 'DELIUS' | 'NOMIS'
+
+export type NomisUserDetails = {
+  prisonCode: string | null
+}
+
+export type DeliusUserDetails = {
   teams: Team[]
   probationAreaCode: string
 }
 
-export interface UserProfileResponse {
+export type UserProfile = {
+  userType: UserType
+  username: string
+  nomisUserDetails?: NomisUserDetails | null
+  deliusUserDetails?: DeliusUserDetails | null
+}
+
+export type UserProfileResponse = {
   data: UserProfile
-  upstreamFailures?: UpstreamFailureDto[]
+  upstreamFailures: UpstreamFailureDto[]
 }

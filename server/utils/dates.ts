@@ -127,3 +127,10 @@ export const getTodayLocal = (): string =>
 
 export const daysUntil = (date: string): number =>
   Math.ceil((new Date(date.substring(0, 10)).getTime() - Date.now()) / (1000 * 3600 * 24))
+
+export const daysBetween = (startDate?: string | null, endDate?: string | null): number | undefined => {
+  if (!startDate || !endDate) return undefined
+
+  const durationDays = (Date.parse(endDate) - Date.parse(startDate)) / (1000 * 3600 * 24)
+  return Number.isFinite(durationDays) ? durationDays : undefined
+}

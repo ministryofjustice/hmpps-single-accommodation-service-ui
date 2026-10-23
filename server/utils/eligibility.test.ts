@@ -527,6 +527,19 @@ describe('cas3 status card', () => {
 
       expect(cas3StatusCard({ serviceResult, cas3Application }).details).toMatchSnapshot()
     })
+
+    it('includes booking duration in weeks for a confirmed booking', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'BOOKING_CONFIRMED' })
+
+      expect(cas3StatusCard({ serviceResult, cas3Application }).details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            key: expect.objectContaining({ text: 'Booking dates' }),
+            value: expect.objectContaining({ text: '1 September 2026 to 27 October 2026 (8 weeks)' }),
+          }),
+        ]),
+      )
+    })
   })
 
   describe('content', () => {

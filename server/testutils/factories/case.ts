@@ -67,5 +67,6 @@ export default CaseFactory.define(() => {
     userAccess: 'FULL' as const,
     limitedAccess: false,
     accommodationSummaries: accommodationSummariesFactory.build(),
+    sexualOffenceRegistrations: [] as Case['sexualOffenceRegistrations'],
   }
 })

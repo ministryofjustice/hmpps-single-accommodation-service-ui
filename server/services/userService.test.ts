@@ -1,4 +1,4 @@
-import { ApiResponseDtoListTeam } from '@sas/api'
+import { ApiResponseDtoListTeamDto } from '@sas/api'
 import UserClient from '../data/userClient'
 import UserService from './userService'
 import { apiResponseFactory } from '../testutils/factories'
@@ -17,7 +17,7 @@ describe('userService', () => {
 
   it("should call getTeams on the API client and return the user's teams", async () => {
     userClient.getTeams.mockResolvedValue(
-      apiResponseFactory.buildResponse<ApiResponseDtoListTeam>([{ code: 'TEAM_CODE', name: 'Team CAS' }]),
+      apiResponseFactory.buildResponse<ApiResponseDtoListTeamDto>([{ code: 'TEAM_CODE', name: 'Team CAS' }]),
     )
 
     const result = await userService.getTeams(token)

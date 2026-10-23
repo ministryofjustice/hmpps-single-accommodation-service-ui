@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { CaseAction, CaseDto, CaseDto as Case, Team } from '@sas/api'
+import { CaseAction, CaseDto, CaseDto as Case, TeamDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, IndexRequest, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
@@ -47,7 +47,7 @@ export const searchResultsSummary = (searchTerm: string, caseData: Case | null):
 export const queryToFilters = (
   query: GetCasesQuery,
   currentUrl: string,
-  teams: Team[] = [],
+  teams: TeamDto[] = [],
 ): { text: string; href: string }[] => {
   const filters: { text: string; href: string }[] = []
 
@@ -144,7 +144,7 @@ export const displayName = (caseData: Case, options: DisplayNameOptions = {}): s
   }
 }
 
-export const assignedToOptions = (fullName: string, teams: Team[]): SelectOption[] => [
+export const assignedToOptions = (fullName: string, teams: TeamDto[]): SelectOption[] => [
   { text: `You (${initialiseName(fullName)})`, value: '' },
   ...teams.map(t => ({ text: t.name, value: t.code })),
 ]
@@ -158,7 +158,7 @@ export const validateSearchCrn = (req: Request, crn?: string) => {
 
 export const setupCaseList = (
   req: IndexRequest,
-  teams: Team[],
+  teams: TeamDto[],
   username: string,
   cases: Case[],
   userFullName: string,

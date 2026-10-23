@@ -14,7 +14,7 @@ describe('UserClient.getMe', () => {
       upstreamFailures: [],
     }
     const scope = nock(config.apis.sasApi.url)
-      .get('/user/me')
+      .get('/users/me')
       .matchHeader('authorization', 'Bearer user-token')
       .reply(200, body)
 

@@ -1,8 +1,8 @@
 import { ApiResponseDtoListTeamDto } from '@sas/api'
+import type { ApiResponseDtoUserDto } from '@sas/api'
 import UserClient from '../data/userClient'
 import UserService from './userService'
 import { apiResponseFactory } from '../testutils/factories'
-import type { UserProfileResponse } from '../interfaces/userProfile'
 
 jest.mock('../data/userClient.ts')
 
@@ -30,7 +30,7 @@ describe('userService', () => {
 
   it('gets the probation area for a Delius user', async () => {
     userClient.getMe.mockResolvedValue(
-      apiResponseFactory.buildResponse<UserProfileResponse>({
+      apiResponseFactory.buildResponse<ApiResponseDtoUserDto>({
         userType: 'DELIUS',
         username: 'user1',
         deliusUserDetails: { teams: [], probationAreaCode: 'London' },
@@ -43,7 +43,7 @@ describe('userService', () => {
 
   it('gets the prison code for a Nomis user', async () => {
     userClient.getMe.mockResolvedValue(
-      apiResponseFactory.buildResponse<UserProfileResponse>({
+      apiResponseFactory.buildResponse<ApiResponseDtoUserDto>({
         userType: 'NOMIS',
         username: 'user1',
         nomisUserDetails: { prisonCode: 'MDI' },
@@ -58,7 +58,7 @@ describe('userService', () => {
     userClient.getMe.mockResolvedValue({
       data: { userType: 'DELIUS', username: 'user1', deliusUserDetails: { teams: [], probationAreaCode } },
       upstreamFailures: [],
-    } as unknown as UserProfileResponse)
+    } as ApiResponseDtoUserDto)
 
     await expect(userService.getUserLocationCode(token)).rejects.toThrow(
       'Unable to determine user location from /users/me',
@@ -69,7 +69,7 @@ describe('userService', () => {
     userClient.getMe.mockResolvedValue({
       data: { userType: 'NOMIS', username: 'user1', nomisUserDetails: { prisonCode } },
       upstreamFailures: [],
-    } as unknown as UserProfileResponse)
+    } as ApiResponseDtoUserDto)
 
     await expect(userService.getUserLocationCode(token)).rejects.toThrow(
       'Unable to determine user location from /users/me',
@@ -77,7 +77,7 @@ describe('userService', () => {
   })
 
   it('rejects profiles with upstream failures', async () => {
-    userClient.getMe.mockResolvedValue(apiResponseFactory.withUpstreamFailures<UserProfileResponse>())
+    userClient.getMe.mockResolvedValue(apiResponseFactory.withUpstreamFailures<ApiResponseDtoUserDto>())
 
     await expect(userService.getUserLocationCode(token)).rejects.toThrow(
       'Unable to determine user location from /users/me',

@@ -1,10 +1,10 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { ApiResponseDtoListTeamDto, TeamDto } from '@sas/api'
+import type { ApiResponseDtoUserDto } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import UserClient from './userClient'
 import apiPaths from '../paths/api'
 import { apiResponseFactory } from '../testutils/factories'
-import type { UserProfileResponse } from '../interfaces/userProfile'
 
 describeClient('UserClient', provider => {
   let userClient: UserClient
@@ -44,7 +44,7 @@ describeClient('UserClient', provider => {
   })
 
   it('should make a GET request to /users/me using user token and return the user profile', async () => {
-    const body = apiResponseFactory.buildResponse<UserProfileResponse>({
+    const body = apiResponseFactory.buildResponse<ApiResponseDtoUserDto>({
       userType: 'DELIUS',
       username: 'test-user',
       deliusUserDetails: { teams: [{ code: 'team-one-code', name: 'Team One' }], probationAreaCode: 'London' },

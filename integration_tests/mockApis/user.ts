@@ -1,9 +1,9 @@
 import { SuperAgentRequest } from 'superagent'
 import { TeamDto } from '@sas/api'
+import type { ApiResponseDtoUserDto } from '@sas/api'
 import { stubFor } from './wiremock'
 import apiPaths from '../../server/paths/api'
 import { apiResponseFactory } from '../../server/testutils/factories'
-import type { UserProfileResponse } from '../../server/interfaces/userProfile'
 
 export default {
   stubGetMe: (probationAreaCode = 'London', teams: TeamDto[] = []): SuperAgentRequest =>
@@ -15,7 +15,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.buildResponse<UserProfileResponse>({
+        jsonBody: apiResponseFactory.buildResponse<ApiResponseDtoUserDto>({
           userType: 'DELIUS',
           username: 'user1',
           deliusUserDetails: { teams, probationAreaCode },

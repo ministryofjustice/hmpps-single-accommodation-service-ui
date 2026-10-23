@@ -114,7 +114,7 @@ export const externalReferralStatusTag = (status?: ExternalReferralDto['status']
 
 export const externalReferralCards = (referrals?: ExternalReferralDto[]): Array<StatusCard> => {
   return (referrals ?? [])
-    .filter(referral => referral.withdrawalReason === null || referral.withdrawalReason === undefined)
+    .filter(({ withdrawalReason }) => !withdrawalReason)
     .map(referral => ({
       heading: referral.submission?.organisationName,
       links: cardLinks(referral),

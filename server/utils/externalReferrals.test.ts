@@ -202,6 +202,24 @@ describe('externalReferrals utils', () => {
         ])
       })
 
+      it('should render a default value if no reference is provided', () => {
+        expect(
+          externalReferralCards([
+            { ...referral, submission: { ...referral.submission, referenceNumber: undefined } },
+          ])[0],
+        ).toEqual(
+          expect.objectContaining({
+            details: [
+              { key: { text: 'Reference' }, value: { text: 'No reference added' } },
+              { key: { text: 'Submitted' }, value: { text: '13 June 2026 (5 days ago)' } },
+              { key: { text: 'Submitted by' }, value: { text: 'created-by' } },
+            ],
+          }),
+        )
+      })
+    })
+
+    describe('External referral list', () => {
       it.each<[ExternalReferralDto[] | undefined]>([[undefined], [[]]])(
         'should return no cards for referrals %p',
         referrals => {
@@ -219,54 +237,12 @@ describe('externalReferrals utils', () => {
       })
 
       it('should preserve the original order of non-withdrawn referrals', () => {
-        const first: ExternalReferralDto = {
-          ...referral,
-          withdrawalReason: null,
-          submission: {
-            ...referral.submission,
-            organisationName: 'First organisation',
-          },
-        }
+        const threeReferrals = externalReferralFactory.buildList(3)
 
-        const second: ExternalReferralDto = {
-          ...referral,
-          withdrawalReason: null,
-          submission: {
-            ...referral.submission,
-            organisationName: 'Second organisation',
-          },
-        }
-
-        const third: ExternalReferralDto = {
-          ...referral,
-          withdrawalReason: null,
-          submission: {
-            ...referral.submission,
-            organisationName: 'Third organisation',
-          },
-        }
-
-        expect(externalReferralCards([first, second, third]).map(card => card.heading)).toEqual([
-          'First organisation',
-          'Second organisation',
-          'Third organisation',
-        ])
-      })
-
-      it('should render a default value if no reference is provided', () => {
-        expect(
-          externalReferralCards([
-            { ...referral, submission: { ...referral.submission, referenceNumber: undefined } },
-          ])[0],
-        ).toEqual(
-          expect.objectContaining({
-            details: [
-              { key: { text: 'Reference' }, value: { text: 'No reference added' } },
-              { key: { text: 'Submitted' }, value: { text: '13 June 2026 (5 days ago)' } },
-              { key: { text: 'Submitted by' }, value: { text: 'created-by' } },
-            ],
-          }),
-        )
+        const cards = externalReferralCards(threeReferrals)
+        threeReferrals.forEach((aReferral, index) => {
+          expect(aReferral.submission.organisationName).toEqual(cards[index].heading)
+        })
       })
     })
 

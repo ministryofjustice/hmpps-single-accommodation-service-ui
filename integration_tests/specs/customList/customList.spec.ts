@@ -7,7 +7,6 @@ import CasesListPage from '../../pages/cases/listPage'
 import CustomListPage from '../../pages/customList/customListPage'
 import CreateListPage from '../../pages/customList/createListPage'
 import ShowCaseListPage from '../../pages/customList/showCaseList'
-import { stubApiError } from '../../mockApis/wiremock'
 
 test.describe('custom list', () => {
   test('should allow a user to create and view a custom list', async ({ page }) => {
@@ -91,7 +90,9 @@ test.describe('custom list', () => {
     // AND I click the submit button
     await createListPage.clickButton('Submit')
     // THEN should show error for the CRN input field
-    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'Enter a valid format for all CRNs. For example, D016821. CRN1 is not a valid CRN format' })
+    await createListPage.shouldShowErrorMessagesForFields({
+      crnList: 'Enter a valid format for all CRNs. For example, D016821. CRN1 is not a valid CRN format',
+    })
   })
   test('should show error when CRN does not exist', async ({ page }) => {
     // GIVEN a custom list does not already exist
@@ -124,7 +125,7 @@ test.describe('custom list', () => {
     // AND I click the submit button
     await createListPage.clickButton('Submit')
     // THEN should show error for the CRN input field
-    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'Invalid CRN: C123456' })
+    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'C123456 is not a recognised CRN' })
   })
 
   test('should allow a user to view an existing custom list and edit it', async ({ page }) => {

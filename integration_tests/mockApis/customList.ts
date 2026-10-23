@@ -36,13 +36,12 @@ export default {
       },
       response: {
         status: 400,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
-          data: {
-            status: 400,
-            errorCode: 'invalidCrns',
-            userMessage: crnList,
-            developerMessage: 'Domain Exception: Invalid CRNs',
-          },
+          status: 400,
+          errorCode: 'invalidCrns',
+          userMessage: crnList,
+          developerMessage: 'Domain Exception: Invalid CRNs',
         },
       },
     }),

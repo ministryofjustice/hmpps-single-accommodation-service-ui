@@ -19,6 +19,7 @@ import {
   externalReferralSubmissionFactory,
 } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
+import { ExternalReferralDto } from '../@types/shared/models/ExternalReferralDto'
 
 describe('externalReferrals utils', () => {
   let req: Request
@@ -215,6 +216,33 @@ describe('externalReferrals utils', () => {
             ],
           }),
         )
+      })
+    })
+
+    describe('External referral list', () => {
+      it.each<[ExternalReferralDto[] | undefined]>([[undefined], [[]]])(
+        'should return no cards for referrals %p',
+        referrals => {
+          expect(externalReferralCards(referrals)).toEqual([])
+        },
+      )
+
+      it('should exclude referrals with a withdrawal reason', () => {
+        const withdrawnReferral: ExternalReferralDto = {
+          ...referral,
+          withdrawalReason: 'ANOTHER_REASON',
+        }
+
+        expect(externalReferralCards([withdrawnReferral])).toEqual([])
+      })
+
+      it('should preserve the original order of non-withdrawn referrals', () => {
+        const threeReferrals = externalReferralFactory.buildList(3)
+
+        const cards = externalReferralCards(threeReferrals)
+        threeReferrals.forEach((aReferral, index) => {
+          expect(aReferral.submission.organisationName).toEqual(cards[index].heading)
+        })
       })
     })
 

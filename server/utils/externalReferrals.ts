@@ -113,12 +113,14 @@ export const externalReferralStatusTag = (status?: ExternalReferralDto['status']
   })[status] || { text: 'Unknown' }
 
 export const externalReferralCards = (referrals?: ExternalReferralDto[]): Array<StatusCard> => {
-  return (referrals ?? []).map(referral => ({
-    heading: referral.submission?.organisationName,
-    links: cardLinks(referral),
-    details: cardDetails(referral),
-    status: externalReferralStatusTag(referral.status),
-  }))
+  return (referrals ?? [])
+    .filter(({ withdrawalReason }) => !withdrawalReason)
+    .map(referral => ({
+      heading: referral.submission?.organisationName,
+      links: cardLinks(referral),
+      details: cardDetails(referral),
+      status: externalReferralStatusTag(referral.status),
+    }))
 }
 
 export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined) => {

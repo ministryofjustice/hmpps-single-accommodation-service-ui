@@ -1,5 +1,5 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { ApiResponseDtoListTeam, Team } from '@sas/api'
+import { ApiResponseDtoListTeamDto, TeamDto } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import UserClient from './userClient'
 import apiPaths from '../paths/api'
@@ -14,13 +14,13 @@ describeClient('UserClient', provider => {
   })
 
   it("should make a GET request to /user/teams using user token and return the user's teams", async () => {
-    const teams: Team[] = [
+    const teams: TeamDto[] = [
       {
         name: 'Team One',
         code: 'team-one-code',
       },
     ]
-    const body = apiResponseFactory.buildResponse<ApiResponseDtoListTeam>(teams)
+    const body = apiResponseFactory.buildResponse<ApiResponseDtoListTeamDto>(teams)
 
     await provider.addInteraction({
       state: 'User exists and has teams',

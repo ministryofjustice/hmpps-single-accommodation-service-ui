@@ -164,7 +164,12 @@ describe('customListController', () => {
 
       await customListController.submitCrnList()(request, response, next)
 
-      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, ['A123456', 'B123456', 'C123456', 'D123456'])
+      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, [
+        'A123456',
+        'B123456',
+        'C123456',
+        'D123456',
+      ])
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=4`)
     })
 
@@ -194,7 +199,7 @@ describe('customListController', () => {
     it('formats two invalid CRNs without a comma before the final item', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'A123456, B123456',errorCode: 'invalidCrns' },
+        data: { userMessage: 'A123456, B123456', errorCode: 'invalidCrns' },
       }
 
       expect(customListController.formatErrorMessage(error)).toBe('A123456 and B123456 are not recognised CRNs')
@@ -203,16 +208,18 @@ describe('customListController', () => {
     it('formats three invalid CRNs with commas between earlier items and "and" before the final item', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'A123456, B123456, C123456',errorCode: 'invalidCrns' },
+        data: { userMessage: 'A123456, B123456, C123456', errorCode: 'invalidCrns' },
       }
 
-      expect(customListController.formatErrorMessage(error)).toBe('A123456, B123456 and C123456 are not recognised CRNs')
+      expect(customListController.formatErrorMessage(error)).toBe(
+        'A123456, B123456 and C123456 are not recognised CRNs',
+      )
     })
 
     it('formats a single invalid CRN without a list separator', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'A123456',errorCode: 'invalidCrns' },
+        data: { userMessage: 'A123456', errorCode: 'invalidCrns' },
       }
 
       expect(customListController.formatErrorMessage(error)).toBe('A123456 is not a recognised CRN')

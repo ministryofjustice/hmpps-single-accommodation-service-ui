@@ -1,5 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
+import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import { setupCaseList } from '../utils/cases'
@@ -114,7 +116,7 @@ export default class CustomListController {
     return `${crns.slice(0, -1).join(',')} and${crns[crns.length - 1]}`
   }
 
-  formatErrorMessage(error: any): string {
+  formatErrorMessage(error: SanitisedError<ErrorResponse>): string {
     const { data } = error
     const containsInvalidCrns = data?.errorCode === 'invalidCrns'
 

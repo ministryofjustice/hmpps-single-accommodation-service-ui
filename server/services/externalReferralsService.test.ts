@@ -82,7 +82,6 @@ describe('ExternalReferralsService', () => {
   it('should call the client to withdraw an external referral', async () => {
     const withdrawal: ExternalReferralWithdrawalDto = {
       withdrawalReason: 'PLACEMENT_COMPLETE',
-      withdrawalNote: 'Withdrawal note',
       otherReason: 'Other reason',
     }
     client.withdrawal.mockResolvedValue()

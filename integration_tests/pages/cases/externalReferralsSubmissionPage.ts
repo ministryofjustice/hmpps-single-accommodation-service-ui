@@ -69,16 +69,22 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
   }
 
   async completeWithdrawalForm(referral: ExternalReferralDto, reasonLabel = 'Placement complete') {
-    const note: string = faker.lorem.paragraph()
     await this.selectRadioByLabel(reasonLabel)
-    await this.completeInputByLabel('Notes (optional)', note)
     return {
       ...referral,
       withdrawalReason: Object.keys(withdrawalReasonLabels).find(
         key => withdrawalReasonLabels[key] === reasonLabel,
       ) as ExternalReferralWithdrawalDto['withdrawalReason'],
-      withdrawalNote: note,
-    }
+    } as ExternalReferralDto
+  }
+
+  async completeWithdrawalOtherReason(referral: ExternalReferralDto) {
+    const otherReason: string = faker.lorem.sentence({ min: 2, max: 4 })
+    await this.completeInputByLabel('Reason', otherReason)
+    return {
+      ...referral,
+      otherReason,
+    } as ExternalReferralDto
   }
 
   async checkApiCalled(referral: ExternalReferralDto, method: 'submit' | 'update' = 'submit') {
@@ -126,14 +132,14 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
     const {
       crn,
       withdrawalReason,
-      withdrawalNote,
+      otherReason,
       submission: { id },
     } = referral
     const postBody = await verifyPost(apiPaths.cases.externalReferrals.withdrawal({ crn, id }))
 
     expect(postBody).toEqual({
       withdrawalReason,
-      withdrawalNote,
+      otherReason,
     })
   }
 }

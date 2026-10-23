@@ -260,15 +260,19 @@ export default class ExternalReferralsController {
       const { caseData, referral } = await this.getSubmissionPageData(token, crn, id)
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
+      const context = {
+        errors,
+        errorSummary,
+        ...userInput,
+      }
+
       return res.render('pages/external-referrals/withdrawal', {
         pageTitle: 'Move to referral history',
         backLinkHref: uiPaths.externalReferrals.show({ crn, id }),
         tableRows: summaryListRows(caseData, referral, true),
-        withdrawalReasons: withdrawalReasonRadios(userInput?.withdrawalReason),
-        errors,
-        errorSummary,
-        withdrawalNote: userInput?.withdrawalNote,
-        ...userInput,
+        withdrawalReasons: withdrawalReasonRadios(userInput?.withdrawalReason, context),
+        ...context,
+        submitButtonText: 'Move to referral history',
       })
     }
   }
@@ -277,7 +281,7 @@ export default class ExternalReferralsController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const { withdrawalReason, withdrawalNote } = req.body
+      const { withdrawalReason, otherReason } = req.body
       const errorRedirect = uiPaths.externalReferrals.withdrawal({ crn, id })
 
       if (!validateWithdrawal(req)) {
@@ -287,7 +291,7 @@ export default class ExternalReferralsController {
       try {
         await this.externalReferralsService.withdrawal(token, crn, id, {
           withdrawalReason,
-          withdrawalNote: withdrawalNote || undefined,
+          otherReason: otherReason || undefined,
         })
 
         req.flash('success', 'Moved to referral history')

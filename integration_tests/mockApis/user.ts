@@ -15,7 +15,11 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: apiResponseFactory.buildResponse<UserProfileResponse>({ teams, probationAreaCode }),
+        jsonBody: apiResponseFactory.buildResponse<UserProfileResponse>({
+          userType: 'DELIUS',
+          username: 'user1',
+          deliusUserDetails: { teams, probationAreaCode },
+        }),
       },
     }),
   stubGetTeams: (teams: TeamDto[] = []): SuperAgentRequest =>

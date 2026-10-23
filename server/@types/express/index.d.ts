@@ -11,7 +11,7 @@ export declare module 'express-session' {
     userTelemetry?: {
       username: string
       authSource: string
-      probationAreaCode: string
+      userLocationCode: string
     }
   }
 }

@@ -28,31 +28,59 @@ describe('userService', () => {
     expect(result).toEqual({ data: [{ code: 'TEAM_CODE', name: 'Team CAS' }], upstreamFailures: [] })
   })
 
-  it('gets the probation area from the current user profile', async () => {
+  it('gets the probation area for a Delius user', async () => {
     userClient.getMe.mockResolvedValue(
-      apiResponseFactory.buildResponse<UserProfileResponse>({ teams: [], probationAreaCode: 'London' }),
+      apiResponseFactory.buildResponse<UserProfileResponse>({
+        userType: 'DELIUS',
+        username: 'user1',
+        deliusUserDetails: { teams: [], probationAreaCode: 'London' },
+      }),
     )
 
-    await expect(userService.getProbationAreaCode(token)).resolves.toBe('London')
+    await expect(userService.getUserLocationCode(token)).resolves.toBe('London')
     expect(userClient.getMe).toHaveBeenCalledWith(token)
   })
 
-  it.each([undefined, null, '', '  ', 123])('rejects an invalid probation area: %s', async probationAreaCode => {
-    userClient.getMe.mockResolvedValue({
-      data: { teams: [], probationAreaCode },
-      upstreamFailures: [],
-    } as UserProfileResponse)
+  it('gets the prison code for a Nomis user', async () => {
+    userClient.getMe.mockResolvedValue(
+      apiResponseFactory.buildResponse<UserProfileResponse>({
+        userType: 'NOMIS',
+        username: 'user1',
+        nomisUserDetails: { prisonCode: 'MDI' },
+      }),
+    )
 
-    await expect(userService.getProbationAreaCode(token)).rejects.toThrow(
-      'Unable to determine probation area from /users/me',
+    await expect(userService.getUserLocationCode(token)).resolves.toBe('MDI')
+    expect(userClient.getMe).toHaveBeenCalledWith(token)
+  })
+
+  it.each([undefined, null, '', '  ', 123])('rejects an invalid Delius probation area: %s', async probationAreaCode => {
+    userClient.getMe.mockResolvedValue({
+      data: { userType: 'DELIUS', username: 'user1', deliusUserDetails: { teams: [], probationAreaCode } },
+      upstreamFailures: [],
+    } as unknown as UserProfileResponse)
+
+    await expect(userService.getUserLocationCode(token)).rejects.toThrow(
+      'Unable to determine user location from /users/me',
+    )
+  })
+
+  it.each([undefined, null, '', '  ', 123])('rejects an invalid Nomis prison code: %s', async prisonCode => {
+    userClient.getMe.mockResolvedValue({
+      data: { userType: 'NOMIS', username: 'user1', nomisUserDetails: { prisonCode } },
+      upstreamFailures: [],
+    } as unknown as UserProfileResponse)
+
+    await expect(userService.getUserLocationCode(token)).rejects.toThrow(
+      'Unable to determine user location from /users/me',
     )
   })
 
   it('rejects profiles with upstream failures', async () => {
     userClient.getMe.mockResolvedValue(apiResponseFactory.withUpstreamFailures<UserProfileResponse>())
 
-    await expect(userService.getProbationAreaCode(token)).rejects.toThrow(
-      'Unable to determine probation area from /users/me',
+    await expect(userService.getUserLocationCode(token)).rejects.toThrow(
+      'Unable to determine user location from /users/me',
     )
   })
 
@@ -60,6 +88,6 @@ describe('userService', () => {
     const error = new Error('API unavailable')
     userClient.getMe.mockRejectedValue(error)
 
-    await expect(userService.getProbationAreaCode(token)).rejects.toBe(error)
+    await expect(userService.getUserLocationCode(token)).rejects.toBe(error)
   })
 })

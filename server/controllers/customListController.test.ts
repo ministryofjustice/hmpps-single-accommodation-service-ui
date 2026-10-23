@@ -198,6 +198,7 @@ describe('customListController', () => {
 
     it('renders the addCrns page with errors on unsuccessful submission', async () => {
       const serverError: SanitisedError = new Error('Server error')
+      // serverError.data = { errorCode: 'invalidCrns', userMessage: 'A123456, B123456' }
       customListService.addCustomList.mockRejectedValue(serverError)
       const crnList = 'A123456,B123456'
       request.body = { crnList }

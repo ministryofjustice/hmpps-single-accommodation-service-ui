@@ -161,6 +161,206 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
 ]
 `;
 
+exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled includes CAS2 referrals 1`] = `
+[
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Approved Premises (CAS1) placement",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)",
+    },
+    {
+      "html": "<div>
+  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+</div>
+<div>
+  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+    <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
+  </span>
+    <span class="govuk-table-span">
+    <span class="govuk-hint">15 January 2023</span>
+  </span>
+    
+</div>",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/123456">View application</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Duty to refer",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  Joe Bloggs",
+    },
+    {
+      "html": "<div>
+  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+</div>
+<div>
+  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+    <strong class="govuk-tag govuk-tag--grey">Withdrawn</strong>
+  </span>
+    <span class="govuk-table-span">
+    <span class="govuk-hint">Submitted on 20 February 2023</span>
+  </span>
+    
+      
+        <p class="govuk-!-margin-bottom-1">Reason: Replaced by a new referral</p>
+      
+    
+</div>",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/dtr/789012/details">View referral</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  CAS3 referral",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  Matt Jones",
+    },
+    {
+      "html": "<div>
+  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+</div>
+<div>
+  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+    <strong class="govuk-tag govuk-tag--grey">Archived</strong>
+  </span>
+    <span class="govuk-table-span">
+    <span class="govuk-hint">25 March 2023</span>
+  </span>
+    
+      
+        <p class="govuk-!-margin-bottom-1">No bookings</p>
+      
+    
+</div>",
+    },
+    {
+      "html": "",
+    },
+  ],
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  Approved Premises (CAS1) placement request",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)",
+    },
+    {
+      "html": "<div>
+  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+</div>
+<div>
+  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+    <strong class="govuk-tag govuk-tag--grey">Request withdrawn</strong>
+  </span>
+    <span class="govuk-table-span">
+    <span class="govuk-hint">30 April 2023</span>
+  </span>
+    
+      
+        <p class="govuk-!-margin-bottom-1">Reason: Their circumstances changed</p>
+      
+    
+</div>",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas1/901234">View application</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  CAS2 application",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  Jane Doe",
+    },
+    {
+      "html": "<div>
+  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+</div>
+<div>
+  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+    <strong class="govuk-tag govuk-tag--grey">Offer declined or withdrawn</strong>
+  </span>
+    <span class="govuk-table-span">
+    <span class="govuk-hint">6 May 2024</span>
+  </span>
+    
+</div>",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://example.com/cas2/654321">View application</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+]
+`;
+
 exports[`referrals utilities referralHistoryTable macro renders a message and no table when there are no referrals 1`] = `
 "<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">

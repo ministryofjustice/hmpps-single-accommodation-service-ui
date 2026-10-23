@@ -23,6 +23,9 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
         default:
           return 'Approved Premises (CAS1) application'
       }
+    case 'CAS2': {
+      return 'CAS2 application'
+    }
     case 'CAS3':
       switch (status) {
         case 'DEPARTED':
@@ -54,6 +57,7 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
     CANCELLED: { text: 'Cancelled', colour: 'orange' },
     ARCHIVED: { text: 'Archived', colour: 'grey' },
     WITHDRAWN: { text: type === 'CAS1' ? 'Application withdrawn' : 'Withdrawn', colour: 'grey' },
+    OFFER_DECLINED_OR_WITHDRAWN: { text: 'Offer declined or withdrawn', colour: 'grey' },
   })[status] || { text: 'Unknown' }
 
 export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
@@ -197,6 +201,7 @@ export const referralLinksForType = (type: Referral['type'], id: string, crn: st
     case 'DTR':
       return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ crn, id }) }]
     case 'CAS1':
+    case 'CAS2':
       return url ? [{ text: 'View application', href: url }] : []
     case 'CAS3':
       return url ? [{ text: 'View referral', href: url }] : []

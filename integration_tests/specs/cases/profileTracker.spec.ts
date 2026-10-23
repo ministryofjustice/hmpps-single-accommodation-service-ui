@@ -30,9 +30,10 @@ test.describe('Profile Tracker Page', () => {
       dtr: { serviceResult: serviceResultFactory.build(), submission: dutyToRefer.submission },
       crs: crsServiceResultFactory.build(),
       cas1: { serviceResult: serviceResultFactory.build() },
+      cas2: { serviceResult: serviceResultFactory.build() },
       cas3: { serviceResult: serviceResultFactory.build() },
     })
-    const referrals = referralFactory.buildReferralHistoryList(3)
+    const referrals = referralFactory.buildReferralHistoryList(4)
     const proposedAddresses = [
       proposedAccommodationFactory.build({ verificationStatus: 'PASSED', nextAccommodationStatus: 'YES' }),
       proposedAccommodationFactory.build({ verificationStatus: 'NOT_CHECKED_YET' }),

@@ -17,10 +17,13 @@ export default class ExternalReferralsClient extends RestClient {
     super('Other Accommodation Referral client', config.apis.sasApi, logger, authenticationClient)
   }
 
-  search(token: string, crn: string) {
+  search(token: string, crn: string, excludeWithdrawnReferrals?: boolean) {
     return this.get<ApiResponseDtoListExternalReferralDto>(
       {
         path: apiPaths.cases.externalReferrals.search({ crn }),
+        ...(excludeWithdrawnReferrals !== undefined && {
+          query: { excludeWithdrawnReferrals },
+        }),
       },
       asUser(token),
     )

@@ -48,7 +48,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.externalReferrals.search({ crn }),
+        urlPath: apiPaths.cases.externalReferrals.search({ crn }),
       },
       response: {
         status: 200,

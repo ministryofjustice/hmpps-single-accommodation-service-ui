@@ -111,26 +111,23 @@ export default class CustomListController {
   }
 
   private pluraliseCrnList(crns: string[]): string {
-    if (crns.length === 0) return ''
+    if (crns.length === 0) return ' '
     if (crns.length === 1) return crns[0]
-    return `${crns.slice(0, -1).join(', ')} and ${crns[crns.length - 1]}`
+    return `${crns.slice(0, -1).join(',')} and${crns[crns.length - 1]}`
   }
 
-  formatErrorMessage(error: SanitisedError<ErrorResponse>): string {
+  formatErrorMessage(error: any): string {
     const { data } = error
     const containsInvalidCrns = data?.errorCode === 'invalidCrns'
 
     if (!containsInvalidCrns) {
       return error.message
     }
-    const { developerMessage } = data
+    const { userMessage } = data
 
-    const invalidCrns: string[] = developerMessage.split(',')
+    const invalidCrns: string[] = userMessage.split(',')
 
     const listText = this.pluraliseCrnList(invalidCrns)
-    if (!containsInvalidCrns) {
-      return listText || developerMessage
-    }
 
     const invalidMessage = invalidCrns.length > 1 ? 'are not recognised CRNs' : 'is not a recognised CRN'
 

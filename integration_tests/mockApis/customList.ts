@@ -28,4 +28,22 @@ export default {
         status: 200,
       },
     }),
+  stubDomainErrorCustomList: (crnList: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.customList({}),
+      },
+      response: {
+        status: 400,
+        jsonBody: {
+          data: {
+            status: 400,
+            errorCode: 'invalidCrns',
+            userMessage: crnList,
+            developerMessage: 'Domain Exception: Invalid CRNs',
+          },
+        },
+      },
+    }),
 }

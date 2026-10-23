@@ -2,13 +2,13 @@ import { context, propagation, trace, ROOT_CONTEXT } from '@opentelemetry/api'
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node'
 import { InMemorySpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base'
 import { ClientRequest, IncomingMessage } from 'http'
-import { createProbationAreaCodeRequestHook } from './probationAreaTelemetry'
+import { createUserLocationCodeRequestHook } from './userLocationTelemetry'
 
 describe('probation area HTTP request hook', () => {
   const exporter = new InMemorySpanExporter()
   const provider = new NodeTracerProvider({ spanProcessors: [new SimpleSpanProcessor(exporter)] })
   const tracer = provider.getTracer('request-hook-test')
-  const hook = createProbationAreaCodeRequestHook('https://sas-api.example')
+  const hook = createUserLocationCodeRequestHook('https://sas-api.example')
 
   beforeAll(() => {
     provider.register()
@@ -42,12 +42,12 @@ describe('probation area HTTP request hook', () => {
   ])('restricts propagation for %s//%s', (protocol, host, shouldRemove) => {
     const span = tracer.startSpan('dependency')
     const req = outgoingRequest(protocol, host)
-    const baggage = propagation.createBaggage({ requestIdentifier: { value: 'London' } })
+    const baggage = propagation.createBaggage({ userLocationCode: { value: 'London' } })
 
     context.with(propagation.setBaggage(ROOT_CONTEXT, baggage), () => hook(span, req))
     span.end()
 
-    expect(exporter.getFinishedSpans()[0].attributes).toEqual({ requestIdentifier: 'London' })
+    expect(exporter.getFinishedSpans()[0].attributes).toEqual({ userLocationCode: 'London' })
     if (shouldRemove) {
       expect(req.removeHeader).toHaveBeenCalledWith('baggage')
     } else {
@@ -59,7 +59,7 @@ describe('probation area HTTP request hook', () => {
     const req = outgoingRequest('http:', 'localhost:8080')
     const span = tracer.startSpan('dependency')
 
-    createProbationAreaCodeRequestHook('http://localhost:8080')(span, req)
+    createUserLocationCodeRequestHook('http://localhost:8080')(span, req)
     span.end()
 
     expect(req.removeHeader).not.toHaveBeenCalled()
@@ -69,7 +69,7 @@ describe('probation area HTTP request hook', () => {
   it('does not tag incoming requests using untrusted baggage', () => {
     const span = tracer.startSpan('incoming')
     const req = Object.create(IncomingMessage.prototype) as IncomingMessage
-    const baggage = propagation.createBaggage({ requestIdentifier: { value: 'Untrusted' } })
+    const baggage = propagation.createBaggage({ userLocationCode: { value: 'Untrusted' } })
 
     context.with(propagation.setBaggage(ROOT_CONTEXT, baggage), () => hook(span, req))
     span.end()

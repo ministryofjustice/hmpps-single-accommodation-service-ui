@@ -1,9 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
+import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
+import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
 import { setupCaseList } from '../utils/cases'
-import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput } from '../utils/validation'
+import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import CustomListService from '../services/customListService'
@@ -72,15 +74,64 @@ export default class CustomListController {
         : []
       const crnTotal = crnList.length
       try {
-        await this.customListService.addCustomList(token, crnList)
-        addUserInputToFlash(req)
-        return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
+        if (this.isValidSubmission(req, crnList)) {
+          await this.customListService.addCustomList(token, crnList)
+          return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
+        }
       } catch (error) {
-        const errorMessage = error.data?.userMessage ? error.data.userMessage : error.message
+        const errorMessage = this.formatErrorMessage(error)
         addErrorToFlash(req, 'crnList', errorMessage)
-        return res.redirect(uiPaths.customList.addCrns.pattern)
+      }
+      return res.redirect(uiPaths.customList.addCrns.pattern)
+    }
+  }
+
+  isValidSubmission(req: IndexRequest, crnList: string[]): boolean {
+    if (crnList.length === 0 || crnList.length > 500) {
+      addErrorToFlash(req, 'crnList', 'Enter 500 CRNs or fewer')
+      return false
+    }
+    const invalidCrns = []
+    for (const crn of crnList) {
+      if (validateCrn(crn)) {
+        invalidCrns.push(crn)
       }
     }
+    if (invalidCrns.length > 0) {
+      const messageSuffix = invalidCrns.length > 1 ? 'are not valid CRN formats' : 'is not a valid CRN format'
+
+      addErrorToFlash(
+        req,
+        'crnList',
+        `Enter a valid format for all CRNs. For example, D016821.  ${invalidCrns.join(', ')} ${messageSuffix}`,
+      )
+      return false
+    }
+    return true
+  }
+
+  private pluraliseCrnList(crns: string[]): string {
+    if (crns.length === 0) return ' '
+    if (crns.length === 1) return crns[0]
+    return `${crns
+      .slice(0, -1)
+      .map(crn => crn.trim())
+      .join(', ')} and ${crns[crns.length - 1].trim()}`
+  }
+
+  formatErrorMessage(error: SanitisedError<ErrorResponse>): string {
+    const { data } = error
+    const containsInvalidCrns = data?.errorCode === 'invalidCrns'
+    const invalidCrns: string[] = data?.userMessage?.split(',') || []
+    if (!containsInvalidCrns || invalidCrns.length === 0) {
+      return error.message
+    }
+
+    const listText = this.pluraliseCrnList(invalidCrns)
+
+    const invalidMessage = invalidCrns.length > 1 ? 'are not recognised CRNs' : 'is not a recognised CRN'
+
+    return `${listText} ${invalidMessage}`.trim()
   }
 
   confirmation(): RequestHandler {

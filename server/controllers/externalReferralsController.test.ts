@@ -12,7 +12,12 @@ import uiPaths from '../paths/ui'
 import * as utils from '../utils/externalReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
-import { detailsSummaryListRows, summaryListRows, outcomeDetailsSummaryListRows } from '../utils/externalReferrals'
+import {
+  detailsSummaryListRows,
+  summaryListRows,
+  outcomeDetailsSummaryListRows,
+  withdrawalReasonRadios,
+} from '../utils/externalReferrals'
 
 describe('ExternalReferralsController', () => {
   const id = '123'
@@ -96,6 +101,7 @@ describe('ExternalReferralsController', () => {
         timeline: [{}, {}],
         editPath: '/cases/CRN123/external-referrals/123/edit',
         outcomePath: '/cases/CRN123/external-referrals/123/outcome',
+        withdrawalPath: '/cases/CRN123/external-referrals/123/withdrawal',
         outcomeDetailRows: [],
         errors: {},
         errorSummary: [],
@@ -476,6 +482,88 @@ describe('ExternalReferralsController', () => {
       await controller.saveOutcome()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith('/cases/CRN123/external-referrals/123/outcome')
+    })
+  })
+
+  describe('withdrawal', () => {
+    beforeEach(() => {
+      request.params.id = id
+    })
+
+    it('renders the withdrawal page', async () => {
+      const referral = externalReferralFactory.submitted().build({ crn })
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(referral),
+      )
+
+      await controller.withdrawal()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXTERNAL_REFERRALS_WITHDRAWAL, {
+        who: 'user1',
+        correlationId: 'request-id',
+      })
+      expect(casesService.getCase).toHaveBeenCalledWith(token, crn)
+      expect(externalReferralsService.getExternalReferralBySubmissionId).toHaveBeenCalledWith(token, crn, id)
+
+      expect(response.render).toHaveBeenCalledWith('pages/external-referrals/withdrawal', {
+        backLinkHref: uiPaths.externalReferrals.show({ crn, id }),
+        errorSummary: [],
+        errors: {},
+        pageTitle: 'Move to referral history',
+        tableRows: summaryListRows(caseData, referral, true),
+        withdrawalReasons: withdrawalReasonRadios(undefined),
+      })
+    })
+  })
+
+  describe('saveWithdrawal', () => {
+    beforeEach(() => {
+      jest.resetAllMocks()
+      jest.restoreAllMocks()
+
+      request = mock<Request>({
+        params: { crn, id },
+        body: {
+          withdrawalReason: 'NO_CAPACITY',
+          withdrawalNote: 'Withdrawal notes',
+        },
+        flash: jest.fn(),
+      })
+    })
+
+    it('saves withdrawal reason and redirects to case page', async () => {
+      const referral = externalReferralFactory.submitted().build()
+      externalReferralsService.getExternalReferralBySubmissionId.mockResolvedValue(
+        apiResponseFactory.externalReferral(referral),
+      )
+
+      await controller.saveWithdrawal()(request, response, next)
+
+      expect(externalReferralsService.withdrawal).toHaveBeenCalledWith(
+        token,
+        crn,
+        id,
+        expect.objectContaining({ withdrawalReason: 'NO_CAPACITY', withdrawalNote: 'Withdrawal notes' }),
+      )
+      expect(request.flash).toHaveBeenCalledWith('success', 'Moved to referral history')
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn }))
+    })
+
+    it('redirects to withdrawal page if validation fails', async () => {
+      jest.spyOn(utils, 'validateWithdrawal').mockReturnValue(false)
+
+      await controller.saveWithdrawal()(request, response, next)
+
+      expect(externalReferralsService.update).not.toHaveBeenCalled()
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.withdrawal({ crn, id }))
+    })
+
+    it('redirects to withdrawal page if the API call fails', async () => {
+      externalReferralsService.withdrawal.mockRejectedValue(new Error('API error'))
+
+      await controller.saveWithdrawal()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.withdrawal({ crn, id }))
     })
   })
 })

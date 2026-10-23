@@ -26,6 +26,7 @@ export default {
     submission: externalReferralsPath.path('submission'),
     edit: externalReferralsPath.path(':id/edit'),
     outcome: externalReferralsPath.path(':id/outcome'),
+    withdrawal: externalReferralsPath.path(':id/withdrawal'),
   },
   proposedAddresses: {
     show: proposedAddressesPath.path(':id/details'),

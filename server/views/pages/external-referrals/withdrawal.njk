@@ -1,0 +1,38 @@
+{% extends "pages/external-referrals/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block formContent %}
+  {{
+  govukRadios({
+    id: "withdrawalReason",
+    name: "withdrawalReason",
+    fieldset: {
+      legend: {
+        text: "Why are you moving to the referral history?",
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    hint: {
+      html: "<p class='govuk-hint'>This records that the referral has been moved to the person's referral history.</p><p class='govuk-hint'>It does not change the referral  in the organisation's system so you may still need to do that separately.</p>"
+    },
+    items: withdrawalReasons,
+    errorMessage: errors.withdrawalReason
+  })
+  }}
+
+  {{
+  govukTextarea({
+    name: "withdrawalNote",
+    label: {
+      text: "Notes (optional)",
+      classes: "govuk-label--s"
+    },
+    hint: {
+      text: "Do not include sensitive personal details or risk assessment notes."
+    },
+    value: withdrawalNote,
+    errorMessage: errors.withdrawalNote
+  })
+  }}
+{% endblock %}

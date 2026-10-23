@@ -44,4 +44,5 @@ export const serviceStatusTag = (status?: ServiceResult['serviceStatus']): Statu
     AWAITING_ARRIVAL: { text: 'Awaiting arrival', colour: 'green' },
     UNKNOWN: { text: 'Unknown', colour: 'grey' },
     OFFER_DECLINED_OR_WITHDRAWN: { text: 'Offer declined or withdrawn', colour: 'orange' },
+    ARCHIVED: { text: 'Archived', colour: 'grey' },
   })[status] || { text: 'Unknown' }

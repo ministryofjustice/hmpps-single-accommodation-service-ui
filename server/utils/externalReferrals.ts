@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { RadioItem, StatusCard, StatusTag } from '@sas/ui'
-import { AuditRecordDto, CaseDto, ExternalReferralDto, ServiceResult } from '@sas/api'
+import { AuditRecordDto, CaseDto, ExternalReferralDto, ExternalReferralWithdrawalDto, ServiceResult } from '@sas/api'
 import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
 import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import {
@@ -184,11 +184,29 @@ export const outcomeReasonLabels: Partial<Record<ExternalReferralDto['status'], 
   REJECTED: 'Rejected',
 }
 
-export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDto) => {
+export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withdrawalReason'], string> = {
+  ANOTHER_ACCOMMODATION_FOUND: 'Another accommodation option found',
+  NO_CAPACITY: 'No capacity',
+  PLACEMENT_COMPLETE: 'Placement complete',
+  NO_RESPONSE_FROM_ORGANISATION: 'No response from organisation',
+  PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED: 'Person can no longer be contacted or has disengaged',
+  PERSON_NOT_SUITABLE: 'Person not suitable',
+  PERSON_NO_LONGER_CONSENTS: 'Person no longer consents',
+  ANOTHER_REASON: 'Other',
+}
+
+export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDto, includeStatus = false) => {
   const rows = caseSummaryListRows(caseData)
   if (referral) {
     rows.push(summaryListRow('Organisation', referral.submission.organisationName))
     rows.push(summaryListRow('Date submitted', formatDateAndDaysAgo(referral.submission.submissionDate)))
+    if (includeStatus) {
+      rows.push(
+        summaryListRow('Status', statusTag(serviceStatusTag(referral.status as ServiceResult['serviceStatus'])), {
+          type: 'html',
+        }),
+      )
+    }
   }
 
   return rows
@@ -221,4 +239,20 @@ export const outcomeDetailsSummaryListRows = (referral: ExternalReferralDto) => 
     summaryListRow('Status', statusTag(serviceStatusTag(status as ServiceResult['serviceStatus'])), { type: 'html' }),
     summaryListRow('Notes', outcomeNote, { type: 'textBlock', noValue: 'No notes added' }),
   ]
+}
+
+export const withdrawalReasonRadios = (
+  withdrawalReason: ExternalReferralWithdrawalDto['withdrawalReason'],
+): Array<RadioItem> => {
+  return radioItems(withdrawalReasonLabels, withdrawalReason)
+}
+
+export const validateWithdrawal = (req: Request) => {
+  const { withdrawalReason, withdrawalNote } = req.body
+  const errors: Record<string, string> = {
+    withdrawalReason: validateRadioButton(withdrawalReason, 'reason for moving to the referral historyry'),
+    withdrawalNote: validateMaxLength(withdrawalNote, 'Notes', 4000),
+  }
+
+  return validateAndFlashErrors(req, errors)
 }

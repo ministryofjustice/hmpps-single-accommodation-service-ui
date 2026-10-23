@@ -10,8 +10,14 @@ import {
   submissionFormValues,
   validateSubmission,
   validateNote,
+  summaryListRows,
 } from './externalReferrals'
-import { auditRecordFactory, externalReferralFactory, externalReferralSubmissionFactory } from '../testutils/factories'
+import {
+  auditRecordFactory,
+  caseFactory,
+  externalReferralFactory,
+  externalReferralSubmissionFactory,
+} from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
 
 describe('externalReferrals utils', () => {
@@ -230,6 +236,33 @@ describe('externalReferrals utils', () => {
           { key: { text: 'Notes' }, value: { html: '<div class="sas-text-block">Note</div>' } },
         ])
       })
+    })
+  })
+
+  describe('summaryListRows', () => {
+    const referral = externalReferralFactory.build()
+    const caseData = caseFactory.build()
+
+    const caseFields = ['Name', 'Date of birth', 'CRN', 'Prison number']
+    const referralFields = ['Organisation', 'Date submitted']
+
+    it('should render the summary list for the submission page', () => {
+      expect(summaryListRows(caseData).map(({ key: { text } }) => text)).toEqual(caseFields)
+    })
+
+    it('should render the summary list for the outcome page', () => {
+      expect(summaryListRows(caseData, referral).map(({ key: { text } }) => text)).toEqual([
+        ...caseFields,
+        ...referralFields,
+      ])
+    })
+
+    it('should render the summary list for the withdrawal page', () => {
+      expect(summaryListRows(caseData, referral, true).map(({ key: { text } }) => text)).toEqual([
+        ...caseFields,
+        ...referralFields,
+        'Status',
+      ])
     })
   })
 

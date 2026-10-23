@@ -16,6 +16,8 @@ import {
   validateOutcome,
   outcomeDetailsSummaryListRows,
   outcomeRadioItems,
+  withdrawalReasonRadios,
+  validateWithdrawal,
 } from '../utils/externalReferrals'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
@@ -61,6 +63,7 @@ export default class ExternalReferralsController {
         outcomeDetailRows: outcomeDetailsSummaryListRows(referral),
         outcomePath: uiPaths.externalReferrals.outcome({ crn, id }),
         editPath: uiPaths.externalReferrals.edit({ crn, id }),
+        withdrawalPath: uiPaths.externalReferrals.withdrawal({ crn, id }),
         ...userInput,
         errors,
         errorSummary,
@@ -238,6 +241,59 @@ export default class ExternalReferralsController {
         return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
+        addUserInputToFlash(req)
+        return res.redirect(errorRedirect)
+      }
+    }
+  }
+
+  withdrawal(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+
+      await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_WITHDRAWAL, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+      })
+
+      const { caseData, referral } = await this.getSubmissionPageData(token, crn, id)
+      const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
+
+      return res.render('pages/external-referrals/withdrawal', {
+        pageTitle: 'Move to referral history',
+        backLinkHref: uiPaths.externalReferrals.show({ crn, id }),
+        tableRows: summaryListRows(caseData, referral, true),
+        withdrawalReasons: withdrawalReasonRadios(userInput?.withdrawalReason),
+        errors,
+        errorSummary,
+        withdrawalNote: userInput?.withdrawalNote,
+        ...userInput,
+      })
+    }
+  }
+
+  saveWithdrawal(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn, id } = req.params
+      const { token } = res.locals.user
+      const { withdrawalReason, withdrawalNote } = req.body
+      const errorRedirect = uiPaths.externalReferrals.withdrawal({ crn, id })
+
+      if (!validateWithdrawal(req)) {
+        return res.redirect(errorRedirect)
+      }
+
+      try {
+        await this.externalReferralsService.withdrawal(token, crn, id, {
+          withdrawalReason,
+          withdrawalNote: withdrawalNote || undefined,
+        })
+
+        req.flash('success', 'Moved to referral history')
+        return res.redirect(uiPaths.cases.show({ crn }))
+      } catch {
+        addGenericErrorToFlash(req, 'There was a problem moving to referral history details. Please try again.')
         addUserInputToFlash(req)
         return res.redirect(errorRedirect)
       }

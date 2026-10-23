@@ -1,5 +1,6 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { faker } from '@faker-js/faker/locale/en'
+import { ExternalReferralWithdrawalDto } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import ExternalReferralsClient from './externalReferralsClient'
 import {
@@ -172,5 +173,56 @@ describeClient('ExternalReferralsClient', provider => {
     })
 
     await client.saveNote('test-user-token', crn, id, note)
+  })
+
+  it('should make a POST request to external-referrals/notes to add a note', async () => {
+    const crn = crnFactory()
+    const id = faker.string.uuid()
+    const note = faker.lorem.lines(2)
+
+    await provider.addInteraction({
+      state: `Note can be added to exernal referal CRN ${crn}, id ${id}`,
+      uponReceiving: 'a request to add a note to an External Referral',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.externalReferrals.notes({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: { note },
+      },
+      willRespondWith: {
+        status: 201,
+      },
+    })
+
+    await client.saveNote('test-user-token', crn, id, note)
+  })
+
+  it('should make a POST request to external-referrals/withdrawals to withdraw a referral', async () => {
+    const crn = crnFactory()
+    const id = faker.string.uuid()
+    const withdrawal: ExternalReferralWithdrawalDto = {
+      withdrawalReason: 'PLACEMENT_COMPLETE',
+      withdrawalNote: 'some note',
+    }
+
+    await provider.addInteraction({
+      state: `Exernal referal CRN ${crn}, id ${id} can be withdrawn`,
+      uponReceiving: 'a request to withdraw an external referral',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.externalReferrals.withdrawal({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: withdrawal,
+      },
+      willRespondWith: {
+        status: 201,
+      },
+    })
+
+    await client.withdrawal('test-user-token', crn, id, withdrawal)
   })
 })

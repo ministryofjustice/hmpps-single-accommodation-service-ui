@@ -1,3 +1,4 @@
+import { ExternalReferralWithdrawalDto } from '@sas/api'
 import ExternalReferralsService from './externalReferralsService'
 import ExternalReferralsClient from '../data/externalReferralsClient'
 import {
@@ -76,5 +77,18 @@ describe('ExternalReferralsService', () => {
     await service.saveNote(token, crn, id, note)
 
     expect(client.saveNote).toHaveBeenCalledWith(token, crn, id, note)
+  })
+
+  it('should call the client to withdraw an external referral', async () => {
+    const withdrawal: ExternalReferralWithdrawalDto = {
+      withdrawalReason: 'PLACEMENT_COMPLETE',
+      withdrawalNote: 'Withdrawal note',
+      otherReason: 'Other reason',
+    }
+    client.withdrawal.mockResolvedValue()
+
+    await service.withdrawal(token, crn, id, withdrawal)
+
+    expect(client.withdrawal).toHaveBeenCalledWith(token, crn, id, withdrawal)
   })
 })

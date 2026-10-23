@@ -122,8 +122,7 @@ export default class CustomListController {
   formatErrorMessage(error: SanitisedError<ErrorResponse>): string {
     const { data } = error
     const containsInvalidCrns = data?.errorCode === 'invalidCrns'
-    const { userMessage } = data
-    const invalidCrns: string[] = userMessage?.split(',') || []
+    const invalidCrns: string[] = data?.userMessage?.split(',') || []
     if (!containsInvalidCrns || invalidCrns.length === 0) {
       return error.message
     }

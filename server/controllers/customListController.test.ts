@@ -218,6 +218,15 @@ describe('customListController', () => {
 
       expect(customListController.formatErrorMessage(error)).toBe('A123456 and B123456 are not recognised CRNs')
     })
+    it('handles 0 crns', () => {
+      const error = {
+        responseStatus: 400,
+        message: 'BAD REQUEST',
+        data: { errorCode: 'invalidCrns' },
+      }
+
+      expect(customListController.formatErrorMessage(error)).toBe('BAD REQUEST')
+    })
 
     it('formats three invalid CRNs with commas between earlier items and "and" before the final item', () => {
       const error = {

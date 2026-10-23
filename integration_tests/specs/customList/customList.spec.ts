@@ -7,6 +7,7 @@ import CasesListPage from '../../pages/cases/listPage'
 import CustomListPage from '../../pages/customList/customListPage'
 import CreateListPage from '../../pages/customList/createListPage'
 import ShowCaseListPage from '../../pages/customList/showCaseList'
+import { stubApiError } from '../../mockApis/wiremock'
 
 test.describe('custom list', () => {
   test('should allow a user to create and view a custom list', async ({ page }) => {
@@ -57,6 +58,73 @@ test.describe('custom list', () => {
     await showCaseListPage.shouldShowLink('Change list', '/custom-list/add-crns')
     // AND I should see the list of cases
     await showCaseListPage.shouldShowCases(cases)
+  })
+  test('should error when user does not input valid crn list', async ({ page }) => {
+    // GIVEN a custom list does not already exist
+    await customListApi.stubGetCustomList([])
+
+    // WHEN I sign in
+    await login(page)
+
+    // THEN I should see the Case list
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+
+    // WHEN I click the custom list link
+    await casesListPage.clickLink('Custom list')
+
+    // THEN I should see the Custom list create page
+    const customListPage = await CustomListPage.verifyOnPage(page)
+
+    // WHEN I click the create list button
+    await customListPage.clickButton('Create a list')
+
+    // THEN I should see the create custom list page
+    const createListPage = await CreateListPage.verifyOnPage(page)
+
+    // AND I click the submit button
+    await createListPage.clickButton('Submit')
+    // THEN should show error for the CRN input field
+    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'Enter fewer than 500 CRNs' })
+
+    // WHEN I add invalid CRNs to the list
+    await createListPage.completeInputByLabel('Add CRNs', 'CRN1')
+    // AND I click the submit button
+    await createListPage.clickButton('Submit')
+    // THEN should show error for the CRN input field
+    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'Enter a valid format for all CRNs. For example, D016821. CRN1 is not a valid CRN format' })
+  })
+  test('should show error when CRN does not exist', async ({ page }) => {
+    // GIVEN a custom list does not already exist
+    await customListApi.stubGetCustomList([])
+    await customListApi.stubDomainErrorCustomList('C123456')
+
+    // WHEN I sign in
+    await login(page)
+
+    // THEN I should see the Case list
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+
+    // WHEN I click the custom list link
+    await casesListPage.clickLink('Custom list')
+
+    // THEN I should see the Custom list create page
+    const customListPage = await CustomListPage.verifyOnPage(page)
+
+    // WHEN I click the create list button
+    await customListPage.clickButton('Create a list')
+
+    // THEN I should see the create custom list page
+    const createListPage = await CreateListPage.verifyOnPage(page)
+
+    // GIVEN the CRN to be entered is valid but does not exist in the system
+    // await customListApi.stubDomainErrorCustomList('C123456')
+
+    // WHEN I add the CRN to the list
+    await createListPage.completeInputByLabel('Add CRNs', 'C123456')
+    // AND I click the submit button
+    await createListPage.clickButton('Submit')
+    // THEN should show error for the CRN input field
+    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'Invalid CRN: C123456' })
   })
 
   test('should allow a user to view an existing custom list and edit it', async ({ page }) => {

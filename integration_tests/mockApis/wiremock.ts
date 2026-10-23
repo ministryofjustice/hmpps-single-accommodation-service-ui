@@ -1,6 +1,7 @@
 import superagent, { Response, SuperAgentRequest } from 'superagent'
 import { ParsedUrlQuery } from 'node:querystring'
 import { apiResponseFactory } from '../../server/testutils/factories'
+import { ErrorResponse } from '@sas/api'
 
 const url = 'http://localhost:9091/__admin'
 
@@ -12,7 +13,7 @@ const getMatchingRequests = (body: string | object) => superagent.post(`${url}/r
 const resetStubs = (): Promise<Array<Response>> =>
   Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
-const stubApiError = (urlPattern: string, method: 'GET' | 'POST' = 'GET', status = 500): SuperAgentRequest =>
+const stubApiError = (urlPattern: string, method: 'GET' | 'POST' = 'GET', status = 500, errorResponse?: ErrorResponse): SuperAgentRequest =>
   stubFor({
     request: {
       method,
@@ -20,6 +21,7 @@ const stubApiError = (urlPattern: string, method: 'GET' | 'POST' = 'GET', status
     },
     response: {
       status,
+      jsonBody: {data: errorResponse},
     },
   })
 

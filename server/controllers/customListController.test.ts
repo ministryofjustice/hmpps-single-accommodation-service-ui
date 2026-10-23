@@ -148,8 +148,8 @@ describe('customListController', () => {
   })
   describe('submitCrnList', () => {
     it.each([
-      ['CRN1,CRN2', 2],
-      ['CRN1', 1],
+      ['A123456,B123456', 2],
+      ['C123456', 1],
     ])('renders the confirmation page on successful submission: %s', async (crnList, crnTotal) => {
       request.body = { crnList }
       await customListController.submitCrnList()(request, response, next)
@@ -160,28 +160,27 @@ describe('customListController', () => {
     })
 
     it('normalises CRNs separated by spaces, commas and line breaks', async () => {
-      request.body = { crnList: 'CRN1,\nCRN2  CRN3\n\nCRN4' }
+      request.body = { crnList: 'A123456,\nB123456  C123456\n\nD123456' }
 
       await customListController.submitCrnList()(request, response, next)
 
-      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, ['CRN1', 'CRN2', 'CRN3', 'CRN4'])
+      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, ['A123456', 'B123456', 'C123456', 'D123456'])
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=4`)
     })
 
-    it('submits an empty list when no CRNs are provided', async () => {
+    it('Errors when an empty list is submitted', async () => {
       request.body = { crnList: '' }
 
       await customListController.submitCrnList()(request, response, next)
 
-      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, [])
       expect(request.body).toEqual({ crnList: '' })
-      expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=0`)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
     })
 
     it('renders the addCrns page with errors on unsuccessful submission', async () => {
       const serverError: SanitisedError = new Error('Server error')
       customListService.addCustomList.mockRejectedValue(serverError)
-      const crnList = 'CRN1,CRN2'
+      const crnList = 'A123456,B123456'
       request.body = { crnList }
 
       const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
@@ -195,37 +194,37 @@ describe('customListController', () => {
     it('formats two invalid CRNs without a comma before the final item', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'invalidCrns: CRN1, CRN2' },
+        data: { userMessage: 'A123456, B123456',errorCode: 'invalidCrns' },
       }
 
-      expect(customListController.formatErrorMessage(error)).toBe('CRN1 and CRN2 are not recognised CRNs')
+      expect(customListController.formatErrorMessage(error)).toBe('A123456 and B123456 are not recognised CRNs')
     })
 
     it('formats three invalid CRNs with commas between earlier items and "and" before the final item', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'invalidCrns: CRN1, CRN2, CRN3' },
+        data: { userMessage: 'A123456, B123456, C123456',errorCode: 'invalidCrns' },
       }
 
-      expect(customListController.formatErrorMessage(error)).toBe('CRN1, CRN2 and CRN3 are not recognised CRNs')
+      expect(customListController.formatErrorMessage(error)).toBe('A123456, B123456 and C123456 are not recognised CRNs')
     })
 
     it('formats a single invalid CRN without a list separator', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'invalidCrns: CRN1' },
+        data: { userMessage: 'A123456',errorCode: 'invalidCrns' },
       }
 
-      expect(customListController.formatErrorMessage(error)).toBe('CRN1 is not a recognised CRN')
+      expect(customListController.formatErrorMessage(error)).toBe('A123456 is not a recognised CRN')
     })
 
-    it('returns just the extracted list when the message does not mention invalid CRNs', () => {
+    it('falls back to the raw message when no CRN list can be extracted', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'someone else: CRN1, CRN2' },
+        message: 'CRN validation failed',
       }
 
-      expect(customListController.formatErrorMessage(error)).toBe('CRN1 and CRN2')
+      expect(customListController.formatErrorMessage(error)).toBe('CRN validation failed')
     })
   })
 

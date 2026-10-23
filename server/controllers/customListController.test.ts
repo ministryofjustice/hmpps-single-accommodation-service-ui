@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
+import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import { user } from '../routes/testutils/appSetup'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
@@ -197,8 +198,7 @@ describe('customListController', () => {
     })
 
     it('renders the addCrns page with errors on unsuccessful submission', async () => {
-      const serverError: SanitisedError = new Error('Server error')
-      // serverError.data = { errorCode: 'invalidCrns', userMessage: 'A123456, B123456' }
+      const serverError: SanitisedError<ErrorResponse> = new Error('Server error')
       customListService.addCustomList.mockRejectedValue(serverError)
       const crnList = 'A123456,B123456'
       request.body = { crnList }
@@ -212,49 +212,35 @@ describe('customListController', () => {
   })
   describe('formatErrorMessage', () => {
     it('formats two invalid CRNs without a comma before the final item', () => {
-      const error = {
-        responseStatus: 400,
-        data: { userMessage: 'A123456, B123456', errorCode: 'invalidCrns' },
-      }
-
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, userMessage: 'A123456, B123456', errorCode: 'invalidCrns' }
       expect(customListController.formatErrorMessage(error)).toBe('A123456 and B123456 are not recognised CRNs')
     })
     it('handles 0 crns', () => {
-      const error = {
-        responseStatus: 400,
-        message: 'BAD REQUEST',
-        data: { errorCode: 'invalidCrns' },
-      }
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, errorCode: 'invalidCrns' }
+      error.message = 'BAD REQUEST'
 
       expect(customListController.formatErrorMessage(error)).toBe('BAD REQUEST')
     })
 
     it('formats three invalid CRNs with commas between earlier items and "and" before the final item', () => {
-      const error = {
-        responseStatus: 400,
-        data: { userMessage: 'A123456,B123456,C123456', errorCode: 'invalidCrns' },
-      }
-
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, userMessage: 'A123456,B123456,C123456', errorCode: 'invalidCrns' }
       expect(customListController.formatErrorMessage(error)).toBe(
         'A123456, B123456 and C123456 are not recognised CRNs',
       )
     })
 
     it('formats a single invalid CRN without a list separator', () => {
-      const error = {
-        responseStatus: 400,
-        data: { userMessage: 'A123456', errorCode: 'invalidCrns' },
-      }
-
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, userMessage: 'A123456', errorCode: 'invalidCrns' }
       expect(customListController.formatErrorMessage(error)).toBe('A123456 is not a recognised CRN')
     })
 
     it('falls back to the raw message when no CRN list can be extracted', () => {
-      const error = {
-        responseStatus: 400,
-        message: 'CRN validation failed',
-      }
-
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.message = 'CRN validation failed'
       expect(customListController.formatErrorMessage(error)).toBe('CRN validation failed')
     })
   })

@@ -42,12 +42,12 @@ describe('probation area HTTP request hook', () => {
   ])('restricts propagation for %s//%s', (protocol, host, shouldRemove) => {
     const span = tracer.startSpan('dependency')
     const req = outgoingRequest(protocol, host)
-    const baggage = propagation.createBaggage({ probationAreaCode: { value: 'London' } })
+    const baggage = propagation.createBaggage({ requestIdentifier: { value: 'London' } })
 
     context.with(propagation.setBaggage(ROOT_CONTEXT, baggage), () => hook(span, req))
     span.end()
 
-    expect(exporter.getFinishedSpans()[0].attributes).toEqual({ probationAreaCode: 'London' })
+    expect(exporter.getFinishedSpans()[0].attributes).toEqual({ requestIdentifier: 'London' })
     if (shouldRemove) {
       expect(req.removeHeader).toHaveBeenCalledWith('baggage')
     } else {
@@ -69,7 +69,7 @@ describe('probation area HTTP request hook', () => {
   it('does not tag incoming requests using untrusted baggage', () => {
     const span = tracer.startSpan('incoming')
     const req = Object.create(IncomingMessage.prototype) as IncomingMessage
-    const baggage = propagation.createBaggage({ probationAreaCode: { value: 'Untrusted' } })
+    const baggage = propagation.createBaggage({ requestIdentifier: { value: 'Untrusted' } })
 
     context.with(propagation.setBaggage(ROOT_CONTEXT, baggage), () => hook(span, req))
     span.end()

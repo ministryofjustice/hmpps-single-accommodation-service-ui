@@ -83,7 +83,7 @@ test.describe('custom list', () => {
     // AND I click the submit button
     await createListPage.clickButton('Submit')
     // THEN should show error for the CRN input field
-    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'Enter fewer than 500 CRNs' })
+    await createListPage.shouldShowErrorMessagesForFields({ crnList: 'Enter 500 CRNs or fewer' })
 
     // WHEN I add invalid CRNs to the list
     await createListPage.completeInputByLabel('Add CRNs', 'CRN1')

@@ -10,6 +10,7 @@ import CustomListController from './customListController'
 import CustomListService from '../services/customListService'
 import * as validationUtils from '../utils/validation'
 import uiPaths from '../paths/ui'
+import { listOfCrns } from '../testutils/crn'
 
 describe('customListController', () => {
   const TEST_TOKEN = 'test-token'
@@ -175,11 +176,24 @@ describe('customListController', () => {
 
     it('Errors when an empty list is submitted', async () => {
       request.body = { crnList: '' }
+      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
 
       await customListController.submitCrnList()(request, response, next)
 
       expect(request.body).toEqual({ crnList: '' })
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
+      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'Enter 500 CRNs or fewer')
+    })
+    it('Errors when too many CRNs are submitted', async () => {
+      const crnList = listOfCrns(501)
+      request.body = { crnList }
+      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
+
+      await customListController.submitCrnList()(request, response, next)
+
+      expect(request.body).toEqual({ crnList })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
+      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'Enter 500 CRNs or fewer')
     })
 
     it('renders the addCrns page with errors on unsuccessful submission', async () => {
@@ -208,7 +222,7 @@ describe('customListController', () => {
     it('formats three invalid CRNs with commas between earlier items and "and" before the final item', () => {
       const error = {
         responseStatus: 400,
-        data: { userMessage: 'A123456, B123456, C123456', errorCode: 'invalidCrns' },
+        data: { userMessage: 'A123456,B123456,C123456', errorCode: 'invalidCrns' },
       }
 
       expect(customListController.formatErrorMessage(error)).toBe(

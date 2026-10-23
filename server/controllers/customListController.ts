@@ -88,7 +88,7 @@ export default class CustomListController {
 
   isValidSubmission(req: IndexRequest, crnList: string[]): boolean {
     if (crnList.length === 0 || crnList.length > 500) {
-      addErrorToFlash(req, 'crnList', 'Enter fewer than 500 CRNs')
+      addErrorToFlash(req, 'crnList', 'Enter 500 CRNs or fewer')
       return false
     }
     const invalidCrns = []
@@ -113,7 +113,10 @@ export default class CustomListController {
   private pluraliseCrnList(crns: string[]): string {
     if (crns.length === 0) return ' '
     if (crns.length === 1) return crns[0]
-    return `${crns.slice(0, -1).join(',')} and${crns[crns.length - 1]}`
+    return `${crns
+      .slice(0, -1)
+      .map(crn => crn.trim())
+      .join(', ')} and ${crns[crns.length - 1].trim()}`
   }
 
   formatErrorMessage(error: SanitisedError<ErrorResponse>): string {

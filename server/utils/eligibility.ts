@@ -360,8 +360,15 @@ const detailsForCas2Status = (
 const placementDurationText = (durationDays?: number | null): string | undefined => {
   if (durationDays == null) return undefined
 
-  const weeks = Math.round(durationDays / 7)
-  return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
+  const weeks = Math.floor(durationDays / 7)
+  const days = durationDays % 7
+
+  const weekText = `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
+  const dayText = `${days} ${days === 1 ? 'day' : 'days'}`
+
+  if (!weeks) return dayText
+  if (!days) return weekText
+  return `${weekText}, ${dayText}`
 }
 
 const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Cas1ApplicationDto): SummaryListRow[] => {

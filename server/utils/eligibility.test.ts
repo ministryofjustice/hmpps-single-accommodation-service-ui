@@ -409,9 +409,16 @@ describe('cas1 status card', () => {
     })
 
     it.each([
-      [10, '1 week'],
-      [11, '2 weeks'],
-    ])('rounds a %s-day placement duration to %s', (durationDays, expectedDuration) => {
+      [0, '0 days'],
+      [1, '1 day'],
+      [3, '3 days'],
+      [7, '1 week'],
+      [8, '1 week, 1 day'],
+      [10, '1 week, 3 days'],
+      [11, '1 week, 4 days'],
+      [14, '2 weeks'],
+      [15, '2 weeks, 1 day'],
+    ])('formats a %s-day placement duration as %s', (durationDays, expectedDuration) => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'PLACEMENT_BOOKED' })
       const application = {
         ...cas1Application,

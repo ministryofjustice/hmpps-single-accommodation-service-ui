@@ -666,6 +666,38 @@ describe('eligibilityToEligibilityCards', () => {
     expect(cards[3].heading).toContain('CAS3 (transitional accommodation)')
   })
 
+  it('hides the CAS1 card when the person is not in prison or CAS1 accommodation', () => {
+    const eligibility = eligibilityFactory.build({
+      crn,
+      cas1: {
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['NOT_IN_PRISON_OR_CAS1_ACCOMMODATION'],
+        }),
+      },
+    })
+
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
+
+    expect(cards.map(card => card.heading)).not.toContain('Approved premises (CAS1)')
+  })
+
+  it('shows the CAS1 card as inactive when ineligible for other reasons', () => {
+    const eligibility = eligibilityFactory.build({
+      crn,
+      cas1: {
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['MALE_NOT_HIGH_RISK_TIER'],
+        }),
+      },
+    })
+
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
+
+    expect(cards.find(card => card.heading === 'Approved premises (CAS1)')?.inactive).toBe(true)
+  })
+
   describe('when the cas2 flag is enabled', () => {
     beforeEach(() => {
       config.flags.cas2Enabled = true

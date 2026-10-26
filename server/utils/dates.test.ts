@@ -3,6 +3,7 @@ import { DateFieldValues } from '@sas/ui'
 import {
   calculateAge,
   dateInputToIsoDate,
+  daysBetween,
   daysUntil,
   formatDate,
   formatDateAndAge,
@@ -53,6 +54,19 @@ describe('date utilities', () => {
       [12, '2025-12-22'],
     ])('returns %s for %s', (expected, date) => {
       expect(daysUntil(date)).toEqual(expected)
+    })
+  })
+
+  describe('daysBetween', () => {
+    it.each([
+      [56, '2026-09-01', '2026-10-27'],
+      [0, '2026-09-01', '2026-09-01'],
+      [-56, '2026-10-27', '2026-09-01'],
+      [undefined, undefined, '2026-10-27'],
+      [undefined, '2026-09-01', undefined],
+      [undefined, 'not a date', '2026-10-27'],
+    ])('returns %s for dates %s to %s', (expected, startDate, endDate) => {
+      expect(daysBetween(startDate, endDate)).toEqual(expected)
     })
   })
 

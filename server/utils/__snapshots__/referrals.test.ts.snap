@@ -174,17 +174,17 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
     },
     {
       "html": "<div>
-  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-</div>
-<div>
-  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-    <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
-  </span>
-    <span class="govuk-table-span">
-    <span class="govuk-hint">15 January 2023</span>
-  </span>
-    
-</div>",
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--orange">Cancelled</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">15 January 2023</span>
+      </span>
+      
+  </div>",
     },
     {
       "html": "
@@ -213,21 +213,21 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
     },
     {
       "html": "<div>
-  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-</div>
-<div>
-  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-    <strong class="govuk-tag govuk-tag--grey">Withdrawn</strong>
-  </span>
-    <span class="govuk-table-span">
-    <span class="govuk-hint">Submitted on 20 February 2023</span>
-  </span>
-    
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--grey">Withdrawn</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">Submitted on 20 February 2023</span>
+      </span>
       
-        <p class="govuk-!-margin-bottom-1">Reason: Replaced by a new referral</p>
+        
+          <p class="govuk-!-margin-bottom-1">Reason: Replaced by a new referral</p>
+        
       
-    
-</div>",
+  </div>",
     },
     {
       "html": "
@@ -256,21 +256,21 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
     },
     {
       "html": "<div>
-  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-</div>
-<div>
-  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-    <strong class="govuk-tag govuk-tag--grey">Archived</strong>
-  </span>
-    <span class="govuk-table-span">
-    <span class="govuk-hint">25 March 2023</span>
-  </span>
-    
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--grey">Archived</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">25 March 2023</span>
+      </span>
       
-        <p class="govuk-!-margin-bottom-1">No bookings</p>
+        
+          <p class="govuk-!-margin-bottom-1">No bookings</p>
+        
       
-    
-</div>",
+  </div>",
     },
     {
       "html": "",
@@ -287,21 +287,21 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
     },
     {
       "html": "<div>
-  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-</div>
-<div>
-  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-    <strong class="govuk-tag govuk-tag--grey">Request withdrawn</strong>
-  </span>
-    <span class="govuk-table-span">
-    <span class="govuk-hint">30 April 2023</span>
-  </span>
-    
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--grey">Request withdrawn</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">30 April 2023</span>
+      </span>
       
-        <p class="govuk-!-margin-bottom-1">Reason: Their circumstances changed</p>
+        
+          <p class="govuk-!-margin-bottom-1">Reason: Their circumstances changed</p>
+        
       
-    
-</div>",
+  </div>",
     },
     {
       "html": "
@@ -330,17 +330,17 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
     },
     {
       "html": "<div>
-  <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
-</div>
-<div>
-  <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-    <strong class="govuk-tag govuk-tag--grey">Offer declined or withdrawn</strong>
-  </span>
-    <span class="govuk-table-span">
-    <span class="govuk-hint">6 May 2024</span>
-  </span>
-    
-</div>",
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--grey">Offer declined or withdrawn</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">6 May 2024</span>
+      </span>
+      
+  </div>",
     },
     {
       "html": "

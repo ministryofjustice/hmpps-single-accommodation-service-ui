@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 
 type DtrReferralHistoryDetails = {
   referredBy: string
@@ -83,69 +83,118 @@ export default class CaseDetailsPage {
     return this.serviceCard('Approved premises (CAS1)')
   }
 
-  async expectCas1Status(status: string) {
-    await expect(this.cas1Card()).toBeVisible()
-    await expect(this.cas1Card().locator('.govuk-tag')).toHaveText(status)
-  }
-
   cas2Card() {
     return this.serviceCard('Short-term accommodation (CAS2)')
-  }
-
-  async expectCas2Status(status: string) {
-    await expect(this.cas2Card()).toBeVisible()
-    await expect(this.cas2Card().locator('.govuk-tag')).toHaveText(status)
-  }
-
-  async expectSubmissionInfo() {
-    await expect(this.cas2Card()).toContainText('Submitted')
-    await expect(this.cas2Card()).toContainText('Submitted by')
-    await expect(this.cas2Card()).toContainText(/\d{1,2} \w+ \d{4}/)
-  }
-
-  async expectDeclineReason(reason: string) {
-    await expect(this.cas2Card()).toContainText('Reason')
-    await expect(this.cas2Card()).toContainText(reason)
-  }
-
-  async expectArrivalInformation() {
-    await expect(this.cas2Card()).toContainText('Marked as arrived by')
-  }
-
-  async clickCas2Link(action: string) {
-    await this.cas2Card().getByRole('link', { name: action }).click()
-  }
-
-  async expectCas2Hint(hintText: string) {
-    await expect(this.cas2Card().locator('.sas-card__hint')).toHaveText(hintText)
-  }
-
-  cas2Action() {
-    return this.page.waitForEvent('popup')
-  }
-
-  private async expectCas2Popup(url: RegExp) {
-    const cas2Page = await this.page.waitForEvent('popup')
-    await expect(cas2Page).toHaveURL(url)
-    return cas2Page
-  }
-
-  async expectCas2Redirect() {
-    const cas2Page = await this.expectCas2Popup(/\/new-cohorts\/applications\/before-you-start$/)
-    await expect(cas2Page.getByRole('heading', { name: 'Apply for short-term accommodation (CAS2)' })).toBeVisible()
-  }
-
-  async expectCas2Application() {
-    await this.expectCas2Popup(/\/assess\/applications$/)
   }
 
   cas3Card() {
     return this.serviceCard('CAS3 (transitional accommodation)')
   }
 
+  private async expectSubmissionInfo(card: Locator) {
+    await expect(card).toContainText('Submitted')
+    await expect(card).toContainText('Submitted by')
+    await expect(card).toContainText(/\d{1,2} \w+ \d{4}/)
+  }
+
+  private async expectCardStatus(card: Locator, status: string) {
+    await expect(card).toBeVisible()
+    await expect(card.locator('.govuk-tag')).toHaveText(status)
+  }
+
+  private async clickCardLink(card: Locator, action: string) {
+    await card.getByRole('link', { name: action }).click()
+  }
+
+  private async expectDeclineReason(card: Locator, reason: string) {
+    await expect(card).toContainText('Reason')
+    await expect(card).toContainText(reason)
+  }
+
+  private async expectCasPopup(url: RegExp) {
+    const newWindow = await this.page.waitForEvent('popup')
+    await expect(newWindow).toHaveURL(url)
+    return newWindow
+  }
+
+  async expectHintText(cardLocator: Locator, hintText: string) {
+    await expect(cardLocator.locator('.sas-card__hint')).toHaveText(hintText)
+  }
+
+  async expectArrivalInformation() {
+    await expect(this.cas2Card()).toContainText('Marked as arrived by')
+  }
+
+  async expectCas1ExpectedArrivalInformation() {
+    await expect(this.cas1Card()).toContainText('Expected arrival')
+    await expect(this.cas1Card()).toContainText('Duration')
+    await expect(this.cas1Card()).toContainText('Request submitted by')
+  }
+
+  async clickCas1Link(action: string) {
+    await this.clickCardLink(this.cas1Card(), action)
+  }
+
+  async clickCas2Link(action: string) {
+    await this.clickCardLink(this.cas2Card(), action)
+  }
+
+  async clickCas3Link(action: string) {
+    await this.clickCardLink(this.cas3Card(), action)
+  }
+
+  async expectCas1Status(status: string) {
+    await this.expectCardStatus(this.cas1Card(), status)
+  }
+
+  async expectCas2Status(status: string) {
+    await this.expectCardStatus(this.cas2Card(), status)
+  }
+
   async expectCas3Status(status: string) {
-    await expect(this.cas3Card()).toBeVisible()
-    await expect(this.cas3Card().locator('.govuk-tag')).toHaveText(status)
+    await this.expectCardStatus(this.cas3Card(), status)
+  }
+
+  async expectCas1SubmissionInfo() {
+    await this.expectSubmissionInfo(this.cas1Card())
+  }
+
+  async expectCas2SubmissionInfo() {
+    await this.expectSubmissionInfo(this.cas2Card())
+  }
+
+  async expectCas3SubmissionInfo() {
+    await this.expectSubmissionInfo(this.cas3Card())
+  }
+
+  async expectCas1DeclineReason(reason: string) {
+    await this.expectDeclineReason(this.cas1Card(), reason)
+  }
+
+  async expectCas2DeclineReason(reason: string) {
+    await this.expectDeclineReason(this.cas2Card(), reason)
+  }
+
+  async expectCas3DeclineReason(reason: string) {
+    await this.expectDeclineReason(this.cas3Card(), reason)
+  }
+
+  async expectCas2Hint(hintText: string) {
+    await expect(this.cas2Card().locator('.sas-card__hint')).toHaveText(hintText)
+  }
+
+  async expectCas1Redirect() {
+    const cas1Page = await this.expectCasPopup(/\/applications\/start$/)
+    await expect(cas1Page.getByRole('heading', { name: 'Apply for an Approved Premises (AP) placement' })).toBeVisible()
+  }
+
+  async expectCas2Redirect() {
+    const cas2Page = await this.expectCasPopup(/\/new-cohorts\/applications\/before-you-start$/)
+    await expect(cas2Page.getByRole('heading', { name: 'Apply for short-term accommodation (CAS2)' })).toBeVisible()
+  }
+
+  async expectExistingApplication() {
+    await this.expectCasPopup(/\/applications(\/|$)/)
   }
 
   proposedAddressesSection() {

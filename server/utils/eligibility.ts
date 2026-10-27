@@ -255,6 +255,42 @@ const contentForCas1Status = (
   }
 }
 
+const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
+  const { serviceStatus, failureReasons } = serviceResult ?? {}
+
+  if (serviceStatus === 'NOT_ELIGIBLE') {
+    if (failureReasons.length >= 2) {
+      return [
+        htmlContent(
+          bulletList('Not eligible due to:', [
+            'Sexual offence history',
+            'Age (applicant is under 18)',
+            'Tier not eligible',
+          ]),
+        ),
+      ]
+    }
+
+    if (failureReasons.includes('INVALID_TIER')) {
+      return [textContent('Tier not eligible.')]
+    }
+
+    if (failureReasons.includes('SEXUAL_OFFENCE_REGISTRATIONS_PRESENT')) {
+      return [textContent('Not eligible due to sexual offence history.')]
+    }
+
+    if (failureReasons.includes('UNDER_18')) {
+      return [textContent('Not eligible as applicant is under 18.')]
+    }
+
+    if (failureReasons.includes('IN_CAS3_ACCOMMODATION')) {
+      return [textContent('Not eligible as applicant is currently in a CAS3 property.')]
+    }
+  }
+
+  return []
+}
+
 const contentForCas3Status = (
   serviceResult?: ServiceResult,
   cas3Application?: Cas3ApplicationDto,
@@ -555,6 +591,7 @@ export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceRe
   hint: hintForCas2Status(serviceResult),
   links: linksForCas2Status(serviceResult),
   details: detailsForCas2Status(serviceResult, cas2Application),
+  content: contentForCas2Status(serviceResult),
 })
 
 export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceResult): StatusCard => ({

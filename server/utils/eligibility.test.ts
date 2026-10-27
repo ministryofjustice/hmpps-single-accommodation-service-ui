@@ -230,6 +230,33 @@ describe('eligibilityStatusCard', () => {
     ],
     cas2: [
       {
+        title: 'NOT_ELIGIBLE',
+        result: { serviceStatus: 'NOT_ELIGIBLE' },
+      },
+      {
+        title: 'NOT_ELIGIBLE tier not correct',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['INVALID_TIER'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE sexual offence history',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['SEXUAL_OFFENCE_REGISTRATIONS_PRESENT'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE under 18',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['UNDER_18'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE currently in CAS3',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_CAS3_ACCOMMODATION'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE multiple failure reasons',
+        result: {
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['INVALID_TIER', 'SEXUAL_OFFENCE_REGISTRATIONS_PRESENT'],
+        },
+      },
+      {
         title: 'NOT_STARTED',
         result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' },
       },
@@ -628,8 +655,11 @@ describe('cas2 status card', () => {
   })
 
   describe('content', () => {
-    it('renders the more guidance content when not started', () => {
-      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' })
+    it('renders additional content for NOT_ELIGIBLE status', () => {
+      const serviceResult = serviceResultFactory.build({
+        serviceStatus: 'NOT_ELIGIBLE',
+        failureReasons: ['INVALID_TIER'],
+      })
 
       expect(cas2StatusCard({ serviceResult }).content).toMatchSnapshot()
     })
@@ -637,7 +667,7 @@ describe('cas2 status card', () => {
     it('does not render content for other statuses', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'SUBMITTED' })
 
-      expect(cas2StatusCard({ serviceResult }).content).toBeUndefined()
+      expect(cas2StatusCard({ serviceResult }).content).toEqual([])
     })
   })
 })

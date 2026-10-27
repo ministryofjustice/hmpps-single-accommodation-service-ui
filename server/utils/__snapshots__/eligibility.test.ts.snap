@@ -374,7 +374,13 @@ exports[`cas1 status card details renders detail rows for a SUBMITTED status 1`]
 ]
 `;
 
-exports[`cas2 status card content renders the more guidance content when not started 1`] = `undefined`;
+exports[`cas2 status card content renders additional content for NOT_ELIGIBLE status 1`] = `
+[
+  {
+    "text": "Tier not eligible.",
+  },
+]
+`;
 
 exports[`cas2 status card details renders detail rows for a AWAITING_ARRIVAL status 1`] = `
 [
@@ -1393,6 +1399,7 @@ exports[`eligibilityStatusCard for cas1 renders a WITHDRAWN status card 1`] = `
 exports[`eligibilityStatusCard for cas2 renders a AWAITING_ARRIVAL status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1431,6 +1438,7 @@ exports[`eligibilityStatusCard for cas2 renders a AWAITING_ARRIVAL status card 1
 exports[`eligibilityStatusCard for cas2 renders a AWAITING_DECISION status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1469,6 +1477,7 @@ exports[`eligibilityStatusCard for cas2 renders a AWAITING_DECISION status card 
 exports[`eligibilityStatusCard for cas2 renders a CANCELLED status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1515,6 +1524,7 @@ exports[`eligibilityStatusCard for cas2 renders a CANCELLED status card 1`] = `
 exports[`eligibilityStatusCard for cas2 renders a MORE_INFORMATION_NEEDED status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1550,9 +1560,132 @@ exports[`eligibilityStatusCard for cas2 renders a MORE_INFORMATION_NEEDED status
 }
 `;
 
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE currently in CAS3 status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not eligible as applicant is currently in a CAS3 property.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE multiple failure reasons status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "html": "<p class="govuk-body govuk-!-margin-bottom-0">Not eligible due to:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        
+      <li>Sexual offence history</li>
+      <li>Age (applicant is under 18)</li>
+      <li>Tier not eligible</li>
+      </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE sexual offence history status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not eligible due to sexual offence history.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE status card 1`] = `
+{
+  "blocked": false,
+  "content": [],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE tier not correct status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Tier not eligible.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE under 18 status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not eligible as applicant is under 18.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [],
   "heading": "Short-term accommodation (CAS2)",
   "hint": undefined,
@@ -1574,6 +1707,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_STARTED status card 1`] = 
 exports[`eligibilityStatusCard for cas2 renders a NOT_SUBMITTED status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1612,6 +1746,7 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_SUBMITTED status card 1`] 
 exports[`eligibilityStatusCard for cas2 renders a OFFER_ACCEPTED status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1650,6 +1785,7 @@ exports[`eligibilityStatusCard for cas2 renders a OFFER_ACCEPTED status card 1`]
 exports[`eligibilityStatusCard for cas2 renders a OFFER_DECLINED_OR_WITHDRAWN status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1696,6 +1832,7 @@ exports[`eligibilityStatusCard for cas2 renders a OFFER_DECLINED_OR_WITHDRAWN st
 exports[`eligibilityStatusCard for cas2 renders a ON_WAITING_LIST status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1734,6 +1871,7 @@ exports[`eligibilityStatusCard for cas2 renders a ON_WAITING_LIST status card 1`
 exports[`eligibilityStatusCard for cas2 renders a PLACE_OFFERED status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1772,6 +1910,7 @@ exports[`eligibilityStatusCard for cas2 renders a PLACE_OFFERED status card 1`] 
 exports[`eligibilityStatusCard for cas2 renders a SUBMITTED status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {
@@ -1810,6 +1949,7 @@ exports[`eligibilityStatusCard for cas2 renders a SUBMITTED status card 1`] = `
 exports[`eligibilityStatusCard for cas2 renders a WITHDRAWN status card 1`] = `
 {
   "blocked": false,
+  "content": [],
   "details": [
     {
       "key": {

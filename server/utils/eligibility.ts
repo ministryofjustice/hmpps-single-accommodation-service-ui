@@ -234,7 +234,13 @@ const contentForCas1Status = (
   const { serviceStatus } = serviceResult ?? {}
 
   switch (serviceStatus) {
-    case 'PLACEMENT_REQUEST_NOT_STARTED': {
+    case 'PLACEMENT_REQUEST_WITHDRAWN':
+    case 'PLACEMENT_BOOKED':
+    case 'PLACEMENT_REQUEST_SUBMITTED':
+    case 'PLACEMENT_REQUEST_REJECTED':
+    case 'PLACEMENT_REQUEST_NOT_STARTED':
+    case 'NOT_ARRIVED':
+    case 'ARRIVED': {
       const { placementHistory } = cas1Application ?? {}
       if (!placementHistory?.length) return undefined
       const history = placementHistory.map(placementHistoryText).filter((entry): entry is string => entry !== undefined)

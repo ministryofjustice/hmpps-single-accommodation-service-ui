@@ -194,6 +194,16 @@ const bookingHistoryText = (booking?: Cas3ExternalPreviousBookingDto): string | 
 
 const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementPairDto): string | undefined => {
   switch (placement?.status) {
+    case 'ARRIVED':
+      return placement.actualArrivalDate ? `Arrived (${formatDate(placement.actualArrivalDate)})` : 'Arrived'
+
+    case 'UPCOMING': {
+      const expectedArrivalDate = requestForPlacement?.expectedArrivalDate ?? placement.premises?.startDate
+      return expectedArrivalDate
+        ? `Placement upcoming (Expected arrival: ${formatDate(expectedArrivalDate)})`
+        : 'Placement upcoming'
+    }
+
     case 'DEPARTED':
       if (placement.actualArrivalDate && placement.actualDepartureDate) {
         return `Departed (${formatDate(placement.actualArrivalDate)} to ${formatDate(placement.actualDepartureDate)})`
@@ -216,11 +226,17 @@ const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementP
   }
 
   switch (requestForPlacement?.status) {
+    case 'REQUEST_SUBMITTED':
+      return `Placement request submitted${requestForPlacement.submittedAt ? ` (${formatDate(requestForPlacement.submittedAt)})` : ''}`
+
+    case 'AWAITING_MATCH':
+      return `Placement request awaiting match${requestForPlacement.submittedAt ? ` (${formatDate(requestForPlacement.submittedAt)})` : ''}`
+
     case 'REQUEST_WITHDRAWN':
       return `Request withdrawn${requestForPlacement.withdrawalDate ? ` (${formatDate(requestForPlacement.withdrawalDate)})` : ''}. Reason: ${cas1WithdrawalReasonLabels[requestForPlacement.withdrawalReason] ?? 'Unknown'}`
 
     case 'REQUEST_REJECTED':
-      return `Request rejected. Reason: ${requestForPlacement.rejectionReason ?? 'Unknown'}`
+      return `Request rejected${requestForPlacement.submittedAt ? ` (${formatDate(requestForPlacement.submittedAt)})` : ''}. Reason: ${requestForPlacement.rejectionReason ?? 'Unknown'}`
 
     default:
       return undefined
@@ -239,6 +255,7 @@ const contentForCas1Status = (
     case 'PLACEMENT_REQUEST_SUBMITTED':
     case 'PLACEMENT_REQUEST_REJECTED':
     case 'PLACEMENT_REQUEST_NOT_STARTED':
+    case 'PLACEMENT_CANCELLED':
     case 'NOT_ARRIVED':
     case 'ARRIVED': {
       const { placementHistory } = cas1Application ?? {}

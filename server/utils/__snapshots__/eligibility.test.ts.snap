@@ -638,7 +638,7 @@ exports[`cas3 status card content previous bookings renders previous bookings 1`
     
     <ul class="govuk-list govuk-list--bullet govuk-!-font-size-16">
       
-        <li>Booking cancelled 20 June 2026. Reason: No longer needed</li>
+        <li>Booking cancelled (20 June 2026). Reason: No longer needed</li>
       
         <li>Booking cancelled. Reason: No longer needed</li>
       
@@ -745,7 +745,7 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CONFIRMED st
       "text": "Booking dates",
     },
     "value": {
-      "text": "1 September 2026 to 27 October 2026",
+      "text": "1 September 2026 to 27 October 2026 (8 weeks)",
     },
   },
   {

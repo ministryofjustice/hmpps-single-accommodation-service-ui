@@ -133,6 +133,7 @@ async function stubReferenceData() {
 }
 
 async function stubUserProfile() {
+  await userApi.stubGetMe()
   await userApi.stubGetTeams([
     {
       code: 'T34M',

@@ -409,9 +409,16 @@ describe('cas1 status card', () => {
     })
 
     it.each([
-      [10, '1 week'],
-      [11, '2 weeks'],
-    ])('rounds a %s-day placement duration to %s', (durationDays, expectedDuration) => {
+      [0, '0 days'],
+      [1, '1 day'],
+      [3, '3 days'],
+      [7, '1 week'],
+      [8, '1 week, 1 day'],
+      [10, '1 week, 3 days'],
+      [11, '1 week, 4 days'],
+      [14, '2 weeks'],
+      [15, '2 weeks, 1 day'],
+    ])('formats a %s-day placement duration as %s', (durationDays, expectedDuration) => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'PLACEMENT_BOOKED' })
       const application = {
         ...cas1Application,
@@ -526,6 +533,19 @@ describe('cas3 status card', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
       expect(cas3StatusCard({ serviceResult, cas3Application }).details).toMatchSnapshot()
+    })
+
+    it('includes booking duration in weeks for a confirmed booking', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'BOOKING_CONFIRMED' })
+
+      expect(cas3StatusCard({ serviceResult, cas3Application }).details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            key: expect.objectContaining({ text: 'Booking dates' }),
+            value: expect.objectContaining({ text: '1 September 2026 to 27 October 2026 (8 weeks)' }),
+          }),
+        ]),
+      )
     })
   })
 
@@ -644,6 +664,38 @@ describe('eligibilityToEligibilityCards', () => {
     expect(cards[1].heading).toContain('Commissioned Rehabilitative Services (CRS)')
     expect(cards[2].heading).toContain('Approved premises (CAS1)')
     expect(cards[3].heading).toContain('CAS3 (transitional accommodation)')
+  })
+
+  it('hides the CAS1 card when the person is not in prison or CAS1 accommodation', () => {
+    const eligibility = eligibilityFactory.build({
+      crn,
+      cas1: {
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['NOT_IN_PRISON_OR_CAS1_ACCOMMODATION'],
+        }),
+      },
+    })
+
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
+
+    expect(cards.map(card => card.heading)).not.toContain('Approved premises (CAS1)')
+  })
+
+  it('shows the CAS1 card as inactive when ineligible for other reasons', () => {
+    const eligibility = eligibilityFactory.build({
+      crn,
+      cas1: {
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['MALE_NOT_HIGH_RISK_TIER'],
+        }),
+      },
+    })
+
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
+
+    expect(cards.find(card => card.heading === 'Approved premises (CAS1)')?.inactive).toBe(true)
   })
 
   describe('when the cas2 flag is enabled', () => {

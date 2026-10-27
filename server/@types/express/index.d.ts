@@ -8,6 +8,11 @@ export declare module 'express-session' {
     pageReferers: Record<string, string>
     caseListUrl?: string
     searchTerm?: string
+    userTelemetry?: {
+      username: string
+      authSource: string
+      userLocationCode: string
+    }
   }
 }
 

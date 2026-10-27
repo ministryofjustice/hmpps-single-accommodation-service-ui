@@ -464,12 +464,17 @@ describe('cas1 status card', () => {
   })
 
   describe('content', () => {
-    const serviceResult = serviceResultFactory.build({
-      serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED',
-    })
-
     describe('placement history', () => {
       it('renders previous placements', () => {
+        const statuses = [
+          'PLACEMENT_REQUEST_WITHDRAWN',
+          'PLACEMENT_BOOKED',
+          'PLACEMENT_REQUEST_SUBMITTED',
+          'PLACEMENT_REQUEST_REJECTED',
+          'PLACEMENT_REQUEST_NOT_STARTED',
+          'NOT_ARRIVED',
+          'ARRIVED',
+        ] as const
         const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
           ...cas1Application,
           placementHistory: [
@@ -515,8 +520,17 @@ describe('cas1 status card', () => {
           ],
         }
 
+        statuses.forEach(serviceStatus => {
+          const { content } = cas1StatusCard({
+            serviceResult: serviceResultFactory.build({ serviceStatus }),
+            cas1Application: application,
+          })
+
+          expect(JSON.stringify(content)).toContain('5 previous placements on this application')
+        })
+
         const { content } = cas1StatusCard({
-          serviceResult,
+          serviceResult: serviceResultFactory.build({ serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED' }),
           cas1Application: application,
         })
 
@@ -526,7 +540,7 @@ describe('cas1 status card', () => {
 
       it('does not render placement history when empty', () => {
         const { content } = cas1StatusCard({
-          serviceResult,
+          serviceResult: serviceResultFactory.build({ serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED' }),
           cas1Application,
         })
 

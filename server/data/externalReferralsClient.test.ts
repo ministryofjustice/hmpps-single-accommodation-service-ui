@@ -204,7 +204,6 @@ describeClient('ExternalReferralsClient', provider => {
     const id = faker.string.uuid()
     const withdrawal: ExternalReferralWithdrawalDto = {
       withdrawalReason: 'PLACEMENT_COMPLETE',
-      withdrawalNote: 'some note',
     }
 
     await provider.addInteraction({

@@ -20,19 +20,4 @@
     errorMessage: errors.withdrawalReason
   })
   }}
-
-  {{
-  govukTextarea({
-    name: "withdrawalNote",
-    label: {
-      text: "Notes (optional)",
-      classes: "govuk-label--s"
-    },
-    hint: {
-      text: "Do not include sensitive personal details or risk assessment notes."
-    },
-    value: withdrawalNote,
-    errorMessage: errors.withdrawalNote
-  })
-  }}
 {% endblock %}

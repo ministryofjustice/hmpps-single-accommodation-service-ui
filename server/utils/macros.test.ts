@@ -8,6 +8,7 @@ import {
   statusCell,
   statusTag,
   textBlock,
+  textField,
   tierScoreTag,
 } from './macros'
 
@@ -163,6 +164,21 @@ describe('Macros', () => {
   describe('textBlock', () => {
     it('renders a text block', () => {
       expect(textBlock(`Some text\n\nmultiple lines\n\n<script>alert("escaped!")</script>`)).toMatchSnapshot()
+    })
+  })
+
+  describe('textField', () => {
+    it('renders a text field', () => {
+      expect(textField('testField', 'Field label', {})).toMatchSnapshot()
+    })
+
+    it('renders a pre-populated text field with an error', () => {
+      expect(
+        textField('testField', 'Field label', {
+          testField: 'field value',
+          errors: { testField: { text: 'Some terrible error' } },
+        }),
+      ).toMatchSnapshot()
     })
   })
 })

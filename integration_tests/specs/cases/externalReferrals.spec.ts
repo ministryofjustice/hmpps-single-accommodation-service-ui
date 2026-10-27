@@ -254,14 +254,23 @@ test.describe('external referrals', () => {
     const submissionPage = await ExternalReferralsSubmissionPage.verifyOnPage(page, 'Move to referral history')
 
     // When I submit the empty form, I see errors
-    await submissionPage.clickButton('Save and continue')
+    await submissionPage.clickButton('Move to referral history')
     await submissionPage.shouldShowErrorMessagesForFields({
       withdrawalReason: 'Select a reason for moving to the referral history',
     })
 
-    // When I complete the form
-    const updatedReferral = await submissionPage.completeWithdrawalForm(referral)
-    await submissionPage.clickButton('Save and continue')
+    // When I complete the form selectiong 'Other' reason, and submit.
+    let updatedReferral = await submissionPage.completeWithdrawalForm(referral, 'Other')
+    await submissionPage.clickButton('Move to referral history')
+
+    // Then I should see an error as the otherReason field is mandatory if shown
+    await submissionPage.shouldShowErrorMessagesForFields({
+      otherReason: 'Enter a reason',
+    })
+
+    // When I complete the other reason field
+    updatedReferral = await submissionPage.completeWithdrawalOtherReason(updatedReferral)
+    await submissionPage.clickButton('Move to referral history')
 
     // Then I am on the case details page
     await ProfileTrackerPage.verifyOnPage(page, caseData)

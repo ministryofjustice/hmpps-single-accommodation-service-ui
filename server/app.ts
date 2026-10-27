@@ -10,6 +10,7 @@ import authorisationMiddleware from './middleware/authorisationMiddleware'
 import setUpAuthentication, { setUpAuthenticationErrorRoute } from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
+import clearInboundBaggage from './middleware/clearInboundBaggage'
 import setUpFrontendComponents from './middleware/setUpFrontendComponents'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpStaticResources from './middleware/setUpStaticResources'
@@ -24,6 +25,7 @@ import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedir
 import { getCaseListUrl } from './utils/backlinks'
 import { getActivePage } from './utils/navigation'
 import setUpSentryProcessor from './middleware/setUpSentryProcessor'
+import setUpUserTelemetry from './middleware/setUpUserTelemetry'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -32,6 +34,7 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
+  app.use(clearInboundBaggage())
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
@@ -52,6 +55,7 @@ export default function createApp(services: Services): express.Application {
   })
   app.use(setUpFrontendComponents())
   app.use(authorisationMiddleware(config.allowedRoles))
+  app.use(setUpUserTelemetry(services.userService))
 
   app.use(routes(services))
 

@@ -3,9 +3,13 @@ import {
   flushTelemetry,
   telemetry,
   ModifiableSpan,
+  defaultInstrumentations,
 } from '@ministryofjustice/hmpps-azure-telemetry'
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
 import { SpanFilterFn, SpanInfo } from '@ministryofjustice/hmpps-azure-telemetry/src/main'
 import applicationInfoSupplier from '../applicationInfo'
+import config from '../config'
+import { createUserLocationCodeRequestHook } from './userLocationTelemetry'
 
 // Sentry v11 reads isolation scopes from the context manager installed by initialiseTelemetry,
 // so no manual context manager registration is needed.
@@ -26,6 +30,17 @@ initialiseTelemetry({
   connectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   debug: process.env.DEBUG_TELEMETRY === 'true',
 })
+  .setInstrumentations(
+    defaultInstrumentations.map(instrumentation => {
+      if (instrumentation instanceof HttpInstrumentation) {
+        instrumentation.setConfig({
+          ...instrumentation.getConfig(),
+          requestHook: createUserLocationCodeRequestHook(config.apis.sasApi.url),
+        })
+      }
+      return instrumentation
+    }),
+  )
   .addFilter(filterSentry)
   .addFilter(telemetry.processors.filterSpanWherePath(['/health', '/ping', '/info', '/assets/*', '/favicon.ico']))
   .addModifier(stripHttpRouteAny)

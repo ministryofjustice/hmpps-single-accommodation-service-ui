@@ -16,7 +16,6 @@ import {
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
-import DutyToReferService from '../services/dutyToReferService'
 import { fetchErrorsAndUserInput } from '../utils/validation'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
@@ -37,7 +36,6 @@ export default class CasesController {
     private readonly casesService: CasesService,
     private readonly referralsService: ReferralsService,
     private readonly eligibilityService: EligibilityService,
-    private readonly dutyToReferService: DutyToReferService,
     private readonly proposedAddressesService: ProposedAddressesService,
     private readonly accommodationService: AccommodationService,
     private readonly userService: UserService,

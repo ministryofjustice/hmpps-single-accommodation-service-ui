@@ -26,7 +26,6 @@ import {
   queryToFilters,
 } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
-import DutyToReferService from '../services/dutyToReferService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import { eligibilityToEligibilityCards } from '../utils/eligibility'
 import { proposedAddressStatusCard } from '../utils/proposedAddresses'
@@ -54,7 +53,6 @@ describe('casesController', () => {
   const casesService = mock<CasesService>()
   const referralsService = mock<ReferralsService>()
   const eligibilityService = mock<EligibilityService>()
-  const dutyToReferService = mock<DutyToReferService>()
   const proposedAddressesService = mock<ProposedAddressesService>()
   const accommodationService = mock<AccommodationService>()
   const userService = mock<UserService>()
@@ -65,7 +63,6 @@ describe('casesController', () => {
     casesService,
     referralsService,
     eligibilityService,
-    dutyToReferService,
     proposedAddressesService,
     accommodationService,
     userService,

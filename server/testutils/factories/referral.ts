@@ -36,6 +36,13 @@ const cas1Referrals: ReferralParams[] = [
   () => ({ status: 'ACCEPTED', placementStatus: 'CANCELLED', placementAddress: shortAddress() }),
 ]
 
+const cas2Referrals: ReferralParams[] = [
+  () => ({ status: 'ARCHIVED' }),
+  () => ({ status: 'WITHDRAWN' }),
+  () => ({ status: 'CANCELLED' }),
+  () => ({ status: 'OFFER_DECLINED_OR_WITHDRAWN' }),
+]
+
 const cas3Referrals: ReferralParams[] = [
   () => ({
     status: 'PENDING',
@@ -103,6 +110,18 @@ class ReferralFactory extends Factory<Referral> {
     })
   }
 
+  cas2Referral() {
+    const id = faker.string.uuid()
+
+    return this.params({
+      id,
+      type: 'CAS2',
+      date: faker.date.past().toISOString(),
+      status: 'ARCHIVED',
+      uiUrl: `https://example.com/cas2/${id}`,
+    })
+  }
+
   cas3Referral() {
     return this.params({
       id: faker.string.uuid(),
@@ -122,6 +141,7 @@ class ReferralFactory extends Factory<Referral> {
     return faker.helpers.arrayElement([
       () => this.dtrReferral().params(faker.helpers.arrayElement(dtrReferrals)()),
       () => this.cas1Referral().params(faker.helpers.arrayElement(cas1Referrals)()),
+      () => this.cas2Referral().params(faker.helpers.arrayElement(cas2Referrals)()),
       () => this.cas3Referral().params(faker.helpers.arrayElement(cas3Referrals)()),
     ])()
   }

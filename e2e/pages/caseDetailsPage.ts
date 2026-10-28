@@ -131,8 +131,8 @@ export default class CaseDetailsPage {
   }
 
   async expectCas2Redirect() {
-    const cas2Page = await this.expectCas2Popup(/\/new-cohorts\/applications\/before-you-start$/)
-    await expect(cas2Page.getByRole('heading', { name: 'Apply for short-term accommodation (CAS2)' })).toBeVisible()
+    const cas2Page = await this.expectCas2Popup(/\/new-cohorts\/applications\/people\/find-by-crn$/)
+    await expect(cas2Page.getByRole('heading', { name: 'Confirm details for CAS2 application' })).toBeVisible()
   }
 
   async expectCas2Application() {

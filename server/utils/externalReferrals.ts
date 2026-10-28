@@ -18,7 +18,7 @@ import {
 
 import paths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
-import { renderMacro, statusTag, textBlock } from './macros'
+import { renderMacro, statusTag, textBlock, textField } from './macros'
 import { serviceStatusTag } from './statusTag'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { staffName } from './staff'
@@ -39,6 +39,7 @@ const fieldMapping: Record<string, FieldDefinition> = {
   email: { label: 'Email address', format: 'text' },
   submissionNote: { label: 'Notes', format: 'textarea' },
   outcomeNote: { label: 'Notes', format: 'textarea' },
+  otherReason: { label: 'Other reason', format: 'text' },
 }
 
 export const validateSubmission = (req: Request) => {
@@ -223,7 +224,7 @@ export const validateOutcome = (req: Request) => {
   const { outcomeStatus, outcomeNote } = req.body
   const errors: Record<string, string> = {
     outcomeStatus: validateRadioButton(outcomeStatus, 'external referral status'),
-    outcomeNote: validateMaxLength(outcomeNote, 'Notes', 4000),
+    outcomeNote: validateMaxLength(outcomeNote, fieldMapping.outcomeNote.label, 4000),
   }
 
   return validateAndFlashErrors(req, errors)
@@ -237,21 +238,31 @@ export const outcomeDetailsSummaryListRows = (referral: ExternalReferralDto) => 
 
   return [
     summaryListRow('Status', statusTag(serviceStatusTag(status as ServiceResult['serviceStatus'])), { type: 'html' }),
-    summaryListRow('Notes', outcomeNote, { type: 'textBlock', noValue: 'No notes added' }),
+    summaryListRow(fieldMapping.outcomeNote.label, outcomeNote, { type: 'textBlock', noValue: 'No details added' }),
   ]
 }
 
 export const withdrawalReasonRadios = (
   withdrawalReason: ExternalReferralWithdrawalDto['withdrawalReason'],
+  context: Record<string, unknown>,
 ): Array<RadioItem> => {
-  return radioItems(withdrawalReasonLabels, withdrawalReason)
+  const html = textField('otherReason', 'Reason', context)
+  return radioItems(withdrawalReasonLabels, withdrawalReason).map((radioItem: RadioItem) => {
+    if (radioItem.value === 'ANOTHER_REASON') {
+      return { ...radioItem, conditional: { html } }
+    }
+    return radioItem
+  })
 }
 
 export const validateWithdrawal = (req: Request) => {
-  const { withdrawalReason, withdrawalNote } = req.body
+  const { withdrawalReason, otherReason } = req.body
   const errors: Record<string, string> = {
-    withdrawalReason: validateRadioButton(withdrawalReason, 'reason for moving to the referral historyry'),
-    withdrawalNote: validateMaxLength(withdrawalNote, 'Notes', 4000),
+    withdrawalReason: validateRadioButton(withdrawalReason, 'reason for moving to the referral history'),
+    otherReason:
+      withdrawalReason === 'ANOTHER_REASON'
+        ? validateMandatoryText(otherReason, 'reason') || validateMaxLength(otherReason, 'reason', 100)
+        : undefined,
   }
 
   return validateAndFlashErrors(req, errors)

@@ -4,8 +4,47 @@
     "caseActions": [],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+        "serviceStatus": "PLACEMENT_REQUEST_WITHDRAWN",
+        "failureReasons": [],
+        "url": "https://cas1/create-new-placement-request"
+      },
+      "cas1Application": {
+        "uiUrl": "https://cas1/create-new-placement-request",
+        "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
+        "applicationStatus": "AWAITING_PLACEMENT",
+        "placementHistory": [
+          {
+            "dateApplied": "2026-05-01",
+            "placement": {
+              "status": "DEPARTED",
+              "actualArrivalDate": "2026-05-20",
+              "actualDepartureDate": "2026-06-20"
+            }
+          },
+          {
+            "dateApplied": "2026-03-15",
+            "requestForPlacement": {
+              "status": "REQUEST_WITHDRAWN",
+              "withdrawalDate": "2026-04-01",
+              "withdrawalReason": "CHANGE_IN_CIRCUMSTANCES"
+            }
+          }
+        ],
+        "application": {
+          "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
+          "status": "AWAITING_PLACEMENT",
+          "createdAt": "2026-01-10T09:00:00.000Z",
+          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-01-12T09:00:00.000Z",
+          "expiresAt": "2027-01-29"
+        },
+        "requestForPlacement": {
+          "status": "REQUEST_WITHDRAWN",
+          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-08-29T09:00:00.000Z",
+          "withdrawalReason": "ERROR_IN_PLACEMENT_REQUEST",
+          "withdrawalDate": "2026-09-01T09:00:00.000Z"
+        }
       }
     },
     "cas2": {
@@ -170,9 +209,46 @@
     ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "SUBMITTED",
         "failureReasons": [],
-        "url": "https://cas1/start"
+        "url": "https://cas1/create-new-placement-request"
+      },
+      "cas1Application": {
+        "uiUrl": "https://cas1/create-new-placement-request",
+        "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
+        "applicationStatus": "AWAITING_PLACEMENT",
+        "placementHistory": [
+          {
+            "dateApplied": "2026-04-10",
+            "requestForPlacement": {
+              "status": "REQUEST_REJECTED",
+              "rejectionReason": "Placement unsuitable"
+            }
+          },
+          {
+            "dateApplied": "2026-02-20",
+            "placement": {
+              "status": "DEPARTED",
+              "actualArrivalDate": "2026-03-01",
+              "actualDepartureDate": "2026-04-01"
+            }
+          }
+        ],
+        "application": {
+          "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
+          "status": "AWAITING_PLACEMENT",
+          "createdAt": "2026-01-10T09:00:00.000Z",
+          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-01-12T09:00:00.000Z",
+          "expiresAt": "2027-01-29"
+        },
+        "requestForPlacement": {
+          "status": "REQUEST_WITHDRAWN",
+          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-08-29T09:00:00.000Z",
+          "withdrawalReason": "ERROR_IN_PLACEMENT_REQUEST",
+          "withdrawalDate": "2026-09-01T09:00:00.000Z"
+        }
       }
     },
     "cas2": {
@@ -344,7 +420,37 @@
         "serviceStatus": "APPLICATION_REJECTED",
         "failureReasons": [],
         "url": "https://cas1/start-new"
-      }
+      },
+      "cas1Application": {
+        "uiUrl": "https://cas1/start",
+        "id": "b2c3d4e5-f6a7-4a4a-9c3e-101c4a4a4a4a",
+        "applicationStatus": "REJECTED",
+        "placementHistory": [
+          {
+            "dateApplied": "2026-06-01",
+            "requestForPlacement": {
+              "status": "REQUEST_WITHDRAWN",
+              "withdrawalDate": "2026-06-15",
+              "withdrawalReason": "CHANGE_IN_CIRCUMSTANCES"
+            }
+          },
+          {
+            "dateApplied": "2026-04-05",
+            "requestForPlacement": {
+              "status": "REQUEST_REJECTED",
+              "rejectionReason": "Placement unsuitable"
+            }
+          }
+        ],
+        "application": {
+          "id": "b2c3d4e5-f6a7-4a4a-9c3e-101c4a4a4a4a",
+          "status": "REJECTED",
+          "createdAt": "2026-08-26T09:00:00.000Z",
+          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-08-29T09:00:00.000Z",
+          "expiresAt": "2027-01-29"
+        },
+        "assessment": { "decision": "REJECTED", "rejectionRationale": "Not enough detail" }      }
     },
     "cas2": {
       "serviceResult": {
@@ -544,6 +650,44 @@
         "serviceStatus": "PLACEMENT_BOOKED",
         "failureReasons": [],
         "url": "https://cas1/view"
+      },
+      "cas1Application": {
+        "uiUrl": "https://cas1/view",
+        "id": "5f9c3e10-1c4a-4a4a-9c3e-101c4a4a4a4a",
+        "applicationStatus": "PLACEMENT_ALLOCATED",
+        "placementHistory": [
+          {
+            "dateApplied": "2026-06-01",
+            "requestForPlacement": {
+              "status": "REQUEST_WITHDRAWN",
+              "withdrawalDate": "2026-06-18",
+              "withdrawalReason": "NO_CAPACITY"
+            }
+          },
+          {
+            "dateApplied": "2026-04-15",
+            "placement": {
+              "status": "DEPARTED",
+              "actualArrivalDate": "2026-05-01",
+              "actualDepartureDate": "2026-05-30"
+            }
+          }
+        ],
+        "application": {
+          "id": "5f9c3e10-1c4a-4a4a-9c3e-101c4a4a4a4a",
+          "status": "PLACEMENT_ALLOCATED",
+          "createdAt": "2026-07-01T09:00:00.000Z",
+          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-07-02T09:00:00.000Z",
+          "expiresAt": "2027-01-29"
+        },
+        "requestForPlacement": {
+          "status": "PLACEMENT_BOOKED",
+          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-08-01T09:00:00.000Z",
+          "expectedArrivalDate": "2026-09-09",
+          "durationDays": 59
+        }
       }
     },
     "cas2": {
@@ -638,6 +782,30 @@
         "serviceStatus": "PLACEMENT_CANCELLED",
         "failureReasons": [],
         "url": "https://cas1/create-new-placement-request"
+      },
+      "cas1Application": {
+        "uiUrl": "https://cas1/create-new-placement-request",
+        "id": "c3d4e5f6-a7b8-4a4a-9c3e-101c4a4a4a4a",
+        "applicationStatus": "AWAITING_PLACEMENT",
+        "placementHistory": [],
+        "application": {
+          "id": "c3d4e5f6-a7b8-4a4a-9c3e-101c4a4a4a4a",
+          "status": "AWAITING_PLACEMENT",
+          "createdAt": "2026-01-10T09:00:00.000Z",
+          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-01-12T09:00:00.000Z",
+          "expiresAt": "2027-01-29"
+        },
+        "requestForPlacement": {
+          "status": "REQUEST_SUBMITTED",
+          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-08-01T09:00:00.000Z",
+          "expectedArrivalDate": "2026-08-24"
+        },
+        "placement": {
+          "status": "CANCELLED",
+          "cancellationReason": "Over capacity"
+        }
       }
     },
     "cas2": {
@@ -788,6 +956,61 @@
         "serviceStatus": "PLACEMENT_REQUEST_NOT_STARTED",
         "failureReasons": [],
         "url": "https://cas1/create-placement-request"
+      },
+      "cas1Application": {
+        "uiUrl": "https://cas1/create-placement-request",
+        "id": "a1b2c3d4-e5f6-4a4a-9c3e-101c4a4a4a4a",
+        "applicationStatus": "AWAITING_PLACEMENT",
+        "application": {
+          "id": "a1b2c3d4-e5f6-4a4a-9c3e-101c4a4a4a4a",
+          "status": "AWAITING_PLACEMENT",
+          "createdAt": "2026-01-10T09:00:00.000Z",
+          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-01-12T09:00:00.000Z",
+          "expiresAt": "2027-01-29"
+        },
+        "placementHistory": [
+          {
+            "dateApplied": "2026-06-01",
+            "requestForPlacement": {
+              "status": "REQUEST_WITHDRAWN",
+              "withdrawalDate": "2026-06-20",
+              "withdrawalReason": "CHANGE_IN_CIRCUMSTANCES"
+            }
+          },
+          {
+            "dateApplied": "2026-05-01",
+            "placement": {
+              "status": "DEPARTED",
+              "actualArrivalDate": "2026-05-20",
+              "actualDepartureDate": "2026-06-20"
+            }
+          },
+          {
+            "dateApplied": "2026-05-01",
+            "requestForPlacement": {
+              "expectedArrivalDate": "2026-05-21"
+            },
+            "placement": {
+              "status": "NOT_ARRIVED"
+            }
+          },
+          {
+            "dateApplied": "2026-04-01",
+            "requestForPlacement": {
+              "status": "REQUEST_WITHDRAWN",
+              "withdrawalDate": "2026-04-20",
+              "withdrawalReason": "NO_CAPACITY"
+            }
+          },
+          {
+            "dateApplied": "2026-03-30",
+            "requestForPlacement": {
+              "status": "REQUEST_REJECTED",
+              "rejectionReason": "Placement unsuitable"
+            }
+          }
+        ]
       }
     },
     "cas2": {
@@ -842,6 +1065,91 @@
           "startDate": null,
           "service": "PA"
         }
+      }
+    }
+  },
+  "N583271": {
+    "crn": "N583271",
+    "caseActions": [],
+    "cas1": {
+      "serviceResult": {
+        "serviceStatus": "PLACEMENT_REQUEST_WITHDRAWN",
+        "failureReasons": [],
+        "url": "https://cas1/create-new-placement-request"
+      },
+      "cas1Application": {
+        "uiUrl": "https://cas1/create-new-placement-request",
+        "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
+        "applicationStatus": "AWAITING_PLACEMENT",
+        "placementHistory": [
+          {
+            "dateApplied": "2026-06-10",
+            "requestForPlacement": {
+              "status": "REQUEST_WITHDRAWN",
+              "withdrawalDate": "2026-06-25",
+              "withdrawalReason": "ERROR_IN_PLACEMENT_REQUEST"
+            }
+          },
+          {
+            "dateApplied": "2026-04-01",
+            "placement": {
+              "status": "DEPARTED",
+              "actualArrivalDate": "2026-04-20",
+              "actualDepartureDate": "2026-05-20"
+            }
+          }
+        ],
+        "application": {
+          "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
+          "status": "AWAITING_PLACEMENT",
+          "createdAt": "2026-01-10T09:00:00.000Z",
+          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-01-12T09:00:00.000Z",
+          "expiresAt": "2027-01-29"
+        },
+        "requestForPlacement": {
+          "status": "REQUEST_WITHDRAWN",
+          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedAt": "2026-08-29T09:00:00.000Z",
+          "withdrawalReason": "ERROR_IN_PLACEMENT_REQUEST",
+          "withdrawalDate": "2026-09-01T09:00:00.000Z"
+        }
+      }
+    },
+    "cas2": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://cas2/start"
+      }
+    },
+    "cas3": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://cas3/start"
+      }
+    },
+    "crs": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://crs/start"
+      },
+      "commissionedRehabilitativeServices": null
+    },
+    "dtr": {
+      "serviceResult": {
+        "serviceStatus": "NOT_STARTED",
+        "failureReasons": [],
+        "url": "https://dtr/add"
+      },
+      "submission": null
+    },
+    "pa": {
+      "serviceResult": {
+        "serviceStatus": "COMPLETED",
+        "failureReasons": []
       }
     }
   }

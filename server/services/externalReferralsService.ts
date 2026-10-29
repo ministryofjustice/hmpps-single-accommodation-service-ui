@@ -16,8 +16,8 @@ export default class ExternalReferralsService {
     return this.externalReferralsClient.update(token, crn, id, data)
   }
 
-  search(token: string, crn: string) {
-    return this.externalReferralsClient.search(token, crn)
+  search(token: string, crn: string, excludeWithdrawnReferrals?: boolean) {
+    return this.externalReferralsClient.search(token, crn, excludeWithdrawnReferrals)
   }
 
   async getTimeline(token: string, crn: string, id: string) {

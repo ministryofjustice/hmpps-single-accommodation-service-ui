@@ -10,8 +10,19 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+        "serviceStatus": "NOT_SUBMITTED",
+        "failureReasons": [],
+        "url": "https://cas2/continue"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/511935",
+        "id": "cas2-application-511935",
+        "createdAt": "2026-06-01T09:00:00.000Z",
+        "createdBy": {
+          "name": "Alex Morgan",
+          "username": "alex.morgan",
+          "userType": "PROBATION_PRACTITIONER"
+        }
       }
     },
     "cas3": {
@@ -83,8 +94,23 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
-        "failureReasons": []
+        "serviceStatus": "MORE_INFORMATION_NEEDED",
+        "failureReasons": [],
+        "url": "https://cas2/continue"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/712106",
+        "id": "cas2-application-712106",
+        "createdAt": "2026-06-03T10:15:00.000Z",
+        "createdBy": {
+          "name": "Sam Taylor",
+          "username": "sam.taylor",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "MORE_INFO_REQUESTED",
+          "submittedAt": "2026-06-04T11:00:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -151,9 +177,23 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "AWAITING_DECISION",
         "failureReasons": [],
-        "url": "https://cas2/start"
+        "url": "https://cas2/view"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/274481",
+        "id": "cas2-application-274481",
+        "createdAt": "2026-05-28T09:30:00.000Z",
+        "createdBy": {
+          "name": "Jordan Lee",
+          "username": "jordan.lee",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "AWAITING_DECISION",
+          "submittedAt": "2026-05-30T14:20:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -209,9 +249,23 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "ON_WAITING_LIST",
         "failureReasons": [],
         "url": "https://cas2/view"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/938951",
+        "id": "cas2-application-938951",
+        "createdAt": "2026-05-20T08:45:00.000Z",
+        "createdBy": {
+          "name": "Casey Patel",
+          "username": "casey.patel",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "ON_WAITING_LIST",
+          "submittedAt": "2026-05-22T12:00:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -294,9 +348,23 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "APPLICATION_REJECTED",
+        "serviceStatus": "PLACE_OFFERED",
         "failureReasons": [],
-        "url": "https://cas2/start-new"
+        "url": "https://cas2/view"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/229440",
+        "id": "cas2-application-229440",
+        "createdAt": "2026-05-10T13:15:00.000Z",
+        "createdBy": {
+          "name": "Riley Chen",
+          "username": "riley.chen",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "PLACE_OFFERED",
+          "submittedAt": "2026-05-12T15:40:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -368,9 +436,23 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "INFO_REQUESTED",
+        "serviceStatus": "OFFER_ACCEPTED",
         "failureReasons": [],
         "url": "https://cas2/view"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/271226",
+        "id": "cas2-application-271226",
+        "createdAt": "2026-05-06T10:00:00.000Z",
+        "createdBy": {
+          "name": "Jamie Rivera",
+          "username": "jamie.rivera",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "OFFER_ACCEPTED",
+          "submittedAt": "2026-05-08T10:30:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -466,9 +548,23 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "AWAITING_ARRIVAL",
         "failureReasons": [],
         "url": "https://cas2/view"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/934069",
+        "id": "cas2-application-934069",
+        "createdAt": "2026-04-27T09:00:00.000Z",
+        "createdBy": {
+          "name": "Drew Wilson",
+          "username": "drew.wilson",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "AWAITING_ARRIVAL",
+          "submittedAt": "2026-04-29T11:00:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -546,9 +642,24 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "OFFER_DECLINED_OR_WITHDRAWN",
         "failureReasons": [],
-        "url": "https://cas2/start"
+        "url": "https://cas2/start-new"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/322559",
+        "id": "cas2-application-322559",
+        "createdAt": "2026-04-16T14:00:00.000Z",
+        "createdBy": {
+          "name": "Taylor Brooks",
+          "username": "taylor.brooks",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "OFFER_DECLINED",
+          "offerDeclinedReason": "The offered accommodation was unsuitable.",
+          "submittedAt": "2026-04-18T09:45:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -614,8 +725,24 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
+        "serviceStatus": "CANCELLED",
+        "failureReasons": [],
+        "url": "https://cas2/start-new"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/247269",
+        "id": "cas2-application-247269",
+        "createdAt": "2026-04-08T08:30:00.000Z",
+        "createdBy": {
+          "name": "Morgan Reed",
+          "username": "morgan.reed",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "CANCELLED",
+          "cancelledReason": "The application was cancelled.",
+          "submittedAt": "2026-04-10T13:20:00.000Z"
+        }
       }
     },
     "cas3": {
@@ -665,9 +792,23 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "WITHDRAWN",
         "failureReasons": [],
-        "url": "https://cas2/start"
+        "url": "https://cas2/start-new"
+      },
+      "cas2Application": {
+        "uiUrl": "https://cas2/application/608163",
+        "id": "cas2-application-608163",
+        "createdAt": "2026-03-30T11:45:00.000Z",
+        "createdBy": {
+          "name": "Avery Scott",
+          "username": "avery.scott",
+          "userType": "PROBATION_PRACTITIONER"
+        },
+        "submittedApplication": {
+          "latestAssessmentStatus": "WITHDRAWN",
+          "submittedAt": "2026-04-01T16:00:00.000Z"
+        }
       }
     },
     "cas3": {

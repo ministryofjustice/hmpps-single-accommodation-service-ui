@@ -91,6 +91,14 @@ export default class PageWithCaseList extends AbstractPage {
     }
   }
 
+  async shouldShowTabs(tabs: string[], selected: string) {
+    for await (const tab of tabs) {
+      await expect(this.page.getByRole('link', { name: tab })).toBeVisible()
+    }
+    await expect(this.page.locator('.govuk-tabs__list-item--selected')).toContainText(selected)
+    await expect(this.page.getByRole('heading', { name: selected, level: 2 })).toBeVisible()
+  }
+
   async clickCaseLink(caseData: Case) {
     await this.clickLink(displayName(caseData, { caseList: true, laoFlag: '' }))
   }

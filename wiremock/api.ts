@@ -5,6 +5,7 @@ import dutyToReferApi from '../integration_tests/mockApis/dutyToRefer'
 import referenceDataApi from '../integration_tests/mockApis/referenceData'
 import proposedAddressesApi from '../integration_tests/mockApis/proposedAddresses'
 import accommodationApi from '../integration_tests/mockApis/accommodation'
+import externalReferralsApi from '../integration_tests/mockApis/externalReferrals'
 import userApi from '../integration_tests/mockApis/user'
 import cases from './fixtures/cases.json'
 import eligibility from './fixtures/eligibility.json'
@@ -13,6 +14,8 @@ import dutyToRefer from './fixtures/dutyToRefer.json'
 import dutyToReferAuditRecords from './fixtures/dutyToReferAuditRecords.json'
 import proposedAddresses from './fixtures/proposedAddresses.json'
 import proposedAddressesAuditRecords from './fixtures/proposedAddressesAuditRecords.json'
+import externalReferrals from './fixtures/externalReferrals.json'
+import externalReferralsAuditRecords from './fixtures/externalReferralsAuditRecords.json'
 import currentAccommodation from './fixtures/currentAccommodation.json'
 import nextAccommodation from './fixtures/nextAccommodation.json'
 import caseAccommodationStatus from './fixtures/caseAccommodationStatus.json'
@@ -25,6 +28,7 @@ import {
   CaseDto,
   DutyToReferDto,
   EligibilityDto,
+  ExternalReferralDto,
   ProposedAccommodationDto,
 } from '@sas/api'
 import { resetStubs } from '../integration_tests/mockApis/wiremock'
@@ -108,6 +112,24 @@ async function stubProposedAddresses() {
   }
 }
 
+async function stubExternalReferrals() {
+  for await (const caseDto of fullCases) {
+    const referrals = (externalReferrals as Record<string, ExternalReferralDto[]>)[caseDto.crn] ?? []
+    await externalReferralsApi.stubListExternalReferral(caseDto.crn, referrals)
+
+    for await (const referral of referrals) {
+      await externalReferralsApi.stubGetExternalReferralBySubmissionId(referral)
+      await externalReferralsApi.stubUpdateExternalReferral(referral)
+      await externalReferralsApi.stubExternalReferralAddNote(caseDto.crn, referral.submission.id)
+      await externalReferralsApi.stubExternalReferralWithdraw(caseDto.crn, referral.submission.id)
+      await externalReferralsApi.stubExternalReferralTimeline(caseDto.crn, referral.submission.id, [
+        (externalReferralsAuditRecords as Record<string, AuditRecordDto>)[referral.submission.id],
+      ])
+    }
+    await externalReferralsApi.stubSubmitExternalReferral(caseDto.crn)
+  }
+}
+
 async function stubAccommodation() {
   for await (const caseDto of fullCases) {
     await accommodationApi.stubGetAccommodationSummary(caseDto.crn, {
@@ -154,6 +176,7 @@ async function stubUserProfile() {
     stubReferrals(),
     stubDutyToRefer(),
     stubProposedAddresses(),
+    stubExternalReferrals(),
     stubAccommodation(),
     stubUserProfile(),
   ])

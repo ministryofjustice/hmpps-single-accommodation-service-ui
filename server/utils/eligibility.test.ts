@@ -464,69 +464,91 @@ describe('cas1 status card', () => {
   })
 
   describe('content', () => {
-    const serviceResult = serviceResultFactory.build({
-      serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED',
-    })
-
     describe('placement history', () => {
-      it('renders previous placements', () => {
-        const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
-          ...cas1Application,
-          placementHistory: [
-            {
-              dateApplied: '2026-06-01',
-              requestForPlacement: {
-                status: 'REQUEST_WITHDRAWN',
-                withdrawalDate: '2026-06-20',
-                withdrawalReason: 'CHANGE_IN_CIRCUMSTANCES',
-              },
+      const statuses = ['PLACEMENT_REQUEST_NOT_STARTED', 'NOT_ARRIVED', 'ARRIVED'] as const
+      const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
+        ...cas1Application,
+        placementHistory: [
+          {
+            dateApplied: '2026-06-01',
+            requestForPlacement: {
+              status: 'REQUEST_WITHDRAWN',
+              withdrawalDate: '2026-06-20',
+              withdrawalReason: 'CHANGE_IN_CIRCUMSTANCES',
             },
-            {
-              dateApplied: '2026-05-01',
-              placement: {
-                status: 'DEPARTED',
-                actualArrivalDate: '2026-05-20',
-                actualDepartureDate: '2026-06-20',
-              },
+          },
+          {
+            dateApplied: '2026-05-01',
+            placement: {
+              status: 'DEPARTED',
+              actualArrivalDate: '2026-05-20',
+              actualDepartureDate: '2026-06-20',
             },
-            {
-              dateApplied: '2026-05-01',
-              requestForPlacement: {
-                expectedArrivalDate: '2026-05-21',
-              },
-              placement: {
-                status: 'NOT_ARRIVED',
-              },
+          },
+          {
+            dateApplied: '2026-05-01',
+            requestForPlacement: { expectedArrivalDate: '2026-05-21' },
+            placement: { status: 'NOT_ARRIVED' },
+          },
+          {
+            dateApplied: '2026-04-01',
+            placement: { status: 'CANCELLED', cancellationReason: 'No longer needed' },
+          },
+          {
+            dateApplied: '2026-03-30',
+            requestForPlacement: {
+              status: 'REQUEST_REJECTED',
+              submittedAt: '2026-03-30',
+              rejectionReason: 'Placement unsuitable',
             },
-            {
-              dateApplied: '2026-04-01',
-              placement: {
-                status: 'CANCELLED',
-                cancellationReason: 'No longer needed',
-              },
+          },
+          {
+            dateApplied: '2026-04-20',
+            requestForPlacement: {
+              status: 'REQUEST_WITHDRAWN',
+              withdrawalDate: '2026-04-20',
+              withdrawalReason: 'DUPLICATE_PLACEMENT_REQUEST',
             },
-            {
-              dateApplied: '2026-03-30',
-              requestForPlacement: {
-                status: 'REQUEST_REJECTED',
-                rejectionReason: 'Placement unsuitable',
-              },
+          },
+          {
+            dateApplied: '2026-03-20',
+            placement: { status: 'ARRIVED', actualArrivalDate: '2026-03-25' },
+          },
+          {
+            dateApplied: '2026-03-10',
+            placement: {
+              status: 'UPCOMING',
+              premises: { addressLine1: '2 Test Street', postcode: 'LS1 1AA', startDate: '2026-04-01' },
             },
-          ],
-        }
+          },
+          {
+            dateApplied: '2026-03-01',
+            requestForPlacement: { status: 'REQUEST_SUBMITTED', submittedAt: '2026-03-02' },
+          },
+          {
+            dateApplied: '2026-02-20',
+            requestForPlacement: { status: 'AWAITING_MATCH', submittedAt: '2026-02-20' },
+          },
+        ],
+      }
 
-        const { content } = cas1StatusCard({
-          serviceResult,
+      const contentFor = (serviceStatus: ServiceResult['serviceStatus']) =>
+        cas1StatusCard({
+          serviceResult: serviceResultFactory.build({ serviceStatus }),
           cas1Application: application,
-        })
+        }).content
 
-        expect(JSON.stringify(content)).toContain('5 previous placements on this application')
-        expect(content).toMatchSnapshot()
+      it.each(statuses)('shows previous placements on the %s card', serviceStatus => {
+        expect(JSON.stringify(contentFor(serviceStatus))).toContain('10 previous placements on this application')
+      })
+
+      it('renders previous placements', () => {
+        expect(contentFor('PLACEMENT_REQUEST_NOT_STARTED')).toMatchSnapshot()
       })
 
       it('does not render placement history when empty', () => {
         const { content } = cas1StatusCard({
-          serviceResult,
+          serviceResult: serviceResultFactory.build({ serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED' }),
           cas1Application,
         })
 

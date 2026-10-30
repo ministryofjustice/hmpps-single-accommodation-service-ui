@@ -8,7 +8,7 @@ exports[`cas1 status card content placement history renders previous placements 
   <details class="govuk-details govuk-!-margin-bottom-1 govuk-!-font-size-16">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
-      5 previous placements on this application
+      10 previous placements on this application
     </span>
   </summary>
   <div class="govuk-details__text">
@@ -23,7 +23,17 @@ exports[`cas1 status card content placement history renders previous placements 
       
         <li>Cancelled. Reason: No longer needed</li>
       
-        <li>Request rejected. Reason: Placement unsuitable</li>
+        <li>Request rejected (30 March 2026). Reason: Placement unsuitable</li>
+      
+        <li>Request withdrawn (20 April 2026). Reason: The request was a duplicate</li>
+      
+        <li>Arrived (25 March 2026)</li>
+      
+        <li>Placement upcoming (Expected arrival: 1 April 2026)</li>
+      
+        <li>Placement request submitted (2 March 2026)</li>
+      
+        <li>Placement request awaiting match (20 February 2026)</li>
       
     </ul>
   

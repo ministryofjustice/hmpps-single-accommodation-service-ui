@@ -133,7 +133,7 @@
     "openapi-typescript-codegen": "^0.31.0",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
-    "path-to-regexp": "8.4.2",
+    "path-to-regexp": "9.0.0",
     "redis": "^6.2.1",
     "static-path": "0.0.4",
     "superagent": "^10.4.1"

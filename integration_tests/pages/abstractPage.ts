@@ -96,7 +96,7 @@ export default class AbstractPage {
   }
 
   async selectRadioByLabel(label: string) {
-    await this.page.getByRole('radio', { name: new RegExp(`^${label}$`) }).check()
+    await this.page.getByRole('radio', { name: label, exact: true }).check()
   }
 
   async selectOptionByLabel(label: string, value: string) {

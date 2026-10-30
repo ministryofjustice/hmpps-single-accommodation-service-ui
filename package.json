@@ -140,7 +140,7 @@
   },
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
-    "@ministryofjustice/eslint-config-hmpps": "2.0.0-alpha.2",
+    "@ministryofjustice/eslint-config-hmpps": "1.0.4",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "1.293.0",
     "@opentelemetry/sdk-trace-base": "2.5.1",

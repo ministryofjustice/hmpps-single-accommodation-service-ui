@@ -80,8 +80,21 @@ export const referralStatusCell = (referral: Referral): StatusCell => {
 
   return {
     status: referralStatusTag(status, type),
-    dateText: type === 'DTR' ? `Submitted on ${formatDate(date)}` : formatDate(date),
+    dateText: referralDateText(type, date),
     details: getReferralDetails(referral),
+  }
+}
+
+const referralDateText = (type: Referral['type'], date: string): string => {
+  const formattedDate = formatDate(date)
+
+  switch (type) {
+    case 'DTR':
+      return `Submitted on ${formattedDate}`
+    case 'CAS2':
+      return `Submitted: ${formattedDate}`
+    default:
+      return formattedDate
   }
 }
 

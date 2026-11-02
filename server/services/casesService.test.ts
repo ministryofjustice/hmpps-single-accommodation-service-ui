@@ -51,4 +51,13 @@ describe('CasesService', () => {
     expect(casesClient.searchByCrn).toHaveBeenCalledWith(token, crn)
     expect(result).toEqual(response)
   })
+
+  it('should call submitCas2Arrival on the api client', async () => {
+    const arrival = { markedAsArrivedDateTime: '2026-10-30T12:00:00.000Z' }
+    casesClient.submitCas2Arrival.mockResolvedValue(undefined)
+
+    await casesService.submitCas2Arrival(token, 'X123456', 'application-123', arrival)
+
+    expect(casesClient.submitCas2Arrival).toHaveBeenCalledWith(token, 'X123456', 'application-123', arrival)
+  })
 })

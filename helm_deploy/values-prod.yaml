@@ -24,6 +24,7 @@ generic-service:
     MAINTENANCE_MODE: "true"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
     CAS2_ENABLED: "false"
+    CAS2_MANUAL_ARRIVAL_ENABLED: "false"
 
   namespace_secrets:
     sqs-hmpps-audit-secret:

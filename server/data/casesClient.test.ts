@@ -118,4 +118,30 @@ describeClient('CasesClient', provider => {
     const response = await casesClient.searchByCrn('test-user-token', crn)
     expect(response).toEqual(body)
   })
+
+  it('should make a POST request to mark a CAS2 application as arrived', async () => {
+    const crn = 'X123456'
+    const applicationId = 'application-123'
+    const arrival = { markedAsArrivedDateTime: '2026-10-30T12:00:00.000Z' }
+
+    await provider.addInteraction({
+      state: 'A CAS2 arrival can be marked for the user',
+      uponReceiving: 'a request to mark a CAS2 application as arrived',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.applications.arrival({ crn, applicationId }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: arrival,
+      },
+      willRespondWith: {
+        status: 201,
+        body: null,
+      },
+    })
+
+    const response = await casesClient.submitCas2Arrival('test-user-token', crn, applicationId, arrival)
+    expect(response).toEqual({})
+  })
 })

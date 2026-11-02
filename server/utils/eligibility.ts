@@ -21,6 +21,7 @@ import { htmlContent, textContent } from './utils'
 import { summaryListRow } from './summaryListRow'
 import { bulletList, govukDetailsList } from './macros'
 import { cas3PremisesToAccommodationAddress, formatAddress } from './addresses'
+import uiPaths from '../paths/ui'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -76,9 +77,12 @@ export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   }
 }
 
-export const linksForCas2Status = (serviceResult?: ServiceResult) => {
+export const linksForCas2Status = (
+  serviceResult?: ServiceResult,
+  cas2Application?: Cas2ApplicationDto | null,
+  crn?: string,
+) => {
   const { serviceStatus, url } = serviceResult || {}
-
   const link: Omit<Link, 'text'> = { href: url, external: true }
 
   switch (serviceStatus) {
@@ -92,7 +96,18 @@ export const linksForCas2Status = (serviceResult?: ServiceResult) => {
     case 'ON_WAITING_LIST':
     case 'PLACE_OFFERED':
     case 'OFFER_ACCEPTED':
+      return [{ text: 'View application', ...link }]
     case 'AWAITING_ARRIVAL':
+      if (config.flags.cas2ManualArrivalEnabled && cas2Application && crn) {
+        const markAsArrivedLink: Omit<Link, 'text'> = {
+          href: uiPaths.applications.arrival({ crn, applicationId: cas2Application.id }),
+          external: false,
+        }
+        return [
+          { text: 'View application', ...link },
+          { text: 'Mark as arrived', ...markAsArrivedLink },
+        ]
+      }
       return [{ text: 'View application', ...link }]
     case 'OFFER_DECLINED_OR_WITHDRAWN':
     case 'CANCELLED':
@@ -608,11 +623,11 @@ export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceRe
   }
 }
 
-export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceResult): StatusCard => ({
+export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceResult, crn: string): StatusCard => ({
   heading: 'Short-term accommodation (CAS2)',
   ...statusFieldsForCas2(serviceResult),
   hint: hintForCas2Status(serviceResult),
-  links: linksForCas2Status(serviceResult),
+  links: linksForCas2Status(serviceResult, cas2Application, crn),
   details: detailsForCas2Status(serviceResult, cas2Application),
   content: contentForCas2Status(serviceResult),
 })
@@ -631,6 +646,6 @@ export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: 
     dutyToReferStatusCard(crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),
     cas1StatusCard(eligibility.cas1),
-    config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2) : undefined,
+    config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2, crn) : undefined,
     cas3StatusCard(eligibility.cas3),
   ].filter(Boolean)

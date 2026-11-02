@@ -13,6 +13,9 @@ export default {
     show: casesPath.path(':crn'),
     search: path('/search'),
   },
+  applications: {
+    arrival: casesPath.path(':crn/applications/:applicationId/arrival'),
+  },
   dutyToRefer: {
     show: dutyToReferPath.path(':id/details'),
     submission: dutyToReferPath.path('submission'),

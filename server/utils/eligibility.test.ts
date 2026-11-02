@@ -152,6 +152,17 @@ describe('linksForService', () => {
 })
 
 describe('eligibilityStatusCard', () => {
+  let originalManualArrivalFlag: boolean
+
+  beforeEach(() => {
+    originalManualArrivalFlag = config.flags.cas2ManualArrivalEnabled
+    config.flags.cas2ManualArrivalEnabled = false
+  })
+
+  afterEach(() => {
+    config.flags.cas2ManualArrivalEnabled = originalManualArrivalFlag
+  })
+
   // See: https://hmpps-single-accommodation-service-prototype-main.apps.live.cloud-platform.service.justice.gov.uk/10-0/_statuses?r=t
   const testCases: Record<'cas1' | 'cas2' | 'cas3', { title: string; result: Partial<ServiceResult> }[]> = {
     cas1: [
@@ -386,7 +397,7 @@ describe('eligibilityStatusCard', () => {
   describe.each(['cas1', 'cas2', 'cas3'] as const)('for %s', service => {
     const cardBuilders: Record<'cas1' | 'cas2' | 'cas3', (result: ServiceResult) => StatusCard> = {
       cas1: result => cas1StatusCard({ serviceResult: result, cas1Application }),
-      cas2: result => cas2StatusCard({ serviceResult: result, cas2Application }),
+      cas2: result => cas2StatusCard({ serviceResult: result, cas2Application }, 'X123456'),
       cas3: result => cas3StatusCard({ serviceResult: result }),
     }
 
@@ -672,7 +683,7 @@ describe('cas2 status card', () => {
     it.each(detailStatuses)('renders detail rows for a %s status', status => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
-      expect(cas2StatusCard({ serviceResult, cas2Application }).details).toMatchSnapshot()
+      expect(cas2StatusCard({ serviceResult, cas2Application }, 'X123456').details).toMatchSnapshot()
     })
   })
 
@@ -683,13 +694,13 @@ describe('cas2 status card', () => {
         failureReasons: ['INVALID_TIER'],
       })
 
-      expect(cas2StatusCard({ serviceResult }).content).toMatchSnapshot()
+      expect(cas2StatusCard({ serviceResult }, 'X123456').content).toMatchSnapshot()
     })
 
     it('does not render content for other statuses', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'SUBMITTED' })
 
-      expect(cas2StatusCard({ serviceResult }).content).toEqual([])
+      expect(cas2StatusCard({ serviceResult }, 'X123456').content).toEqual([])
     })
   })
 })
@@ -751,8 +762,16 @@ describe('eligibilityToEligibilityCards', () => {
   })
 
   describe('when the cas2 flag is enabled', () => {
+    let previousManualArrivalFlag: boolean
+
     beforeEach(() => {
       config.flags.cas2Enabled = true
+      previousManualArrivalFlag = config.flags.cas2ManualArrivalEnabled
+      config.flags.cas2ManualArrivalEnabled = true
+    })
+
+    afterEach(() => {
+      config.flags.cas2ManualArrivalEnabled = previousManualArrivalFlag
     })
 
     afterEach(() => {
@@ -766,6 +785,29 @@ describe('eligibilityToEligibilityCards', () => {
 
       expect(cards).toHaveLength(5)
       expect(cards[3].heading).toContain('Short-term accommodation (CAS2)')
+    })
+
+    it('links to mark the actual CAS2 application as arrived', () => {
+      const eligibility = eligibilityFactory.build({
+        crn,
+        cas2: {
+          serviceResult: serviceResultFactory.build({
+            serviceStatus: 'AWAITING_ARRIVAL',
+            url: 'https://cas2/view',
+          }),
+          cas2Application,
+        },
+      })
+
+      const card = eligibilityToEligibilityCards(eligibility, crn).find(
+        eligibilityCard => eligibilityCard.heading === 'Short-term accommodation (CAS2)',
+      )
+
+      expect(card?.links).toContainEqual({
+        text: 'Mark as arrived',
+        href: '/cases/X123456/applications/cas2-application-id/arrival',
+        external: false,
+      })
     })
   })
 

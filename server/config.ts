@@ -130,6 +130,7 @@ export default {
     maintenanceModeAllowlist: get('MAINTENANCE_MODE_ALLOWLIST', ''),
     hideManualAddressEntry: get('HIDE_MANUAL_ADDRESS_ENTRY', 'false') === 'true',
     cas2Enabled: get('CAS2_ENABLED', 'false') === 'true',
+    cas2ManualArrivalEnabled: get('CAS2_MANUAL_ARRIVAL_ENABLED', 'false') === 'true',
   },
   timeoutOverrides: {
     sasCasesApi: {

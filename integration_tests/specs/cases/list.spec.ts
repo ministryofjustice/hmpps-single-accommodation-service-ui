@@ -90,6 +90,31 @@ test.describe('List of cases', () => {
     })
   })
 
+  test('Should switch between the housing support and settled housing tabs', async ({ page }) => {
+    const tabs = ['Housing support needed', 'Settled housing secured']
+    const nfaCases = [...Array(3)].map(() => caseFactory.build())
+    const housedCases = [...Array(2)].map(() => caseFactory.build())
+    const teams = [{ code: 'team-one-code', name: 'Team One' }]
+
+    await stubCaseListPage(nfaCases, teams)
+    await casesApi.stubGetCases(housedCases, { peopleType: 'HOUSED' })
+
+    // WHEN I sign in
+    await login(page)
+
+    // THEN I should see the Case list with the default tab selected
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+    await casesListPage.shouldShowTabs(tabs, 'Housing support needed')
+    await casesListPage.shouldShowCases(nfaCases)
+
+    // WHEN I switch to the settled tab
+    await casesListPage.clickLink('Settled housing secured')
+
+    // THEN the settled cases are shown with that tab selected
+    await casesListPage.shouldShowTabs(tabs, 'Settled housing secured')
+    await casesListPage.shouldShowCases(housedCases)
+  })
+
   test('should show LAO cases', async ({ page }) => {
     // GIVEN there are LAO cases to show
     const cases = [caseFactory.build(), caseFactory.build({ limitedAccess: true }), caseFactory.limitedAccess().build()]

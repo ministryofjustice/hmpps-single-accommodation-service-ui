@@ -1,10 +1,11 @@
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker/locale/en_GB'
-import { DtrSubmissionDto, DutyToReferDto, AccommodationReferralDto as Referral } from '@sas/api'
+import { DtrSubmissionDto, DutyToReferDto, AccommodationReferralDto as Referral, ExternalReferralDto } from '@sas/api'
 import staffDetailsFactory from './staffDetails'
 import { acceptedOutcomeReasons, notAcceptedOutcomeReasons, withdrawalReasons } from './dutyToReferSubmission'
 import referenceDataFactory from './referenceData'
 import { ukPostcode } from './ukPostcode'
+import { externalReferralStatusTag } from '../../utils/externalReferrals'
 
 const statuses = ['ACCEPTED', 'REJECTED', 'PENDING', 'WITHDRAWN'] as Referral['status'][]
 
@@ -95,6 +96,21 @@ class ReferralFactory extends Factory<Referral> {
     })
   }
 
+  externalReferral() {
+    const status = faker.helpers.arrayElement(Object.keys(externalReferralStatusTag())) as ExternalReferralDto['status']
+    const withdrawalReason = ['COMPLETED', 'ARCHIVED'].includes(status)
+      ? faker.helpers.arrayElement(withdrawalReasons)
+      : undefined
+
+    return this.params({
+      id: faker.string.uuid(),
+      type: 'ER',
+      date: faker.date.past().toISOString(),
+      withdrawalReason,
+      status,
+    })
+  }
+
   cas1Referral() {
     return this.params({
       id: faker.string.uuid(),
@@ -143,6 +159,7 @@ class ReferralFactory extends Factory<Referral> {
       () => this.cas1Referral().params(faker.helpers.arrayElement(cas1Referrals)()),
       () => this.cas2Referral().params(faker.helpers.arrayElement(cas2Referrals)()),
       () => this.cas3Referral().params(faker.helpers.arrayElement(cas3Referrals)()),
+      () => this.externalReferral(),
     ])()
   }
 

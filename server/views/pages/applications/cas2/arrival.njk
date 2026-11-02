@@ -17,7 +17,7 @@
         {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorSummary }) }}
       {% endif %}
 
-      <h1 class="govuk-heading-l">{{ "Confirm CAS2  " + displayName + " has arrived at a CAS2 property" }}</h1>
+      <h1 class="govuk-heading-l">{{ "Confirm that " + displayName + " has arrived at a CAS2 property" }}</h1>
       <p class="govuk-body">If you have not already done so, record the property address as {{ displayName }}'s current address.</p>
 
       <form action="{{ formAction }}" method="post">

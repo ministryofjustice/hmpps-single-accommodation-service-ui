@@ -4,7 +4,7 @@ import CaseDetailsPage from '../pages/caseDetailsPage'
 import { CasCard } from '../data/casCard'
 
 const statuses: CasCard[] = [
-  { crn: 'XXXXX', status: 'Not started', action: 'Start application', actionLink: 'redirect' },
+  { crn: 'Y086007', status: 'Not started', action: 'Start application', actionLink: 'redirect' },
   { crn: 'Y082779', status: 'Submitted', submissionInfo: true, action: 'View application', actionLink: 'application' },
   {
     crn: 'Y076210',
@@ -14,7 +14,7 @@ const statuses: CasCard[] = [
     actionLink: 'application',
   },
   {
-    crn: 'XXXXX',
+    crn: 'Y085823',
     status: 'Information requested',
     submissionInfo: true,
     action: 'View application',
@@ -30,52 +30,37 @@ const statuses: CasCard[] = [
   },
   {
     crn: 'Y080298',
-    status: 'Placement booked',
-    expectedArrivalInfo: true,
-    action: 'View application',
-    actionLink: 'application',
-  },
-  {
-    crn: 'XXXXX',
-    status: 'Arrived',
+    status: 'Placement request not started',
     submissionInfo: true,
-    action: 'View application',
+    action: 'Create placement request',
     actionLink: 'application',
   },
   {
-    crn: 'XXXXX',
+    crn: 'Y085881',
     status: 'Not arrived',
-    submissionInfo: true,
-    action: 'View application',
-    actionLink: 'application',
-  },
-  {
-    crn: 'XXXXX',
-    status: 'Placement cancelled',
-    declineReason: 'Some reason',
-    submissionInfo: true,
-    action: 'View application',
+    notArrivedInfo: true,
+    action: 'Create new placement request',
     actionLink: 'application',
   },
   {
     crn: 'Y006208',
     status: 'Placement request submitted',
-    submissionInfo: true,
+    placementRequestSubmittedInfo: true,
     action: 'View application',
     actionLink: 'application',
   },
   {
-    crn: 'XXXXX',
-    status: 'Placement request rejected',
-    submissionInfo: true,
-    declineReason: 'Over capacity',
-    action: 'Start new application',
-    actionLink: 'redirect',
+    crn: 'Y085882',
+    status: 'Placement request withdrawn',
+    placementRequestSubmittedInfo: true,
+    declineReason: 'The request was a duplicate',
+    declineReasonLabel: 'Withdrawal reason',
+    action: 'Create new placement request',
+    actionLink: 'application',
   },
   {
-    crn: 'XXXXX',
+    crn: 'Y085890',
     status: 'Arrived',
-    submissionInfo: true,
     arrivalInfo: true,
     action: 'View application',
     actionLink: 'application',
@@ -107,12 +92,22 @@ for (const status of statuses) {
     }
     // AND I should see the arrival information if available
     if (status.arrivalInfo) {
-      await caseDetailsPage.expectArrivalInformation()
+      await caseDetailsPage.expectCas1ArrivalInformation()
+    }
+
+    // AND I should see the not-arrived information if available
+    if (status.notArrivedInfo) {
+      await caseDetailsPage.expectCas1NotArrivedInformation()
+    }
+
+    // AND I should see the placement request submitted information if available
+    if (status.placementRequestSubmittedInfo) {
+      await caseDetailsPage.expectCas1PlacementRequestSubmittedInformation()
     }
 
     // AND I should see the decline reason if available
     if (status.declineReason) {
-      await caseDetailsPage.expectCas1DeclineReason(status.declineReason)
+      await caseDetailsPage.expectCas1DeclineReason(status.declineReason, status.declineReasonLabel)
     }
 
     // WHEN I click the "${status.action}" link

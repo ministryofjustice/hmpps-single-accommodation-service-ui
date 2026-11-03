@@ -7,4 +7,7 @@ export type CasCard = {
   declineReason?: string
   expectedArrivalInfo?: boolean
   arrivalInfo?: boolean
+  notArrivedInfo?: boolean
+  placementRequestSubmittedInfo?: boolean
+  declineReasonLabel?: string
 }

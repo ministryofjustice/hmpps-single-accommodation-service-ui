@@ -102,13 +102,18 @@ export default class CaseDetailsPage {
     await this.expectCardDeclineReason(this.cas2Card(), reason)
   }
 
-  private async expectCardDeclineReason(card: Locator, reason: string) {
-    await expect(card).toContainText('Reason')
+  private async expectCardDeclineReason(card: Locator, reason: string, label = 'Reason') {
+    await expect(card).toContainText(label)
     await expect(card).toContainText(reason)
   }
 
   async expectArrivalInformation() {
     await expect(this.cas2Card()).toContainText('Marked as arrived by')
+  }
+
+  async expectCas1ArrivalInformation() {
+    await expect(this.cas1Card()).toContainText('Arrival date')
+    await expect(this.cas1Card()).toContainText('Expected departure')
   }
 
   async clickCas2Link(action: string) {
@@ -167,6 +172,18 @@ export default class CaseDetailsPage {
     await expect(this.cas1Card()).toContainText('Request submitted by')
   }
 
+  async expectCas1NotArrivedInformation() {
+    await expect(this.cas1Card()).toContainText('Expected arrival')
+    await expect(this.cas1Card()).toContainText('Request submitted by')
+    await expect(this.cas1Card()).toContainText('Application expires')
+  }
+
+  async expectCas1PlacementRequestSubmittedInformation() {
+    await expect(this.cas1Card()).toContainText('Request submitted')
+    await expect(this.cas1Card()).toContainText('Request submitted by')
+    await expect(this.cas1Card()).toContainText('Application expires')
+  }
+
   async clickCas1Link(action: string) {
     await this.clickCardLink(this.cas1Card(), action)
   }
@@ -195,8 +212,8 @@ export default class CaseDetailsPage {
     await this.expectSubmissionInfo(this.cas3Card())
   }
 
-  async expectCas1DeclineReason(reason: string) {
-    await this.expectCardDeclineReason(this.cas1Card(), reason)
+  async expectCas1DeclineReason(reason: string, label = 'Decision') {
+    await this.expectCardDeclineReason(this.cas1Card(), reason, label)
   }
 
   async expectCas2DeclineReason(reason: string) {

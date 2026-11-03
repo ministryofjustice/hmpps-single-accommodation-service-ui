@@ -41,4 +41,5 @@ export type AccommodationReferralDto = {
   withdrawalReason?: string | null
   withdrawalNote?: string | null
   otherReason?: string | null
+  organisationName?: string | null
 }

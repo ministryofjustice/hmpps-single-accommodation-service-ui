@@ -132,9 +132,7 @@ describe('proposedAddressesController', () => {
     jest.spyOn(controller.formData, 'remove')
     jest.spyOn(controller.formData, 'update')
 
-    jest
-      .spyOn(backlinks, 'default')
-      .mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
+    jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
     jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
   })
 

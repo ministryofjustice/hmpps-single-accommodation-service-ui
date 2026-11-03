@@ -47,9 +47,7 @@ describe('currentAddressController', () => {
 
     controller = new CurrentAddressController(auditService, casesService, proposedAddressesService)
 
-    jest
-      .spyOn(backlinks, 'default')
-      .mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
+    jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
     jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
     jest
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')

@@ -31,14 +31,16 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
     page: Page,
     readonly caseData: Case,
+    readonly caseListUrl: string,
   ) {
     super(page)
     this.header = page.locator('h1', { hasText: displayName(caseData) })
+    page.locator('.govuk-breadcrumbs__link', { hasText: caseListUrl })
   }
 
-  static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
-    await page.goto(paths.cases.show({ caseListUrl: 'cases', crn: caseData.crn as string }))
-    return ProfileTrackerPage.verifyOnPage(page, caseData)
+  static async visit(page: Page, caseData: Case, caseListUrl: string): Promise<ProfileTrackerPage> {
+    await page.goto(paths.cases.show({ caseListUrl, crn: caseData.crn as string }))
+    return ProfileTrackerPage.verifyOnPage(page, caseData, caseListUrl)
   }
 
   async shouldShowEligibility(eligibility: Eligibility) {
@@ -182,7 +184,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(proposedAddressesSection).toBeVisible()
     await expect(proposedAddressesSection.getByRole('link', { name: 'Add a proposed address' })).toHaveAttribute(
       'href',
-      paths.proposedAddresses.start({ caseListUrl: 'cases', crn: this.caseData.crn }),
+      paths.proposedAddresses.start({ caseListUrl: this.caseListUrl, crn: this.caseData.crn }),
     )
 
     if (!proposedAddresses.find(address => address.verificationStatus !== 'FAILED')) {

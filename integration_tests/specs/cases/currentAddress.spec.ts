@@ -57,7 +57,7 @@ const startJourney = async (page: Page, proposedAddresses: ProposedAccommodation
 
   await login(page)
 
-  const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+  const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
   await profileTrackerPage.clickAddNewCurrentAddress()
 
   return profileTrackerPage

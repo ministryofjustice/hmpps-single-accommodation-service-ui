@@ -39,7 +39,7 @@ test.describe('external referrals', () => {
     await login(page)
 
     // When I visit the person tracker page
-    const trackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const trackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I see the external referral cards
     await trackerPage.shouldShowExternalReferralCards([referral])
@@ -81,7 +81,7 @@ test.describe('external referrals', () => {
     await login(page)
 
     // When I visit the person tracker page
-    const trackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const trackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I see the external referral cards
     await trackerPage.shouldShowExternalReferralCards([referral])
@@ -171,7 +171,7 @@ test.describe('external referrals', () => {
     await login(page)
 
     // When I visit the person tracker page
-    const trackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const trackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I select 'view details' on a referral card
     await trackerPage.clickViewReferralDetails()
@@ -241,7 +241,7 @@ test.describe('external referrals', () => {
     await login(page)
 
     // When I visit the person tracker page
-    const trackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const trackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I select 'view details' on a referral card
     await trackerPage.clickViewReferralDetails()

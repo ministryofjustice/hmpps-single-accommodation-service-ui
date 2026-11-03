@@ -92,7 +92,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click the add referral details link
     await profileTrackerPage.clickLink('Add referral details')
@@ -234,7 +234,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -322,7 +322,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -401,7 +401,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -470,7 +470,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -567,7 +567,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))

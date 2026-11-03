@@ -254,11 +254,11 @@ describe('Proposed addresses utilities', () => {
 
     it('updates arrangement with empty default values for missing fields', async () => {
       req.body = {
-        accommodationTypeCode: 'cases',
+        accommodationTypeCode: '',
       }
       await updateTypeFromRequest(req, formDataManager)
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
-        accommodationTypeCode: 'cases',
+        accommodationTypeCode: '',
       })
     })
   })
@@ -294,7 +294,7 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('marks none as checked when no selection provided', () => {
-      const items = accommodationTypeItems(accommodationTypesReferenceData, 'cases')
+      const items = accommodationTypeItems(accommodationTypesReferenceData, '')
 
       expect(items.every(item => item.checked === false)).toBe(true)
     })

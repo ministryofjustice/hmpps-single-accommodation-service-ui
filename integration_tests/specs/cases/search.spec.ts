@@ -53,7 +53,7 @@ test.describe('Find a person', () => {
     await searchPage.clickCaseLink(searchCase)
 
     // THEN I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, searchCase)
+    await ProfileTrackerPage.verifyOnProfileTrackerPage(page, searchCase, 'search', '/search')
   })
 
   test('should show no results message when case not found', async ({ page }) => {

@@ -145,7 +145,7 @@ test.describe('add proposed address', () => {
     await login(page)
 
     // When I visit the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click the add a proposed address link
     await profileTrackerPage.clickLink('Add a proposed address')
@@ -281,7 +281,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.checkApiCalled(crn, updatedProposedAddressData)
 
     // And I see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And I should see a success banner confirming the proposed address was added
     await profileTrackerPage.shouldShowBanner('Private address added')
@@ -312,7 +312,7 @@ test.describe('add proposed address', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click the add a proposed address link
     await profileTrackerPage.clickLink('Add a proposed address')
@@ -418,7 +418,7 @@ test.describe('add proposed address', () => {
     await addProposedAddressPage.checkApiCalled(crn, submittedAddress)
 
     // And I see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And I should see a success banner confirming the proposed address was added
     await profileTrackerPage.shouldShowBanner('Private address added')
@@ -455,7 +455,7 @@ test.describe('edit proposed address', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click the Add checks link for a proposed address
     await profileTrackerPage.clickLink('Add checks')
@@ -475,7 +475,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.clickLink('Back')
 
     // Then I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // When I click the Add checks link again
     await profileTrackerPage.clickLink('Add checks')
@@ -491,7 +491,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And I should see a banner confirming the proposed address was updated
     await profileTrackerPage.shouldShowBanner('Address updated')
@@ -523,7 +523,7 @@ test.describe('edit proposed address', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click the Add checks link for a proposed address
     await profileTrackerPage.clickLink('Add checks')
@@ -554,7 +554,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And I should see a banner confirming the proposed address was updated
     await profileTrackerPage.shouldShowBanner('Address updated')
@@ -574,7 +574,7 @@ test.describe('edit proposed address', () => {
     await addProposedAddressPage.clickButton('Continue')
 
     // Then I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And I should see a banner confirming the proposed address was updated
     await profileTrackerPage.shouldShowBanner('Address updated')
@@ -721,7 +721,7 @@ test.describe('set proposed address as current', () => {
     await login(page)
 
     // When I visit profile tracker page with a proposed address
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click on 'Set as current address'
     await profileTrackerPage.clickLink('Set as current address')
@@ -743,7 +743,7 @@ test.describe('set proposed address as current', () => {
     await confirmCurrentAddressPage.checkApiCalled()
 
     // And I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And a banner should be shown confirming the proposed address was updated
     await profileTrackerPage.shouldShowBanner('Current address updated')
@@ -754,7 +754,7 @@ test.describe('set proposed address as current', () => {
     await login(page)
 
     // When I visit profile tracker page with a proposed address
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click on 'View details' in the proposed address card
     await profileTrackerPage.clickLink(
@@ -785,7 +785,7 @@ test.describe('set proposed address as current', () => {
     await confirmCurrentAddressPage.checkApiCalled()
 
     // And I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And a banner should be shown confirming the proposed address was updated
     await profileTrackerPage.shouldShowBanner('Current address updated')

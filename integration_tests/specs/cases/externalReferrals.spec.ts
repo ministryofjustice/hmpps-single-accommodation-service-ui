@@ -39,13 +39,13 @@ test.describe('external referrals', () => {
     await login(page)
 
     // When I visit the person tracker page
-    const trackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I see the external referral cards
-    await trackerPage.shouldShowExternalReferralCards([referral])
+    await profileTrackerPage.shouldShowExternalReferralCards([referral])
 
     // When I click on the link to create a new referral
-    await trackerPage.clickAddExternalReferralLink()
+    await profileTrackerPage.clickAddExternalReferralLink()
 
     // Then I should be on the external referral submission page
     const submissionPage = await ExternalReferralsSubmissionPage.verifyOnPage(page, 'Add external referral details')
@@ -67,8 +67,8 @@ test.describe('external referrals', () => {
     await submissionPage.clickButton('Save and continue')
 
     // Then I see the confirmation banner
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
-    await trackerPage.shouldShowBanner('Success', 'Referral details added')
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
+    await profileTrackerPage.shouldShowBanner('Success', 'Referral details added')
 
     // And the API should have been called with the correct data
     await submissionPage.checkApiCalled(referral, 'submit')
@@ -81,13 +81,13 @@ test.describe('external referrals', () => {
     await login(page)
 
     // When I visit the person tracker page
-    const trackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I see the external referral cards
-    await trackerPage.shouldShowExternalReferralCards([referral])
+    await profileTrackerPage.shouldShowExternalReferralCards([referral])
 
     // When I select 'view details' on a referral card
-    await trackerPage.clickViewReferralDetails()
+    await profileTrackerPage.clickViewReferralDetails()
 
     // Then I am on the referral details page
     const detailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, referral)
@@ -273,10 +273,10 @@ test.describe('external referrals', () => {
     await submissionPage.clickButton('Move to referral history')
 
     // Then I am on the case details page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // Then I should see a confirmation banner
-    await trackerPage.shouldShowBanner('Success', 'Moved to referral history')
+    await profileTrackerPage.shouldShowBanner('Success', 'Moved to referral history')
 
     // And the withdrawal API should have been called
     await submissionPage.checkWithdrawalApiCalled(updatedReferral)

@@ -31,16 +31,29 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
     page: Page,
     readonly caseData: Case,
-    readonly caseListUrl: string,
+    readonly caseListUrl: string = '',
+    readonly caseListSegment: string = '',
   ) {
     super(page)
     this.header = page.locator('h1', { hasText: displayName(caseData) })
-    page.locator('.govuk-breadcrumbs__link', { hasText: caseListUrl })
+  }
+
+  static async verifyOnProfileTrackerPage(
+    page: Page,
+    caseData: Case,
+    caseListUrl: string,
+    caseListSegment: string,
+  ): Promise<ProfileTrackerPage> {
+    await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link')).toHaveAttribute(
+      'href',
+      caseListSegment,
+    )
+    return ProfileTrackerPage.verifyOnPage(page, caseData, caseListUrl, '/')
   }
 
   static async visit(page: Page, caseData: Case, caseListUrl: string): Promise<ProfileTrackerPage> {
     await page.goto(paths.cases.show({ caseListUrl, crn: caseData.crn as string }))
-    return ProfileTrackerPage.verifyOnPage(page, caseData, caseListUrl)
+    return ProfileTrackerPage.verifyOnPage(page, caseData, caseListUrl, '/')
   }
 
   async shouldShowEligibility(eligibility: Eligibility) {

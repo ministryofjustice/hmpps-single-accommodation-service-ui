@@ -52,7 +52,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData, 'cases')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
     await profileTrackerPage.shouldShowEligibility(eligibility)
@@ -81,7 +81,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData, 'cases')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // AND I should see there are no actions
     await profileTrackerPage.shouldNotShowNextActionsCard()
@@ -102,7 +102,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData, 'cases')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
   })
@@ -143,7 +143,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData, 'cases')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // AND I should see the upstream failure warnings
     await profileTrackerPage.shouldShowApiErrors([

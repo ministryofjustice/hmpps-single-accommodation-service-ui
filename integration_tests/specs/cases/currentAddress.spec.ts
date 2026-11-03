@@ -71,7 +71,7 @@ test.describe('change the current address', () => {
     const failedChecks = proposedAddress('3', 'London Street', 'FAILED')
 
     // When I start changing the current address
-    const profileTrackerPage = await startJourney(page, [secondAddress, firstAddress, failedChecks])
+    let profileTrackerPage = await startJourney(page, [secondAddress, firstAddress, failedChecks])
 
     // Then only confirmed addresses should have been requested
     const selectPage = await SelectCurrentAddressPage.verifyOnPage(page, caseData)
@@ -95,7 +95,7 @@ test.describe('change the current address', () => {
     await selectPage.checkArrivalApiCalled(firstAddress)
 
     // And I am returned to the profile with a success banner
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, caseListUrl, '/')
     await profileTrackerPage.shouldShowBanner('Current address changed')
   })
 

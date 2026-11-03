@@ -87,7 +87,7 @@ test.describe('custom list', () => {
     await showCaseListPage.clickCaseLink(cases[0])
 
     // Then I should see the profile tracker page for that case
-    await ProfileTrackerPage.verifyOnPage(page, cases[0])
+    await ProfileTrackerPage.verifyOnProfileTrackerPage(page, cases[0], 'custom-list', '/custom-list')
   })
   test('should error when user does not input valid crn list', async ({ page }) => {
     // GIVEN a custom list does not already exist

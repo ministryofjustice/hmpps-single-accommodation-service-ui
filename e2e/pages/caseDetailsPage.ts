@@ -88,8 +88,7 @@ export default class CaseDetailsPage {
   }
 
   async expectCas2Status(status: string) {
-    await expect(this.cas2Card()).toBeVisible()
-    await expect(this.cas2Card().locator('.govuk-tag')).toHaveText(status)
+    await this.expectCardStatus(this.cas2Card(), status)
   }
 
   async expectSubmissionInfo(card: Locator = this.cas2Card()) {

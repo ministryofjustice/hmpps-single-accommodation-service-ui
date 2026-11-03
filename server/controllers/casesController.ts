@@ -26,7 +26,7 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import { getActiveCaseListSegment, setActiveCaseListUrl } from '../utils/navigation'
+import { getActiveCaseListSegment } from '../utils/navigation'
 import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
@@ -50,7 +50,6 @@ export default class CasesController {
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
       const { peopleType = 'NFA_RISK' } = query
-      setActiveCaseListUrl(req)
       const {
         data: { teams, cases },
       } = await collectApiResponses({
@@ -90,7 +89,6 @@ export default class CasesController {
           }
         }
       }
-      setActiveCaseListUrl(req)
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       return res.render('pages/search', {
         crn: searchTerm,
@@ -111,7 +109,6 @@ export default class CasesController {
       })
       const { crn } = req.params
       const { token } = res.locals.user
-      // setActiveCaseListUrl(req)
       const caseListUrl = getActiveCaseListSegment(req)
       const { data: caseData } = await this.casesService.getCase(token, crn)
 

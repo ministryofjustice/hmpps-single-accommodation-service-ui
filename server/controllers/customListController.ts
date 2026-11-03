@@ -9,7 +9,6 @@ import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validate
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import CustomListService from '../services/customListService'
-import { setActiveCaseListUrl } from '../utils/navigation'
 
 export default class CustomListController {
   constructor(
@@ -36,7 +35,6 @@ export default class CustomListController {
       }
       req.body = { crnList: cases.map(c => c.crn).join(',') }
       req.session.caseListUrl = req.originalUrl
-      setActiveCaseListUrl(req)
       addUserInputToFlash(req)
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {

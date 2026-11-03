@@ -74,7 +74,7 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request = mock<Request>({ id: 'request-id', originalUrl: '/', path: '/' })
   })
 
   describe('index', () => {
@@ -96,7 +96,6 @@ describe('casesController', () => {
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
       jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
-      jest.spyOn(navigationUtils, 'setActiveCaseListUrl')
     })
 
     it('renders the case list page for the current user by default', async () => {
@@ -111,7 +110,6 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(navigationUtils.setActiveCaseListUrl).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
@@ -146,7 +144,6 @@ describe('casesController', () => {
         teamCode: 'team-code',
         peopleType: 'HOUSED',
       })
-      expect(navigationUtils.setActiveCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
         tabs: casesTabs(request.originalUrl, 'HOUSED'),

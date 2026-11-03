@@ -42,15 +42,9 @@ describe('getActiveCaseListUrl', () => {
   })
 })
 describe('getActiveCaseListSegment', () => {
-  it('returns "cases" when path is undefined', () => {
-    const request = mock<Request>({ path: undefined })
-
-    expect(getActiveCaseListSegment(request)).toEqual('cases')
-  })
-
   it('returns "cases" when path is /cases', () => {
     const request = mock<Request>({
-      path: '/cases',
+      originalUrl: '/cases',
       session: {
         caseListUrl: '/?foo=bar&qux=0',
       },
@@ -60,13 +54,13 @@ describe('getActiveCaseListSegment', () => {
   })
 
   it('returns "search" when path starts with /search', () => {
-    const request = mock<Request>({ path: '/search' })
+    const request = mock<Request>({ originalUrl: '/search' })
 
     expect(getActiveCaseListSegment(request)).toEqual('search')
   })
 
   it('returns "custom-list" when path starts with /custom-list', () => {
-    const request = mock<Request>({ path: '/custom-list' })
+    const request = mock<Request>({ originalUrl: '/custom-list' })
 
     expect(getActiveCaseListSegment(request)).toEqual('custom-list')
   })
@@ -80,7 +74,7 @@ describe('setActiveCaseListUrl', () => {
         a: 'b',
         peopleType: 'NFA_RISK',
       },
-      path: '/cases/?teamCode=YES&a=b',
+      originalUrl: '/cases/?teamCode=YES&a=b',
     })
 
     setActiveCaseListUrl(request)
@@ -93,7 +87,7 @@ describe('setActiveCaseListUrl', () => {
       query: {
         peopleType: 'NFA_RISK',
       },
-      path: '/search',
+      originalUrl: '/search',
     })
 
     setActiveCaseListUrl(request)
@@ -106,7 +100,7 @@ describe('setActiveCaseListUrl', () => {
       query: {
         peopleType: 'NFA_RISK',
       },
-      path: '/custom-list',
+      originalUrl: '/custom-list',
     })
 
     setActiveCaseListUrl(request)

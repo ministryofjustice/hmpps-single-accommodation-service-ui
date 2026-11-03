@@ -9,7 +9,7 @@ const breadcrumbs = (req: Request, caseData?: CaseDto) => {
   const caseListSegment = getActiveCaseListSegment(req)
   return [
     {
-      text: caseListSegment === 'cases' ? 'Case list' : 'Custom list',
+      text: { cases: 'Case list', 'custom-list': 'Custom list', search: 'Search' }[caseListSegment],
       href: caseListUrl,
     },
     caseData && {

@@ -18,6 +18,7 @@ import {
   outcomeDetailsSummaryListRows,
   withdrawalReasonRadios,
 } from '../utils/externalReferrals'
+import * as navigationUtils from '../utils/navigation'
 
 describe('ExternalReferralsController', () => {
   const id = '123'
@@ -62,6 +63,7 @@ describe('ExternalReferralsController', () => {
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
     jest.spyOn(validationUtils, 'addUserInputToFlash')
     jest.spyOn(utils, 'externalReferralTimelineEntry').mockReturnValue({} as TimelineEntry)
+    jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
   })
 
   afterEach(() => {
@@ -411,6 +413,7 @@ describe('ExternalReferralsController', () => {
     beforeEach(() => {
       jest.resetAllMocks()
       jest.restoreAllMocks()
+      jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
 
       request = mock<Request>({
         params: { crn, id },
@@ -525,6 +528,7 @@ describe('ExternalReferralsController', () => {
     beforeEach(() => {
       jest.resetAllMocks()
       jest.restoreAllMocks()
+      jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
 
       request = mock<Request>({
         params: { crn, id },

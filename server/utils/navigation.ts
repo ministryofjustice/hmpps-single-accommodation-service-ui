@@ -9,8 +9,10 @@ export const getActivePage = (path: string): string => {
 }
 
 export const getActiveCaseListSegment = (req: Request): string => {
-  if (req.path?.startsWith('/search')) return 'search'
-  if (req.path?.startsWith('/custom-list')) return 'custom-list'
+  if (typeof req.path === 'string') {
+    if (req.path?.startsWith('/search')) return 'search'
+    if (req.path?.startsWith('/custom-list')) return 'custom-list'
+  }
   return 'cases'
 }
 
@@ -25,10 +27,12 @@ export const setActiveCaseListUrl = (req: IndexRequest): void => {
   }
 
   let newUrl = '/'
-  if (req.path?.startsWith('/search')) {
-    newUrl = '/search'
-  } else if (req.path?.startsWith('/custom-list')) {
-    newUrl = '/custom-list'
+  if (typeof req.path === 'string') {
+    if (req.path?.startsWith('/search')) {
+      newUrl = '/search'
+    } else if (req.path?.startsWith('/custom-list')) {
+      newUrl = '/custom-list'
+    }
   }
 
   req.session.caseListUrl = `${newUrl}${search ? `?${search}` : ''}`

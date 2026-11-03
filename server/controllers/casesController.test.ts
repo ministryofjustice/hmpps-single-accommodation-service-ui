@@ -195,7 +195,7 @@ describe('casesController', () => {
 
       expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
       expect(response.render).toHaveBeenCalledWith('pages/search', {
-        casesRows: caseToRows(caseData),
+        casesRows: caseToRows(caseData, 'search'),
         casesTableColumns: casesTableColumns(),
         crn: 'X123456',
         errors: {},

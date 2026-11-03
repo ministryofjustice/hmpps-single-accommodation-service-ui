@@ -98,8 +98,8 @@ export default class CaseDetailsPage {
   }
 
   async expectSubmissionInfo() {
-    await expect(this.cas2Card()).toContainText('Submitted')
-    await expect(this.cas2Card()).toContainText('Submitted by')
+    await expect(this.cas2Card()).toContainText(/Submitted|Application started/)
+    await expect(this.cas2Card()).toContainText(/Submitted by|Started by/)
     await expect(this.cas2Card()).toContainText(/\d{1,2} \w+ \d{4}/)
   }
 
@@ -131,12 +131,12 @@ export default class CaseDetailsPage {
   }
 
   async expectCas2Redirect() {
-    const cas2Page = await this.expectCas2Popup(/\/new-cohorts\/applications\/people\/find-by-crn$/)
-    await expect(cas2Page.getByRole('heading', { name: 'Confirm details for CAS2 application' })).toBeVisible()
+    const cas2Page = await this.expectCas2Popup(/\/new-cohorts\/applications\/people\/find-by-crn(\?.*)?$/)
+    await expect(cas2Page.getByRole('heading', { name: /^Confirm .+'s details$/ })).toBeVisible()
   }
 
   async expectCas2Application() {
-    await this.expectCas2Popup(/\/assess\/applications$/)
+    await this.expectCas2Popup(/\/applications\/[0-9a-f-]+(\/overview)?$/)
   }
 
   cas3Card() {

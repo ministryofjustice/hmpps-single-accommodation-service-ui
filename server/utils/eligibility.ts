@@ -278,20 +278,19 @@ const contentForCas1Status = (
   }
 }
 
+const cas2NotEligibleSummaries: Partial<Record<ServiceResult['failureReasons'][number], string>> = {
+  INVALID_TIER: 'Tier not eligible',
+  UNDER_18: 'Age (applicant is under 18)',
+  SEXUAL_OFFENCE_REGISTRATIONS_PRESENT: 'Sexual offence history',
+}
+
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
   const { serviceStatus, failureReasons } = serviceResult ?? {}
 
   if (serviceStatus === 'NOT_ELIGIBLE') {
     if (failureReasons.length >= 2) {
-      return [
-        htmlContent(
-          bulletList('Not eligible due to:', [
-            'Sexual offence history',
-            'Age (applicant is under 18)',
-            'Tier not eligible',
-          ]),
-        ),
-      ]
+      const bullets = failureReasons.map(reason => cas2NotEligibleSummaries[reason]).filter(Boolean)
+      return [htmlContent(bulletList('Not eligible due to:', bullets))]
     }
 
     if (failureReasons.includes('INVALID_TIER')) {
@@ -308,6 +307,10 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
 
     if (failureReasons.includes('IN_CAS3_ACCOMMODATION')) {
       return [textContent('Not eligible as applicant is currently in a CAS3 property.')]
+    }
+
+    if (failureReasons.includes('IN_PRISON_NO_RELEASE_DATE')) {
+      return [textContent('Must have a conditional release date to start application.')]
     }
   }
 

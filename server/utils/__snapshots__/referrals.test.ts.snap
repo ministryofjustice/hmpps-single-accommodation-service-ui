@@ -337,7 +337,7 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
       <strong class="govuk-tag govuk-tag--grey">Offer declined or withdrawn</strong>
     </span>
       <span class="govuk-table-span">
-        <span class="govuk-hint">6 May 2024</span>
+        <span class="govuk-hint">Submitted: 6 May 2024</span>
       </span>
       
   </div>",

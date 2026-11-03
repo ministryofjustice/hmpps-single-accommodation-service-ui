@@ -42,13 +42,13 @@ describe('getActiveCaseListUrl', () => {
   })
 })
 describe('getActiveCaseListSegment', () => {
-  it('returns the base case list link if none is in session', () => {
+  it('returns "cases" when path is undefined', () => {
     const request = mock<Request>({ path: undefined })
 
     expect(getActiveCaseListSegment(request)).toEqual('cases')
   })
 
-  it('returns the case list link saved in session', () => {
+  it('returns "cases" when path is /cases', () => {
     const request = mock<Request>({
       path: '/cases',
       session: {
@@ -58,11 +58,22 @@ describe('getActiveCaseListSegment', () => {
 
     expect(getActiveCaseListSegment(request)).toEqual('cases')
   })
+
+  it('returns "search" when path starts with /search', () => {
+    const request = mock<Request>({ path: '/search' })
+
+    expect(getActiveCaseListSegment(request)).toEqual('search')
+  })
+
+  it('returns "custom-list" when path starts with /custom-list', () => {
+    const request = mock<Request>({ path: '/custom-list' })
+
+    expect(getActiveCaseListSegment(request)).toEqual('custom-list')
+  })
 })
 
-// todo
 describe('setActiveCaseListUrl', () => {
-  it('sets the given case list link in session', () => {
+  it('sets the case list URL to / when path is /cases', () => {
     const request = mock<Request>({
       query: {
         teamCode: 'YES',
@@ -75,5 +86,31 @@ describe('setActiveCaseListUrl', () => {
     setActiveCaseListUrl(request)
 
     expect(request.session.caseListUrl).toEqual('/?teamCode=YES&a=b&peopleType=NFA_RISK')
+  })
+
+  it('sets the case list URL to /search when path starts with /search', () => {
+    const request = mock<Request>({
+      query: {
+        peopleType: 'NFA_RISK',
+      },
+      path: '/search',
+    })
+
+    setActiveCaseListUrl(request)
+
+    expect(request.session.caseListUrl).toEqual('/search?peopleType=NFA_RISK')
+  })
+
+  it('sets the case list URL to /custom-list when path starts with /custom-list', () => {
+    const request = mock<Request>({
+      query: {
+        peopleType: 'NFA_RISK',
+      },
+      path: '/custom-list',
+    })
+
+    setActiveCaseListUrl(request)
+
+    expect(request.session.caseListUrl).toEqual('/custom-list?peopleType=NFA_RISK')
   })
 })

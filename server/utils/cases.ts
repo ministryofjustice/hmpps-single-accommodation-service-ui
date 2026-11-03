@@ -108,7 +108,8 @@ export const casesToRows = (caseListUrl: string, cases: Case[], currentUsername?
     ]
   })
 
-export const caseToRows = (caseData: Case | null): TableRow[] => (caseData ? casesToRows(null, [caseData]) : [])
+export const caseToRows = (caseData: Case | null, caseListUrl: string): TableRow[] =>
+  caseData ? casesToRows(caseListUrl, [caseData]) : []
 
 export const casesTableColumns = () => [
   { text: 'Name' },

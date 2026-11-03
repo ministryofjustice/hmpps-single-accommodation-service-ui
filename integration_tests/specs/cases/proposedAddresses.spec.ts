@@ -732,7 +732,7 @@ test.describe('set proposed address as current', () => {
     // And the page should show the correct information and links
     await confirmCurrentAddressPage.shouldShowProposedAddress()
 
-    const backLink = paths.cases.show({ crn: caseData.crn })
+    const backLink = paths.cases.show({ caseListUrl: 'cases', crn: caseData.crn })
     await confirmCurrentAddressPage.shouldShowLink('Back', backLink)
     await confirmCurrentAddressPage.shouldShowLink('Cancel', backLink)
 
@@ -774,7 +774,7 @@ test.describe('set proposed address as current', () => {
     // And the page should show the correct information and links
     await confirmCurrentAddressPage.shouldShowProposedAddress()
 
-    const backLink = paths.proposedAddresses.show({ crn: caseData.crn, id: confirmedAddress.id })
+    const backLink = paths.proposedAddresses.show({ caseListUrl: 'cases', crn: caseData.crn, id: confirmedAddress.id })
     await confirmCurrentAddressPage.shouldShowLink('Back', backLink)
     await confirmCurrentAddressPage.shouldShowLink('Cancel', backLink)
 

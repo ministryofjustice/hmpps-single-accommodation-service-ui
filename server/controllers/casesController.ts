@@ -90,13 +90,13 @@ export default class CasesController {
           }
         }
       }
-
+      setActiveCaseListUrl(req)
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       return res.render('pages/search', {
         crn: searchTerm,
         resultsSummary: isValidSearchCrn ? searchResultsSummary(searchTerm, caseData) : undefined,
         casesTableColumns: casesTableColumns(),
-        casesRows: caseToRows(caseData),
+        casesRows: caseToRows(caseData, 'search'),
         errors,
         errorSummary,
       })

@@ -35,9 +35,8 @@ import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import * as backLinksUtils from '../utils/backlinks'
 import * as validationUtils from '../utils/validation'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
 import * as navigationUtils from '../utils/navigation'
@@ -98,7 +97,6 @@ describe('casesController', () => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
       jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
       jest.spyOn(navigationUtils, 'setActiveCaseListUrl')
-
     })
 
     it('renders the case list page for the current user by default', async () => {

@@ -83,10 +83,16 @@ export const accommodationCard = (
   const typeName = accommodationType(accommodation)
   const link =
     cardType === 'next' && accommodation.proposedAccommodationId
-      ? uiPaths.proposedAddresses.show({ caseListUrl, crn: accommodation.crn, id: accommodation.proposedAccommodationId })
+      ? uiPaths.proposedAddresses.show({
+          caseListUrl,
+          crn: accommodation.crn,
+          id: accommodation.proposedAccommodationId,
+        })
       : null
   const addAddressLink =
-    cardType === 'current' && accommodation.crn ? uiPaths.currentAddress.select({ caseListUrl, crn: accommodation.crn }) : undefined
+    cardType === 'current' && accommodation.crn
+      ? uiPaths.currentAddress.select({ caseListUrl, crn: accommodation.crn })
+      : undefined
 
   return {
     cardType,

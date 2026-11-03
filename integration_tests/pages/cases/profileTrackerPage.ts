@@ -162,7 +162,13 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       await expect(row).toContainText(referralStatusTag(referral.status, referral.type).text)
       await this.shouldShowStatusCell(referralStatusCell(referral), row)
 
-      for await (const link of referralLinksForType('cases', referral.type, referral.id, this.caseData.crn, referral.uiUrl)) {
+      for await (const link of referralLinksForType(
+        'cases',
+        referral.type,
+        referral.id,
+        this.caseData.crn,
+        referral.uiUrl,
+      )) {
         await expect(row.getByRole('link', { name: link.text })).toHaveAttribute('href', link.href)
       }
     }
@@ -190,7 +196,10 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
 
     for await (const proposedAddress of proposedAddresses) {
-      await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress, 'cases'))
+      await this.shouldShowCard(
+        formatAddress(proposedAddress.address),
+        proposedAddressStatusCard(proposedAddress, 'cases'),
+      )
     }
   }
 

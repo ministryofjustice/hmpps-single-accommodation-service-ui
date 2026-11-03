@@ -26,7 +26,7 @@ import {
 } from '../testutils/factories'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { radioItems } from '../utils/utils'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import * as navigationUtils from '../utils/navigation'
 
 describe('dutyToReferController', () => {
@@ -70,7 +70,6 @@ describe('dutyToReferController', () => {
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
     jest.spyOn(validationUtils, 'addUserInputToFlash')
     jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
-
   })
 
   describe('submission', () => {
@@ -190,7 +189,11 @@ describe('dutyToReferController', () => {
 
     it('updates and redirects to the DTR details page when editing', async () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
-      const expectedRedirect = uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: dutyToRefer.submission.id })
+      const expectedRedirect = uiPaths.dutyToRefer.show({
+        caseListUrl: 'cases',
+        crn: 'CRN123',
+        id: dutyToRefer.submission.id,
+      })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       request.params.id = dutyToRefer.submission.id
@@ -213,7 +216,11 @@ describe('dutyToReferController', () => {
       const submission = dtrSubmissionFactory.accepted().build({ outcomeNote: 'This is an outcome note' })
       const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123', submission })
       const outcomeReason = dutyToRefer.submission?.outcomeReason
-      const expectedRedirect = uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: dutyToRefer.submission.id })
+      const expectedRedirect = uiPaths.dutyToRefer.show({
+        caseListUrl: 'cases',
+        crn: 'CRN123',
+        id: dutyToRefer.submission.id,
+      })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       request.params.id = dutyToRefer.submission.id
@@ -495,7 +502,9 @@ describe('dutyToReferController', () => {
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
+      )
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         note: 'Enter a note',
       })
@@ -508,7 +517,9 @@ describe('dutyToReferController', () => {
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
+      )
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'API error')
       expect(validationUtils.addUserInputToFlash).toHaveBeenCalledWith(request)
     })
@@ -520,7 +531,9 @@ describe('dutyToReferController', () => {
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
+      )
       expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
       expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         note: 'Some valid note',

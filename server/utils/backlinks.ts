@@ -1,7 +1,5 @@
 import { match, Path } from 'path-to-regexp'
 import type { Request } from 'express'
-import { IndexRequest } from '@sas/ui'
-import uiPaths from '../paths/ui'
 import config from '../config'
 import { getActiveCaseListUrl } from './navigation'
 
@@ -17,7 +15,7 @@ import { getActiveCaseListUrl } from './navigation'
  * @return the url to use as the backlink for the page.
  */
 
-export const getPageBackLink = (
+const getPageBackLink = (
   pagePattern: string,
   req: Request,
   matchList: Array<Path>,
@@ -47,3 +45,4 @@ export const getPageBackLink = (
 
   return lastReferer || defaultPath
 }
+export default getPageBackLink

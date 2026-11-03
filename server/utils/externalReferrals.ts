@@ -90,7 +90,6 @@ const cardLinks = (referral: ExternalReferralDto, caseListUrl: string) => {
   const { crn, submission: { id } = {} } = referral
 
   const url = paths.externalReferrals.show({ caseListUrl, crn, id })
-  console.log('url: ', url)
   return [{ text: 'View details', href: url, external: false }]
 }
 

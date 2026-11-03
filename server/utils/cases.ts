@@ -10,7 +10,7 @@ import { accommodationCell, accommodationStatusCell } from './accommodationSumma
 import { validateAndFlashErrors, validateCrn } from './validation'
 import { summaryListRow } from './summaryListRow'
 import { formatDateAndAge } from './dates'
-import { getActiveCaseListSegment, getActiveCaseListUrl } from './navigation'
+import { getActiveCaseListSegment } from './navigation'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -86,7 +86,7 @@ export const updateQueryParams = (url: string, updateParams: Record<string, unkn
 }
 
 export const personCell = (caseListUrl: string, caseData: Case, assignedToText?: string): string =>
- renderMacro('personCell', {
+  renderMacro('personCell', {
     ...caseData,
     name: displayName(caseData, { laoFlag: '', caseList: true }),
     assignedToText,
@@ -169,7 +169,6 @@ export const setupCaseList = (
   const { peopleType = 'NFA_RISK' } = query
   const filters = queryToFilters(query, req.originalUrl, teams)
   const caseListUrl = getActiveCaseListSegment(req)
-  console.log(`caseListUrl: ${caseListUrl}`)
 
   const currentUsername = query.teamCode ? username : undefined
   return {

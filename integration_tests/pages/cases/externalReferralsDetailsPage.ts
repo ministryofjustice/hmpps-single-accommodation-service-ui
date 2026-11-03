@@ -17,7 +17,9 @@ export default class ExternalReferralsDetailsPage extends AbstractPage {
   }
 
   static async visit(page: Page, caseData: Case, referral: ExternalReferralDto): Promise<ExternalReferralsDetailsPage> {
-    await page.goto(paths.externalReferrals.show({ caseListUrl: 'cases',crn: caseData.crn, id: referral.submission.id }))
+    await page.goto(
+      paths.externalReferrals.show({ caseListUrl: 'cases', crn: caseData.crn, id: referral.submission.id }),
+    )
     return ExternalReferralsDetailsPage.verifyOnPage(page, referral)
   }
 

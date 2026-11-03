@@ -38,7 +38,7 @@ import { addressLines, formatAddress } from '../utils/addresses'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import { radioItems } from '../utils/utils'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -133,11 +133,9 @@ describe('proposedAddressesController', () => {
     jest.spyOn(controller.formData, 'update')
 
     jest
-      .spyOn(backlinks, 'getPageBackLink')
+      .spyOn(backlinks, 'default')
       .mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
-    jest
-      .spyOn(navigationUtils, 'getActiveCaseListSegment')
-      .mockReturnValue('cases')
+    jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
   })
 
   describe('show', () => {
@@ -166,9 +164,9 @@ describe('proposedAddressesController', () => {
         caseData,
         assignedTo: caseAssignedTo(caseData, user.username),
         address: formatAddress(proposedAddress.address),
-        addressDetailRows: addressDetailRows(proposedAddress,'cases'),
+        addressDetailRows: addressDetailRows(proposedAddress, 'cases'),
         timeline: addressTimeline(auditRecords),
-        nextAction: nextActionButton(proposedAddress,'cases'),
+        nextAction: nextActionButton(proposedAddress, 'cases'),
         errors: {},
         errorSummary: [],
       })
@@ -245,7 +243,9 @@ describe('proposedAddressesController', () => {
 
       expect(controller.formData.remove).toHaveBeenCalledWith('CRN123', request.session)
       expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, {})
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -307,7 +307,9 @@ describe('proposedAddressesController', () => {
         postcode: 'Enter a UK postcode',
         nameOrNumber: 'Enter a property name or number',
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
       expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
         nameOrNumber: '',
@@ -326,7 +328,9 @@ describe('proposedAddressesController', () => {
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         postcode: 'Enter a valid UK postcode',
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
       expect(controller.formData.update).toHaveBeenCalledTimes(1)
     })
 
@@ -341,7 +345,9 @@ describe('proposedAddressesController', () => {
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         postcode: 'Enter a valid UK postcode',
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('fetches lookup results, saves them to session and redirects to select address if the submitted data is valid', async () => {
@@ -354,7 +360,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveLookup()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.selectAddress({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
       expect(controller.formData.update).toHaveBeenCalledTimes(2)
       expect(controller.formData.update).toHaveBeenLastCalledWith('CRN123', request.session, {
         lookupResults,
@@ -413,7 +421,9 @@ describe('proposedAddressesController', () => {
 
       await controller.selectAddress()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to the Case details page if there is no session data', async () => {
@@ -440,7 +450,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveSelectAddress()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to the select address page with an error if no address was selected', async () => {
@@ -451,7 +463,9 @@ describe('proposedAddressesController', () => {
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         addressUprn: 'Select an address',
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.selectAddress({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to the select address page with an error if an address not in the list was selected', async () => {
@@ -462,7 +476,9 @@ describe('proposedAddressesController', () => {
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         addressUprn: 'Select an address',
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.selectAddress({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.selectAddress({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('saves the selected address to the session and redirects to the details page', async () => {
@@ -470,7 +486,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveSelectAddress()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
       expect(controller.formData.update).toHaveBeenCalledWith('CRN123', request.session, {
         address: lookupResults[0],
       })
@@ -538,7 +556,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveDetails()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to details when address invalid', async () => {
@@ -552,7 +572,9 @@ describe('proposedAddressesController', () => {
       }
       await controller.saveDetails()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.details({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.details({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -658,7 +680,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveType()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to arrangement type when arrangement type invalid', async () => {
@@ -668,7 +692,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveType()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -678,7 +704,9 @@ describe('proposedAddressesController', () => {
         address,
         accommodationTypeCode,
       })
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }))
+      jest
+        .spyOn(backlinks, 'default')
+        .mockReturnValue(uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }))
 
       await controller.status()(request, response, next)
 
@@ -703,7 +731,9 @@ describe('proposedAddressesController', () => {
         accommodationTypeCode,
         verificationStatus: 'NOT_CHECKED_YET',
       })
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }))
+      jest
+        .spyOn(backlinks, 'default')
+        .mockReturnValue(uiPaths.proposedAddresses.type({ caseListUrl: 'cases', crn: 'CRN123' }))
       await controller.status()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
@@ -737,7 +767,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveStatus()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to next accommodation when status is PASSED', async () => {
@@ -745,7 +777,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveStatus()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to status when status invalid', async () => {
@@ -753,7 +787,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveStatus()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -764,7 +800,9 @@ describe('proposedAddressesController', () => {
         accommodationTypeCode,
         verificationStatus: 'PASSED',
       })
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }))
+      jest
+        .spyOn(backlinks, 'default')
+        .mockReturnValue(uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }))
 
       await controller.nextAccommodation()(request, response, next)
 
@@ -792,7 +830,9 @@ describe('proposedAddressesController', () => {
         nextAccommodationStatus: 'TO_BE_DECIDED',
       })
 
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }))
+      jest
+        .spyOn(backlinks, 'default')
+        .mockReturnValue(uiPaths.proposedAddresses.status({ caseListUrl: 'cases', crn: 'CRN123' }))
 
       await controller.nextAccommodation()(request, response, next)
 
@@ -827,7 +867,9 @@ describe('proposedAddressesController', () => {
       request.body = { nextAccommodationStatus: 'YES' }
 
       await controller.saveNextAccommodation()(request, response, next)
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects to next accommodation when next accommodation invalid', async () => {
@@ -835,7 +877,9 @@ describe('proposedAddressesController', () => {
 
       await controller.saveNextAccommodation()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -844,7 +888,7 @@ describe('proposedAddressesController', () => {
       setSessionData(fullSessionData)
 
       jest
-        .spyOn(backlinks, 'getPageBackLink')
+        .spyOn(backlinks, 'default')
         .mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }))
 
       await controller.checkYourAnswers()(request, response, next)
@@ -855,7 +899,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/check-your-answers', {
         crn: 'CRN123',
-        tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', accommodationTypes,'cases'),
+        tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', accommodationTypes, 'cases'),
         backLinkHref: uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }),
         caseListUrl: 'cases',
         errors: {},
@@ -901,7 +945,9 @@ describe('proposedAddressesController', () => {
 
       expect(proposedAddressesService.submit).toHaveBeenCalledWith('token-1', 'CRN123', fullSessionData)
       expect(controller.formData.remove).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
       expect(auditService.logPageView).not.toHaveBeenCalled()
     })
   })
@@ -953,7 +999,10 @@ describe('proposedAddressesController', () => {
 
     describe('if the Check your answer page has been reached', () => {
       it('clears session data and redirects to the case details page', async () => {
-        setSessionData({ ...fullSessionData, redirect: uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }) })
+        setSessionData({
+          ...fullSessionData,
+          redirect: uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl: 'cases', crn: 'CRN123' }),
+        })
 
         await controller.cancel()(request, response, next)
 
@@ -998,7 +1047,9 @@ describe('proposedAddressesController', () => {
 
         await controller.saveStatus()(request, response, next)
 
-        expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }))
+        expect(response.redirect).toHaveBeenCalledWith(
+          uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }),
+        )
       })
     })
   })
@@ -1045,7 +1096,9 @@ describe('proposedAddressesController', () => {
 
         await controller.saveStatus()(request, response, next)
 
-        expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }))
+        expect(response.redirect).toHaveBeenCalledWith(
+          uiPaths.proposedAddresses.nextAccommodation({ caseListUrl: 'cases', crn: 'CRN123' }),
+        )
       })
     })
 
@@ -1067,7 +1120,7 @@ describe('proposedAddressesController', () => {
         nextAccommodationStatus: 'YES',
       })
 
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue('/foo')
+      jest.spyOn(backlinks, 'default').mockReturnValue('/foo')
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
 

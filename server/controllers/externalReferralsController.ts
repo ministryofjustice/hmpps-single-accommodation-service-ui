@@ -19,7 +19,7 @@ import {
   withdrawalReasonRadios,
   validateWithdrawal,
 } from '../utils/externalReferrals'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { getActiveCaseListSegment } from '../utils/navigation'
 
@@ -49,7 +49,7 @@ export default class ExternalReferralsController {
       ])
 
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       return res.render('pages/external-referrals/show', {
         breadcrumbs: breadcrumbs(req, caseData),
         crn,
@@ -78,7 +78,9 @@ const caseListUrl = getActiveCaseListSegment(req)
       const { token } = res.locals.user
       const { crn, id } = req.params
       const caseListUrl = getActiveCaseListSegment(req)
-      const backLinkHref = id ? uiPaths.externalReferrals.show({ caseListUrl, crn, id }) : uiPaths.cases.show({ caseListUrl, crn })
+      const backLinkHref = id
+        ? uiPaths.externalReferrals.show({ caseListUrl, crn, id })
+        : uiPaths.cases.show({ caseListUrl, crn })
 
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_SUBMISSION, {
         who: res.locals.user.username,
@@ -162,7 +164,7 @@ const caseListUrl = getActiveCaseListSegment(req)
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { note } = req.body
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_ADD_NOTE, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -258,7 +260,7 @@ const caseListUrl = getActiveCaseListSegment(req)
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_WITHDRAWAL, {
         who: res.locals.user.username,
         correlationId: req.id,

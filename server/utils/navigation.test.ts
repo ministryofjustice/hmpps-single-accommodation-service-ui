@@ -1,10 +1,7 @@
-import { getActivePage, getActiveCaseListUrl,getActiveCaseListSegment,setActiveCaseListUrl } from './navigation'
 import { mock } from 'jest-mock-extended'
-import { Session } from 'express-session'
-import uiPaths from '../paths/ui'
-import * as backlinksUtils from './backlinks'
-import * as navigationUtils from './navigation'
 import { Request } from 'express'
+import { getActivePage, getActiveCaseListUrl, getActiveCaseListSegment, setActiveCaseListUrl } from './navigation'
+import uiPaths from '../paths/ui'
 
 describe('getActivePage', () => {
   it('returns "caseList" for the case list page', () => {
@@ -28,18 +25,6 @@ describe('getActivePage', () => {
 })
 
 describe('getActiveCaseListUrl', () => {
-  const pagePattern = 'page-Pattern'
-  const mockRequest = (referer: string, lastStoredReferer: string) =>
-    mock<Request & { session: Session }>({
-      headers: { referer },
-      session: {
-        pageReferers: lastStoredReferer
-          ? {
-              [pagePattern]: lastStoredReferer,
-            }
-          : undefined,
-      },
-    })
   it('returns the base case list link if none is in session', () => {
     const request = mock<Request>()
 
@@ -57,20 +42,8 @@ describe('getActiveCaseListUrl', () => {
   })
 })
 describe('getActiveCaseListSegment', () => {
-  const pagePattern = 'page-Pattern'
-  const mockRequest = (referer: string, lastStoredReferer: string) =>
-    mock<Request & { session: Session }>({
-      headers: { referer },
-      session: {
-        pageReferers: lastStoredReferer
-          ? {
-              [pagePattern]: lastStoredReferer,
-            }
-          : undefined,
-      },
-    })
   it('returns the base case list link if none is in session', () => {
-    const request = mock<Request>({path:undefined})
+    const request = mock<Request>({ path: undefined })
 
     expect(getActiveCaseListSegment(request)).toEqual('cases')
   })
@@ -104,4 +77,3 @@ describe('setActiveCaseListUrl', () => {
     expect(request.session.caseListUrl).toEqual('/?teamCode=YES&a=b&peopleType=NFA_RISK')
   })
 })
-

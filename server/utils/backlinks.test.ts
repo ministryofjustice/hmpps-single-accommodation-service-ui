@@ -2,7 +2,7 @@ import { mock } from 'jest-mock-extended'
 import { Session } from 'express-session'
 import { Request } from 'express'
 import * as navigationUtils from './navigation'
-import { getPageBackLink } from './backlinks'
+import getPageBackLink from './backlinks'
 
 describe('Link management', () => {
   const matchList = ['/pattern1/:param', '/pattern2/']

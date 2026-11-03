@@ -6,7 +6,6 @@ const currentAddressPath = listPath.path(':crn/current-address')
 const dutyToReferPath = listPath.path(':crn/dtr')
 const externalReferralsPath = listPath.path(':crn/external-referrals')
 const customListPath = path('/custom-list')
-const prefix:'cases' | 'custom-list' = 'cases'
 
 export default {
   cases: {

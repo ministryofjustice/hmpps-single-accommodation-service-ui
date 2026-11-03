@@ -138,7 +138,6 @@ export default class CustomListController {
 
   confirmation(): RequestHandler {
     return async (req: Request, res: Response) => {
-
       await this.auditService.logPageView(Page.CUSTOM_LIST_CONFIRMATION, {
         who: res.locals.user.username,
         correlationId: req.id,

@@ -718,7 +718,7 @@ describe('eligibilityToEligibilityCards', () => {
   it('returns eligibility cards for each service', () => {
     const eligibility = eligibilityFactory.build({ crn })
 
-    const cards = eligibilityToEligibilityCards(eligibility, crn,'cases')
+    const cards = eligibilityToEligibilityCards(eligibility, crn, 'cases')
 
     expect(cards).toHaveLength(4)
     expect(cards[0].heading).toContain('Duty to Refer (DTR)')
@@ -738,7 +738,7 @@ describe('eligibilityToEligibilityCards', () => {
       },
     })
 
-    const cards = eligibilityToEligibilityCards(eligibility, crn,'cases')
+    const cards = eligibilityToEligibilityCards(eligibility, crn, 'cases')
 
     expect(cards.map(card => card.heading)).not.toContain('Approved premises (CAS1)')
   })
@@ -754,7 +754,7 @@ describe('eligibilityToEligibilityCards', () => {
       },
     })
 
-    const cards = eligibilityToEligibilityCards(eligibility, crn,'cases')
+    const cards = eligibilityToEligibilityCards(eligibility, crn, 'cases')
 
     expect(cards.find(card => card.heading === 'Approved premises (CAS1)')?.inactive).toBe(true)
   })
@@ -771,7 +771,7 @@ describe('eligibilityToEligibilityCards', () => {
     it('includes the CAS2 card', () => {
       const eligibility = eligibilityFactory.build({ crn })
 
-      const cards = eligibilityToEligibilityCards(eligibility, crn,'cases')
+      const cards = eligibilityToEligibilityCards(eligibility, crn, 'cases')
 
       expect(cards).toHaveLength(5)
       expect(cards[3].heading).toContain('Short-term accommodation (CAS2)')
@@ -819,7 +819,7 @@ describe('eligibilityToEligibilityCards', () => {
       }),
     })
 
-    const cards = eligibilityToEligibilityCards(eligibility, crn,'cases')
+    const cards = eligibilityToEligibilityCards(eligibility, crn, 'cases')
 
     expect(cards).toMatchSnapshot()
   })

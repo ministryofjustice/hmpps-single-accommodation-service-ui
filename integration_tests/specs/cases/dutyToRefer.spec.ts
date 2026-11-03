@@ -133,7 +133,10 @@ test.describe('duty to refer', () => {
     await profileTrackerPage.shouldShowBanner('DTR referral details added')
 
     // And I should see the new DTR eligibility card
-    await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr))
+    await profileTrackerPage.shouldShowCard(
+      'Duty to refer (DTR)',
+      dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr),
+    )
 
     // When I click on the DTR link
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))

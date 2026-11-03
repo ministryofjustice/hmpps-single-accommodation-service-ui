@@ -60,7 +60,11 @@ const hintForDTR = (result: ServiceResult) => {
   return undefined
 }
 
-export const dutyToReferStatusCard = (caseListUrl: string, crn?: string, dutyToRefer?: DtrServiceResult): StatusCard => {
+export const dutyToReferStatusCard = (
+  caseListUrl: string,
+  crn?: string,
+  dutyToRefer?: DtrServiceResult,
+): StatusCard => {
   const { serviceResult } = dutyToRefer || {}
   const { serviceStatus } = serviceResult || {}
 

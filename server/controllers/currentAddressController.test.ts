@@ -47,7 +47,9 @@ describe('currentAddressController', () => {
 
     controller = new CurrentAddressController(auditService, casesService, proposedAddressesService)
 
-    jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
+    jest
+      .spyOn(backlinks, 'default')
+      .mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
     jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
     jest
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
@@ -84,7 +86,9 @@ describe('currentAddressController', () => {
       await controller.select()(request, response, next)
 
       expect(response.render).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.new({  caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.new({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -116,7 +120,9 @@ describe('currentAddressController', () => {
       await controller.saveSelect()(request, response, next)
 
       expect(proposedAddressesService.submitArrival).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.new({  caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.new({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects back to the selection page when nothing is selected', async () => {
@@ -125,7 +131,9 @@ describe('currentAddressController', () => {
       await controller.saveSelect()(request, response, next)
 
       expect(proposedAddressesService.submitArrival).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.select({  caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.select({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects back to the selection page when there is an API error', async () => {
@@ -138,7 +146,9 @@ describe('currentAddressController', () => {
         request,
         'There was a problem saving the current address. Please try again.',
       )
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.select({  caseListUrl: 'cases', crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.select({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 

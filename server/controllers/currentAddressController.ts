@@ -12,7 +12,7 @@ import {
   validateAndFlashErrors,
   validateRadioButton,
 } from '../utils/validation'
-import { getPageBackLink } from '../utils/backlinks'
+import getPageBackLink from '../utils/backlinks'
 import { getActiveCaseListSegment } from '../utils/navigation'
 import { getTodayLocal } from '../utils/dates'
 
@@ -64,7 +64,7 @@ export default class CurrentAddressController {
       const { crn } = req.params
       const { token } = res.locals.user
       const { proposedAddressId } = req.body
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const isValid = validateAndFlashErrors(req, {
         proposedAddressId: validateRadioButton(proposedAddressId, 'address'),
       })
@@ -96,7 +96,7 @@ const caseListUrl = getActiveCaseListSegment(req)
     return async (req: Request, res: Response) => {
       const { crn } = req.params
       const { token } = res.locals.user
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       await this.auditService.logPageView(Page.CURRENT_ADDRESS_NEW, {
         who: res.locals.user.username,
         correlationId: req.id,

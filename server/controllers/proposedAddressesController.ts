@@ -37,7 +37,7 @@ import {
 import ProposedAddressesService from '../services/proposedAddressesService'
 import CasesService from '../services/casesService'
 import OsDataHubService from '../services/osDataHubService'
-import {  getPageBackLink } from '../utils/backlinks'
+import getPageBackLink from '../utils/backlinks'
 import { getActiveCaseListSegment } from '../utils/navigation'
 import { addressLines, formatAddress } from '../utils/addresses'
 import { caseAssignedTo, displayName } from '../utils/cases'
@@ -46,7 +46,7 @@ import config from '../config'
 import { radioItems } from '../utils/utils'
 import { collectApiResponses } from '../utils/apiResponses'
 import { getTodayLocal } from '../utils/dates'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 
 interface EditRequest extends Request {
   params: {
@@ -167,7 +167,7 @@ export default class ProposedAddressesController {
         who: res.locals.user.username,
         correlationId: req.id,
       })
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const { crn } = req.params
 
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
@@ -192,7 +192,7 @@ const caseListUrl = getActiveCaseListSegment(req)
       const { crn } = req.params
       const { session } = req
       const { nameOrNumber, postcode } = req.body
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const proposedAddressFormSessionData = await this.formData.update(crn, session, {
         nameOrNumber: req.body?.nameOrNumber,
         postcode: req.body?.postcode,
@@ -234,7 +234,7 @@ const caseListUrl = getActiveCaseListSegment(req)
       })
 
       const { crn } = req.params
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       if (!proposedAddressFormSessionData) return res.redirect(uiPaths.cases.show({ caseListUrl, crn }))
 
@@ -270,7 +270,7 @@ const caseListUrl = getActiveCaseListSegment(req)
       const { crn } = req.params
       const { session } = req
       const { addressUprn } = req.body
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const { lookupResults } = this.formData.get(crn, session)
 
       if (!lookupResults) {
@@ -303,7 +303,7 @@ const caseListUrl = getActiveCaseListSegment(req)
       })
 
       const { crn } = req.params
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       if (!proposedAddressFormSessionData) return res.redirect(uiPaths.cases.show({ caseListUrl, crn }))
 
@@ -351,7 +351,7 @@ const caseListUrl = getActiveCaseListSegment(req)
         this.casesService.getCase(token, crn),
         this.referenceDataService.getAccommodationTypes(token),
       ])
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       return res.render('pages/proposed-address/type', {
         crn,
         backLinkHref:
@@ -385,7 +385,7 @@ const caseListUrl = getActiveCaseListSegment(req)
         correlationId: req.id,
       })
       const { crn } = req.params
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       const redirect = validateUpToType(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
@@ -437,7 +437,7 @@ const caseListUrl = getActiveCaseListSegment(req)
 
       const { token } = res.locals.user
       const { crn } = req.params
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const proposedAddressFormSessionData = this.formData.get(crn, req.session)
       const redirect = validateUpToStatus(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
@@ -491,7 +491,9 @@ const caseListUrl = getActiveCaseListSegment(req)
       const redirect = validateUpToNextAccommodation(req, proposedAddressFormSessionData)
       if (redirect) return res.redirect(redirect)
 
-      await this.formData.update(crn, req.session, { redirect: uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl, crn }) })
+      await this.formData.update(crn, req.session, {
+        redirect: uiPaths.proposedAddresses.checkYourAnswers({ caseListUrl, crn }),
+      })
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       const { data: accommodationTypes } = await this.referenceDataService.getAccommodationTypes(token)
@@ -535,9 +537,9 @@ const caseListUrl = getActiveCaseListSegment(req)
 
   cancel(): RequestHandler {
     return async (req: Request, res: Response) => {
-      const {  crn } = req.params
+      const { crn } = req.params
       const { redirect } = this.formData.get(crn, req.session)
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       await this.formData.remove(crn, req.session)
 
       return res.redirect(
@@ -568,7 +570,7 @@ const caseListUrl = getActiveCaseListSegment(req)
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       await this.auditService.logPageView(Page.PROPOSED_ADDRESS_ARRIVAL, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -601,7 +603,7 @@ const caseListUrl = getActiveCaseListSegment(req)
       const { crn, id } = req.params
       const { token } = res.locals.user
 
-        const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       try {
         const arrival: ProposedAccommodationArrivalCommand = {
           arrivalDate: getTodayLocal(),

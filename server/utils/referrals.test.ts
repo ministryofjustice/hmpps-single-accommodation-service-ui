@@ -47,13 +47,13 @@ describe('referrals utilities', () => {
 
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {
-      expect(referralHistoryRows('cases',referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
+      expect(referralHistoryRows('cases', referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
 
     it('filters out CAS2 referrals when the feature flag is disabled', () => {
       const cas2Referral = referralFactory.build({ type: 'CAS2' })
 
-      expect(referralHistoryRows('',[...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(4)
+      expect(referralHistoryRows('', [...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(4)
     })
 
     describe('when the cas2 flag is enabled', () => {
@@ -71,7 +71,7 @@ describe('referrals utilities', () => {
           referredBy: { username: 'jane_doe', name: 'Jane Doe' },
         })
 
-        const result = referralHistoryRows('custom-list',[...referrals, cas2Referral], 'alice_smith', 'CRN123')
+        const result = referralHistoryRows('custom-list', [...referrals, cas2Referral], 'alice_smith', 'CRN123')
 
         expect(result).toHaveLength(5)
         expect(result).toMatchSnapshot()
@@ -81,15 +81,15 @@ describe('referrals utilities', () => {
 
   describe('referralHistoryTable macro', () => {
     it('renders the referral history table for a given list of referrals', () => {
-      expect(referralHistoryTable('cases',referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
+      expect(referralHistoryTable('cases', referrals, 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
 
     it('renders a message and no table when there are no referrals', () => {
-      expect(referralHistoryTable('',[], 'alice_smith', 'CRN123')).toMatchSnapshot()
+      expect(referralHistoryTable('', [], 'alice_smith', 'CRN123')).toMatchSnapshot()
     })
 
     it('renders a message when there is an API error', () => {
-      expect(referralHistoryTable('',null, 'alice_smith', 'CRN123', true)).toMatchSnapshot()
+      expect(referralHistoryTable('', null, 'alice_smith', 'CRN123', true)).toMatchSnapshot()
     })
   })
 })

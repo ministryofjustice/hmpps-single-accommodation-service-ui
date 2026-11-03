@@ -60,7 +60,12 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
     OFFER_DECLINED_OR_WITHDRAWN: { text: 'Offer declined or withdrawn', colour: 'grey' },
   })[status] || { text: 'Unknown' }
 
-export const referralHistoryRows = (caseListUrl: string, referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
+export const referralHistoryRows = (
+  caseListUrl: string,
+  referrals?: Referral[],
+  username?: string,
+  crn?: string,
+): TableRow[] => {
   return (referrals ?? [])
     .filter(referral => config.flags.cas2Enabled || referral.type !== 'CAS2')
     .map(referral => {
@@ -197,15 +202,27 @@ const getCas3ReferralDetails = (referral: Referral, status?: string): Array<Text
   return details
 }
 
-export const referralHistoryTable = (caseListUrl: string, referrals: Referral[], username?: string, crn?: string, hasApiError?: boolean): string =>
-  renderMacro('referralHistoryTable', { rows: referralHistoryRows(caseListUrl,referrals, username, crn), hasApiError })
+export const referralHistoryTable = (
+  caseListUrl: string,
+  referrals: Referral[],
+  username?: string,
+  crn?: string,
+  hasApiError?: boolean,
+): string =>
+  renderMacro('referralHistoryTable', { rows: referralHistoryRows(caseListUrl, referrals, username, crn), hasApiError })
 
 export const referralReferredBy = (c: Referral, username?: string): string => {
   const fullName = c.referredBy?.name ?? 'Unknown'
   return c.referredBy?.username?.toUpperCase() === username?.toUpperCase() ? `You (${fullName})` : fullName
 }
 
-export const referralLinksForType = (caseListUrl: string, type: Referral['type'], id: string, crn: string, url?: string | null) => {
+export const referralLinksForType = (
+  caseListUrl: string,
+  type: Referral['type'],
+  id: string,
+  crn: string,
+  url?: string | null,
+) => {
   switch (type) {
     case 'DTR':
       return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ caseListUrl, crn, id }) }]

@@ -51,7 +51,7 @@ describe('cases utilities', () => {
     })
 
     it('renders a formatted cell for a case with full access', () => {
-      expect(personCell('cases',personFullAccess)).toMatchSnapshot()
+      expect(personCell('cases', personFullAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with limited information', () => {
@@ -65,7 +65,7 @@ describe('cases utilities', () => {
         riskLevel: undefined,
       })
 
-      expect(personCell('cases',personWithLimitedInformation)).toMatchSnapshot()
+      expect(personCell('cases', personWithLimitedInformation)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with full access with LAO flag', () => {
@@ -74,7 +74,7 @@ describe('cases utilities', () => {
         limitedAccess: true,
       })
 
-      expect(personCell('cases',personRestrictedAccess)).toMatchSnapshot()
+      expect(personCell('cases', personRestrictedAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with limited access', () => {
@@ -83,7 +83,7 @@ describe('cases utilities', () => {
         prisonNumber: 'Z4567HG',
       })
 
-      expect(personCell('cases',personExcludedAccess)).toMatchSnapshot()
+      expect(personCell('cases', personExcludedAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with unknown access', () => {
@@ -92,11 +92,11 @@ describe('cases utilities', () => {
         prisonNumber: 'C4567HG',
       })
 
-      expect(personCell('cases',personUnknownAccess)).toMatchSnapshot()
+      expect(personCell('cases', personUnknownAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell including Assigned to', () => {
-      expect(personCell('cases',personFullAccess, 'You (John Doe)')).toMatchSnapshot()
+      expect(personCell('cases', personFullAccess, 'You (John Doe)')).toMatchSnapshot()
     })
   })
 
@@ -139,7 +139,9 @@ describe('cases utilities', () => {
         assignedTo: assignedUserFactory.build({ username: 'CURRENT_USER', forename: 'Jane', surname: 'Doe' }),
       })
 
-      expect(casesToRows('cases', cases, 'CURRENT_USER')[0][0].html).toEqual(personCell('cases', cases[0], 'You (Jane Doe)'))
+      expect(casesToRows('cases', cases, 'CURRENT_USER')[0][0].html).toEqual(
+        personCell('cases', cases[0], 'You (Jane Doe)'),
+      )
     })
 
     it('returns a formatted row for a case assigned to another user', () => {
@@ -147,7 +149,9 @@ describe('cases utilities', () => {
         assignedTo: assignedUserFactory.build({ username: 'ANOTHER_USER', forename: 'Dave', surname: 'Grant' }),
       })
 
-      expect(casesToRows('cases', cases, 'CURRENT_USER')[0][0].html).toEqual(personCell('cases', cases[0], 'Dave Grant'))
+      expect(casesToRows('cases', cases, 'CURRENT_USER')[0][0].html).toEqual(
+        personCell('cases', cases[0], 'Dave Grant'),
+      )
     })
 
     it('renders "None" for both accommodation columns when a case is no fixed abode', () => {

@@ -4,14 +4,12 @@ import { getActiveCaseListSegment, getActiveCaseListUrl } from './navigation'
 import { displayName } from './cases'
 import paths from '../paths/ui'
 
-// eslint-disable-next-line import/prefer-default-export
-export const breadcrumbs = (req: Request, caseData?: CaseDto) =>{
+const breadcrumbs = (req: Request, caseData?: CaseDto) => {
   const caseListUrl = getActiveCaseListUrl(req)
   const caseListSegment = getActiveCaseListSegment(req)
-  //todo need to upadte this.
   return [
     {
-      text: caseListSegment == 'cases' ? 'Case list' : 'Custom list',
+      text: caseListSegment === 'cases' ? 'Case list' : 'Custom list',
       href: caseListUrl,
     },
     caseData && {
@@ -20,3 +18,4 @@ export const breadcrumbs = (req: Request, caseData?: CaseDto) =>{
     },
   ].filter(Boolean)
 }
+export default breadcrumbs

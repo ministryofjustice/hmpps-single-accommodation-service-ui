@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
-import { breadcrumbs } from './breadcrumbs'
+import breadcrumbs from './breadcrumbs'
 import { caseFactory } from '../testutils/factories'
 
 describe('breadcrumbs', () => {
@@ -14,7 +14,7 @@ describe('breadcrumbs', () => {
   it('renders a single breadcrumb item for the case list page', () => {
     expect(breadcrumbs(request)).toEqual([{ text: 'Case list', href: '/case-list' }])
   })
-//todo custom list
+  // todo custom list
   it('renders breadcrumb items for the case list page and the profile page if case data is provided', () => {
     const caseData = caseFactory.build({
       crn: 'A123321',

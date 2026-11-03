@@ -626,7 +626,11 @@ export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceRe
   content: contentForCas3Status(serviceResult, cas3Application),
 })
 
-export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string, caseListUrl: string): StatusCard[] =>
+export const eligibilityToEligibilityCards = (
+  eligibility: EligibilityDto,
+  crn: string,
+  caseListUrl: string,
+): StatusCard[] =>
   [
     dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),

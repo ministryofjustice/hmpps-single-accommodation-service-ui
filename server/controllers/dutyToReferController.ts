@@ -24,7 +24,7 @@ import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
 import { radioItems } from '../utils/utils'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import { getActiveCaseListSegment } from '../utils/navigation'
 
 export type SubmissionFlow = 'add' | 'addNew' | 'edit'
@@ -84,7 +84,9 @@ export default class DutyToReferController {
       const { token } = res.locals.user
       const { crn, id } = req.params
       const caseListUrl = getActiveCaseListSegment(req)
-      const backLinkHref = id ? uiPaths.dutyToRefer.show({ caseListUrl, crn, id }) : uiPaths.cases.show({ caseListUrl, crn })
+      const backLinkHref = id
+        ? uiPaths.dutyToRefer.show({ caseListUrl, crn, id })
+        : uiPaths.cases.show({ caseListUrl, crn })
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
         who: res.locals.user.username,
@@ -179,7 +181,7 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       await this.auditService.logPageView(Page.DUTY_TO_REFER_OUTCOME, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -257,7 +259,7 @@ const caseListUrl = getActiveCaseListSegment(req)
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       await this.auditService.logPageView(Page.DUTY_TO_REFER_WITHDRAW, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -348,7 +350,7 @@ const caseListUrl = getActiveCaseListSegment(req)
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { note } = req.body
-const caseListUrl = getActiveCaseListSegment(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       if (!validateNote(req)) {
         return res.redirect(uiPaths.dutyToRefer.show({ caseListUrl, crn, id }))
       }

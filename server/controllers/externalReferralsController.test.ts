@@ -10,7 +10,7 @@ import ExternalReferralsService from '../services/externalReferralsService'
 import uiPaths from '../paths/ui'
 
 import * as utils from '../utils/externalReferrals'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import {
   detailsSummaryListRows,
@@ -559,7 +559,9 @@ describe('ExternalReferralsController', () => {
       await controller.saveWithdrawal()(request, response, next)
 
       expect(externalReferralsService.update).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.withdrawal({ caseListUrl: 'cases', crn, id }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.externalReferrals.withdrawal({ caseListUrl: 'cases', crn, id }),
+      )
     })
 
     it('redirects to withdrawal page if the API call fails', async () => {
@@ -567,7 +569,9 @@ describe('ExternalReferralsController', () => {
 
       await controller.saveWithdrawal()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.withdrawal({ caseListUrl: 'cases', crn, id }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.externalReferrals.withdrawal({ caseListUrl: 'cases', crn, id }),
+      )
     })
   })
 })

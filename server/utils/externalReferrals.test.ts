@@ -183,7 +183,7 @@ describe('externalReferrals utils', () => {
       })
 
       it('should render a set of referral status cards for the person tracker page', () => {
-        expect(externalReferralCards('cases',[referral])).toEqual([
+        expect(externalReferralCards('cases', [referral])).toEqual([
           {
             details: [
               { key: { text: 'Reference' }, value: { text: 'REF' } },

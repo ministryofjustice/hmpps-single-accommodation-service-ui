@@ -250,6 +250,7 @@ export default class CaseDetailsPage {
           level: 3,
         }),
       })
+      .last()
   }
 
   currentAccommodationCard() {

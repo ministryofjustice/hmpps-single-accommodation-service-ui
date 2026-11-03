@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 
-export type Team = {
+export type TeamDto = {
   name: string
   code: string
 }

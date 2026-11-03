@@ -317,7 +317,7 @@ describe('casesController', () => {
       expect(eligibilityService.getEligibility).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(proposedAddressesService.getProposedAddresses).toHaveBeenCalledWith(TEST_TOKEN, crn)
       expect(accommodationService.getAccommodationHistory).toHaveBeenCalledWith(TEST_TOKEN, crn)
-      expect(externalReferralsService.search).toHaveBeenCalledWith(TEST_TOKEN, crn)
+      expect(externalReferralsService.search).toHaveBeenCalledWith(TEST_TOKEN, crn, true)
 
       expect(response.render).toHaveBeenCalledWith('pages/show', {
         breadcrumbs: breadcrumbs(request),

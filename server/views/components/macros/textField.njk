@@ -1,0 +1,19 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% macro textField(context) %}
+{{
+  govukInput({
+    label: {
+      text: context.label
+    },
+    hint: {
+      text: context.hint
+    },
+    classes: 'govuk-!-width-full',
+    name: context.fieldName,
+    id: context.fieldName,
+    value: context[context.fieldName],
+    errorMessage: context.errors[context.fieldName]
+  })
+}}
+{% endmacro %}

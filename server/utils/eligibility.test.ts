@@ -230,6 +230,33 @@ describe('eligibilityStatusCard', () => {
     ],
     cas2: [
       {
+        title: 'NOT_ELIGIBLE',
+        result: { serviceStatus: 'NOT_ELIGIBLE' },
+      },
+      {
+        title: 'NOT_ELIGIBLE tier not correct',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['INVALID_TIER'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE sexual offence history',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['SEXUAL_OFFENCE_REGISTRATIONS_PRESENT'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE under 18',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['UNDER_18'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE currently in CAS3',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_CAS3_ACCOMMODATION'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE multiple failure reasons',
+        result: {
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['INVALID_TIER', 'SEXUAL_OFFENCE_REGISTRATIONS_PRESENT'],
+        },
+      },
+      {
         title: 'NOT_STARTED',
         result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' },
       },
@@ -409,9 +436,16 @@ describe('cas1 status card', () => {
     })
 
     it.each([
-      [10, '1 week'],
-      [11, '2 weeks'],
-    ])('rounds a %s-day placement duration to %s', (durationDays, expectedDuration) => {
+      [0, '0 days'],
+      [1, '1 day'],
+      [3, '3 days'],
+      [7, '1 week'],
+      [8, '1 week, 1 day'],
+      [10, '1 week, 3 days'],
+      [11, '1 week, 4 days'],
+      [14, '2 weeks'],
+      [15, '2 weeks, 1 day'],
+    ])('formats a %s-day placement duration as %s', (durationDays, expectedDuration) => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'PLACEMENT_BOOKED' })
       const application = {
         ...cas1Application,
@@ -430,69 +464,100 @@ describe('cas1 status card', () => {
   })
 
   describe('content', () => {
-    const serviceResult = serviceResultFactory.build({
-      serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED',
-    })
-
     describe('placement history', () => {
-      it('renders previous placements', () => {
-        const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
-          ...cas1Application,
-          placementHistory: [
-            {
-              dateApplied: '2026-06-01',
-              requestForPlacement: {
-                status: 'REQUEST_WITHDRAWN',
-                withdrawalDate: '2026-06-20',
-                withdrawalReason: 'CHANGE_IN_CIRCUMSTANCES',
-              },
+      const statuses = [
+        'PLACEMENT_REQUEST_WITHDRAWN',
+        'PLACEMENT_BOOKED',
+        'PLACEMENT_REQUEST_SUBMITTED',
+        'PLACEMENT_REQUEST_REJECTED',
+        'PLACEMENT_REQUEST_NOT_STARTED',
+        'PLACEMENT_CANCELLED',
+        'NOT_ARRIVED',
+        'ARRIVED',
+      ] as const
+      const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
+        ...cas1Application,
+        placementHistory: [
+          {
+            dateApplied: '2026-06-01',
+            requestForPlacement: {
+              status: 'REQUEST_WITHDRAWN',
+              withdrawalDate: '2026-06-20',
+              withdrawalReason: 'CHANGE_IN_CIRCUMSTANCES',
             },
-            {
-              dateApplied: '2026-05-01',
-              placement: {
-                status: 'DEPARTED',
-                actualArrivalDate: '2026-05-20',
-                actualDepartureDate: '2026-06-20',
-              },
+          },
+          {
+            dateApplied: '2026-05-01',
+            placement: {
+              status: 'DEPARTED',
+              actualArrivalDate: '2026-05-20',
+              actualDepartureDate: '2026-06-20',
             },
-            {
-              dateApplied: '2026-05-01',
-              requestForPlacement: {
-                expectedArrivalDate: '2026-05-21',
-              },
-              placement: {
-                status: 'NOT_ARRIVED',
-              },
+          },
+          {
+            dateApplied: '2026-05-01',
+            requestForPlacement: { expectedArrivalDate: '2026-05-21' },
+            placement: { status: 'NOT_ARRIVED' },
+          },
+          {
+            dateApplied: '2026-04-01',
+            placement: { status: 'CANCELLED', cancellationReason: 'No longer needed' },
+          },
+          {
+            dateApplied: '2026-03-30',
+            requestForPlacement: {
+              status: 'REQUEST_REJECTED',
+              submittedAt: '2026-03-30',
+              rejectionReason: 'Placement unsuitable',
             },
-            {
-              dateApplied: '2026-04-01',
-              placement: {
-                status: 'CANCELLED',
-                cancellationReason: 'No longer needed',
-              },
+          },
+          {
+            dateApplied: '2026-04-20',
+            requestForPlacement: {
+              status: 'REQUEST_WITHDRAWN',
+              withdrawalDate: '2026-04-20',
+              withdrawalReason: 'DUPLICATE_PLACEMENT_REQUEST',
             },
-            {
-              dateApplied: '2026-03-30',
-              requestForPlacement: {
-                status: 'REQUEST_REJECTED',
-                rejectionReason: 'Placement unsuitable',
-              },
+          },
+          {
+            dateApplied: '2026-03-20',
+            placement: { status: 'ARRIVED', actualArrivalDate: '2026-03-25' },
+          },
+          {
+            dateApplied: '2026-03-10',
+            placement: {
+              status: 'UPCOMING',
+              premises: { addressLine1: '2 Test Street', postcode: 'LS1 1AA', startDate: '2026-04-01' },
             },
-          ],
-        }
+          },
+          {
+            dateApplied: '2026-03-01',
+            requestForPlacement: { status: 'REQUEST_SUBMITTED', submittedAt: '2026-03-02' },
+          },
+          {
+            dateApplied: '2026-02-20',
+            requestForPlacement: { status: 'AWAITING_MATCH', submittedAt: '2026-02-20' },
+          },
+        ],
+      }
 
-        const { content } = cas1StatusCard({
-          serviceResult,
+      const contentFor = (serviceStatus: ServiceResult['serviceStatus']) =>
+        cas1StatusCard({
+          serviceResult: serviceResultFactory.build({ serviceStatus }),
           cas1Application: application,
-        })
+        }).content
 
-        expect(JSON.stringify(content)).toContain('5 previous placements on this application')
-        expect(content).toMatchSnapshot()
+      it.each(statuses)('shows previous placements on the %s card', serviceStatus => {
+        expect(JSON.stringify(contentFor(serviceStatus))).toContain('10 previous placements on this application')
+      })
+
+      it('renders previous placements', () => {
+        expect(contentFor('PLACEMENT_REQUEST_NOT_STARTED')).toMatchSnapshot()
       })
 
       it('does not render placement history when empty', () => {
         const { content } = cas1StatusCard({
-          serviceResult,
+          serviceResult: serviceResultFactory.build({ serviceStatus: 'PLACEMENT_REQUEST_NOT_STARTED' }),
           cas1Application,
         })
 
@@ -526,6 +591,19 @@ describe('cas3 status card', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
       expect(cas3StatusCard({ serviceResult, cas3Application }).details).toMatchSnapshot()
+    })
+
+    it('includes booking duration in weeks for a confirmed booking', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'BOOKING_CONFIRMED' })
+
+      expect(cas3StatusCard({ serviceResult, cas3Application }).details).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            key: expect.objectContaining({ text: 'Booking dates' }),
+            value: expect.objectContaining({ text: '1 September 2026 to 27 October 2026 (8 weeks)' }),
+          }),
+        ]),
+      )
     })
   })
 
@@ -608,8 +686,11 @@ describe('cas2 status card', () => {
   })
 
   describe('content', () => {
-    it('renders the more guidance content when not started', () => {
-      const serviceResult = serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' })
+    it('renders additional content for NOT_ELIGIBLE status', () => {
+      const serviceResult = serviceResultFactory.build({
+        serviceStatus: 'NOT_ELIGIBLE',
+        failureReasons: ['INVALID_TIER'],
+      })
 
       expect(cas2StatusCard({ serviceResult }).content).toMatchSnapshot()
     })
@@ -617,7 +698,7 @@ describe('cas2 status card', () => {
     it('does not render content for other statuses', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: 'SUBMITTED' })
 
-      expect(cas2StatusCard({ serviceResult }).content).toBeUndefined()
+      expect(cas2StatusCard({ serviceResult }).content).toEqual([])
     })
   })
 })
@@ -644,6 +725,38 @@ describe('eligibilityToEligibilityCards', () => {
     expect(cards[1].heading).toContain('Commissioned Rehabilitative Services (CRS)')
     expect(cards[2].heading).toContain('Approved premises (CAS1)')
     expect(cards[3].heading).toContain('CAS3 (transitional accommodation)')
+  })
+
+  it('hides the CAS1 card when the person is not in prison or CAS1 accommodation', () => {
+    const eligibility = eligibilityFactory.build({
+      crn,
+      cas1: {
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['NOT_IN_PRISON_OR_CAS1_ACCOMMODATION'],
+        }),
+      },
+    })
+
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
+
+    expect(cards.map(card => card.heading)).not.toContain('Approved premises (CAS1)')
+  })
+
+  it('shows the CAS1 card as inactive when ineligible for other reasons', () => {
+    const eligibility = eligibilityFactory.build({
+      crn,
+      cas1: {
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_ELIGIBLE',
+          failureReasons: ['MALE_NOT_HIGH_RISK_TIER'],
+        }),
+      },
+    })
+
+    const cards = eligibilityToEligibilityCards(eligibility, crn)
+
+    expect(cards.find(card => card.heading === 'Approved premises (CAS1)')?.inactive).toBe(true)
   })
 
   describe('when the cas2 flag is enabled', () => {

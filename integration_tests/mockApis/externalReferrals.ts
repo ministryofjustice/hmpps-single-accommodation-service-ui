@@ -48,7 +48,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: apiPaths.cases.externalReferrals.search({ crn }),
+        urlPath: apiPaths.cases.externalReferrals.search({ crn }),
       },
       response: {
         status: 200,
@@ -75,6 +75,19 @@ export default {
       request: {
         method: 'POST',
         urlPattern: apiPaths.cases.externalReferrals.notes({ crn, id }),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    }),
+
+  stubExternalReferralWithdraw: (crn: string, id: string): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: apiPaths.cases.externalReferrals.withdrawal({ crn, id }),
       },
       response: {
         status: 200,

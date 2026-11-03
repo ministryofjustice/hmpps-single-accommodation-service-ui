@@ -5,9 +5,9 @@ import { CasCard } from '../data/casCard'
 
 const statuses: CasCard[] = [
   { crn: 'XXXXX', status: 'Not started', action: 'Start application', actionLink: 'redirect' },
-  { crn: 'XXXXX', status: 'Submitted', submissionInfo: true, action: 'View application', actionLink: 'application' },
+  { crn: 'Y082779', status: 'Submitted', submissionInfo: true, action: 'View application', actionLink: 'application' },
   {
-    crn: 'XXXXX',
+    crn: 'Y076210',
     status: 'Not submitted',
     submissionInfo: true,
     action: 'Continue application',
@@ -21,9 +21,9 @@ const statuses: CasCard[] = [
     actionLink: 'application',
   },
   {
-    crn: '',
+    crn: 'Y080265',
     status: 'Application rejected',
-    declineReason: 'Some reason',
+    declineReason: 'Reject, not suitable for an AP: AP not necessary or proportionate to manage the identified risk',
     submissionInfo: true,
     action: 'Start new application',
     actionLink: 'redirect',
@@ -58,7 +58,7 @@ const statuses: CasCard[] = [
     actionLink: 'application',
   },
   {
-    crn: 'XXXXX',
+    crn: 'Y006208',
     status: 'Placement request submitted',
     submissionInfo: true,
     action: 'View application',

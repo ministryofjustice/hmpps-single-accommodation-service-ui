@@ -24,6 +24,7 @@ type Macro =
   | 'govukDetailsList'
   | 'textBlock'
   | 'bulletList'
+  | 'textField'
 
 export const renderMacro = <T>(macroName: Macro, context: T): string =>
   nunjucksInline().renderString(
@@ -51,3 +52,6 @@ export const textBlock = (text?: string) => renderMacro('textBlock', text)
 
 export const bulletList = (summaryText: string, items: string[], ordered?: boolean) =>
   renderMacro('bulletList', { summaryText, items, ordered: ordered ?? false })
+
+export const textField = (fieldName: string, label: string, context?: Record<string, unknown>) =>
+  renderMacro('textField', { ...context, fieldName, label })

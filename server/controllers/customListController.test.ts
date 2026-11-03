@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
+import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import { user } from '../routes/testutils/appSetup'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
@@ -10,6 +11,7 @@ import CustomListController from './customListController'
 import CustomListService from '../services/customListService'
 import * as validationUtils from '../utils/validation'
 import uiPaths from '../paths/ui'
+import { listOfCrns } from '../testutils/crn'
 
 describe('customListController', () => {
   const TEST_TOKEN = 'test-token'
@@ -148,43 +150,57 @@ describe('customListController', () => {
   })
   describe('submitCrnList', () => {
     it.each([
-      ['CRN1,CRN2', 2],
-      ['CRN1', 1],
+      ['A123456,B123456', 2],
+      ['C123456', 1],
     ])('renders the confirmation page on successful submission: %s', async (crnList, crnTotal) => {
       request.body = { crnList }
-      const addUserInputToFlash = jest.spyOn(validationUtils, 'addUserInputToFlash')
-
       await customListController.submitCrnList()(request, response, next)
 
       expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, crnList.split(','))
       expect(request.body).toEqual({ crnList })
-      expect(addUserInputToFlash).toHaveBeenCalledWith(request)
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
     })
 
     it('normalises CRNs separated by spaces, commas and line breaks', async () => {
-      request.body = { crnList: 'CRN1,\nCRN2  CRN3\n\nCRN4' }
+      request.body = { crnList: 'A123456,\nB123456  C123456\n\nD123456' }
 
       await customListController.submitCrnList()(request, response, next)
 
-      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, ['CRN1', 'CRN2', 'CRN3', 'CRN4'])
+      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, [
+        'A123456',
+        'B123456',
+        'C123456',
+        'D123456',
+      ])
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=4`)
     })
 
-    it('submits an empty list when no CRNs are provided', async () => {
+    it('Errors when an empty list is submitted', async () => {
       request.body = { crnList: '' }
+      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
 
       await customListController.submitCrnList()(request, response, next)
 
-      expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, [])
       expect(request.body).toEqual({ crnList: '' })
-      expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=0`)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
+      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'Enter 500 CRNs or fewer')
+    })
+    it('Errors when too many CRNs are submitted', async () => {
+      const crnList = listOfCrns(501)
+      request.body = { crnList }
+      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
+
+      await customListController.submitCrnList()(request, response, next)
+
+      expect(request.body).toEqual({ crnList })
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
+      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'Enter 500 CRNs or fewer')
     })
 
     it('renders the addCrns page with errors on unsuccessful submission', async () => {
-      const serverError: SanitisedError = new Error('Server error')
+      const serverError: SanitisedError<ErrorResponse> = new Error('Server error')
       customListService.addCustomList.mockRejectedValue(serverError)
-      const crnList = 'CRN1,CRN2'
+      const crnList = 'A123456,B123456'
       request.body = { crnList }
 
       const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
@@ -193,22 +209,42 @@ describe('customListController', () => {
       expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
       expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'Server error')
     })
+  })
+  describe('formatErrorMessage', () => {
+    it('formats two invalid CRNs without a comma before the final item', () => {
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, userMessage: 'A123456, B123456', errorCode: 'invalidCrns' }
+      expect(customListController.formatErrorMessage(error)).toBe('A123456 and B123456 are not recognised CRNs')
+    })
+    it('handles 0 crns', () => {
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, errorCode: 'invalidCrns' }
+      error.message = 'BAD REQUEST'
 
-    it('uses the API user message when submission fails with a sanitised error payload', async () => {
-      const serverError = {
-        message: 'Generic server error',
-        data: { userMessage: 'This list contains an invalid CRN' },
-      } as SanitisedError
-      customListService.addCustomList.mockRejectedValue(serverError)
-      request.body = { crnList: 'CRN1,CRN2' }
+      expect(customListController.formatErrorMessage(error)).toBe('BAD REQUEST')
+    })
 
-      const errorResponse = jest.spyOn(validationUtils, 'addErrorToFlash')
-      await customListController.submitCrnList()(request, response, next)
+    it('formats three invalid CRNs with commas between earlier items and "and" before the final item', () => {
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, userMessage: 'A123456,B123456,C123456', errorCode: 'invalidCrns' }
+      expect(customListController.formatErrorMessage(error)).toBe(
+        'A123456, B123456 and C123456 are not recognised CRNs',
+      )
+    })
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.addCrns.pattern)
-      expect(errorResponse).toHaveBeenCalledWith(request, 'crnList', 'This list contains an invalid CRN')
+    it('formats a single invalid CRN without a list separator', () => {
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.data = { status: 400, userMessage: 'A123456', errorCode: 'invalidCrns' }
+      expect(customListController.formatErrorMessage(error)).toBe('A123456 is not a recognised CRN')
+    })
+
+    it('falls back to the raw message when no CRN list can be extracted', () => {
+      const error: SanitisedError<ErrorResponse> = new SanitisedError('')
+      error.message = 'CRN validation failed'
+      expect(customListController.formatErrorMessage(error)).toBe('CRN validation failed')
     })
   })
+
   describe('confirmation', () => {
     it.each([
       [1, 'CRN added'],

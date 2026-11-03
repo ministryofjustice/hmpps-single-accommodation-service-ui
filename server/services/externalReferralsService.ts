@@ -1,4 +1,4 @@
-import { ExternalReferralCommand } from '@sas/api'
+import { ExternalReferralCommand, ExternalReferralWithdrawalDto } from '@sas/api'
 import { ExternalReferralsClient } from '../data'
 
 export default class ExternalReferralsService {
@@ -16,8 +16,8 @@ export default class ExternalReferralsService {
     return this.externalReferralsClient.update(token, crn, id, data)
   }
 
-  search(token: string, crn: string) {
-    return this.externalReferralsClient.search(token, crn)
+  search(token: string, crn: string, excludeWithdrawnReferrals?: boolean) {
+    return this.externalReferralsClient.search(token, crn, excludeWithdrawnReferrals)
   }
 
   async getTimeline(token: string, crn: string, id: string) {
@@ -26,5 +26,9 @@ export default class ExternalReferralsService {
 
   saveNote(token: string, crn: string, id: string, note: string) {
     return this.externalReferralsClient.saveNote(token, crn, id, note)
+  }
+
+  withdrawal(token: string, crn: string, id: string, withdrawal: ExternalReferralWithdrawalDto) {
+    return this.externalReferralsClient.withdrawal(token, crn, id, withdrawal)
   }
 }

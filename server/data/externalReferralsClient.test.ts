@@ -1,5 +1,6 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { faker } from '@faker-js/faker/locale/en'
+import { ExternalReferralWithdrawalDto } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import ExternalReferralsClient from './externalReferralsClient'
 import {
@@ -19,29 +20,37 @@ describeClient('ExternalReferralsClient', provider => {
     client = new ExternalReferralsClient(mockAuthenticationClient)
   })
 
-  it('search - should make a get request to /cases/{crn}/external-accommodation-referral/search and return response', async () => {
-    const referrals = externalReferralFactory.submitted().buildList(2)
-    const body = apiResponseFactory.externalReferrals(referrals)
-    const crn = crnFactory()
+  it.each([true, false, undefined])(
+    'search - should handle excludeWithdrawnReferrals=%s and return the response',
+    async excludeWithdrawnReferrals => {
+      const referrals = externalReferralFactory.submitted().buildList(2)
+      const body = apiResponseFactory.externalReferrals(referrals)
+      const crn = crnFactory()
 
-    await provider.addInteraction({
-      state: `external referrals exist with`,
-      uponReceiving: 'a request to get all external referrals for a crn',
-      withRequest: {
-        method: 'GET',
-        path: apiPaths.cases.externalReferrals.search({ crn }),
-        headers: {
-          authorization: 'Bearer test-user-token',
+      await provider.addInteraction({
+        state: 'external referrals exist with',
+        uponReceiving: `a request to get external referrals with excludeWithdrawnReferrals=${excludeWithdrawnReferrals}`,
+        withRequest: {
+          method: 'GET',
+          path: apiPaths.cases.externalReferrals.search({ crn }),
+          query:
+            excludeWithdrawnReferrals === undefined
+              ? {}
+              : { excludeWithdrawnReferrals: String(excludeWithdrawnReferrals) },
+          headers: {
+            authorization: 'Bearer test-user-token',
+          },
         },
-      },
-      willRespondWith: {
-        status: 200,
-        body,
-      },
-    })
-    const response = await client.search('test-user-token', crn)
-    expect(response).toEqual(body)
-  })
+        willRespondWith: {
+          status: 200,
+          body,
+        },
+      })
+
+      const response = await client.search('test-user-token', crn, excludeWithdrawnReferrals)
+      expect(response).toEqual(body)
+    },
+  )
 
   it('should make a GET request to /cases/{crn}/other-accommodation-referral/{id} and return the response body', async () => {
     const referral = externalReferralFactory.submitted().build()
@@ -172,5 +181,55 @@ describeClient('ExternalReferralsClient', provider => {
     })
 
     await client.saveNote('test-user-token', crn, id, note)
+  })
+
+  it('should make a POST request to external-referrals/notes to add a note', async () => {
+    const crn = crnFactory()
+    const id = faker.string.uuid()
+    const note = faker.lorem.lines(2)
+
+    await provider.addInteraction({
+      state: `Note can be added to exernal referal CRN ${crn}, id ${id}`,
+      uponReceiving: 'a request to add a note to an External Referral',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.externalReferrals.notes({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: { note },
+      },
+      willRespondWith: {
+        status: 201,
+      },
+    })
+
+    await client.saveNote('test-user-token', crn, id, note)
+  })
+
+  it('should make a POST request to external-referrals/withdrawals to withdraw a referral', async () => {
+    const crn = crnFactory()
+    const id = faker.string.uuid()
+    const withdrawal: ExternalReferralWithdrawalDto = {
+      withdrawalReason: 'PLACEMENT_COMPLETE',
+    }
+
+    await provider.addInteraction({
+      state: `Exernal referal CRN ${crn}, id ${id} can be withdrawn`,
+      uponReceiving: 'a request to withdraw an external referral',
+      withRequest: {
+        method: 'POST',
+        path: apiPaths.cases.externalReferrals.withdrawal({ crn, id }),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+        body: withdrawal,
+      },
+      willRespondWith: {
+        status: 201,
+      },
+    })
+
+    await client.withdrawal('test-user-token', crn, id, withdrawal)
   })
 })

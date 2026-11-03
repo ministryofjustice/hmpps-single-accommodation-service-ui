@@ -10,9 +10,17 @@ import {
   submissionFormValues,
   validateSubmission,
   validateNote,
+  summaryListRows,
+  withdrawalReasonRadios,
 } from './externalReferrals'
-import { auditRecordFactory, externalReferralFactory, externalReferralSubmissionFactory } from '../testutils/factories'
+import {
+  auditRecordFactory,
+  caseFactory,
+  externalReferralFactory,
+  externalReferralSubmissionFactory,
+} from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
+import * as macros from './macros'
 
 describe('externalReferrals utils', () => {
   let req: Request
@@ -233,6 +241,33 @@ describe('externalReferrals utils', () => {
     })
   })
 
+  describe('summaryListRows', () => {
+    const referral = externalReferralFactory.build()
+    const caseData = caseFactory.build()
+
+    const caseFields = ['Name', 'Date of birth', 'CRN', 'Prison number']
+    const referralFields = ['Organisation', 'Date submitted']
+
+    it('should render the summary list for the submission page', () => {
+      expect(summaryListRows(caseData).map(({ key: { text } }) => text)).toEqual(caseFields)
+    })
+
+    it('should render the summary list for the outcome page', () => {
+      expect(summaryListRows(caseData, referral).map(({ key: { text } }) => text)).toEqual([
+        ...caseFields,
+        ...referralFields,
+      ])
+    })
+
+    it('should render the summary list for the withdrawal page', () => {
+      expect(summaryListRows(caseData, referral, true).map(({ key: { text } }) => text)).toEqual([
+        ...caseFields,
+        ...referralFields,
+        'Status',
+      ])
+    })
+  })
+
   describe('submissionFormValues', () => {
     it('maps submission values from referral', () => {
       const referral = externalReferralFactory.build({
@@ -320,6 +355,17 @@ describe('externalReferrals utils', () => {
       expect(result.html).toMatch(/<p><strong class="govuk-tag govuk-tag--green">Accepted<\/strong><\/p>/)
       expect(result.html).toMatch(/Notes:\s*<div class="sas-text-block">Outcome note<\/div>/)
       expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
+    })
+  })
+
+  describe('withdrawalReasonRadios', () => {
+    it('renders the withdrawal reasons', () => {
+      jest.spyOn(macros, 'textField').mockReturnValue('test-field-macro')
+      const result = withdrawalReasonRadios('ANOTHER_REASON', { otherReason: 'Other reason' })
+      expect(result).toHaveLength(8)
+      expect(result[7].checked).toEqual(true)
+      expect(result[7].conditional.html).toEqual('test-field-macro')
+      expect(macros.textField).toHaveBeenCalledWith('otherReason', 'Reason', { otherReason: 'Other reason' })
     })
   })
 })

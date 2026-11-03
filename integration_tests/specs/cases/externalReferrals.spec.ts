@@ -24,6 +24,7 @@ const setupStubs = async () => {
   await externalReferralsApi.stubListExternalReferral(crn, [referral])
   await externalReferralsApi.stubExternalReferralTimeline(crn, referral.submission.id, referralTimeline)
   await externalReferralsApi.stubExternalReferralAddNote(crn, referral.submission.id)
+  await externalReferralsApi.stubExternalReferralWithdraw(crn, referral.submission.id)
   await userApi.stubGetTeams()
 
   return { caseData, referral, referralTimeline }
@@ -231,5 +232,53 @@ test.describe('external referrals', () => {
 
     // And I should see the updated outcome summary
     await rejectedDetailsPage.shouldShowOutcomeDetails()
+  })
+
+  test('should allow user to move a referral to the history', async ({ page }) => {
+    // Given I have stubbed the API responses
+    const { caseData, referral } = await setupStubs()
+    // And I am logged in
+    await login(page)
+
+    // When I visit the person tracker page
+    const trackerPage = await ProfileTrackerPage.visit(page, caseData)
+
+    // And I select 'view details' on a referral card
+    await trackerPage.clickViewReferralDetails()
+    const detailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, referral)
+
+    // When I click 'Move to referral history'
+    await detailsPage.clickButton('Move to referral history')
+
+    // Then I am on the move to history page
+    const submissionPage = await ExternalReferralsSubmissionPage.verifyOnPage(page, 'Move to referral history')
+
+    // When I submit the empty form, I see errors
+    await submissionPage.clickButton('Move to referral history')
+    await submissionPage.shouldShowErrorMessagesForFields({
+      withdrawalReason: 'Select a reason for moving to the referral history',
+    })
+
+    // When I complete the form selectiong 'Other' reason, and submit.
+    let updatedReferral = await submissionPage.completeWithdrawalForm(referral, 'Other')
+    await submissionPage.clickButton('Move to referral history')
+
+    // Then I should see an error as the otherReason field is mandatory if shown
+    await submissionPage.shouldShowErrorMessagesForFields({
+      otherReason: 'Enter a reason',
+    })
+
+    // When I complete the other reason field
+    updatedReferral = await submissionPage.completeWithdrawalOtherReason(updatedReferral)
+    await submissionPage.clickButton('Move to referral history')
+
+    // Then I am on the case details page
+    await ProfileTrackerPage.verifyOnPage(page, caseData)
+
+    // Then I should see a confirmation banner
+    await trackerPage.shouldShowBanner('Success', 'Moved to referral history')
+
+    // And the withdrawal API should have been called
+    await submissionPage.checkWithdrawalApiCalled(updatedReferral)
   })
 })

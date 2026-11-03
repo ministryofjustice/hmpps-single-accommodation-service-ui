@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { RadioItem, StatusCard, StatusTag } from '@sas/ui'
-import { AuditRecordDto, CaseDto, ExternalReferralDto, ServiceResult } from '@sas/api'
+import { AuditRecordDto, CaseDto, ExternalReferralDto, ExternalReferralWithdrawalDto, ServiceResult } from '@sas/api'
 import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
 import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import {
@@ -18,7 +18,7 @@ import {
 
 import paths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
-import { renderMacro, statusTag, textBlock } from './macros'
+import { renderMacro, statusTag, textBlock, textField } from './macros'
 import { serviceStatusTag } from './statusTag'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { staffName } from './staff'
@@ -39,6 +39,7 @@ const fieldMapping: Record<string, FieldDefinition> = {
   email: { label: 'Email address', format: 'text' },
   submissionNote: { label: 'Notes', format: 'textarea' },
   outcomeNote: { label: 'Notes', format: 'textarea' },
+  otherReason: { label: 'Other reason', format: 'text' },
 }
 
 export const validateSubmission = (req: Request) => {
@@ -184,11 +185,29 @@ export const outcomeReasonLabels: Partial<Record<ExternalReferralDto['status'], 
   REJECTED: 'Rejected',
 }
 
-export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDto) => {
+export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withdrawalReason'], string> = {
+  ANOTHER_ACCOMMODATION_FOUND: 'Another accommodation option found',
+  NO_CAPACITY: 'No capacity',
+  PLACEMENT_COMPLETE: 'Placement complete',
+  NO_RESPONSE_FROM_ORGANISATION: 'No response from organisation',
+  PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED: 'Person can no longer be contacted or has disengaged',
+  PERSON_NOT_SUITABLE: 'Person not suitable',
+  PERSON_NO_LONGER_CONSENTS: 'Person no longer consents',
+  ANOTHER_REASON: 'Other',
+}
+
+export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDto, includeStatus = false) => {
   const rows = caseSummaryListRows(caseData)
   if (referral) {
     rows.push(summaryListRow('Organisation', referral.submission.organisationName))
     rows.push(summaryListRow('Date submitted', formatDateAndDaysAgo(referral.submission.submissionDate)))
+    if (includeStatus) {
+      rows.push(
+        summaryListRow('Status', statusTag(serviceStatusTag(referral.status as ServiceResult['serviceStatus'])), {
+          type: 'html',
+        }),
+      )
+    }
   }
 
   return rows
@@ -205,7 +224,7 @@ export const validateOutcome = (req: Request) => {
   const { outcomeStatus, outcomeNote } = req.body
   const errors: Record<string, string> = {
     outcomeStatus: validateRadioButton(outcomeStatus, 'external referral status'),
-    outcomeNote: validateMaxLength(outcomeNote, 'Notes', 4000),
+    outcomeNote: validateMaxLength(outcomeNote, fieldMapping.outcomeNote.label, 4000),
   }
 
   return validateAndFlashErrors(req, errors)
@@ -219,6 +238,32 @@ export const outcomeDetailsSummaryListRows = (referral: ExternalReferralDto) => 
 
   return [
     summaryListRow('Status', statusTag(serviceStatusTag(status as ServiceResult['serviceStatus'])), { type: 'html' }),
-    summaryListRow('Notes', outcomeNote, { type: 'textBlock', noValue: 'No notes added' }),
+    summaryListRow(fieldMapping.outcomeNote.label, outcomeNote, { type: 'textBlock', noValue: 'No details added' }),
   ]
+}
+
+export const withdrawalReasonRadios = (
+  withdrawalReason: ExternalReferralWithdrawalDto['withdrawalReason'],
+  context: Record<string, unknown>,
+): Array<RadioItem> => {
+  const html = textField('otherReason', 'Reason', context)
+  return radioItems(withdrawalReasonLabels, withdrawalReason).map((radioItem: RadioItem) => {
+    if (radioItem.value === 'ANOTHER_REASON') {
+      return { ...radioItem, conditional: { html } }
+    }
+    return radioItem
+  })
+}
+
+export const validateWithdrawal = (req: Request) => {
+  const { withdrawalReason, otherReason } = req.body
+  const errors: Record<string, string> = {
+    withdrawalReason: validateRadioButton(withdrawalReason, 'reason for moving to the referral history'),
+    otherReason:
+      withdrawalReason === 'ANOTHER_REASON'
+        ? validateMandatoryText(otherReason, 'reason') || validateMaxLength(otherReason, 'reason', 100)
+        : undefined,
+  }
+
+  return validateAndFlashErrors(req, errors)
 }

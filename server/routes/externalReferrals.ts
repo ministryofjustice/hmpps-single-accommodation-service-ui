@@ -17,4 +17,7 @@ export default function externalReferralsRoutes(
 
   router.get(basePath.outcome.pattern, externalReferralsController.outcome())
   router.post(basePath.outcome.pattern, externalReferralsController.saveOutcome())
+
+  router.get(basePath.withdrawal.pattern, externalReferralsController.withdrawal())
+  router.post(basePath.withdrawal.pattern, externalReferralsController.saveWithdrawal())
 }

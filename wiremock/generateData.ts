@@ -2,12 +2,13 @@
 import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
-import { CaseDto, DtrServiceResult, DutyToReferDto, ProposedAccommodationDto } from '@sas/api'
+import { CaseDto, DtrServiceResult, DutyToReferDto, ExternalReferralDto, ProposedAccommodationDto } from '@sas/api'
 import {
   accommodationSummaryFactory,
   auditRecordFactory,
   caseFactory,
   eligibilityFactory,
+  externalReferralFactory,
   proposedAccommodationFactory,
   referralFactory,
 } from '../server/testutils/factories'
@@ -17,7 +18,7 @@ import casesFixture from './fixtures/cases.json'
 /**
  * Generate data for wiremock fixtures.
  *
- * Usage: npx ts-node wiremock/generateData.ts [--all] [--eligibility] [--referrals] [--dtr] [--proposed-addresses] [--accommodation-history]
+ * Usage: npx ts-node wiremock/generateData.ts [--all] [--eligibility] [--referrals] [--dtr] [--proposed-addresses] [--external-referrals] [--accommodation-history]
  */
 
 const generateCases = process.argv.includes('--all')
@@ -27,12 +28,13 @@ const generate = {
   referrals: generateCases || process.argv.includes('--referrals'),
   dutyToRefer: generateCases || process.argv.includes('--dtr'),
   proposedAddresses: generateCases || process.argv.includes('--proposed-addresses'),
+  externalReferrals: generateCases || process.argv.includes('--external-referrals'),
   accommodation: generateCases || process.argv.includes('--accommodation'),
 }
 
 if (Object.values(generate).filter(Boolean).length === 0) {
   console.log(
-    'No data selected. Specify --all, --eligibility, --referrals, --dtr, --proposed-addresses or --accommodation',
+    'No data selected. Specify --all, --eligibility, --referrals, --dtr, --proposed-addresses, --external-referrals or --accommodation',
   )
   process.exit(1)
 }
@@ -154,6 +156,34 @@ if (generate.proposedAddresses) {
       ]),
   )
   saveToFixture('proposedAddressesAuditRecords', auditRecords)
+}
+
+if (generate.externalReferrals) {
+  const trait = () =>
+    faker.helpers.arrayElement([
+      externalReferralFactory.submitted(),
+      externalReferralFactory.accepted(),
+      externalReferralFactory.rejected(),
+    ])
+
+  const externalReferrals = cases.reduce(
+    (responses, c) => ({
+      ...responses,
+      [c.crn]: [...Array(faker.number.int({ min: 0, max: 3 }))].map(() => trait().build({ crn: c.crn })),
+    }),
+    {} as Record<string, ExternalReferralDto[]>,
+  )
+  saveToFixture('externalReferrals', externalReferrals)
+
+  const auditRecords = Object.fromEntries(
+    Object.values(externalReferrals)
+      .flat()
+      .map((referral: ExternalReferralDto) => [
+        referral.submission.id,
+        auditRecordFactory.build({ type: 'CREATE', commitDate: referral.submission.createdAt }),
+      ]),
+  )
+  saveToFixture('externalReferralsAuditRecords', auditRecords)
 }
 
 if (generate.accommodation) {

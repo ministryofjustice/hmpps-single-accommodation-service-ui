@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Team } from './Team'
 import type { UpstreamFailureDto } from './UpstreamFailureDto'
-export type ApiResponseDtoListTeam = {
-  data: Array<Team>
+import type { UserDto } from './UserDto'
+export type ApiResponseDtoUserDto = {
+  data: UserDto
   upstreamFailures: Array<UpstreamFailureDto>
 }

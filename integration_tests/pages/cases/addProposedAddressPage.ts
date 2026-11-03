@@ -9,6 +9,7 @@ import {
   formatProposedAddressNextAccommodation,
   formatProposedAddressStatus,
   formDataToRequestBody,
+  verificationStatusLabels,
 } from '../../../server/utils/proposedAddresses'
 import { accommodationTypesMap } from '../../../server/testutils/factories/proposedAccommodation'
 import { formatAddress } from '../../../server/utils/addresses'
@@ -124,7 +125,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async completeStatusForm(proposedAddressData: ProposedAddressFormData) {
-    const statusLabel = formatProposedAddressStatus(proposedAddressData.verificationStatus)
+    const statusLabel = verificationStatusLabels[proposedAddressData.verificationStatus]
     await this.selectRadioByLabel(statusLabel)
   }
 

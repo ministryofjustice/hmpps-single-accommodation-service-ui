@@ -258,6 +258,179 @@ multiple lines
 &lt;script&gt;alert(&quot;escaped!&quot;)&lt;/script&gt;</div>"
 `;
 
+exports[`Macros textField renders a pre-populated text field with an error 1`] = `
+"
+
+
+
+
+  
+
+  
+<div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="testField">
+    Field label
+  </label>
+
+  
+  
+  <div id="testField-hint" class="govuk-hint">
+    
+  </div>
+
+
+  
+  
+  <p id="testField-error" class="govuk-error-message">
+    
+    <span class="govuk-visually-hidden">Error:</span> Some terrible error
+    
+  </p>
+
+  <input
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+    
+        
+        
+      
+        
+      
+    
+        
+        
+    
+        
+        
+      
+        
+      
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+   class="govuk-input govuk-!-width-full govuk-input--error" id="testField" name="testField" type="text" value="field value" aria-describedby="testField-hint testField-error">
+
+</div>
+
+"
+`;
+
+exports[`Macros textField renders a text field 1`] = `
+"
+
+
+
+
+  
+<div class="govuk-form-group">
+  <label class="govuk-label" for="testField">
+    Field label
+  </label>
+
+  
+  
+  <div id="testField-hint" class="govuk-hint">
+    
+  </div>
+
+
+  <input
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+        
+      
+    
+        
+        
+      
+    
+        
+        
+    
+        
+        
+    
+        
+        
+      
+        
+      
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+   class="govuk-input govuk-!-width-full" id="testField" name="testField" type="text" aria-describedby="testField-hint">
+
+</div>
+
+"
+`;
+
 exports[`Macros tierScoreTag renders tag if tier is empty 1`] = `""`;
 
 exports[`Macros tierScoreTag renders tag if tier is known 1`] = `

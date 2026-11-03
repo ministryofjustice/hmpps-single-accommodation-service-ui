@@ -124,7 +124,7 @@ export default class CasesController {
         proposedAddresses: this.proposedAddressesService.getProposedAddresses(token, crn),
         accommodationHistory: this.accommodationService.getAccommodationHistory(token, crn),
         accommodationSummaries: this.accommodationService.getAccommodationSummary(token, crn),
-        externalReferrals: this.externalReferralsService.search(token, crn),
+        externalReferrals: this.externalReferralsService.search(token, crn, true),
       })
 
       return res.render('pages/show', {

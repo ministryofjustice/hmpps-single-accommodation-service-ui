@@ -20,13 +20,6 @@ const statuses: CasCard[] = [
     actionLink: 'application',
   },
   {
-    crn: 'Y076360',
-    status: 'More information needed',
-    submissionInfo: true,
-    action: 'Continue application',
-    actionLink: 'application',
-  },
-  {
     crn: 'Y085246',
     status: 'Withdrawn',
     submissionInfo: true,

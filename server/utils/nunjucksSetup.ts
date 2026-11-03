@@ -11,6 +11,7 @@ import { formatDate, mojDateOrBlank } from './dates'
 import uiPaths from '../paths/ui'
 import { riskLevelStatusTag } from './riskLevel'
 import { injectConditionals } from './form'
+import { sexualOffenceTags } from './sexualOffenceTags'
 
 const NUNJUCKS_TEMPLATE_PATHS = [
   path.join(__dirname, '../../server/views'),
@@ -30,6 +31,7 @@ const addGlobals = (env: nunjucks.Environment) => {
     ...uiPaths,
   })
   env.addGlobal('riskLevel', riskLevelStatusTag)
+  env.addGlobal('sexualOffenceTags', sexualOffenceTags)
   env.addGlobal('injectConditionals', injectConditionals)
   env.addGlobal('dateFieldValues', dateFieldValues)
 

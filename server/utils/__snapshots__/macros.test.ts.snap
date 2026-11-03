@@ -250,6 +250,48 @@ exports[`Macros riskLevelTag renders a risk level tag for risk level VERY_HIGH 1
 
 exports[`Macros riskLevelTag renders an unknown risk level tag 1`] = `""`;
 
+exports[`Macros sexualOffenceRegistrationTag renders a tag for each registration code 1`] = `
+"
+    <div class="sas-risk-tag">
+      <dd>(SC1 &amp; SC2)</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>Non Registered Sex Offender</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>Registered Sex Offender</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>Risk to Children</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>Sexual Harm Prevention Order / Sexual Risk Order</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>Child Sexual Exploitation – Perpetrator</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>ALT Child Sexual Exploitation history</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>ALT Registered Sex Offender</dd>
+    </div>
+  
+    <div class="sas-risk-tag">
+      <dd>Sex Offences Prevention Order</dd>
+    </div>
+  "
+`;
+
+exports[`Macros sexualOffenceRegistrationTag renders no tags when there are no registrations 1`] = `""`;
+
 exports[`Macros textBlock renders a text block 1`] = `
 "<div class="sas-text-block">Some text
 

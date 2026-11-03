@@ -1598,10 +1598,29 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE multiple failure 
       "html": "<p class="govuk-body govuk-!-margin-bottom-0">Not eligible due to:</p>
       <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
         
-      <li>Sexual offence history</li>
-      <li>Age (applicant is under 18)</li>
       <li>Tier not eligible</li>
+      <li>Sexual offence history</li>
       </ul>",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE no conditional release date status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Must have a conditional release date to start application.",
     },
   ],
   "details": [],

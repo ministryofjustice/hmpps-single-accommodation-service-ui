@@ -250,6 +250,10 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_CAS3_ACCOMMODATION'] },
       },
       {
+        title: 'NOT_ELIGIBLE no conditional release date',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_PRISON_NO_RELEASE_DATE'] },
+      },
+      {
         title: 'NOT_ELIGIBLE multiple failure reasons',
         result: {
           serviceStatus: 'NOT_ELIGIBLE',

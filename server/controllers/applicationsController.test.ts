@@ -67,6 +67,7 @@ describe('ApplicationsController', () => {
     expect(casesService.submitCas2Arrival).toHaveBeenCalledWith('token-1', 'X123456', 'application-123', {
       markedAsArrivedDateTime: '2026-10-30T12:00:00.000Z',
     })
+    expect(request.flash).toHaveBeenCalledWith('success', 'CAS2 accommodation marked as arrived')
     expect(response.redirect).toHaveBeenCalledWith('/cases/X123456')
   })
 

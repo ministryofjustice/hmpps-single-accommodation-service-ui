@@ -49,8 +49,10 @@ describe('referrals utilities', () => {
     status: 'COMPLETED',
     date: '2026-06-22',
     withdrawalReason: 'PLACEMENT_COMPLETE',
+    organisationName: 'The organisation',
     referredBy: { username: 'alice_smith', name: 'Alice Smith' },
   })
+
   const referrals = [referral1, referral2, referral3, referral4, referral5]
 
   describe('referralHistoryRows', () => {

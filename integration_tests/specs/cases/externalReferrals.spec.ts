@@ -285,6 +285,7 @@ test.describe('external referrals', () => {
     })
 
     await casesApi.stubGetReferralHistory(crn, [historicReferral])
+    await externalReferralsApi.stubGetExternalReferralBySubmissionId(updatedReferral)
 
     await submissionPage.clickButton('Move to referral history')
 
@@ -299,5 +300,14 @@ test.describe('external referrals', () => {
 
     // And the withdrawal API should have been called
     await submissionPage.checkWithdrawalApiCalled(updatedReferral)
+
+    // When I click to view the withdrawn referral
+    await trackerPage.clickViewReferralHistoryDetails()
+
+    // Then I am on the move to history page
+    const withdrawnDetailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, referral)
+
+    // And the details page has buttons and change links removed
+    await withdrawnDetailsPage.shouldNotShowLink('change')
   })
 })

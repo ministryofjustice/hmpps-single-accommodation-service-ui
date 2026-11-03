@@ -13,7 +13,7 @@ type Cas2Card = {
 }
 
 const statuses: Cas2Card[] = [
-  { crn: 'Y067718', status: 'Not started', action: 'Start application', actionLink: 'redirect' },
+  { crn: 'Y084841', status: 'Not started', action: 'Start application', actionLink: 'redirect' },
   { crn: 'Y076357', status: 'Submitted', submissionInfo: true, action: 'View application', actionLink: 'application' },
   {
     crn: 'Y076809',
@@ -30,7 +30,7 @@ const statuses: Cas2Card[] = [
     actionLink: 'application',
   },
   {
-    crn: 'Y068099',
+    crn: 'Y085246',
     status: 'Withdrawn',
     submissionInfo: true,
     action: 'Start new application',

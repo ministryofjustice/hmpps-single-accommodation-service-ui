@@ -469,7 +469,16 @@ describe('cas1 status card', () => {
 
   describe('content', () => {
     describe('placement history', () => {
-      const statuses = ['PLACEMENT_REQUEST_NOT_STARTED', 'NOT_ARRIVED', 'ARRIVED'] as const
+      const statuses = [
+        'PLACEMENT_REQUEST_WITHDRAWN',
+        'PLACEMENT_BOOKED',
+        'PLACEMENT_REQUEST_SUBMITTED',
+        'PLACEMENT_REQUEST_REJECTED',
+        'PLACEMENT_REQUEST_NOT_STARTED',
+        'PLACEMENT_CANCELLED',
+        'NOT_ARRIVED',
+        'ARRIVED',
+      ] as const
       const application: NonNullable<Cas1ServiceResult['cas1Application']> = {
         ...cas1Application,
         placementHistory: [

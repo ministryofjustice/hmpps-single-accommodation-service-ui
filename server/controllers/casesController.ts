@@ -26,7 +26,7 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import { setCaseListUrl } from '../utils/backlinks'
+import { getActiveCaseListSegment, setActiveCaseListUrl } from '../utils/navigation'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
@@ -50,7 +50,7 @@ export default class CasesController {
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
       const { peopleType = 'NFA_RISK' } = query
-      setCaseListUrl(req)
+      setActiveCaseListUrl(req)
       const {
         data: { teams, cases },
       } = await collectApiResponses({
@@ -111,7 +111,8 @@ export default class CasesController {
       })
       const { crn } = req.params
       const { token } = res.locals.user
-
+      // setActiveCaseListUrl(req)
+      const caseListUrl = getActiveCaseListSegment(req)
       const { data: caseData } = await this.casesService.getCase(token, crn)
 
       if (caseData.userAccess === 'LIMITED') {
@@ -135,14 +136,21 @@ export default class CasesController {
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: renderActions(data.eligibility?.caseActions),
         noFixedAbode: noFixedAbodeAlert(data.accommodationSummaries),
-        nextAccommodationCard: accommodationCard('next', data.accommodationSummaries?.nextAccommodation),
-        currentAccommodationCard: accommodationCard('current', data.accommodationSummaries?.currentAccommodation),
-        referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),
-        eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn) : [],
-        proposedAddresses: data.proposedAddresses.proposed.map(proposedAddressStatusCard),
+        nextAccommodationCard: accommodationCard(caseListUrl, 'next', data.accommodationSummaries?.nextAccommodation),
+        currentAccommodationCard: accommodationCard(
+          caseListUrl,
+          'current',
+          data.accommodationSummaries?.currentAccommodation,
+        ),
+        referralHistoryRows: referralHistoryRows(caseListUrl, data.referralHistory, res.locals?.user?.username, crn),
+        eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn, caseListUrl) : [],
+        proposedAddresses: data.proposedAddresses.proposed.map(it => proposedAddressStatusCard(it, caseListUrl)),
         accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),
-        failedChecksAddresses: data.proposedAddresses.failedChecks.map(proposedAddressStatusCard),
-        externalReferralCards: externalReferralCards(data.externalReferrals),
+        failedChecksAddresses: data.proposedAddresses.failedChecks.map(it =>
+          proposedAddressStatusCard(it, caseListUrl),
+        ),
+        externalReferralCards: externalReferralCards(caseListUrl, data.externalReferrals),
+        caseListUrl,
       })
     }
   }

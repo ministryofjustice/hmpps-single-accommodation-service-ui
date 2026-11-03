@@ -30,7 +30,7 @@ describe('customListController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request = mock<Request>({ id: 'request-id', originalUrl: '/', path: '/custom-list' })
   })
 
   describe('index', () => {
@@ -87,7 +87,7 @@ describe('customListController', () => {
         peopleType: 'NFA_RISK',
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
+        casesRows: casesToRows('custom-list', cases),
         filters: [],
         query: {},
       })

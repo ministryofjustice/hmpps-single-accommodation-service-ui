@@ -27,6 +27,7 @@ import { displayName } from '../../../server/utils/cases'
 import { stubProfilePage } from '../../helpers/profilePage'
 
 const crn = 'X123456'
+const caseListUrl = 'cases'
 const setupStubs = async ({
   initialCaseData,
   initialDutyToRefer,
@@ -132,7 +133,7 @@ test.describe('duty to refer', () => {
     await profileTrackerPage.shouldShowBanner('DTR referral details added')
 
     // And I should see the new DTR eligibility card
-    await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(crn, eligibility.dtr))
+    await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr))
 
     // When I click on the DTR link
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -609,7 +610,10 @@ test.describe('duty to refer', () => {
     )
 
     // And I should see the new DTR eligibility card
-    await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(crn, eligibility.dtr))
+    await profileTrackerPage.shouldShowCard(
+      'Duty to refer (DTR)',
+      dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr),
+    )
 
     // When I click on the DTR link
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))

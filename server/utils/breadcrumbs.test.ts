@@ -8,13 +8,13 @@ describe('breadcrumbs', () => {
   const caseListUrl = '/case-list'
 
   beforeEach(() => {
-    request = mock<Request>({ session: { caseListUrl } })
+    request = mock<Request>({ session: { caseListUrl }, path: '/' })
   })
 
   it('renders a single breadcrumb item for the case list page', () => {
     expect(breadcrumbs(request)).toEqual([{ text: 'Case list', href: '/case-list' }])
   })
-
+//todo custom list
   it('renders breadcrumb items for the case list page and the profile page if case data is provided', () => {
     const caseData = caseFactory.build({
       crn: 'A123321',

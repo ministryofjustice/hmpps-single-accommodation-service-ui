@@ -51,7 +51,7 @@ describe('cases utilities', () => {
     })
 
     it('renders a formatted cell for a case with full access', () => {
-      expect(personCell(personFullAccess)).toMatchSnapshot()
+      expect(personCell('cases',personFullAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with limited information', () => {
@@ -65,7 +65,7 @@ describe('cases utilities', () => {
         riskLevel: undefined,
       })
 
-      expect(personCell(personWithLimitedInformation)).toMatchSnapshot()
+      expect(personCell('cases',personWithLimitedInformation)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with full access with LAO flag', () => {
@@ -74,7 +74,7 @@ describe('cases utilities', () => {
         limitedAccess: true,
       })
 
-      expect(personCell(personRestrictedAccess)).toMatchSnapshot()
+      expect(personCell('cases',personRestrictedAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with limited access', () => {
@@ -83,7 +83,7 @@ describe('cases utilities', () => {
         prisonNumber: 'Z4567HG',
       })
 
-      expect(personCell(personExcludedAccess)).toMatchSnapshot()
+      expect(personCell('cases',personExcludedAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell for a case with unknown access', () => {
@@ -92,11 +92,11 @@ describe('cases utilities', () => {
         prisonNumber: 'C4567HG',
       })
 
-      expect(personCell(personUnknownAccess)).toMatchSnapshot()
+      expect(personCell('cases',personUnknownAccess)).toMatchSnapshot()
     })
 
     it('renders a formatted cell including Assigned to', () => {
-      expect(personCell(personFullAccess, 'You (John Doe)')).toMatchSnapshot()
+      expect(personCell('cases',personFullAccess, 'You (John Doe)')).toMatchSnapshot()
     })
   })
 
@@ -124,9 +124,9 @@ describe('cases utilities', () => {
       const cases = caseFactory.settled().buildList(1)
       const accommodationStatus = accommodationStatusCell(cases[0])
 
-      expect(casesToRows(cases)).toEqual([
+      expect(casesToRows('cases', cases)).toEqual([
         [
-          { html: personCell(cases[0]) },
+          { html: personCell('cases', cases[0]) },
           { html: accommodationCell('current', cases[0]) },
           { html: accommodationCell('next', cases[0]) },
           { html: accommodationStatus ? statusCell(accommodationStatus) : '' },
@@ -139,7 +139,7 @@ describe('cases utilities', () => {
         assignedTo: assignedUserFactory.build({ username: 'CURRENT_USER', forename: 'Jane', surname: 'Doe' }),
       })
 
-      expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'You (Jane Doe)'))
+      expect(casesToRows('cases', cases, 'CURRENT_USER')[0][0].html).toEqual(personCell('cases', cases[0], 'You (Jane Doe)'))
     })
 
     it('returns a formatted row for a case assigned to another user', () => {
@@ -147,16 +147,16 @@ describe('cases utilities', () => {
         assignedTo: assignedUserFactory.build({ username: 'ANOTHER_USER', forename: 'Dave', surname: 'Grant' }),
       })
 
-      expect(casesToRows(cases, 'CURRENT_USER')[0][0].html).toEqual(personCell(cases[0], 'Dave Grant'))
+      expect(casesToRows('cases', cases, 'CURRENT_USER')[0][0].html).toEqual(personCell('cases', cases[0], 'Dave Grant'))
     })
 
     it('renders "None" for both accommodation columns when a case is no fixed abode', () => {
       const cases = caseFactory.nfa().buildList(1)
       const accommodationStatus = accommodationStatusCell(cases[0])
 
-      expect(casesToRows(cases)).toEqual([
+      expect(casesToRows('cases', cases)).toEqual([
         [
-          { html: personCell(cases[0]) },
+          { html: personCell('cases', cases[0]) },
           { html: 'No accommodation' },
           { html: '' },
           { html: statusCell(accommodationStatus) },
@@ -167,8 +167,8 @@ describe('cases utilities', () => {
     it('renders fallback values when accommodation summaries is undefined', () => {
       const cases = caseFactory.buildList(1, { accommodationSummaries: undefined })
 
-      expect(casesToRows(cases)).toEqual([
-        [{ html: personCell(cases[0]) }, { html: 'No accommodation' }, { html: '' }, { html: '' }],
+      expect(casesToRows('cases', cases)).toEqual([
+        [{ html: personCell('cases', cases[0]) }, { html: 'No accommodation' }, { html: '' }, { html: '' }],
       ])
     })
   })

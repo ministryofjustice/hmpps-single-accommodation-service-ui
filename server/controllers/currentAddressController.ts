@@ -13,6 +13,7 @@ import {
   validateRadioButton,
 } from '../utils/validation'
 import { getPageBackLink } from '../utils/backlinks'
+import { getActiveCaseListSegment } from '../utils/navigation'
 import { getTodayLocal } from '../utils/dates'
 
 export default class CurrentAddressController {
@@ -26,14 +27,14 @@ export default class CurrentAddressController {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
       const { token } = res.locals.user
-
+      const caseListUrl = getActiveCaseListSegment(req)
       const [{ data: caseData }, { data: proposedAddresses }] = await Promise.all([
         this.casesService.getCase(token, crn),
         this.proposedAddressesService.getProposedAddresses(token, crn, { confirmedOnly: true }),
       ])
 
       if (!proposedAddresses.proposed.length) {
-        return res.redirect(uiPaths.currentAddress.new({ crn }))
+        return res.redirect(uiPaths.currentAddress.new({ caseListUrl, crn }))
       }
 
       await this.auditService.logPageView(Page.CURRENT_ADDRESS_SELECT, {
@@ -53,6 +54,7 @@ export default class CurrentAddressController {
         items: proposedAddressItems(proposedAddresses.proposed, userInput.proposedAddressId),
         errors,
         errorSummary,
+        caseListUrl,
       })
     }
   }
@@ -62,17 +64,17 @@ export default class CurrentAddressController {
       const { crn } = req.params
       const { token } = res.locals.user
       const { proposedAddressId } = req.body
-
+const caseListUrl = getActiveCaseListSegment(req)
       const isValid = validateAndFlashErrors(req, {
         proposedAddressId: validateRadioButton(proposedAddressId, 'address'),
       })
 
       if (!isValid) {
-        return res.redirect(uiPaths.currentAddress.select({ crn }))
+        return res.redirect(uiPaths.currentAddress.select({ caseListUrl, crn }))
       }
 
       if (proposedAddressId === NEW_ADDRESS_OPTION) {
-        return res.redirect(uiPaths.currentAddress.new({ crn }))
+        return res.redirect(uiPaths.currentAddress.new({ caseListUrl, crn }))
       }
 
       try {
@@ -82,10 +84,10 @@ export default class CurrentAddressController {
         }
         await this.proposedAddressesService.submitArrival(token, crn, proposedAddressId, arrival)
         req.flash('success', 'Current address changed')
-        return res.redirect(uiPaths.cases.show({ crn }))
+        return res.redirect(uiPaths.cases.show({ caseListUrl, crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the current address. Please try again.')
-        return res.redirect(uiPaths.currentAddress.select({ crn }))
+        return res.redirect(uiPaths.currentAddress.select({ caseListUrl, crn }))
       }
     }
   }
@@ -94,7 +96,7 @@ export default class CurrentAddressController {
     return async (req: Request, res: Response) => {
       const { crn } = req.params
       const { token } = res.locals.user
-
+const caseListUrl = getActiveCaseListSegment(req)
       await this.auditService.logPageView(Page.CURRENT_ADDRESS_NEW, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -109,6 +111,7 @@ export default class CurrentAddressController {
         ]),
         displayName: displayName(caseData),
         deliusLink: deliusAddressAndAccommodationUrl(crn),
+        caseListUrl,
       })
     }
   }

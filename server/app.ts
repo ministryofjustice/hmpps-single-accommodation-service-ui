@@ -22,7 +22,7 @@ import routes from './routes'
 import type { Services } from './services'
 import config from './config'
 import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedirect'
-import { getCaseListUrl } from './utils/backlinks'
+import { getActiveCaseListUrl, setActiveCaseListUrl } from './utils/navigation'
 import { getActivePage } from './utils/navigation'
 import setUpSentryProcessor from './middleware/setUpSentryProcessor'
 import setUpUserTelemetry from './middleware/setUpUserTelemetry'
@@ -49,7 +49,8 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpMaintenancePageRedirect())
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')
-    res.locals.caseListUrl = getCaseListUrl(req)
+    setActiveCaseListUrl(req)
+    res.locals.caseListUrl = getActiveCaseListUrl(req)
     res.locals.activePage = getActivePage(req.path)
     next()
   })

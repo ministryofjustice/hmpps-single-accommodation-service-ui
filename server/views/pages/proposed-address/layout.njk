@@ -40,7 +40,7 @@
         </div>
         {% block extraAction %}{% endblock %}
         <p>
-          <a class="govuk-link govuk-link--no-visited-state" href="{{ cancelLinkHref or paths.proposedAddresses.cancel({ crn: crn }) }}">
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ cancelLinkHref or paths.proposedAddresses.cancel({ caseListUrl: caseListUrl, crn: crn }) }}">
             Cancel
           </a>
         </p>

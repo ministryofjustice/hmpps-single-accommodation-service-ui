@@ -66,7 +66,7 @@
         <header class="sas-section__header">
           <h3 class="govuk-heading-l govuk-!-margin-bottom-4">External referrals</h3>
           <a
-            href="{{ paths.externalReferrals.submission({ crn: caseData.crn }) }}"
+            href="{{ paths.externalReferrals.submission({ caseListUrl: caseListUrl, crn: caseData.crn }) }}"
             class="govuk-link govuk-link--no-visited-state govuk-body"
           >Add details</a>
         </header>
@@ -81,7 +81,7 @@
         <header class="sas-section__header">
           <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Proposed addresses</h2>
           <a
-            href="{{ paths.proposedAddresses.start({ crn: caseData.crn }) }}"
+            href="{{ paths.proposedAddresses.start({ caseListUrl: caseListUrl, crn: caseData.crn }) }}"
             class="govuk-link govuk-link--no-visited-state govuk-body"
             >Add a proposed address</a
           >
@@ -108,7 +108,7 @@
   <h2 class="govuk-heading-l govuk-!-margin-top-6">History</h2>
 
   <section>
-    {{ referralHistoryTable({ rows: referralHistoryRows, hasApiError: 'referralHistory' in upstreamFailures }) }}
+    {{ referralHistoryTable({ caseListUrl: caseListUrl, rows: referralHistoryRows, hasApiError: 'referralHistory' in upstreamFailures }) }}
   </section>
 
   <section>

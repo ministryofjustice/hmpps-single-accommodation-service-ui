@@ -3,7 +3,7 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Check your answers before adding the address" %}
-{% set formAction = paths.proposedAddresses.submit({ crn: crn }) %}
+{% set formAction = paths.proposedAddresses.submit({ caseListUrl:caseListUrl, crn: crn }) %}
 {% set buttonText = "Save" %}
 
 {% block formContent %}

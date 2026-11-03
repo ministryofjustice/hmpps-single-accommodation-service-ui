@@ -32,7 +32,7 @@
               {{
                 govukButton({
                     text: "Add outcome",
-                    href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                    href: paths.dutyToRefer.outcome({ caseListUrl: caseListUrl, crn: crn, id: dtrId }),
                     preventDoubleClick: true
                 })
               }}
@@ -40,7 +40,7 @@
             {{
               govukButton({
                 text: "Withdraw this referral",
-                href: paths.dutyToRefer.withdraw({ crn: crn, id: dtrId }),
+                href: paths.dutyToRefer.withdraw({ caseListUrl: caseListUrl, crn: crn, id: dtrId }),
                 preventDoubleClick: true,
                 classes: "govuk-button--secondary"
               })
@@ -49,7 +49,7 @@
             {{
               govukButton({
                 text: "Add new referral",
-                href: paths.dutyToRefer.newSubmission({ crn: crn }),
+                href: paths.dutyToRefer.newSubmission({ caseListUrl: caseListUrl, crn: crn }),
                 preventDoubleClick: true,
                 classes: "govuk-button--secondary"
               })
@@ -66,7 +66,7 @@
                   actions: {
                     items: [
                       {
-                        href: paths.dutyToRefer.outcome({ crn: crn, id: dtrId }),
+                        href: paths.dutyToRefer.outcome({ caseListUrl: caseListUrl, crn: crn, id: dtrId }),
                         classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
                         text: "Change"
                       }
@@ -86,7 +86,7 @@
                 actions: {
                   items: [
                     {
-                      href: paths.dutyToRefer.edit({ crn: crn, id: dtrId }),
+                      href: paths.dutyToRefer.edit({ caseListUrl: caseListUrl, crn: crn, id: dtrId }),
                       classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
                       text: "Change"
                     }

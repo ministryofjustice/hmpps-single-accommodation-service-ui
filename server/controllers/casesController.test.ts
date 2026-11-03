@@ -40,6 +40,7 @@ import * as validationUtils from '../utils/validation'
 import { breadcrumbs } from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
+import * as navigationUtils from '../utils/navigation'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -95,7 +96,9 @@ describe('casesController', () => {
 
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
-      jest.spyOn(backLinksUtils, 'setCaseListUrl')
+      jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
+      jest.spyOn(navigationUtils, 'setActiveCaseListUrl')
+
     })
 
     it('renders the case list page for the current user by default', async () => {
@@ -110,7 +113,7 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
+      expect(navigationUtils.setActiveCaseListUrl).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
@@ -119,7 +122,7 @@ describe('casesController', () => {
         peopleType: 'NFA_RISK',
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
+        casesRows: casesToRows('cases', cases),
         filters: [],
         query: {},
       })
@@ -145,7 +148,7 @@ describe('casesController', () => {
         teamCode: 'team-code',
         peopleType: 'HOUSED',
       })
-      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
+      expect(navigationUtils.setActiveCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         ...baseContext,
         tabs: casesTabs(request.originalUrl, 'HOUSED'),
@@ -153,7 +156,7 @@ describe('casesController', () => {
         resultsSummary: casesResultsSummary(cases),
         filters: queryToFilters(request.query, request.originalUrl, teams),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases, 'user1'),
+        casesRows: casesToRows('cases', cases, 'user1'),
         query: request.query,
       })
     })
@@ -327,14 +330,15 @@ describe('casesController', () => {
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: renderActions(eligibility.caseActions),
         noFixedAbode: noFixedAbodeAlert(accommodationSummaries),
-        nextAccommodationCard: accommodationCard('next', accommodationSummaries.nextAccommodation),
-        currentAccommodationCard: accommodationCard('current', accommodationSummaries.currentAccommodation),
-        referralHistoryRows: referralHistoryRows(referralHistory),
-        eligibilityCards: eligibilityToEligibilityCards(eligibility, crn),
-        proposedAddresses: proposed.map(proposedAddressStatusCard),
+        nextAccommodationCard: accommodationCard('cases', 'next', accommodationSummaries.nextAccommodation),
+        caseListUrl: 'cases',
+        currentAccommodationCard: accommodationCard('cases', 'current', accommodationSummaries.currentAccommodation),
+        referralHistoryRows: referralHistoryRows('cases', referralHistory),
+        eligibilityCards: eligibilityToEligibilityCards(eligibility, crn, 'cases'),
+        proposedAddresses: proposed.map(it => proposedAddressStatusCard(it, 'cases')),
         accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
-        failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),
-        externalReferralCards: externalReferralCards(externalReferrals),
+        failedChecksAddresses: failedChecks.map(it => proposedAddressStatusCard(it, 'cases')),
+        externalReferralCards: externalReferralCards('cases', externalReferrals),
       })
     })
 

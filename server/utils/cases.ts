@@ -10,6 +10,7 @@ import { accommodationCell, accommodationStatusCell } from './accommodationSumma
 import { validateAndFlashErrors, validateCrn } from './validation'
 import { summaryListRow } from './summaryListRow'
 import { formatDateAndAge } from './dates'
+import { getActiveCaseListSegment, getActiveCaseListUrl } from './navigation'
 
 export const formatRiskLevel = (level?: Case['riskLevel']) => {
   return (
@@ -84,29 +85,30 @@ export const updateQueryParams = (url: string, updateParams: Record<string, unkn
   return queryString ? `${path}?${queryString}` : path
 }
 
-export const personCell = (caseData: Case, assignedToText?: string): string =>
-  renderMacro('personCell', {
+export const personCell = (caseListUrl: string, caseData: Case, assignedToText?: string): string =>
+ renderMacro('personCell', {
     ...caseData,
     name: displayName(caseData, { laoFlag: '', caseList: true }),
     assignedToText,
+    caseListUrl,
   })
 
 export const actionsCell = (actions: CaseAction[]): string =>
   renderMacro('actionsCell', { actions: renderActions(actions) })
 
-export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[] =>
+export const casesToRows = (caseListUrl: string, cases: Case[], currentUsername?: string): TableRow[] =>
   cases.map(c => {
     const assignedToText = currentUsername ? caseAssignedTo(c, currentUsername) : undefined
     const accommodationStatus = accommodationStatusCell(c)
     return [
-      htmlContent(personCell(c, assignedToText)),
+      htmlContent(personCell(caseListUrl, c, assignedToText)),
       htmlContent(accommodationCell('current', c)),
       htmlContent(accommodationCell('next', c)),
       htmlContent(accommodationStatus ? statusCell(accommodationStatus) : ''),
     ]
   })
 
-export const caseToRows = (caseData: Case | null): TableRow[] => (caseData ? casesToRows([caseData]) : [])
+export const caseToRows = (caseData: Case | null): TableRow[] => (caseData ? casesToRows(null, [caseData]) : [])
 
 export const casesTableColumns = () => [
   { text: 'Name' },
@@ -166,6 +168,8 @@ export const setupCaseList = (
   const { query } = req
   const { peopleType = 'NFA_RISK' } = query
   const filters = queryToFilters(query, req.originalUrl, teams)
+  const caseListUrl = getActiveCaseListSegment(req)
+  console.log(`caseListUrl: ${caseListUrl}`)
 
   const currentUsername = query.teamCode ? username : undefined
   return {
@@ -173,7 +177,7 @@ export const setupCaseList = (
     tabs: casesTabs(req.originalUrl, peopleType),
     resultsSummary: casesResultsSummary(cases),
     casesTableColumns: casesTableColumns(),
-    casesRows: casesToRows(cases, currentUsername),
+    casesRows: casesToRows(caseListUrl, cases, currentUsername),
     query,
     filters,
     assignedToOptions: assignedToOptions(userFullName, teams),

@@ -37,12 +37,12 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   }
 
   static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
-    await page.goto(paths.cases.show({ crn: caseData.crn as string }))
+    await page.goto(paths.cases.show({ caseListUrl: 'cases', crn: caseData.crn as string }))
     return ProfileTrackerPage.verifyOnPage(page, caseData)
   }
 
   async shouldShowEligibility(eligibility: Eligibility) {
-    for await (const card of eligibilityToEligibilityCards(eligibility, this.caseData.crn)) {
+    for await (const card of eligibilityToEligibilityCards(eligibility, this.caseData.crn, 'cases')) {
       await this.shouldShowCard(card.heading, card)
     }
   }
@@ -162,7 +162,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       await expect(row).toContainText(referralStatusTag(referral.status, referral.type).text)
       await this.shouldShowStatusCell(referralStatusCell(referral), row)
 
-      for await (const link of referralLinksForType(referral.type, referral.id, this.caseData.crn, referral.uiUrl)) {
+      for await (const link of referralLinksForType('cases', referral.type, referral.id, this.caseData.crn, referral.uiUrl)) {
         await expect(row.getByRole('link', { name: link.text })).toHaveAttribute('href', link.href)
       }
     }
@@ -176,7 +176,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await expect(proposedAddressesSection).toBeVisible()
     await expect(proposedAddressesSection.getByRole('link', { name: 'Add a proposed address' })).toHaveAttribute(
       'href',
-      paths.proposedAddresses.start({ crn: this.caseData.crn }),
+      paths.proposedAddresses.start({ caseListUrl: 'cases', crn: this.caseData.crn }),
     )
 
     if (!proposedAddresses.find(address => address.verificationStatus !== 'FAILED')) {
@@ -190,7 +190,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
 
     for await (const proposedAddress of proposedAddresses) {
-      await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress))
+      await this.shouldShowCard(formatAddress(proposedAddress.address), proposedAddressStatusCard(proposedAddress, 'cases'))
     }
   }
 
@@ -236,7 +236,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       'Add details of applications made to other providers, such as charities, voluntary organisations and housing associations.',
     )
     for await (const referral of referrals) {
-      await this.shouldShowCard(referral.submission.organisationName, externalReferralCards([referral])[0])
+      await this.shouldShowCard(referral.submission.organisationName, externalReferralCards('cases', [referral])[0])
     }
   }
 

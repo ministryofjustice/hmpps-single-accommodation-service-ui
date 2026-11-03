@@ -43,6 +43,7 @@ export default class ApplicationsController {
         await this.casesService.submitCas2Arrival(res.locals.user.token, crn, applicationId, {
           markedAsArrivedDateTime: new Date().toISOString(),
         })
+        req.flash('success', 'CAS2 accommodation marked as arrived')
         return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem confirming the arrival. Please try again.')

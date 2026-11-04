@@ -43,7 +43,15 @@ describe('referrals utilities', () => {
     referralRejectionReasonDetail: 'Some rejection reason detail',
     referredBy: { username: 'alice_smith', name: 'Alice Smith' },
   })
-  const referrals = [referral1, referral2, referral3, referral4]
+  const referral5 = referralFactory.build({
+    id: '206790',
+    type: 'ER',
+    status: 'COMPLETED',
+    date: '2026-06-22',
+    withdrawalReason: 'PLACEMENT_COMPLETE',
+    referredBy: { username: 'alice_smith', name: 'Alice Smith' },
+  })
+  const referrals = [referral1, referral2, referral3, referral4, referral5]
 
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {
@@ -53,7 +61,7 @@ describe('referrals utilities', () => {
     it('filters out CAS2 referrals when the feature flag is disabled', () => {
       const cas2Referral = referralFactory.build({ type: 'CAS2' })
 
-      expect(referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(4)
+      expect(referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(5)
     })
 
     describe('when the cas2 flag is enabled', () => {
@@ -73,7 +81,7 @@ describe('referrals utilities', () => {
 
         const result = referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')
 
-        expect(result).toHaveLength(5)
+        expect(result).toHaveLength(6)
         expect(result).toMatchSnapshot()
       })
     })

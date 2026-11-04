@@ -141,6 +141,9 @@ export default class CustomListController {
         correlationId: req.id,
       })
       const crnTotalText = Number(req.query.t)
+      if (!crnTotalText) {
+        return res.redirect(uiPaths.customList.index.pattern)
+      }
       const crnAddedText = crnTotalText > 1 ? 'CRNs added' : 'CRN added'
       return res.render('pages/customList/confirmation', {
         crnTotalText,

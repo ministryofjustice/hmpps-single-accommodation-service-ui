@@ -60,7 +60,11 @@ const hintForDTR = (result: ServiceResult) => {
   return undefined
 }
 
-export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResult): StatusCard => {
+export const dutyToReferStatusCard = (
+  caseListUrl: string,
+  crn?: string,
+  dutyToRefer?: DtrServiceResult,
+): StatusCard => {
   const { serviceResult } = dutyToRefer || {}
   const { serviceStatus } = serviceResult || {}
 
@@ -70,17 +74,17 @@ export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResu
     hint: hintForDTR(serviceResult),
     status: serviceStatusTag(serviceStatus),
     details: detailsForStatus(dutyToRefer),
-    links: linksForStatus(dutyToRefer, crn),
+    links: linksForStatus(caseListUrl, dutyToRefer, crn),
   }
 }
 
-export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => {
+export const linksForStatus = (caseListUrl: string, dtr?: DtrServiceResult, crn?: string): Link[] => {
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
 
   const link = submission?.id && {
     text: 'View referral',
-    href: uiPaths.dutyToRefer.show({ crn, id: submission.id }),
+    href: uiPaths.dutyToRefer.show({ caseListUrl, crn, id: submission.id }),
   }
 
   switch (status) {
@@ -89,7 +93,7 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
     case 'SUBMITTED':
       return [link]
     case 'NOT_STARTED':
-      return [{ text: 'Add referral details', href: uiPaths.dutyToRefer.submission({ crn }) }]
+      return [{ text: 'Add referral details', href: uiPaths.dutyToRefer.submission({ caseListUrl, crn }) }]
     default:
       return []
   }

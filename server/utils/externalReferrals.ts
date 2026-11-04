@@ -86,9 +86,10 @@ export const submissionFormValues = (referral: ExternalReferralDto | undefined):
   }
 }
 
-const cardLinks = (referral: ExternalReferralDto) => {
+const cardLinks = (referral: ExternalReferralDto, caseListUrl: string) => {
   const { crn, submission: { id } = {} } = referral
-  const url = paths.externalReferrals.show({ crn, id })
+
+  const url = paths.externalReferrals.show({ caseListUrl, crn, id })
   return [{ text: 'View details', href: url, external: false }]
 }
 
@@ -113,10 +114,10 @@ export const externalReferralStatusTag = (status?: ExternalReferralDto['status']
     ARCHIVED: { text: 'Archived', colour: 'grey' },
   })[status] || { text: 'Unknown' }
 
-export const externalReferralCards = (referrals?: ExternalReferralDto[]): Array<StatusCard> => {
+export const externalReferralCards = (caseListUrl: string, referrals?: ExternalReferralDto[]): Array<StatusCard> => {
   return (referrals ?? []).map(referral => ({
     heading: referral.submission?.organisationName,
-    links: cardLinks(referral),
+    links: cardLinks(referral, caseListUrl),
     details: cardDetails(referral),
     status: externalReferralStatusTag(referral.status),
   }))

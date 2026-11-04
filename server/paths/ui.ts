@@ -1,16 +1,17 @@
 import { path } from 'static-path'
 
-const casesPath = path('/cases')
-const proposedAddressesPath = casesPath.path(':crn/proposed-addresses')
-const currentAddressPath = casesPath.path(':crn/current-address')
-const dutyToReferPath = casesPath.path(':crn/dtr')
-const externalReferralsPath = casesPath.path(':crn/external-referrals')
+const listPath = path('/:caseListUrl')
+const proposedAddressesPath = listPath.path(':crn/proposed-addresses')
+const currentAddressPath = listPath.path(':crn/current-address')
+const dutyToReferPath = listPath.path(':crn/dtr')
+const externalReferralsPath = listPath.path(':crn/external-referrals')
 const customListPath = path('/custom-list')
 
 export default {
   cases: {
     index: path('/'),
-    show: casesPath.path(':crn'),
+    listPath: path('/cases'),
+    show: listPath.path(':crn'),
     search: path('/search'),
   },
   dutyToRefer: {
@@ -56,5 +57,6 @@ export default {
     index: customListPath,
     addCrns: customListPath.path('add-crns'),
     confirmation: customListPath.path('confirmation'),
+    show: customListPath.path(':crn'),
   },
 }

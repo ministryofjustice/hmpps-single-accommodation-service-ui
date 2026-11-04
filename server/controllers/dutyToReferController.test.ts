@@ -26,7 +26,8 @@ import {
 } from '../testutils/factories'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { radioItems } from '../utils/utils'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
+import * as navigationUtils from '../utils/navigation'
 
 describe('dutyToReferController', () => {
   let request: Request
@@ -68,6 +69,7 @@ describe('dutyToReferController', () => {
     jest.spyOn(validationUtils, 'validateAndFlashErrors')
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
     jest.spyOn(validationUtils, 'addUserInputToFlash')
+    jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
   })
 
   describe('submission', () => {
@@ -83,6 +85,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/submission', {
         pageTitle: 'Add Duty to Refer (DTR) referral details',
         backLinkHref: '/cases/CRN123',
+        caseListUrl: 'cases',
         crn: 'CRN123',
         tableRows: summaryListRows(caseData),
         localAuthorities,
@@ -181,12 +184,16 @@ describe('dutyToReferController', () => {
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral details added')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
     })
 
     it('updates and redirects to the DTR details page when editing', async () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
-      const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
+      const expectedRedirect = uiPaths.dutyToRefer.show({
+        caseListUrl: 'cases',
+        crn: 'CRN123',
+        id: dutyToRefer.submission.id,
+      })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       request.params.id = dutyToRefer.submission.id
@@ -209,7 +216,11 @@ describe('dutyToReferController', () => {
       const submission = dtrSubmissionFactory.accepted().build({ outcomeNote: 'This is an outcome note' })
       const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123', submission })
       const outcomeReason = dutyToRefer.submission?.outcomeReason
-      const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
+      const expectedRedirect = uiPaths.dutyToRefer.show({
+        caseListUrl: 'cases',
+        crn: 'CRN123',
+        id: dutyToRefer.submission.id,
+      })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       request.params.id = dutyToRefer.submission.id
@@ -248,7 +259,7 @@ describe('dutyToReferController', () => {
         heading: 'New DTR referral details added',
         body: "<p>The previous referral has been moved to James Smith's referral history</p>",
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
     })
 
     describe.each([
@@ -256,19 +267,19 @@ describe('dutyToReferController', () => {
         'when editing an existing submission',
         'edit',
         { id: 'submission-id' },
-        uiPaths.dutyToRefer.edit({ crn: 'CRN123', id: 'submission-id' }),
+        uiPaths.dutyToRefer.edit({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
       ],
       [
         'when adding a submission for the first time',
         'add',
         { id: undefined },
-        uiPaths.dutyToRefer.submission({ crn: 'CRN123' }),
+        uiPaths.dutyToRefer.submission({ caseListUrl: 'cases', crn: 'CRN123' }),
       ],
       [
         'when adding a new submission',
         'addNew',
         { id: undefined },
-        uiPaths.dutyToRefer.newSubmission({ crn: 'CRN123' }),
+        uiPaths.dutyToRefer.newSubmission({ caseListUrl: 'cases', crn: 'CRN123' }),
       ],
     ])('%s', (_, flow: SubmissionFlow, params, errorRedirect) => {
       beforeEach(() => {
@@ -319,6 +330,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/outcome', {
         pageTitle: 'Add Duty to Refer (DTR) outcome',
         backLinkHref: '/cases/CRN123/dtr/existing-submission-id/details',
+        caseListUrl: 'cases',
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
@@ -404,7 +416,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).not.toHaveBeenCalled()
       expect(response.redirect).toHaveBeenCalledWith(
-        uiPaths.dutyToRefer.outcome({ crn: 'CRN123', id: 'submission-id' }),
+        uiPaths.dutyToRefer.outcome({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
       )
     })
 
@@ -415,7 +427,7 @@ describe('dutyToReferController', () => {
       await controller.saveOutcome()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(
-        uiPaths.dutyToRefer.outcome({ crn: 'CRN123', id: 'submission-id' }),
+        uiPaths.dutyToRefer.outcome({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
       )
     })
   })
@@ -441,6 +453,7 @@ describe('dutyToReferController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/show', {
         breadcrumbs: breadcrumbs(request, caseData),
+        caseListUrl: 'cases',
         crn,
         dtrId: 'submission-id',
         displayName: displayName(caseData),
@@ -489,7 +502,9 @@ describe('dutyToReferController', () => {
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
+      )
       expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(request, {
         note: 'Enter a note',
       })
@@ -502,7 +517,9 @@ describe('dutyToReferController', () => {
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
+      )
       expect(validationUtils.addGenericErrorToFlash).toHaveBeenCalledWith(request, 'API error')
       expect(validationUtils.addUserInputToFlash).toHaveBeenCalledWith(request)
     })
@@ -514,7 +531,9 @@ describe('dutyToReferController', () => {
 
       await controller.saveNote()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.dutyToRefer.show({ crn: 'CRN123', id: 'submission-id' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.dutyToRefer.show({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
+      )
       expect(request.flash).toHaveBeenCalledWith('success', 'Note added')
       expect(dutyToReferService.submitTimelineNote).toHaveBeenCalledWith('token-1', 'CRN123', 'submission-id', {
         note: 'Some valid note',
@@ -542,6 +561,7 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/withdraw', {
         pageTitle: 'Withdraw referral',
         backLinkHref: '/cases/CRN123/dtr/submission-id/details',
+        caseListUrl: 'cases',
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
@@ -608,7 +628,7 @@ describe('dutyToReferController', () => {
         submissionNote: null,
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'DTR referral withdrawn')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
     })
 
     it('saves with OTHER reason and withdrawal reason text', async () => {
@@ -637,7 +657,7 @@ describe('dutyToReferController', () => {
 
       expect(dutyToReferService.update).not.toHaveBeenCalled()
       expect(response.redirect).toHaveBeenCalledWith(
-        uiPaths.dutyToRefer.withdraw({ crn: 'CRN123', id: 'submission-id' }),
+        uiPaths.dutyToRefer.withdraw({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
       )
     })
 
@@ -647,7 +667,7 @@ describe('dutyToReferController', () => {
       await controller.saveWithdrawal()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(
-        uiPaths.dutyToRefer.withdraw({ crn: 'CRN123', id: 'submission-id' }),
+        uiPaths.dutyToRefer.withdraw({ caseListUrl: 'cases', crn: 'CRN123', id: 'submission-id' }),
       )
     })
   })

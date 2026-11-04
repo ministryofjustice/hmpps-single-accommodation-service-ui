@@ -16,7 +16,7 @@ export default class ExternalReferralsSubmissionPage extends AbstractPage {
   }
 
   static async visit(page: Page, caseData: Case): Promise<ExternalReferralsSubmissionPage> {
-    await page.goto(paths.externalReferrals.submission({ crn: caseData.crn }))
+    await page.goto(paths.externalReferrals.submission({ caseListUrl: 'cases', crn: caseData.crn }))
     return ExternalReferralsSubmissionPage.verifyOnPage(page, 'Add external referral details')
   }
 

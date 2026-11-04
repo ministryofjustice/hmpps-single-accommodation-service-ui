@@ -3,7 +3,7 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Enter the address" %}
-{% set formAction = paths.proposedAddresses.details({crn: crn}) %}
+{% set formAction = paths.proposedAddresses.details({ caseListUrl: caseListUrl, crn: crn}) %}
 
 {% block formContent %}
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">

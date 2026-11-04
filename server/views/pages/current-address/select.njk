@@ -3,7 +3,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set pageTitle = "What is the new current address?" %}
-{% set formAction = paths.currentAddress.select({ crn: crn }) %}
+{% set formAction = paths.currentAddress.select({ caseListUrl: caseListUrl, crn: crn }) %}
 
 {% block formContent %}
   {{

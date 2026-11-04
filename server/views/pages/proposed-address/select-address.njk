@@ -3,14 +3,14 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set pageTitle = "Select an address" %}
-{% set backLinkHref = paths.proposedAddresses.lookup({crn: crn}) %}
-{% set formAction = paths.proposedAddresses.selectAddress({crn: crn}) %}
+{% set backLinkHref = paths.proposedAddresses.lookup({ caseListUrl:caseListUrl, crn: crn}) %}
+{% set formAction = paths.proposedAddresses.selectAddress({ caseListUrl:caseListUrl, crn: crn}) %}
 {% set hideManualAddressEntry = featureFlags.hideManualAddressEntry %}
 
 {% block extraAction %}
   {% if not hideManualAddressEntry %}
     <p>
-      <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.details({ crn: crn }) }}">
+      <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.details({ caseListUrl: caseListUrl, crn: crn }) }}">
         Enter address manually
       </a>
     </p>
@@ -42,7 +42,7 @@
       {% endif %}
     </dl>
 
-    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.lookup({crn: crn}) }}">Change</a>
+    <a class="govuk-link govuk-link--no-visited-state" href="{{ paths.proposedAddresses.lookup({ caseListUrl:caseListUrl, crn: crn}) }}">Change</a>
   </div>
 
   {{

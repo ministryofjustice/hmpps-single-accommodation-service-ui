@@ -19,8 +19,10 @@ export default function routes(services: Services): Router {
     customListController,
     staticController,
   } = controllers(services)
+  customListRoutes(router, customListController, casesController)
 
   router.get(uiPaths.cases.index.pattern, casesController.index())
+  router.get(uiPaths.cases.listPath.pattern, casesController.index())
   router.get(uiPaths.cases.search.pattern, casesController.search())
   router.get(uiPaths.cases.show.pattern, casesController.show())
 
@@ -28,7 +30,6 @@ export default function routes(services: Services): Router {
   currentAddressRoutes(router, currentAddressController)
   dutyToReferRoutes(router, dutyToReferController)
   externalReferralsRoutes(router, externalReferralsController)
-  customListRoutes(router, customListController)
 
   router.get(uiPaths.static.maintenance.pattern, staticController.maintenance())
 

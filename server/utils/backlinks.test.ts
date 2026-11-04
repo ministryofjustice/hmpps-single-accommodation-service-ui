@@ -1,9 +1,8 @@
 import { mock } from 'jest-mock-extended'
 import { Session } from 'express-session'
 import { Request } from 'express'
-import * as backlinksUtils from './backlinks'
-import { getCaseListUrl, getPageBackLink, setCaseListUrl } from './backlinks'
-import uiPaths from '../paths/ui'
+import * as navigationUtils from './navigation'
+import getPageBackLink from './backlinks'
 
 describe('Link management', () => {
   const matchList = ['/pattern1/:param', '/pattern2/']
@@ -32,7 +31,7 @@ describe('Link management', () => {
 
   describe('getPageBackLink', () => {
     beforeEach(() => {
-      jest.spyOn(backlinksUtils, 'getCaseListUrl').mockReturnValue('/?teamCode=N34')
+      jest.spyOn(navigationUtils, 'getActiveCaseListUrl').mockReturnValue('/?teamCode=N34')
     })
 
     it('should return the referer path and save it in session if it matches a provided path', () => {
@@ -49,7 +48,7 @@ describe('Link management', () => {
       expect(request.session.pageReferers[pagePattern]).toEqual(expected)
     })
 
-    it('should return a case list url if the referer path matches but is from a different domain', () => {
+    it('should use default path if the referer path matches but is from a different domain', () => {
       const request = mockRequest(differentDomainMatchingReferer, undefined)
       expect(getPageBackLink(pagePattern, request, matchList)).toEqual('/?teamCode=N34')
     })
@@ -67,39 +66,6 @@ describe('Link management', () => {
     it('should return the provided default path if there is no stored referer and the current referer does not match a path', () => {
       const request = mockRequest(null, null)
       expect(getPageBackLink(pagePattern, request, matchList, 'defaultPath')).toEqual('defaultPath')
-    })
-  })
-
-  describe('getCaseListUrl', () => {
-    it('returns the base case list link if none is in session', () => {
-      const request = mock<Request>()
-
-      expect(getCaseListUrl(request)).toEqual(uiPaths.cases.index({}))
-    })
-
-    it('returns the case list link saved in session', () => {
-      const request = mock<Request>({
-        session: {
-          caseListUrl: '/?foo=bar&qux=0',
-        },
-      })
-
-      expect(getCaseListUrl(request)).toEqual('/?foo=bar&qux=0')
-    })
-  })
-
-  describe('setCaseListUrl', () => {
-    it('sets the given case list link in session', () => {
-      const request = mock<Request>({
-        query: {
-          teamCode: 'YES',
-          a: 'b',
-        },
-      })
-
-      setCaseListUrl(request)
-
-      expect(request.session.caseListUrl).toEqual('/?teamCode=YES&a=b')
     })
   })
 })

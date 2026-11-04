@@ -183,7 +183,7 @@ describe('externalReferrals utils', () => {
       })
 
       it('should render a set of referral status cards for the person tracker page', () => {
-        expect(externalReferralCards([referral])).toEqual([
+        expect(externalReferralCards('cases', [referral])).toEqual([
           {
             details: [
               { key: { text: 'Reference' }, value: { text: 'REF' } },
@@ -205,7 +205,7 @@ describe('externalReferrals utils', () => {
 
       it('should render a default value if no reference is provided', () => {
         expect(
-          externalReferralCards([
+          externalReferralCards('custom-list', [
             { ...referral, submission: { ...referral.submission, referenceNumber: undefined } },
           ])[0],
         ).toEqual(
@@ -214,6 +214,13 @@ describe('externalReferrals utils', () => {
               { key: { text: 'Reference' }, value: { text: 'No reference added' } },
               { key: { text: 'Submitted' }, value: { text: '13 June 2026 (5 days ago)' } },
               { key: { text: 'Submitted by' }, value: { text: 'created-by' } },
+            ],
+            links: [
+              {
+                external: false,
+                href: '/custom-list/CRN1234/external-referrals/submission-id/details',
+                text: 'View details',
+              },
             ],
           }),
         )

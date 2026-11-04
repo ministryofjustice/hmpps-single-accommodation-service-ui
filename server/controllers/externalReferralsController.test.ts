@@ -10,7 +10,7 @@ import ExternalReferralsService from '../services/externalReferralsService'
 import uiPaths from '../paths/ui'
 
 import * as utils from '../utils/externalReferrals'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import {
   detailsSummaryListRows,
@@ -18,6 +18,7 @@ import {
   outcomeDetailsSummaryListRows,
   withdrawalReasonRadios,
 } from '../utils/externalReferrals'
+import * as navigationUtils from '../utils/navigation'
 
 describe('ExternalReferralsController', () => {
   const id = '123'
@@ -62,6 +63,7 @@ describe('ExternalReferralsController', () => {
     jest.spyOn(validationUtils, 'addGenericErrorToFlash')
     jest.spyOn(validationUtils, 'addUserInputToFlash')
     jest.spyOn(utils, 'externalReferralTimelineEntry').mockReturnValue({} as TimelineEntry)
+    jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
   })
 
   afterEach(() => {
@@ -105,6 +107,7 @@ describe('ExternalReferralsController', () => {
         outcomeDetailRows: [],
         errors: {},
         errorSummary: [],
+        caseListUrl: 'cases',
       })
     })
 
@@ -158,6 +161,7 @@ describe('ExternalReferralsController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/external-referrals/submission', {
         pageTitle: 'Add external referral details',
         backLinkHref: '/cases/CRN123',
+        caseListUrl: 'cases',
         crn,
         tableRows: summaryListRows(caseData),
         errors: {},
@@ -249,7 +253,7 @@ describe('ExternalReferralsController', () => {
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'Referral details added')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ caseListUrl: 'cases', crn }))
     })
 
     it('updates and redirects to the details page when editing', async () => {
@@ -269,7 +273,7 @@ describe('ExternalReferralsController', () => {
       })
       expect(casesService.getCase).not.toHaveBeenCalled()
       expect(request.flash).toHaveBeenCalledWith('success', 'Referral details changed')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.show({ crn, id }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.show({ caseListUrl: 'cases', crn, id }))
     })
 
     it('redirects to submission page when validation fails', async () => {
@@ -300,7 +304,7 @@ describe('ExternalReferralsController', () => {
 
   describe('addNote', () => {
     const note = 'note text'
-    const detailsPagePath = uiPaths.externalReferrals.show({ crn, id })
+    const detailsPagePath = uiPaths.externalReferrals.show({ caseListUrl: 'cases', crn, id })
 
     it('adds note then redirects to the referral details page', async () => {
       request.params.id = id
@@ -362,6 +366,7 @@ describe('ExternalReferralsController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/external-referrals/outcome', {
         backLinkHref: '/cases/CRN123/external-referrals/123/details',
+        caseListUrl: 'cases',
         crn,
         errorSummary: [],
         errors: {},
@@ -408,6 +413,7 @@ describe('ExternalReferralsController', () => {
     beforeEach(() => {
       jest.resetAllMocks()
       jest.restoreAllMocks()
+      jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
 
       request = mock<Request>({
         params: { crn, id },
@@ -436,7 +442,7 @@ describe('ExternalReferralsController', () => {
         body: 'If the organisation has shared a possible address, <a href="/cases/CRN123/proposed-addresses/start">add it as a proposed address</a>.',
         heading: 'Outcome details added',
       })
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.show({ crn, id }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.show({ caseListUrl: 'cases', crn, id }))
     })
 
     it('accepts an existing rejected referral and redirects to referral details', async () => {
@@ -506,7 +512,8 @@ describe('ExternalReferralsController', () => {
       expect(externalReferralsService.getExternalReferralBySubmissionId).toHaveBeenCalledWith(token, crn, id)
 
       expect(response.render).toHaveBeenCalledWith('pages/external-referrals/withdrawal', {
-        backLinkHref: uiPaths.externalReferrals.show({ crn, id }),
+        backLinkHref: uiPaths.externalReferrals.show({ caseListUrl: 'cases', crn, id }),
+        caseListUrl: 'cases',
         errorSummary: [],
         errors: {},
         pageTitle: 'Move to referral history',
@@ -521,6 +528,7 @@ describe('ExternalReferralsController', () => {
     beforeEach(() => {
       jest.resetAllMocks()
       jest.restoreAllMocks()
+      jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
 
       request = mock<Request>({
         params: { crn, id },
@@ -546,7 +554,7 @@ describe('ExternalReferralsController', () => {
         expect.objectContaining({ withdrawalReason: 'NO_CAPACITY' }),
       )
       expect(request.flash).toHaveBeenCalledWith('success', 'Moved to referral history')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ caseListUrl: 'cases', crn }))
     })
 
     it('redirects to withdrawal page if validation fails', async () => {
@@ -555,7 +563,9 @@ describe('ExternalReferralsController', () => {
       await controller.saveWithdrawal()(request, response, next)
 
       expect(externalReferralsService.update).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.withdrawal({ crn, id }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.externalReferrals.withdrawal({ caseListUrl: 'cases', crn, id }),
+      )
     })
 
     it('redirects to withdrawal page if the API call fails', async () => {
@@ -563,7 +573,9 @@ describe('ExternalReferralsController', () => {
 
       await controller.saveWithdrawal()(request, response, next)
 
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.externalReferrals.withdrawal({ crn, id }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.externalReferrals.withdrawal({ caseListUrl: 'cases', crn, id }),
+      )
     })
   })
 })

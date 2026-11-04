@@ -27,6 +27,7 @@ import { displayName } from '../../../server/utils/cases'
 import { stubProfilePage } from '../../helpers/profilePage'
 
 const crn = 'X123456'
+const caseListUrl = 'cases'
 const setupStubs = async ({
   initialCaseData,
   initialDutyToRefer,
@@ -91,7 +92,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // And I click the add referral details link
     await profileTrackerPage.clickLink('Add referral details')
@@ -126,13 +127,16 @@ test.describe('duty to refer', () => {
     await dutyToReferPage.checkApiCalled(crn, submittedDutyToRefer)
 
     // And I should see the case details page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And I should see a success banner confirming referral details were added
     await profileTrackerPage.shouldShowBanner('DTR referral details added')
 
     // And I should see the new DTR eligibility card
-    await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(crn, eligibility.dtr))
+    await profileTrackerPage.shouldShowCard(
+      'Duty to refer (DTR)',
+      dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr),
+    )
 
     // When I click on the DTR link
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -230,7 +234,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -318,7 +322,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -397,7 +401,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -466,7 +470,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -513,7 +517,7 @@ test.describe('duty to refer', () => {
     await dutyToReferWithdrawPage.checkApiCalled(crn, withdrawnDutyToRefer, 'update')
 
     // And I should see the profile tracker page with a not started duty to refer
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
     await profileTrackerPage.shouldShowEligibility(eligibility)
 
     // And I should see a success banner confirming the referral was withdrawn
@@ -563,7 +567,7 @@ test.describe('duty to refer', () => {
     await login(page)
 
     // When I visit profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData)
+    let profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
 
     // Then I click the link to view duty to refer details in the dtr card
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))
@@ -600,7 +604,7 @@ test.describe('duty to refer', () => {
     await dutyToReferPage.checkApiCalled(crn, newDutyToRefer)
 
     // And I should see the case details page
-    await ProfileTrackerPage.verifyOnPage(page, caseData)
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
 
     // And I should see a success banner confirming referral details were added
     await profileTrackerPage.shouldShowBanner(
@@ -609,7 +613,10 @@ test.describe('duty to refer', () => {
     )
 
     // And I should see the new DTR eligibility card
-    await profileTrackerPage.shouldShowCard('Duty to refer (DTR)', dutyToReferStatusCard(crn, eligibility.dtr))
+    await profileTrackerPage.shouldShowCard(
+      'Duty to refer (DTR)',
+      dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr),
+    )
 
     // When I click on the DTR link
     await profileTrackerPage.clickLink('View referral', profileTrackerPage.getCard('Duty to Refer (DTR)'))

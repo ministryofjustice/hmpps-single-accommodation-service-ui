@@ -1,8 +1,7 @@
 import { match, Path } from 'path-to-regexp'
 import type { Request } from 'express'
-import { IndexRequest } from '@sas/ui'
-import uiPaths from '../paths/ui'
 import config from '../config'
+import { getActiveCaseListUrl } from './navigation'
 
 /**
  * Provides referer links for pages with multiple routes
@@ -16,11 +15,11 @@ import config from '../config'
  * @return the url to use as the backlink for the page.
  */
 
-export const getPageBackLink = (
+const getPageBackLink = (
   pagePattern: string,
   req: Request,
   matchList: Array<Path>,
-  defaultPath = getCaseListUrl(req),
+  defaultPath = getActiveCaseListUrl(req),
 ): string => {
   const {
     session,
@@ -28,7 +27,6 @@ export const getPageBackLink = (
   } = req
   const refererUrl = referer && new URL(referer)
   const lastReferer = session.pageReferers?.[pagePattern]
-
   if (refererUrl && refererUrl.host === new URL(config.ingressUrl).host) {
     const refererPath = refererUrl?.pathname
     const hasMatch = matchList.find(path => match(path)(refererPath))
@@ -47,11 +45,4 @@ export const getPageBackLink = (
 
   return lastReferer || defaultPath
 }
-
-export const getCaseListUrl = (req: Request): string => req.session.caseListUrl || uiPaths.cases.index({})
-
-export const setCaseListUrl = (req: IndexRequest): void => {
-  const search = new URLSearchParams(req.query).toString()
-
-  req.session.caseListUrl = `${uiPaths.cases.index({})}${search ? `?${search}` : ''}`
-}
+export default getPageBackLink

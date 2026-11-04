@@ -78,7 +78,7 @@ describe('duty to refer utils', () => {
         submission: dtrSubmission,
       })
 
-      expect(dutyToReferStatusCard('CRN123', dutyToRefer)).toMatchSnapshot()
+      expect(dutyToReferStatusCard('cases', 'CRN123', dutyToRefer)).toMatchSnapshot()
     })
   })
 
@@ -149,7 +149,7 @@ describe('duty to refer utils', () => {
       { status: 'upcoming', expectedLinks: [], dtr: dtrServiceResultFactory.upcoming().build() },
       { status: 'undefined', expectedLinks: [], dtr: undefined },
     ])('returns links $links for status $status', ({ expectedLinks, dtr }) => {
-      const links = linksForStatus(dtr, 'CRN123').map(link => link.text)
+      const links = linksForStatus('cases', dtr, 'CRN123').map(link => link.text)
 
       expect(links).toEqual(expect.arrayContaining(expectedLinks))
       expect(links).toHaveLength(expectedLinks.length)

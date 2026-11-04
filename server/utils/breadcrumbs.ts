@@ -1,18 +1,21 @@
 import { CaseDto } from '@sas/api'
 import { Request } from 'express'
-import { getCaseListUrl } from './backlinks'
+import { getActiveCaseListSegment, getActiveCaseListUrl } from './navigation'
 import { displayName } from './cases'
 import paths from '../paths/ui'
 
-// eslint-disable-next-line import/prefer-default-export
-export const breadcrumbs = (req: Request, caseData?: CaseDto) =>
-  [
+const breadcrumbs = (req: Request, caseData?: CaseDto) => {
+  const caseListUrl = getActiveCaseListUrl(req)
+  const caseListSegment = getActiveCaseListSegment(req)
+  return [
     {
-      text: 'Case list',
-      href: getCaseListUrl(req),
+      text: { cases: 'Case list', 'custom-list': 'Custom list', search: 'Search' }[caseListSegment],
+      href: caseListUrl,
     },
     caseData && {
       text: displayName(caseData, { laoFlag: '' }),
-      href: paths.cases.show({ crn: caseData.crn }),
+      href: paths.cases.show({ caseListUrl: caseListSegment, crn: caseData.crn }),
     },
   ].filter(Boolean)
+}
+export default breadcrumbs

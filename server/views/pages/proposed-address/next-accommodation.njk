@@ -2,7 +2,7 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "Do you want to confirm this as the person's next address?" %}
-{% set formAction = paths.proposedAddresses.nextAccommodation({ crn: crn }) %}
+{% set formAction = paths.proposedAddresses.nextAccommodation({ caseListUrl: caseListUrl, crn: crn }) %}
 {% set heading %}
   <span class="govuk-caption-l">{{ address }}</span>
   <h1 class="govuk-fieldset__heading">Do you want to confirm this as the next address for {{ name }}?</h1>

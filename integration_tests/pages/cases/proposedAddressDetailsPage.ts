@@ -45,13 +45,17 @@ export default class ProposedAddressDetailsPage extends PageWithCaseDetails {
     const { crn, id } = this.proposedAddress
 
     if (this.proposedAddress.verificationStatus === 'NOT_CHECKED_YET') {
-      await this.shouldShowLink('Add checks', uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }), 'button')
+      await this.shouldShowLink(
+        'Add checks',
+        uiPaths.proposedAddresses.edit({ caseListUrl: 'cases', crn, id, page: 'status' }),
+        'button',
+      )
     }
 
     if (this.proposedAddress.verificationStatus === 'PASSED') {
       await this.shouldShowLink(
         'Confirm as next address',
-        uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
+        uiPaths.proposedAddresses.edit({ caseListUrl: 'cases', crn, id, page: 'nextAccommodation' }),
         'button',
       )
     }

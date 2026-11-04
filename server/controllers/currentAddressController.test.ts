@@ -6,6 +6,7 @@ import CasesService from '../services/casesService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
 import * as backlinks from '../utils/backlinks'
+import * as navigationUtils from '../utils/navigation'
 import * as validationUtils from '../utils/validation'
 import { apiResponseFactory, caseFactory, proposedAccommodationFactory } from '../testutils/factories'
 import { displayName } from '../utils/cases'
@@ -46,7 +47,8 @@ describe('currentAddressController', () => {
 
     controller = new CurrentAddressController(auditService, casesService, proposedAddressesService)
 
-    jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
+    jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
+    jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
     jest
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
@@ -66,8 +68,9 @@ describe('currentAddressController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/current-address/select', {
         crn: 'CRN123',
-        backLinkHref: uiPaths.cases.show({ crn: 'CRN123' }),
-        cancelLinkHref: uiPaths.cases.show({ crn: 'CRN123' }),
+        backLinkHref: uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }),
+        cancelLinkHref: uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }),
+        caseListUrl: 'cases',
         pageHeading: `What is the new current address for ${displayName(caseData)}?`,
         items: proposedAddressItems([proposedAddress]),
         errors: {},
@@ -81,7 +84,9 @@ describe('currentAddressController', () => {
       await controller.select()(request, response, next)
 
       expect(response.render).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.new({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.new({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -104,7 +109,7 @@ describe('currentAddressController', () => {
         arrivalMethod: 'WITHOUT_VERIFICATION',
       })
       expect(request.flash).toHaveBeenCalledWith('success', 'Current address changed')
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }))
     })
 
     it('redirects to the nDelius page when the user chooses to add a new address', async () => {
@@ -113,7 +118,9 @@ describe('currentAddressController', () => {
       await controller.saveSelect()(request, response, next)
 
       expect(proposedAddressesService.submitArrival).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.new({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.new({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects back to the selection page when nothing is selected', async () => {
@@ -122,7 +129,9 @@ describe('currentAddressController', () => {
       await controller.saveSelect()(request, response, next)
 
       expect(proposedAddressesService.submitArrival).not.toHaveBeenCalled()
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.select({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.select({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
 
     it('redirects back to the selection page when there is an API error', async () => {
@@ -135,7 +144,9 @@ describe('currentAddressController', () => {
         request,
         'There was a problem saving the current address. Please try again.',
       )
-      expect(response.redirect).toHaveBeenCalledWith(uiPaths.currentAddress.select({ crn: 'CRN123' }))
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.currentAddress.select({ caseListUrl: 'cases', crn: 'CRN123' }),
+      )
     })
   })
 
@@ -148,7 +159,8 @@ describe('currentAddressController', () => {
         correlationId: 'request-id',
       })
       expect(response.render).toHaveBeenCalledWith('pages/current-address/new', {
-        backLinkHref: uiPaths.cases.show({ crn: 'CRN123' }),
+        backLinkHref: uiPaths.cases.show({ caseListUrl: 'cases', crn: 'CRN123' }),
+        caseListUrl: 'cases',
         displayName: displayName(caseData),
         deliusLink: deliusAddressAndAccommodationUrl('CRN123'),
       })

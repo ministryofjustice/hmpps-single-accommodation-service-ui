@@ -60,7 +60,12 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
     OFFER_DECLINED_OR_WITHDRAWN: { text: 'Offer declined or withdrawn', colour: 'grey' },
   })[status] || { text: 'Unknown' }
 
-export const referralHistoryRows = (referrals?: Referral[], username?: string, crn?: string): TableRow[] => {
+export const referralHistoryRows = (
+  caseListUrl: string,
+  referrals?: Referral[],
+  username?: string,
+  crn?: string,
+): TableRow[] => {
   return (referrals ?? [])
     .filter(referral => config.flags.cas2Enabled || referral.type !== 'CAS2')
     .map(referral => {
@@ -70,7 +75,7 @@ export const referralHistoryRows = (referrals?: Referral[], username?: string, c
         htmlContent(tableTextCell('Referral type', referralStatusType(type, status))),
         htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
         htmlContent(statusCell(referralStatusCell(referral))),
-        htmlContent(linksCell(referralLinksForType(type, id, crn, uiUrl))),
+        htmlContent(linksCell(referralLinksForType(caseListUrl, type, id, crn, uiUrl))),
       ]
     })
 }
@@ -198,21 +203,29 @@ const getCas3ReferralDetails = (referral: Referral, status?: string): Array<Text
 }
 
 export const referralHistoryTable = (
+  caseListUrl: string,
   referrals: Referral[],
   username?: string,
   crn?: string,
   hasApiError?: boolean,
-): string => renderMacro('referralHistoryTable', { rows: referralHistoryRows(referrals, username, crn), hasApiError })
+): string =>
+  renderMacro('referralHistoryTable', { rows: referralHistoryRows(caseListUrl, referrals, username, crn), hasApiError })
 
 export const referralReferredBy = (c: Referral, username?: string): string => {
   const fullName = c.referredBy?.name ?? 'Unknown'
   return c.referredBy?.username?.toUpperCase() === username?.toUpperCase() ? `You (${fullName})` : fullName
 }
 
-export const referralLinksForType = (type: Referral['type'], id: string, crn: string, url?: string | null) => {
+export const referralLinksForType = (
+  caseListUrl: string,
+  type: Referral['type'],
+  id: string,
+  crn: string,
+  url?: string | null,
+) => {
   switch (type) {
     case 'DTR':
-      return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ crn, id }) }]
+      return [{ text: 'View referral', href: uiPaths.dutyToRefer.show({ caseListUrl, crn, id }) }]
     case 'CAS1':
     case 'CAS2':
       return url ? [{ text: 'View application', href: url }] : []

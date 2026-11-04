@@ -23,7 +23,7 @@ import CasesListPage from '../../pages/cases/listPage'
 test.describe('Profile Tracker Page', () => {
   test('Should display profile tracker for a specific case', async ({ page }) => {
     const crn = 'X123456'
-    const caseData = caseFactory.build({ crn })
+    const caseData = caseFactory.build({ crn, sexualOffenceRegistrations: ['RSC', 'SHPO'] })
     const dutyToRefer = dutyToReferFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
       crn,

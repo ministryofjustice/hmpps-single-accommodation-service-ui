@@ -1,0 +1,8 @@
+{%- macro sexualOffenceRegistrationTag(registrations) -%}
+  {% for code in registrations or [] %}
+    <div class="sas-risk-tag">
+      <dt class="govuk-visually-hidden">Sexual offence registration</dt>
+      <dd>{{ sexualOffenceTags[code] }}</dd>
+    </div>
+  {% endfor %}
+{%- endmacro -%}

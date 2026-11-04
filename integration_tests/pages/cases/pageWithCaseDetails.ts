@@ -4,6 +4,7 @@ import AbstractPage from '../abstractPage'
 import { riskLevelStatusTag } from '../../../server/utils/riskLevel'
 import { formatDate } from '../../../server/utils/dates'
 import { displayName } from '../../../server/utils/cases'
+import { sexualOffenceTags } from '../../../server/utils/sexualOffenceTags'
 
 export default class PageWithCaseDetails extends AbstractPage {
   async shouldShowCaseDetails(caseData: CaseDto) {
@@ -26,6 +27,11 @@ export default class PageWithCaseDetails extends AbstractPage {
         const dd = this.page.locator(`dt:has-text("${detail.label}") + dd`)
         await expect(dd).toContainText(detail.value ?? '')
       }
+    }
+
+    const tagContainer = this.page.locator('.sas-risk-tags')
+    for await (const registration of caseData.sexualOffenceRegistrations ?? []) {
+      await expect(tagContainer.getByText(sexualOffenceTags[registration], { exact: true })).toBeVisible()
     }
   }
 }

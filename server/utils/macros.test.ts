@@ -7,10 +7,12 @@ import {
   statusCard,
   statusCell,
   statusTag,
+  sexualOffenceRegistrationTag,
   textBlock,
   textField,
   tierScoreTag,
 } from './macros'
+import { sexualOffenceTags } from './sexualOffenceTags'
 
 describe('Macros', () => {
   describe('Status Tag', () => {
@@ -107,6 +109,18 @@ describe('Macros', () => {
       ['undefined', undefined],
     ])('renders tag if tier is %s', (_, tierScore) => {
       expect(tierScoreTag(tierScore)).toMatchSnapshot()
+    })
+  })
+
+  describe('sexualOffenceRegistrationTag', () => {
+    it('renders a tag for each registration code', () => {
+      const registrations = Object.keys(sexualOffenceTags) as Case['sexualOffenceRegistrations']
+
+      expect(sexualOffenceRegistrationTag(registrations)).toMatchSnapshot()
+    })
+
+    it('renders no tags when there are no registrations', () => {
+      expect(sexualOffenceRegistrationTag([])).toMatchSnapshot()
     })
   })
 

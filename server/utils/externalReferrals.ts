@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { RadioItem, StatusCard, StatusTag } from '@sas/ui'
+import { RadioItem, StatusCard, StatusTag, TimelineValue } from '@sas/ui'
 import { AuditRecordDto, CaseDto, ExternalReferralDto, ExternalReferralWithdrawalDto, ServiceResult } from '@sas/api'
 import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
 import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
@@ -104,14 +104,18 @@ const cardDetails = (referral: ExternalReferralDto): Array<SummaryListRow> => {
   ]
 }
 
-export const externalReferralStatusTag = (status?: ExternalReferralDto['status']): StatusTag =>
-  ({
-    SUBMITTED: { text: 'Submitted', colour: 'yellow' },
-    REJECTED: { text: 'Rejected', colour: 'orange' },
-    ACCEPTED: { text: 'Accepted', colour: 'green' },
-    COMPLETED: { text: 'Completed', colour: 'green' },
-    ARCHIVED: { text: 'Archived', colour: 'grey' },
-  })[status] || { text: 'Unknown' }
+const externalReferralStatusTags: Record<string, StatusTag> = {
+  SUBMITTED: { text: 'Submitted', colour: 'yellow' },
+  REJECTED: { text: 'Rejected', colour: 'orange' },
+  ACCEPTED: { text: 'Accepted', colour: 'green' },
+  COMPLETED: { text: 'Completed', colour: 'green' },
+  ARCHIVED: { text: 'Archived', colour: 'grey' },
+} satisfies Record<ExternalReferralDto['status'], StatusTag>
+
+export const externalReferralStatusTag = (status?: string): StatusTag =>
+  status && Object.prototype.hasOwnProperty.call(externalReferralStatusTags, status)
+    ? externalReferralStatusTags[status]
+    : { text: 'Unknown' }
 
 export const externalReferralCards = (referrals?: ExternalReferralDto[]): Array<StatusCard> => {
   return (referrals ?? []).map(referral => ({
@@ -139,12 +143,81 @@ export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined
   return rows
 }
 
-export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
-  type ServiceStatus = ServiceResult['serviceStatus']
+export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withdrawalReason'], string> = {
+  ANOTHER_ACCOMMODATION_FOUND: 'Another accommodation option found',
+  NO_CAPACITY: 'No capacity',
+  PLACEMENT_COMPLETE: 'Placement complete',
+  NO_RESPONSE_FROM_ORGANISATION: 'No response from organisation',
+  PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED: 'Person can no longer be contacted or has disengaged',
+  PERSON_NOT_SUITABLE: 'Person not suitable',
+  PERSON_NO_LONGER_CONSENTS: 'Person no longer consents',
+  ANOTHER_REASON: 'Other',
+}
 
+const withdrawalTimelineReasonLabels = {
+  ...withdrawalReasonLabels,
+  PLACEMENT_COMPLETE: 'Completed stay',
+}
+
+// Audit records omit unchanged status, so use the API's reason-to-status mapping.
+const withdrawalStatusByReason: Record<
+  ExternalReferralWithdrawalDto['withdrawalReason'],
+  ExternalReferralDto['status']
+> = {
+  PLACEMENT_COMPLETE: 'COMPLETED',
+  ANOTHER_ACCOMMODATION_FOUND: 'ARCHIVED',
+  NO_RESPONSE_FROM_ORGANISATION: 'ARCHIVED',
+  PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED: 'ARCHIVED',
+  PERSON_NO_LONGER_CONSENTS: 'ARCHIVED',
+  PERSON_NOT_SUITABLE: 'REJECTED',
+  NO_CAPACITY: 'REJECTED',
+  ANOTHER_REASON: 'ARCHIVED',
+}
+
+const isWithdrawalReason = (reason: string): reason is ExternalReferralWithdrawalDto['withdrawalReason'] =>
+  Object.prototype.hasOwnProperty.call(withdrawalTimelineReasonLabels, reason)
+
+export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
   const { type, changes } = auditRecord
 
   if (type === 'NOTE') return noteTimelineEntry(auditRecord, currentUsername)
+
+  const fieldChange = (fieldName: string) => changes.find(({ field }) => field === fieldName)
+  const { value: newStatus, oldValue: oldStatus } = fieldChange('status') || {}
+  const withdrawalReason = fieldChange('withdrawalReason')?.value
+  const isWithdrawal = type === 'UPDATE' && (withdrawalReason || newStatus === 'COMPLETED' || newStatus === 'ARCHIVED')
+
+  if (isWithdrawal) {
+    const knownReason = withdrawalReason && isWithdrawalReason(withdrawalReason) ? withdrawalReason : undefined
+    const status = newStatus || (knownReason && withdrawalStatusByReason[knownReason])
+    const otherReason = fieldChange('otherReason')?.value
+    const withdrawalNote = fieldChange('withdrawalNote')?.value
+    const values: TimelineValue[] = [
+      ...(withdrawalReason
+        ? [
+            {
+              label: 'Reason',
+              value: textContent(knownReason ? withdrawalTimelineReasonLabels[knownReason] : withdrawalReason),
+            },
+          ]
+        : []),
+      ...(otherReason ? [{ label: 'Other reason', value: textContent(otherReason) }] : []),
+      ...(withdrawalNote ? [{ label: 'Notes', value: htmlContent(textBlock(withdrawalNote)) }] : []),
+    ]
+
+    const html = renderMacro('timelineEntry', {
+      status: status ? externalReferralStatusTag(status) : undefined,
+      values,
+      isChange: false,
+    })
+
+    return timelineEntry(
+      'Moved to referral history',
+      html,
+      auditRecord.commitDate,
+      staffName(auditRecord.authorDetails, currentUsername),
+    )
+  }
 
   const changeValues = changes
     .map(({ field, value }) => {
@@ -160,19 +233,13 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
     })
     .filter(Boolean)
 
-  const fieldChange = (fieldName: string) => changes.find(({ field }) => field === fieldName)
-
-  const { value: newStatus, oldValue: oldStatus } = (fieldChange('status') || {}) as {
-    value: ServiceStatus
-    oldValue: ServiceStatus
-  }
   const isOutcome = (newStatus && newStatus !== 'SUBMITTED') || fieldChange('outcomeNote')
   const isChange = isOutcome ? !newStatus || oldStatus !== 'SUBMITTED' : type === 'UPDATE'
   const label = `${isOutcome ? 'Outcome' : 'Referral'} details ${isChange ? 'changed' : 'added'}`
 
   const html = renderMacro('timelineEntry', {
     type,
-    status: newStatus ? serviceStatusTag(newStatus) : undefined,
+    status: newStatus ? externalReferralStatusTag(newStatus) : undefined,
     values: changeValues,
     isChange,
   })
@@ -183,17 +250,6 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
 export const outcomeReasonLabels: Partial<Record<ExternalReferralDto['status'], string>> = {
   ACCEPTED: 'Accepted',
   REJECTED: 'Rejected',
-}
-
-export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withdrawalReason'], string> = {
-  ANOTHER_ACCOMMODATION_FOUND: 'Another accommodation option found',
-  NO_CAPACITY: 'No capacity',
-  PLACEMENT_COMPLETE: 'Placement complete',
-  NO_RESPONSE_FROM_ORGANISATION: 'No response from organisation',
-  PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED: 'Person can no longer be contacted or has disengaged',
-  PERSON_NOT_SUITABLE: 'Person not suitable',
-  PERSON_NO_LONGER_CONSENTS: 'Person no longer consents',
-  ANOTHER_REASON: 'Other',
 }
 
 export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDto, includeStatus = false) => {

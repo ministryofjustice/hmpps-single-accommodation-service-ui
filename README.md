@@ -7,7 +7,7 @@ Repository for the UI for the Single Accommodation Service (SAS).
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/) version 24
+- [Node.js](https://nodejs.org/en/) version 26
 - [Docker](https://www.docker.com/) (if running against a containerised local stack)
 
 

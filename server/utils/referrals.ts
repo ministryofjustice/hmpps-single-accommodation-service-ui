@@ -149,7 +149,7 @@ const getExternalReferralDetails = (referral: Referral): Array<TextOrHtmlContent
   return [
     withdrawalReason &&
       textContent(
-        `Reason: ${externalReferralWithdrawalReasonLabels[withdrawalReason]}${otherReason ? `, ${otherReason}` : ''}`,
+        `Reason: ${withdrawalReason === 'ANOTHER_REASON' ? otherReason : externalReferralWithdrawalReasonLabels[withdrawalReason]}`,
       ),
   ].filter(Boolean)
 }

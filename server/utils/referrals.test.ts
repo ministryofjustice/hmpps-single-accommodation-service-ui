@@ -6,54 +6,63 @@ describe('referrals utilities', () => {
   beforeEach(() => {
     config.flags.cas2Enabled = false
   })
-
-  const referral1 = referralFactory.build({
-    id: '123456',
-    type: 'CAS1',
-    status: 'CANCELLED',
-    date: '2023-01-15',
-    uiUrl: 'https://example.com/cas1/123456',
-    referredBy: { username: 'alice_smith', name: 'Alice Smith' },
-  })
-  const referral2 = referralFactory.build({
-    id: '789012',
-    type: 'DTR',
-    status: 'WITHDRAWN',
-    placementStatus: 'PRIORITY_NEED',
-    referralRejectionReason: 'NEW_REFERRAL',
-    date: '2023-02-20',
-    referredBy: { username: 'joe_bloggs', name: 'Joe Bloggs' },
-  })
-  const referral3 = referralFactory.build({
-    id: '345678',
-    type: 'CAS3',
-    status: 'ARCHIVED',
-    date: '2023-03-25',
-    uiUrl: null,
-    referredBy: { username: 'matt_jones', name: 'Matt Jones' },
-  })
-  const referral4 = referralFactory.build({
-    id: '901234',
-    type: 'CAS1',
-    status: 'REQUEST_WITHDRAWN',
-    date: '2023-04-30',
-    uiUrl: 'https://example.com/cas1/901234',
-    withdrawalReason: 'ChangeInCircumstances',
-    referralRejectionReason: 'Some rejection reason',
-    referralRejectionReasonDetail: 'Some rejection reason detail',
-    referredBy: { username: 'alice_smith', name: 'Alice Smith' },
-  })
-  const referral5 = referralFactory.build({
-    id: '206790',
-    type: 'ER',
-    status: 'COMPLETED',
-    date: '2026-06-22',
-    withdrawalReason: 'PLACEMENT_COMPLETE',
-    organisationName: 'The organisation',
-    referredBy: { username: 'alice_smith', name: 'Alice Smith' },
-  })
-
-  const referrals = [referral1, referral2, referral3, referral4, referral5]
+  const referrals = [
+    referralFactory.build({
+      id: '123456',
+      type: 'CAS1',
+      status: 'CANCELLED',
+      date: '2023-01-15',
+      uiUrl: 'https://example.com/cas1/123456',
+      referredBy: { username: 'alice_smith', name: 'Alice Smith' },
+    }),
+    referralFactory.build({
+      id: '789012',
+      type: 'DTR',
+      status: 'WITHDRAWN',
+      placementStatus: 'PRIORITY_NEED',
+      referralRejectionReason: 'NEW_REFERRAL',
+      date: '2023-02-20',
+      referredBy: { username: 'joe_bloggs', name: 'Joe Bloggs' },
+    }),
+    referralFactory.build({
+      id: '345678',
+      type: 'CAS3',
+      status: 'ARCHIVED',
+      date: '2023-03-25',
+      uiUrl: null,
+      referredBy: { username: 'matt_jones', name: 'Matt Jones' },
+    }),
+    referralFactory.build({
+      id: '901234',
+      type: 'CAS1',
+      status: 'REQUEST_WITHDRAWN',
+      date: '2023-04-30',
+      uiUrl: 'https://example.com/cas1/901234',
+      withdrawalReason: 'ChangeInCircumstances',
+      referralRejectionReason: 'Some rejection reason',
+      referralRejectionReasonDetail: 'Some rejection reason detail',
+      referredBy: { username: 'alice_smith', name: 'Alice Smith' },
+    }),
+    referralFactory.build({
+      id: '206790',
+      type: 'ER',
+      status: 'COMPLETED',
+      date: '2026-06-22',
+      withdrawalReason: 'PLACEMENT_COMPLETE',
+      organisationName: 'The organisation',
+      referredBy: { username: 'alice_smith', name: 'Alice Smith' },
+    }),
+    referralFactory.build({
+      id: '206790',
+      type: 'ER',
+      status: 'REJECTED',
+      date: '2026-06-22',
+      withdrawalReason: 'ANOTHER_REASON',
+      otherReason: 'A made-up reason',
+      organisationName: 'The other organisation',
+      referredBy: { username: 'alice_smith', name: 'Alice Smith' },
+    }),
+  ]
 
   describe('referralHistoryRows', () => {
     it('returns formatted rows for a given list of referrals', () => {
@@ -63,7 +72,7 @@ describe('referrals utilities', () => {
     it('filters out CAS2 referrals when the feature flag is disabled', () => {
       const cas2Referral = referralFactory.build({ type: 'CAS2' })
 
-      expect(referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(5)
+      expect(referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')).toHaveLength(referrals.length)
     })
 
     describe('when the cas2 flag is enabled', () => {
@@ -83,7 +92,7 @@ describe('referrals utilities', () => {
 
         const result = referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')
 
-        expect(result).toHaveLength(6)
+        expect(result).toHaveLength(referrals.length + 1)
         expect(result).toMatchSnapshot()
       })
     })

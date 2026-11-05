@@ -24,7 +24,7 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <section>
         <div class="govuk-button-group govuk-!-padding-bottom-4">
-          {% if outcomeDetailRows.length == 0 %}
+          {% if outcomePath and outcomeDetailRows.length == 0 %}
               {{
                 govukButton({
                     text: "Add outcome",
@@ -33,14 +33,16 @@
                 })
               }}
           {% endif %}
-          {{
-            govukButton({
-              text: "Move to referral history",
-              href: withdrawalPath,
-              preventDoubleClick: true,
-              classes: "govuk-button--secondary"
-            })
-          }}
+          {% if withdrawalPath %}
+            {{
+              govukButton({
+                text: "Move to referral history",
+                href: withdrawalPath,
+                preventDoubleClick: true,
+                classes: "govuk-button--secondary"
+              })
+            }}
+          {% endif %}
         </div>
 
         {% if outcomeDetailRows.length > 0 %}
@@ -50,9 +52,9 @@
                   title: {
                     text: "Outcome"
                   },
-                  actions: {
+                  actions: outcomePath and {
                     items: [
-                      {
+                       {
                         href: outcomePath,
                         classes: "govuk-!-font-weight-regular govuk-link--no-visited-state",
                         text: "Change"
@@ -70,7 +72,7 @@
                 title: {
                   text: "Referral details"
                 },
-                actions: {
+                actions: editPath and {
                   items: [
                     {
                       href: editPath,

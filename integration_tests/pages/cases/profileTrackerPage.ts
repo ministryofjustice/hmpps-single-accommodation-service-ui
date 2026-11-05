@@ -245,6 +245,11 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     await this.clickLink('View details', section)
   }
 
+  async clickViewReferralHistoryDetails() {
+    const section = await this.page.locator('css=section', { has: this.page.getByText('Referral history') })
+    await this.clickLink('View referral', section)
+  }
+
   async clickAddExternalReferralLink() {
     const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
     await this.clickLink('Add details', section)

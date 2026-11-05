@@ -10,10 +10,10 @@ import uiPaths from '../paths/ui'
 import config from '../config'
 import { withdrawalReasonLabels as externalReferralWithdrawalReasonLabels } from './externalReferrals'
 
-export const referralStatusType = (referral: Referral): string => {
-  switch (referral.type) {
+export const referralStatusType = ({ type, status, organisationName }: Referral): string => {
+  switch (type) {
     case 'CAS1':
-      switch (referral.status) {
+      switch (status) {
         case 'REQUEST_REJECTED':
         case 'REQUEST_WITHDRAWN':
           return 'Approved Premises (CAS1) placement request'
@@ -28,7 +28,7 @@ export const referralStatusType = (referral: Referral): string => {
       return 'CAS2 application'
     }
     case 'CAS3':
-      switch (referral.status) {
+      switch (status) {
         case 'DEPARTED':
         case 'CANCELLED':
           return 'CAS3 booking'
@@ -38,7 +38,7 @@ export const referralStatusType = (referral: Referral): string => {
     case 'DTR':
       return 'Duty to refer'
     case 'ER':
-      return 'External referral'
+      return organisationName || 'External referral'
     default:
       return 'Unknown'
   }
@@ -144,15 +144,14 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
 }
 
 const getExternalReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
-  const { withdrawalReason } = referral as { withdrawalReason: ExternalReferralDto['withdrawalReason'] }
+  const { withdrawalReason, otherReason } = referral as Partial<ExternalReferralDto>
 
-  const details: Array<TextOrHtmlContent> = []
-
-  if (withdrawalReason) {
-    if (withdrawalReason === 'ANOTHER_REASON') details.push(textContent(`Reason: ${referral.otherReason}`))
-    else details.push(textContent(`Withdrawal reason: ${externalReferralWithdrawalReasonLabels[withdrawalReason]}`))
-  }
-  return details
+  return [
+    withdrawalReason &&
+      textContent(
+        `Reason: ${externalReferralWithdrawalReasonLabels[withdrawalReason]}${otherReason ? `, ${otherReason}` : ''}`,
+      ),
+  ].filter(Boolean)
 }
 
 const getCas1ReferralDetails = (referral: Referral, status?: string): Array<TextOrHtmlContent> => {

@@ -53,6 +53,10 @@ export default class AbstractPage {
     await (container || this.page).getByRole('link', { name: text }).click()
   }
 
+  async shouldNotShowLink(text: string | RegExp, role: 'link' | 'button' = 'link'): Promise<void> {
+    await expect(this.page.getByRole(role, { name: text })).toHaveCount(0)
+  }
+
   async clickChangeLink(key: string) {
     await this.page
       .locator('.govuk-summary-list__row', {

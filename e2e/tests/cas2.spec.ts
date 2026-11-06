@@ -1,24 +1,14 @@
 import { test } from '../test'
 import { signIn } from '../steps/signIn'
 import CaseDetailsPage from '../pages/caseDetailsPage'
+import { CasCard } from '../data/casCard'
 
-type Cas2Card = {
-  status: string
-  crn: string
-  submissionInfo?: boolean
-  action: string
-  actionLink: 'redirect' | 'application'
-  declineReason?: string
-  arrivalInfo?: boolean
-}
-
-const statuses: Cas2Card[] = [
+const statuses: CasCard[] = [
   { crn: 'Y084841', status: 'Not started', action: 'Start application', actionLink: 'redirect' },
   { crn: 'Y076357', status: 'Submitted', submissionInfo: true, action: 'View application', actionLink: 'application' },
   {
     crn: 'Y076809',
     status: 'Not submitted',
-    submissionInfo: true,
     action: 'Continue application',
     actionLink: 'application',
   },
@@ -105,7 +95,7 @@ for (const status of statuses) {
 
     // AND I should see the submission information if available
     if (status.submissionInfo) {
-      await caseDetailsPage.expectSubmissionInfo()
+      await caseDetailsPage.expectCas2SubmissionInfo()
     }
 
     // AND I should see the arrival information if available
@@ -115,7 +105,7 @@ for (const status of statuses) {
 
     // AND I should see the decline reason if available
     if (status.declineReason) {
-      await caseDetailsPage.expectDeclineReason(status.declineReason)
+      await caseDetailsPage.expectCas2DeclineReason(status.declineReason)
     }
 
     // WHEN I click the "${status.action}" link
@@ -125,7 +115,7 @@ for (const status of statuses) {
     if (status.actionLink === 'redirect') {
       await caseDetailsPage.expectCas2Redirect()
     } else if (status.actionLink === 'application') {
-      await caseDetailsPage.expectCas2Application()
+      await caseDetailsPage.expectExistingApplication()
     }
   })
 }

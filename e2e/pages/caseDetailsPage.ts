@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 
 type DtrReferralHistoryDetails = {
   referredBy: string
@@ -83,33 +83,36 @@ export default class CaseDetailsPage {
     return this.serviceCard('Approved premises (CAS1)')
   }
 
-  async expectCas1Status(status: string) {
-    await expect(this.cas1Card()).toBeVisible()
-    await expect(this.cas1Card().locator('.govuk-tag')).toHaveText(status)
-  }
-
   cas2Card() {
     return this.serviceCard('Short-term accommodation (CAS2)')
   }
 
   async expectCas2Status(status: string) {
-    await expect(this.cas2Card()).toBeVisible()
-    await expect(this.cas2Card().locator('.govuk-tag')).toHaveText(status)
+    await this.expectCardStatus(this.cas2Card(), status)
   }
 
-  async expectSubmissionInfo() {
-    await expect(this.cas2Card()).toContainText(/Submitted|Application started/)
-    await expect(this.cas2Card()).toContainText(/Submitted by|Started by/)
-    await expect(this.cas2Card()).toContainText(/\d{1,2} \w+ \d{4}/)
+  async expectSubmissionInfo(card: Locator = this.cas2Card()) {
+    await expect(card).toContainText(/Submitted|Application started/)
+    await expect(card).toContainText(/Submitted by|Started by/)
+    await expect(card).toContainText(/\d{1,2} \w+ \d{4}/)
   }
 
   async expectDeclineReason(reason: string) {
-    await expect(this.cas2Card()).toContainText('Reason')
-    await expect(this.cas2Card()).toContainText(reason)
+    await this.expectCardDeclineReason(this.cas2Card(), reason)
+  }
+
+  private async expectCardDeclineReason(card: Locator, reason: string, label = 'Reason') {
+    await expect(card).toContainText(label)
+    await expect(card).toContainText(reason)
   }
 
   async expectArrivalInformation() {
     await expect(this.cas2Card()).toContainText('Marked as arrived by')
+  }
+
+  async expectCas1ArrivalInformation() {
+    await expect(this.cas1Card()).toContainText('Arrival date')
+    await expect(this.cas1Card()).toContainText('Expected departure')
   }
 
   async clickCas2Link(action: string) {
@@ -143,9 +146,90 @@ export default class CaseDetailsPage {
     return this.serviceCard('CAS3 (transitional accommodation)')
   }
 
+  private async expectCardStatus(card: Locator, status: string) {
+    await expect(card).toBeVisible()
+    await expect(card.locator('.govuk-tag')).toHaveText(status)
+  }
+
+  private async clickCardLink(card: Locator, action: string) {
+    await card.getByRole('link', { name: action }).click()
+  }
+
+  private async expectCasPopup(url: RegExp) {
+    const newWindow = await this.page.waitForEvent('popup')
+    await expect(newWindow).toHaveURL(url)
+    return newWindow
+  }
+
+  async expectHintText(cardLocator: Locator, hintText: string) {
+    await expect(cardLocator.locator('.sas-card__hint')).toHaveText(hintText)
+  }
+
+  async expectCas1ExpectedArrivalInformation() {
+    await expect(this.cas1Card()).toContainText('Expected arrival')
+    await expect(this.cas1Card()).toContainText('Duration')
+    await expect(this.cas1Card()).toContainText('Request submitted by')
+  }
+
+  async expectCas1NotArrivedInformation() {
+    await expect(this.cas1Card()).toContainText('Expected arrival')
+    await expect(this.cas1Card()).toContainText('Request submitted by')
+    await expect(this.cas1Card()).toContainText('Application expires')
+  }
+
+  async expectCas1PlacementRequestSubmittedInformation() {
+    await expect(this.cas1Card()).toContainText('Request submitted')
+    await expect(this.cas1Card()).toContainText('Request submitted by')
+    await expect(this.cas1Card()).toContainText('Application expires')
+  }
+
+  async clickCas1Link(action: string) {
+    await this.clickCardLink(this.cas1Card(), action)
+  }
+
+  async clickCas3Link(action: string) {
+    await this.clickCardLink(this.cas3Card(), action)
+  }
+
+  async expectCas1Status(status: string) {
+    await this.expectCardStatus(this.cas1Card(), status)
+  }
+
   async expectCas3Status(status: string) {
-    await expect(this.cas3Card()).toBeVisible()
-    await expect(this.cas3Card().locator('.govuk-tag')).toHaveText(status)
+    await this.expectCardStatus(this.cas3Card(), status)
+  }
+
+  async expectCas1SubmissionInfo() {
+    await this.expectSubmissionInfo(this.cas1Card())
+  }
+
+  async expectCas2SubmissionInfo() {
+    await this.expectSubmissionInfo(this.cas2Card())
+  }
+
+  async expectCas3SubmissionInfo() {
+    await this.expectSubmissionInfo(this.cas3Card())
+  }
+
+  async expectCas1DeclineReason(reason: string, label = 'Decision') {
+    await this.expectCardDeclineReason(this.cas1Card(), reason, label)
+  }
+
+  async expectCas2DeclineReason(reason: string) {
+    await this.expectCardDeclineReason(this.cas2Card(), reason)
+  }
+
+  async expectCas3DeclineReason(reason: string) {
+    await this.expectCardDeclineReason(this.cas3Card(), reason)
+  }
+
+  async expectCas1Redirect() {
+    const cas1Page = await this.expectCasPopup(/\/applications\/start$/)
+    await expect(cas1Page.getByRole('heading', { name: 'Apply for an Approved Premises (AP) placement' })).toBeVisible()
+  }
+
+  async expectExistingApplication() {
+    await this.expectCasPopup(/\/applications(\/|$)/)
   }
 
   proposedAddressesSection() {
@@ -166,6 +250,7 @@ export default class CaseDetailsPage {
           level: 3,
         }),
       })
+      .last()
   }
 
   currentAccommodationCard() {

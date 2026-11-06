@@ -12,6 +12,9 @@ export default {
     index: path('/case-list'),
     search: path('/search/:crn'),
     show: casePath,
+    applications: {
+      arrival: casePath.path('applications/:applicationId/arrival'),
+    },
     accommodation: {
       summary: accommodationPath.path('summary'),
     },

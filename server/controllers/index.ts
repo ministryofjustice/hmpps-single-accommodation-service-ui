@@ -6,8 +6,10 @@ import CurrentAddressController from './currentAddressController'
 import StaticController from './staticController'
 import ExternalReferralsController from './externalReferralsController'
 import CustomListController from './customListController'
+import ApplicationsController from './applicationsController'
 
 export const controllers = (services: Services) => ({
+  applicationsController: new ApplicationsController(services.auditService, services.casesService),
   casesController: new CasesController(
     services.auditService,
     services.casesService,

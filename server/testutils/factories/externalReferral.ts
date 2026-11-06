@@ -3,6 +3,7 @@ import { ExternalReferralDto } from '@sas/api'
 import { Factory } from 'fishery'
 import crn from '../crn'
 import externalReferralSubmissionFactory from './externalReferralSubmission'
+import { withdrawalReasonLabels } from '../../utils/externalReferrals'
 
 class ExternalReferralFactory extends Factory<ExternalReferralDto> {
   submitted() {
@@ -21,6 +22,15 @@ class ExternalReferralFactory extends Factory<ExternalReferralDto> {
   rejected() {
     return this.params({
       status: 'REJECTED',
+    })
+  }
+
+  withdrawn() {
+    return this.params({
+      status: faker.helpers.arrayElement(['COMPLETED', 'ARCHIVED', 'REJECTED']),
+      withdrawalReason: faker.helpers.arrayElement(
+        Object.keys(withdrawalReasonLabels) as Array<ExternalReferralDto['withdrawalReason']>,
+      ),
     })
   }
 }

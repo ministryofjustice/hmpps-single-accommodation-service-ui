@@ -49,6 +49,8 @@ export default class ExternalReferralsController {
 
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
+      const isActive = !referral.withdrawalReason
+
       return res.render('pages/external-referrals/show', {
         breadcrumbs: breadcrumbs(req, caseData),
         crn,
@@ -61,9 +63,9 @@ export default class ExternalReferralsController {
         status: referral?.status,
         timeline: auditRecords.map(record => externalReferralTimelineEntry(record, username)),
         outcomeDetailRows: outcomeDetailsSummaryListRows(referral),
-        outcomePath: uiPaths.externalReferrals.outcome({ crn, id }),
-        editPath: uiPaths.externalReferrals.edit({ crn, id }),
-        withdrawalPath: uiPaths.externalReferrals.withdrawal({ crn, id }),
+        outcomePath: isActive && uiPaths.externalReferrals.outcome({ crn, id }),
+        editPath: isActive && uiPaths.externalReferrals.edit({ crn, id }),
+        withdrawalPath: isActive && uiPaths.externalReferrals.withdrawal({ crn, id }),
         ...userInput,
         errors,
         errorSummary,
@@ -84,6 +86,11 @@ export default class ExternalReferralsController {
       })
 
       const { caseData, referral } = await this.getSubmissionPageData(token, crn, id)
+
+      if (referral?.withdrawalReason) {
+        return res.redirect(backLinkHref)
+      }
+
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       const formValues = {
@@ -121,6 +128,10 @@ export default class ExternalReferralsController {
 
       const submissionDate = dateInputToIsoDate(req.body, 'submissionDate')
       const referral = await this.getReferral(token, crn, id)
+
+      if (referral?.withdrawalReason) {
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
+      }
 
       try {
         const submission: ExternalReferralCommand = {
@@ -193,6 +204,10 @@ export default class ExternalReferralsController {
 
       const { caseData, referral } = await this.getSubmissionPageData(token, crn, id)
 
+      if (referral.withdrawalReason) {
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
+      }
+
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
       const outcomeStatus: ExternalReferralDto['status'] = userInput?.outcomeStatus ?? referral?.status
 
@@ -222,6 +237,11 @@ export default class ExternalReferralsController {
       }
 
       const referral = await this.getReferral(token, crn, id)
+
+      if (referral.withdrawalReason) {
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
+      }
+
       try {
         await this.externalReferralsService.update(token, crn, id, {
           ...this.preFillCommand(referral),
@@ -258,6 +278,11 @@ export default class ExternalReferralsController {
       })
 
       const { caseData, referral } = await this.getSubmissionPageData(token, crn, id)
+
+      if (referral.withdrawalReason) {
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
+      }
+
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
 
       const context = {

@@ -1,6 +1,11 @@
 import { test } from '@playwright/test'
 import { faker } from '@faker-js/faker'
-import { auditRecordFactory, caseFactory, externalReferralFactory } from '../../../server/testutils/factories'
+import {
+  auditRecordFactory,
+  caseFactory,
+  externalReferralFactory,
+  referralFactory,
+} from '../../../server/testutils/factories'
 import externalReferralsApi from '../../mockApis/externalReferrals'
 import { login } from '../../testUtils'
 import ExternalReferralsSubmissionPage from '../../pages/cases/externalReferralsSubmissionPage'
@@ -269,7 +274,19 @@ test.describe('external referrals', () => {
     })
 
     // When I complete the other reason field
-    updatedReferral = await submissionPage.completeWithdrawalOtherReason(updatedReferral)
+    updatedReferral = { ...(await submissionPage.completeWithdrawalOtherReason(updatedReferral)), status: 'ARCHIVED' }
+
+    // And I insert the referral into the referral history mock
+    const historicReferral = referralFactory.externalReferral().build({
+      id: updatedReferral.submission.id,
+      status: 'ARCHIVED',
+      withdrawalReason: updatedReferral.withdrawalReason,
+      otherReason: updatedReferral.otherReason,
+    })
+
+    await casesApi.stubGetReferralHistory(crn, [historicReferral])
+    await externalReferralsApi.stubGetExternalReferralBySubmissionId(updatedReferral)
+
     await submissionPage.clickButton('Move to referral history')
 
     // Then I am on the case details page
@@ -278,7 +295,19 @@ test.describe('external referrals', () => {
     // Then I should see a confirmation banner
     await trackerPage.shouldShowBanner('Success', 'Moved to referral history')
 
+    // And I should see the withdrawn external referral in the referral history
+    await trackerPage.shouldShowReferralHistory([historicReferral])
+
     // And the withdrawal API should have been called
     await submissionPage.checkWithdrawalApiCalled(updatedReferral)
+
+    // When I click to view the withdrawn referral
+    await trackerPage.clickViewReferralHistoryDetails()
+
+    // Then I am on the move to history page
+    const withdrawnDetailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, referral)
+
+    // And the details page has buttons and change links removed
+    await withdrawnDetailsPage.shouldNotShowLink('change')
   })
 })

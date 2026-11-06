@@ -158,7 +158,7 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
       const i = referrals.indexOf(referral)
       const row = table.locator('tbody tr').nth(i)
 
-      await expect(row).toContainText(referralStatusType(referral.type, referral.status))
+      await expect(row).toContainText(referralStatusType(referral))
       await expect(row).toContainText(referralStatusTag(referral.status, referral.type).text)
       await this.shouldShowStatusCell(referralStatusCell(referral), row)
 
@@ -243,6 +243,11 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   async clickViewReferralDetails() {
     const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
     await this.clickLink('View details', section)
+  }
+
+  async clickViewReferralHistoryDetails() {
+    const section = await this.page.locator('css=section', { has: this.page.getByText('Referral history') })
+    await this.clickLink('View referral', section)
   }
 
   async clickAddExternalReferralLink() {

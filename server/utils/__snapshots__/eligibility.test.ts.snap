@@ -1570,12 +1570,52 @@ exports[`eligibilityStatusCard for cas2 renders a MORE_INFORMATION_NEEDED status
 }
 `;
 
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE currently in CAS2 status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not eligible as applicant is currently in a CAS2 property.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE currently in CAS3 status card 1`] = `
 {
   "blocked": false,
   "content": [
     {
       "text": "Not eligible as applicant is currently in a CAS3 property.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE currently in community status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not eligible unless at risk of recall.",
     },
   ],
   "details": [],

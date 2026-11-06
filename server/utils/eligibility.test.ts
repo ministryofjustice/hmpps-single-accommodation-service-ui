@@ -254,6 +254,14 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_PRISON_NO_RELEASE_DATE'] },
       },
       {
+        title: 'NOT_ELIGIBLE currently in CAS2',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_CAS2_ACCOMMODATION'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE currently in community',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_COMMUNITY'] },
+      },
+      {
         title: 'NOT_ELIGIBLE multiple failure reasons',
         result: {
           serviceStatus: 'NOT_ELIGIBLE',

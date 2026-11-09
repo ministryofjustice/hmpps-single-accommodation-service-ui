@@ -1,4 +1,5 @@
 import { GetCasesQuery } from '@sas/ui'
+import { Cas2ArrivalDto } from '@sas/api'
 import { CasesClient } from '../data'
 
 export default class CasesService {
@@ -14,5 +15,9 @@ export default class CasesService {
 
   searchByCrn(token: string, crn: string) {
     return this.casesClient.searchByCrn(token, crn)
+  }
+
+  submitCas2Arrival(token: string, crn: string, applicationId: string, arrival: Cas2ArrivalDto) {
+    return this.casesClient.submitCas2Arrival(token, crn, applicationId, arrival)
   }
 }

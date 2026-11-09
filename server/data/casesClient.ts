@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { ApiResponseDtoCaseDto, ApiResponseDtoListCaseDto } from '@sas/api'
+import { ApiResponseDtoCaseDto, ApiResponseDtoListCaseDto, Cas2ArrivalDto } from '@sas/api'
 import { GetCasesQuery } from '@sas/ui'
 import config from '../config'
 import logger from '../../logger'
@@ -74,6 +74,13 @@ export default class CasesClient extends RestClient {
   searchByCrn(token: string, crn: string) {
     return this.get<ApiResponseDtoCaseDto>(
       { path: apiPaths.cases.search({ crn }), timeout: config.timeoutOverrides.sasCasesApi },
+      asUser(token),
+    )
+  }
+
+  submitCas2Arrival(token: string, crn: string, applicationId: string, arrival: Cas2ArrivalDto) {
+    return this.post<void>(
+      { path: apiPaths.cases.applications.arrival({ crn, applicationId }), data: arrival },
       asUser(token),
     )
   }

@@ -10,6 +10,7 @@ import DutyToReferController from '../controllers/dutyToReferController'
 import StaticController from '../controllers/staticController'
 import ExternalReferralsController from '../controllers/externalReferralsController'
 import CustomListController from '../controllers/customListController'
+import ApplicationsController from '../controllers/applicationsController'
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -82,6 +83,11 @@ const customListController = mock<CustomListController>({
   confirmation: mockHandler,
 })
 
+const applicationsController = mock<ApplicationsController>({
+  arrival: mockHandler,
+  saveArrival: mockHandler,
+})
+
 jest.mock('../controllers', () => ({
   controllers: () => ({
     casesController,
@@ -91,6 +97,7 @@ jest.mock('../controllers', () => ({
     staticController,
     externalReferralsController,
     customListController,
+    applicationsController,
   }),
 }))
 
@@ -149,6 +156,18 @@ describe('Routing', () => {
         .expect(() => {
           expect(customListController.confirmation).toHaveBeenCalled()
         })
+    })
+  })
+
+  describe('Applications', () => {
+    it('GET /cases/:crn/applications/:applicationId/arrival should render', async () => {
+      await request(app).get('/cases/X123456/applications/application-123/arrival').expect(200)
+      expect(applicationsController.arrival).toHaveBeenCalled()
+    })
+
+    it('POST /cases/:crn/applications/:applicationId/arrival should submit', async () => {
+      await request(app).post('/cases/X123456/applications/application-123/arrival').expect(200)
+      expect(applicationsController.saveArrival).toHaveBeenCalled()
     })
   })
 })

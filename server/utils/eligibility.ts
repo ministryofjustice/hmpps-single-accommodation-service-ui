@@ -126,6 +126,7 @@ export const linksForCas3Status = (serviceResult?: ServiceResult) => {
   switch (serviceStatus) {
     case 'NOT_STARTED':
       return [{ text: 'Start referral', ...link }]
+    case 'ARRIVED':
     case 'SUBMITTED':
     case 'BEDSPACE_OFFERED':
     case 'BOOKING_CONFIRMED':

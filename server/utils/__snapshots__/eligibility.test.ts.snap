@@ -2062,7 +2062,13 @@ exports[`eligibilityStatusCard for cas3 renders a ARRIVED status card 1`] = `
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
-  "links": undefined,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View referral",
+    },
+  ],
   "status": {
     "colour": "green",
     "text": "Arrived",

@@ -1,25 +1,40 @@
 import { mock } from 'jest-mock-extended'
-import { Request } from 'express'
+import { Request, Response } from 'express'
 import { getActivePage, setActiveCaseListUrl } from './navigation'
 
 describe('getActivePage', () => {
   it('returns "case-list" for the case list page', () => {
-    expect(getActivePage('/')).toEqual('case-list')
+    const req = mock<Request>({
+      session: { caseListUrl: '/' },
+    })
+    expect(getActivePage(req)).toEqual('case-list')
   })
 
   it('returns "search" for the search page', () => {
-    expect(getActivePage('/search')).toEqual('search')
+    const req = mock<Request>({
+      session: { caseListUrl: '/search' },
+    })
+    expect(getActivePage(req)).toEqual('search')
   })
 
   it('returns "cases" for other pages', () => {
-    expect(getActivePage('/cases/X123456')).toEqual('case-list')
+    const req = mock<Request>({
+      session: { caseListUrl: '/cases/X123456' },
+    })
+    expect(getActivePage(req)).toEqual('case-list')
   })
 
   it('returns "custom-list" for the custom list page', () => {
-    expect(getActivePage('/custom-list')).toEqual('custom-list')
+    const req = mock<Request>({
+      session: { caseListUrl: '/custom-list' },
+    })
+    expect(getActivePage(req)).toEqual('custom-list')
   })
   it('returns "custom-list" for the custom list pages', () => {
-    expect(getActivePage('/custom-list/add-crns')).toEqual('custom-list')
+    const req = mock<Request>({
+      session: { caseListUrl: '/custom-list/add-crns' },
+    })
+    expect(getActivePage(req)).toEqual('custom-list')
   })
 })
 describe('setActiveCaseListUrl', () => {
@@ -37,7 +52,8 @@ describe('setActiveCaseListUrl', () => {
       originalUrl: '/cases/?teamCode=YES&a=b',
     })
 
-    setActiveCaseListUrl(request, 'cases')
+    const res = mock<Response>()
+    setActiveCaseListUrl(request, res, 'cases')
 
     expect(request.session.caseListUrl).toEqual('/?teamCode=YES&a=b&peopleType=NFA_RISK')
   })
@@ -50,7 +66,8 @@ describe('setActiveCaseListUrl', () => {
       originalUrl: '/search',
     })
 
-    setActiveCaseListUrl(request, 'search')
+    const res = mock<Response>()
+    setActiveCaseListUrl(request, res, 'search')
 
     expect(request.session.caseListUrl).toEqual('/search?peopleType=NFA_RISK')
   })
@@ -63,7 +80,8 @@ describe('setActiveCaseListUrl', () => {
       originalUrl: '/custom-list',
     })
 
-    setActiveCaseListUrl(request, 'custom-list')
+    const res = mock<Response>()
+    setActiveCaseListUrl(request, res, 'custom-list')
 
     expect(request.session.caseListUrl).toEqual('/custom-list?peopleType=NFA_RISK')
   })

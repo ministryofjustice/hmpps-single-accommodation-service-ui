@@ -32,7 +32,6 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     page: Page,
     readonly caseData: Case,
     readonly caseListUrl: string = '',
-    readonly caseListSegment: string = '',
   ) {
     super(page)
     this.header = page.locator('h1', { hasText: displayName(caseData) })
@@ -42,14 +41,12 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     page: Page,
     caseData: Case,
     caseListUrl: string,
-    backLinkText: string,
+    linkText: string,
   ): Promise<ProfileTrackerPage> {
-    await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link')).toHaveAttribute(
-      'href',
-      caseListUrl,
-    )
-    await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link')).toHaveText(backLinkText)
-    return ProfileTrackerPage.verifyOnPage(page, caseData)
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
+    await profileTrackerPage.shouldShowBreadcrumb(caseListUrl, linkText)
+    await profileTrackerPage.shouldShowSelectedNavigationLink(caseListUrl.split('?')[0], linkText)
+    return profileTrackerPage
   }
 
   static async visit(

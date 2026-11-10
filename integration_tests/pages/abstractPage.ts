@@ -113,10 +113,6 @@ export default class AbstractPage {
     }
   }
 
-  async shouldShowBreadcrumb(text: string, url: string, locator?: Locator) {
-    await expect((locator || this.page).getByRole('link', { name: 'Breadcrumb' })).toHaveAttribute('href', url)
-  }
-
   async shouldShowSummaryItem(key: string, value: string | string[], container?: Locator) {
     const summaryItem = (container || this.page)
       .locator('.govuk-summary-list__row', {
@@ -140,6 +136,26 @@ export default class AbstractPage {
     return this.page.locator('.govuk-summary-card', {
       has: this.page.getByRole('heading', { name: title }),
     })
+  }
+
+  async shouldShowBreadcrumb(url: string, text: string) {
+    await expect(this.page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link')).toHaveAttribute(
+      'href',
+      url,
+    )
+    await expect(this.page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link')).toHaveText(text)
+  }
+
+  async shouldShowSelectedNavigationLink(url: string, text: string) {
+    await expect(this.page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: text })).toHaveAttribute(
+      'href',
+      url,
+    )
+    await expect(this.page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: text })).toHaveText(text)
+    await expect(this.page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: text })).toHaveAttribute(
+      'aria-current',
+      'true',
+    )
   }
 
   async shouldShowCard(title: string, cardData: StatusCard) {

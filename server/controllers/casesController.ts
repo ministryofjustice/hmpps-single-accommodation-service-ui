@@ -46,8 +46,7 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      setActiveCaseListUrl(req, '/')
-      res.locals.activePage = '/'
+      setActiveCaseListUrl(req, res, 'case-list')
 
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
@@ -70,8 +69,7 @@ export default class CasesController {
 
   search(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      setActiveCaseListUrl(req, 'search')
-      res.locals.activePage = '/search'
+      setActiveCaseListUrl(req, res, 'search')
       const searchTerm = req.query.searchTerm ?? req.session.searchTerm
       delete req.session.searchTerm
       let caseData: CaseDto | null = null

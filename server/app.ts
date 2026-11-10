@@ -50,7 +50,7 @@ export default function createApp(services: Services): express.Application {
     res.locals.successMessages = req.flash('success')
     req.session.caseListUrl = getCaseListUrl(req)
     res.locals.caseListUrl = getCaseListUrl(req)
-    res.locals.activePage = getActivePage(req.path)
+    res.locals.activePage = getActivePage(req)
     next()
   })
   app.use(setUpFrontendComponents())

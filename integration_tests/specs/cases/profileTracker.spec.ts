@@ -52,7 +52,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, '/', 'Case list')
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
     await profileTrackerPage.shouldShowEligibility(eligibility)
@@ -81,7 +81,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, '/', 'Case list')
 
     // AND I should see there are no actions
     await profileTrackerPage.shouldNotShowNextActionsCard()
@@ -102,7 +102,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, '/', 'Case list')
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
   })
@@ -143,7 +143,7 @@ test.describe('Profile Tracker Page', () => {
     await caseListPage.clickCaseLink(caseData)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, 'cases', '/')
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, '/', 'Case list')
 
     // AND I should see the upstream failure warnings
     await profileTrackerPage.shouldShowApiErrors([
@@ -177,7 +177,7 @@ test.describe('Profile Tracker Page', () => {
       await login(page)
 
       // AND I visit the profile tracker page
-      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, '/', 'Case list')
 
       // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldShowNextAccommodationCard(nextAccommodation)
@@ -199,7 +199,7 @@ test.describe('Profile Tracker Page', () => {
       await login(page)
 
       // AND I visit the profile tracker page
-      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, '/', 'Case list')
 
       // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldNotShowNextAccommodationCard()
@@ -218,7 +218,7 @@ test.describe('Profile Tracker Page', () => {
       await login(page)
 
       // AND I visit the profile tracker page
-      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, '/', 'Case list')
 
       // THEN I should see the correct accommodation cards
       await profileTrackerPage.shouldNotShowCurrentAccommodationCard()
@@ -239,7 +239,7 @@ test.describe('Profile Tracker Page', () => {
       await login(page)
 
       // AND I visit the profile tracker page
-      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, '/', 'Case list')
 
       // THEN I should see the correct proposed addresses cards
       await profileTrackerPage.shouldShowProposedAddresses()
@@ -259,7 +259,7 @@ test.describe('Profile Tracker Page', () => {
       await login(page)
 
       // AND I visit the profile tracker page
-      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+      const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, '/', 'Case list')
 
       // THEN I should see the correct proposed addresses cards
       await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)

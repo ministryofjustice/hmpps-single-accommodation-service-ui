@@ -30,7 +30,6 @@ import {
   proposedAddressFormFactory,
 } from '../testutils/factories'
 import * as validationUtils from './validation'
-import * as navigationUtils from './navigation'
 import MultiPageFormManager from './multiPageFormManager'
 import uiPaths from '../paths/ui'
 import { formatAddress } from './addresses'
@@ -91,7 +90,7 @@ describe('Proposed addresses utilities', () => {
         nextAccommodationStatus: undefined,
         createdAt: '2026-01-05T10:45:00.000Z',
       })
-      expect(proposedAddressStatusCard(proposedAddress, 'cases')).toMatchSnapshot()
+      expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
 
     it('returns a "not checked yet" proposed address status card object', () => {
@@ -102,7 +101,7 @@ describe('Proposed addresses utilities', () => {
         createdAt: '2026-01-20T09:30:00.000Z',
       })
 
-      expect(proposedAddressStatusCard(proposedAddress, 'cases')).toMatchSnapshot()
+      expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
 
     it.each(['NO', 'TO_BE_DECIDED', undefined])(
@@ -114,7 +113,7 @@ describe('Proposed addresses utilities', () => {
           nextAccommodationStatus,
           createdAt: '2026-01-20T09:30:00.000Z',
         })
-        expect(proposedAddressStatusCard(proposedAddress, 'cases')).toMatchSnapshot()
+        expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
       },
     )
 
@@ -126,7 +125,7 @@ describe('Proposed addresses utilities', () => {
         createdAt: '2026-01-20T09:30:00.000Z',
       })
 
-      expect(proposedAddressStatusCard(proposedAddress, 'cases')).toMatchSnapshot()
+      expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
 
     it('returns a status card for an address with no accommodation type', () => {
@@ -135,7 +134,7 @@ describe('Proposed addresses utilities', () => {
         accommodationType: null,
       })
 
-      expect(proposedAddressStatusCard(proposedAddress, 'cases')).toMatchSnapshot()
+      expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
   })
 
@@ -156,16 +155,16 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('formats address, arrangement and status', () => {
-      const rows = checkYourAnswersRows(baseSessionData, 'CRN123', accommodationTypesReferenceData, 'custom-list')
+      const rows = checkYourAnswersRows(baseSessionData, 'CRN123', accommodationTypesReferenceData)
 
       const addressHtml = rows.address[0].value.html
       const arrangementHtml = rows.supportingInfo[0].value.html
 
       expect(addressHtml).toBe('10 Moonlight Road<br />London<br />Greater London<br />NW1 6XE<br />UK')
       expect(arrangementHtml).toBe('Other accommodation type')
-      expect(rows.address[0].actions?.items[0].href).toBe('/custom-list/CRN123/proposed-addresses/lookup')
-      expect(rows.supportingInfo[0].actions?.items[0].href).toBe('/custom-list/CRN123/proposed-addresses/type')
-      expect(rows.supportingInfo[1].actions?.items[0].href).toBe('/custom-list/CRN123/proposed-addresses/status')
+      expect(rows.address[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/lookup')
+      expect(rows.supportingInfo[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/type')
+      expect(rows.supportingInfo[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
     })
 
     it('formats status when checks failed with reason', () => {
@@ -173,7 +172,7 @@ describe('Proposed addresses utilities', () => {
         ...baseSessionData,
         verificationStatus: 'FAILED',
       })
-      const rows = checkYourAnswersRows(sessionData, 'CRN123', accommodationTypesReferenceData, 'cases')
+      const rows = checkYourAnswersRows(sessionData, 'CRN123', accommodationTypesReferenceData)
 
       expect(rows.supportingInfo[1].value.html).toMatchSnapshot()
     })
@@ -186,12 +185,7 @@ describe('Proposed addresses utilities', () => {
         lookupResults: null,
       })
 
-      const rows = checkYourAnswersRows(
-        fullSessionDataManualAddressEntry,
-        'CRN123',
-        accommodationTypesReferenceData,
-        'cases',
-      )
+      const rows = checkYourAnswersRows(fullSessionDataManualAddressEntry, 'CRN123', accommodationTypesReferenceData)
 
       expect(rows.address[0].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/details')
     })
@@ -332,7 +326,6 @@ describe('Proposed addresses utilities', () => {
     beforeEach(() => {
       jest.restoreAllMocks()
       jest.spyOn(validationUtils, 'validateAndFlashErrors')
-      jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
     })
 
     describe('validateLookupFromSession', () => {
@@ -340,9 +333,7 @@ describe('Proposed addresses utilities', () => {
         const invalidLookup: ProposedAddressFormData = {
           postcode: '',
         }
-        expect(validateLookupFromSession(req, invalidLookup)).toEqual(
-          uiPaths.proposedAddresses.lookup({ crn, caseListUrl: 'cases' }),
-        )
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
           postcode: 'Enter a UK postcode',
           nameOrNumber: 'Enter a property name or number',
@@ -355,9 +346,7 @@ describe('Proposed addresses utilities', () => {
           postcode: '',
         }
 
-        expect(validateLookupFromSession(req, invalidLookup)).toEqual(
-          uiPaths.proposedAddresses.lookup({ crn, caseListUrl: 'cases' }),
-        )
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
           postcode: 'Enter a UK postcode',
         })
@@ -369,9 +358,7 @@ describe('Proposed addresses utilities', () => {
           postcode,
         }
 
-        expect(validateLookupFromSession(req, invalidLookup)).toEqual(
-          uiPaths.proposedAddresses.lookup({ crn, caseListUrl: 'cases' }),
-        )
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
           postcode: 'Enter a valid UK postcode',
         })
@@ -383,9 +370,7 @@ describe('Proposed addresses utilities', () => {
           postcode: 'AB1 2CD',
         }
 
-        expect(validateLookupFromSession(req, invalidLookup)).toEqual(
-          uiPaths.proposedAddresses.lookup({ crn, caseListUrl: 'cases' }),
-        )
+        expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
           nameOrNumber: 'Property name or number must be 255 characters or less',
           postcode: undefined,
@@ -416,12 +401,12 @@ describe('Proposed addresses utilities', () => {
         {
           name: 'redirects to case details when there is no session data',
           data: undefined,
-          expected: uiPaths.cases.show({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.cases.show({ crn }),
         },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, postcode: 'cases' } },
-          expected: uiPaths.proposedAddresses.details({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
           name: 'returns undefined when address valid',
@@ -450,17 +435,17 @@ describe('Proposed addresses utilities', () => {
         {
           name: 'redirects to case details when there is no session data',
           data: undefined,
-          expected: uiPaths.cases.show({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.cases.show({ crn }),
         },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, postcode: 'cases' } } as ProposedAddressFormData,
-          expected: uiPaths.proposedAddresses.details({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
           name: 'redirects to type when type missing',
           data: validUpToAddress(),
-          expected: uiPaths.proposedAddresses.type({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.type({ crn }),
         },
         {
           name: 'returns undefined when address + type valid',
@@ -490,22 +475,22 @@ describe('Proposed addresses utilities', () => {
         {
           name: 'redirects to case details when there is no session data',
           data: undefined,
-          expected: uiPaths.cases.show({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.cases.show({ crn }),
         },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, postcode: 'cases' } } as ProposedAddressFormData,
-          expected: uiPaths.proposedAddresses.details({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
           name: 'redirects to type when type invalid',
           data: validUpToAddress(),
-          expected: uiPaths.proposedAddresses.type({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.type({ crn }),
         },
         {
           name: 'redirects to status when verification status missing',
           data: validUpToType(),
-          expected: uiPaths.proposedAddresses.status({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.status({ crn }),
         },
         {
           name: 'returns undefined when address + type + status valid',
@@ -534,27 +519,27 @@ describe('Proposed addresses utilities', () => {
         {
           name: 'redirects to case details when there is no session data',
           data: undefined,
-          expected: uiPaths.cases.show({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.cases.show({ crn }),
         },
         {
           name: 'redirects to details when address invalid',
           data: { address: { ...validAddress, postcode: 'cases' } } as ProposedAddressFormData,
-          expected: uiPaths.proposedAddresses.details({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
           name: 'redirects to type when type invalid',
           data: validUpToAddress(),
-          expected: uiPaths.proposedAddresses.type({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.type({ crn }),
         },
         {
           name: 'redirects to status when status invalid',
           data: validUpToType(),
-          expected: uiPaths.proposedAddresses.status({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.status({ crn }),
         },
         {
           name: 'redirects to next accommodation when status PASSED but next accommodation missing',
           data: validUpToStatusPassed(),
-          expected: uiPaths.proposedAddresses.nextAccommodation({ crn, caseListUrl: 'cases' }),
+          expected: uiPaths.proposedAddresses.nextAccommodation({ crn }),
         },
         {
           name: 'returns undefined when status NOT_CHECKED_YET',
@@ -683,7 +668,7 @@ describe('Proposed addresses utilities', () => {
           ...params,
         })
 
-        expect(addressDetailRows(proposedAddress, 'cases')).toMatchSnapshot()
+        expect(addressDetailRows(proposedAddress)).toMatchSnapshot()
       },
     )
 
@@ -692,11 +677,10 @@ describe('Proposed addresses utilities', () => {
         ...baseProposedAddress,
         address: { ...baseProposedAddress.address, uprn: 'some-uprn' },
       })
-      const detailRows = addressDetailRows(proposedAddress, 'cases')
+      const detailRows = addressDetailRows(proposedAddress)
 
       expect(detailRows[1]?.actions.items[0].href).toBe(
         uiPaths.proposedAddresses.edit({
-          caseListUrl: 'cases',
           crn: baseProposedAddress.crn,
           id: proposedAddress.id,
           page: 'lookup',
@@ -714,9 +698,9 @@ describe('Proposed addresses utilities', () => {
     const { id } = proposedAddress
 
     it('returns a button to add checks', () => {
-      expect(nextActionButton(proposedAddress, 'cases')).toEqual({
+      expect(nextActionButton(proposedAddress)).toEqual({
         text: 'Add checks',
-        href: uiPaths.proposedAddresses.edit({ caseListUrl: 'cases', crn, id, page: 'status' }),
+        href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }),
       })
     })
 
@@ -726,9 +710,9 @@ describe('Proposed addresses utilities', () => {
         verificationStatus: 'PASSED',
       })
 
-      expect(nextActionButton(checksPassedAddress, 'cases')).toEqual({
+      expect(nextActionButton(checksPassedAddress)).toEqual({
         text: 'Confirm as next address',
-        href: uiPaths.proposedAddresses.edit({ caseListUrl: 'cases', crn, id, page: 'nextAccommodation' }),
+        href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
       })
     })
 
@@ -739,16 +723,16 @@ describe('Proposed addresses utilities', () => {
         nextAccommodationStatus: 'YES',
       })
 
-      expect(nextActionButton(checksPassedAddress, 'cases')).toEqual({
+      expect(nextActionButton(checksPassedAddress)).toEqual({
         text: 'Set as current address',
-        href: uiPaths.proposedAddresses.arrival({ crn, id, caseListUrl: 'cases' }),
+        href: uiPaths.proposedAddresses.arrival({ crn, id }),
       })
     })
 
     it('returns nothing when the proposed address has failed checks', () => {
       const noButtonAddress = proposedAccommodationFactory.build({ ...proposedAddress, verificationStatus: 'FAILED' })
 
-      expect(nextActionButton(noButtonAddress, 'cases')).toBeUndefined()
+      expect(nextActionButton(noButtonAddress)).toBeUndefined()
     })
   })
 

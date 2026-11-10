@@ -16,7 +16,7 @@ import {
   validateRadioButton,
 } from './validation'
 
-import paths from '../paths/ui'
+import uiPaths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
 import { renderMacro, statusTag, textBlock, textField } from './macros'
 import { serviceStatusTag } from './statusTag'
@@ -86,10 +86,10 @@ export const submissionFormValues = (referral: ExternalReferralDto | undefined):
   }
 }
 
-const cardLinks = (referral: ExternalReferralDto, caseListUrl: string) => {
+const cardLinks = (referral: ExternalReferralDto) => {
   const { crn, submission: { id } = {} } = referral
 
-  const url = paths.externalReferrals.show({ caseListUrl, crn, id })
+  const url = uiPaths.externalReferrals.show({ crn, id })
   return [{ text: 'View details', href: url, external: false }]
 }
 
@@ -114,10 +114,10 @@ export const externalReferralStatusTag = (status?: ExternalReferralDto['status']
     ARCHIVED: { text: 'Archived', colour: 'grey' },
   })[status] || { text: 'Unknown' }
 
-export const externalReferralCards = (caseListUrl: string, referrals?: ExternalReferralDto[]): Array<StatusCard> => {
+export const externalReferralCards = (referrals?: ExternalReferralDto[]): Array<StatusCard> => {
   return (referrals ?? []).map(referral => ({
     heading: referral.submission?.organisationName,
-    links: cardLinks(referral, caseListUrl),
+    links: cardLinks(referral),
     details: cardDetails(referral),
     status: externalReferralStatusTag(referral.status),
   }))

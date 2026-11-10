@@ -80,7 +80,7 @@ describe('accommodationSummary', () => {
       })
 
       it.each(testCases)('returns a context card object for a %s accommodation', (_, accommodation) => {
-        expect(accommodationCard('cases', cellType, accommodation)).toMatchSnapshot()
+        expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
       })
 
       it('returns an empty cell for a limited access case', () => {

@@ -22,7 +22,6 @@ export default function routes(services: Services): Router {
   customListRoutes(router, customListController, casesController)
 
   router.get(uiPaths.cases.index.pattern, casesController.index())
-  router.get(uiPaths.cases.listPath.pattern, casesController.index())
   router.get(uiPaths.cases.search.pattern, casesController.search())
   router.get(uiPaths.cases.show.pattern, casesController.show())
 

@@ -25,7 +25,6 @@ import { caseAssignedTo, displayName } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
 import { radioItems } from '../utils/utils'
 import breadcrumbs from '../utils/breadcrumbs'
-import { getActiveCaseListSegment } from '../utils/navigation'
 
 export type SubmissionFlow = 'add' | 'addNew' | 'edit'
 
@@ -57,7 +56,6 @@ export default class DutyToReferController {
       const outcomeDetailRows = outcomeDetailsSummaryListRows(dutyToRefer)
 
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
-      const caseListUrl = getActiveCaseListSegment(req)
 
       return res.render('pages/duty-to-refer/show', {
         breadcrumbs: breadcrumbs(req, caseData),
@@ -70,7 +68,6 @@ export default class DutyToReferController {
         outcomeDetailRows,
         timeline: auditRecords.map(record => dutyToReferTimelineEntry(record, username)),
         status: dutyToRefer?.status,
-        caseListUrl,
         active: dutyToRefer.active,
         ...userInput,
         errors,
@@ -83,10 +80,8 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { token } = res.locals.user
       const { crn, id } = req.params
-      const caseListUrl = getActiveCaseListSegment(req)
-      const backLinkHref = id
-        ? uiPaths.dutyToRefer.show({ caseListUrl, crn, id })
-        : uiPaths.cases.show({ caseListUrl, crn })
+
+      const backLinkHref = id ? uiPaths.dutyToRefer.show({ crn, id }) : uiPaths.cases.show({ crn })
 
       await this.auditService.logPageView(Page.DUTY_TO_REFER_SUBMISSION, {
         who: res.locals.user.username,
@@ -109,7 +104,6 @@ export default class DutyToReferController {
         crn,
         tableRows,
         localAuthorities,
-        caseListUrl,
         errors,
         errorSummary,
         formValues,
@@ -122,12 +116,12 @@ export default class DutyToReferController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber, submissionNote } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
+
       const errorRedirect = {
         add: uiPaths.dutyToRefer.submission,
         addNew: uiPaths.dutyToRefer.newSubmission,
         edit: uiPaths.dutyToRefer.edit,
-      }[flow]({ caseListUrl, crn, id })
+      }[flow]({ crn, id })
 
       if (!validateSubmission(req)) {
         return res.redirect(errorRedirect)
@@ -153,7 +147,7 @@ export default class DutyToReferController {
           }
           await this.dutyToReferService.update(token, crn, id, submission)
           req.flash('success', 'Referral details changed')
-          return res.redirect(uiPaths.dutyToRefer.show({ caseListUrl, crn, id }))
+          return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
         }
 
         await this.dutyToReferService.submit(token, crn, submission)
@@ -169,7 +163,7 @@ export default class DutyToReferController {
           req.flash('success', 'DTR referral details added')
         }
 
-        return res.redirect(uiPaths.cases.show({ caseListUrl, crn }))
+        return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
         return res.redirect(errorRedirect)
@@ -181,7 +175,7 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const caseListUrl = getActiveCaseListSegment(req)
+
       await this.auditService.logPageView(Page.DUTY_TO_REFER_OUTCOME, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -201,7 +195,7 @@ export default class DutyToReferController {
 
       return res.render('pages/duty-to-refer/outcome', {
         pageTitle: `${dtr.status === 'SUBMITTED' ? 'Add' : 'Edit'} Duty to Refer (DTR) outcome`,
-        backLinkHref: uiPaths.dutyToRefer.show({ caseListUrl, crn, id }),
+        backLinkHref: uiPaths.dutyToRefer.show({ crn, id }),
         crn,
         dtr,
         tableRows,
@@ -209,7 +203,6 @@ export default class DutyToReferController {
         outcomeNote: userInput?.outcomeNote ?? dtr?.submission?.outcomeNote,
         errors,
         errorSummary,
-        caseListUrl,
       })
     }
   }
@@ -227,8 +220,8 @@ export default class DutyToReferController {
         submissionNote,
         outcomeNote,
       } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
-      const errorRedirect = uiPaths.dutyToRefer.outcome({ caseListUrl, crn, id })
+
+      const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
 
       if (!validateOutcome(req)) {
         return res.redirect(errorRedirect)
@@ -247,7 +240,7 @@ export default class DutyToReferController {
         })
 
         req.flash('success', currentStatus !== 'SUBMITTED' ? 'Outcome details changed' : 'Outcome details added')
-        return res.redirect(uiPaths.dutyToRefer.show({ caseListUrl, crn, id }))
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
         return res.redirect(errorRedirect)
@@ -259,7 +252,7 @@ export default class DutyToReferController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const caseListUrl = getActiveCaseListSegment(req)
+
       await this.auditService.logPageView(Page.DUTY_TO_REFER_WITHDRAW, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -279,7 +272,7 @@ export default class DutyToReferController {
 
       return res.render('pages/duty-to-refer/withdraw', {
         pageTitle: 'Withdraw referral',
-        backLinkHref: uiPaths.dutyToRefer.show({ caseListUrl, crn, id }),
+        backLinkHref: uiPaths.dutyToRefer.show({ crn, id }),
         crn,
         dtr,
         tableRows,
@@ -287,7 +280,6 @@ export default class DutyToReferController {
         errors,
         errorSummary,
         ...userInput,
-        caseListUrl,
       })
     }
   }
@@ -306,8 +298,8 @@ export default class DutyToReferController {
         outcomeReason,
         outcomeNote,
       } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
-      const errorRedirect = uiPaths.dutyToRefer.withdraw({ caseListUrl, crn, id })
+
+      const errorRedirect = uiPaths.dutyToRefer.withdraw({ crn, id })
 
       if (!validateWithdraw(req)) {
         return res.redirect(errorRedirect)
@@ -332,7 +324,7 @@ export default class DutyToReferController {
         await this.dutyToReferService.update(token, crn, id, withdrawal)
 
         req.flash('success', 'DTR referral withdrawn')
-        return res.redirect(uiPaths.cases.show({ caseListUrl, crn }))
+        return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem withdrawing the DTR referral. Please try again.')
         return res.redirect(errorRedirect)
@@ -350,9 +342,9 @@ export default class DutyToReferController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { note } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
+
       if (!validateNote(req)) {
-        return res.redirect(uiPaths.dutyToRefer.show({ caseListUrl, crn, id }))
+        return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
       }
 
       try {
@@ -362,7 +354,7 @@ export default class DutyToReferController {
         addGenericErrorToFlash(req, error.message)
         addUserInputToFlash(req)
       }
-      return res.redirect(uiPaths.dutyToRefer.show({ caseListUrl, crn, id }))
+      return res.redirect(uiPaths.dutyToRefer.show({ crn, id }))
     }
   }
 

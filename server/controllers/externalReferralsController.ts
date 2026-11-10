@@ -21,7 +21,6 @@ import {
 } from '../utils/externalReferrals'
 import breadcrumbs from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
-import { getActiveCaseListSegment } from '../utils/navigation'
 
 export type SubmissionFlow = 'add' | 'edit'
 
@@ -49,7 +48,7 @@ export default class ExternalReferralsController {
       ])
 
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
-      const caseListUrl = getActiveCaseListSegment(req)
+
       return res.render('pages/external-referrals/show', {
         breadcrumbs: breadcrumbs(req, caseData),
         crn,
@@ -62,13 +61,12 @@ export default class ExternalReferralsController {
         status: referral?.status,
         timeline: auditRecords.map(record => externalReferralTimelineEntry(record, username)),
         outcomeDetailRows: outcomeDetailsSummaryListRows(referral),
-        outcomePath: uiPaths.externalReferrals.outcome({ caseListUrl, crn, id }),
-        editPath: uiPaths.externalReferrals.edit({ caseListUrl, crn, id }),
-        withdrawalPath: uiPaths.externalReferrals.withdrawal({ caseListUrl, crn, id }),
+        outcomePath: uiPaths.externalReferrals.outcome({ crn, id }),
+        editPath: uiPaths.externalReferrals.edit({ crn, id }),
+        withdrawalPath: uiPaths.externalReferrals.withdrawal({ crn, id }),
         ...userInput,
         errors,
         errorSummary,
-        caseListUrl,
       })
     }
   }
@@ -77,10 +75,8 @@ export default class ExternalReferralsController {
     return async (req: Request, res: Response) => {
       const { token } = res.locals.user
       const { crn, id } = req.params
-      const caseListUrl = getActiveCaseListSegment(req)
-      const backLinkHref = id
-        ? uiPaths.externalReferrals.show({ caseListUrl, crn, id })
-        : uiPaths.cases.show({ caseListUrl, crn })
+
+      const backLinkHref = id ? uiPaths.externalReferrals.show({ crn, id }) : uiPaths.cases.show({ crn })
 
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_SUBMISSION, {
         who: res.locals.user.username,
@@ -105,7 +101,6 @@ export default class ExternalReferralsController {
         errors,
         errorSummary,
         formValues,
-        caseListUrl,
       })
     }
   }
@@ -115,11 +110,11 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { organisationName, referenceNumber, website, submissionNote, email, phoneNumber } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
+
       const errorRedirect = {
         add: uiPaths.externalReferrals.submission,
         edit: uiPaths.externalReferrals.edit,
-      }[flow]({ caseListUrl, crn, id })
+      }[flow]({ crn, id })
 
       if (!validateSubmission(req)) {
         return res.redirect(errorRedirect)
@@ -144,13 +139,13 @@ export default class ExternalReferralsController {
           await this.externalReferralsService.update(token, crn, id, submission)
 
           req.flash('success', 'Referral details changed')
-          return res.redirect(uiPaths.externalReferrals.show({ caseListUrl, crn, id }))
+          return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
         }
 
         await this.externalReferralsService.submit(token, crn, submission)
 
         req.flash('success', 'Referral details added')
-        return res.redirect(uiPaths.cases.show({ caseListUrl, crn }))
+        return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the submission details. Please try again.')
         addUserInputToFlash(req)
@@ -164,13 +159,13 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { note } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
+
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_ADD_NOTE, {
         who: res.locals.user.username,
         correlationId: req.id,
       })
       if (!validateNote(req)) {
-        return res.redirect(uiPaths.externalReferrals.show({ caseListUrl, crn, id }))
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
       }
 
       try {
@@ -180,7 +175,7 @@ export default class ExternalReferralsController {
         addGenericErrorToFlash(req, 'There was a problem saving the note. Please try again.')
         addUserInputToFlash(req)
       }
-      return res.redirect(uiPaths.externalReferrals.show({ caseListUrl, crn, id }))
+      return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
     }
   }
 
@@ -190,7 +185,7 @@ export default class ExternalReferralsController {
         id: correlationId,
         params: { crn, id },
       } = req
-      const caseListUrl = getActiveCaseListSegment(req)
+
       const { token, username } = res.locals.user
 
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_OUTCOME, {
@@ -205,7 +200,7 @@ export default class ExternalReferralsController {
 
       return res.render('pages/external-referrals/outcome', {
         pageTitle: `${referral.status === 'SUBMITTED' ? 'Add' : 'Edit'} external referral outcome`,
-        backLinkHref: uiPaths.externalReferrals.show({ caseListUrl, crn, id }),
+        backLinkHref: uiPaths.externalReferrals.show({ crn, id }),
         crn,
         tableRows: summaryListRows(caseData, referral),
         statusItems: outcomeRadioItems(outcomeStatus),
@@ -213,7 +208,6 @@ export default class ExternalReferralsController {
         errorSummary,
         outcomeNote: referral.submission.outcomeNote,
         ...userInput,
-        caseListUrl,
       })
     }
   }
@@ -223,8 +217,8 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { outcomeStatus, outcomeNote } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
-      const errorRedirect = uiPaths.externalReferrals.outcome({ caseListUrl, crn, id })
+
+      const errorRedirect = uiPaths.externalReferrals.outcome({ crn, id })
 
       if (!validateOutcome(req)) {
         return res.redirect(errorRedirect)
@@ -242,12 +236,12 @@ export default class ExternalReferralsController {
           heading: referral.status !== 'SUBMITTED' ? 'Outcome details changed' : 'Outcome details added',
           body:
             (outcomeStatus as ExternalReferralDto['status']) === 'ACCEPTED'
-              ? `If the organisation has shared a possible address, <a href="${uiPaths.proposedAddresses.start({ caseListUrl, crn })}">add it as a proposed address</a>.`
+              ? `If the organisation has shared a possible address, <a href="${uiPaths.proposedAddresses.start({ crn })}">add it as a proposed address</a>.`
               : undefined,
         }
 
         req.flash('success', flash)
-        return res.redirect(uiPaths.externalReferrals.show({ caseListUrl, crn, id }))
+        return res.redirect(uiPaths.externalReferrals.show({ crn, id }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem saving the outcome details. Please try again.')
         addUserInputToFlash(req)
@@ -260,7 +254,7 @@ export default class ExternalReferralsController {
     return async (req: Request, res: Response) => {
       const { crn, id } = req.params
       const { token } = res.locals.user
-      const caseListUrl = getActiveCaseListSegment(req)
+
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_WITHDRAWAL, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -277,12 +271,11 @@ export default class ExternalReferralsController {
 
       return res.render('pages/external-referrals/withdrawal', {
         pageTitle: 'Move to referral history',
-        backLinkHref: uiPaths.externalReferrals.show({ caseListUrl, crn, id }),
+        backLinkHref: uiPaths.externalReferrals.show({ crn, id }),
         tableRows: summaryListRows(caseData, referral, true),
         withdrawalReasons: withdrawalReasonRadios(userInput?.withdrawalReason, context),
         ...context,
         submitButtonText: 'Move to referral history',
-        caseListUrl,
       })
     }
   }
@@ -292,8 +285,8 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { withdrawalReason, otherReason } = req.body
-      const caseListUrl = getActiveCaseListSegment(req)
-      const errorRedirect = uiPaths.externalReferrals.withdrawal({ caseListUrl, crn, id })
+
+      const errorRedirect = uiPaths.externalReferrals.withdrawal({ crn, id })
 
       if (!validateWithdrawal(req)) {
         return res.redirect(errorRedirect)
@@ -306,7 +299,7 @@ export default class ExternalReferralsController {
         })
 
         req.flash('success', 'Moved to referral history')
-        return res.redirect(uiPaths.cases.show({ caseListUrl, crn }))
+        return res.redirect(uiPaths.cases.show({ crn }))
       } catch {
         addGenericErrorToFlash(req, 'There was a problem moving to referral history details. Please try again.')
         addUserInputToFlash(req)

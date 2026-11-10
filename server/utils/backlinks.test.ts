@@ -1,13 +1,12 @@
 import { mock } from 'jest-mock-extended'
 import { Session } from 'express-session'
 import { Request } from 'express'
-import * as navigationUtils from './navigation'
 import getPageBackLink from './backlinks'
+import * as navUtils from './navigation'
 
 describe('Link management', () => {
   const matchList = ['/pattern1/:param', '/pattern2/']
   const pagePattern = 'page-Pattern'
-
   const mockRequest = (referer: string, lastStoredReferer: string) =>
     mock<Request & { session: Session }>({
       headers: { referer },
@@ -27,13 +26,10 @@ describe('Link management', () => {
 
   beforeEach(() => {
     jest.restoreAllMocks()
+    jest.spyOn(navUtils, 'getCaseListUrl').mockReturnValue('/?teamCode=N34')
   })
 
   describe('getPageBackLink', () => {
-    beforeEach(() => {
-      jest.spyOn(navigationUtils, 'getActiveCaseListUrl').mockReturnValue('/?teamCode=N34')
-    })
-
     it('should return the referer path and save it in session if it matches a provided path', () => {
       const request = mockRequest(matchingReferer, undefined)
       const expected = '/pattern1/112233445566'

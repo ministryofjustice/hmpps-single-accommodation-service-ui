@@ -17,7 +17,7 @@ import AddCurrentAddressPage from '../../pages/cases/addCurrentAddressPage'
 import paths from '../../../server/paths/ui'
 
 const crn = 'X123456'
-const caseListUrl = 'cases'
+const caseListUrl = '/'
 const caseData = caseFactory.build({ crn })
 
 const proposedAddress = (
@@ -57,7 +57,7 @@ const startJourney = async (page: Page, proposedAddresses: ProposedAccommodation
 
   await login(page)
 
-  const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, 'cases')
+  const profileTrackerPage = await ProfileTrackerPage.visit(page, caseData, '/', 'Case list')
   await profileTrackerPage.clickAddNewCurrentAddress()
 
   return profileTrackerPage
@@ -83,7 +83,7 @@ test.describe('change the current address', () => {
     await selectPage.shouldNotShowProposedAddress(secondAddress)
     await selectPage.shouldNotShowProposedAddress(failedChecks)
 
-    const backLink = paths.cases.show({ caseListUrl, crn })
+    const backLink = paths.cases.show({ crn })
     await selectPage.shouldShowLink('Back', backLink)
     await selectPage.shouldShowLink('Cancel', backLink)
 
@@ -95,7 +95,7 @@ test.describe('change the current address', () => {
     await selectPage.checkArrivalApiCalled(firstAddress)
 
     // And I am returned to the profile with a success banner
-    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, caseListUrl, '/')
+    profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, caseListUrl, 'Case list')
     await profileTrackerPage.shouldShowBanner('Current address changed')
   })
 
@@ -124,7 +124,7 @@ test.describe('change the current address', () => {
     // Then I should see the nDelius page
     const addPage = await AddCurrentAddressPage.verifyOnPage(page, caseData)
     await addPage.shouldShowDeliusLink()
-    await addPage.shouldShowLink('Back', paths.currentAddress.select({ caseListUrl, crn }))
+    await addPage.shouldShowLink('Back', paths.currentAddress.select({ crn }))
   })
 
   test('should send the user straight to nDelius when there are no proposed addresses', async ({ page }) => {
@@ -135,6 +135,6 @@ test.describe('change the current address', () => {
     // Then I should go straight to the nDelius page
     const addPage = await AddCurrentAddressPage.verifyOnPage(page, caseData)
     await addPage.shouldShowDeliusLink()
-    await addPage.shouldShowLink('Back', paths.cases.show({ caseListUrl, crn }))
+    await addPage.shouldShowLink('Back', paths.cases.show({ crn }))
   })
 })

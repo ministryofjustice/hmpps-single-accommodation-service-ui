@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import uiPaths from '../paths/ui'
 import ExternalReferralsController from '../controllers/externalReferralsController'
+import uiPaths from '../paths/ui'
 
 const basePath = uiPaths.externalReferrals
 export default function externalReferralsRoutes(

@@ -73,7 +73,6 @@ export const settledTag = (type?: AccommodationSummaryDto['type']): StatusTag =>
   })[type?.code]
 
 export const accommodationCard = (
-  caseListUrl: string,
   cardType: 'current' | 'next',
   accommodation?: AccommodationSummaryDto | null,
 ): AccommodationCardContext => {
@@ -84,15 +83,12 @@ export const accommodationCard = (
   const link =
     cardType === 'next' && accommodation.proposedAccommodationId
       ? uiPaths.proposedAddresses.show({
-          caseListUrl,
           crn: accommodation.crn,
           id: accommodation.proposedAccommodationId,
         })
       : null
   const addAddressLink =
-    cardType === 'current' && accommodation.crn
-      ? uiPaths.currentAddress.select({ caseListUrl, crn: accommodation.crn })
-      : undefined
+    cardType === 'current' && accommodation.crn ? uiPaths.currentAddress.select({ crn: accommodation.crn }) : undefined
 
   return {
     cardType,

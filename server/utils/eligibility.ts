@@ -626,15 +626,12 @@ export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceRe
   content: contentForCas3Status(serviceResult, cas3Application),
 })
 
-export const eligibilityToEligibilityCards = (
-  eligibility: EligibilityDto,
-  crn: string,
-  caseListUrl: string,
-): StatusCard[] =>
-  [
-    dutyToReferStatusCard(caseListUrl, crn, eligibility.dtr),
+export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] => {
+  return [
+    dutyToReferStatusCard(crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),
     cas1StatusCard(eligibility.cas1),
     config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2) : undefined,
     cas3StatusCard(eligibility.cas3),
   ].filter(Boolean)
+}

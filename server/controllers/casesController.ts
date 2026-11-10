@@ -26,7 +26,7 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import { getActiveCaseListSegment } from '../utils/navigation'
+import { setActiveCaseListUrl } from '../utils/navigation'
 import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
@@ -46,6 +46,9 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
+      setActiveCaseListUrl(req, '/')
+      res.locals.activePage = '/'
+
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
@@ -67,6 +70,8 @@ export default class CasesController {
 
   search(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
+      setActiveCaseListUrl(req, 'search')
+      res.locals.activePage = '/search'
       const searchTerm = req.query.searchTerm ?? req.session.searchTerm
       delete req.session.searchTerm
       let caseData: CaseDto | null = null
@@ -94,7 +99,7 @@ export default class CasesController {
         crn: searchTerm,
         resultsSummary: isValidSearchCrn ? searchResultsSummary(searchTerm, caseData) : undefined,
         casesTableColumns: casesTableColumns(),
-        casesRows: caseToRows(caseData, 'search'),
+        casesRows: caseToRows(caseData),
         errors,
         errorSummary,
       })
@@ -109,7 +114,6 @@ export default class CasesController {
       })
       const { crn } = req.params
       const { token } = res.locals.user
-      const caseListUrl = getActiveCaseListSegment(req)
       const { data: caseData } = await this.casesService.getCase(token, crn)
 
       if (caseData.userAccess === 'LIMITED') {
@@ -133,21 +137,14 @@ export default class CasesController {
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
         nextActions: renderActions(data.eligibility?.caseActions),
         noFixedAbode: noFixedAbodeAlert(data.accommodationSummaries),
-        nextAccommodationCard: accommodationCard(caseListUrl, 'next', data.accommodationSummaries?.nextAccommodation),
-        currentAccommodationCard: accommodationCard(
-          caseListUrl,
-          'current',
-          data.accommodationSummaries?.currentAccommodation,
-        ),
-        referralHistoryRows: referralHistoryRows(caseListUrl, data.referralHistory, res.locals?.user?.username, crn),
-        eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn, caseListUrl) : [],
-        proposedAddresses: data.proposedAddresses.proposed.map(it => proposedAddressStatusCard(it, caseListUrl)),
+        nextAccommodationCard: accommodationCard('next', data.accommodationSummaries?.nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', data.accommodationSummaries?.currentAccommodation),
+        referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),
+        eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn) : [],
+        proposedAddresses: data.proposedAddresses.proposed.map(it => proposedAddressStatusCard(it)),
         accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),
-        failedChecksAddresses: data.proposedAddresses.failedChecks.map(it =>
-          proposedAddressStatusCard(it, caseListUrl),
-        ),
-        externalReferralCards: externalReferralCards(caseListUrl, data.externalReferrals),
-        caseListUrl,
+        failedChecksAddresses: data.proposedAddresses.failedChecks.map(it => proposedAddressStatusCard(it)),
+        externalReferralCards: externalReferralCards(data.externalReferrals),
       })
     }
   }

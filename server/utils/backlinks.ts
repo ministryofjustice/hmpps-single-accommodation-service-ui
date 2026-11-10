@@ -1,7 +1,7 @@
 import { match, Path } from 'path-to-regexp'
 import type { Request } from 'express'
 import config from '../config'
-import { getActiveCaseListUrl } from './navigation'
+import { getCaseListUrl } from './navigation'
 
 /**
  * Provides referer links for pages with multiple routes
@@ -19,7 +19,7 @@ const getPageBackLink = (
   pagePattern: string,
   req: Request,
   matchList: Array<Path>,
-  defaultPath = getActiveCaseListUrl(req),
+  defaultPath = getCaseListUrl(req),
 ): string => {
   const {
     session,

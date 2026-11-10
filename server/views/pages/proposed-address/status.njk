@@ -2,7 +2,7 @@
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "What is the status of the address checks?" %}
-{% set formAction = paths.proposedAddresses.status({ caseListUrl: caseListUrl, crn: crn }) %}
+{% set formAction = paths.proposedAddresses.status({ crn: crn }) %}
 {% set heading %}
   <span class="govuk-caption-l">{{ address }}</span>
   <h1 class="govuk-fieldset__heading">What is the status of the address checks?</h1>

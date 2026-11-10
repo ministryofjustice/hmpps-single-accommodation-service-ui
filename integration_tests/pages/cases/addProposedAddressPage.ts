@@ -25,7 +25,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   static async visit(page: Page, caseData: Case): Promise<AddProposedAddressPage> {
-    await page.goto(paths.proposedAddresses.start({ caseListUrl: 'cases', crn: caseData.crn }))
+    await page.goto(paths.proposedAddresses.start({ crn: caseData.crn }))
     return AddProposedAddressPage.verifyOnPage(page, caseData.crn)
   }
 
@@ -52,7 +52,7 @@ export default class AddProposedAddressPage extends AbstractPage {
 
     await expect(this.page.getByRole('link', { name: 'Change' })).toHaveAttribute(
       'href',
-      paths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: this.crn }),
+      paths.proposedAddresses.lookup({ crn: this.crn }),
     )
 
     await expect(this.page.getByRole('group', { name: 'Select an address' })).toBeVisible()
@@ -83,7 +83,7 @@ export default class AddProposedAddressPage extends AbstractPage {
 
     await expect(this.page.getByRole('link', { name: 'Change' })).toHaveAttribute(
       'href',
-      paths.proposedAddresses.lookup({ caseListUrl: 'cases', crn: this.crn }),
+      paths.proposedAddresses.lookup({ crn: this.crn }),
     )
   }
 

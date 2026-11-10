@@ -35,7 +35,6 @@ import { noteTimelineEntry, timelineEntry } from './timeline'
 import config from '../config'
 import { summaryListRow } from './summaryListRow'
 import { staffName } from './staff'
-import { getActiveCaseListSegment } from './navigation'
 
 export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): StatusTag =>
   ({
@@ -45,10 +44,7 @@ export const proposedAddressStatusTag = (status: ProposedAddressDisplayStatus): 
     CONFIRMED: { text: 'Confirmed', colour: 'green' },
   })[status]
 
-export const proposedAddressStatusCard = (
-  proposedAddress: ProposedAccommodationDto,
-  caseListUrl: string,
-): StatusCard => {
+export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodationDto): StatusCard => {
   const status = displayStatus(proposedAddress)
 
   return {
@@ -61,45 +57,37 @@ export const proposedAddressStatusCard = (
       summaryListRow('Added by', proposedAddress.createdBy),
       summaryListRow('Date added', formatDateAndDaysAgo(proposedAddress.createdAt)),
     ].filter(Boolean),
-    links: linksForStatus(status, proposedAddress.crn, proposedAddress.id, caseListUrl),
+    links: linksForStatus(status, proposedAddress.crn, proposedAddress.id),
   }
 }
 
-const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: string, caseListUrl: string) => {
-  const detailsLink = { text: 'View details', href: uiPaths.proposedAddresses.show({ caseListUrl, crn, id }) }
-
+const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: string) => {
+  const detailsLink = { text: 'View details', href: uiPaths.proposedAddresses.show({ crn, id }) }
   switch (status) {
     case 'PASSED':
       return [
         {
           text: 'Set as next address',
-          href: uiPaths.proposedAddresses.edit({ caseListUrl, crn, id, page: 'nextAccommodation' }),
+          href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
         },
         detailsLink,
       ]
     case 'NOT_CHECKED_YET':
-      return [
-        { text: 'Add checks', href: uiPaths.proposedAddresses.edit({ caseListUrl, crn, id, page: 'status' }) },
-        detailsLink,
-      ]
+      return [{ text: 'Add checks', href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }) }, detailsLink]
     case 'CONFIRMED':
-      return [
-        { text: 'Set as current address', href: uiPaths.proposedAddresses.arrival({ caseListUrl, crn, id }) },
-        detailsLink,
-      ]
+      return [{ text: 'Set as current address', href: uiPaths.proposedAddresses.arrival({ crn, id }) }, detailsLink]
     default:
       return [detailsLink]
   }
 }
 
-export const flowRedirects: Record<ProposedAddressFormPage, (params: { caseListUrl: string; crn: string }) => string> =
-  {
-    lookup: uiPaths.proposedAddresses.lookup,
-    status: uiPaths.proposedAddresses.status,
-    nextAccommodation: uiPaths.proposedAddresses.nextAccommodation,
-    type: uiPaths.proposedAddresses.type,
-    details: uiPaths.proposedAddresses.details,
-  }
+export const flowRedirects: Record<ProposedAddressFormPage, (params: { crn: string }) => string> = {
+  lookup: uiPaths.proposedAddresses.lookup,
+  status: uiPaths.proposedAddresses.status,
+  nextAccommodation: uiPaths.proposedAddresses.nextAccommodation,
+  type: uiPaths.proposedAddresses.type,
+  details: uiPaths.proposedAddresses.details,
+}
 
 export const displayStatus = (proposedAddress: ProposedAccommodationDto): ProposedAddressDisplayStatus =>
   proposedAddress.nextAccommodationStatus === 'YES' ? 'CONFIRMED' : proposedAddress.verificationStatus
@@ -123,13 +111,12 @@ export const checkYourAnswersRows = (
   sessionData: ProposedAddressFormData,
   crn: string,
   accommodationTypes: ReferenceDataDto[],
-  caseListUrl: string,
 ): Record<'address' | 'supportingInfo', SummaryListRow[]> => {
   const addressParts = addressLines(sessionData.address || {}, 'full')
   const changeAddressLink =
     sessionData.lookupResults || config.flags.hideManualAddressEntry
-      ? uiPaths.proposedAddresses.lookup({ caseListUrl, crn })
-      : uiPaths.proposedAddresses.details({ caseListUrl, crn })
+      ? uiPaths.proposedAddresses.lookup({ crn })
+      : uiPaths.proposedAddresses.details({ crn })
 
   const rows = {
     address: [
@@ -142,11 +129,11 @@ export const checkYourAnswersRows = (
       summaryListRow(
         'Living arrangement',
         accommodationTypes.find(type => type.code === sessionData.accommodationTypeCode).name,
-        { type: 'html', actions: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ caseListUrl, crn }) }] },
+        { type: 'html', actions: [{ text: 'Change', href: uiPaths.proposedAddresses.type({ crn }) }] },
       ),
       summaryListRow('Address checks', formatStatusWithReason(sessionData), {
         type: 'html',
-        actions: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ caseListUrl, crn }) }],
+        actions: [{ text: 'Change', href: uiPaths.proposedAddresses.status({ crn }) }],
       }),
     ],
   }
@@ -158,7 +145,7 @@ export const checkYourAnswersRows = (
         formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus),
         {
           type: 'html',
-          actions: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ caseListUrl, crn }) }],
+          actions: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
         },
       ),
     )
@@ -183,9 +170,7 @@ export const validateLookupFromSession = (req: Request, sessionData: ProposedAdd
       (!postcode && validateMandatoryText(nameOrNumber, 'property name or number')) ||
       validateMaxLength(nameOrNumber, 'Property name or number', 255),
   }
-  return !validateAndFlashErrors(req, errors)
-    ? uiPaths.proposedAddresses.lookup({ caseListUrl: getActiveCaseListSegment(req), crn: req.params.crn })
-    : undefined
+  return !validateAndFlashErrors(req, errors) ? uiPaths.proposedAddresses.lookup({ crn: req.params.crn }) : undefined
 }
 
 export const updateAddressFromRequest = async (
@@ -278,22 +263,20 @@ const validateNextAccommodationFromSession = (req: Request, sessionData: Propose
 
 export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const { crn } = req.params
-  const caseListUrl = getActiveCaseListSegment(req)
-  if (!sessionData) return uiPaths.cases.show({ caseListUrl, crn })
+  if (!sessionData) return uiPaths.cases.show({ crn })
 
   const redirect =
     sessionData.lookupResults || config.flags.hideManualAddressEntry
-      ? uiPaths.proposedAddresses.lookup({ caseListUrl, crn })
-      : uiPaths.proposedAddresses.details({ caseListUrl, crn })
+      ? uiPaths.proposedAddresses.lookup({ crn })
+      : uiPaths.proposedAddresses.details({ crn })
   return !validateAddressFromSession(req, sessionData) ? redirect : undefined
 }
 
 export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const addressRedirect = validateUpToAddress(req, sessionData)
   if (addressRedirect) return addressRedirect
-  const caseListUrl = getActiveCaseListSegment(req)
   return !validateTypeFromSession(req, sessionData)
-    ? uiPaths.proposedAddresses.type({ caseListUrl, crn: req.params.crn })
+    ? uiPaths.proposedAddresses.type({ crn: req.params.crn })
     : undefined
 }
 
@@ -301,9 +284,8 @@ export const validateUpToStatus = (req: Request, sessionData: ProposedAddressFor
   const typeRedirect = validateUpToType(req, sessionData)
   if (typeRedirect) return typeRedirect
 
-  const caseListUrl = getActiveCaseListSegment(req)
   return !validateStatusFromSession(req, sessionData)
-    ? uiPaths.proposedAddresses.status({ caseListUrl, crn: req.params.crn })
+    ? uiPaths.proposedAddresses.status({ crn: req.params.crn })
     : undefined
 }
 
@@ -311,9 +293,8 @@ export const validateUpToNextAccommodation = (req: Request, sessionData: Propose
   const statusRedirect = validateUpToStatus(req, sessionData)
   if (statusRedirect) return statusRedirect
 
-  const caseListUrl = getActiveCaseListSegment(req)
   return !validateNextAccommodationFromSession(req, sessionData)
-    ? uiPaths.proposedAddresses.nextAccommodation({ caseListUrl, crn: req.params.crn })
+    ? uiPaths.proposedAddresses.nextAccommodation({ crn: req.params.crn })
     : undefined
 }
 
@@ -360,10 +341,10 @@ export const lookupResultsItems = (results: AccommodationAddressDetails[], selec
     checked: selectedUprn === result.uprn,
   }))
 
-export const addressDetailRows = (proposedAddress: ProposedAccommodationDto, caseListUrl: string): SummaryListRow[] => {
+export const addressDetailRows = (proposedAddress: ProposedAccommodationDto): SummaryListRow[] => {
   const editLink = (page: ProposedAddressFormPage): SummaryListActionItem => ({
     text: 'Change',
-    href: uiPaths.proposedAddresses.edit({ caseListUrl, crn: proposedAddress.crn, id: proposedAddress.id, page }),
+    href: uiPaths.proposedAddresses.edit({ crn: proposedAddress.crn, id: proposedAddress.id, page }),
   })
 
   return [
@@ -385,26 +366,25 @@ export const addressDetailRows = (proposedAddress: ProposedAccommodationDto, cas
   ].filter(Boolean)
 }
 
-export const nextActionButton = (proposedAddress: ProposedAccommodationDto, caseListUrl: string): Button => {
+export const nextActionButton = (proposedAddress: ProposedAccommodationDto): Button => {
   const { crn, id, verificationStatus, nextAccommodationStatus } = proposedAddress
-
   if (verificationStatus === 'NOT_CHECKED_YET') {
     return {
       text: 'Add checks',
-      href: uiPaths.proposedAddresses.edit({ caseListUrl, crn, id, page: 'status' }),
+      href: uiPaths.proposedAddresses.edit({ crn, id, page: 'status' }),
     }
   }
   if (verificationStatus === 'PASSED') {
     if (nextAccommodationStatus === 'YES') {
       return {
         text: 'Set as current address',
-        href: uiPaths.proposedAddresses.arrival({ caseListUrl, crn, id }),
+        href: uiPaths.proposedAddresses.arrival({ crn, id }),
       }
     }
 
     return {
       text: 'Confirm as next address',
-      href: uiPaths.proposedAddresses.edit({ caseListUrl, crn, id, page: 'nextAccommodation' }),
+      href: uiPaths.proposedAddresses.edit({ crn, id, page: 'nextAccommodation' }),
     }
   }
 

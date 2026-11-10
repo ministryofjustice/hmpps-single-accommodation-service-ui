@@ -87,7 +87,7 @@ describe('customListController', () => {
         peopleType: 'NFA_RISK',
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows('custom-list', cases),
+        casesRows: casesToRows(cases),
         filters: [],
         query: {},
       })

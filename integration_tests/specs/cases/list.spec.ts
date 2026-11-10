@@ -77,8 +77,8 @@ test.describe('List of cases', () => {
     const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(
       page,
       filteredCase,
-      'cases',
       `/?peopleType=NFA_RISK&searchTerm=${prisonNumber}&teamCode=team-one-code&riskLevel=${riskLevel}`,
+      'Case list',
     )
 
     // WHEN I click on the Case list link

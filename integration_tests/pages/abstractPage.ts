@@ -113,6 +113,10 @@ export default class AbstractPage {
     }
   }
 
+  async shouldShowBreadcrumb(text: string, url: string, locator?: Locator) {
+    await expect((locator || this.page).getByRole('link', { name: 'Breadcrumb' })).toHaveAttribute('href', url)
+  }
+
   async shouldShowSummaryItem(key: string, value: string | string[], container?: Locator) {
     const summaryItem = (container || this.page)
       .locator('.govuk-summary-list__row', {

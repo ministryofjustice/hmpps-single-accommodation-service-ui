@@ -22,9 +22,9 @@ import routes from './routes'
 import type { Services } from './services'
 import config from './config'
 import setUpMaintenancePageRedirect from './middleware/setUpMaintenancePageRedirect'
-import { getActiveCaseListUrl, setActiveCaseListUrl, getActivePage } from './utils/navigation'
 import setUpSentryProcessor from './middleware/setUpSentryProcessor'
 import setUpUserTelemetry from './middleware/setUpUserTelemetry'
+import { getCaseListUrl } from './utils/navigation'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -48,11 +48,11 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpMaintenancePageRedirect())
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')
-    setActiveCaseListUrl(req)
-    res.locals.caseListUrl = getActiveCaseListUrl(req)
-    res.locals.activePage = getActivePage(req.path)
+    req.session.caseListUrl = req.session.caseListUrl || '/'
+    res.locals.activePage = getCaseListUrl(req)
     next()
   })
+  // nunjucksSetup(app)
   app.use(setUpFrontendComponents())
   app.use(authorisationMiddleware(config.allowedRoles))
   app.use(setUpUserTelemetry(services.userService))

@@ -1,20 +1,20 @@
 import { CaseDto } from '@sas/api'
 import { Request } from 'express'
-import { getActiveCaseListSegment, getActiveCaseListUrl } from './navigation'
 import { displayName } from './cases'
 import paths from '../paths/ui'
+import { getActivePage } from './navigation'
 
 const breadcrumbs = (req: Request, caseData?: CaseDto) => {
-  const caseListUrl = getActiveCaseListUrl(req)
-  const caseListSegment = getActiveCaseListSegment(req)
+  const activePage = getActivePage(req.path)
+  const caseListUrl = req?.session?.caseListUrl
   return [
     {
-      text: { cases: 'Case list', 'custom-list': 'Custom list', search: 'Search' }[caseListSegment],
+      text: { 'case-list': 'Case list', 'custom-list': 'Custom list', search: 'Search' }[activePage],
       href: caseListUrl,
     },
     caseData && {
       text: displayName(caseData, { laoFlag: '' }),
-      href: paths.cases.show({ caseListUrl: caseListSegment, crn: caseData.crn }),
+      href: paths.cases.show({ crn: caseData.crn }),
     },
   ].filter(Boolean)
 }

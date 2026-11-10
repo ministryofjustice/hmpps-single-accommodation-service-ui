@@ -39,7 +39,6 @@ import * as validationUtils from '../utils/validation'
 import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
-import * as navigationUtils from '../utils/navigation'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -95,7 +94,6 @@ describe('casesController', () => {
 
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
-      jest.spyOn(navigationUtils, 'getActiveCaseListSegment').mockReturnValue('cases')
     })
 
     it('renders the case list page for the current user by default', async () => {
@@ -118,7 +116,7 @@ describe('casesController', () => {
         peopleType: 'NFA_RISK',
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows('cases', cases),
+        casesRows: casesToRows(cases),
         filters: [],
         query: {},
       })
@@ -151,7 +149,7 @@ describe('casesController', () => {
         resultsSummary: casesResultsSummary(cases),
         filters: queryToFilters(request.query, request.originalUrl, teams),
         casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows('cases', cases, 'user1'),
+        casesRows: casesToRows(cases, 'user1'),
         query: request.query,
       })
     })
@@ -192,7 +190,7 @@ describe('casesController', () => {
 
       expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
       expect(response.render).toHaveBeenCalledWith('pages/search', {
-        casesRows: caseToRows(caseData, 'search'),
+        casesRows: caseToRows(caseData),
         casesTableColumns: casesTableColumns(),
         crn: 'X123456',
         errors: {},
@@ -325,15 +323,14 @@ describe('casesController', () => {
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
         nextActions: renderActions(eligibility.caseActions),
         noFixedAbode: noFixedAbodeAlert(accommodationSummaries),
-        nextAccommodationCard: accommodationCard('cases', 'next', accommodationSummaries.nextAccommodation),
-        caseListUrl: 'cases',
-        currentAccommodationCard: accommodationCard('cases', 'current', accommodationSummaries.currentAccommodation),
-        referralHistoryRows: referralHistoryRows('cases', referralHistory),
-        eligibilityCards: eligibilityToEligibilityCards(eligibility, crn, 'cases'),
-        proposedAddresses: proposed.map(it => proposedAddressStatusCard(it, 'cases')),
+        nextAccommodationCard: accommodationCard('next', accommodationSummaries.nextAccommodation),
+        currentAccommodationCard: accommodationCard('current', accommodationSummaries.currentAccommodation),
+        referralHistoryRows: referralHistoryRows(referralHistory),
+        eligibilityCards: eligibilityToEligibilityCards(eligibility, crn),
+        proposedAddresses: proposed.map(it => proposedAddressStatusCard(it)),
         accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
-        failedChecksAddresses: failedChecks.map(it => proposedAddressStatusCard(it, 'cases')),
-        externalReferralCards: externalReferralCards('cases', externalReferrals),
+        failedChecksAddresses: failedChecks.map(it => proposedAddressStatusCard(it)),
+        externalReferralCards: externalReferralCards(externalReferrals),
       })
     })
 

@@ -111,6 +111,7 @@ describe('proposedAddressesController', () => {
       params: { crn: 'CRN123', id: 'address-id' },
       session: {
         save: jest.fn().mockImplementation((callback: () => unknown) => callback()),
+        caseListUrl: '/search?teamCode=N34',
       },
     })
 
@@ -147,6 +148,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders the address details page', async () => {
+      jest.mock('../utils/navigation', () => ({}))
       await controller.show()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.PROPOSED_ADDRESS_DETAILS, {

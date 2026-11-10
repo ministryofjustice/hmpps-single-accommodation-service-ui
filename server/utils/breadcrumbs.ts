@@ -5,8 +5,8 @@ import paths from '../paths/ui'
 import { getActivePage } from './navigation'
 
 const breadcrumbs = (req: Request, caseData?: CaseDto) => {
-  const activePage = getActivePage(req.path)
-  const caseListUrl = req?.session?.caseListUrl
+  const caseListUrl = req?.session?.caseListUrl || paths.cases.index({})
+  const activePage = getActivePage(caseListUrl)
   return [
     {
       text: { 'case-list': 'Case list', 'custom-list': 'Custom list', search: 'Search' }[activePage],

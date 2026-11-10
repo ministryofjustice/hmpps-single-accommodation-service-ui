@@ -11,7 +11,7 @@ export const getCaseListUrl = (req: IndexRequest): string => {
   return req?.session?.caseListUrl || uiPaths.cases.index({})
 }
 
-export const setActiveCaseListUrl = (req: IndexRequest, url?: string): void => {
+export const setActiveCaseListUrl = (req: IndexRequest, url: string): void => {
   let search = req.query?.peopleType ? new URLSearchParams(req.query).toString() : ''
   if (!search) {
     search = req?.session?.caseListUrl?.includes('?') ? req.session.caseListUrl.split('?')[1] : ''

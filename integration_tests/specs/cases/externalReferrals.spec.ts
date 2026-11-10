@@ -1,5 +1,6 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { faker } from '@faker-js/faker'
+import { ExternalReferralDto, ExternalReferralWithdrawalDto, FieldChange } from '@sas/api'
 import {
   auditRecordFactory,
   caseFactory,
@@ -168,6 +169,76 @@ test.describe('external referrals', () => {
     // And the API should have been called with the note
     await detailsPage.checkNoteApiCalled(referral, noteText)
   })
+
+  const withdrawalEvents: Array<{
+    reason: ExternalReferralWithdrawalDto['withdrawalReason']
+    reasonText: string
+    status: ExternalReferralDto['status']
+    tag: string
+    colour: string
+    statusChanged: boolean
+    otherReason?: string
+  }> = [
+    {
+      reason: 'PLACEMENT_COMPLETE',
+      reasonText: 'Placement complete',
+      status: 'COMPLETED',
+      tag: 'Completed',
+      colour: 'green',
+      statusChanged: true,
+    },
+    {
+      reason: 'ANOTHER_REASON',
+      reasonText: 'Other',
+      status: 'ARCHIVED',
+      tag: 'Archived',
+      colour: 'grey',
+      statusChanged: true,
+      otherReason: 'The service is no longer needed',
+    },
+    {
+      reason: 'NO_CAPACITY',
+      reasonText: 'No capacity',
+      status: 'REJECTED',
+      tag: 'Rejected',
+      colour: 'orange',
+      statusChanged: false,
+    },
+  ]
+
+  for (const event of withdrawalEvents) {
+    test(`should show the ${event.reason} withdrawal in the timeline`, async ({ page }) => {
+      const { caseData, referral } = await setupStubs()
+      const changes: FieldChange[] = [
+        ...(event.statusChanged ? [{ field: 'status', value: event.status, oldValue: 'SUBMITTED' }] : []),
+        { field: 'withdrawalReason', value: event.reason },
+        ...(event.otherReason ? [{ field: 'otherReason', value: event.otherReason }] : []),
+      ]
+      const withdrawalEvent = auditRecordFactory.build({ type: 'UPDATE', changes })
+      const withdrawnReferral: ExternalReferralDto = {
+        ...referral,
+        status: event.status,
+        withdrawalReason: event.reason,
+        otherReason: event.otherReason,
+      }
+
+      await externalReferralsApi.stubGetExternalReferralBySubmissionId(withdrawnReferral)
+      await externalReferralsApi.stubExternalReferralTimeline(crn, referral.submission.id, [withdrawalEvent])
+      await login(page)
+      await ExternalReferralsDetailsPage.visit(page, caseData, withdrawnReferral)
+
+      const timelineEntry = page.locator('.moj-timeline__item').first()
+      await expect(timelineEntry.getByRole('heading', { name: 'Moved to referral history' })).toBeVisible()
+      if (event.statusChanged) {
+        await expect(timelineEntry.locator('.govuk-tag')).toHaveText(event.tag)
+        await expect(timelineEntry.locator('.govuk-tag')).toHaveClass(new RegExp(`govuk-tag--${event.colour}`))
+      } else {
+        await expect(timelineEntry.locator('.govuk-tag')).toHaveCount(0)
+      }
+      const reasonLabel = event.statusChanged ? 'Other reason:' : 'Other reason changed to'
+      await expect(timelineEntry).toContainText(`${reasonLabel} ${event.otherReason || event.reasonText}`)
+    })
+  }
 
   test('should allow user to add and edit an outcome to a referral', async ({ page }) => {
     // Given I have stubbed the API responses

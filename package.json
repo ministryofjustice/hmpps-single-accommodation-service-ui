@@ -41,6 +41,7 @@
     "generate-dotenv-files": "script/generate-dotenv-files.sh",
     "set-github-secrets": "script/set-github-secrets.sh",
     "generate-types": "script/generate-types",
+    "generate:status-card-preview": "node script/status-card-preview/generate.js",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
@@ -178,6 +179,7 @@
     "playwright-ctrf-json-reporter": "0.1.0",
     "prettier": "^3.9.9",
     "prettier-plugin-jinja-template": "^2.2.0",
+    "purgecss": "^7.0.2",
     "start-server-and-test": "^3.0.12",
     "supertest": "^7.3.0",
     "ts-jest": "^29.4.14",

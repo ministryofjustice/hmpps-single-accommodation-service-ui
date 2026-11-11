@@ -1,4 +1,5 @@
-@use 'govuk-frontend/dist/govuk' as *;
+@use 'govuk-frontend/dist/govuk/base' as *;
+@use 'govuk-frontend/dist/govuk/components/hint';
 
 .sas-card {
   border: 1px solid govuk-colour('black', $variant: 'tint-80');

@@ -142,6 +142,26 @@ export default class AbstractPage {
     })
   }
 
+  async shouldShowBreadcrumb(url: string, text: string) {
+    await expect(this.page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link')).toHaveAttribute(
+      'href',
+      url,
+    )
+    await expect(this.page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link')).toHaveText(text)
+  }
+
+  async shouldShowSelectedNavigationLink(url: string, text: string) {
+    await expect(this.page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: text })).toHaveAttribute(
+      'href',
+      url,
+    )
+    await expect(this.page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: text })).toHaveText(text)
+    await expect(this.page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: text })).toHaveAttribute(
+      'aria-current',
+      'true',
+    )
+  }
+
   async shouldShowCard(title: string, cardData: StatusCard) {
     const card = this.getCard(title)
 

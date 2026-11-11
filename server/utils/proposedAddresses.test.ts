@@ -358,7 +358,6 @@ describe('Proposed addresses utilities', () => {
         const invalidLookup: ProposedAddressFormData = {
           postcode: '',
         }
-
         expect(validateLookupFromSession(req, invalidLookup)).toEqual(uiPaths.proposedAddresses.lookup({ crn }))
         expect(validationUtils.validateAndFlashErrors).toHaveBeenCalledWith(req, {
           postcode: 'Enter a UK postcode',
@@ -733,7 +732,11 @@ describe('Proposed addresses utilities', () => {
       const detailRows = addressDetailRows(proposedAddress)
 
       expect(detailRows[1]?.actions.items[0].href).toBe(
-        uiPaths.proposedAddresses.edit({ crn: baseProposedAddress.crn, id: proposedAddress.id, page: 'lookup' }),
+        uiPaths.proposedAddresses.edit({
+          crn: baseProposedAddress.crn,
+          id: proposedAddress.id,
+          page: 'lookup',
+        }),
       )
     })
   })

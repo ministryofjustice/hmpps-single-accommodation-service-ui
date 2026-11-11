@@ -6,6 +6,8 @@ import CasesListPage from '../../pages/cases/listPage'
 import CustomListPage from '../../pages/customList/customListPage'
 import CreateListPage from '../../pages/customList/createListPage'
 import ShowCaseListPage from '../../pages/customList/showCaseList'
+import ProfileTrackerPage from '../../pages/cases/profileTrackerPage'
+import { stubProfilePage } from '../../helpers/profilePage'
 import { stubCaseListPage } from '../../helpers/caseListPage'
 
 test.describe('custom list', () => {
@@ -56,6 +58,34 @@ test.describe('custom list', () => {
     await showCaseListPage.shouldShowLink('Change list', '/custom-list/add-crns')
     // AND I should see the list of cases
     await showCaseListPage.shouldShowCases(cases)
+  })
+  test('should allow a user to navigate to a profile via the custom list', async ({ page }) => {
+    const cases = [caseFactory.build({ crn: 'X123456' }), caseFactory.build({ crn: 'X654321' })]
+
+    await customListApi.stubSubmitCustomList()
+    await stubProfilePage({ crn: cases[0].crn, caseData: cases[0], accommodationSummaries: null })
+
+    // GIVEN a custom list already exists
+    // GIVEN a custom list already exists
+    await customListApi.stubGetCustomListCrns(['X123456', 'X654321'])
+    await customListApi.stubGetCustomListCases(cases, { peopleType: 'NFA_RISK' })
+    // WHEN I sign in
+    await login(page)
+
+    // THEN I should see the Case list
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+
+    // WHEN I navigate to the custom list page
+    await casesListPage.clickLink('Custom list')
+
+    // THEN I should see the custom case list page
+    const showCaseListPage = await ShowCaseListPage.verifyOnPage(page)
+
+    // When I click a case within the list
+    await showCaseListPage.clickCaseLink(cases[0])
+
+    // Then I should see the profile tracker page for that case
+    await ProfileTrackerPage.verifyOnProfileTrackerPage(page, cases[0], '/custom-list', 'Custom list')
   })
   test('should error when user does not input valid crn list', async ({ page }) => {
     // GIVEN a custom list does not already exist

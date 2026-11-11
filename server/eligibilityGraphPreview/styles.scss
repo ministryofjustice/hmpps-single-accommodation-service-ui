@@ -1,6 +1,7 @@
 @use 'sass:meta';
 @use 'govuk-frontend/dist/govuk/base' as govuk with (
-  $govuk-font-family: (Arial, sans-serif)
+  $govuk-font-family: (Arial, sans-serif),
+  $govuk-global-styles: true
 );
 
 // Keep GOV.UK styles inside the preview, away from the graph controls.

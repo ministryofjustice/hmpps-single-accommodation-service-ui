@@ -28,7 +28,7 @@ describe('customListController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request = mock<Request>({ id: 'request-id', originalUrl: '/custom-list', path: '/custom-list' })
   })
 
   describe('index', () => {

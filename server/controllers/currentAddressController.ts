@@ -12,7 +12,7 @@ import {
   validateAndFlashErrors,
   validateRadioButton,
 } from '../utils/validation'
-import { getPageBackLink } from '../utils/backlinks'
+import getPageBackLink from '../utils/backlinks'
 import { getTodayLocal } from '../utils/dates'
 
 export default class CurrentAddressController {

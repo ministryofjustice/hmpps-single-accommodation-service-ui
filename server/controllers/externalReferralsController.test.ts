@@ -10,7 +10,7 @@ import ExternalReferralsService from '../services/externalReferralsService'
 import uiPaths from '../paths/ui'
 
 import * as utils from '../utils/externalReferrals'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import {
   detailsSummaryListRows,
@@ -58,6 +58,7 @@ describe('ExternalReferralsController', () => {
     )
 
     request = mock<Request>({
+      path: '/custom-list',
       id: 'request-id',
       params: { crn, id: undefined },
       body: {},

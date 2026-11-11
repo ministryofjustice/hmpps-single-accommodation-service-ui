@@ -5,7 +5,6 @@ import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import ProposedAddressesService from '../services/proposedAddressesService'
 import uiPaths from '../paths/ui'
-import * as backlinks from '../utils/backlinks'
 import * as validationUtils from '../utils/validation'
 import { apiResponseFactory, caseFactory, proposedAccommodationFactory } from '../testutils/factories'
 import { displayName } from '../utils/cases'
@@ -38,6 +37,7 @@ describe('currentAddressController', () => {
     stubProposedAddresses()
 
     request = mock<Request>({
+      session: { caseListUrl: '/cases/CRN123' },
       id: 'request-id',
       params: { crn: 'CRN123' },
       body: {},
@@ -46,7 +46,6 @@ describe('currentAddressController', () => {
 
     controller = new CurrentAddressController(auditService, casesService, proposedAddressesService)
 
-    jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
     jest
       .spyOn(validationUtils, 'fetchErrorsAndUserInput')
       .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })

@@ -31,14 +31,32 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   constructor(
     page: Page,
     readonly caseData: Case,
+    readonly caseListUrl: string = '',
   ) {
     super(page)
     this.header = page.locator('h1', { hasText: displayName(caseData) })
   }
 
-  static async visit(page: Page, caseData: Case): Promise<ProfileTrackerPage> {
+  static async verifyOnProfileTrackerPage(
+    page: Page,
+    caseData: Case,
+    caseListUrl: string,
+    linkText: string,
+  ): Promise<ProfileTrackerPage> {
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
+    await profileTrackerPage.shouldShowBreadcrumb(caseListUrl, linkText)
+    await profileTrackerPage.shouldShowSelectedNavigationLink(caseListUrl.split('?')[0], linkText)
+    return profileTrackerPage
+  }
+
+  static async visit(
+    page: Page,
+    caseData: Case,
+    caseListUrl: string,
+    backLinkText: string,
+  ): Promise<ProfileTrackerPage> {
     await page.goto(paths.cases.show({ crn: caseData.crn as string }))
-    return ProfileTrackerPage.verifyOnPage(page, caseData)
+    return ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, caseListUrl, backLinkText)
   }
 
   async shouldShowEligibility(eligibility: Eligibility) {

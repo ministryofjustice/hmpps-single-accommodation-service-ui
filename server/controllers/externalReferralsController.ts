@@ -19,7 +19,7 @@ import {
   withdrawalReasonRadios,
   validateWithdrawal,
 } from '../utils/externalReferrals'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import { caseAssignedTo, displayName } from '../utils/cases'
 
 export type SubmissionFlow = 'add' | 'edit'

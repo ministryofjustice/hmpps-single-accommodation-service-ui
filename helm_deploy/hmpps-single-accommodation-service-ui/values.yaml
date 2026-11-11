@@ -30,6 +30,7 @@ generic-service:
     NODE_ENV: 'production'
     # Enable Node's environment proxy support for Cloud Platform's HTTP(S)_PROXY and NO_PROXY variables.
     NODE_USE_ENV_PROXY: '1'
+    APPLICATION_INSIGHTS_NO_STATSBEAT: 'true'
     REDIS_ENABLED: 'true'
     REDIS_TLS_ENABLED: 'true'
     TOKEN_VERIFICATION_ENABLED: 'true'

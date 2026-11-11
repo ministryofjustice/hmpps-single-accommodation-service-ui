@@ -91,8 +91,9 @@ export default class CaseDetailsPage {
     await this.expectCardStatus(this.cas2Card(), status)
   }
 
-  async expectSubmissionInfo(card: Locator = this.cas2Card()) {
-    await expect(card).toContainText(/Submitted|Application started/)
+  async expectSubmissionInfo(card: Locator) {
+    await expect(card).toContainText(/Submitted|Application started|Started by/)
+
     await expect(card).toContainText(/Submitted by|Started by/)
     await expect(card).toContainText(/\d{1,2} \w+ \d{4}/)
   }
@@ -113,6 +114,24 @@ export default class CaseDetailsPage {
   async expectCas1ArrivalInformation() {
     await expect(this.cas1Card()).toContainText('Arrival date')
     await expect(this.cas1Card()).toContainText('Expected departure')
+  }
+
+  async expectCas3ArrivalInformation() {
+    await expect(this.cas3Card()).toContainText('Arrival date')
+    await expect(this.cas3Card()).toContainText('Expected departure date')
+    await expect(this.cas3Card()).toContainText('Referral submitted by')
+  }
+
+  async expectCas3CancellationReason(reason: string) {
+    await expect(this.cas3Card()).toContainText(reason)
+    await expect(this.cas3Card()).toContainText('Booking dates')
+    await expect(this.cas3Card()).toContainText('Referral submitted by')
+  }
+
+  async expectCas3BookingInformation() {
+    await expect(this.cas3Card()).toContainText('Address')
+    await expect(this.cas3Card()).toContainText('Booking dates')
+    await expect(this.cas3Card()).toContainText('Referral submitted by')
   }
 
   async clickCas2Link(action: string) {
@@ -153,6 +172,10 @@ export default class CaseDetailsPage {
 
   private async clickCardLink(card: Locator, action: string) {
     await card.getByRole('link', { name: action }).click()
+  }
+
+  private async expectIneligibleInformation(card: Locator, reason: string) {
+    await expect(card).toContainText(reason)
   }
 
   private async expectCasPopup(url: RegExp) {
@@ -220,7 +243,17 @@ export default class CaseDetailsPage {
   }
 
   async expectCas3DeclineReason(reason: string) {
-    await this.expectCardDeclineReason(this.cas3Card(), reason)
+    await this.expectCardDeclineReason(this.cas3Card(), reason, 'Rejection reason')
+  }
+
+  async expectCas3IneligibleInformation(reason: string) {
+    await this.expectIneligibleInformation(this.cas3Card(), reason)
+  }
+
+  async expectCas3OfferInformation() {
+    await expect(this.cas3Card()).toContainText('Bedspace details are sent by email')
+    await expect(this.cas3Card()).toContainText('Provisional offer sent')
+    await expect(this.cas3Card()).toContainText('Referral submitted by')
   }
 
   async expectCas1Redirect() {
@@ -230,6 +263,15 @@ export default class CaseDetailsPage {
 
   async expectExistingApplication() {
     await this.expectCasPopup(/\/applications(\/|$)/)
+  }
+
+  async expectExistingReferral() {
+    await this.expectCasPopup(/\/referrals(\/|$)/)
+  }
+
+  async expectCas3Redirect() {
+    const cas3Page = await this.expectCasPopup(/\/referrals\/start$/)
+    await expect(cas3Page.getByRole('heading', { name: 'Make a referral for CAS3' })).toBeVisible()
   }
 
   proposedAddressesSection() {

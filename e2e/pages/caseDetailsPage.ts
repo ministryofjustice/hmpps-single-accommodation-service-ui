@@ -91,7 +91,7 @@ export default class CaseDetailsPage {
     await this.expectCardStatus(this.cas2Card(), status)
   }
 
-  async expectSubmissionInfo(card: Locator = this.cas2Card()) {
+  async expectSubmissionInfo(card: Locator) {
     await expect(card).toContainText(/Submitted|Application started|Started by/)
 
     await expect(card).toContainText(/Submitted by|Started by/)

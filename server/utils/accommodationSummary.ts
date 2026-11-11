@@ -193,6 +193,6 @@ export const isLoading = (caseDto: CaseDto): boolean =>
   !caseDto.assignedTo &&
   !caseDto.riskLevel &&
   !caseDto.tierScore &&
-  !caseDto.accommodationSummaries.caseAccommodationStatus &&
-  !caseDto.accommodationSummaries.currentAccommodation &&
-  !caseDto.accommodationSummaries.nextAccommodation
+  !caseDto.accommodationSummaries?.caseAccommodationStatus &&
+  !caseDto.accommodationSummaries?.currentAccommodation &&
+  !caseDto.accommodationSummaries?.nextAccommodation

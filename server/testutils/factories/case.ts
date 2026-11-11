@@ -32,11 +32,7 @@ class CaseFactory extends Factory<Case> {
       assignedTo: null,
       riskLevel: null,
       tierScore: null,
-      accommodationSummaries: {
-        caseAccommodationStatus: null,
-        currentAccommodation: null,
-        nextAccommodation: null,
-      },
+      accommodationSummaries: null,
     })
   }
 

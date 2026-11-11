@@ -6,7 +6,6 @@ import AuditService, { Page } from '../services/auditService'
 import { user } from '../routes/testutils/appSetup'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
 import { casesResultsSummary, casesTableColumns, casesTabs, casesToRows } from '../utils/cases'
-import UserService from '../services/userService'
 import CustomListController from './customListController'
 import CustomListService from '../services/customListService'
 import * as validationUtils from '../utils/validation'
@@ -24,9 +23,8 @@ describe('customListController', () => {
 
   const auditService = mock<AuditService>()
   const customListService = mock<CustomListService>()
-  const userService = mock<UserService>()
 
-  const customListController = new CustomListController(auditService, customListService, userService)
+  const customListController = new CustomListController(auditService, customListService)
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -34,12 +32,8 @@ describe('customListController', () => {
   })
 
   describe('index', () => {
-    const teams = [{ code: 'team-code', name: 'Team Name' }]
     const baseContext = {
-      assignedToOptions: [
-        { value: '', text: 'You (J. Doe)' },
-        { value: 'team-code', text: 'Team Name' },
-      ],
+      assignedToOptions: [{ value: '', text: 'You (J. Doe)' }],
       riskLevelOptions: [
         { value: '', text: 'All' },
         { value: 'VERY_HIGH', text: 'Very high' },
@@ -48,10 +42,6 @@ describe('customListController', () => {
         { value: 'LOW', text: 'Low' },
       ],
     }
-
-    beforeEach(() => {
-      userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
-    })
 
     it('renders the create custom list page when no list already exits', async () => {
       customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList([]))
@@ -76,20 +66,20 @@ describe('customListController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
-      // TODO once backend filter has been setup
-      // expect(customListService.getCustomList).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
-      expect(customListService.getCustomList).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(customListService.getCustomList).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/customList/show', {
         changeListHref: '/custom-list/add-crns',
-        ...baseContext,
-        tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
-        peopleType: 'NFA_RISK',
-        resultsSummary: casesResultsSummary(cases),
-        casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
-        filters: [],
-        query: {},
+        caseListSettings: {
+          ...baseContext,
+          tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
+          peopleType: 'NFA_RISK',
+          resultsSummary: casesResultsSummary(cases),
+          casesTableColumns: casesTableColumns(),
+          casesRows: casesToRows(cases),
+          filters: [],
+          query: {},
+          disabledFields: ['assignedTo'],
+        },
       })
     })
 

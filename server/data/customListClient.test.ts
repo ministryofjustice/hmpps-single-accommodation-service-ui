@@ -31,7 +31,7 @@ describeClient('CustomListClient', provider => {
       },
     })
 
-    const response = await customListClient.getCustomList('test-user-token')
+    const response = await customListClient.getCustomList('test-user-token', {})
     expect(response).toEqual(body)
   })
 

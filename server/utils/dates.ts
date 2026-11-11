@@ -3,8 +3,6 @@ import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
 import type { DateFieldParts } from '@sas/ui'
 import logger from '../../logger'
 
-const { mojDate } = mojFilters()
-
 const isValidDate = (date?: string, logError = false) => {
   if (date && !Number.isNaN(new Date(date).getTime())) return true
   if (logError) {
@@ -104,7 +102,7 @@ export const isoDateToDateInput = (date: string | undefined, fieldName: string):
 }
 
 export const mojDateOrBlank = (timestamp: string, type: 'datetime'): string =>
-  isValidDate(timestamp) ? mojDate(timestamp, type) : ''
+  isValidDate(timestamp) ? mojFilters().mojDate(timestamp, type) : ''
 
 export const dateFieldParts = (body: Record<string, string | undefined>, field: string): DateFieldParts => {
   return {

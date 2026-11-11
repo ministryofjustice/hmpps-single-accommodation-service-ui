@@ -114,6 +114,13 @@ On `main`, the pipeline tests and uploads the HTML. Once the full pipeline succe
 it triggers the API to download it and open or update a PR only if the content
 changed.
 
+To update the preview's example data or mappings, run `/update-preview` in VS Code
+or select the [same prompt](.github/prompts/update-preview.prompt.md) in IntelliJ
+Copilot Chat where supported. Alternatively, attach
+[the shared instructions](docs/update-eligibility-graph-preview.md) and ask Copilot
+to follow them. Copilot will review the changes, update the preview code where
+needed and run the checks.
+
 ### Probation region telemetry
 
 After authentication and authorisation, the UI calls `GET /users/me` with the user's token.

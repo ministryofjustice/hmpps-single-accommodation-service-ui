@@ -102,6 +102,18 @@ The service will be available at http://localhost:3000. You can login with the f
 
 Commit hooks have been set up to run linters, typecheck and unit tests on commit. You can also run these manually.
 
+### Generate the eligibility graph card preview
+
+The API's eligibility graph previews cards using HTML generated from this UI's
+card logic, templates and styles.
+
+Run `npm run generate:status-card-preview` to create `dist/status-card-preview.html`
+locally. Edit the UI sources, not the generated file.
+
+On `main`, the pipeline tests and uploads the HTML. Once the full pipeline succeeds,
+it triggers the API to download it and open or update a PR only if the content
+changed.
+
 ### Probation region telemetry
 
 After authentication and authorisation, the UI calls `GET /users/me` with the user's token.

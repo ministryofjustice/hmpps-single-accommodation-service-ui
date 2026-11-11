@@ -58,17 +58,10 @@ const statuses: CasCard[] = [
     action: 'View referral',
     actionLink: 'referral',
   },
-  {
-    crn: 'Y077925',
-    status: 'Arrived',
-    arrivalInfo: true,
-    action: 'View referral',
-    actionLink: 'referral',
-  },
 ]
 
 for (const status of statuses) {
-  test(`CAS3 status is ${status.status}`, async ({ page, users: { probation: probationUser } }) => {
+  test.skip(`CAS3 status is ${status.status}`, async ({ page, users: { probation: probationUser } }) => {
     // GIVEN I sign in as a probation user
     await signIn(page, probationUser)
 

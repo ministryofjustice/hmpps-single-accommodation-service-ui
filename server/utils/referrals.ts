@@ -108,6 +108,8 @@ const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
       return getDtrReferralDetails(referral)
     case 'CAS1':
       return getCas1ReferralDetails(referral, referral.status)
+    case 'CAS2':
+      return getCas2ReferralDetails(referral, referral.status)
     case 'CAS3':
       return getCas3ReferralDetails(referral, referral.status)
     case 'ER':
@@ -181,6 +183,18 @@ const getCas1ReferralDetails = (referral: Referral, status?: string): Array<Text
 
   if (referral.placementAddress && placementStatuses.includes(status)) {
     details.push(textContent(referral.placementAddress))
+  }
+
+  return details
+}
+
+const getCas2ReferralDetails = (referral: Referral, status?: string): Array<TextOrHtmlContent> => {
+  const details: Array<TextOrHtmlContent> = []
+
+  const cas2StatusesWithReason = ['OFFER_DECLINED_OR_WITHDRAWN', 'WITHDRAWN', 'CANCELLED']
+
+  if (cas2StatusesWithReason.includes(status) && referral.subStatus) {
+    details.push(textContent(`Reason: ${referral.subStatus}`))
   }
 
   return details

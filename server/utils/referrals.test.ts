@@ -1,3 +1,4 @@
+import { AccommodationReferralDto } from '@sas/api'
 import { referralFactory } from '../testutils/factories'
 import { referralHistoryRows, referralHistoryTable } from './referrals'
 import config from '../config'
@@ -87,6 +88,27 @@ describe('referrals utilities', () => {
           status: 'OFFER_DECLINED_OR_WITHDRAWN',
           date: '2024-05-06',
           uiUrl: 'https://example.com/cas2/654321',
+          referredBy: { username: 'jane_doe', name: 'Jane Doe' },
+        })
+
+        const result = referralHistoryRows([...referrals, cas2Referral], 'alice_smith', 'CRN123')
+
+        expect(result).toHaveLength(referrals.length + 1)
+        expect(result).toMatchSnapshot()
+      })
+
+      it.each([
+        ['OFFER_DECLINED_OR_WITHDRAWN', 'Area unsuitable'],
+        ['WITHDRAWN', 'Withdrawn by referrer'],
+        ['CANCELLED', 'No property available'],
+      ])('includes CAS2 referrals with substatus for %s status', (status, subStatus) => {
+        const cas2Referral = referralFactory.build({
+          id: '123456',
+          type: 'CAS2',
+          status: status as AccommodationReferralDto['status'],
+          date: '2024-05-06',
+          uiUrl: 'https://example.com/cas2/123456',
+          subStatus,
           referredBy: { username: 'jane_doe', name: 'Jane Doe' },
         })
 

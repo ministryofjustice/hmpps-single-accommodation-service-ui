@@ -110,7 +110,6 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { organisationName, referenceNumber, website, submissionNote, email, phoneNumber } = req.body
-
       const errorRedirect = {
         add: uiPaths.externalReferrals.submission,
         edit: uiPaths.externalReferrals.edit,
@@ -185,7 +184,6 @@ export default class ExternalReferralsController {
         id: correlationId,
         params: { crn, id },
       } = req
-
       const { token, username } = res.locals.user
 
       await this.auditService.logPageView(Page.EXTERNAL_REFERRALS_OUTCOME, {
@@ -217,7 +215,6 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { outcomeStatus, outcomeNote } = req.body
-
       const errorRedirect = uiPaths.externalReferrals.outcome({ crn, id })
 
       if (!validateOutcome(req)) {
@@ -285,7 +282,6 @@ export default class ExternalReferralsController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { withdrawalReason, otherReason } = req.body
-
       const errorRedirect = uiPaths.externalReferrals.withdrawal({ crn, id })
 
       if (!validateWithdrawal(req)) {

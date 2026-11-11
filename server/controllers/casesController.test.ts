@@ -327,9 +327,9 @@ describe('casesController', () => {
         currentAccommodationCard: accommodationCard('current', accommodationSummaries.currentAccommodation),
         referralHistoryRows: referralHistoryRows(referralHistory),
         eligibilityCards: eligibilityToEligibilityCards(eligibility, crn),
-        proposedAddresses: proposed.map(it => proposedAddressStatusCard(it)),
+        proposedAddresses: proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(accommodationHistory),
-        failedChecksAddresses: failedChecks.map(it => proposedAddressStatusCard(it)),
+        failedChecksAddresses: failedChecks.map(proposedAddressStatusCard),
         externalReferralCards: externalReferralCards(externalReferrals),
       })
     })

@@ -139,9 +139,9 @@ export default class CasesController {
         currentAccommodationCard: accommodationCard('current', data.accommodationSummaries?.currentAccommodation),
         referralHistoryRows: referralHistoryRows(data.referralHistory, res.locals?.user?.username, crn),
         eligibilityCards: data.eligibility ? eligibilityToEligibilityCards(data.eligibility, crn) : [],
-        proposedAddresses: data.proposedAddresses.proposed.map(it => proposedAddressStatusCard(it)),
+        proposedAddresses: data.proposedAddresses.proposed.map(proposedAddressStatusCard),
         accommodationHistoryRows: accommodationHistoryRows(data.accommodationHistory),
-        failedChecksAddresses: data.proposedAddresses.failedChecks.map(it => proposedAddressStatusCard(it)),
+        failedChecksAddresses: data.proposedAddresses.failedChecks.map(proposedAddressStatusCard),
         externalReferralCards: externalReferralCards(data.externalReferrals),
       })
     }

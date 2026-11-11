@@ -326,7 +326,6 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/outcome', {
         pageTitle: 'Add Duty to Refer (DTR) outcome',
         backLinkHref: '/cases/CRN123/dtr/existing-submission-id/details',
-
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),
@@ -449,7 +448,6 @@ describe('dutyToReferController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/show', {
         breadcrumbs: breadcrumbs(request, caseData),
-
         crn,
         dtrId: 'submission-id',
         displayName: displayName(caseData),
@@ -551,7 +549,6 @@ describe('dutyToReferController', () => {
       expect(response.render).toHaveBeenCalledWith('pages/duty-to-refer/withdraw', {
         pageTitle: 'Withdraw referral',
         backLinkHref: '/cases/CRN123/dtr/submission-id/details',
-
         crn: 'CRN123',
         dtr,
         tableRows: summaryListRows(caseData, dtr),

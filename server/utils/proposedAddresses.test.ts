@@ -90,6 +90,7 @@ describe('Proposed addresses utilities', () => {
         nextAccommodationStatus: undefined,
         createdAt: '2026-01-05T10:45:00.000Z',
       })
+
       expect(proposedAddressStatusCard(proposedAddress)).toMatchSnapshot()
     })
 
@@ -288,7 +289,7 @@ describe('Proposed addresses utilities', () => {
     })
 
     it('marks none as checked when no selection provided', () => {
-      const items = accommodationTypeItems(accommodationTypesReferenceData, '')
+      const items = accommodationTypeItems(accommodationTypesReferenceData)
 
       expect(items.every(item => item.checked === false)).toBe(true)
     })
@@ -405,7 +406,7 @@ describe('Proposed addresses utilities', () => {
         },
         {
           name: 'redirects to details when address invalid',
-          data: { address: { ...validAddress, postcode: 'cases' } },
+          data: { address: { ...validAddress, postcode: '' } },
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
@@ -439,7 +440,7 @@ describe('Proposed addresses utilities', () => {
         },
         {
           name: 'redirects to details when address invalid',
-          data: { address: { ...validAddress, postcode: 'cases' } } as ProposedAddressFormData,
+          data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
@@ -479,7 +480,7 @@ describe('Proposed addresses utilities', () => {
         },
         {
           name: 'redirects to details when address invalid',
-          data: { address: { ...validAddress, postcode: 'cases' } } as ProposedAddressFormData,
+          data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {
@@ -523,7 +524,7 @@ describe('Proposed addresses utilities', () => {
         },
         {
           name: 'redirects to details when address invalid',
-          data: { address: { ...validAddress, postcode: 'cases' } } as ProposedAddressFormData,
+          data: { address: { ...validAddress, postcode: '' } } as ProposedAddressFormData,
           expected: uiPaths.proposedAddresses.details({ crn }),
         },
         {

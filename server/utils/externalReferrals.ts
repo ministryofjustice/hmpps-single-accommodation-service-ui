@@ -16,7 +16,7 @@ import {
   validateRadioButton,
 } from './validation'
 
-import uiPaths from '../paths/ui'
+import paths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
 import { renderMacro, statusTag, textBlock, textField } from './macros'
 import { serviceStatusTag } from './statusTag'
@@ -88,8 +88,7 @@ export const submissionFormValues = (referral: ExternalReferralDto | undefined):
 
 const cardLinks = (referral: ExternalReferralDto) => {
   const { crn, submission: { id } = {} } = referral
-
-  const url = uiPaths.externalReferrals.show({ crn, id })
+  const url = paths.externalReferrals.show({ crn, id })
   return [{ text: 'View details', href: url, external: false }]
 }
 

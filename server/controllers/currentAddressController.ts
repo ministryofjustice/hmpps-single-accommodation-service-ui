@@ -3,6 +3,7 @@ import { ProposedAccommodationArrivalCommand } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
 import ProposedAddressesService from '../services/proposedAddressesService'
+import uiPaths from '../paths/ui'
 import { displayName } from '../utils/cases'
 import { deliusAddressAndAccommodationUrl, NEW_ADDRESS_OPTION, proposedAddressItems } from '../utils/currentAddress'
 import {
@@ -13,7 +14,6 @@ import {
 } from '../utils/validation'
 import getPageBackLink from '../utils/backlinks'
 import { getTodayLocal } from '../utils/dates'
-import uiPaths from '../paths/ui'
 
 export default class CurrentAddressController {
   constructor(

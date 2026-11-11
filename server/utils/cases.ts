@@ -84,13 +84,12 @@ export const updateQueryParams = (url: string, updateParams: Record<string, unkn
   return queryString ? `${path}?${queryString}` : path
 }
 
-export const personCell = (caseData: Case, assignedToText?: string): string => {
-  return renderMacro('personCell', {
+export const personCell = (caseData: Case, assignedToText?: string): string =>
+  renderMacro('personCell', {
     ...caseData,
     name: displayName(caseData, { laoFlag: '', caseList: true }),
     assignedToText,
   })
-}
 
 export const actionsCell = (actions: CaseAction[]): string =>
   renderMacro('actionsCell', { actions: renderActions(actions) })

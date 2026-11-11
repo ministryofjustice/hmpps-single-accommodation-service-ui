@@ -148,7 +148,6 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders the address details page', async () => {
-      jest.mock('../utils/navigation', () => ({}))
       await controller.show()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.PROPOSED_ADDRESS_DETAILS, {
@@ -262,7 +261,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('renders the address lookup page with errors and session data', async () => {
-      setSessionData({ nameOrNumber: 'cases', postcode: 'H23 8TY' })
+      setSessionData({ nameOrNumber: '', postcode: 'H23 8TY' })
 
       const errors = { nameOrNumber: 'Enter a property name or number' }
       const errorSummary = [{ href: '#nameOrNumber', text: 'Enter a property name or number' }]
@@ -273,7 +272,7 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/lookup', {
         crn: 'CRN123',
-        nameOrNumber: 'cases',
+        nameOrNumber: '',
         postcode: 'H23 8TY',
         errors,
         errorSummary,
@@ -532,11 +531,11 @@ describe('proposedAddressesController', () => {
 
     it('redirects to details when address invalid', async () => {
       request.body = {
-        addressLine1: 'cases',
-        addressLine2: 'cases',
-        addressTown: 'cases',
-        addressCounty: 'cases',
-        addressPostcode: 'cases',
+        addressLine1: '',
+        addressLine2: '',
+        addressTown: '',
+        addressCounty: '',
+        addressPostcode: '',
         addressCountry: 'UK',
       }
       await controller.saveDetails()(request, response, next)

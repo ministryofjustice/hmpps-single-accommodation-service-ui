@@ -116,7 +116,6 @@ export default class DutyToReferController {
       const { crn, id } = req.params
       const { token } = res.locals.user
       const { localAuthorityAreaId, referenceNumber, submissionNote } = req.body
-
       const errorRedirect = {
         add: uiPaths.dutyToRefer.submission,
         addNew: uiPaths.dutyToRefer.newSubmission,
@@ -220,7 +219,6 @@ export default class DutyToReferController {
         submissionNote,
         outcomeNote,
       } = req.body
-
       const errorRedirect = uiPaths.dutyToRefer.outcome({ crn, id })
 
       if (!validateOutcome(req)) {
@@ -298,7 +296,6 @@ export default class DutyToReferController {
         outcomeReason,
         outcomeNote,
       } = req.body
-
       const errorRedirect = uiPaths.dutyToRefer.withdraw({ crn, id })
 
       if (!validateWithdraw(req)) {

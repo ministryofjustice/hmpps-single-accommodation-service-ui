@@ -8,7 +8,7 @@ import { renderMacro, statusTag } from './macros'
 import uiPaths from '../paths/ui'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
-  const { type } = accommodation
+  const type = accommodation?.type || null
   return (
     {
       A10: 'CAS2 accommodation of 13 weeks or more',
@@ -31,6 +31,7 @@ export const accommodationType = (accommodation: AccommodationSummaryDto): strin
       A16: 'Awaiting Assessment',
       A17: 'CAS3',
       HMP: type?.description || 'Unknown',
+      LOADING: 'Accommodation information loading',
     }[type?.code] || 'Unknown'
   )
 }
@@ -144,13 +145,15 @@ export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDt
   const summaries = caseData.accommodationSummaries
   const accommodation = cellType === 'current' ? summaries?.currentAccommodation : summaries?.nextAccommodation
 
-  if (!accommodation) return cellType === 'current' ? 'No accommodation' : ''
+  const caseIsLoading = isLoading(caseData)
+  if (!accommodation && !caseIsLoading) return cellType === 'current' ? 'No accommodation' : ''
 
   return renderMacro('accommodationCell', {
     cellType,
     accommodationType: accommodationType(accommodation),
-    addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
-    isPrivate: isPrivateAccommodation(accommodation.type),
+    addressLine1: accommodation?.address ? addressLines(accommodation.address)[0] : undefined,
+    isPrivate: isPrivateAccommodation(accommodation?.type),
+    isLoading: caseIsLoading,
     ...accommodation,
     caseStatus: summaries?.caseAccommodationStatus,
   })
@@ -185,3 +188,11 @@ const privateAccommodationCodes = ['A01A', 'A01C', 'A01D', 'A07A', 'A07B']
 
 export const isPrivateAccommodation = (type?: AccommodationSummaryDto['type']): boolean =>
   Boolean(type?.code && privateAccommodationCodes.includes(type.code))
+
+export const isLoading = (caseDto: CaseDto): boolean =>
+  !caseDto.assignedTo &&
+  !caseDto.riskLevel &&
+  !caseDto.tierScore &&
+  !caseDto.accommodationSummaries.caseAccommodationStatus &&
+  !caseDto.accommodationSummaries.currentAccommodation &&
+  !caseDto.accommodationSummaries.nextAccommodation

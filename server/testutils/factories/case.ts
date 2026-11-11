@@ -27,6 +27,19 @@ class CaseFactory extends Factory<Case> {
     })
   }
 
+  loading() {
+    return this.params({
+      assignedTo: null,
+      riskLevel: null,
+      tierScore: null,
+      accommodationSummaries: {
+        caseAccommodationStatus: null,
+        currentAccommodation: null,
+        nextAccommodation: null,
+      },
+    })
+  }
+
   unknownAccess() {
     return this.limitedAccess().params({
       userAccess: 'UNKNOWN',

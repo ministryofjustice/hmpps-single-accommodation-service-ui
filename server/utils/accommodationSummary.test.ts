@@ -83,8 +83,9 @@ describe('accommodationSummary', () => {
         expect(accommodationCard(cellType, accommodation)).toMatchSnapshot()
       })
 
-      it('returns an empty cell for a limited access case', () => {
-        expect(accommodationCell(cellType, caseFactory.limitedAccess().build())).toEqual('')
+      it('returns a context card object for a loading accommodation', () => {
+        const caseData = caseFactory.loading().build()
+        expect(accommodationCell(cellType, caseData)).toMatchSnapshot()
       })
     })
   })

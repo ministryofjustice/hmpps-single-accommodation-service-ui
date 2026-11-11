@@ -39,7 +39,7 @@ const fieldMapping: Record<string, FieldDefinition> = {
   email: { label: 'Email address', format: 'text' },
   submissionNote: { label: 'Notes', format: 'textarea' },
   outcomeNote: { label: 'Notes', format: 'textarea' },
-  otherReason: { label: 'Other reason', format: 'text' },
+  withdrawalReason: { label: 'Other reason', format: 'text' },
 }
 
 export const validateSubmission = (req: Request) => {
@@ -139,52 +139,6 @@ export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined
   return rows
 }
 
-export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
-  type ServiceStatus = ServiceResult['serviceStatus']
-
-  const { type, changes } = auditRecord
-
-  if (type === 'NOTE') return noteTimelineEntry(auditRecord, currentUsername)
-
-  const changeValues = changes
-    .map(({ field, value }) => {
-      const def = fieldMapping[field]
-      if (!def) return undefined
-      if (!value) return type === 'UPDATE' ? { value: textContent(`${fieldMapping[field].label} removed`) } : undefined
-
-      let content: TextOrHtmlContent = textContent(value)
-      if (def.format === 'date') content = textContent(formatDate(value))
-      if (def.format === 'textarea') content = htmlContent(textBlock(value))
-
-      return { label: def.label, value: content }
-    })
-    .filter(Boolean)
-
-  const fieldChange = (fieldName: string) => changes.find(({ field }) => field === fieldName)
-
-  const { value: newStatus, oldValue: oldStatus } = (fieldChange('status') || {}) as {
-    value: ServiceStatus
-    oldValue: ServiceStatus
-  }
-  const isOutcome = (newStatus && newStatus !== 'SUBMITTED') || fieldChange('outcomeNote')
-  const isChange = isOutcome ? !newStatus || oldStatus !== 'SUBMITTED' : type === 'UPDATE'
-  const label = `${isOutcome ? 'Outcome' : 'Referral'} details ${isChange ? 'changed' : 'added'}`
-
-  const html = renderMacro('timelineEntry', {
-    type,
-    status: newStatus ? serviceStatusTag(newStatus) : undefined,
-    values: changeValues,
-    isChange,
-  })
-
-  return timelineEntry(label, html, auditRecord.commitDate, staffName(auditRecord.authorDetails, currentUsername))
-}
-
-export const outcomeReasonLabels: Partial<Record<ExternalReferralDto['status'], string>> = {
-  ACCEPTED: 'Accepted',
-  REJECTED: 'Rejected',
-}
-
 export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withdrawalReason'], string> = {
   ANOTHER_ACCOMMODATION_FOUND: 'Another accommodation option found',
   NO_CAPACITY: 'No capacity',
@@ -194,6 +148,69 @@ export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withd
   PERSON_NOT_SUITABLE: 'Person not suitable',
   PERSON_NO_LONGER_CONSENTS: 'Person no longer consents',
   ANOTHER_REASON: 'Other',
+}
+
+export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
+  type ServiceStatus = ServiceResult['serviceStatus']
+
+  const { type, changes } = auditRecord
+
+  const fieldChange = (fieldName: string) => changes.find(({ field }) => field === fieldName)
+
+  if (type === 'NOTE') return noteTimelineEntry(auditRecord, currentUsername)
+  let isWithdrawal = false
+  const changeValues = changes
+    .map(({ field, value }) => {
+      let content: TextOrHtmlContent = textContent(value)
+      const def = fieldMapping[field]
+
+      if (!def) return undefined
+
+      if (field === 'withdrawalReason') {
+        content = textContent(
+          value === 'ANOTHER_REASON'
+            ? fieldChange('otherReason')?.value || 'No reason entered'
+            : withdrawalReasonLabels[value as ExternalReferralWithdrawalDto['withdrawalReason']],
+        )
+        isWithdrawal = true
+      }
+      if (!value) return type === 'UPDATE' ? { value: textContent(`${fieldMapping[field].label} removed`) } : undefined
+
+      if (def.format === 'date') content = textContent(formatDate(value))
+      if (def.format === 'textarea') content = htmlContent(textBlock(value))
+
+      return { label: def.label, value: content }
+    })
+    .filter(Boolean)
+
+  const { value: newStatus, oldValue: oldStatus } = (fieldChange('status') || {}) as {
+    value: ServiceStatus
+    oldValue: ServiceStatus
+  }
+  const isOutcome = (newStatus && newStatus !== 'SUBMITTED') || fieldChange('outcomeNote')
+  const isChange = isOutcome ? !newStatus || oldStatus !== 'SUBMITTED' : type === 'UPDATE'
+  const label = `${isOutcome ? 'Outcome' : 'Referral'} details ${isChange ? 'changed' : 'added'}`
+
+  const timeLineLabel = !isWithdrawal ? label : 'Moved to referral history'
+
+  const html = renderMacro('timelineEntry', {
+    type,
+    status: newStatus ? serviceStatusTag(newStatus) : undefined,
+    values: changeValues,
+    isChange,
+  })
+
+  return timelineEntry(
+    timeLineLabel,
+    html,
+    auditRecord.commitDate,
+    staffName(auditRecord.authorDetails, currentUsername),
+  )
+}
+
+export const outcomeReasonLabels: Partial<Record<ExternalReferralDto['status'], string>> = {
+  ACCEPTED: 'Accepted',
+  REJECTED: 'Rejected',
 }
 
 export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDto, includeStatus = false) => {

@@ -7,6 +7,7 @@ export type CasCard = {
   bedspaceOffered?: boolean
   declineReason?: string
   ineligibleInfo?: string
+
   expectedArrivalInfo?: boolean
   arrivalInfo?: boolean
   notArrivedInfo?: boolean

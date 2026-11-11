@@ -1,4 +1,4 @@
-import { DtrSubmissionDto, AccommodationReferralDto as Referral } from '@sas/api'
+import { DtrSubmissionDto, AccommodationReferralDto as Referral, ExternalReferralDto } from '@sas/api'
 import { StatusCell, StatusTag } from '@sas/ui'
 import { TableRow, TextOrHtmlContent } from '@govuk/ui'
 import { linksCell, tableTextCell } from './tables'
@@ -8,8 +8,9 @@ import { outcomeReasonSummaryLabels, withdrawReasonLabels } from './dutyToRefer'
 import { formatDate } from './dates'
 import uiPaths from '../paths/ui'
 import config from '../config'
+import { withdrawalReasonLabels as externalReferralWithdrawalReasonLabels } from './externalReferrals'
 
-export const referralStatusType = (type?: Referral['type'], status?: string): string => {
+export const referralStatusType = ({ type, status, organisationName }: Referral): string => {
   switch (type) {
     case 'CAS1':
       switch (status) {
@@ -36,6 +37,8 @@ export const referralStatusType = (type?: Referral['type'], status?: string): st
       }
     case 'DTR':
       return 'Duty to refer'
+    case 'ER':
+      return organisationName || 'External referral'
     default:
       return 'Unknown'
   }
@@ -64,10 +67,10 @@ export const referralHistoryRows = (referrals?: Referral[], username?: string, c
   return (referrals ?? [])
     .filter(referral => config.flags.cas2Enabled || referral.type !== 'CAS2')
     .map(referral => {
-      const { status, type, id, uiUrl } = referral
+      const { type, id, uiUrl } = referral
 
       return [
-        htmlContent(tableTextCell('Referral type', referralStatusType(type, status))),
+        htmlContent(tableTextCell('Referral type', referralStatusType(referral))),
         htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),
         htmlContent(statusCell(referralStatusCell(referral))),
         htmlContent(linksCell(referralLinksForType(type, id, crn, uiUrl))),
@@ -90,6 +93,7 @@ const referralDateText = (type: Referral['type'], date: string): string => {
 
   switch (type) {
     case 'DTR':
+    case 'ER':
       return `Submitted on ${formattedDate}`
     case 'CAS2':
       return `Submitted: ${formattedDate}`
@@ -106,6 +110,8 @@ const getReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
       return getCas1ReferralDetails(referral, referral.status)
     case 'CAS3':
       return getCas3ReferralDetails(referral, referral.status)
+    case 'ER':
+      return getExternalReferralDetails(referral)
     default:
       return []
   }
@@ -135,6 +141,17 @@ const getDtrReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => 
   }
 
   return details
+}
+
+const getExternalReferralDetails = (referral: Referral): Array<TextOrHtmlContent> => {
+  const { withdrawalReason, otherReason } = referral as Partial<ExternalReferralDto>
+
+  return [
+    withdrawalReason &&
+      textContent(
+        `Reason: ${withdrawalReason === 'ANOTHER_REASON' ? otherReason : externalReferralWithdrawalReasonLabels[withdrawalReason]}`,
+      ),
+  ].filter(Boolean)
 }
 
 const getCas1ReferralDetails = (referral: Referral, status?: string): Array<TextOrHtmlContent> => {
@@ -218,6 +235,8 @@ export const referralLinksForType = (type: Referral['type'], id: string, crn: st
       return url ? [{ text: 'View application', href: url }] : []
     case 'CAS3':
       return url ? [{ text: 'View referral', href: url }] : []
+    case 'ER':
+      return [{ text: 'View referral', href: uiPaths.externalReferrals.show({ crn, id }) }]
     default:
       return []
   }

@@ -93,6 +93,7 @@ export default class CaseDetailsPage {
 
   async expectSubmissionInfo(card: Locator = this.cas2Card()) {
     await expect(card).toContainText(/Submitted|Application started|Started by/)
+
     await expect(card).toContainText(/Submitted by|Started by/)
     await expect(card).toContainText(/\d{1,2} \w+ \d{4}/)
   }

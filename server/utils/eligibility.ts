@@ -21,6 +21,7 @@ import { htmlContent, textContent } from './utils'
 import { summaryListRow } from './summaryListRow'
 import { bulletList, govukDetailsList } from './macros'
 import { cas3PremisesToAccommodationAddress, formatAddress } from './addresses'
+import uiPaths from '../paths/ui'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -76,9 +77,12 @@ export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
   }
 }
 
-export const linksForCas2Status = (serviceResult?: ServiceResult) => {
+export const linksForCas2Status = (
+  serviceResult?: ServiceResult,
+  cas2Application?: Cas2ApplicationDto | null,
+  crn?: string,
+) => {
   const { serviceStatus, url } = serviceResult || {}
-
   const link: Omit<Link, 'text'> = { href: url, external: true }
 
   switch (serviceStatus) {
@@ -92,7 +96,18 @@ export const linksForCas2Status = (serviceResult?: ServiceResult) => {
     case 'ON_WAITING_LIST':
     case 'PLACE_OFFERED':
     case 'OFFER_ACCEPTED':
+      return [{ text: 'View application', ...link }]
     case 'AWAITING_ARRIVAL':
+      if (config.flags.cas2ManualArrivalEnabled && cas2Application && crn) {
+        const markAsArrivedLink: Omit<Link, 'text'> = {
+          href: uiPaths.applications.arrival({ crn, applicationId: cas2Application.id }),
+          external: false,
+        }
+        return [
+          { text: 'View application', ...link },
+          { text: 'Mark as arrived', ...markAsArrivedLink },
+        ]
+      }
       return [{ text: 'View application', ...link }]
     case 'OFFER_DECLINED_OR_WITHDRAWN':
     case 'CANCELLED':
@@ -111,6 +126,7 @@ export const linksForCas3Status = (serviceResult?: ServiceResult) => {
   switch (serviceStatus) {
     case 'NOT_STARTED':
       return [{ text: 'Start referral', ...link }]
+    case 'ARRIVED':
     case 'SUBMITTED':
     case 'BEDSPACE_OFFERED':
     case 'BOOKING_CONFIRMED':
@@ -284,6 +300,16 @@ const cas2NotEligibleSummaries: Partial<Record<ServiceResult['failureReasons'][n
   SEXUAL_OFFENCE_REGISTRATIONS_PRESENT: 'Sexual offence history',
 }
 
+const cas2NotEligibleReasons: Partial<Record<ServiceResult['failureReasons'][number], string>> = {
+  INVALID_TIER: 'Tier not eligible.',
+  SEXUAL_OFFENCE_REGISTRATIONS_PRESENT: 'Not eligible due to sexual offence history.',
+  UNDER_18: 'Not eligible as applicant is under 18.',
+  IN_CAS3_ACCOMMODATION: 'Not eligible as applicant is currently in a CAS3 property.',
+  IN_PRISON_NO_RELEASE_DATE: 'Must have a conditional release date to start application.',
+  IN_CAS2_ACCOMMODATION: 'Not eligible as applicant is currently in a CAS2 property.',
+  IN_COMMUNITY: 'Not eligible unless at risk of recall.',
+}
+
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
   const { serviceStatus, failureReasons } = serviceResult ?? {}
 
@@ -293,25 +319,11 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
       return [htmlContent(bulletList('Not eligible due to:', bullets))]
     }
 
-    if (failureReasons.includes('INVALID_TIER')) {
-      return [textContent('Tier not eligible.')]
-    }
-
-    if (failureReasons.includes('SEXUAL_OFFENCE_REGISTRATIONS_PRESENT')) {
-      return [textContent('Not eligible due to sexual offence history.')]
-    }
-
-    if (failureReasons.includes('UNDER_18')) {
-      return [textContent('Not eligible as applicant is under 18.')]
-    }
-
-    if (failureReasons.includes('IN_CAS3_ACCOMMODATION')) {
-      return [textContent('Not eligible as applicant is currently in a CAS3 property.')]
-    }
-
-    if (failureReasons.includes('IN_PRISON_NO_RELEASE_DATE')) {
-      return [textContent('Must have a conditional release date to start application.')]
-    }
+    return failureReasons
+      .map(reason => cas2NotEligibleReasons[reason])
+      .filter(Boolean)
+      .map(text => textContent(text))
+      .slice(0, 1)
   }
 
   return []
@@ -611,11 +623,11 @@ export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceRe
   }
 }
 
-export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceResult): StatusCard => ({
+export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceResult, crn: string): StatusCard => ({
   heading: 'Short-term accommodation (CAS2)',
   ...statusFieldsForCas2(serviceResult),
   hint: hintForCas2Status(serviceResult),
-  links: linksForCas2Status(serviceResult),
+  links: linksForCas2Status(serviceResult, cas2Application, crn),
   details: detailsForCas2Status(serviceResult, cas2Application),
   content: contentForCas2Status(serviceResult),
 })
@@ -634,6 +646,6 @@ export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: 
     dutyToReferStatusCard(crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),
     cas1StatusCard(eligibility.cas1),
-    config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2) : undefined,
+    config.flags.cas2Enabled ? cas2StatusCard(eligibility.cas2, crn) : undefined,
     cas3StatusCard(eligibility.cas3),
   ].filter(Boolean)

@@ -7,6 +7,7 @@ type Macro =
   | 'statusTag'
   | 'statusCell'
   | 'riskLevelTag'
+  | 'sexualOffenceRegistrationTag'
   | 'tierScoreTag'
   | 'statusCard'
   | 'referralHistoryTable'
@@ -38,6 +39,9 @@ export const statusCell = (context: { status: StatusTag; dateText?: string; deta
   renderMacro('statusCell', context)
 
 export const riskLevelTag = (riskLevel: CaseDto['riskLevel']) => renderMacro('riskLevelTag', riskLevel)
+
+export const sexualOffenceRegistrationTag = (registrations: CaseDto['sexualOffenceRegistrations']) =>
+  renderMacro('sexualOffenceRegistrationTag', registrations)
 
 export const tierScoreTag = (tierScore: CaseDto['tierScore']) => renderMacro('tierScoreTag', tierScore)
 

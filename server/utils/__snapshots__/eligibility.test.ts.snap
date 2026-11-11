@@ -1570,12 +1570,52 @@ exports[`eligibilityStatusCard for cas2 renders a MORE_INFORMATION_NEEDED status
 }
 `;
 
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE currently in CAS2 status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not eligible as applicant is currently in a CAS2 property.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE currently in CAS3 status card 1`] = `
 {
   "blocked": false,
   "content": [
     {
       "text": "Not eligible as applicant is currently in a CAS3 property.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE currently in community status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not eligible unless at risk of recall.",
     },
   ],
   "details": [],
@@ -2022,7 +2062,13 @@ exports[`eligibilityStatusCard for cas3 renders a ARRIVED status card 1`] = `
   "heading": "CAS3 (transitional accommodation)",
   "hint": undefined,
   "inactive": false,
-  "links": undefined,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/view",
+      "text": "View referral",
+    },
+  ],
   "status": {
     "colour": "green",
     "text": "Arrived",

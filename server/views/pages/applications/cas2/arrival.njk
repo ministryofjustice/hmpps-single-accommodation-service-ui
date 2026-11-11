@@ -1,0 +1,32 @@
+{% extends "partials/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = "Confirm CAS2 arrival" %}
+
+{% block containerStart %}
+  {{ govukBackLink({ text: "Back", href: backLinkHref }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if errorSummary and errorSummary.length %}
+        {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorSummary }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-l">{{ "Confirm that " + displayName + " has arrived at a CAS2 property" }}</h1>
+      <p class="govuk-body">If you have not already done so, record the property address as {{ displayName }}'s current address.</p>
+
+      <form action="{{ formAction }}" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
+        <p class="govuk-body">
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ cancelLinkHref }}">Cancel</a>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}

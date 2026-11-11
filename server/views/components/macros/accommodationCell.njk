@@ -4,9 +4,11 @@
   >
   {%- if context.isLoading -%}
     {%- if context.cellType === 'current' -%}
-      <strong> Accommodation information loading</strong>
+      <p class="govuk-!-margin-bottom-1">
+        <strong>Accommodation information loading</strong>
+      </p>
       <br />
-      <span>Try refreshing the page.</span>
+      <p>Try refreshing the page.</p>
     {%- else -%}
 
     {% endif -%}

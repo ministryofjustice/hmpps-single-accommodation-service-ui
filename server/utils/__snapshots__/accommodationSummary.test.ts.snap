@@ -284,9 +284,11 @@ exports[`accommodationSummary accommodationCell and accommodationCard macros for
 exports[`accommodationSummary accommodationCell and accommodationCard macros for current accommodation returns a context card object for a loading accommodation 1`] = `
 "<span class="sas-table__cell-header" aria-hidden="true"
     >Current accommodation</span
-  ><strong> Accommodation information loading</strong>
+  ><p class="govuk-!-margin-bottom-1">
+        <strong>Accommodation information loading</strong>
+      </p>
       <br />
-      <span>Try refreshing the page.</span>"
+      <p>Try refreshing the page.</p>"
 `;
 
 exports[`accommodationSummary accommodationCell and accommodationCard macros for next accommodation renders a formatted cell for a CAS2 accommodation 1`] = `

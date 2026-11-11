@@ -9,5 +9,5 @@
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Custom list</h1>
     <p><a class="govuk-link govuk-link--no-visited-state" href="{{ changeListHref }}">Change list</a></p>
   </div>
-  {{ caseList(peopleType, tabs, resultsSummary, casesTableColumns, casesRows, query, filters, assignedToOptions, riskLevelOptions) }}
+  {{ caseList(caseListSettings) }}
 {% endblock %}

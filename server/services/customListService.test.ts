@@ -1,3 +1,4 @@
+import { GetCasesQuery } from '@sas/ui'
 import { apiResponseFactory } from '../testutils/factories'
 import CustomListClient from '../data/customListClient'
 import CustomListService from './customListService'
@@ -17,10 +18,11 @@ describe('CustomListService', () => {
   it('should call getCustomList on the api client and return the custom list for current user', async () => {
     const response = apiResponseFactory.caseList()
     customListClient.getCustomList.mockResolvedValue(response)
+    const query: GetCasesQuery = { searchTerm: 'foo', riskLevel: 'MEDIUM' }
 
-    const result = await customListService.getCustomList(token)
+    const result = await customListService.getCustomList(token, query)
 
-    expect(customListClient.getCustomList).toHaveBeenCalledWith(token)
+    expect(customListClient.getCustomList).toHaveBeenCalledWith(token, query)
     expect(result).toEqual(response)
   })
   it('should call addCustomList on the api client and return the result', async () => {

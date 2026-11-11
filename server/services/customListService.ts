@@ -1,3 +1,4 @@
+import { GetCasesQuery } from '@sas/ui'
 import CustomListClient from '../data/customListClient'
 
 export default class CustomListService {
@@ -7,7 +8,7 @@ export default class CustomListService {
     return this.customListClient.addCustomList(token, crnList)
   }
 
-  getCustomList(token: string) {
-    return this.customListClient.getCustomList(token)
+  getCustomList(token: string, query: GetCasesQuery) {
+    return this.customListClient.getCustomList(token, query)
   }
 }

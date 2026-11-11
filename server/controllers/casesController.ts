@@ -57,11 +57,10 @@ export default class CasesController {
         teams: this.userService.getTeams(token),
         cases: this.casesService.getCases(token, { ...query, peopleType }),
       })
-      const caseListSettings = setupCaseList(req, teams, username, cases, userFullName)
+      const caseListSettings = setupCaseList(req, username, cases, userFullName, teams)
 
       return res.render('pages/index', {
-        peopleType,
-        ...caseListSettings,
+        caseListSettings,
       })
     }
   }

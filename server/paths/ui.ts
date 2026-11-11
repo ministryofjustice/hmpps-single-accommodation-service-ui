@@ -56,6 +56,5 @@ export default {
     index: customListPath,
     addCrns: customListPath.path('add-crns'),
     confirmation: customListPath.path('confirmation'),
-    show: customListPath.path(':crn'),
   },
 }

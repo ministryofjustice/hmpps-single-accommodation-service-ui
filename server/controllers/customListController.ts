@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ErrorResponse } from '@sas/api'
@@ -18,9 +18,13 @@ export default class CustomListController {
     private readonly userService: UserService,
   ) {}
 
+  setActiveCaseListUrl(req: IndexRequest, res: Response, next: NextFunction): void {
+    setActiveCaseListUrl(req, res, 'custom-list')
+    next()
+  }
+
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      setActiveCaseListUrl(req, res, 'custom-list')
       const { token, username, displayName: userFullName } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
       const {

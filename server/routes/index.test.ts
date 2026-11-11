@@ -80,6 +80,7 @@ const customListController = mock<CustomListController>({
   addCrns: mockHandler,
   submitCrnList: mockHandler,
   confirmation: mockHandler,
+  setActiveCaseListUrl: (req, res, next) => next(),
 })
 
 jest.mock('../controllers', () => ({

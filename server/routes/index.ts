@@ -8,6 +8,7 @@ import dutyToReferRoutes from './dutyToRefer'
 import externalReferralsRoutes from './externalReferrals'
 import customListRoutes from './customList'
 import applicationsRoutes from './applications'
+import publicProtectionCheckRoutes from './publicProtectionCheck'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -20,6 +21,7 @@ export default function routes(services: Services): Router {
     externalReferralsController,
     customListController,
     staticController,
+    publicProtectionCheckController,
   } = controllers(services)
 
   router.get(uiPaths.cases.index.pattern, casesController.index())
@@ -32,6 +34,7 @@ export default function routes(services: Services): Router {
   externalReferralsRoutes(router, externalReferralsController)
   customListRoutes(router, customListController)
   applicationsRoutes(router, applicationsController)
+  publicProtectionCheckRoutes(router, publicProtectionCheckController)
 
   router.get(uiPaths.static.maintenance.pattern, staticController.maintenance())
 

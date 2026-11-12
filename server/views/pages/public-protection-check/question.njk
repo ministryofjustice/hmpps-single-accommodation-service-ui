@@ -1,0 +1,34 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% extends "pages/public-protection-check/layout.njk" %}
+
+{% block formContent %}
+
+  {% if page %}
+    {% if page.content %}
+      {{ page.content | safe }}
+    {% endif %}
+    {% if page.guidance %}
+      {% call govukInsetText({ classes: "guidance-panel" }) %}
+        {{ page.guidance | safe }}
+      {% endcall %}
+    {% endif %}
+
+    {% if page.questions %}
+      {% for question in page.questions %}
+        {{
+          govukRadios({
+           name: question.name,
+           fieldset: {
+               legend: {
+                   text: question.label,
+                   classes: "govuk-fieldset__legend--m"
+               }
+           },
+           items: question.items,
+           errorMessage: errors[question.name]
+          })
+        }}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+{% endblock %}

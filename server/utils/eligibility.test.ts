@@ -770,11 +770,12 @@ describe('eligibilityToEligibilityCards', () => {
 
     const cards = eligibilityToEligibilityCards(eligibility, crn)
 
-    expect(cards).toHaveLength(4)
-    expect(cards[0].heading).toContain('Duty to Refer (DTR)')
-    expect(cards[1].heading).toContain('Commissioned Rehabilitative Services (CRS)')
-    expect(cards[2].heading).toContain('Approved premises (CAS1)')
-    expect(cards[3].heading).toContain('CAS3 (transitional accommodation)')
+    expect(cards).toHaveLength(5)
+    expect(cards[0].heading).toContain('Public protection check')
+    expect(cards[1].heading).toContain('Duty to Refer (DTR)')
+    expect(cards[2].heading).toContain('Commissioned Rehabilitative Services (CRS)')
+    expect(cards[3].heading).toContain('Approved premises (CAS1)')
+    expect(cards[4].heading).toContain('CAS3 (transitional accommodation)')
   })
 
   it('hides the CAS1 card when the person is not in prison or CAS1 accommodation', () => {
@@ -831,8 +832,8 @@ describe('eligibilityToEligibilityCards', () => {
 
       const cards = eligibilityToEligibilityCards(eligibility, crn)
 
-      expect(cards).toHaveLength(5)
-      expect(cards[3].heading).toContain('Short-term accommodation (CAS2)')
+      expect(cards).toHaveLength(6)
+      expect(cards[4].heading).toContain('Short-term accommodation (CAS2)')
     })
 
     it('links to mark the actual CAS2 application as arrived', () => {

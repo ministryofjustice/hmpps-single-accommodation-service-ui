@@ -16,6 +16,11 @@ on:
         required: true
         default: false
         type: boolean
+      upload_status_card_preview:
+        description: Upload status card preview artifact
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -66,9 +71,7 @@ jobs:
           npx nyc check-coverage -t ./coverage
 
       - name: Upload tested status card preview
-        if: >-
-          github.ref == 'refs/heads/main' ||
-          github.ref == 'refs/heads/Feature/SAS-629-dynamically-create-status-card-preview-html'
+        if: github.ref == 'refs/heads/main' || inputs.upload_status_card_preview == true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: status-card-preview

@@ -114,14 +114,17 @@ describe('casesController', () => {
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        ...baseContext,
-        tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
-        peopleType: 'NFA_RISK',
-        resultsSummary: casesResultsSummary(cases),
-        casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases),
-        filters: [],
-        query: {},
+        caseListSettings: {
+          ...baseContext,
+          tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
+          peopleType: 'NFA_RISK',
+          resultsSummary: casesResultsSummary(cases),
+          casesTableColumns: casesTableColumns(),
+          casesRows: casesToRows(cases),
+          filters: [],
+          query: {},
+          disabledFields: [],
+        },
       })
     })
 
@@ -147,14 +150,17 @@ describe('casesController', () => {
       })
       expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        ...baseContext,
-        tabs: casesTabs(request.originalUrl, 'HOUSED'),
-        peopleType: 'HOUSED',
-        resultsSummary: casesResultsSummary(cases),
-        filters: queryToFilters(request.query, request.originalUrl, teams),
-        casesTableColumns: casesTableColumns(),
-        casesRows: casesToRows(cases, 'user1'),
-        query: request.query,
+        caseListSettings: {
+          ...baseContext,
+          tabs: casesTabs(request.originalUrl, 'HOUSED'),
+          peopleType: 'HOUSED',
+          resultsSummary: casesResultsSummary(cases),
+          filters: queryToFilters(request.query, request.originalUrl, teams),
+          casesTableColumns: casesTableColumns(),
+          casesRows: casesToRows(cases, 'user1'),
+          query: request.query,
+          disabledFields: [],
+        },
       })
     })
   })

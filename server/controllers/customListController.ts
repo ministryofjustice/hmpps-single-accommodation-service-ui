@@ -4,48 +4,42 @@ import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
-import { setupCaseList } from '../utils/cases'
+import { CaseListFields, setupCaseList } from '../utils/cases'
 import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
-import { collectApiResponses } from '../utils/apiResponses'
-import UserService from '../services/userService'
 import CustomListService from '../services/customListService'
 
 export default class CustomListController {
   constructor(
     private readonly auditService: AuditService,
     private readonly customListService: CustomListService,
-    private readonly userService: UserService,
   ) {}
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { token, username, displayName: userFullName } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
-      const {
-        data: { teams, cases },
-      } = await collectApiResponses({
-        teams: this.userService.getTeams(token),
-        cases: this.customListService.getCustomList(token),
-      })
+      const { peopleType = 'NFA_RISK' } = req.query
+      const { data: cases } = await this.customListService.getCustomList(token, { peopleType })
       if (cases.length === 0) {
+        // todo if the case list is empty, but the crnlist is not, then don't redirect, show the case list still but with change list.
         await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, eventDetails)
         return res.render('pages/customList/index', {
           addCrnsHref: uiPaths.customList.addCrns.pattern,
         })
       }
-      req.body = { crnList: cases.map(c => c.crn).join(',') }
-      req.session.caseListUrl = req.originalUrl
+      // req.body = { crnList: cases.map(c => c.crn).join(',') }// todo remove this because it maps only the filtered crns, like housed vs not housed.
+      // req.session.caseListUrl = req.originalUrl
       addUserInputToFlash(req)
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
-        ...setupCaseList(req, teams, username, cases, userFullName),
+        caseListSettings: setupCaseList(req, username, cases, userFullName, [], [CaseListFields.AssignedTo]),
       })
     }
   }
 
   addCrns(): RequestHandler {
-    return async (req: Request, res: Response) => {
+    return async (req: IndexRequest, res: Response) => {
       const { token, username } = res.locals.user
       await this.auditService.logPageView(Page.CUSTOM_LIST_ADD_CRNS, {
         who: username,
@@ -53,7 +47,9 @@ export default class CustomListController {
       })
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
       const crnList =
-        userInput?.crnList ?? (await this.customListService.getCustomList(token)).data.map(c => c.crn).join(',')
+        userInput?.crnList ??
+        // dont apply filter at this level, get all the crns
+        (await this.customListService.getCustomList(token, {  })).data.map(c => c.crn).join(',')
       return res.render('pages/customList/addCrns', {
         crnList,
         backLinkHref: uiPaths.customList.index.pattern,

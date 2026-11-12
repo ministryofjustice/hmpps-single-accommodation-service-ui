@@ -8,7 +8,7 @@ import { renderMacro, statusTag } from './macros'
 import uiPaths from '../paths/ui'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
-  const { type } = accommodation || {}
+  const { type } = accommodation
   return (
     {
       A10: 'CAS2 accommodation of 13 weeks or more',
@@ -31,7 +31,6 @@ export const accommodationType = (accommodation: AccommodationSummaryDto): strin
       A16: 'Awaiting Assessment',
       A17: 'CAS3',
       HMP: type?.description || 'Unknown',
-      LOADING: 'Accommodation information loading',
     }[type?.code] || 'Unknown'
   )
 }
@@ -146,14 +145,16 @@ export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDt
   const accommodation = cellType === 'current' ? summaries?.currentAccommodation : summaries?.nextAccommodation
 
   const caseIsLoading = isLoading(caseData)
-  if (!accommodation && !caseIsLoading) return cellType === 'current' ? 'No accommodation' : ''
+  if (caseIsLoading) {
+    return renderMacro('accommodationCell', { cellType, isLoading: true })
+  }
+  if (!accommodation) return cellType === 'current' ? 'No accommodation' : ''
 
   return renderMacro('accommodationCell', {
     cellType,
     accommodationType: accommodationType(accommodation),
-    addressLine1: accommodation?.address ? addressLines(accommodation.address)[0] : undefined,
-    isPrivate: isPrivateAccommodation(accommodation?.type),
-    isLoading: caseIsLoading,
+    addressLine1: accommodation.address ? addressLines(accommodation.address)[0] : undefined,
+    isPrivate: isPrivateAccommodation(accommodation.type),
     ...accommodation,
     caseStatus: summaries?.caseAccommodationStatus,
   })

@@ -18,17 +18,17 @@ export default class CustomListController {
     return async (req: IndexRequest, res: Response) => {
       const { token, username, displayName: userFullName } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
-      const { query } = req
-      const { peopleType = 'NFA_RISK' } = query
-      const { data: cases } = await this.customListService.getCustomList(token, { ...query, peopleType })
+      const { peopleType = 'NFA_RISK' } = req.query
+      const { data: cases } = await this.customListService.getCustomList(token, { peopleType })
       if (cases.length === 0) {
+        // todo if the case list is empty, but the crnlist is not, then don't redirect, show the case list still but with change list.
         await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, eventDetails)
         return res.render('pages/customList/index', {
           addCrnsHref: uiPaths.customList.addCrns.pattern,
         })
       }
-      req.body = { crnList: cases.map(c => c.crn).join(',') }
-      req.session.caseListUrl = req.originalUrl
+      // req.body = { crnList: cases.map(c => c.crn).join(',') }// todo remove this because it maps only the filtered crns, like housed vs not housed.
+      // req.session.caseListUrl = req.originalUrl
       addUserInputToFlash(req)
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
@@ -45,12 +45,11 @@ export default class CustomListController {
         who: username,
         correlationId: req.id,
       })
-      const { query } = req
-      const { peopleType = 'NFA_RISK' } = query
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
       const crnList =
         userInput?.crnList ??
-        (await this.customListService.getCustomList(token, { ...query, peopleType })).data.map(c => c.crn).join(',')
+        // dont apply filter at this level, get all the crns
+        (await this.customListService.getCustomList(token, {  })).data.map(c => c.crn).join(',')
       return res.render('pages/customList/addCrns', {
         crnList,
         backLinkHref: uiPaths.customList.index.pattern,

@@ -8,7 +8,7 @@ import { renderMacro, statusTag } from './macros'
 import uiPaths from '../paths/ui'
 
 export const accommodationType = (accommodation: AccommodationSummaryDto): string => {
-  const type = accommodation?.type || null
+  const { type } = accommodation || {}
   return (
     {
       A10: 'CAS2 accommodation of 13 weeks or more',

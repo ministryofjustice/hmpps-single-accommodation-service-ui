@@ -5,7 +5,7 @@ import { StatusTag } from '@sas/ui'
 export const serviceStatusTag = (status?: ServiceResult['serviceStatus']): StatusTag =>
   ({
     UPSTREAM_ERROR: { text: 'Upstream', colour: 'grey' },
-    PPC_NOT_STARTED: { text: 'PPC not started', colour: 'orange' },
+    PPC_NOT_STARTED: { text: 'Not started', colour: 'orange' },
     PPC_COMPLETED_PUBLIC_PROTECTION_REQUIRED: { text: 'PPC completed (public protection required)', colour: 'green' },
     PPC_COMPLETED_PUBLIC_PROTECTION_NOT_REQUIRED: {
       text: 'PPC completed (public protection not required)',

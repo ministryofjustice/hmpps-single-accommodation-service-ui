@@ -6,6 +6,7 @@ const currentAddressPath = casesPath.path(':crn/current-address')
 const dutyToReferPath = casesPath.path(':crn/dtr')
 const externalReferralsPath = casesPath.path(':crn/external-referrals')
 const customListPath = path('/custom-list')
+const publicProtectionPath = casesPath.path(':crn/public-protection')
 
 export default {
   cases: {
@@ -59,5 +60,12 @@ export default {
     index: customListPath,
     addCrns: customListPath.path('add-crns'),
     confirmation: customListPath.path('confirmation'),
+  },
+  publicProtectionCheck: {
+    start: publicProtectionPath.path('start'),
+    questions: publicProtectionPath.path(':page'),
+    root: publicProtectionPath,
+    checkYourAnswers: publicProtectionPath.path('check-your-answers'),
+    show: publicProtectionPath,
   },
 }

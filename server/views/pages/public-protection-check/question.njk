@@ -1,0 +1,73 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% extends "pages/public-protection-check/layout.njk" %}
+
+{% block formContent %}
+
+  {% if page %}
+    {% if page.content %}
+      {{ page.content | safe }}
+    {% endif %}
+    {% if page.guidance %}
+      {% call govukInsetText({ classes: "guidance-panel" }) %}
+        {{ page.guidance | safe }}
+      {% endcall %}
+    {% endif %}
+
+    {% if page.questions %}
+      {% for question in page.questions %}
+        {% if question.type === 'radio' %}
+          {{
+            govukRadios({
+             name: question.name,
+             fieldset: {
+                 legend: {
+                     text: question.label,
+                     classes: "govuk-fieldset__legend--m"
+                 },
+                 hint: question.hint
+             },
+             items: question.items,
+             errorMessage: errors[question.name]
+            })
+          }}
+        {% elseif question.type === 'checkBox' %}
+          {{
+              govukCheckboxes({
+                  idPrefix: question.name,
+                  name: question.name,
+                  errorMessage: errors[question.name],
+                  fieldset: {
+                      legend: {
+                          text: question.label,
+                          classes: "govuk-fieldset__legend--m"
+                      }
+                  },
+                  hint: { text: question.hint },
+                  items: question.items
+              })
+          }}
+        {% elseif question.type === 'textInput' %}
+          {{
+            govukInput({
+              name: question.name,
+              label: { text: question.label, classes: "govuk-fieldset__legend--m"},
+              hint: question.hint,
+              value: data[question.name],
+              errorMessage: errors[question.name]
+            })
+          }}
+        {% elseif question.type === 'textArea' %}
+          {{
+            govukTextarea({
+              name: question.name,
+              label: { text: question.label, classes: "govuk-fieldset__legend--m"},
+              hint: question.hint,
+              value: data[question.name],
+              errorMessage: errors[question.name]
+            })
+          }}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+{% endblock %}

@@ -11,6 +11,7 @@ import StaticController from '../controllers/staticController'
 import ExternalReferralsController from '../controllers/externalReferralsController'
 import CustomListController from '../controllers/customListController'
 import ApplicationsController from '../controllers/applicationsController'
+import PublicProtectionCheckController from '../controllers/publicProtectionCheckController'
 
 const mockHandler = jest.fn(() => (req: Request, res: Response) => res.send('ok'))
 
@@ -89,6 +90,15 @@ const applicationsController = mock<ApplicationsController>({
   saveArrival: mockHandler,
 })
 
+const publicProtectionCheckController = mock<PublicProtectionCheckController>({
+  start: mockHandler,
+  questionShow: mockHandler,
+  questionSave: mockHandler,
+  checkYourAnswers: mockHandler,
+  submit: mockHandler,
+  show: mockHandler,
+})
+
 jest.mock('../controllers', () => ({
   controllers: () => ({
     casesController,
@@ -99,6 +109,7 @@ jest.mock('../controllers', () => ({
     externalReferralsController,
     customListController,
     applicationsController,
+    publicProtectionCheckController,
   }),
 }))
 

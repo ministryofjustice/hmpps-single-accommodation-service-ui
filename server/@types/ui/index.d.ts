@@ -62,8 +62,17 @@ export type Link = {
   external?: boolean
 }
 
+export type PublicProtectionFormData = {
+  riskManagement?: string
+  controlMeasures?: string
+  supportNeeds?: string
+  furtherNeeds?: string
+  needsDetails?: string
+}
+
 export type MultiPageFormData = {
   proposedAddress?: Record<string, ProposedAddressFormData>
+  publicProtectionChecker?: Record<string, PublicProtectionFormData>
 }
 
 export type GetCasesQuery = {
@@ -97,9 +106,13 @@ export type RadioItem = {
 }
 
 export type CheckboxItem = {
-  text: string
-  value: string
+  text?: string
+  html?: string
+  value?: string
   checked?: boolean
+  behaviour?: string
+  divider?: string
+  hint?: { text?: string; html?: string }
 }
 
 export interface SelectOption {

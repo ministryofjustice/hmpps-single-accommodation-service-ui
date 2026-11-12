@@ -40,8 +40,8 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   static async verifyOnProfileTrackerPage(
     page: Page,
     caseData: Case,
-    caseListUrl: string,
-    linkText: string,
+    caseListUrl = '/',
+    linkText = 'Case list',
   ): Promise<ProfileTrackerPage> {
     const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, caseData)
     await profileTrackerPage.shouldShowBreadcrumb(caseListUrl, linkText)
@@ -52,8 +52,8 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   static async visit(
     page: Page,
     caseData: Case,
-    caseListUrl: string,
-    backLinkText: string,
+    caseListUrl?: string,
+    backLinkText?: string,
   ): Promise<ProfileTrackerPage> {
     await page.goto(paths.cases.show({ crn: caseData.crn as string }))
     return ProfileTrackerPage.verifyOnProfileTrackerPage(page, caseData, caseListUrl, backLinkText)
@@ -271,5 +271,12 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
   async clickAddExternalReferralLink() {
     const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
     await this.clickLink('Add details', section)
+  }
+
+  async clickPublicProtectionCheckLink() {
+    const section = await this.page.locator('css=.sas-card', {
+      has: this.page.getByText('CAS applications'),
+    })
+    await this.clickLink('Start checks', section)
   }
 }

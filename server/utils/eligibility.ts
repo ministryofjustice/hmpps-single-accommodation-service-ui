@@ -22,6 +22,7 @@ import { summaryListRow } from './summaryListRow'
 import { bulletList, govukDetailsList } from './macros'
 import { cas3PremisesToAccommodationAddress, formatAddress } from './addresses'
 import uiPaths from '../paths/ui'
+import { publicProtectionCheckStatusCard } from './publicProtectionCheck'
 
 const cas1WithdrawalReasonLabels: Record<string, string> = {
   DUPLICATE_PLACEMENT_REQUEST: 'The request was a duplicate',
@@ -658,6 +659,7 @@ export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceRe
 
 export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] =>
   [
+    publicProtectionCheckStatusCard(crn, eligibility.ppc),
     dutyToReferStatusCard(crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),
     cas1StatusCard(eligibility.cas1),

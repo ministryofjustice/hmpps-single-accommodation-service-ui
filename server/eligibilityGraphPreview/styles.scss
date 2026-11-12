@@ -1,0 +1,33 @@
+@use 'sass:meta';
+@use 'govuk-frontend/dist/govuk/base' as govuk with (
+  $govuk-font-family: (Arial, sans-serif),
+  $govuk-global-styles: true
+);
+
+// Keep GOV.UK styles inside the preview, away from the graph controls.
+:is(#panel .result, #panel .trace-update, .status-card-preview) {
+  @include meta.load-css('govuk-frontend/dist/govuk/core/typography');
+  @include meta.load-css('govuk-frontend/dist/govuk/core/links');
+  @include meta.load-css('govuk-frontend/dist/govuk/core/lists');
+  @include meta.load-css('govuk-frontend/dist/govuk/components/hint');
+  @include meta.load-css('govuk-frontend/dist/govuk/components/tag');
+  @include meta.load-css('govuk-frontend/dist/govuk/components/summary-list');
+  @include meta.load-css('govuk-frontend/dist/govuk/components/details');
+  @include meta.load-css('govuk-frontend/dist/govuk/overrides/typography');
+  @include meta.load-css('govuk-frontend/dist/govuk/overrides/spacing');
+  @include meta.load-css('govuk-frontend/dist/govuk/utilities');
+  @include meta.load-css('../../assets/scss/components/card');
+  @include meta.load-css('../../assets/scss/components/text-block');
+  @include meta.load-css('../../assets/scss/overrides/local');
+
+  .sas-card {
+    background: white;
+    color: govuk.govuk-colour('black');
+  }
+
+  a[aria-disabled='true'] {
+    color: govuk.govuk-functional-colour(link);
+    text-decoration: underline;
+    cursor: not-allowed;
+  }
+}

@@ -211,12 +211,11 @@ describe('generated status card preview', () => {
     expect(call(`statusActionPreview({status: 'CRS_NOT_REQUIRED'})`)).toContain('None')
   })
 
-  it('disables navigation and clearly identifies example details', () => {
+  it('disables navigation while retaining example details', () => {
     const html = call(`statusCardPreview({status: 'CAS2_AWAITING_ARRIVAL'}, [])`)
     expect(html).toContain('aria-disabled="true"')
     expect(html).toContain('govuk-link govuk-link--no-visited-state')
     expect(html).not.toMatch(/href=|target=/)
-    expect(html).toContain('application details are examples')
     expect(html).toContain('Example practitioner')
   })
 

@@ -124,8 +124,7 @@ export const statusCardPreview = (
       .replace(/\s(?:href|target|rel)="[^"]*"/g, '')
       .replace('<a', '<a role="link" aria-disabled="true" title="Example link only"'),
   )
-  return `<div class="status-card-preview" data-preview-status="${escape(outcome.status)}">
-<p class="preview-example-note">Preview: application details are examples.</p>${html}</div>`
+  return `<div class="status-card-preview" data-preview-status="${escape(outcome.status)}">${html}</div>`
 }
 
 export const statusCardTag = (outcome: GraphOutcome, statuses: GraphStatuses): string => {

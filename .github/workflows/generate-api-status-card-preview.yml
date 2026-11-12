@@ -4,11 +4,11 @@ on:
   workflow_run:
     workflows: ['Pipeline [test -> build -> deploy]']
     types: [completed]
-    branches: [main, Feature/SAS-629-dynamically-create-status-card-preview-html]
+    branches: [main]
   workflow_dispatch:
     inputs:
       ui_run_id:
-        description: Successful UI pipeline run ID containing the preview artifact
+        description: Successful UI main pipeline run ID containing the preview artifact
         required: true
         type: string
 
@@ -18,13 +18,9 @@ permissions:
 jobs:
   trigger-api-preview:
     if: >-
-      (github.event_name == 'workflow_dispatch' &&
-       (github.ref == 'refs/heads/main' ||
-        github.ref == 'refs/heads/Feature/SAS-629-dynamically-create-status-card-preview-html')) ||
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.conclusion == 'success' &&
-       (github.event.workflow_run.head_branch == 'main' ||
-        github.event.workflow_run.head_branch == 'Feature/SAS-629-dynamically-create-status-card-preview-html'))
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+       github.event.workflow_run.conclusion == 'success')
     runs-on: [self-hosted, hmpps-github-actions-runner]
     steps:
       - name: Generate Token
@@ -41,7 +37,6 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         env:
           UI_RUN_ID: ${{ github.event.workflow_run.id || inputs.ui_run_id }}
-          UI_BRANCH: ${{ github.event.workflow_run.head_branch || github.ref_name }}
         with:
           github-token: ${{ steps.generate-token.outputs.token }}
           script: |
@@ -49,13 +44,10 @@ jobs:
             if (!/^[1-9]\d*$/.test(runId)) {
               throw new Error('A valid UI pipeline run ID is required');
             }
-            const apiRef = process.env.UI_BRANCH === 'Feature/SAS-629-dynamically-create-status-card-preview-html'
-              ? 'Feature/SAS-1629-dynamically-create-status-card-preview.html'
-              : 'main';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: 'hmpps-single-accommodation-service-api',
               workflow_id: 'update-status-card-preview.yml',
-              ref: apiRef,
+              ref: 'main',
               inputs: { ui_run_id: runId }
             })

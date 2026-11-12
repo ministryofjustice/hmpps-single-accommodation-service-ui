@@ -114,6 +114,10 @@ On `main`, the pipeline tests and uploads the HTML. Once the full pipeline succe
 it triggers the API to download it and open or update a PR only if the content
 changed.
 
+To upload a preview to a branch's pipeline run, manually run the pipeline for that
+branch with **Upload status card preview artifact** enabled. The
+`status-card-preview` artifact will be available from that run.
+
 To update the preview's example data or mappings, run `/update-preview` in VS Code
 or select the [same prompt](.github/prompts/update-preview.prompt.md) in IntelliJ
 Copilot Chat where supported. Alternatively, attach

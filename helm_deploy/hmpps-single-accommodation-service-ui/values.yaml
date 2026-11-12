@@ -28,6 +28,9 @@ generic-service:
   # Environment variables to load into the deployment
   env:
     NODE_ENV: 'production'
+    # Enable Node's environment proxy support for Cloud Platform's HTTP(S)_PROXY and NO_PROXY variables.
+    NODE_USE_ENV_PROXY: '1'
+    APPLICATION_INSIGHTS_NO_STATSBEAT: 'true'
     REDIS_ENABLED: 'true'
     REDIS_TLS_ENABLED: 'true'
     TOKEN_VERIFICATION_ENABLED: 'true'
@@ -44,6 +47,14 @@ generic-service:
 
   namespace_secrets:
     # These secrets are created by terraform.
+    # Keep the name aligned with the egress-controls module's default resource_name_prefix.
+    hmpps-envoy-https-proxy-env:
+      HTTP_PROXY: 'HTTP_PROXY'
+      HTTPS_PROXY: 'HTTPS_PROXY'
+      NO_PROXY: 'NO_PROXY'
+      http_proxy: 'http_proxy'
+      https_proxy: 'https_proxy'
+      no_proxy: 'no_proxy'
     hmpps-single-accommodation-service-ui-client-creds:
       CLIENT_CREDS_CLIENT_ID: 'CLIENT_CREDS_CLIENT_ID'
       CLIENT_CREDS_CLIENT_SECRET: 'CLIENT_CREDS_CLIENT_SECRET'

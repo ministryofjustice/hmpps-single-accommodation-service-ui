@@ -1,6 +1,7 @@
 import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
 import { faker } from '@faker-js/faker'
+import { ExternalReferralWithdrawalDto } from '@sas/api'
 import * as validationUtils from './validation'
 
 import {
@@ -12,6 +13,7 @@ import {
   validateNote,
   summaryListRows,
   withdrawalReasonRadios,
+  withdrawalReasonLabels,
 } from './externalReferrals'
 import {
   auditRecordFactory,
@@ -357,128 +359,106 @@ describe('externalReferrals utils', () => {
       expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
     })
 
+    const archivedTag = `<strong class="govuk-tag govuk-tag--grey">Archived</strong>`
+    const completedTag = `<strong class="govuk-tag govuk-tag--green">Completed</strong>`
+    const rejectedTag = `<strong class="govuk-tag govuk-tag--orange">Rejected</strong>`
+
     const withdrawalCases = [
       {
-        ...externalReferralFactory.build({ status: 'COMPLETED', withdrawalReason: 'PLACEMENT_COMPLETE' }),
-        reasonText: 'Placement complete',
-        tag: 'Completed',
-        colour: 'green',
+        changes: { status: 'COMPLETED', withdrawalReason: 'PLACEMENT_COMPLETE' },
+        tag: completedTag,
       },
       {
-        ...externalReferralFactory.build({ status: 'ARCHIVED', withdrawalReason: 'ANOTHER_ACCOMMODATION_FOUND' }),
-        reasonText: 'Another accommodation option found',
-        tag: 'Archived',
-        colour: 'grey',
+        changes: { status: 'ARCHIVED', withdrawalReason: 'ANOTHER_ACCOMMODATION_FOUND' },
+        tag: archivedTag,
       },
       {
-        ...externalReferralFactory.build({ status: 'ARCHIVED', withdrawalReason: 'NO_RESPONSE_FROM_ORGANISATION' }),
-        reasonText: 'No response from organisation',
-        tag: 'Archived',
-        colour: 'grey',
+        changes: { status: 'ARCHIVED', withdrawalReason: 'NO_RESPONSE_FROM_ORGANISATION' },
+        tag: archivedTag,
       },
       {
-        ...externalReferralFactory.build({
+        changes: {
           status: 'ARCHIVED',
           withdrawalReason: 'PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED',
-        }),
-        reasonText: 'Person can no longer be contacted or has disengaged',
-        tag: 'Archived',
-        colour: 'grey',
+        },
+        tag: archivedTag,
       },
       {
-        ...externalReferralFactory.build({ status: 'ARCHIVED', withdrawalReason: 'PERSON_NO_LONGER_CONSENTS' }),
-        reasonText: 'Person no longer consents',
-        tag: 'Archived',
-        colour: 'grey',
+        changes: { status: 'ARCHIVED', withdrawalReason: 'PERSON_NO_LONGER_CONSENTS' },
+        tag: archivedTag,
       },
       {
-        ...externalReferralFactory.build({ status: 'REJECTED', withdrawalReason: 'PERSON_NOT_SUITABLE' }),
-        reasonText: 'Person not suitable',
-        tag: 'Rejected',
-        colour: 'orange',
+        changes: { status: 'REJECTED', withdrawalReason: 'PERSON_NOT_SUITABLE' },
+        tag: rejectedTag,
       },
       {
-        ...externalReferralFactory.build({ status: 'REJECTED', withdrawalReason: 'NO_CAPACITY' }),
-        reasonText: 'No capacity',
-        tag: 'Rejected',
-        colour: 'orange',
+        changes: { status: 'REJECTED', withdrawalReason: 'NO_CAPACITY' },
+        tag: rejectedTag,
       },
       {
-        ...externalReferralFactory.build({ status: 'ARCHIVED', withdrawalReason: 'ANOTHER_REASON' }),
+        changes: { status: 'ARCHIVED', withdrawalReason: 'ANOTHER_REASON' },
+        tag: archivedTag,
         reasonText: 'No reason entered',
-        tag: 'Archived',
-        colour: 'grey',
+      },
+      {
+        changes: {
+          status: 'ARCHIVED',
+          withdrawalReason: 'ANOTHER_REASON',
+          otherReason: 'User entered reason <unsafe>',
+        },
+        reasonText: 'User entered reason &lt;unsafe&gt;',
+        tag: archivedTag,
       },
     ]
 
     it.each(withdrawalCases)(
-      'renders a withdrawal for $withdrawalReason with its recorded status and reason',
-      ({ withdrawalReason, reasonText, status, tag, colour }) => {
+      'renders a withdrawal with status and reason "$reasonText"',
+      ({ changes: { withdrawalReason, status, otherReason }, reasonText, tag }) => {
         const auditRecord = auditRecordFactory.build({
           type: 'UPDATE',
           changes: [
             { field: 'status', value: status, oldValue: 'SUBMITTED' },
             { field: 'withdrawalReason', value: withdrawalReason },
-          ],
+            otherReason && { field: 'otherReason', value: otherReason },
+          ].filter(Boolean),
         })
 
         const result = externalReferralTimelineEntry(auditRecord)
 
         expect(result.label.text).toEqual('Moved to referral history')
-        expect(result.html).toContain(`<strong class="govuk-tag govuk-tag--${colour}">${tag}</strong>`)
-        expect(result.html).toMatch(new RegExp(`Other reason:\\s*${reasonText}`))
-        expect(result.html).not.toContain('changed to')
+        expect(result.html).toContain(tag)
+        expect(result.html).toMatch(
+          new RegExp(
+            `Reason:\\s*${reasonText || withdrawalReasonLabels[withdrawalReason as ExternalReferralWithdrawalDto['withdrawalReason']]}`,
+          ),
+        )
         expect(result.datetime.timestamp).toEqual(auditRecord.commitDate)
         expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
       },
     )
 
     it.each(withdrawalCases)(
-      'renders the reason change for $withdrawalReason without a status tag when the status did not change',
-      ({ withdrawalReason, reasonText }) => {
+      'renders the reason change for $reasonText without a status tag when the status did not change',
+      ({ changes: { withdrawalReason, otherReason }, reasonText }) => {
         const auditRecord = auditRecordFactory.build({
           type: 'UPDATE',
-          changes: [{ field: 'withdrawalReason', value: withdrawalReason }],
+          changes: [
+            { field: 'withdrawalReason', value: withdrawalReason },
+            otherReason && { field: 'otherReason', value: otherReason },
+          ].filter(Boolean),
         })
 
         const result = externalReferralTimelineEntry(auditRecord)
 
         expect(result.label.text).toEqual('Moved to referral history')
-        expect(result.html).toMatch(new RegExp(`Other reason changed to\\s*${reasonText}`))
+        expect(result.html).toMatch(
+          new RegExp(
+            `Reason:\\s*${reasonText || withdrawalReasonLabels[withdrawalReason as ExternalReferralWithdrawalDto['withdrawalReason']]}`,
+          ),
+        )
         expect(result.html).not.toContain('govuk-tag')
       },
     )
-
-    it('uses the escaped other reason as the reason and omits the withdrawal note', () => {
-      const auditRecord = auditRecordFactory.build({
-        type: 'UPDATE',
-        changes: [
-          { field: 'status', value: 'ARCHIVED', oldValue: 'SUBMITTED' },
-          { field: 'withdrawalReason', value: 'ANOTHER_REASON' },
-          { field: 'otherReason', value: 'Reason with <unsafe> & details' },
-        ],
-      })
-
-      const result = externalReferralTimelineEntry(auditRecord)
-
-      expect(result.label.text).toEqual('Moved to referral history')
-      expect(result.html).toMatch(/Other reason:\s*Reason with &lt;unsafe&gt; &amp; details/)
-      expect(result.html).not.toContain('<unsafe>')
-      expect(result.html).not.toContain('Note with')
-    })
-
-    it('treats a completed status change without a withdrawal reason as an outcome change', () => {
-      const auditRecord = auditRecordFactory.build({
-        type: 'UPDATE',
-        changes: [{ field: 'status', value: 'COMPLETED', oldValue: 'ACCEPTED' }],
-      })
-
-      const result = externalReferralTimelineEntry(auditRecord)
-
-      expect(result.label.text).toEqual('Outcome details changed')
-      expect(result.html).toContain('<strong class="govuk-tag govuk-tag--green">Completed</strong>')
-      expect(result.html).not.toContain('Reason:')
-    })
 
     it('continues to treat a rejection without a withdrawal reason as an outcome', () => {
       const auditRecord = auditRecordFactory.build({

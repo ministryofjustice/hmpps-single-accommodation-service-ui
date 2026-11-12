@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { faker } from '@faker-js/faker'
-import { ExternalReferralDto, ExternalReferralWithdrawalDto, FieldChange } from '@sas/api'
 import {
   auditRecordFactory,
   caseFactory,
@@ -170,76 +169,6 @@ test.describe('external referrals', () => {
     await detailsPage.checkNoteApiCalled(referral, noteText)
   })
 
-  const withdrawalEvents: Array<{
-    reason: ExternalReferralWithdrawalDto['withdrawalReason']
-    reasonText: string
-    status: ExternalReferralDto['status']
-    tag: string
-    colour: string
-    statusChanged: boolean
-    otherReason?: string
-  }> = [
-    {
-      reason: 'PLACEMENT_COMPLETE',
-      reasonText: 'Placement complete',
-      status: 'COMPLETED',
-      tag: 'Completed',
-      colour: 'green',
-      statusChanged: true,
-    },
-    {
-      reason: 'ANOTHER_REASON',
-      reasonText: 'Other',
-      status: 'ARCHIVED',
-      tag: 'Archived',
-      colour: 'grey',
-      statusChanged: true,
-      otherReason: 'The service is no longer needed',
-    },
-    {
-      reason: 'NO_CAPACITY',
-      reasonText: 'No capacity',
-      status: 'REJECTED',
-      tag: 'Rejected',
-      colour: 'orange',
-      statusChanged: false,
-    },
-  ]
-
-  for (const event of withdrawalEvents) {
-    test(`should show the ${event.reason} withdrawal in the timeline`, async ({ page }) => {
-      const { caseData, referral } = await setupStubs()
-      const changes: FieldChange[] = [
-        ...(event.statusChanged ? [{ field: 'status', value: event.status, oldValue: 'SUBMITTED' }] : []),
-        { field: 'withdrawalReason', value: event.reason },
-        ...(event.otherReason ? [{ field: 'otherReason', value: event.otherReason }] : []),
-      ]
-      const withdrawalEvent = auditRecordFactory.build({ type: 'UPDATE', changes })
-      const withdrawnReferral: ExternalReferralDto = {
-        ...referral,
-        status: event.status,
-        withdrawalReason: event.reason,
-        otherReason: event.otherReason,
-      }
-
-      await externalReferralsApi.stubGetExternalReferralBySubmissionId(withdrawnReferral)
-      await externalReferralsApi.stubExternalReferralTimeline(crn, referral.submission.id, [withdrawalEvent])
-      await login(page)
-      await ExternalReferralsDetailsPage.visit(page, caseData, withdrawnReferral)
-
-      const timelineEntry = page.locator('.moj-timeline__item').first()
-      await expect(timelineEntry.getByRole('heading', { name: 'Moved to referral history' })).toBeVisible()
-      if (event.statusChanged) {
-        await expect(timelineEntry.locator('.govuk-tag')).toHaveText(event.tag)
-        await expect(timelineEntry.locator('.govuk-tag')).toHaveClass(new RegExp(`govuk-tag--${event.colour}`))
-      } else {
-        await expect(timelineEntry.locator('.govuk-tag')).toHaveCount(0)
-      }
-      const reasonLabel = event.statusChanged ? 'Other reason:' : 'Other reason changed to'
-      await expect(timelineEntry).toContainText(`${reasonLabel} ${event.otherReason || event.reasonText}`)
-    })
-  }
-
   test('should allow user to add and edit an outcome to a referral', async ({ page }) => {
     // Given I have stubbed the API responses
     const { caseData, referral } = await setupStubs()
@@ -262,7 +191,7 @@ test.describe('external referrals', () => {
 
     // When I submit the empty form, I see errors
     await outcomePage.clickButton('Save and continue')
-    await outcomePage.shouldShowErrorMessagesForFields({ outcomeStatus: 'Select an external referral status' })
+    await outcomePage.shouldShowErrorMessagesForFields({ outcomeStatus: 'Select a status' })
 
     // When I complete the form and submit
     const updatedReferral = await outcomePage.completeOutcomeForm(referral)
@@ -332,10 +261,10 @@ test.describe('external referrals', () => {
     // When I submit the empty form, I see errors
     await submissionPage.clickButton('Move to referral history')
     await submissionPage.shouldShowErrorMessagesForFields({
-      withdrawalReason: 'Select a reason for moving to the referral history',
+      withdrawalReason: 'Select a reason',
     })
 
-    // When I complete the form selectiong 'Other' reason, and submit.
+    // When I complete the form selecting 'Other' reason, and submit.
     let updatedReferral = await submissionPage.completeWithdrawalForm(referral, 'Other')
     await submissionPage.clickButton('Move to referral history')
 
@@ -347,7 +276,7 @@ test.describe('external referrals', () => {
     // When I complete the other reason field
     updatedReferral = { ...(await submissionPage.completeWithdrawalOtherReason(updatedReferral)), status: 'ARCHIVED' }
 
-    // And I insert the referral into the referral history mock
+    // And I insert the referral into the referral history mock and timeline
     const historicReferral = referralFactory.externalReferral().build({
       id: updatedReferral.submission.id,
       status: 'ARCHIVED',
@@ -357,6 +286,16 @@ test.describe('external referrals', () => {
 
     await casesApi.stubGetReferralHistory(crn, [historicReferral])
     await externalReferralsApi.stubGetExternalReferralBySubmissionId(updatedReferral)
+
+    const withdrawalEvent = auditRecordFactory.build({
+      type: 'UPDATE',
+      changes: [
+        { field: 'status', value: 'REJECTED', oldValue: 'SUBMITTED' },
+        { field: 'withdrawalReason', value: updatedReferral.withdrawalReason },
+        { field: 'otherReason', value: updatedReferral.otherReason },
+      ],
+    })
+    await externalReferralsApi.stubExternalReferralTimeline(crn, referral.submission.id, [withdrawalEvent])
 
     await submissionPage.clickButton('Move to referral history')
 
@@ -375,10 +314,13 @@ test.describe('external referrals', () => {
     // When I click to view the withdrawn referral
     await trackerPage.clickViewReferralHistoryDetails()
 
-    // Then I am on the move to history page
+    // Then I am on the referral details page
     const withdrawnDetailsPage = await ExternalReferralsDetailsPage.verifyOnPage(page, referral)
 
     // And the details page has buttons and change links removed
     await withdrawnDetailsPage.shouldNotShowLink('change')
+
+    // and the withdrawal timeline entry should be shown
+    await detailsPage.shouldShowTimelineEntry(externalReferralTimelineEntry(withdrawalEvent))
   })
 })

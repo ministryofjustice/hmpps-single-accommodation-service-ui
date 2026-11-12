@@ -1,22 +1,33 @@
 {%- macro accommodationCell(context) -%}
-  <span class="sas-table__cell-header" aria-hidden="true">{{ 'Current accommodation' if context.cellType === 'current' else 'Next accommodation' }}</span>
+  <span class="sas-table__cell-header" aria-hidden="true"
+    >{{ 'Current accommodation' if context.cellType === 'current' else 'Next accommodation' }}</span
+  >
+  {%- if context.isLoading -%}
+    {%- if context.cellType === 'current' -%}
+      <p class="govuk-!-margin-bottom-1">
+        <strong>Accommodation information loading</strong>
+      </p>
+      <p>Try refreshing the page.</p>
+    {%- else -%}
 
-  {{ context.accommodationType }}
-
-  {%- if context.isPrivate -%}
-    {%- if context.addressLine1 %}
-      <br />
-      <span class="govuk-hint">{{ context.addressLine1 }}</span>
     {% endif -%}
   {%- else -%}
-    {%- if context.cellType !== 'current' and context.startDate %}
-      <br />
-      <span class="govuk-hint">From {{ context.startDate | date }}</span>
-    {% endif -%}
+    {{ context.accommodationType }}
+    {%- if context.isPrivate -%}
+      {%- if context.addressLine1 %}
+        <br />
+        <span class="govuk-hint">{{ context.addressLine1 }}</span>
+      {% endif -%}
+    {%- else -%}
+      {%- if context.cellType !== 'current' and context.startDate %}
+        <br />
+        <span class="govuk-hint">From {{ context.startDate | date }}</span>
+      {% endif -%}
 
-    {%- if context.endDate %}
-      <br />
-      <span class="govuk-hint">Until {{ context.endDate | date }}</span>
-    {% endif -%}
+      {%- if context.endDate %}
+        <br />
+        <span class="govuk-hint">Until {{ context.endDate | date }}</span>
+      {% endif -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endmacro -%}

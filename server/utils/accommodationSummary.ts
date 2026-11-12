@@ -144,6 +144,10 @@ export const accommodationCell = (cellType: 'current' | 'next', caseData: CaseDt
   const summaries = caseData.accommodationSummaries
   const accommodation = cellType === 'current' ? summaries?.currentAccommodation : summaries?.nextAccommodation
 
+  const caseIsLoading = isLoading(caseData)
+  if (caseIsLoading) {
+    return renderMacro('accommodationCell', { cellType, isLoading: true })
+  }
   if (!accommodation) return cellType === 'current' ? 'No accommodation' : ''
 
   return renderMacro('accommodationCell', {
@@ -185,3 +189,11 @@ const privateAccommodationCodes = ['A01A', 'A01C', 'A01D', 'A07A', 'A07B']
 
 export const isPrivateAccommodation = (type?: AccommodationSummaryDto['type']): boolean =>
   Boolean(type?.code && privateAccommodationCodes.includes(type.code))
+
+export const isLoading = (caseDto: CaseDto): boolean =>
+  !caseDto.assignedTo &&
+  !caseDto.riskLevel &&
+  !caseDto.tierScore &&
+  !caseDto.accommodationSummaries?.caseAccommodationStatus &&
+  !caseDto.accommodationSummaries?.currentAccommodation &&
+  !caseDto.accommodationSummaries?.nextAccommodation

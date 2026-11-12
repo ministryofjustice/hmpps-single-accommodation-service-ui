@@ -137,4 +137,16 @@ test.describe('List of cases', () => {
     // AND it should have content
     await laoAccessPage.shouldHaveContent()
   })
+  test('should show loading cases', async ({ page }) => {
+    // GIVEN there cases that are loading
+    const cases = [caseFactory.build(), caseFactory.loading().build()]
+    await casesApi.stubGetCases(cases)
+
+    // WHEN I sign in
+    await login(page)
+
+    // THEN I should see the Case list with the loading case
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+    await casesListPage.shouldShowCases(cases, ['Name', 'Current accommodation', 'Next accommodation', 'Status'])
+  })
 })

@@ -4,7 +4,7 @@ import AbstractPage from './abstractPage'
 import { formatDate } from '../../server/utils/dates'
 import { riskLevelStatusTag } from '../../server/utils/riskLevel'
 import { displayName } from '../../server/utils/cases'
-import { accommodationType, accommodationStatusCell } from '../../server/utils/accommodationSummary'
+import { accommodationType, accommodationStatusCell, isLoading } from '../../server/utils/accommodationSummary'
 
 export default class PageWithCaseList extends AbstractPage {
   readonly casesRows: Locator
@@ -45,12 +45,17 @@ export default class PageWithCaseList extends AbstractPage {
       ].filter(Boolean)
 
       if (person.userAccess !== 'LIMITED') {
-        await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
-        await expect(row).toContainText(person.tierScore as string)
-        await expect(row).toContainText(formatDate(person.dateOfBirth as string))
+        if (!isLoading(person)) {
+          await expect(row).toContainText(riskLevelStatusTag(person.riskLevel).text)
+          await expect(row).toContainText(person.tierScore as string)
+          await expect(row).toContainText(formatDate(person.dateOfBirth as string))
 
-        for await (const accommodation of accommodations) {
-          await expect(row).toContainText(accommodationType(accommodation))
+          for await (const accommodation of accommodations) {
+            await expect(row).toContainText(accommodationType(accommodation))
+          }
+        } else {
+          await expect(row).toContainText('Accommodation information loading')
+          await expect(row).toContainText('Try refreshing the page.')
         }
       } else {
         await expect(row).not.toContainText('RoSH')

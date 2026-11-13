@@ -26,6 +26,7 @@ export type AccommodationReferralDto = {
     | 'OFFER_DECLINED_OR_WITHDRAWN'
     | 'SUBMITTED'
     | 'COMPLETED'
+  subStatus?: string | null
   assessmentStatus?: string | null
   requestForPlacementStatus?: string | null
   date: string

@@ -23,8 +23,9 @@ if (config.sentry.dsn) {
       urlQueryParams: false,
       stackFrameVariables: false,
     },
-    integrations: [Sentry.expressIntegration(), Sentry.httpIntegration({ disableIncomingRequestSpans: true })],
-    enableOpenTelemetrySetup: true,
+    integrations: [Sentry.expressIntegration(), Sentry.httpIntegration({ tracePropagation: false })],
+    // Sentry v11 uses native tracing; HMPPS telemetry owns the OpenTelemetry provider and propagation.
+    enableOpenTelemetrySetup: false,
     tracesSampler: ({ name }) => {
       if (name.includes('ping') || name.includes('health') || name.includes('assets')) {
         return 0

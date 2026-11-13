@@ -191,8 +191,6 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
   const isChange = isOutcome ? !newStatus || oldStatus !== 'SUBMITTED' : !isWithdrawal && type === 'UPDATE'
   const label = `${isOutcome ? 'Outcome' : 'Referral'} details ${isChange ? 'changed' : 'added'}`
 
-  const timeLineLabel = !isWithdrawal ? label : 'Moved to referral history'
-
   const html = renderMacro('timelineEntry', {
     type,
     status: newStatus ? serviceStatusTag(newStatus) : undefined,
@@ -201,7 +199,7 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
   })
 
   return timelineEntry(
-    timeLineLabel,
+    isWithdrawal ? 'Moved to referral history' : label,
     html,
     auditRecord.commitDate,
     staffName(auditRecord.authorDetails, currentUsername),

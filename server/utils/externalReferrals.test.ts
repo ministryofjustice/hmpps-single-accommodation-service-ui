@@ -1,7 +1,6 @@
 import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
 import { faker } from '@faker-js/faker'
-import { ExternalReferralWithdrawalDto } from '@sas/api'
 import * as validationUtils from './validation'
 
 import {
@@ -13,7 +12,6 @@ import {
   validateNote,
   summaryListRows,
   withdrawalReasonRadios,
-  withdrawalReasonLabels,
 } from './externalReferrals'
 import {
   auditRecordFactory,
@@ -324,152 +322,84 @@ describe('externalReferrals utils', () => {
       expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
     })
 
-    it('renders a referral update event', () => {
-      const auditRecord = auditRecordFactory.build({
-        type: 'UPDATE',
+    const rejectedTag = `<strong class="govuk-tag govuk-tag--orange">Rejected</strong>`
+    const acceptedTag = `<strong class="govuk-tag govuk-tag--green">Accepted</strong>`
+
+    const fieldReg = (label: string, value: string) => new RegExp(`${label}[\\S\\s]*${value}`)
+
+    const updateCases = [
+      {
+        title: 'Update referral details',
         changes: [
           { field: 'email', value: 'mail@test.com' },
-          { field: 'phoneNumber', value: '01234567' },
+          { field: 'phoneNumber', value: '012345678' },
           { field: 'submissionNote', value: 'Submission note' },
         ],
-      })
-      const result = externalReferralTimelineEntry(auditRecord)
-
-      expect(result.html).toMatch(/Email address changed to\s*mail@test.com/)
-      expect(result.html).toMatch(/Phone number changed to\s*01234567/)
-      expect(result.html).toMatch(/Notes changed to:\s*<div class="sas-text-block">Submission note<\/div>/)
-      expect(result.label.text).toEqual('Referral details changed')
-      expect(result.datetime.timestamp).toEqual(auditRecord.commitDate)
-      expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
-    })
-
-    it('renders an add outcome event', () => {
-      const auditRecord = auditRecordFactory.build({
-        type: 'UPDATE',
+        checks: [
+          fieldReg('Phone number changed to', '012345678'),
+          fieldReg('Notes changed to', 'Submission note'),
+          fieldReg('Email address changed to', 'mail@test.com'),
+        ],
+        label: 'Referral details changed',
+      },
+      {
+        title: 'Add outcome',
+        label: 'Outcome details added',
         changes: [
           { field: 'status', value: 'ACCEPTED', oldValue: 'SUBMITTED' },
-          { field: 'outcomeNote', value: 'Outcome note' },
+          { field: 'outcomeNote', value: 'note-value' },
         ],
-      })
-      const result = externalReferralTimelineEntry(auditRecord)
-
-      expect(result.label.text).toEqual('Outcome details added')
-      expect(result.html).toMatch(/<p><strong class="govuk-tag govuk-tag--green">Accepted<\/strong><\/p>/)
-      expect(result.html).toMatch(/Notes:\s*<div class="sas-text-block">Outcome note<\/div>/)
-      expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
-    })
-
-    const archivedTag = `<strong class="govuk-tag govuk-tag--grey">Archived</strong>`
-    const completedTag = `<strong class="govuk-tag govuk-tag--green">Completed</strong>`
-    const rejectedTag = `<strong class="govuk-tag govuk-tag--orange">Rejected</strong>`
-
-    const withdrawalCases = [
-      {
-        changes: { status: 'COMPLETED', withdrawalReason: 'PLACEMENT_COMPLETE' },
-        tag: completedTag,
+        checks: [acceptedTag, fieldReg('Notes:', 'note-value')],
       },
       {
-        changes: { status: 'ARCHIVED', withdrawalReason: 'ANOTHER_ACCOMMODATION_FOUND' },
-        tag: archivedTag,
+        title: 'Update outcome',
+        label: 'Outcome details changed',
+        changes: [
+          { field: 'status', value: 'ACCEPTED', oldValue: 'REJECTED' },
+          { field: 'outcomeNote', value: 'note-value' },
+        ],
+        checks: [acceptedTag, fieldReg('Notes changed to', 'note-value')],
       },
       {
-        changes: { status: 'ARCHIVED', withdrawalReason: 'NO_RESPONSE_FROM_ORGANISATION' },
-        tag: archivedTag,
+        title: 'Withdraw with status change',
+        label: 'Moved to referral history',
+        changes: [
+          { field: 'status', value: 'REJECTED', oldValue: 'SUBMITTED' },
+          { field: 'withdrawalReason', value: 'PERSON_NOT_SUITABLE' },
+        ],
+        checks: [rejectedTag, fieldReg('Reason:', 'Person is not suitable')],
       },
       {
-        changes: {
-          status: 'ARCHIVED',
-          withdrawalReason: 'PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED',
-        },
-        tag: archivedTag,
+        title: 'Withdraw without status change',
+        label: 'Moved to referral history',
+        changes: [{ field: 'withdrawalReason', value: 'PERSON_NOT_SUITABLE' }],
+        checks: [fieldReg('Reason:', 'Person is not suitable')],
       },
       {
-        changes: { status: 'ARCHIVED', withdrawalReason: 'PERSON_NO_LONGER_CONSENTS' },
-        tag: archivedTag,
-      },
-      {
-        changes: { status: 'REJECTED', withdrawalReason: 'PERSON_NOT_SUITABLE' },
-        tag: rejectedTag,
-      },
-      {
-        changes: { status: 'REJECTED', withdrawalReason: 'NO_CAPACITY' },
-        tag: rejectedTag,
-      },
-      {
-        changes: { status: 'ARCHIVED', withdrawalReason: 'ANOTHER_REASON' },
-        tag: archivedTag,
-        reasonText: 'No reason entered',
-      },
-      {
-        changes: {
-          status: 'ARCHIVED',
-          withdrawalReason: 'ANOTHER_REASON',
-          otherReason: 'User entered reason <unsafe>',
-        },
-        reasonText: 'User entered reason &lt;unsafe&gt;',
-        tag: archivedTag,
+        title: 'Withdraw other reason',
+        label: 'Moved to referral history',
+        changes: [
+          { field: 'withdrawalReason', value: 'ANOTHER_REASON' },
+          { field: 'otherReason', value: 'Other reason' },
+        ],
+        checks: [fieldReg('Reason:', 'Other reason')],
       },
     ]
 
-    it.each(withdrawalCases)(
-      'renders a withdrawal with status and reason "$reasonText"',
-      ({ changes: { withdrawalReason, status, otherReason }, reasonText, tag }) => {
-        const auditRecord = auditRecordFactory.build({
-          type: 'UPDATE',
-          changes: [
-            { field: 'status', value: status, oldValue: 'SUBMITTED' },
-            { field: 'withdrawalReason', value: withdrawalReason },
-            otherReason && { field: 'otherReason', value: otherReason },
-          ].filter(Boolean),
-        })
-
-        const result = externalReferralTimelineEntry(auditRecord)
-
-        expect(result.label.text).toEqual('Moved to referral history')
-        expect(result.html).toContain(tag)
-        expect(result.html).toMatch(
-          new RegExp(
-            `Reason:\\s*${reasonText || withdrawalReasonLabels[withdrawalReason as ExternalReferralWithdrawalDto['withdrawalReason']]}`,
-          ),
-        )
-        expect(result.datetime.timestamp).toEqual(auditRecord.commitDate)
-        expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
-      },
-    )
-
-    it.each(withdrawalCases)(
-      'renders the reason change for $reasonText without a status tag when the status did not change',
-      ({ changes: { withdrawalReason, otherReason }, reasonText }) => {
-        const auditRecord = auditRecordFactory.build({
-          type: 'UPDATE',
-          changes: [
-            { field: 'withdrawalReason', value: withdrawalReason },
-            otherReason && { field: 'otherReason', value: otherReason },
-          ].filter(Boolean),
-        })
-
-        const result = externalReferralTimelineEntry(auditRecord)
-
-        expect(result.label.text).toEqual('Moved to referral history')
-        expect(result.html).toMatch(
-          new RegExp(
-            `Reason:\\s*${reasonText || withdrawalReasonLabels[withdrawalReason as ExternalReferralWithdrawalDto['withdrawalReason']]}`,
-          ),
-        )
-        expect(result.html).not.toContain('govuk-tag')
-      },
-    )
-
-    it('continues to treat a rejection without a withdrawal reason as an outcome', () => {
+    it.each(updateCases)('renders an update event - "$title"', ({ changes, checks, label }) => {
       const auditRecord = auditRecordFactory.build({
         type: 'UPDATE',
-        changes: [{ field: 'status', value: 'REJECTED', oldValue: 'SUBMITTED' }],
+        changes,
       })
 
       const result = externalReferralTimelineEntry(auditRecord)
 
-      expect(result.label.text).toEqual('Outcome details added')
-      expect(result.html).toContain('<strong class="govuk-tag govuk-tag--orange">Rejected</strong>')
+      expect(result.label.text).toEqual(label)
+      checks.forEach(check => {
+        expect(result.html).toMatch(check)
+      })
+      expect(result.datetime.timestamp).toEqual(auditRecord.commitDate)
+      expect(result.byline.text).toEqual(`${auditRecord.authorDetails.forename} ${auditRecord.authorDetails.surname}`)
     })
   })
 

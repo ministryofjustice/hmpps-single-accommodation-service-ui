@@ -9,6 +9,7 @@ export type ProposedAccommodationDto = {
   crn: string
   accommodationType?: AccommodationTypeDto | null
   verificationStatus?: 'NOT_CHECKED_YET' | 'FAILED' | 'PASSED'
+  verificationReason?: string | null
   nextAccommodationStatus?: 'YES' | 'NO' | 'TO_BE_DECIDED'
   address: AccommodationAddressDetails
   createdBy: string

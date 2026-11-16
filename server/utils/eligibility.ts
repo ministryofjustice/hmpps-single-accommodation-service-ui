@@ -96,6 +96,7 @@ export const linksForCas2Status = (
     case 'ON_WAITING_LIST':
     case 'PLACE_OFFERED':
     case 'OFFER_ACCEPTED':
+    case 'ARRIVED':
       return [{ text: 'View application', ...link }]
     case 'AWAITING_ARRIVAL':
       if (config.flags.cas2ManualArrivalEnabled && cas2Application && crn) {
@@ -419,6 +420,7 @@ const detailsForCas2Status = (
     case 'PLACE_OFFERED':
     case 'OFFER_ACCEPTED':
     case 'AWAITING_ARRIVAL':
+    case 'ARRIVED':
     case 'WITHDRAWN':
       return [submittedRow(), submittedByRow()]
     case 'OFFER_DECLINED_OR_WITHDRAWN':

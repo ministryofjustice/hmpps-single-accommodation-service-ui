@@ -5,5 +5,6 @@
 export type DtrEventDetailsDto = {
   id: string
   crn: string
+  status: 'SUBMITTED' | 'ACCEPTED' | 'NOT_ACCEPTED' | 'WITHDRAWN'
   viewUrl: string
 }

@@ -13,7 +13,6 @@ export type Cas2SubmittedApplicationSummaryDto = {
     | 'WITHDRAWN'
     | 'CANCELLED'
     | 'AWAITING_ARRIVAL'
-    | 'UNKNOWN'
   offerDeclinedReason?: string | null
   cancelledReason?: string | null
   submittedAt: string

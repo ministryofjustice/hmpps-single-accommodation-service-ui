@@ -253,7 +253,7 @@
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "AWAITING_DECISION",
+        "serviceStatus": "ARRIVED",
         "failureReasons": [],
         "url": "https://cas2/view"
       },
@@ -267,8 +267,9 @@
           "userType": "PROBATION_PRACTITIONER"
         },
         "submittedApplication": {
-          "latestAssessmentStatus": "AWAITING_DECISION",
-          "submittedAt": "2026-05-30T14:20:00.000Z"
+          "latestAssessmentStatus": "AWAITING_ARRIVAL",
+          "submittedAt": "2026-05-30T14:20:00.000Z",
+          "markedAsArrivedDateTime": "2026-11-13T10:00:00.000Z"
         }
       }
     },

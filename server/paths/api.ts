@@ -53,5 +53,9 @@ export default {
     me: path('/users/me'),
     teams: path('/user/teams'),
   },
-  customList: path('/case-list/custom'),
+  customList: {
+    getCases: path('/case-list/custom/'),
+    updateList: path('/case-list/custom/'),
+    getList: path('/case-list/custom/crns'),
+  },
 }

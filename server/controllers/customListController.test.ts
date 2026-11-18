@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { mock } from 'jest-mock-extended'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
-import { ErrorResponse } from '@sas/api'
+import { ApiResponseDtoListString, ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import { user } from '../routes/testutils/appSetup'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
@@ -44,7 +44,9 @@ describe('customListController', () => {
     }
 
     it('renders the create custom list page when no list already exits', async () => {
-      customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList([]))
+      customListService.getCustomListCrns.mockResolvedValue(
+        apiResponseFactory.buildResponse<ApiResponseDtoListString>([]),
+      )
       await customListController.index()(request, response, next)
 
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CUSTOM_LIST_INDEX, {
@@ -58,7 +60,10 @@ describe('customListController', () => {
 
     it('renders the custom list page when a list already exists', async () => {
       const cases = caseFactory.buildList(3)
-      customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(cases))
+      customListService.getCustomListCrns.mockResolvedValue(
+        apiResponseFactory.buildResponse<ApiResponseDtoListString>([cases.map(c => c.crn).join(',')]),
+      )
+      customListService.getCustomListCases.mockResolvedValue(apiResponseFactory.caseList(cases))
       request.query = {}
       await customListController.index()(request, response, next)
 
@@ -66,7 +71,8 @@ describe('customListController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(customListService.getCustomList).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
+      expect(customListService.getCustomListCrns).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(customListService.getCustomListCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/customList/show', {
         changeListHref: '/custom-list/add-crns',
         caseListSettings: {
@@ -85,12 +91,15 @@ describe('customListController', () => {
 
     it('stores the current custom list in flash when a list already exists', async () => {
       const cases = [caseFactory.build({ crn: 'CRN1' }), caseFactory.build({ crn: 'CRN2' })]
-      customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(cases))
+      customListService.getCustomListCrns.mockResolvedValue(
+        apiResponseFactory.buildResponse<ApiResponseDtoListString>([cases.map(c => c.crn).join(',')]),
+      )
+      customListService.getCustomListCases.mockResolvedValue(apiResponseFactory.caseList(cases))
       const addUserInputToFlash = jest.spyOn(validationUtils, 'addUserInputToFlash')
 
       await customListController.index()(request, response, next)
 
-      expect(request.body).toEqual({ crnList: 'CRN1,CRN2' })
+      expect(request.body).toEqual({ crnList: ['CRN1,CRN2'] })
       expect(addUserInputToFlash).toHaveBeenCalledWith(request)
     })
   })
@@ -98,7 +107,10 @@ describe('customListController', () => {
     it.each([null, 'CRN1,CRN2'])('renders the add crns page when list is: %s', async crnList => {
       const caseList = crnList ? [caseFactory.build({ crn: 'CRN1' }), caseFactory.build({ crn: 'CRN2' })] : []
       const expectedCrnList = crnList || ''
-      customListService.getCustomList.mockResolvedValue(apiResponseFactory.caseList(caseList))
+      customListService.getCustomListCrns.mockResolvedValue(
+        apiResponseFactory.buildResponse<ApiResponseDtoListString>([caseList.map(c => c.crn).join(',')]),
+      )
+      customListService.getCustomListCases.mockResolvedValue(apiResponseFactory.caseList(caseList))
       const expectedError = new Error('Error Message')
       const expectedErrorSummary = ['Error Summary']
       jest
@@ -119,7 +131,10 @@ describe('customListController', () => {
     })
 
     it('prefers flashed user input over the stored custom list', async () => {
-      customListService.getCustomList.mockResolvedValue(
+      customListService.getCustomListCrns.mockResolvedValue(
+        apiResponseFactory.buildResponse<ApiResponseDtoListString>([['CRN1', 'CRN2'].join(',')]),
+      )
+      customListService.getCustomListCases.mockResolvedValue(
         apiResponseFactory.caseList([caseFactory.build({ crn: 'CRN1' }), caseFactory.build({ crn: 'CRN2' })]),
       )
       jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({
@@ -147,12 +162,16 @@ describe('customListController', () => {
       await customListController.submitCrnList()(request, response, next)
 
       expect(customListService.addCustomList).toHaveBeenCalledWith(TEST_TOKEN, crnList.split(','))
-      expect(request.body).toEqual({ crnList })
+      expect(request.body).toEqual({ crnList: crnList.split(',') })
       expect(response.redirect).toHaveBeenCalledWith(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
     })
 
-    it('normalises CRNs separated by spaces, commas and line breaks', async () => {
-      request.body = { crnList: 'A123456,\nB123456  C123456\n\nD123456' }
+    it.each([
+      'A123456,\nB123456  C123456\n\nD123456',
+      '\nA123456,,,,\nB123456  C123456\n\nD123456\n',
+      ',,,A123456,\nB123456 ,\n, C123456\n\nD123456',
+    ])('normalises CRNs separated by spaces, commas and line breaks', async crnList => {
+      request.body = { crnList }
 
       await customListController.submitCrnList()(request, response, next)
 

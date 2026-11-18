@@ -1,4 +1,5 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import { ApiResponseDtoListString } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import { apiResponseFactory } from '../testutils/factories'
 import apiPaths from '../paths/api'
@@ -12,7 +13,7 @@ describeClient('CustomListClient', provider => {
     customListClient = new CustomListClient(mockAuthenticationClient)
   })
 
-  it('should make a GET request to /custom-list using user token and return the response body', async () => {
+  it('should make a GET request to /case-list/custom/ using user token and return the response body', async () => {
     const body = apiResponseFactory.caseList()
 
     await provider.addInteraction({
@@ -20,7 +21,7 @@ describeClient('CustomListClient', provider => {
       uponReceiving: 'a request to get custom list cases',
       withRequest: {
         method: 'GET',
-        path: apiPaths.customList({}),
+        path: apiPaths.customList.getCases({}),
         headers: {
           authorization: 'Bearer test-user-token',
         },
@@ -31,18 +32,40 @@ describeClient('CustomListClient', provider => {
       },
     })
 
-    const response = await customListClient.getCustomList('test-user-token', {})
+    const response = await customListClient.getCustomListCrns('test-user-token')
+    expect(response).toEqual(body)
+  })
+  it('should make a GET request to /case-list/custom/crns using user token and return the response body', async () => {
+    const body = apiResponseFactory.buildResponse(['CRN1', 'CRN2']) as ApiResponseDtoListString
+
+    await provider.addInteraction({
+      state: 'Custom list cases exists for user',
+      uponReceiving: 'a request to get custom list cases',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.customList.getList({}),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+
+    const response = await customListClient.getCustomListCrns('test-user-token')
     expect(response).toEqual(body)
   })
 
-  it('should make a POST request to /custom-list using user token and body', async () => {
+  it('should make a POST request to /case-list/custom/ using user token and body', async () => {
     const crnList = ['X123456', 'X654321']
     await provider.addInteraction({
       state: 'Custom list can be submitted for user',
       uponReceiving: 'a request to submit a custom list for a user',
       withRequest: {
         method: 'POST',
-        path: apiPaths.customList({}),
+        path: apiPaths.customList.updateList({}),
         headers: {
           authorization: 'Bearer test-user-token',
         },

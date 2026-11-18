@@ -1,9 +1,9 @@
 import type { SuperAgentRequest } from 'superagent'
 import { CaseDto as Case } from '@sas/api'
+import { GetCasesQuery } from '@sas/ui'
 import { queryParameters, stubFor } from './wiremock'
 import apiPaths from '../../server/paths/api'
 import { apiResponseFactory, caseFactory } from '../../server/testutils/factories'
-import {GetCasesQuery} from "@sas/ui";
 
 export default {
   stubGetCustomList: (cases: Case[], query: GetCasesQuery): SuperAgentRequest =>

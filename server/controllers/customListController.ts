@@ -19,17 +19,18 @@ export default class CustomListController {
       const { token, username, displayName: userFullName } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
       const { peopleType = 'NFA_RISK' } = req.query
-      const { data: cases } = await this.customListService.getCustomList(token, { peopleType })
-      if (cases.length === 0) {
-        // todo if the case list is empty, but the crnlist is not, then don't redirect, show the case list still but with change list.
+      const { userInput } = fetchErrorsAndUserInput(req)
+      const crnList = userInput?.crnList ?? (await this.customListService.getCustomListCrns(token)).data
+      if (crnList.length === 0) {
         await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, eventDetails)
         return res.render('pages/customList/index', {
           addCrnsHref: uiPaths.customList.addCrns.pattern,
         })
       }
-      // req.body = { crnList: cases.map(c => c.crn).join(',') }// todo remove this because it maps only the filtered crns, like housed vs not housed.
-      // req.session.caseListUrl = req.originalUrl
+
+      req.body = { crnList }
       addUserInputToFlash(req)
+      const { data: cases } = await this.customListService.getCustomListCases(token, { peopleType })
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
@@ -47,9 +48,7 @@ export default class CustomListController {
       })
       const { errors, errorSummary, userInput } = fetchErrorsAndUserInput(req)
       const crnList =
-        userInput?.crnList ??
-        // dont apply filter at this level, get all the crns
-        (await this.customListService.getCustomList(token, {  })).data.map(c => c.crn).join(',')
+        userInput?.crnList ?? (await this.customListService.getCustomListCrns(token)).data.map(c => c).join('\n')
       return res.render('pages/customList/addCrns', {
         crnList,
         backLinkHref: uiPaths.customList.index.pattern,
@@ -71,6 +70,8 @@ export default class CustomListController {
       const crnTotal = crnList.length
       try {
         if (this.isValidSubmission(req, crnList)) {
+          req.body = { crnList }
+          addUserInputToFlash(req)
           await this.customListService.addCustomList(token, crnList)
           return res.redirect(`${uiPaths.customList.confirmation.pattern}?t=${crnTotal}`)
         }

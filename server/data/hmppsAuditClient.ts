@@ -1,6 +1,19 @@
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs'
 import logger from '../../logger'
 
+export const proxyAgentOptions = () => {
+  const proxyEnv = {
+    http_proxy: process.env.HTTP_PROXY || process.env.http_proxy,
+    https_proxy: process.env.HTTPS_PROXY || process.env.https_proxy,
+    no_proxy: process.env.NO_PROXY || process.env.no_proxy,
+  }
+
+  return {
+    httpAgent: { proxyEnv },
+    httpsAgent: { proxyEnv },
+  }
+}
+
 export interface AuditEvent {
   what: string
   who: string
@@ -41,7 +54,10 @@ export default class HmppsAuditClient {
     this.enabled = config.enabled
     this.queueUrl = config.queueUrl
     this.serviceName = config.serviceName
-    this.sqsClient = new SQSClient({ region: config.region })
+    this.sqsClient = new SQSClient({
+      region: config.region,
+      requestHandler: proxyAgentOptions(),
+    })
   }
 
   async sendMessage(event: AuditEvent, throwOnError: boolean = true) {

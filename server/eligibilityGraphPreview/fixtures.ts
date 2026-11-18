@@ -125,6 +125,7 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
   }
   const cas3: Cas3ApplicationDto = {
     id: 'preview',
+    createdAt: exampleDate(-3),
     uiUrl: '#',
     applicationStatus: cas3ApplicationStatus,
     applicationSubmittedDate: draft ? undefined : exampleDate(-2),

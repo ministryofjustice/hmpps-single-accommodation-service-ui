@@ -173,7 +173,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
   </div>
   <div>
     <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-      <strong class="govuk-tag">Unknown</strong>
+      <strong class="govuk-tag govuk-tag--green">Completed</strong>
     </span>
       <span class="govuk-table-span">
         <span class="govuk-hint">Submitted on 22 June 2026</span>
@@ -193,6 +193,49 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
           
             <li class="govuk-summary-list__actions-list-item">
               <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206790/details">View referral</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  The organisation",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)",
+    },
+    {
+      "html": "<div>
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--grey">Archived</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">Submitted on 22 June 2026</span>
+      </span>
+      
+        
+          <p class="govuk-!-margin-bottom-1">Reason: No response from organisation</p>
+        
+      
+  </div>",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206791/details">View referral</a>
             </li>
           
         </ul>
@@ -235,7 +278,7 @@ exports[`referrals utilities referralHistoryRows returns formatted rows for a gi
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206790/details">View referral</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206792/details">View referral</a>
             </li>
           
         </ul>
@@ -420,7 +463,7 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
   </div>
   <div>
     <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-      <strong class="govuk-tag">Unknown</strong>
+      <strong class="govuk-tag govuk-tag--green">Completed</strong>
     </span>
       <span class="govuk-table-span">
         <span class="govuk-hint">Submitted on 22 June 2026</span>
@@ -440,6 +483,49 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
           
             <li class="govuk-summary-list__actions-list-item">
               <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206790/details">View referral</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  ",
+    },
+  ],
+  [
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  The organisation",
+    },
+    {
+      "html": "<span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)",
+    },
+    {
+      "html": "<div>
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--grey">Archived</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">Submitted on 22 June 2026</span>
+      </span>
+      
+        
+          <p class="govuk-!-margin-bottom-1">Reason: No response from organisation</p>
+        
+      
+  </div>",
+    },
+    {
+      "html": "
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206791/details">View referral</a>
             </li>
           
         </ul>
@@ -482,7 +568,7 @@ exports[`referrals utilities referralHistoryRows when the cas2 flag is enabled i
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206790/details">View referral</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206792/details">View referral</a>
             </li>
           
         </ul>
@@ -815,7 +901,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
   </div>
   <div>
     <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
-      <strong class="govuk-tag">Unknown</strong>
+      <strong class="govuk-tag govuk-tag--green">Completed</strong>
     </span>
       <span class="govuk-table-span">
         <span class="govuk-hint">Submitted on 22 June 2026</span>
@@ -837,6 +923,61 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
           
             <li class="govuk-summary-list__actions-list-item">
               <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206790/details">View referral</a>
+            </li>
+          
+        </ul>
+      </span>
+    </div>
+  </td>
+      
+    
+    </tr>
+  
+
+  
+    <tr class="govuk-table__row">
+    
+      
+      
+      <th scope="row" class="govuk-table__header"><span class="sas-table__cell-header" aria-hidden="true">Referral type</span>
+  The organisation</th>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><span class="sas-table__cell-header" aria-hidden="true">Referred by</span>
+  You (Alice Smith)</td>
+      
+    
+      
+      
+      <td class="govuk-table__cell"><div>
+    <span class="sas-table__cell-header" aria-hidden="true">Status and details</span>
+  </div>
+  <div>
+    <span class="govuk-table-span govuk-!-display-block govuk-!-margin-bottom-2">
+      <strong class="govuk-tag govuk-tag--grey">Archived</strong>
+    </span>
+      <span class="govuk-table-span">
+        <span class="govuk-hint">Submitted on 22 June 2026</span>
+      </span>
+      
+        
+          <p class="govuk-!-margin-bottom-1">Reason: No response from organisation</p>
+        
+      
+  </div></td>
+      
+    
+      
+      
+      <td class="govuk-table__cell">
+    <div class="govuk-summary-list__actions govuk-!-padding-0">
+      <span class="govuk-table-span govuk-body">
+        <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
+          
+            <li class="govuk-summary-list__actions-list-item">
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206791/details">View referral</a>
             </li>
           
         </ul>
@@ -891,7 +1032,7 @@ exports[`referrals utilities referralHistoryTable macro renders the referral his
         <ul class="govuk-summary-list__actions-list govuk-!-margin-0">
           
             <li class="govuk-summary-list__actions-list-item">
-              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206790/details">View referral</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="/cases/CRN123/external-referrals/206792/details">View referral</a>
             </li>
           
         </ul>

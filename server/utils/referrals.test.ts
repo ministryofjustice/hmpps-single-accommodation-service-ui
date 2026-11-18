@@ -53,7 +53,16 @@ describe('referrals utilities', () => {
       referredBy: { username: 'alice_smith', name: 'Alice Smith' },
     }),
     referralFactory.build({
-      id: '206790',
+      id: '206791',
+      type: 'ER',
+      status: 'ARCHIVED',
+      date: '2026-06-22',
+      withdrawalReason: 'NO_RESPONSE_FROM_ORGANISATION',
+      organisationName: 'The organisation',
+      referredBy: { username: 'alice_smith', name: 'Alice Smith' },
+    }),
+    referralFactory.build({
+      id: '206792',
       type: 'ER',
       status: 'REJECTED',
       date: '2026-06-22',

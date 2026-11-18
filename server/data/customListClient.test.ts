@@ -13,7 +13,7 @@ describeClient('CustomListClient', provider => {
     customListClient = new CustomListClient(mockAuthenticationClient)
   })
 
-  it('should make a GET request to /case-list/custom/ using user token and return the response body', async () => {
+  it('should make a GET request to /case-list/custom/ using user token and query, then return the response body', async () => {
     const body = apiResponseFactory.caseList()
 
     await provider.addInteraction({
@@ -22,6 +22,11 @@ describeClient('CustomListClient', provider => {
       withRequest: {
         method: 'GET',
         path: apiPaths.customList.getCases({}),
+        query: {
+          searchTerm: 'bob',
+          riskLevel: 'LOW',
+          teamCode: 'N0345T',
+        },
         headers: {
           authorization: 'Bearer test-user-token',
         },
@@ -32,7 +37,11 @@ describeClient('CustomListClient', provider => {
       },
     })
 
-    const response = await customListClient.getCustomListCrns('test-user-token')
+    const response = await customListClient.getCustomListCases('test-user-token', {
+      searchTerm: 'bob',
+      riskLevel: 'LOW',
+      teamCode: 'N0345T',
+    })
     expect(response).toEqual(body)
   })
   it('should make a GET request to /case-list/custom/crns using user token and return the response body', async () => {

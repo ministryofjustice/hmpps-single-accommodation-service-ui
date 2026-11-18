@@ -2,7 +2,7 @@ name: Generate API Status Card Preview HTML
 
 on:
   workflow_run:
-    workflows: ['Pipeline [test -> build -> deploy]']
+    workflows: ['Pipeline \[test -> build -> deploy\]']
     types: [completed]
     branches: [main]
   workflow_dispatch:

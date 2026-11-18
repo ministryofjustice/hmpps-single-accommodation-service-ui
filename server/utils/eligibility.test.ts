@@ -51,6 +51,7 @@ const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
 
 const cas3Application: NonNullable<Cas3ServiceResult['cas3Application']> = {
   id: 'cas3-application-id',
+  createdAt: '2026-06-01T09:00:00.000Z',
   applicationStatus: 'SUBMITTED',
   uiUrl: 'https://example.com/referral',
   applicationSubmittedDate: '2026-06-02',
@@ -110,6 +111,7 @@ describe('linksForService', () => {
     { service: 'cas2', status: 'PLACE_OFFERED', expected: ['View application'] },
     { service: 'cas2', status: 'OFFER_ACCEPTED', expected: ['View application'] },
     { service: 'cas2', status: 'AWAITING_ARRIVAL', expected: ['View application'] },
+    { service: 'cas2', status: 'ARRIVED', expected: ['View application'] },
     { service: 'cas2', status: 'OFFER_DECLINED_OR_WITHDRAWN', expected: ['Start new application'] },
     { service: 'cas2', status: 'CANCELLED', expected: ['Start new application'] },
     { service: 'cas2', status: 'WITHDRAWN', expected: ['Start new application'] },
@@ -697,6 +699,7 @@ describe('cas2 status card', () => {
       'PLACE_OFFERED',
       'OFFER_ACCEPTED',
       'AWAITING_ARRIVAL',
+      'ARRIVED',
       'OFFER_DECLINED_OR_WITHDRAWN',
       'CANCELLED',
       'WITHDRAWN',

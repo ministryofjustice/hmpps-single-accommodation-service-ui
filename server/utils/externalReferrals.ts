@@ -39,7 +39,7 @@ const fieldMapping: Record<string, FieldDefinition> = {
   email: { label: 'Email address', format: 'text' },
   submissionNote: { label: 'Notes', format: 'textarea' },
   outcomeNote: { label: 'Notes', format: 'textarea' },
-  withdrawalReason: { label: 'Other reason', format: 'text' },
+  withdrawalReason: { label: 'Reason', format: 'text' },
 }
 
 export const validateSubmission = (req: Request) => {
@@ -142,11 +142,11 @@ export const detailsSummaryListRows = (referral: ExternalReferralDto = undefined
 export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withdrawalReason'], string> = {
   ANOTHER_ACCOMMODATION_FOUND: 'Another accommodation option found',
   NO_CAPACITY: 'No capacity',
-  PLACEMENT_COMPLETE: 'Placement complete',
   NO_RESPONSE_FROM_ORGANISATION: 'No response from organisation',
   PERSON_CANNOT_BE_CONTACTED_OR_DISENGAGED: 'Person can no longer be contacted or has disengaged',
-  PERSON_NOT_SUITABLE: 'Person not suitable',
+  PERSON_NOT_SUITABLE: 'Person is not suitable',
   PERSON_NO_LONGER_CONSENTS: 'Person no longer consents',
+  PLACEMENT_COMPLETE: 'Placement complete',
   ANOTHER_REASON: 'Other',
 }
 
@@ -187,11 +187,9 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
     value: ServiceStatus
     oldValue: ServiceStatus
   }
-  const isOutcome = (newStatus && newStatus !== 'SUBMITTED') || fieldChange('outcomeNote')
-  const isChange = isOutcome ? !newStatus || oldStatus !== 'SUBMITTED' : type === 'UPDATE'
+  const isOutcome = ['REJECTED', 'ACCEPTED'].includes(newStatus) || fieldChange('outcomeNote')
+  const isChange = isOutcome ? !newStatus || oldStatus !== 'SUBMITTED' : !isWithdrawal && type === 'UPDATE'
   const label = `${isOutcome ? 'Outcome' : 'Referral'} details ${isChange ? 'changed' : 'added'}`
-
-  const timeLineLabel = !isWithdrawal ? label : 'Moved to referral history'
 
   const html = renderMacro('timelineEntry', {
     type,
@@ -201,7 +199,7 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
   })
 
   return timelineEntry(
-    timeLineLabel,
+    isWithdrawal ? 'Moved to referral history' : label,
     html,
     auditRecord.commitDate,
     staffName(auditRecord.authorDetails, currentUsername),
@@ -240,7 +238,7 @@ export const outcomeRadioItems = (outcomeReason: ExternalReferralDto['status']):
 export const validateOutcome = (req: Request) => {
   const { outcomeStatus, outcomeNote } = req.body
   const errors: Record<string, string> = {
-    outcomeStatus: validateRadioButton(outcomeStatus, 'external referral status'),
+    outcomeStatus: validateRadioButton(outcomeStatus, 'status'),
     outcomeNote: validateMaxLength(outcomeNote, fieldMapping.outcomeNote.label, 4000),
   }
 
@@ -275,7 +273,7 @@ export const withdrawalReasonRadios = (
 export const validateWithdrawal = (req: Request) => {
   const { withdrawalReason, otherReason } = req.body
   const errors: Record<string, string> = {
-    withdrawalReason: validateRadioButton(withdrawalReason, 'reason for moving to the referral history'),
+    withdrawalReason: validateRadioButton(withdrawalReason, 'reason'),
     otherReason:
       withdrawalReason === 'ANOTHER_REASON'
         ? validateMandatoryText(otherReason, 'reason') || validateMaxLength(otherReason, 'reason', 100)

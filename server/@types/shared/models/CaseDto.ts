@@ -21,4 +21,5 @@ export type CaseDto = {
   accommodationSummaries?: AccommodationSummariesDto | null
   sexualOffenceRegistrations: Array<'RSC' | 'ANSO' | 'ARSO' | 'RCHD' | 'SHPO' | 'CSEP' | 'ALT13' | 'ALT3' | 'SOPS'>
   teamCode?: string | null
+  inUsersCustomList: boolean
 }

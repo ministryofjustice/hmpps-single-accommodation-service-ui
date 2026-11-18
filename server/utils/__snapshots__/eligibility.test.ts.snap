@@ -392,6 +392,27 @@ exports[`cas2 status card content renders additional content for NOT_ELIGIBLE st
 ]
 `;
 
+exports[`cas2 status card details renders detail rows for a ARRIVED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "2 June 2026 (60 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
 exports[`cas2 status card details renders detail rows for a AWAITING_ARRIVAL status 1`] = `
 [
   {

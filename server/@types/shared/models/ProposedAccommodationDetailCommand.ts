@@ -6,6 +6,7 @@ import type { AccommodationAddressDetails } from './AccommodationAddressDetails'
 export type ProposedAccommodationDetailCommand = {
   accommodationTypeCode?: string | null
   verificationStatus: 'NOT_CHECKED_YET' | 'FAILED' | 'PASSED'
+  verificationReason?: string | null
   nextAccommodationStatus: 'YES' | 'NO' | 'TO_BE_DECIDED'
   address: AccommodationAddressDetails
 }

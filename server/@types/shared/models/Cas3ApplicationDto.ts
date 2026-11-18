@@ -7,6 +7,7 @@ import type { Cas3PremisesSummaryDto } from './Cas3PremisesSummaryDto'
 import type { Cas3StaffDto } from './Cas3StaffDto'
 export type Cas3ApplicationDto = {
   id: string
+  createdAt: string
   applicationStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'REQUESTED_FURTHER_INFORMATION' | 'REJECTED'
   applicationSubmittedDate?: string | null
   applicationSubmittedBy?: Cas3StaffDto | null

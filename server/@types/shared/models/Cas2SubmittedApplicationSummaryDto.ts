@@ -1,7 +1,8 @@
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
-
+/* eslint-disable */
+import type { Cas2MarkedAsArrivedDto } from './Cas2MarkedAsArrivedDto'
 export type Cas2SubmittedApplicationSummaryDto = {
   latestAssessmentStatus?:
     | 'MORE_INFO_REQUESTED'
@@ -16,5 +17,5 @@ export type Cas2SubmittedApplicationSummaryDto = {
   offerDeclinedReason?: string | null
   cancelledReason?: string | null
   submittedAt: string
-  markedAsArrivedDateTime?: string | null
+  markedAsArrived?: Cas2MarkedAsArrivedDto | null
 }

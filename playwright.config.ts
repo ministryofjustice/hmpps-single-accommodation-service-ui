@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
+import { loadEnvFile } from 'node:process'
 
+loadEnvFile('feature.env')
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv

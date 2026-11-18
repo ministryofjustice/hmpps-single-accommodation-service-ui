@@ -48,8 +48,8 @@ describeClient('CustomListClient', provider => {
     const body = apiResponseFactory.buildResponse(['CRN1', 'CRN2']) as ApiResponseDtoListString
 
     await provider.addInteraction({
-      state: 'Custom list cases exists for user',
-      uponReceiving: 'a request to get custom list cases',
+      state: 'Custom list exists for user',
+      uponReceiving: 'a request to get custom list crns',
       withRequest: {
         method: 'GET',
         path: apiPaths.customList.getList({}),

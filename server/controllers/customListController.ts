@@ -18,6 +18,7 @@ export default class CustomListController {
     return async (req: IndexRequest, res: Response) => {
       const { token, username, displayName: userFullName } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
+      const { query } = req
       const { peopleType = 'NFA_RISK' } = req.query
       const { userInput } = fetchErrorsAndUserInput(req)
       const crnList = userInput?.crnList ?? (await this.customListService.getCustomListCrns(token)).data
@@ -30,7 +31,7 @@ export default class CustomListController {
 
       req.body = { crnList }
       addUserInputToFlash(req)
-      const { data: cases } = await this.customListService.getCustomListCases(token, { peopleType })
+      const { data: cases } = await this.customListService.getCustomListCases(token, { ...query, peopleType })
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,

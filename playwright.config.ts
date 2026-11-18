@@ -1,8 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 import { loadEnvFile } from 'node:process'
 
-const envFile = process.env.FEATURE_ENV_FILE
-if (envFile) loadEnvFile(envFile)
+loadEnvFile('feature.env')
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv

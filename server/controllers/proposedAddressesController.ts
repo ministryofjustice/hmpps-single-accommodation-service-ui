@@ -383,6 +383,7 @@ export default class ProposedAddressesController {
       if (redirect) return res.redirect(redirect)
 
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
+      const { verificationStatus, verificationReason } = proposedAddressFormSessionData
 
       const backLinkHref = getPageBackLink(uiPaths.proposedAddresses.status.pattern, req, [
         uiPaths.proposedAddresses.type.pattern,
@@ -391,10 +392,9 @@ export default class ProposedAddressesController {
 
       return res.render('pages/proposed-address/status', {
         crn,
-        verificationStatusItems: radioItems(
-          verificationStatusLabels,
-          proposedAddressFormSessionData?.verificationStatus,
-        ),
+        verificationStatusItems: radioItems(verificationStatusLabels, verificationStatus),
+        verificationReasonPassed: verificationStatus === 'PASSED' ? verificationReason : undefined,
+        verificationReasonFailed: verificationStatus === 'FAILED' ? verificationReason : undefined,
         backLinkHref,
         address: formatAddress(proposedAddressFormSessionData.address),
         errors,
@@ -406,7 +406,7 @@ export default class ProposedAddressesController {
   saveStatus(): RequestHandler {
     return async (req: Request, res: Response) => {
       const proposedAddressFormSessionData = await updateStatusFromRequest(req, this.formData)
-      const redirect = validateUpToStatus(req, proposedAddressFormSessionData)
+      const redirect = validateUpToStatus(req, proposedAddressFormSessionData, { requireReason: true })
       if (redirect) return res.redirect(redirect)
 
       if (proposedAddressFormSessionData?.verificationStatus === 'PASSED') {

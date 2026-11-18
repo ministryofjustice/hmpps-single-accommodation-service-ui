@@ -12,12 +12,14 @@ export default class AddressStatusCheckPage {
     ).toBeVisible()
   }
 
-  async selectPassed() {
+  async selectPassed(reason: string) {
     await this.page.getByLabel('Passed').check()
+    await this.page.getByLabel('Why is it suitable?').fill(reason)
   }
 
-  async selectFailed() {
+  async selectFailed(reason: string) {
     await this.page.getByLabel('Failed').check()
+    await this.page.getByLabel('Why is it not suitable?').fill(reason)
   }
 
   async selectNotChecked() {

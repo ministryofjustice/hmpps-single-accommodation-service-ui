@@ -11,8 +11,6 @@ import applicationInfoSupplier from '../applicationInfo'
 import config from '../config'
 import { createUserLocationCodeRequestHook } from './userLocationTelemetry'
 
-// Sentry v11 reads isolation scopes from the context manager installed by initialiseTelemetry,
-// so no manual context manager registration is needed.
 const applicationInfo = applicationInfoSupplier()
 
 const filterSentry: SpanFilterFn = (span: SpanInfo) => !span.attributes['sentry.op']

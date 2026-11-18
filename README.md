@@ -102,6 +102,14 @@ The service will be available at http://localhost:3000. You can login with the f
 
 Commit hooks have been set up to run linters, typecheck and unit tests on commit. You can also run these manually.
 
+### Sentry and Azure telemetry
+
+HMPPS Azure telemetry owns the global OpenTelemetry provider and HTTP trace propagation.
+Sentry v11 uses its native HTTP and Express tracing with `enableOpenTelemetrySetup: false`;
+its HTTP integration has `tracePropagation: false` to avoid overwriting HMPPS trace headers.
+Keep Sentry's incoming request spans enabled so that `tracesSampler` controls request tracing.
+Sentry tracing and Azure spans are collected independently, not exported through a shared provider.
+
 ### Probation region telemetry
 
 After authentication and authorisation, the UI calls `GET /users/me` with the user's token.

@@ -168,10 +168,14 @@ describe('Proposed addresses utilities', () => {
       expect(rows.supportingInfo[1].actions?.items[0].href).toBe('/cases/CRN123/proposed-addresses/status')
     })
 
-    it('formats status when checks failed with reason', () => {
+    it.each([
+      ['FAILED', 'Not suitable'],
+      ['PASSED', 'Suitable'],
+    ] as const)('formats status when checks %s with reason', (verificationStatus, verificationReason) => {
       const sessionData = proposedAddressFormFactory.build({
         ...baseSessionData,
-        verificationStatus: 'FAILED',
+        verificationStatus,
+        verificationReason,
       })
       const rows = checkYourAnswersRows(sessionData, 'CRN123', accommodationTypesReferenceData)
 
@@ -265,6 +269,26 @@ describe('Proposed addresses utilities', () => {
       await updateStatusFromRequest(req, formDataManager)
 
       expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, { verificationStatus: 'FAILED' })
+    })
+
+    it.each([
+      ['PASSED', 'Suitable'],
+      ['FAILED', 'Not suitable'],
+      ['NOT_CHECKED_YET', undefined],
+    ])('updates form data with the reason for the selected status %s', async (verificationStatus, expected) => {
+      req.body = {
+        verificationStatus,
+        verificationReasonPassed: 'Suitable',
+        verificationReasonFailed: 'Not suitable',
+      }
+
+      await updateStatusFromRequest(req, formDataManager)
+
+      expect(formDataManager.update).toHaveBeenCalledWith('CRN123', req.session, {
+        verificationStatus,
+        verificationReason: expected,
+        nextAccommodationStatus: undefined,
+      })
     })
   })
 
@@ -503,6 +527,21 @@ describe('Proposed addresses utilities', () => {
         expect(validateUpToStatus(req, data)).toBe(expected)
       })
 
+      it.each([
+        ['PASSED', 'verificationReasonPassed', 'Enter reason address is suitable'],
+        ['FAILED', 'verificationReasonFailed', 'Enter reason address is not suitable'],
+      ] as const)('flashes errors when status is %s and reason missing', (verificationStatus, field, error) => {
+        const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
+
+        validateUpToStatus(req, { ...validUpToType(), verificationStatus }, { requireReason: true })
+
+        expect(validateAndFlashErrorsSpy).toHaveBeenCalledWith(req, expect.objectContaining({ [field]: error }))
+      })
+
+      it('does not require a reason for existing addresses saved without one', () => {
+        expect(validateUpToStatus(req, { ...validUpToType(), verificationStatus: 'PASSED' })).toBeUndefined()
+      })
+
       it('flashes errors when verification status missing', () => {
         const validateAndFlashErrorsSpy = jest.spyOn(validationUtils, 'validateAndFlashErrors')
         validateUpToStatus(req, validUpToType())
@@ -590,6 +629,7 @@ describe('Proposed addresses utilities', () => {
           address: proposedAddressFormData.address,
           accommodationTypeCode: proposedAddressFormData.accommodationTypeCode,
           verificationStatus: proposedAddressFormData.verificationStatus,
+          verificationReason: proposedAddressFormData.verificationReason ?? null,
           nextAccommodationStatus: expected,
         })
       },
@@ -652,15 +692,26 @@ describe('Proposed addresses utilities', () => {
     })
 
     it.each([
-      { title: 'that failed checks', params: { verificationStatus: 'FAILED' as const } },
+      {
+        title: 'that failed checks',
+        params: { verificationStatus: 'FAILED' as const, verificationReason: 'Not suitable' },
+      },
       { title: 'that has not been checked', params: { verificationStatus: 'NOT_CHECKED_YET' as const } },
       {
         title: 'that passed checks',
-        params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'TO_BE_DECIDED' as const },
+        params: {
+          verificationStatus: 'PASSED' as const,
+          verificationReason: 'Suitable',
+          nextAccommodationStatus: 'TO_BE_DECIDED' as const,
+        },
       },
       {
         title: 'that is confirmed',
-        params: { verificationStatus: 'PASSED' as const, nextAccommodationStatus: 'YES' as const },
+        params: {
+          verificationStatus: 'PASSED' as const,
+          verificationReason: 'Suitable',
+          nextAccommodationStatus: 'YES' as const,
+        },
       },
     ])(
       'returns the correct rows for an address $title',
@@ -896,6 +947,15 @@ describe('Proposed addresses utilities', () => {
         })
 
       expect(addressTimeline([postcodeChangedRecord, createdRecord])).toMatchSnapshot()
+    })
+
+    it('does not add an entry for an update that only changes the reason', () => {
+      const createdRecord = auditRecordFactory.proposedAddressCreated().build()
+      const reasonChangedRecord = auditRecordFactory
+        .proposedAddressUpdated([{ field: 'verificationReason', value: 'Suitable' }])
+        .build()
+
+      expect(addressTimeline([reasonChangedRecord, createdRecord])).toHaveLength(1)
     })
   })
 })

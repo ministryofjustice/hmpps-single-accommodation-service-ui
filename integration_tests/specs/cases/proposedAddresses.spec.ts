@@ -252,6 +252,15 @@ test.describe('add proposed address', () => {
 
     // When I click to change the status checks
     await addProposedAddressPage.clickChangeLink('Address checks')
+
+    // And I select Passed without giving a reason
+    await addProposedAddressPage.completeStatusForm({ ...updatedProposedAddressData, verificationReason: '' })
+    await addProposedAddressPage.clickButton('Continue')
+
+    // Then I should see an error
+    await addProposedAddressPage.shouldShowErrorMessagesForFields({
+      verificationReasonPassed: 'Enter reason address is suitable',
+    })
     await addProposedAddressPage.completeStatusForm(updatedProposedAddressData)
     await addProposedAddressPage.clickButton('Continue')
 
@@ -448,8 +457,13 @@ test.describe('edit proposed address', () => {
   })
 
   test('should allow user to add checks to a proposed address', async ({ page }) => {
-    const failedStatusFormData = { ...initialProposedAddressData, verificationStatus: 'FAILED' as const }
-    const failedStatusUpdate = { ...proposedAddress, verificationStatus: 'FAILED' as const }
+    const verificationReason = 'Address is not suitable'
+    const failedStatusFormData = {
+      ...initialProposedAddressData,
+      verificationStatus: 'FAILED' as const,
+      verificationReason,
+    }
+    const failedStatusUpdate = { ...proposedAddress, verificationStatus: 'FAILED' as const, verificationReason }
 
     // And I am logged in
     await login(page)
@@ -498,6 +512,9 @@ test.describe('edit proposed address', () => {
 
     // And the proposed address should show the updated status
     await profileTrackerPage.shouldShowProposedAddresses([failedStatusUpdate])
+
+    // And the API should have been call with the reason
+    await addProposedAddressPage.checkUpdateApiCalled(crn, id, failedStatusFormData)
   })
 
   test('should allow user to confirm a proposed address as next accommodation', async ({ page }) => {
@@ -593,6 +610,7 @@ test.describe('edit proposed address', () => {
     const checksPassedProposedAddress = proposedAccommodationFactory.build({
       ...updatedProposedAddress,
       verificationStatus: 'PASSED',
+      verificationReason: 'All checks completed. The address is suitable.',
       nextAccommodationStatus: 'TO_BE_DECIDED',
     })
 

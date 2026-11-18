@@ -20,4 +20,8 @@ export default class CasesService {
   submitCas2Arrival(token: string, crn: string, applicationId: string, arrival: Cas2ArrivalDto) {
     return this.casesClient.submitCas2Arrival(token, crn, applicationId, arrival)
   }
+
+  getRecentSearches(token: string) {
+    return this.casesClient.getRecentSearches(token)
+  }
 }

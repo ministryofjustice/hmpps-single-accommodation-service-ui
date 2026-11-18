@@ -38,6 +38,16 @@
           })
         }}
       </form>
+      {% if recentSearches and recentSearches.length %}
+        <h2 class="govuk-heading-s govuk-!-margin-top-6" id="recent-searches-heading">Recent searches</h2>
+        <ul class="govuk-list govuk-list--bullet" aria-labelledby="recent-searches-heading">
+          {% for item in recentSearches %}
+            <li>
+              <a class="govuk-link" href="{{ paths.cases.show({ crn: item.crn }) }}">{{ item.crn }}</a> - {{ item.name }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
   </div>
   <div class="govuk-grid-row">

@@ -1,4 +1,4 @@
-@use "govuk-frontend/dist/govuk" as *;
+@use "govuk-frontend/dist/govuk/base" as *;
 
 // was originally 600px but reduced to 510px to account for the report banner on all pages
 .govuk-main-wrapper {

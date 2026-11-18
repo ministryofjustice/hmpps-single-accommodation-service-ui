@@ -6,15 +6,17 @@ import CasesListPage from '../../pages/cases/listPage'
 import CustomListPage from '../../pages/customList/customListPage'
 import CreateListPage from '../../pages/customList/createListPage'
 import ShowCaseListPage from '../../pages/customList/showCaseList'
+import { stubCaseListPage } from '../../helpers/caseListPage'
 
 test.describe('custom list', () => {
   test('should allow a user to create and view a custom list', async ({ page }) => {
     const cases = [caseFactory.build({ crn: 'X123456' }), caseFactory.build({ crn: 'X654321' })]
+    await stubCaseListPage([])
 
     await customListApi.stubSubmitCustomList()
 
     // GIVEN a custom list does not already exist
-    await customListApi.stubGetCustomList([], { peopleType: 'NFA_RISK' })
+    await customListApi.stubGetCustomListCrns([])
 
     // WHEN I sign in
     await login(page)
@@ -40,10 +42,10 @@ test.describe('custom list', () => {
     await createListPage.clickButton('Submit')
 
     // THEN the API should be called with the correct CRNs
-    await createListPage.checkApiCalled(['X123456', 'X654321'])
+    await createListPage.checkUpdateListApiCalled(['X123456', 'X654321'])
+    await customListApi.stubGetCustomListCases(cases, { peopleType: 'NFA_RISK' })
     // AND I should see the confirmation panel
     await createListPage.shouldShowPanel('CRNs added', '2 CRNs added')
-    await customListApi.stubGetCustomList(cases, { peopleType: 'NFA_RISK' })
 
     // WHEN I click the view list button
     await createListPage.clickButton('View list')
@@ -57,7 +59,7 @@ test.describe('custom list', () => {
   })
   test('should error when user does not input valid crn list', async ({ page }) => {
     // GIVEN a custom list does not already exist
-    await customListApi.stubGetCustomList([], { peopleType: 'NFA_RISK' })
+    await customListApi.stubGetCustomListCrns([])
 
     // WHEN I sign in
     await login(page)
@@ -93,7 +95,7 @@ test.describe('custom list', () => {
   })
   test('should show error when CRN does not exist', async ({ page }) => {
     // GIVEN a custom list does not already exist
-    await customListApi.stubGetCustomList([], { peopleType: 'NFA_RISK' })
+    await customListApi.stubGetCustomListCrns([])
     await customListApi.stubDomainErrorCustomList('C123456')
 
     // WHEN I sign in
@@ -132,7 +134,8 @@ test.describe('custom list', () => {
     await customListApi.stubSubmitCustomList()
 
     // GIVEN a custom list already exists
-    await customListApi.stubGetCustomList(cases, { peopleType: 'NFA_RISK' })
+    await customListApi.stubGetCustomListCrns(['X123456', 'X654321'])
+    await customListApi.stubGetCustomListCases(cases, { peopleType: 'NFA_RISK' })
 
     // WHEN I sign in
     await login(page)
@@ -164,10 +167,11 @@ test.describe('custom list', () => {
     await addCrnsPage.clickButton('Submit')
 
     // THEN the API should be called with the correct CRNs
-    await addCrnsPage.checkApiCalled(['X123456', 'X987654'])
+    await addCrnsPage.checkUpdateListApiCalled(['X123456', 'X987654'])
     // AND I should see the confirmation panel
     await addCrnsPage.shouldShowPanel('CRNs added', '2 CRNs added')
-    await customListApi.stubGetCustomList(newCases, { peopleType: 'NFA_RISK' })
+    await customListApi.stubGetCustomListCrns(['X123456', 'X987654'])
+    await customListApi.stubGetCustomListCases(newCases, { peopleType: 'NFA_RISK' })
 
     // WHEN I click the view list button
     await addCrnsPage.clickButton('View list')

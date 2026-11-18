@@ -60,4 +60,15 @@ describe('CasesService', () => {
 
     expect(casesClient.submitCas2Arrival).toHaveBeenCalledWith(token, 'X123456', 'application-123', arrival)
   })
+
+  it('should call getRecentSearches and return the cases', async () => {
+    const response = apiResponseFactory.caseList()
+
+    casesClient.getRecentSearches.mockResolvedValue(response)
+
+    const result = await casesService.getRecentSearches(token)
+
+    expect(casesClient.getRecentSearches).toHaveBeenCalledWith(token)
+    expect(result).toEqual(response)
+  })
 })

@@ -11,6 +11,7 @@ export default {
   cases: {
     index: path('/case-list'),
     search: path('/search/:crn'),
+    recentSearches: path('/case-list/search-history'),
     show: casePath,
     applications: {
       arrival: casePath.path('applications/:applicationId/arrival'),

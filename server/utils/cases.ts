@@ -44,6 +44,12 @@ export const casesResultsSummary = (cases: Case[]): string =>
 export const searchResultsSummary = (searchTerm: string, caseData: Case | null): string =>
   caseData ? `Result for ‘${searchTerm}’` : `0 results for ‘${searchTerm}’`
 
+export const recentSearchItems = (cases: Case[] = []): { crn: string; name: string }[] =>
+  cases.map(caseData => ({
+    crn: caseData.crn,
+    name: displayName(caseData, { caseList: true, onlyFirstLast: true, laoFlag: '' }),
+  }))
+
 export const queryToFilters = (
   query: GetCasesQuery,
   currentUrl: string,

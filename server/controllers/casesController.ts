@@ -12,6 +12,7 @@ import {
   validateSearchCrn,
   searchResultsSummary,
   setupCaseList,
+  recentSearchItems,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -76,9 +77,9 @@ export default class CasesController {
         correlationId: req.id,
       })
 
+      const { token } = res.locals.user
       const isValidSearchCrn = searchTerm != null && validateSearchCrn(req, searchTerm)
       if (isValidSearchCrn) {
-        const { token } = res.locals.user
         try {
           const { data } = await this.casesService.searchByCrn(token, searchTerm)
           caseData = data
@@ -90,12 +91,15 @@ export default class CasesController {
         }
       }
 
+      const { data: recentSearches } = await this.casesService.getRecentSearches(token)
+
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       return res.render('pages/search', {
         crn: searchTerm,
         resultsSummary: isValidSearchCrn ? searchResultsSummary(searchTerm, caseData) : undefined,
         casesTableColumns: casesTableColumns(),
         casesRows: caseToRows(caseData),
+        recentSearches: recentSearchItems(recentSearches),
         errors,
         errorSummary,
       })

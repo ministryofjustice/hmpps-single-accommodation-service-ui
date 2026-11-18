@@ -12,6 +12,7 @@ import {
   updateQueryParams,
   removeQueryParam,
   searchResultsSummary,
+  recentSearchItems,
 } from './cases'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { statusCell } from './macros'
@@ -415,6 +416,25 @@ describe('cases utilities', () => {
 
     it('returns 0 results when case not found', () => {
       expect(searchResultsSummary('X123456', null)).toBe('0 results for ‘X123456’')
+    })
+  })
+
+  describe('recentSearchItems', () => {
+    it('returns the CRN and name', () => {
+      const cases = [
+        caseFactory.build({ crn: 'C321654', forename: 'Dave', middleNames: 'John Charles', surname: 'Foo' }),
+        caseFactory.build({ crn: 'D777665', forename: 'John', middleNames: '', surname: 'Doe' }),
+      ]
+
+      expect(recentSearchItems(cases)).toEqual([
+        { crn: 'C321654', name: 'Foo, Dave' },
+        { crn: 'D777665', name: 'Doe, John' },
+      ])
+    })
+
+    it('returns an empty list when there are no recent searches', () => {
+      expect(recentSearchItems([])).toEqual([])
+      expect(recentSearchItems(undefined)).toEqual([])
     })
   })
 })

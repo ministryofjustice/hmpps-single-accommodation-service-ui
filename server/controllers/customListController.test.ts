@@ -268,5 +268,11 @@ describe('customListController', () => {
         showHref: uiPaths.customList.index.pattern,
       })
     })
+    it('redirects when no CRN list provided', async () => {
+      request.query = {}
+      await customListController.confirmation()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.index.pattern)
+    })
   })
 })

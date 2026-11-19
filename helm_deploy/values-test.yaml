@@ -9,10 +9,13 @@ generic-service:
     tlsSecretName: hmpps-single-accommodation-service-test-cert
 
   env:
+   # Enable Node's environment proxy support for Cloud Platform's HTTP(S)_PROXY and NO_PROXY variables.
+    NODE_USE_ENV_PROXY: '1'
+    APPLICATION_INSIGHTS_NO_STATSBEAT: 'true'
     INGRESS_URL: "https://single-accommodation-service-test.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
-    SAS_API_URL: 'https://single-accommodation-service-api-test.hmpps.service.justice.gov.uk'
+    SAS_API_URL: "https://single-accommodation-service-api-test.hmpps.service.justice.gov.uk"
     SAS_API_TIMEOUT_RESPONSE: 5000
     SAS_API_TIMEOUT_DEADLINE: 10000
     SAS_CASES_API_TIMEOUT_RESPONSE: 5000
@@ -25,11 +28,22 @@ generic-service:
     OS_DATAHUB_API_URL: "https://api.os.uk"
     DELIUS_URL: "https://ndelius.test.probation.service.justice.gov.uk"
     SAS_ALLOWED_ROLES: "ROLE_SINGLE_ACCOMMODATION_SERVICE_PROBATION_PRACTITIONER"
-    LOG_LEVEL: 'debug'
+    LOG_LEVEL: "debug"
     MAINTENANCE_MODE: "false"
     HIDE_MANUAL_ADDRESS_ENTRY: "true"
     CAS2_ENABLED: "false"
     CAS2_MANUAL_ARRIVAL_ENABLED: "false"
+
+namespace_secrets:
+  # These secrets are created by terraform.
+  # Keep the name aligned with the egress-controls module's default resource_name_prefix.
+  hmpps-envoy-https-proxy-env:
+    HTTP_PROXY: "HTTP_PROXY"
+    HTTPS_PROXY: "HTTPS_PROXY"
+    NO_PROXY: "NO_PROXY"
+    http_proxy: "http_proxy"
+    https_proxy: "https_proxy"
+    no_proxy: "no_proxy"
 
 generic-prometheus-alerts:
   targetApplication: hmpps-single-accommodation-service-ui

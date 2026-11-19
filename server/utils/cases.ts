@@ -156,12 +156,18 @@ export const validateSearchCrn = (req: Request, crn?: string) => {
   return validateAndFlashErrors(req, errors)
 }
 
+export enum CaseListFields {
+  Search = 'search',
+  AssignedTo = 'assignedTo',
+  Rosh = 'rosh',
+}
 export const setupCaseList = (
   req: IndexRequest,
-  teams: TeamDto[],
   username: string,
   cases: Case[],
   userFullName: string,
+  teams: TeamDto[] = [],
+  disabledFields: CaseListFields[] = [],
 ) => {
   const { query } = req
   const { peopleType = 'NFA_RISK' } = query
@@ -184,6 +190,7 @@ export const setupCaseList = (
       { value: 'MEDIUM', text: 'Medium' },
       { value: 'LOW', text: 'Low' },
     ],
+    disabledFields,
   }
 }
 

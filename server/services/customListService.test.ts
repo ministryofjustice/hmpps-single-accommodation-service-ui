@@ -1,3 +1,5 @@
+import { GetCasesQuery } from '@sas/ui'
+import { ApiResponseDtoListString } from '@sas/api'
 import { apiResponseFactory } from '../testutils/factories'
 import CustomListClient from '../data/customListClient'
 import CustomListService from './customListService'
@@ -16,11 +18,21 @@ describe('CustomListService', () => {
 
   it('should call getCustomList on the api client and return the custom list for current user', async () => {
     const response = apiResponseFactory.caseList()
-    customListClient.getCustomList.mockResolvedValue(response)
+    customListClient.getCustomListCases.mockResolvedValue(response)
+    const query: GetCasesQuery = { searchTerm: 'foo', riskLevel: 'MEDIUM' }
 
-    const result = await customListService.getCustomList(token)
+    const result = await customListService.getCustomListCases(token, query)
 
-    expect(customListClient.getCustomList).toHaveBeenCalledWith(token)
+    expect(customListClient.getCustomListCases).toHaveBeenCalledWith(token, query)
+    expect(result).toEqual(response)
+  })
+  it('should call getCustomList on the api client and return the list of crns for current user', async () => {
+    const response = apiResponseFactory.buildResponse(['CRN1', 'CRN2']) as ApiResponseDtoListString
+    customListClient.getCustomListCrns.mockResolvedValue(response)
+
+    const result = await customListService.getCustomListCrns(token)
+
+    expect(customListClient.getCustomListCrns).toHaveBeenCalledWith(token)
     expect(result).toEqual(response)
   })
   it('should call addCustomList on the api client and return the result', async () => {

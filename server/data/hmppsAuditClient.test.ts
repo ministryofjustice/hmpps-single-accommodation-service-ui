@@ -1,7 +1,7 @@
 import { mockClient } from 'aws-sdk-client-mock'
 import { SendMessageCommand, SendMessageCommandInput, SQSClient } from '@aws-sdk/client-sqs'
 
-import HmppsAuditClient, { SqsMessage } from './hmppsAuditClient'
+import HmppsAuditClient, { proxyAgentOptions, SqsMessage } from './hmppsAuditClient'
 import logger from '../../logger'
 
 jest.mock('../../logger')
@@ -20,6 +20,43 @@ describe('hmppsAuditClient', () => {
   afterEach(() => {
     sqsMock.reset()
     jest.resetAllMocks()
+  })
+
+  describe('proxyAgentOptions', () => {
+    it('uses the proxy environment variables for both HTTP agents', () => {
+      const originalEnv = {
+        HTTP_PROXY: process.env.HTTP_PROXY,
+        HTTPS_PROXY: process.env.HTTPS_PROXY,
+        NO_PROXY: process.env.NO_PROXY,
+        http_proxy: process.env.http_proxy,
+        https_proxy: process.env.https_proxy,
+        no_proxy: process.env.no_proxy,
+      }
+
+      try {
+        process.env.HTTP_PROXY = 'http://upper-proxy:3128'
+        process.env.HTTPS_PROXY = 'http://upper-proxy:3128'
+        process.env.NO_PROXY = 'localhost,.internal'
+        process.env.http_proxy = 'http://lower-proxy:3128'
+        process.env.https_proxy = 'http://lower-proxy:3128'
+        process.env.no_proxy = 'lowercase.internal'
+
+        const options = proxyAgentOptions()
+        const expectedProxyEnv = {
+          http_proxy: 'http://upper-proxy:3128',
+          https_proxy: 'http://upper-proxy:3128',
+          no_proxy: 'localhost,.internal',
+        }
+
+        expect(options.httpAgent.proxyEnv).toEqual(expectedProxyEnv)
+        expect(options.httpsAgent.proxyEnv).toEqual(expectedProxyEnv)
+      } finally {
+        for (const [key, value] of Object.entries(originalEnv)) {
+          if (value === undefined) delete process.env[key]
+          else process.env[key] = value
+        }
+      }
+    })
   })
 
   describe('sendMessage', () => {

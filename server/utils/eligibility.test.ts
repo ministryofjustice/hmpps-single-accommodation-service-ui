@@ -51,6 +51,7 @@ const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
 
 const cas3Application: NonNullable<Cas3ServiceResult['cas3Application']> = {
   id: 'cas3-application-id',
+  createdAt: '2026-06-01T09:00:00.000Z',
   applicationStatus: 'SUBMITTED',
   uiUrl: 'https://example.com/referral',
   applicationSubmittedDate: '2026-06-02',

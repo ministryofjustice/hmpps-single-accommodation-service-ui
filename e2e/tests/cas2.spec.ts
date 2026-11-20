@@ -69,14 +69,14 @@ const statuses: CasCard[] = [
     action: 'Start new application',
     actionLink: 'redirect',
   },
-  // {
-  //   crn: 'XXXXX',
-  //   status: 'Arrived',
-  //   submissionInfo: true,
-  //   arrivalInfo: true,
-  //   action: 'View application',
-  //   actionLink: 'application',
-  // },
+  {
+    crn: 'Y061068',
+    status: 'Arrived',
+    submissionInfo: true,
+    arrivalInfo: true,
+    action: 'View application',
+    actionLink: 'application',
+  },
 ]
 
 for (const status of statuses) {

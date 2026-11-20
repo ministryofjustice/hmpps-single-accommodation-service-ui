@@ -1,4 +1,11 @@
-import { Cas1ServiceResult, Cas3ServiceResult, Cas2ServiceResult, ServiceResult } from '@sas/api'
+import {
+  Cas1ServiceResult,
+  Cas3ServiceResult,
+  Cas2ServiceResult,
+  ServiceResult,
+  Cas2SubmittedApplicationSummaryDto,
+  Cas2ApplicationDto,
+} from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
 import {
   cas1StatusCard,
@@ -699,7 +706,6 @@ describe('cas2 status card', () => {
       'PLACE_OFFERED',
       'OFFER_ACCEPTED',
       'AWAITING_ARRIVAL',
-      'ARRIVED',
       'OFFER_DECLINED_OR_WITHDRAWN',
       'CANCELLED',
       'WITHDRAWN',
@@ -709,6 +715,23 @@ describe('cas2 status card', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
       expect(cas2StatusCard({ serviceResult, cas2Application }, 'X123456').details).toMatchSnapshot()
+    })
+
+    it('renders details for an ARRIVED status', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'ARRIVED' })
+      const submittedApplication: Cas2SubmittedApplicationSummaryDto = {
+        latestAssessmentStatus: 'AWAITING_ARRIVAL',
+        submittedAt: '2026-11-01',
+        markedAsArrived: {
+          dateTime: '2026-11-02T12:34:56',
+          arrivedByName: 'Bob Smith',
+          arrivedByUsername: 'BobSmith',
+        },
+      }
+
+      const application: Cas2ApplicationDto = { ...cas2Application, submittedApplication }
+
+      expect(cas2StatusCard({ serviceResult, cas2Application: application }, 'X123456').details).toMatchSnapshot()
     })
   })
 

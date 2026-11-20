@@ -59,6 +59,7 @@ export const referralStatusTag = (status?: string, type?: Referral['type']): Sta
     DEPARTED: { text: 'Departed', colour: 'green' },
     CANCELLED: { text: 'Cancelled', colour: 'orange' },
     ARCHIVED: { text: 'Archived', colour: 'grey' },
+    COMPLETED: { text: 'Completed', colour: 'green' },
     WITHDRAWN: { text: type === 'CAS1' ? 'Application withdrawn' : 'Withdrawn', colour: 'grey' },
     OFFER_DECLINED_OR_WITHDRAWN: { text: 'Offer declined or withdrawn', colour: 'grey' },
   })[status] || { text: 'Unknown' }
@@ -68,7 +69,6 @@ export const referralHistoryRows = (referrals?: Referral[], username?: string, c
     .filter(referral => config.flags.cas2Enabled || referral.type !== 'CAS2')
     .map(referral => {
       const { type, id, uiUrl } = referral
-
       return [
         htmlContent(tableTextCell('Referral type', referralStatusType(referral))),
         htmlContent(tableTextCell('Referred by', referralReferredBy(referral, username))),

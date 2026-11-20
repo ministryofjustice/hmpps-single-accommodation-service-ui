@@ -62,8 +62,15 @@ export type Link = {
   external?: boolean
 }
 
+export type PublicProtectionFormData = {
+  riskManagement?: string
+  controlMeasures?: string
+  supportNeeds?: string
+}
+
 export type MultiPageFormData = {
   proposedAddress?: Record<string, ProposedAddressFormData>
+  publicProtectionChecker?: Record<string, PublicProtectionFormData>
 }
 
 export type GetCasesQuery = {

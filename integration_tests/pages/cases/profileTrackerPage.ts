@@ -254,4 +254,11 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     const section = await this.page.locator('css=section', { has: this.page.getByText('External referrals') })
     await this.clickLink('Add details', section)
   }
+
+  async clickPublicProtectionCheckLink() {
+    const section = await this.page.locator('css=.sas-card', {
+      has: this.page.getByText('Public protection check'),
+    })
+    await this.clickLink('Start checks', section)
+  }
 }

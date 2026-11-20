@@ -2398,6 +2398,15 @@ exports[`eligibilityStatusCard for cas3 renders a UPCOMING status card 1`] = `
 exports[`eligibilityToEligibilityCards returns an array of eligibility card objects 1`] = `
 [
   {
+    "heading": "Public protection check",
+    "links": [
+      {
+        "href": "/cases/X123456/public-protection/start",
+        "text": "Start checks",
+      },
+    ],
+  },
+  {
     "details": [
       {
         "key": {

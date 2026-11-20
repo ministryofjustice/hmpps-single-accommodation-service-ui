@@ -7,6 +7,7 @@ import StaticController from './staticController'
 import ExternalReferralsController from './externalReferralsController'
 import CustomListController from './customListController'
 import ApplicationsController from './applicationsController'
+import PublicProtectionCheckController from './publicProtectionCheckController'
 
 export const controllers = (services: Services) => ({
   applicationsController: new ApplicationsController(services.auditService, services.casesService),
@@ -45,6 +46,7 @@ export const controllers = (services: Services) => ({
     services.casesService,
   ),
   customListController: new CustomListController(services.auditService, services.customListService),
+  publicProtectionCheckController: new PublicProtectionCheckController(services.auditService, services.casesService),
   staticController: new StaticController(),
 })
 

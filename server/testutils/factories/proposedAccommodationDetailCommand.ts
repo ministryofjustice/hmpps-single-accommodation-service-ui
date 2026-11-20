@@ -14,9 +14,14 @@ const nextAccommodationStatuses: Readonly<ProposedAccommodationDetailCommand['ne
   'TO_BE_DECIDED',
 ]
 
-export default Factory.define<ProposedAccommodationDetailCommand>(() => ({
-  accommodationTypeCode: faker.helpers.arrayElement(accommodationTypes).code,
-  verificationStatus: faker.helpers.arrayElement(verificationStatuses),
-  address: addressFactory.build(),
-  nextAccommodationStatus: faker.helpers.arrayElement(nextAccommodationStatuses),
-}))
+export default Factory.define<ProposedAccommodationDetailCommand>(({ params }) => {
+  const verificationStatus = params.verificationStatus ?? faker.helpers.arrayElement(verificationStatuses)
+
+  return {
+    accommodationTypeCode: faker.helpers.arrayElement(accommodationTypes).code,
+    verificationStatus,
+    verificationReason: verificationStatus === 'NOT_CHECKED_YET' ? null : faker.lorem.sentence(),
+    address: addressFactory.build(),
+    nextAccommodationStatus: faker.helpers.arrayElement(nextAccommodationStatuses),
+  }
+})

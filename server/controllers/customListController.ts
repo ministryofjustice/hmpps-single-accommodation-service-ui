@@ -4,7 +4,7 @@ import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
-import { CaseListFields, setupCaseList } from '../utils/cases'
+import { setupCaseList } from '../utils/cases'
 import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
 import CustomListService from '../services/customListService'
 import { setActiveCaseListTab, setCaseListFilters } from '../utils/navigation'
@@ -22,7 +22,7 @@ export default class CustomListController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      const { token, username, displayName: userFullName } = res.locals.user
+      const { token, username } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
       const { userInput } = fetchErrorsAndUserInput(req)
       const crnList = userInput?.crnList ?? (await this.customListService.getCustomListCrns(token)).data
@@ -43,7 +43,7 @@ export default class CustomListController {
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
-        caseListSettings: setupCaseList(req, username, cases, userFullName, [], [CaseListFields.AssignedTo]),
+        caseListSettings: setupCaseList(req, username, cases, null, null),
       })
     }
   }

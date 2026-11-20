@@ -1,7 +1,7 @@
 import { Request } from 'express'
-import { CaseAction, CaseDto, CaseDto as Case, TeamDto } from '@sas/api'
+import { CaseAction, CaseDto, CaseDto as Case, TeamDto, TeamMemberDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
-import { GetCasesQuery, IndexRequest, SelectOption } from '@sas/ui'
+import { GetCasesApiQuery, IndexRequest, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
 import { renderMacro, statusCell } from './macros'
 import { renderActions } from './actions'
@@ -51,9 +51,10 @@ export const recentSearchItems = (cases: Case[] = []): { crn: string; name: stri
   }))
 
 export const queryToFilters = (
-  query: GetCasesQuery,
+  query: GetCasesApiQuery,
   currentUrl: string,
   teams: TeamDto[] = [],
+  teamMembers: TeamMemberDto[] = [],
 ): { text: string; href: string }[] => {
   const filters: { text: string; href: string }[] = []
 
@@ -62,9 +63,19 @@ export const queryToFilters = (
 
   if (query?.teamCode) {
     const teamName = teams?.find(team => team.code === query.teamCode)?.name
-    filters.push({ text: `Assigned to: ${teamName || 'Unknown team'}`, href: removeQueryParam(currentUrl, 'teamCode') })
+    filters.push({
+      text: `Assigned to: ${teamName || 'Unknown team'}`,
+      href: removeQueryParam(currentUrl, 'assignedTo'),
+    })
   }
-
+  if (query?.assignedToUsername) {
+    const teamMember = teamMembers?.find(member => member.username === query.assignedToUsername)
+    const fullName = teamMember ? `${teamMember.forename} ${teamMember.surname}` : undefined
+    filters.push({
+      text: `Assigned to: ${fullName || 'Unknown team member'}`,
+      href: removeQueryParam(currentUrl, 'assignedTo'),
+    })
+  }
   if (query?.riskLevel)
     filters.push({ text: `RoSH: ${formatRiskLevel(query.riskLevel)}`, href: removeQueryParam(currentUrl, 'riskLevel') })
 
@@ -150,10 +161,22 @@ export const displayName = (caseData: Case, options: DisplayNameOptions = {}): s
   }
 }
 
-export const assignedToOptions = (fullName: string, teams: TeamDto[]): SelectOption[] => [
-  { text: `You (${initialiseName(fullName)})`, value: '' },
-  ...teams.map(t => ({ text: t.name, value: t.code })),
-]
+export type assignedToOptionsType = { user: SelectOption; teams: SelectOption[]; teamMembers: SelectOption[] }
+
+export const setupAssignedToOptions = (
+  fullName: string,
+  teams: TeamDto[],
+  teamMembers: TeamMemberDto[],
+  assignedTo: string = '',
+): assignedToOptionsType => ({
+  user: { text: `You (${initialiseName(fullName)})`, value: '', selected: assignedTo === '' },
+  teams: teams.map(t => ({ text: t.name, value: t.code, selected: assignedTo === t.code })),
+  teamMembers: teamMembers.map(m => ({
+    text: `${m.forename} ${m.surname}`,
+    value: m.username,
+    selected: assignedTo === m.username,
+  })),
+})
 
 export const validateSearchCrn = (req: Request, crn?: string) => {
   const errors: Record<string, string> = {
@@ -171,24 +194,20 @@ export const setupCaseList = (
   req: IndexRequest,
   username: string,
   cases: Case[],
-  userFullName: string,
-  teams: TeamDto[] = [],
-  disabledFields: CaseListFields[] = [],
+  assignedToOptions: assignedToOptionsType,
+  filters: { text: string; href: string }[],
 ) => {
   const { query } = req
   const { peopleType = 'NFA_RISK' } = query
-  const filters = queryToFilters(query, req.originalUrl, teams)
-
-  const currentUsername = query.teamCode ? username : undefined
   return {
     peopleType,
     tabs: casesTabs(req.originalUrl, peopleType),
     resultsSummary: casesResultsSummary(cases),
     casesTableColumns: casesTableColumns(),
-    casesRows: casesToRows(cases, currentUsername),
+    casesRows: casesToRows(cases, username),
     query,
     filters,
-    assignedToOptions: assignedToOptions(userFullName, teams),
+    assignedToOptions,
     riskLevelOptions: [
       { value: '', text: 'All' },
       { value: 'VERY_HIGH', text: 'Very high' },
@@ -196,11 +215,10 @@ export const setupCaseList = (
       { value: 'MEDIUM', text: 'Medium' },
       { value: 'LOW', text: 'Low' },
     ],
-    disabledFields,
   }
 }
 
-export type caseSettingsType = ReturnType<typeof setupCaseList>
+export type caseListSettingsType = ReturnType<typeof setupCaseList>
 
 export const caseSummaryListRows = (caseData: CaseDto) => {
   const rows = [

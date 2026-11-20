@@ -5,7 +5,7 @@ import { ApiResponseDtoListString, ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import { user } from '../routes/testutils/appSetup'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
-import { casesResultsSummary, casesTableColumns, casesTabs, casesToRows } from '../utils/cases'
+import { caseListSettingsType, casesResultsSummary, casesTableColumns, casesTabs, casesToRows } from '../utils/cases'
 import CustomListController from './customListController'
 import CustomListService from '../services/customListService'
 import * as validationUtils from '../utils/validation'
@@ -46,17 +46,6 @@ describe('customListController', () => {
   })
 
   describe('index', () => {
-    const baseContext = {
-      assignedToOptions: [{ value: '', text: 'You (J. Doe)' }],
-      riskLevelOptions: [
-        { value: '', text: 'All' },
-        { value: 'VERY_HIGH', text: 'Very high' },
-        { value: 'HIGH', text: 'High' },
-        { value: 'MEDIUM', text: 'Medium' },
-        { value: 'LOW', text: 'Low' },
-      ],
-    }
-
     it('renders the create custom list page when no list already exits', async () => {
       request.session.caseListFilters = 'riskLevel=HIGH'
       customListService.getCustomListCrns.mockResolvedValue(
@@ -91,19 +80,26 @@ describe('customListController', () => {
       })
       expect(customListService.getCustomListCrns).toHaveBeenCalledWith(TEST_TOKEN)
       expect(customListService.getCustomListCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
+      const expectedSettings: caseListSettingsType = {
+        tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
+        peopleType: 'NFA_RISK',
+        resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
+        casesRows: casesToRows(cases, user.username),
+        filters: null,
+        query: {},
+        assignedToOptions: null,
+        riskLevelOptions: [
+          { value: '', text: 'All' },
+          { value: 'VERY_HIGH', text: 'Very high' },
+          { value: 'HIGH', text: 'High' },
+          { value: 'MEDIUM', text: 'Medium' },
+          { value: 'LOW', text: 'Low' },
+        ],
+      }
       expect(response.render).toHaveBeenCalledWith('pages/customList/show', {
         changeListHref: '/custom-list/add-crns',
-        caseListSettings: {
-          ...baseContext,
-          tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
-          peopleType: 'NFA_RISK',
-          resultsSummary: casesResultsSummary(cases),
-          casesTableColumns: casesTableColumns(),
-          casesRows: casesToRows(cases),
-          filters: [],
-          query: {},
-          disabledFields: ['assignedTo'],
-        },
+        caseListSettings: expectedSettings,
       })
     })
 

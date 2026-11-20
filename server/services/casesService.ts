@@ -1,11 +1,11 @@
-import { GetCasesQuery } from '@sas/ui'
+import { GetCasesApiQuery } from '@sas/ui'
 import { Cas2ArrivalDto } from '@sas/api'
 import { CasesClient } from '../data'
 
 export default class CasesService {
   constructor(private readonly casesClient: CasesClient) {}
 
-  getCases(token: string, query: GetCasesQuery) {
+  getCases(token: string, query: GetCasesApiQuery) {
     return this.casesClient.getCases(token, query)
   }
 

@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
-import { IndexRequest } from '@sas/ui'
+import { GetCasesApiQuery, IndexRequest } from '@sas/ui'
 import { CaseDto } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
@@ -12,6 +12,8 @@ import {
   validateSearchCrn,
   searchResultsSummary,
   setupCaseList,
+  queryToFilters,
+  setupAssignedToOptions,
   recentSearchItems,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
@@ -52,15 +54,32 @@ export default class CasesController {
 
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
-      const { query } = req
-      const { peopleType = 'NFA_RISK' } = query
+
+      // AssignedTo Filter, team or team member
+      const { assignedTo, ...queryParams } = req.query
+      const assignedToUsername = assignedTo?.startsWith('member_') ? assignedTo.substring('member_'.length) : undefined
+      const teamCode = assignedTo?.startsWith('team_') ? assignedTo.substring('team_'.length) : undefined
+
+      // set up the API query
+      const casesQuery: GetCasesApiQuery = {
+        ...queryParams,
+        peopleType: queryParams.peopleType ?? 'NFA_RISK',
+        assignedToUsername,
+        teamCode,
+      }
+      // Get the data from the API
       const {
-        data: { teams, cases },
+        data: { teams, teamMembers, cases },
       } = await collectApiResponses({
         teams: this.userService.getTeams(token),
-        cases: this.casesService.getCases(token, { ...query, peopleType }),
+        teamMembers: this.userService.getMyTeamMembers(token),
+        cases: this.casesService.getCases(token, casesQuery),
       })
-      const caseListSettings = setupCaseList(req, username, cases, userFullName, teams)
+
+      // set up the case list
+      const assignedToOptions = setupAssignedToOptions(userFullName, teams, teamMembers, assignedToUsername || teamCode)
+      const filters = queryToFilters(casesQuery, req.originalUrl, teams, teamMembers)
+      const caseListSettings = setupCaseList(req, teamCode ? username : null, cases, assignedToOptions, filters)
 
       return res.render('pages/index', {
         caseListSettings,

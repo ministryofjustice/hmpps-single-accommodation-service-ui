@@ -1,14 +1,7 @@
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% extends "partials/layout.njk" %}
-
-{% set pageTitle = "Case list" %}
-{% set mainClasses = "govuk-body" %}
-{% set caseListV2 = featureFlags.caseListV2 or caseListV2Tabs %}
-{% set caseListV2Tabs = featureFlags.caseListV2Tabs %}
 
 {% macro caseList(caseListSettings) %}
   <div class="govuk-tabs">
@@ -37,20 +30,39 @@
           </div>
         </div>
         <div class="govuk-grid-row">
-{% if 'assignedTo' not in caseListSettings.disabledFields %}
-          <div class="govuk-grid-column-one-quarter">
-            {{
-              govukSelect({
-                label: {
-                  text: 'Assigned to'
-                },
-                name: 'teamCode',
-                value: caseListSettings.query.teamCode,
-                items: caseListSettings.assignedToOptions
-              })
-            }}
-          </div>
-                {% endif %}
+          {% if caseListSettings.assignedToOptions %}
+            <div class="govuk-grid-column-one-quarter">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="assignedTo">Assigned to</label>
+                <select class="govuk-select" id="assignedTo" name="assignedTo">
+                  <option
+                    value="{{ caseListSettings.assignedToOptions.user.value }}"
+                    {% if caseListSettings.assignedToOptions.user.selected %}selected{% endif %}
+                  >
+                    {{ caseListSettings.assignedToOptions.user.text }}
+                  </option>
+                  {% if caseListSettings.assignedToOptions.teams %}
+                    <optgroup label="Teams">
+                      {% for team in caseListSettings.assignedToOptions.teams %}
+                        <option value="team_{{ team.value }}" {% if team.selected %}selected{% endif %}>
+                          {{ team.text }}
+                        </option>
+                      {% endfor %}
+                    </optgroup>
+                  {% endif %}
+                  {% if caseListSettings.assignedToOptions.teamMembers %}
+                    <optgroup label="Teams members">
+                      {% for teamMember in caseListSettings.assignedToOptions.teamMembers %}
+                        <option value="member_{{ teamMember.value }}" {% if teamMember.selected %}selected{% endif %}>
+                          {{ teamMember.text }}
+                        </option>
+                      {% endfor %}
+                    </optgroup>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+          {% endif %}
 
           <div class="govuk-grid-column-one-quarter">
             {{
@@ -86,7 +98,9 @@
             {% endfor %}
           </ul>
           <p class="govuk-!-margin-bottom-1">
-            <a class="govuk-link govuk-link--no-visited-state" href="?peopleType={{ caseListSettings.peopleType }}">Clear filters</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="?peopleType={{ caseListSettings.peopleType }}"
+              >Clear filters</a
+            >
           </p>
         </div>
       {% else %}

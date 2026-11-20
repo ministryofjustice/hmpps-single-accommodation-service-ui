@@ -8,11 +8,11 @@ import {
   queryToFilters,
   actionsCell,
   displayName,
-  assignedToOptions,
   updateQueryParams,
   removeQueryParam,
   searchResultsSummary,
   recentSearchItems,
+  setupAssignedToOptions,
 } from './cases'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { statusCell } from './macros'
@@ -210,20 +210,21 @@ describe('cases utilities', () => {
       { code: 'team-one-code', name: 'Team One' },
       { code: 'team-two-code', name: 'Team Two' },
     ]
+    const teamMembers = [{ username: 'jane.doe', forename: 'Jane', surname: 'Doe' }]
 
     it('returns an empty array when no filters are applied', () => {
       expect(queryToFilters({}, '/')).toEqual([])
     })
 
     it('returns all active filter tags when multiple filters are applied', () => {
-      const url = '/?teamCode=team-two-code&riskLevel=HIGH&searchTerm=CRN123'
+      const url = '/?assignedTo=team_team-two-code&riskLevel=HIGH&searchTerm=CRN123'
 
       expect(
         queryToFilters({ teamCode: 'team-two-code', riskLevel: 'HIGH', searchTerm: 'CRN123' }, url, teams),
       ).toEqual([
-        { text: '‘CRN123’', href: '/?teamCode=team-two-code&riskLevel=HIGH' },
+        { text: '‘CRN123’', href: '/?assignedTo=team_team-two-code&riskLevel=HIGH' },
         { text: 'Assigned to: Team Two', href: '/?riskLevel=HIGH&searchTerm=CRN123' },
-        { text: 'RoSH: High', href: '/?teamCode=team-two-code&searchTerm=CRN123' },
+        { text: 'RoSH: High', href: '/?assignedTo=team_team-two-code&searchTerm=CRN123' },
       ])
     })
 
@@ -231,14 +232,20 @@ describe('cases utilities', () => {
       [
         'teamCode',
         { teamCode: 'team-one-code' } as const,
-        '/?teamCode=team-one-code&riskLevel=HIGH',
+        '/?assignedTo=team_team-one-code&riskLevel=HIGH',
         [{ text: 'Assigned to: Team One', href: '/?riskLevel=HIGH' }],
+      ],
+      [
+        'assignedToUsername',
+        { assignedToUsername: 'jane.doe' } as const,
+        '/?assignedTo=member_jane.doe&peopleType=HOUSED',
+        [{ text: 'Assigned to: Jane Doe', href: '/?peopleType=HOUSED' }],
       ],
       [
         'riskLevel',
         { riskLevel: 'VERY_HIGH' } as const,
-        '/?teamCode=team-one-code&riskLevel=VERY_HIGH',
-        [{ text: 'RoSH: Very high', href: '/?teamCode=team-one-code' }],
+        '/?assignedTo=team_team-one-code&riskLevel=VERY_HIGH',
+        [{ text: 'RoSH: Very high', href: '/?assignedTo=team_team-one-code' }],
       ],
       [
         'searchTerm',
@@ -247,7 +254,7 @@ describe('cases utilities', () => {
         [{ text: '‘CRN123’', href: '/?riskLevel=LOW' }],
       ],
     ])('includes a filter tag when %s is set', (_, query, url, expected) => {
-      expect(queryToFilters(query, url, teams)).toEqual(expected)
+      expect(queryToFilters(query, url, teams, teamMembers)).toEqual(expected)
     })
   })
 
@@ -326,19 +333,26 @@ describe('cases utilities', () => {
     })
   })
 
-  describe('assignedToOptions', () => {
-    it('returns options for the user and their teams', () => {
-      const userFullName = 'Alice Smith'
-      const teams = [
-        { code: 'team-one-code', name: 'Team One' },
-        { code: 'team-two-code', name: 'Team Two' },
-      ]
+  describe('setupAssignedToOptions', () => {
+    const teams = [
+      { code: 'team-one-code', name: 'Team One' },
+      { code: 'team-two-code', name: 'Team Two' },
+    ]
+    const teamMembers = [{ username: 'jane.doe', forename: 'Jane', surname: 'Doe' }]
 
-      expect(assignedToOptions(userFullName, teams)).toEqual([
-        { value: '', text: 'You (A. Smith)' },
-        { value: 'team-one-code', text: 'Team One' },
-        { value: 'team-two-code', text: 'Team Two' },
-      ])
+    it.each([
+      ['the current user by default', undefined, true, false, false],
+      ['a team', 'team-two-code', false, true, false],
+      ['a team member', 'jane.doe', false, false, true],
+    ])('returns grouped options and selects %s', (_, assignedTo, userSelected, teamSelected, memberSelected) => {
+      expect(setupAssignedToOptions('Alice Smith', teams, teamMembers, assignedTo)).toEqual({
+        user: { value: '', text: 'You (A. Smith)', selected: userSelected },
+        teams: [
+          { value: 'team-one-code', text: 'Team One', selected: false },
+          { value: 'team-two-code', text: 'Team Two', selected: teamSelected },
+        ],
+        teamMembers: [{ value: 'jane.doe', text: 'Jane Doe', selected: memberSelected }],
+      })
     })
   })
 
@@ -387,15 +401,15 @@ describe('cases utilities', () => {
     })
 
     it('preserves existing filters in the tab hrefs', () => {
-      expect(casesTabs('/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one', 'NFA_RISK')).toEqual([
+      expect(casesTabs('/?searchTerm=foo&riskLevel=HIGH&assignedTo=team_team-one', 'NFA_RISK')).toEqual([
         {
           text: 'Housing support needed',
-          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=NFA_RISK',
+          href: '/?searchTerm=foo&riskLevel=HIGH&assignedTo=team_team-one&peopleType=NFA_RISK',
           selected: true,
         },
         {
           text: 'Settled housing secured',
-          href: '/?searchTerm=foo&riskLevel=HIGH&teamCode=team-one&peopleType=HOUSED',
+          href: '/?searchTerm=foo&riskLevel=HIGH&assignedTo=team_team-one&peopleType=HOUSED',
           selected: false,
         },
       ])

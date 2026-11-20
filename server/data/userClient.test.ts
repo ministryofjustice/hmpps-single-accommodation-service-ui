@@ -1,5 +1,5 @@
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { ApiResponseDtoListTeamDto, TeamDto } from '@sas/api'
+import { ApiResponseDtoListTeamDto, ApiResponseDtoListTeamMemberDto, TeamDto } from '@sas/api'
 import type { ApiResponseDtoUserDto } from '@sas/api'
 import describeClient from '../testutils/describeClient'
 import UserClient from './userClient'
@@ -67,6 +67,34 @@ describeClient('UserClient', provider => {
     })
 
     const response = await userClient.getMe('test-user-token')
+    expect(response).toEqual(body)
+  })
+  it('should make a GET request to /users/me/team-members using user token and return a list of users', async () => {
+    const body = apiResponseFactory.buildResponse<ApiResponseDtoListTeamMemberDto>([
+      {
+        username: 'test-username',
+        forename: 'test-user-forename',
+        surname: 'test-user-surname',
+      },
+    ])
+
+    await provider.addInteraction({
+      state: 'User exists and has team members',
+      uponReceiving: 'a request to get the the user team members',
+      withRequest: {
+        method: 'GET',
+        path: apiPaths.user.myTeamMembers({}),
+        headers: {
+          authorization: 'Bearer test-user-token',
+        },
+      },
+      willRespondWith: {
+        status: 200,
+        body,
+      },
+    })
+
+    const response = await userClient.getMyTeamMembers('test-user-token')
     expect(response).toEqual(body)
   })
 })

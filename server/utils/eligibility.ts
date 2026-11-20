@@ -406,6 +406,13 @@ const detailsForCas2Status = (
       submittedApplication?.submittedAt ? formatDateAndDaysAgo(submittedApplication.submittedAt) : undefined,
     )
   const submittedByRow = () => summaryListRow('Submitted by', createdBy.name)
+  const arrivedRow = () =>
+    summaryListRow(
+      'Marked as arrived by',
+      submittedApplication.markedAsArrived
+        ? `${submittedApplication.markedAsArrived.arrivedByName} (${formatDate(submittedApplication.markedAsArrived.dateTime, 'days ago/in')})`
+        : undefined,
+    )
 
   switch (serviceResult.serviceStatus) {
     case 'NOT_SUBMITTED':
@@ -420,9 +427,10 @@ const detailsForCas2Status = (
     case 'PLACE_OFFERED':
     case 'OFFER_ACCEPTED':
     case 'AWAITING_ARRIVAL':
-    case 'ARRIVED':
     case 'WITHDRAWN':
       return [submittedRow(), submittedByRow()]
+    case 'ARRIVED':
+      return [submittedRow(), submittedByRow(), arrivedRow()]
     case 'OFFER_DECLINED_OR_WITHDRAWN':
       return [
         summaryListRow('Reason', submittedApplication?.offerDeclinedReason ?? undefined),

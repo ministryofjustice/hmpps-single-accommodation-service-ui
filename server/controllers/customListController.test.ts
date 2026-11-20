@@ -28,7 +28,7 @@ describe('customListController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request = mock<Request>({ id: 'request-id', originalUrl: '/custom-list', path: '/custom-list' })
   })
 
   describe('index', () => {
@@ -267,6 +267,12 @@ describe('customListController', () => {
         crnAddedText,
         showHref: uiPaths.customList.index.pattern,
       })
+    })
+    it('redirects when no CRN list provided', async () => {
+      request.query = {}
+      await customListController.confirmation()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.index.pattern)
     })
   })
 })

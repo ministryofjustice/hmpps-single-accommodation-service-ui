@@ -24,7 +24,7 @@ import ReferenceDataService from '../services/referenceDataService'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { collectApiResponses } from '../utils/apiResponses'
 import { radioItems } from '../utils/utils'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 
 export type SubmissionFlow = 'add' | 'addNew' | 'edit'
 

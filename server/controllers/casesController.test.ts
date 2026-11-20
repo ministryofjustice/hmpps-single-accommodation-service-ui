@@ -35,9 +35,8 @@ import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import * as backLinksUtils from '../utils/backlinks'
 import * as validationUtils from '../utils/validation'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
 
@@ -74,7 +73,7 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request = mock<Request>({ id: 'request-id', originalUrl: '/', path: '/' })
   })
 
   describe('index', () => {
@@ -95,7 +94,6 @@ describe('casesController', () => {
 
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
-      jest.spyOn(backLinksUtils, 'setCaseListUrl')
     })
 
     it('renders the case list page for the current user by default', async () => {
@@ -110,7 +108,6 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
@@ -148,7 +145,6 @@ describe('casesController', () => {
         teamCode: 'team-code',
         peopleType: 'HOUSED',
       })
-      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         caseListSettings: {
           ...baseContext,

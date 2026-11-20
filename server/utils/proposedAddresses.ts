@@ -63,7 +63,6 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodation
 
 const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: string) => {
   const detailsLink = { text: 'View details', href: uiPaths.proposedAddresses.show({ crn, id }) }
-
   switch (status) {
     case 'PASSED':
       return [
@@ -144,7 +143,10 @@ export const checkYourAnswersRows = (
       summaryListRow(
         'Set as next address',
         formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus),
-        { type: 'html', actions: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }] },
+        {
+          type: 'html',
+          actions: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
+        },
       ),
     )
   }
@@ -261,7 +263,6 @@ const validateNextAccommodationFromSession = (req: Request, sessionData: Propose
 
 export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const { crn } = req.params
-
   if (!sessionData) return uiPaths.cases.show({ crn })
 
   const redirect =
@@ -274,7 +275,6 @@ export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFo
 export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const addressRedirect = validateUpToAddress(req, sessionData)
   if (addressRedirect) return addressRedirect
-
   return !validateTypeFromSession(req, sessionData)
     ? uiPaths.proposedAddresses.type({ crn: req.params.crn })
     : undefined
@@ -368,7 +368,6 @@ export const addressDetailRows = (proposedAddress: ProposedAccommodationDto): Su
 
 export const nextActionButton = (proposedAddress: ProposedAccommodationDto): Button => {
   const { crn, id, verificationStatus, nextAccommodationStatus } = proposedAddress
-
   if (verificationStatus === 'NOT_CHECKED_YET') {
     return {
       text: 'Add checks',

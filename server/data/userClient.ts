@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { ApiResponseDtoListTeamDto } from '@sas/api'
+import { ApiResponseDtoListTeamDto, ApiResponseDtoListTeamMemberDto } from '@sas/api'
 import type { ApiResponseDtoUserDto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
@@ -13,6 +13,10 @@ export default class UserClient extends RestClient {
 
   getTeams(token: string) {
     return this.get<ApiResponseDtoListTeamDto>({ path: apiPaths.user.teams({}) }, asUser(token))
+  }
+
+  getMyTeamMembers(token: string) {
+    return this.get<ApiResponseDtoListTeamMemberDto>({ path: apiPaths.user.myTeamMembers({}) }, asUser(token))
   }
 
   getMe(token: string) {

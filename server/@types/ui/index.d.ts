@@ -66,10 +66,18 @@ export type MultiPageFormData = {
   proposedAddress?: Record<string, ProposedAddressFormData>
 }
 
-export type GetCasesQuery = {
+export type GetCasesApiQuery = {
   searchTerm?: string
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
   teamCode?: string
+  assignedToUsername?: string
+  peopleType?: 'NFA_RISK' | 'HOUSED'
+}
+
+export type GetCasesFormQuery = {
+  searchTerm?: string
+  riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+  assignedTo?: string
   peopleType?: 'NFA_RISK' | 'HOUSED'
 }
 
@@ -79,7 +87,7 @@ export type GetProposedAddressesQuery = {
 }
 
 export interface IndexRequest extends Request {
-  query: GetCasesQuery
+  query: GetCasesFormQuery
 }
 
 export type DividerItem = {

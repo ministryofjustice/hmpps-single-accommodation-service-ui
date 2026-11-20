@@ -1,4 +1,4 @@
-import { GetCasesQuery } from '@sas/ui'
+import { GetCasesApiQuery } from '@sas/ui'
 import CasesClient from '../data/casesClient'
 import CasesService from './casesService'
 import { apiResponseFactory } from '../testutils/factories'
@@ -20,7 +20,7 @@ describe('CasesService', () => {
 
     casesClient.getCases.mockResolvedValue(response)
 
-    const query: GetCasesQuery = { searchTerm: 'foo', riskLevel: 'MEDIUM', teamCode: 'team-code-id' }
+    const query: GetCasesApiQuery = { searchTerm: 'foo', riskLevel: 'MEDIUM', teamCode: 'team-code-id' }
 
     const result = await casesService.getCases(token, query)
 

@@ -66,5 +66,6 @@ export default {
     questions: publicProtectionPath.path(':page'),
     root: publicProtectionPath,
     checkYourAnswers: publicProtectionPath.path('check-your-answers'),
+    show: publicProtectionPath,
   },
 }

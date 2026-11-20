@@ -9,6 +9,8 @@ export default function publicProtectionCheckRoutes(
 ): void {
   router.get(uiPaths.publicProtectionCheck.start.pattern, publicProtectionCheckController.start())
   router.get(uiPaths.publicProtectionCheck.checkYourAnswers.pattern, publicProtectionCheckController.checkYourAnswers())
+  router.post(uiPaths.publicProtectionCheck.checkYourAnswers.pattern, publicProtectionCheckController.submit())
+  router.get(uiPaths.publicProtectionCheck.show.pattern, publicProtectionCheckController.show())
 
   publicProtectionCheckPageNames.forEach(page => {
     router.get(

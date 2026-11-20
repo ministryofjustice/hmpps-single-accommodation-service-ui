@@ -7,6 +7,7 @@ import {
   PublicProtectionCheckPageName,
   publicProtectionCheckPageNames as pageNames,
 } from '../utils/publicProtectionCheck'
+import * as ppcUtils from '../utils/publicProtectionCheck'
 import AuditService from '../services/auditService'
 import CasesService from '../services/casesService'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
@@ -138,7 +139,7 @@ describe('publicProtectionCheckController', () => {
   })
 
   describe('checkYourAnswers', () => {
-    it('should redirect back to the case page if there is no form data', async () => {
+    it('should redirect back to the case page if there are no form data', async () => {
       await controller.checkYourAnswers()(request, response, next)
 
       expect(response.redirect).toHaveBeenCalledWith(casePath)
@@ -155,6 +156,70 @@ describe('publicProtectionCheckController', () => {
         expect.objectContaining({
           pageTitle: 'Check your answers',
           tableRows: checkYourAnswersRows(caseData, formData),
+        }),
+      )
+    })
+  })
+
+  describe('submit', () => {
+    it('should redirect back to the case page if there are no form data', async () => {
+      await controller.submit()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(casePath)
+    })
+
+    it('should redirect to the relevant form if there is an error an any page', async () => {
+      setFormData({})
+      jest.spyOn(ppcUtils, 'validateBody').mockReturnValue({ question: 'fail message' })
+
+      await controller.submit()(request, response, next)
+      expect(response.redirect).toHaveBeenCalledWith(
+        uiPaths.publicProtectionCheck.questions({ crn, page: pageNames[0] }),
+      )
+    })
+
+    it('should redirect to the result page if there are no errors', async () => {
+      setFormData({})
+      jest.spyOn(ppcUtils, 'validateBody').mockReturnValue({})
+      await controller.submit()(request, response, next)
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.publicProtectionCheck.show({ crn }))
+    })
+  })
+
+  describe('show', () => {
+    it('should render the show page for an eligible case', async () => {
+      const formData = { riskManagement: 'no', controlMeasures: 'yes', supportNeeds: 'no' }
+      setFormData(formData)
+
+      await controller.show()(request, response, next)
+
+      expect(auditService.logPageView).toHaveBeenCalledWith('PUBLIC_PROTECTION_CHECK_SHOW', {
+        correlationId: 'request-id',
+        who: 'user1',
+        subjectId: 'C12345',
+      })
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/public-protection-check/show',
+        expect.objectContaining({
+          casePageLink: casePath,
+          eligible: true,
+          pageTitle: 'Public protection need identified',
+          personName,
+        }),
+      )
+    })
+
+    it('should render the show page for an ineligible case', async () => {
+      const formData = { riskManagement: 'yes', controlMeasures: 'yes', supportNeeds: 'no' }
+      setFormData(formData)
+
+      await controller.show()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/public-protection-check/show',
+        expect.objectContaining({
+          eligible: false,
+          pageTitle: 'No public protection need identified',
         }),
       )
     })

@@ -1,0 +1,25 @@
+{% extends "pages/public-protection-check/layout.njk" %}
+
+{% block content %}
+  {{ super() }}
+  {% if eligible %}
+    <p>Based on your answers, there is a public protection need for the on-site supervision and risk management provided through an Approved Premises (CAS1) placement.</p>
+  {% else %}
+    <p>Based on your answers, {{ personName }}'s needs may be met through stable accommodation (such as CAS2 or CAS3) combined with support and risk management.</p>
+    <p>This means an Approved Premises application is not considered appropriate for this person.</p>
+  {% endif %}
+  <h2 class="govuk-heading-m">What happens next</h2>
+  {% if eligible %}
+    <p>You can begin an Approved Premises (CAS1) application.</p>
+  {% else %}
+    <p>Return to {{ personName }}'s accommodation options and choose the appropriate accommodation application for them.</p>
+  {% endif %}
+  <p>If you disagree with this decision you can xxxxxxxxxxxx</p>
+  <p><a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ surveyLink }}">What did you think of these questions?</a> (Takes 60 seconds)</p>
+  {{
+    govukButton({
+        text: "Return to accommodation options",
+        href: casePageLink
+    })
+  }}
+{% endblock %}

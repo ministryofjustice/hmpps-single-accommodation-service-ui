@@ -11,6 +11,8 @@ import {
   validateBody,
   PublicProtectionCheckPageName as PageName,
   publicProtectionCheckPageNames as pageNames,
+  QuestionPage,
+  PublicProtectionCheckPageName,
 } from '../utils/publicProtectionCheck'
 
 export default class PublicProtectionCheckController {
@@ -61,6 +63,7 @@ export default class PublicProtectionCheckController {
       return res.render('pages/public-protection-check/question', {
         page,
         backLinkHref,
+        submitButtonText: 'Continue',
         errors,
         errorSummary,
       })
@@ -114,6 +117,53 @@ export default class PublicProtectionCheckController {
         pageTitle: 'Check your answers',
         submitButtonText: 'Submit',
         tableRows: checkYourAnswersRows(caseData, data),
+      })
+    }
+  }
+
+  submit(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.params
+
+      const data = this.formData.get(crn, req.session)
+      if (!data) return res.redirect(uiPaths.cases.show({ crn }))
+
+      const pages = publicProtectionQuestionPages('', data)
+      for (const pageName of Object.keys(pages)) {
+        const page = pages[pageName as PublicProtectionCheckPageName] as QuestionPage
+        if (!validateAndFlashErrors(req, validateBody(page, data)))
+          return res.redirect(uiPaths.publicProtectionCheck.questions({ crn, page: pageName }))
+      }
+
+      return res.redirect(uiPaths.publicProtectionCheck.show({ crn }))
+    }
+  }
+
+  show(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { crn } = req.params
+      const { token } = res.locals.user
+
+      await this.auditService.logPageView(Page.PUBLIC_PROTECTION_CHECK_SHOW, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+        subjectId: crn,
+      })
+
+      const { data: caseData } = await this.casesService.getCase(token, crn)
+      /** placeholder
+       * these data should be pulled from the API by crn, along with the eligibility
+       */
+      const { riskManagement, controlMeasures, supportNeeds } = this.formData.get(crn, req.session) || {}
+
+      const eligible = riskManagement === 'no' && controlMeasures === 'yes' && supportNeeds === 'no'
+
+      return res.render('pages/public-protection-check/show', {
+        eligible,
+        surveyLink: '#',
+        casePageLink: uiPaths.cases.show({ crn }),
+        personName: displayName(caseData),
+        pageTitle: eligible ? 'Public protection need identified' : 'No public protection need identified',
       })
     }
   }

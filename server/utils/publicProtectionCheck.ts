@@ -35,7 +35,7 @@ export type Question = {
   required?: string
 }
 
-type QuestionPage = {
+export type QuestionPage = {
   pageTitle: string
   content?: string
   guidance?: string

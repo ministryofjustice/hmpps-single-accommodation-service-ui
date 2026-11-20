@@ -45,11 +45,7 @@ export const controllers = (services: Services) => ({
     services.externalReferralsService,
     services.casesService,
   ),
-  customListController: new CustomListController(
-    services.auditService,
-    services.customListService,
-    services.userService,
-  ),
+  customListController: new CustomListController(services.auditService, services.customListService),
   publicProtectionCheckController: new PublicProtectionCheckController(services.auditService, services.casesService),
   staticController: new StaticController(),
 })

@@ -94,6 +94,8 @@ const publicProtectionCheckController = mock<PublicProtectionCheckController>({
   questionShow: mockHandler,
   questionSave: mockHandler,
   checkYourAnswers: mockHandler,
+  submit: mockHandler,
+  show: mockHandler,
 })
 
 jest.mock('../controllers', () => ({

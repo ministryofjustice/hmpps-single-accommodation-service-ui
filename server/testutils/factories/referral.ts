@@ -39,9 +39,9 @@ const cas1Referrals: ReferralParams[] = [
 
 const cas2Referrals: ReferralParams[] = [
   () => ({ status: 'ARCHIVED' }),
-  () => ({ status: 'WITHDRAWN' }),
-  () => ({ status: 'CANCELLED' }),
-  () => ({ status: 'OFFER_DECLINED_OR_WITHDRAWN' }),
+  () => ({ status: 'WITHDRAWN', subStatus: 'Withdrawn by referrer' }),
+  () => ({ status: 'CANCELLED', subStatus: 'No property available' }),
+  () => ({ status: 'OFFER_DECLINED_OR_WITHDRAWN', subStatus: 'Area unsuitable' }),
 ]
 
 const cas3Referrals: ReferralParams[] = [

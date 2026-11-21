@@ -123,6 +123,54 @@
       "placementAddress": null,
       "placementStatus": "REJECTED",
       "referralRejectionReasonDetail": "stipes curis tenuis talus desidero summa succedo brevis adflicto praesentium voro ex votum vesper vergo cogo volup contra beatae dolores autus varius appositus speciosus delectatio arbitro debitis vere testimonium bene adnuo tardus ratione talio tergiversatio utroque talus via subnecto stabilis"
+    },
+    {
+      "id": "e1f2a3b4-c5d6-47e8-9f0a-1b2c3d4e5f6a",
+      "applicationId": "e1f2a3b4-c5d6-47e8-9f0a-1b2c3d4e5f6a",
+      "type": "CAS2",
+      "status": "OFFER_DECLINED_OR_WITHDRAWN",
+      "subStatus": "Property unsuitable for needs",
+      "date": "2026-03-08T13:45:00.000Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Emma Richards",
+        "username": "Emma.Richards"
+      },
+      "placementAddress": null,
+      "placementStatus": null
+    },
+    {
+      "id": "f2a3b4c5-d6e7-48f9-0a1b-2c3d4e5f6a7b",
+      "applicationId": "f2a3b4c5-d6e7-48f9-0a1b-2c3d4e5f6a7b",
+      "type": "CAS2",
+      "status": "WITHDRAWN",
+      "subStatus": "Applicant remanded in custody",
+      "date": "2026-03-02T16:30:00.000Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "James Connor",
+        "username": "James.Connor"
+      },
+      "placementAddress": null,
+      "placementStatus": null
+    },
+    {
+      "id": "a3b4c5d6-e7f8-49a0-1b2c-3d4e5f6a7b8c",
+      "applicationId": "a3b4c5d6-e7f8-49a0-1b2c-3d4e5f6a7b8c",
+      "type": "CAS2",
+      "status": "CANCELLED",
+      "subStatus": "Not eligible",
+      "date": "2026-02-25T10:00:00.000Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Patricia Moore",
+        "username": "Patricia.Moore"
+      },
+      "placementAddress": null,
+      "placementStatus": null
     }
   ],
   "T274481": [
@@ -449,6 +497,69 @@
       "referredBy": {
         "name": "Gloria Spinka",
         "username": "Gloria Spinka"
+      },
+      "placementAddress": null,
+      "placementStatus": null
+    },
+    {
+      "id": "f1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
+      "applicationId": "a1b2c3d4-e5f6-47a8-9b0c-1d2e3f4a5b6c",
+      "type": "CAS2",
+      "status": "OFFER_DECLINED_OR_WITHDRAWN",
+      "subStatus": "Area unsuitable",
+      "date": "2026-03-10T10:30:00.000Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Sarah Johnson",
+        "username": "Sarah.Johnson"
+      },
+      "placementAddress": null,
+      "placementStatus": null
+    },
+    {
+      "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+      "applicationId": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+      "type": "CAS2",
+      "status": "WITHDRAWN",
+      "subStatus": "Withdrawn by referrer",
+      "date": "2026-03-05T14:20:00.000Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Michael Thompson",
+        "username": "Michael.Thompson"
+      },
+      "placementAddress": null,
+      "placementStatus": null
+    },
+    {
+      "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "applicationId": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "type": "CAS2",
+      "status": "CANCELLED",
+      "subStatus": "No property available",
+      "date": "2026-02-28T09:15:00.000Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Jennifer Davis",
+        "username": "Jennifer.Davis"
+      },
+      "placementAddress": null,
+      "placementStatus": null
+    },
+    {
+      "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+      "applicationId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+      "type": "CAS2",
+      "status": "ARCHIVED",
+      "date": "2026-01-15T11:45:00.000Z",
+      "localAuthorityArea": null,
+      "pdu": null,
+      "referredBy": {
+        "name": "Robert Wilson",
+        "username": "Robert.Wilson"
       },
       "placementAddress": null,
       "placementStatus": null

@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test'
+import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
 
 export type DtrOutcome =
   | 'Yes, it was accepted on prevention and relief duty'
@@ -11,12 +12,10 @@ export class AddDtrOutcomePage {
   constructor(private readonly page: Page) {}
 
   async expectPageToBeDisplayed() {
-    await expect(
-      this.page.getByRole('heading', {
-        name: 'Add Duty to Refer (DTR) outcome',
-        level: 1,
-      }),
-    ).toBeVisible()
+    await expectHeadingToBeDisplayed(this.page, {
+      name: 'Add Duty to Refer (DTR) outcome',
+      level: 1,
+    })
 
     await expect(
       this.page.getByRole('group', {

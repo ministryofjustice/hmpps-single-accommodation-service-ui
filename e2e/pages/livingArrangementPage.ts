@@ -1,15 +1,14 @@
-import { expect, Page } from '@playwright/test'
+import { Page } from '@playwright/test'
+import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
 
 export default class LivingArrangementPage {
   constructor(private readonly page: Page) {}
 
   async expectPageToBeDisplayed() {
-    await expect(
-      this.page.getByRole('heading', {
-        name: /Which best describes the living arrangement/,
-        level: 1,
-      }),
-    ).toBeVisible()
+    await expectHeadingToBeDisplayed(this.page, {
+      name: /Which best describes the living arrangement/,
+      level: 1,
+    })
   }
 
   async selectLivingArrangement(option: string) {

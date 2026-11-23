@@ -63,4 +63,16 @@ export default {
         jsonBody: { data: caseData ?? null, upstreamFailures: [] },
       },
     }),
+  stubGetRecentSearches: (cases: Case[] = []): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: apiPaths.cases.recentSearches({}),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: apiResponseFactory.caseList(cases),
+      },
+    }),
 }

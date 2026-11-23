@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test'
+import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
 
 type DateInput = {
   day: string
@@ -10,12 +11,10 @@ export default class AddDtrReferralDetailsPage {
   constructor(private readonly page: Page) {}
 
   async expectPageToBeDisplayed() {
-    await expect(
-      this.page.getByRole('heading', {
-        name: /Add( new)? Duty to Refer \(DTR\) referral details/,
-        level: 1,
-      }),
-    ).toBeVisible()
+    await expectHeadingToBeDisplayed(this.page, {
+      name: /Add( new)? Duty to Refer \(DTR\) referral details/,
+      level: 1,
+    })
   }
 
   async enterSubmissionDate({ day, month, year }: DateInput) {

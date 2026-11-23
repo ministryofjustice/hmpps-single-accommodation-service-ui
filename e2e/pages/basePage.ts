@@ -12,7 +12,7 @@ export default class BasePage {
       const actualHeading = await this.page
         .locator('h1')
         .first()
-        .innerText()
+        .innerText({ timeout: 1000 })
         .catch(() => '<no heading found>')
 
       throw new Error(

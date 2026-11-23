@@ -162,6 +162,13 @@ async function stubUserProfile() {
       name: 'Team name',
     },
   ])
+  await userApi.stubGetTeamMembers([
+    {
+      username: 'membername',
+      forename: 'member',
+      surname: 'name',
+    },
+  ])
 }
 
 ;(async function () {

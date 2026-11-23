@@ -30,10 +30,10 @@ export default class ProposedAddressDetailsPage extends PageWithCaseDetails {
     await this.shouldShowSummaryItem('Address', addressLines(this.proposedAddress.address))
     await this.shouldShowSummaryItem('Housing arrangement', this.proposedAddress.accommodationType.description)
 
-    await this.shouldShowSummaryItem(
-      'Address checks',
+    await this.shouldShowSummaryItem('Address checks', [
       formatProposedAddressStatus(this.proposedAddress.verificationStatus),
-    )
+      this.proposedAddress.verificationReason,
+    ])
 
     if (this.proposedAddress.verificationStatus === 'PASSED') {
       await this.shouldShowSummaryItem(

@@ -62,7 +62,7 @@ test('Can add and confirm a proposed address', async ({
   // AND I mark the address checks as passed
   const addressStatusCheckPage = new AddressStatusCheckPage(page)
   await addressStatusCheckPage.expectPageToBeDisplayed()
-  await addressStatusCheckPage.selectPassed()
+  await addressStatusCheckPage.selectPassed('Address is suitable')
   await addressStatusCheckPage.continue()
 
   // AND I confirm the address as the next address

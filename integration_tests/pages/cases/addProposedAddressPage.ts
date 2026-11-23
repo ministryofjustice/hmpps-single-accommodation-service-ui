@@ -3,7 +3,7 @@ import { ProposedAddressFormData, RadioItem } from '@sas/ui'
 import { AccommodationAddressDetails, CaseDto as Case } from '@sas/api'
 import AbstractPage from '../abstractPage'
 import paths from '../../../server/paths/ui'
-import { verifyPost } from '../../mockApis/wiremock'
+import { verifyPost, verifyPut } from '../../mockApis/wiremock'
 import apiPaths from '../../../server/paths/api'
 import {
   formatProposedAddressNextAccommodation,
@@ -13,6 +13,11 @@ import {
 } from '../../../server/utils/proposedAddresses'
 import { accommodationTypesMap } from '../../../server/testutils/factories/proposedAccommodation'
 import { formatAddress } from '../../../server/utils/addresses'
+
+const verificationReasonLabels: Partial<Record<ProposedAddressFormData['verificationStatus'], string>> = {
+  PASSED: 'Why is it suitable?',
+  FAILED: 'Why is it not suitable?',
+}
 
 export default class AddProposedAddressPage extends AbstractPage {
   constructor(
@@ -127,6 +132,11 @@ export default class AddProposedAddressPage extends AbstractPage {
   async completeStatusForm(proposedAddressData: ProposedAddressFormData) {
     const statusLabel = verificationStatusLabels[proposedAddressData.verificationStatus]
     await this.selectRadioByLabel(statusLabel)
+
+    const reasonLabel = verificationReasonLabels[proposedAddressData.verificationStatus]
+    if (reasonLabel) {
+      await this.completeInputByLabel(reasonLabel, proposedAddressData.verificationReason)
+    }
   }
 
   async completeNextAccommodationForm(proposedAddressData: ProposedAddressFormData) {
@@ -152,10 +162,10 @@ export default class AddProposedAddressPage extends AbstractPage {
       'Living arrangement',
       accommodationTypesMap[proposedAddressData.accommodationTypeCode],
     )
-    await this.shouldShowSummaryItem(
-      'Address checks',
+    await this.shouldShowSummaryItem('Address checks', [
       formatProposedAddressStatus(proposedAddressData.verificationStatus),
-    )
+      proposedAddressData.verificationReason,
+    ])
 
     if (proposedAddressData.verificationStatus === 'PASSED') {
       await this.shouldShowSummaryItem(
@@ -200,6 +210,11 @@ export default class AddProposedAddressPage extends AbstractPage {
   async shouldShowPopulatedStatusForm(addressData: ProposedAddressFormData) {
     const statusLabel = formatProposedAddressStatus(addressData.verificationStatus)
     await this.verifyRadioInput(statusLabel)
+
+    const reasonLabel = verificationReasonLabels[addressData.verificationStatus]
+    if (reasonLabel) {
+      await this.verifyTextInput(reasonLabel, addressData.verificationReason)
+    }
   }
 
   async shouldShowPopulatedNextAccommodationForm(addressData: ProposedAddressFormData) {
@@ -213,6 +228,14 @@ export default class AddProposedAddressPage extends AbstractPage {
     const expectedBody = formDataToRequestBody(proposedAddressData)
 
     expect(requestBody).toEqual(expectedBody)
+  }
+
+  async checkUpdateApiCalled(crn: string, id: string, proposedAddressData: ProposedAddressFormData) {
+    const requestBody = await verifyPut(apiPaths.cases.proposedAddresses.update({ crn, id }))
+
+    const { verificationStatus, verificationReason } = formDataToRequestBody(proposedAddressData)
+
+    expect(requestBody).toEqual(expect.objectContaining({ verificationStatus, verificationReason }))
   }
 
   async shouldShowAddressCaption(address: AccommodationAddressDetails) {

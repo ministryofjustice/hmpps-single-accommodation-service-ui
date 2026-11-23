@@ -1,4 +1,5 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% extends "pages/proposed-address/layout.njk" %}
 
 {% set pageTitle = "What is the status of the address checks?" %}
@@ -6,6 +7,34 @@
 {% set heading %}
   <span class="govuk-caption-l">{{ address }}</span>
   <h1 class="govuk-fieldset__heading">What is the status of the address checks?</h1>
+{% endset %}
+
+{% set passedReasonHtml %}
+  {{
+    govukTextarea({
+        label: {
+            text: "Why is it suitable?"
+        },
+        name: "verificationReasonPassed",
+        id: "verificationReasonPassed",
+        value: verificationReasonPassed,
+        errorMessage: errors.verificationReasonPassed
+    })
+  }}
+{% endset %}
+
+{% set failedReasonHtml %}
+  {{
+    govukTextarea({
+        label: {
+            text: "Why is it not suitable?"
+        },
+        name: "verificationReasonFailed",
+        id: "verificationReasonFailed",
+        value: verificationReasonFailed,
+        errorMessage: errors.verificationReasonFailed
+    })
+  }}
 {% endset %}
 
 {% block formContent %}
@@ -19,7 +48,7 @@
                 isPageHeading: true
             }
         },
-        items: verificationStatusItems,
+        items: injectConditionals(verificationStatusItems, { PASSED: passedReasonHtml, FAILED: failedReasonHtml }),
         errorMessage: errors.verificationStatus
     })
   }}

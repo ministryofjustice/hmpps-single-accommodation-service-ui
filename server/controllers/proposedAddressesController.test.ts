@@ -701,6 +701,16 @@ describe('proposedAddressesController', () => {
       })
     })
 
+    it('renders status page with the reason from session data', async () => {
+      setSessionData({ address, accommodationTypeCode, verificationStatus: 'PASSED', verificationReason: 'Suitable' })
+      await controller.status()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/proposed-address/status',
+        expect.objectContaining({ verificationReasonPassed: 'Suitable' }),
+      )
+    })
+
     it('redirects when the session data is invalid', async () => {
       jest.spyOn(proposedAddressesUtils, 'validateUpToType').mockReturnValue('/redirect-url')
 
@@ -725,7 +735,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects to next accommodation when status is PASSED', async () => {
-      request.body = { verificationStatus: 'PASSED' }
+      request.body = { verificationStatus: 'PASSED', verificationReasonPassed: 'Suitable' }
 
       await controller.saveStatus()(request, response, next)
 
@@ -734,6 +744,14 @@ describe('proposedAddressesController', () => {
 
     it('redirects to status when status invalid', async () => {
       request.body = { verificationStatus: undefined }
+
+      await controller.saveStatus()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+    })
+
+    it('redirects to status when status is PASSED and no reason is given', async () => {
+      request.body = { verificationStatus: 'PASSED' }
 
       await controller.saveStatus()(request, response, next)
 
@@ -975,7 +993,7 @@ describe('proposedAddressesController', () => {
 
     describe('saveStatus', () => {
       it('redirects to the Next accommodation page when status is PASSED', async () => {
-        request.body = { verificationStatus: 'PASSED' }
+        request.body = { verificationStatus: 'PASSED', verificationReasonPassed: 'Suitable' }
 
         await controller.saveStatus()(request, response, next)
 
@@ -1022,7 +1040,7 @@ describe('proposedAddressesController', () => {
 
     describe('saveStatus', () => {
       it('redirects to the Next accommodation page when status is PASSED', async () => {
-        request.body = { verificationStatus: 'PASSED' }
+        request.body = { verificationStatus: 'PASSED', verificationReasonPassed: 'Suitable' }
 
         await controller.saveStatus()(request, response, next)
 

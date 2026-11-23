@@ -1,5 +1,5 @@
-import { expect, Page } from '@playwright/test'
-import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
+import { expect } from '@playwright/test'
+import BasePage from './basePage'
 
 type DateInput = {
   day: string
@@ -7,11 +7,9 @@ type DateInput = {
   year: string
 }
 
-export default class AddDtrReferralDetailsPage {
-  constructor(private readonly page: Page) {}
-
+export default class AddDtrReferralDetailsPage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expectHeadingToBeDisplayed(this.page, {
+    await this.expectHeadingToBeDisplayed({
       name: /Add( new)? Duty to Refer \(DTR\) referral details/,
       level: 1,
     })

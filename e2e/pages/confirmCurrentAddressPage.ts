@@ -1,11 +1,8 @@
-import { Page } from '@playwright/test'
-import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
+import BasePage from './basePage'
 
-export default class ConfirmCurrentAddressPage {
-  constructor(private readonly page: Page) {}
-
+export default class ConfirmCurrentAddressPage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expectHeadingToBeDisplayed(this.page, {
+    await this.expectHeadingToBeDisplayed({
       name: /Confirm that .* has moved into this address/,
       level: 1,
     })

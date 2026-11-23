@@ -27,7 +27,7 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import { setActiveCaseListUrl } from '../utils/navigation'
+import { setActiveCaseListTab, setCaseListFilters } from '../utils/navigation'
 import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
@@ -47,7 +47,8 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      setActiveCaseListUrl(req, res, 'case-list')
+      setActiveCaseListTab(req, res, 'case-list')
+      setCaseListFilters(req)
 
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
@@ -69,7 +70,7 @@ export default class CasesController {
 
   search(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
-      setActiveCaseListUrl(req, res, 'search')
+      setActiveCaseListTab(req, res, 'search')
       const searchTerm = req.query.searchTerm ?? req.session.searchTerm
       delete req.session.searchTerm
       let caseData: CaseDto | null = null

@@ -37,7 +37,7 @@ describe('currentAddressController', () => {
     stubProposedAddresses()
 
     request = mock<Request>({
-      session: { caseListUrl: '/cases/CRN123' },
+      session: { caseListUrl: '/cases/CRN123', caseListFilters: '' },
       id: 'request-id',
       params: { crn: 'CRN123' },
       body: {},

@@ -7,7 +7,7 @@ import uiPaths from '../paths/ui'
 import { CaseListFields, setupCaseList } from '../utils/cases'
 import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
 import CustomListService from '../services/customListService'
-import { setActiveCaseListUrl } from '../utils/navigation'
+import { setActiveCaseListTab } from '../utils/navigation'
 
 export default class CustomListController {
   constructor(
@@ -16,7 +16,7 @@ export default class CustomListController {
   ) {}
 
   setActiveCaseListUrl(req: IndexRequest, res: Response, next: NextFunction): void {
-    setActiveCaseListUrl(req, res, 'custom-list')
+    setActiveCaseListTab(req, res, 'custom-list')
     next()
   }
 

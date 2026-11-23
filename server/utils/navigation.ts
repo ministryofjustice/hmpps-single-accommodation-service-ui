@@ -9,21 +9,26 @@ export const getActivePage = (req: IndexRequest): string => {
 }
 
 export const getCaseListUrl = (req: IndexRequest): string => {
-  return req?.session?.caseListUrl || uiPaths.cases.index({})
+  const activeTab = req.session.caseListUrl || uiPaths.cases.index({})
+  const filters = req.session.caseListFilters
+
+  return filters ? `${activeTab}?${filters}` : activeTab
 }
 
-export const setActiveCaseListUrl = (req: IndexRequest, res: Response, url: string): void => {
-  let search = req.query?.peopleType ? new URLSearchParams(req.query).toString() : ''
-  if (!search) {
-    search = req?.session?.caseListUrl?.includes('?') ? req.session.caseListUrl.split('?')[1] : ''
-  }
-  res.locals.activePage = url
-  let newUrl = '/'
-  if (url?.startsWith('search')) {
-    newUrl = '/search'
-  } else if (url?.startsWith('custom-list')) {
-    newUrl = '/custom-list'
-  }
-  newUrl = `${newUrl}${search ? `?${search}` : ''}`
-  req.session.caseListUrl = newUrl
+export const setCaseListFilters = (req: IndexRequest): void => {
+  req.session.caseListFilters = req.query?.peopleType && new URLSearchParams(req.query).toString()
+}
+
+export const setActiveCaseListTab = (
+  req: IndexRequest,
+  res: Response,
+  tab: 'custom-list' | 'case-list' | 'search',
+): void => {
+  res.locals.activePage = tab
+
+  req.session.caseListUrl = {
+    'custom-list': uiPaths.customList.index({}),
+    'case-list': uiPaths.cases.index({}),
+    search: uiPaths.cases.search({}),
+  }[tab]
 }

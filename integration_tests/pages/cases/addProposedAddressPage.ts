@@ -79,7 +79,7 @@ export default class AddProposedAddressPage extends AbstractPage {
   }
 
   async shouldShowConfirmAddressForm(addressLines: string[]) {
-    await expect(this.page.getByRole('heading', { level: 1 })).toHaveText('Confirm address')
+    await expect(this.page.getByRole('heading', { level: 1 })).toHaveText('Confirm ddress')
 
     const address = this.page.locator('address')
     for await (const line of addressLines) {

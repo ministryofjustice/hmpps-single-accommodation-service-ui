@@ -24,6 +24,7 @@ import {
   casesToRows,
   caseToRows,
   queryToFilters,
+  recentSearchItems,
 } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -170,6 +171,7 @@ describe('casesController', () => {
       jest
         .spyOn(validationUtils, 'fetchErrorsAndUserInput')
         .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
+      casesService.getRecentSearches.mockResolvedValue(apiResponseFactory.caseList([]))
     })
 
     it('renders the search page', async () => {
@@ -188,6 +190,7 @@ describe('casesController', () => {
         crn: undefined,
         errors: {},
         errorSummary: [],
+        recentSearches: [],
         resultsSummary: undefined,
       })
     })
@@ -205,6 +208,7 @@ describe('casesController', () => {
         crn: 'X123456',
         errors: {},
         errorSummary: [],
+        recentSearches: [],
         resultsSummary: `Result for ‘X123456’`,
       })
     })
@@ -227,6 +231,22 @@ describe('casesController', () => {
       )
     })
 
+    it('renders the search page with recent searches', async () => {
+      request.query = {}
+      const recentSearches = caseFactory.buildList(3)
+      casesService.getRecentSearches.mockResolvedValue(apiResponseFactory.caseList(recentSearches))
+
+      await casesController.search()(request, response, next)
+
+      expect(casesService.getRecentSearches).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          recentSearches: recentSearchItems(recentSearches),
+        }),
+      )
+    })
+
     it('renders a 0 results summary when a valid CRN returns a 404', async () => {
       request.query = { searchTerm: 'X123456' }
       const notFoundError: SanitisedError = new Error('Not found')
@@ -242,6 +262,7 @@ describe('casesController', () => {
         crn: 'X123456',
         errors: {},
         errorSummary: [],
+        recentSearches: [],
         resultsSummary: `0 results for ‘X123456’`,
       })
     })
@@ -265,6 +286,7 @@ describe('casesController', () => {
         crn: 'not-a-crn',
         errors,
         errorSummary,
+        recentSearches: [],
         resultsSummary: undefined,
       })
     })

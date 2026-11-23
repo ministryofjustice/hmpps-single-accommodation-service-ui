@@ -1,11 +1,9 @@
-import { expect, Page } from '@playwright/test'
-import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
+import { expect } from '@playwright/test'
+import BasePage from './basePage'
 
-export default class ViewDtrReferralDetailsPage {
-  constructor(private readonly page: Page) {}
-
+export default class ViewDtrReferralDetailsPage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expectHeadingToBeDisplayed(this.page, {
+    await this.expectHeadingToBeDisplayed({
       name: 'Duty to Refer (DTR)',
       level: 1,
     })

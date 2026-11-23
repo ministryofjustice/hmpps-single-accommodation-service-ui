@@ -1,11 +1,8 @@
-import { Page } from '@playwright/test'
-import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
+import BasePage from './basePage'
 
-export default class LivingArrangementPage {
-  constructor(private readonly page: Page) {}
-
+export default class LivingArrangementPage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expectHeadingToBeDisplayed(this.page, {
+    await this.expectHeadingToBeDisplayed({
       name: /Which best describes the living arrangement/,
       level: 1,
     })

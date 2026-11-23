@@ -1,5 +1,5 @@
-import { expect, Page } from '@playwright/test'
-import { expectHeadingToBeDisplayed } from '../utils/expectHeadingToBeDisplayed'
+import { expect } from '@playwright/test'
+import BasePage from './basePage'
 
 export type DtrOutcome =
   | 'Yes, it was accepted on prevention and relief duty'
@@ -8,11 +8,9 @@ export type DtrOutcome =
   | 'No, it was rejected as they are considered intentionally homeless'
   | 'No, it was rejected for another reason'
 
-export class AddDtrOutcomePage {
-  constructor(private readonly page: Page) {}
-
+export class AddDtrOutcomePage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expectHeadingToBeDisplayed(this.page, {
+    await this.expectHeadingToBeDisplayed({
       name: 'Add Duty to Refer (DTR) outcome',
       level: 1,
     })

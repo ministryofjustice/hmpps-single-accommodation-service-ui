@@ -26,6 +26,6 @@ export default class AddressStatusCheckPage {
   }
 
   async continue() {
-    await this.page.getByRole('button', { name: 'Continue' }).click()
+    await this.page.getByRole('button', { name: 'Cnue' }).click()
   }
 }

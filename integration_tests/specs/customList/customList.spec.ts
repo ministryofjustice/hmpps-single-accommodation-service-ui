@@ -66,7 +66,6 @@ test.describe('custom list', () => {
     await stubProfilePage({ crn: cases[0].crn, caseData: cases[0], accommodationSummaries: null })
 
     // GIVEN a custom list already exists
-    // GIVEN a custom list already exists
     await customListApi.stubGetCustomListCrns(['X123456', 'X654321'])
     await customListApi.stubGetCustomListCases(cases, { peopleType: 'NFA_RISK' })
     // WHEN I sign in

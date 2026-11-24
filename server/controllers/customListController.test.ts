@@ -11,6 +11,7 @@ import CustomListService from '../services/customListService'
 import * as validationUtils from '../utils/validation'
 import uiPaths from '../paths/ui'
 import { listOfCrns } from '../testutils/crn'
+import * as navUtils from '../utils/navigation'
 
 describe('customListController', () => {
   const TEST_TOKEN = 'test-token'
@@ -23,12 +24,25 @@ describe('customListController', () => {
 
   const auditService = mock<AuditService>()
   const customListService = mock<CustomListService>()
+  const setCaseListFilters = jest.spyOn(navUtils, 'setCaseListFilters')
 
   const customListController = new CustomListController(auditService, customListService)
 
   beforeEach(() => {
     jest.clearAllMocks()
     request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request.query = {}
+  })
+
+  describe('setActiveCaseListUrl', () => {
+    it('sets the active tab to the custom list and continues to the next handler', () => {
+      const nextHandler = jest.fn()
+      customListController.setActiveCaseListUrl(request, response, nextHandler)
+
+      expect(response.locals.activePage).toBe('custom-list')
+      expect(request.session.activeCaseListTab).toBe('/custom-list')
+      expect(nextHandler).toHaveBeenCalled()
+    })
   })
 
   describe('index', () => {
@@ -44,6 +58,7 @@ describe('customListController', () => {
     }
 
     it('renders the create custom list page when no list already exits', async () => {
+      request.session.caseListFilters = 'riskLevel=HIGH'
       customListService.getCustomListCrns.mockResolvedValue(
         apiResponseFactory.buildResponse<ApiResponseDtoListString>([]),
       )
@@ -53,6 +68,9 @@ describe('customListController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
+      expect(setCaseListFilters).toHaveBeenCalledWith(request)
+      expect(request.session.caseListFilters).toBe('')
+      expect(customListService.getCustomListCases).not.toHaveBeenCalled()
       expect(response.render).toHaveBeenCalledWith('pages/customList/index', {
         addCrnsHref: '/custom-list/add-crns',
       })
@@ -101,6 +119,22 @@ describe('customListController', () => {
 
       expect(request.body).toEqual({ crnList: ['CRN1,CRN2'] })
       expect(addUserInputToFlash).toHaveBeenCalledWith(request)
+    })
+
+    it('stores the case list filters from the query when a list already exists', async () => {
+      const cases = caseFactory.buildList(1)
+      const query = { peopleType: 'NFA_RISK', riskLevel: 'HIGH' }
+      request.query = query
+      customListService.getCustomListCrns.mockResolvedValue(
+        apiResponseFactory.buildResponse<ApiResponseDtoListString>([cases.map(c => c.crn).join(',')]),
+      )
+      customListService.getCustomListCases.mockResolvedValue(apiResponseFactory.caseList(cases))
+
+      await customListController.index()(request, response, next)
+
+      expect(setCaseListFilters).toHaveBeenCalledWith(request)
+      expect(request.session.caseListFilters).toBe('peopleType=NFA_RISK&riskLevel=HIGH')
+      expect(customListService.getCustomListCases).toHaveBeenCalledWith(TEST_TOKEN, query)
     })
   })
   describe('addCrns', () => {
@@ -267,6 +301,12 @@ describe('customListController', () => {
         crnAddedText,
         showHref: uiPaths.customList.index.pattern,
       })
+    })
+    it('redirects when no CRN list provided', async () => {
+      request.query = {}
+      await customListController.confirmation()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.index.pattern)
     })
   })
 })

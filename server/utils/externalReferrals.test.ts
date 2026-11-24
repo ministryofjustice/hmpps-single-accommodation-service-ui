@@ -215,6 +215,13 @@ describe('externalReferrals utils', () => {
               { key: { text: 'Submitted' }, value: { text: '13 June 2026 (5 days ago)' } },
               { key: { text: 'Submitted by' }, value: { text: 'created-by' } },
             ],
+            links: [
+              {
+                external: false,
+                href: '/cases/CRN1234/external-referrals/submission-id/details',
+                text: 'View details',
+              },
+            ],
           }),
         )
       })

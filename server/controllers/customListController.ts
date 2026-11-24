@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { IndexRequest } from '@sas/ui'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ErrorResponse } from '@sas/api'
@@ -7,6 +7,7 @@ import uiPaths from '../paths/ui'
 import { CaseListFields, setupCaseList } from '../utils/cases'
 import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
 import CustomListService from '../services/customListService'
+import { setActiveCaseListTab, setCaseListFilters } from '../utils/navigation'
 
 export default class CustomListController {
   constructor(
@@ -14,12 +15,18 @@ export default class CustomListController {
     private readonly customListService: CustomListService,
   ) {}
 
+  setActiveCaseListUrl(req: IndexRequest, res: Response, next: NextFunction): void {
+    setActiveCaseListTab(req, res, 'custom-list')
+    next()
+  }
+
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
       const { token, username, displayName: userFullName } = res.locals.user
       const eventDetails = { who: username, correlationId: req.id }
       const { userInput } = fetchErrorsAndUserInput(req)
       const crnList = userInput?.crnList ?? (await this.customListService.getCustomListCrns(token)).data
+      setCaseListFilters(req) // todo test this?
       if (crnList.length === 0) {
         await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, eventDetails)
         return res.render('pages/customList/index', {
@@ -140,6 +147,9 @@ export default class CustomListController {
         correlationId: req.id,
       })
       const crnTotalText = Number(req.query.t)
+      if (!crnTotalText) {
+        return res.redirect(uiPaths.customList.index.pattern)
+      }
       const crnAddedText = crnTotalText > 1 ? 'CRNs added' : 'CRN added'
       return res.render('pages/customList/confirmation', {
         crnTotalText,

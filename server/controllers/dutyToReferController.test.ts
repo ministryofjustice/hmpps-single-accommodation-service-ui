@@ -26,7 +26,7 @@ import {
 } from '../testutils/factories'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import { radioItems } from '../utils/utils'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 
 describe('dutyToReferController', () => {
   let request: Request
@@ -54,6 +54,7 @@ describe('dutyToReferController', () => {
     referenceDataService.getLocalAuthorities.mockResolvedValue(apiResponseFactory.referenceData(localAuthorities))
 
     request = mock<Request>({
+      path: '/cases/',
       id: 'request-id',
       params: { crn: 'CRN123', id: undefined },
       body: {},
@@ -186,7 +187,10 @@ describe('dutyToReferController', () => {
 
     it('updates and redirects to the DTR details page when editing', async () => {
       const dutyToRefer = dutyToReferFactory.submitted().build({ crn: 'CRN123' })
-      const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
+      const expectedRedirect = uiPaths.dutyToRefer.show({
+        crn: 'CRN123',
+        id: dutyToRefer.submission.id,
+      })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       request.params.id = dutyToRefer.submission.id
@@ -209,7 +213,10 @@ describe('dutyToReferController', () => {
       const submission = dtrSubmissionFactory.accepted().build({ outcomeNote: 'This is an outcome note' })
       const dutyToRefer = dutyToReferFactory.accepted().build({ crn: 'CRN123', submission })
       const outcomeReason = dutyToRefer.submission?.outcomeReason
-      const expectedRedirect = uiPaths.dutyToRefer.show({ crn: 'CRN123', id: dutyToRefer.submission.id })
+      const expectedRedirect = uiPaths.dutyToRefer.show({
+        crn: 'CRN123',
+        id: dutyToRefer.submission.id,
+      })
       dutyToReferService.getDtrBySubmissionId.mockResolvedValue(apiResponseFactory.dutyToRefer(dutyToRefer))
 
       request.params.id = dutyToRefer.submission.id

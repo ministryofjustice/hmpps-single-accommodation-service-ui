@@ -9,14 +9,13 @@ export const getActivePage = (req: IndexRequest): string => {
 }
 
 export const getCaseListUrl = (req: IndexRequest): string => {
-  const activeTab = req.session.caseListUrl || uiPaths.cases.index({})
+  const activeTab = req.session.activeCaseListTab || uiPaths.cases.index({})
   const filters = req.session.caseListFilters
-
-  return filters ? `${activeTab}?${filters}` : activeTab
+  return filters && !activeTab.startsWith(uiPaths.cases.search.pattern) ? `${activeTab}?${filters}` : activeTab
 }
 
 export const setCaseListFilters = (req: IndexRequest): void => {
-  req.session.caseListFilters = req.query?.peopleType && new URLSearchParams(req.query).toString()
+  req.session.caseListFilters = req?.query && new URLSearchParams(req.query).toString()
 }
 
 export const setActiveCaseListTab = (
@@ -26,7 +25,7 @@ export const setActiveCaseListTab = (
 ): void => {
   res.locals.activePage = tab
 
-  req.session.caseListUrl = {
+  req.session.activeCaseListTab = {
     'custom-list': uiPaths.customList.index({}),
     'case-list': uiPaths.cases.index({}),
     search: uiPaths.cases.search({}),

@@ -2,10 +2,10 @@ import { CaseDto } from '@sas/api'
 import { Request } from 'express'
 import { displayName } from './cases'
 import paths from '../paths/ui'
-import { getActivePage } from './navigation'
+import { getActivePage, getCaseListUrl } from './navigation'
 
 const breadcrumbs = (req: Request, caseData?: CaseDto) => {
-  const caseListUrl = req?.session?.caseListUrl || paths.cases.index({})
+  const caseListUrl = getCaseListUrl(req)
   const activePage = getActivePage(req)
   return [
     {

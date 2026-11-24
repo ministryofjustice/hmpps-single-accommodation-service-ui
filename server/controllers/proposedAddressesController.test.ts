@@ -111,7 +111,7 @@ describe('proposedAddressesController', () => {
       params: { crn: 'CRN123', id: 'address-id' },
       session: {
         save: jest.fn().mockImplementation((callback: () => unknown) => callback()),
-        caseListUrl: '/search?teamCode=N34',
+        activeCaseListTab: '/',
       },
     })
 

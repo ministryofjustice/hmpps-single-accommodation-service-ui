@@ -7,7 +7,7 @@ import uiPaths from '../paths/ui'
 import { CaseListFields, setupCaseList } from '../utils/cases'
 import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
 import CustomListService from '../services/customListService'
-import { setActiveCaseListTab } from '../utils/navigation'
+import { setActiveCaseListTab, setCaseListFilters } from '../utils/navigation'
 
 export default class CustomListController {
   constructor(
@@ -26,6 +26,7 @@ export default class CustomListController {
       const eventDetails = { who: username, correlationId: req.id }
       const { userInput } = fetchErrorsAndUserInput(req)
       const crnList = userInput?.crnList ?? (await this.customListService.getCustomListCrns(token)).data
+      setCaseListFilters(req) // todo test this?
       if (crnList.length === 0) {
         await this.auditService.logPageView(Page.CUSTOM_LIST_INDEX, eventDetails)
         return res.render('pages/customList/index', {

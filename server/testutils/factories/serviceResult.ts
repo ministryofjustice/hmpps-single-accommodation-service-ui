@@ -25,6 +25,12 @@ const crsStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_ELIGIBLE', 'NOT
 
 const paStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_ELIGIBLE', 'NOT_STARTED', 'COMPLETED']
 
+const ppcStatuses: Array<ServiceResult['serviceStatus']> = [
+  'PPC_NOT_STARTED',
+  'PPC_COMPLETED_PUBLIC_PROTECTION_REQUIRED',
+  'PPC_COMPLETED_PUBLIC_PROTECTION_NOT_REQUIRED',
+]
+
 const allFailureReasons: ServiceResult['failureReasons'] = [
   'MALE_NOT_HIGH_RISK_TIER',
   'NON_MALE_NOT_HIGH_RISK_TIER',
@@ -46,6 +52,10 @@ class ServiceResultFactory extends Factory<ServiceResult> {
 
   pa() {
     return this.params({ serviceStatus: faker.helpers.arrayElement(paStatuses) })
+  }
+
+  ppc() {
+    return this.params({ serviceStatus: faker.helpers.arrayElement(ppcStatuses) })
   }
 }
 

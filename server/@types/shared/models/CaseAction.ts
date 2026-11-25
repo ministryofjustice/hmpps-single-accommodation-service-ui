@@ -4,6 +4,7 @@
 
 export type CaseAction = {
   type:
+    | 'START_PPC'
     | 'CREATE_PLACEMENT'
     | 'PROVIDE_INFORMATION'
     | 'START_APPROVED_PREMISE_APPLICATION'
@@ -22,5 +23,5 @@ export type CaseAction = {
     | 'SUBMIT_CRS_REFERRAL'
     | 'ADD_AND_CONFIRM_PROPOSED_ADDRESS'
   startDate?: string | null
-  service: 'CAS1' | 'CAS2' | 'CAS3' | 'DTR' | 'CRS' | 'PA'
+  service: 'PPC' | 'CAS1' | 'CAS2' | 'CAS3' | 'DTR' | 'CRS' | 'PA'
 }

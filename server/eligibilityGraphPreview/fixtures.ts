@@ -1,4 +1,4 @@
-import { Cas1ApplicationDto, Cas2ApplicationDto, Cas3ApplicationDto, DtrSubmissionDto, ServiceResult } from '@sas/api'
+import { Cas1ApplicationDto, Cas2ApplicationDto, Cas3ApplicationDto, DtrSubmissionDto, ServiceResultV2 } from '@sas/api'
 
 export const exampleDate = (offset: number): string => {
   const date = new Date()
@@ -7,63 +7,63 @@ export const exampleDate = (offset: number): string => {
 }
 
 // These are example API states, not rules for how the UI displays them.
-export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
-  const arrived = status === 'ARRIVED'
-  const draft = status === 'NOT_SUBMITTED'
+export const exampleApplications = (status: ServiceResultV2['serviceStatus']) => {
+  const arrived = ['CAS1_ARRIVED', 'CAS2_ARRIVED', 'CAS3_ARRIVED'].includes(status)
+  const draft = ['CAS1_NOT_SUBMITTED', 'CAS2_NOT_SUBMITTED', 'CAS3_NOT_SUBMITTED'].includes(status)
   const cas1ApplicationStates: Partial<
-    Record<ServiceResult['serviceStatus'], Cas1ApplicationDto['applicationStatus']>
+    Record<ServiceResultV2['serviceStatus'], Cas1ApplicationDto['applicationStatus']>
   > = {
-    NOT_SUBMITTED: 'STARTED',
-    SUBMITTED: 'AWAITING_ASSESSMENT',
-    INFO_REQUESTED: 'REQUESTED_FURTHER_INFORMATION',
-    APPLICATION_REJECTED: 'REJECTED',
-    PLACEMENT_BOOKED: 'PLACEMENT_ALLOCATED',
-    ARRIVED: 'PLACEMENT_ALLOCATED',
-    NOT_ARRIVED: 'PLACEMENT_ALLOCATED',
-    PLACEMENT_CANCELLED: 'PLACEMENT_ALLOCATED',
+    CAS1_NOT_SUBMITTED: 'STARTED',
+    CAS1_SUBMITTED: 'AWAITING_ASSESSMENT',
+    CAS1_INFO_REQUESTED: 'REQUESTED_FURTHER_INFORMATION',
+    CAS1_APPLICATION_REJECTED: 'REJECTED',
+    CAS1_PLACEMENT_BOOKED: 'PLACEMENT_ALLOCATED',
+    CAS1_ARRIVED: 'PLACEMENT_ALLOCATED',
+    CAS1_NOT_ARRIVED: 'PLACEMENT_ALLOCATED',
+    CAS1_PLACEMENT_CANCELLED: 'PLACEMENT_ALLOCATED',
   }
   const requestStates: Partial<
-    Record<ServiceResult['serviceStatus'], Cas1ApplicationDto['requestForPlacementStatus']>
+    Record<ServiceResultV2['serviceStatus'], Cas1ApplicationDto['requestForPlacementStatus']>
   > = {
-    PLACEMENT_REQUEST_SUBMITTED: 'REQUEST_SUBMITTED',
-    PLACEMENT_REQUEST_REJECTED: 'REQUEST_REJECTED',
-    PLACEMENT_REQUEST_WITHDRAWN: 'REQUEST_WITHDRAWN',
-    PLACEMENT_BOOKED: 'PLACEMENT_BOOKED',
-    ARRIVED: 'PLACEMENT_BOOKED',
-    NOT_ARRIVED: 'PLACEMENT_BOOKED',
-    PLACEMENT_CANCELLED: 'PLACEMENT_BOOKED',
+    CAS1_PLACEMENT_REQUEST_SUBMITTED: 'REQUEST_SUBMITTED',
+    CAS1_PLACEMENT_REQUEST_REJECTED: 'REQUEST_REJECTED',
+    CAS1_PLACEMENT_REQUEST_WITHDRAWN: 'REQUEST_WITHDRAWN',
+    CAS1_PLACEMENT_BOOKED: 'PLACEMENT_BOOKED',
+    CAS1_ARRIVED: 'PLACEMENT_BOOKED',
+    CAS1_NOT_ARRIVED: 'PLACEMENT_BOOKED',
+    CAS1_PLACEMENT_CANCELLED: 'PLACEMENT_BOOKED',
   }
-  const placementStates: Partial<Record<ServiceResult['serviceStatus'], Cas1ApplicationDto['placementStatus']>> = {
-    PLACEMENT_BOOKED: 'UPCOMING',
-    ARRIVED: 'ARRIVED',
-    NOT_ARRIVED: 'NOT_ARRIVED',
-    PLACEMENT_CANCELLED: 'CANCELLED',
+  const placementStates: Partial<Record<ServiceResultV2['serviceStatus'], Cas1ApplicationDto['placementStatus']>> = {
+    CAS1_PLACEMENT_BOOKED: 'UPCOMING',
+    CAS1_ARRIVED: 'ARRIVED',
+    CAS1_NOT_ARRIVED: 'NOT_ARRIVED',
+    CAS1_PLACEMENT_CANCELLED: 'CANCELLED',
   }
   const cas2AssessmentStates: Partial<
     Record<
-      ServiceResult['serviceStatus'],
+      ServiceResultV2['serviceStatus'],
       NonNullable<Cas2ApplicationDto['submittedApplication']>['latestAssessmentStatus']
     >
   > = {
-    MORE_INFORMATION_NEEDED: 'MORE_INFO_REQUESTED',
-    AWAITING_DECISION: 'AWAITING_DECISION',
-    ON_WAITING_LIST: 'ON_WAITING_LIST',
-    PLACE_OFFERED: 'PLACE_OFFERED',
-    OFFER_ACCEPTED: 'OFFER_ACCEPTED',
-    AWAITING_ARRIVAL: 'AWAITING_ARRIVAL',
-    OFFER_DECLINED_OR_WITHDRAWN: 'OFFER_DECLINED',
-    CANCELLED: 'CANCELLED',
-    WITHDRAWN: 'WITHDRAWN',
+    CAS2_MORE_INFORMATION_NEEDED: 'MORE_INFO_REQUESTED',
+    CAS2_AWAITING_DECISION: 'AWAITING_DECISION',
+    CAS2_ON_WAITING_LIST: 'ON_WAITING_LIST',
+    CAS2_PLACE_OFFERED: 'PLACE_OFFERED',
+    CAS2_OFFER_ACCEPTED: 'OFFER_ACCEPTED',
+    CAS2_AWAITING_ARRIVAL: 'AWAITING_ARRIVAL',
+    CAS2_OFFER_DECLINED_OR_WITHDRAWN: 'OFFER_DECLINED',
+    CAS2_CANCELLED: 'CANCELLED',
+    CAS2_WITHDRAWN: 'WITHDRAWN',
   }
-  const cas3BookingStates: Partial<Record<ServiceResult['serviceStatus'], Cas3ApplicationDto['bookingStatus']>> = {
-    BEDSPACE_OFFERED: 'PROVISIONAL',
-    BOOKING_CONFIRMED: 'CONFIRMED',
-    BOOKING_CANCELLED: 'CANCELLED',
-    ARRIVED: 'ARRIVED',
+  const cas3BookingStates: Partial<Record<ServiceResultV2['serviceStatus'], Cas3ApplicationDto['bookingStatus']>> = {
+    CAS3_BEDSPACE_OFFERED: 'PROVISIONAL',
+    CAS3_BOOKING_CONFIRMED: 'CONFIRMED',
+    CAS3_BOOKING_CANCELLED: 'CANCELLED',
+    CAS3_ARRIVED: 'ARRIVED',
   }
   let cas3ApplicationStatus: Cas3ApplicationDto['applicationStatus'] = 'SUBMITTED'
   if (draft) cas3ApplicationStatus = 'IN_PROGRESS'
-  else if (status === 'REJECTED') cas3ApplicationStatus = 'REJECTED'
+  else if (status === 'CAS3_REJECTED') cas3ApplicationStatus = 'REJECTED'
   const staff = { name: 'Example practitioner', username: 'example', staffCode: 'EXAMPLE' }
   const start = exampleDate(arrived ? -2 : 14)
   const end = exampleDate((arrived ? -2 : 14) + 84)
@@ -80,11 +80,11 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
       expiresAt: draft ? undefined : exampleDate(180),
     },
     assessment:
-      draft || status === 'SUBMITTED' || status === 'INFO_REQUESTED'
+      draft || status === 'CAS1_SUBMITTED' || status === 'CAS1_INFO_REQUESTED'
         ? undefined
         : {
-            decision: status === 'APPLICATION_REJECTED' ? 'REJECTED' : 'ACCEPTED',
-            rejectionRationale: status === 'APPLICATION_REJECTED' ? 'Example rejection reason' : undefined,
+            decision: status === 'CAS1_APPLICATION_REJECTED' ? 'REJECTED' : 'ACCEPTED',
+            rejectionRationale: status === 'CAS1_APPLICATION_REJECTED' ? 'Example rejection reason' : undefined,
           },
     requestForPlacement: requestStates[status]
       ? {
@@ -93,8 +93,8 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
           submittedBy: staff,
           expectedArrivalDate: start,
           durationDays: 84,
-          rejectionReason: status === 'PLACEMENT_REQUEST_REJECTED' ? 'Example rejection reason' : undefined,
-          withdrawalReason: status === 'PLACEMENT_REQUEST_WITHDRAWN' ? 'CHANGE_IN_CIRCUMSTANCES' : undefined,
+          rejectionReason: status === 'CAS1_PLACEMENT_REQUEST_REJECTED' ? 'Example rejection reason' : undefined,
+          withdrawalReason: status === 'CAS1_PLACEMENT_REQUEST_WITHDRAWN' ? 'CHANGE_IN_CIRCUMSTANCES' : undefined,
         }
       : undefined,
     requestForPlacementStatus: requestStates[status],
@@ -104,7 +104,7 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
           status: placementStates[status],
           actualArrivalDate: arrived ? start : undefined,
           expectedDepartureDate: end,
-          cancellationReason: status === 'PLACEMENT_CANCELLED' ? 'Example cancellation reason' : undefined,
+          cancellationReason: status === 'CAS1_PLACEMENT_CANCELLED' ? 'Example cancellation reason' : undefined,
         }
       : undefined,
     placementHistory: [],
@@ -119,8 +119,8 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
       : {
           latestAssessmentStatus: cas2AssessmentStates[status],
           submittedAt: exampleDate(-2),
-          offerDeclinedReason: status === 'OFFER_DECLINED_OR_WITHDRAWN' ? 'Example decline reason' : undefined,
-          cancelledReason: status === 'CANCELLED' ? 'Example cancellation reason' : undefined,
+          offerDeclinedReason: status === 'CAS2_OFFER_DECLINED_OR_WITHDRAWN' ? 'Example decline reason' : undefined,
+          cancelledReason: status === 'CAS2_CANCELLED' ? 'Example cancellation reason' : undefined,
         },
   }
   const cas3: Cas3ApplicationDto = {
@@ -130,10 +130,11 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
     applicationStatus: cas3ApplicationStatus,
     applicationSubmittedDate: draft ? undefined : exampleDate(-2),
     createdBy: draft ? undefined : staff,
-    applicationRejectedReason: status === 'REJECTED' ? 'Example rejection reason' : undefined,
+    applicationRejectedReason: status === 'CAS3_REJECTED' ? 'Example rejection reason' : undefined,
     bookingStatus: cas3BookingStates[status],
     bookingProvisionalOfferSentDate: cas3BookingStates[status] ? exampleDate(-1) : undefined,
-    cancellation: status === 'BOOKING_CANCELLED' ? { cancellationReason: 'Example cancellation reason' } : undefined,
+    cancellation:
+      status === 'CAS3_BOOKING_CANCELLED' ? { cancellationReason: 'Example cancellation reason' } : undefined,
     premises: cas3BookingStates[status]
       ? {
           addressLine1: '1 Example Road',
@@ -153,17 +154,45 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
     createdBy: staff.name,
   }
   const noApplication = [
-    'NOT_STARTED',
-    'NOT_ELIGIBLE',
-    'NOT_REQUIRED',
-    'UPCOMING',
-    'CANNOT_START_YET',
-    'UNKNOWN',
+    'CAS1_NOT_STARTED',
+    'CAS2_NOT_STARTED',
+    'CAS3_NOT_STARTED',
+    'CAS3_NOT_STARTED_NEW',
+    'CRS_NOT_STARTED_REFERRAL',
+    'CRS_NOT_STARTED_ACCOMMODATION_REFERRAL',
+    'DTR_NOT_STARTED',
+    'PA_NOT_STARTED',
+    'PPC_NOT_STARTED',
+    'CAS1_UPCOMING',
+    'CAS2_UPCOMING',
+    'CAS3_UPCOMING',
+    'DTR_UPCOMING',
+    'CRS_UPCOMING_REFERRAL',
+    'CRS_UPCOMING_ACCOMMODATION_REFERRAL',
+    'CAS3_CANNOT_START_YET_SUBMIT_DTR',
+    'CAS3_CANNOT_START_YET_SUBMIT_CRS',
+    'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS',
+    'CAS3_CANNOT_START_YET_SUBMIT_CRS_ACCOMMODATION',
+    'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS_ACCOMMODATION',
+    'CAS1_NOT_ELIGIBLE',
+    'CAS2_NOT_ELIGIBLE',
+    'CAS3_NOT_ELIGIBLE',
+    'PA_NOT_ELIGIBLE',
+    'PPC_NOT_REQUIRED',
+    'DTR_NOT_REQUIRED',
+    'CRS_NOT_REQUIRED',
+    'PPC_UPSTREAM_ERROR',
+    'CAS1_UPSTREAM_ERROR',
+    'CAS2_UPSTREAM_ERROR',
+    'CAS3_UPSTREAM_ERROR',
+    'DTR_UPSTREAM_ERROR',
+    'CRS_UPSTREAM_ERROR',
+    'PA_UPSTREAM_ERROR',
   ].includes(status)
   return {
     cas1: noApplication ? undefined : cas1,
     cas2: noApplication ? undefined : cas2,
     cas3: noApplication ? undefined : cas3,
-    submission: ['SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'].includes(status) ? submission : undefined,
+    submission: ['DTR_SUBMITTED', 'DTR_ACCEPTED', 'DTR_NOT_ACCEPTED'].includes(status) ? submission : undefined,
   }
 }

@@ -45,7 +45,7 @@ test.describe('List of cases', () => {
     // AND the filters should be set to default values
     await casesListPage.verifyFilters({
       searchTerm: '',
-      teamCode: '',
+      assignedTo: '',
       riskLevel: '',
     })
 
@@ -71,7 +71,7 @@ test.describe('List of cases', () => {
     // AND the filters are populated with the selected values
     await casesListPage.verifyFilters({
       searchTerm: prisonNumber,
-      teamCode: 'team_team-one-code',
+      assignedTo: 'team_team-one-code',
       riskLevel,
     })
 
@@ -89,7 +89,7 @@ test.describe('List of cases', () => {
     const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(
       page,
       filteredCase,
-      `/?peopleType=NFA_RISK&searchTerm=${prisonNumber}&teamCode=team-one-code&riskLevel=${riskLevel}`,
+      `/?peopleType=NFA_RISK&searchTerm=${prisonNumber}&assignedTo=team_team-one-code&riskLevel=${riskLevel}`,
       'Case list',
     )
 
@@ -116,7 +116,7 @@ test.describe('List of cases', () => {
     await casesListPage.shouldShowCases([filteredCase])
     await casesListPage.verifyFilters({
       searchTerm: prisonNumber,
-      teamCode: `member_${teamMember.username}`,
+      assignedTo: `member_${teamMember.username}`,
       riskLevel,
     })
     await casesListPage.shouldShowFilterTags({

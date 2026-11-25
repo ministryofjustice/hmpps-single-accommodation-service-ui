@@ -81,9 +81,9 @@ export default class PageWithCaseList extends AbstractPage {
     await this.clickButton('Apply filters')
   }
 
-  async verifyFilters({ searchTerm, teamCode, riskLevel }: Record<string, string>) {
+  async verifyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
     await this.verifyTextInput('Filter by name, CRN or prison number', searchTerm)
-    await this.verifySelectInput('Assigned to', teamCode)
+    await this.verifySelectInput('Assigned to', assignedTo)
     await this.verifySelectInput('RoSH', riskLevel)
   }
 

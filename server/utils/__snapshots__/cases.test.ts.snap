@@ -1,18 +1,5 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`cases utilities actionsCell macro renders a formatted cell for a given list of actions 1`] = `
-"
-    <span class="sas-table__cell-header" aria-hidden="true">Actions</span>
-
-    <ul class="govuk-list">
-        <li>Add DTR referral details</li>
-        <li>Submit a CRS referral <time datetime="2026-07-23" title="23 July 2026">in 35 days</time></li>
-    </ul>
-  "
-`;
-
-exports[`cases utilities actionsCell macro renders an empty cell when no actions are provided 1`] = `""`;
-
 exports[`cases utilities personCell macro renders a formatted cell for a case with full access 1`] = `
 "<span class="sas-table__cell-header" aria-hidden="true">Name</span>
 

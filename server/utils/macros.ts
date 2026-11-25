@@ -20,7 +20,6 @@ type Macro =
   | 'timelineDutyToRefer'
   | 'timelineEntry'
   | 'timelineProposedAddress'
-  | 'actionsCell'
   | 'govukDetails'
   | 'govukDetailsList'
   | 'textBlock'

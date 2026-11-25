@@ -1,10 +1,9 @@
 import { Request } from 'express'
-import { CaseAction, CaseDto, CaseDto as Case, TeamDto } from '@sas/api'
+import { CaseDto, CaseDto as Case, TeamDto } from '@sas/api'
 import { TableRow } from '@govuk/ui'
 import { GetCasesQuery, IndexRequest, SelectOption } from '@sas/ui'
 import { htmlContent, initialiseName } from './utils'
 import { renderMacro, statusCell } from './macros'
-import { renderActions } from './actions'
 import { staffName } from './staff'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { validateAndFlashErrors, validateCrn } from './validation'
@@ -96,9 +95,6 @@ export const personCell = (caseData: Case, assignedToText?: string): string =>
     name: displayName(caseData, { laoFlag: '', caseList: true }),
     assignedToText,
   })
-
-export const actionsCell = (actions: CaseAction[]): string =>
-  renderMacro('actionsCell', { actions: renderActions(actions) })
 
 export const casesToRows = (cases: Case[], currentUsername?: string): TableRow[] =>
   cases.map(c => {

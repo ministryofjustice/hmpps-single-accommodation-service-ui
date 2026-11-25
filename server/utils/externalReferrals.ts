@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { RadioItem, StatusCard, StatusTag } from '@sas/ui'
-import { AuditRecordDto, CaseDto, ExternalReferralDto, ExternalReferralWithdrawalDto, ServiceResult } from '@sas/api'
+import { AuditRecordDto, CaseDto, ExternalReferralDto, ExternalReferralWithdrawalDto } from '@sas/api'
 import { SummaryListRow, TextOrHtmlContent, TimelineEntry } from '@govuk/ui'
 import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import {
@@ -19,7 +19,6 @@ import {
 import paths from '../paths/ui'
 import { summaryListRow } from './summaryListRow'
 import { renderMacro, statusTag, textBlock, textField } from './macros'
-import { serviceStatusTag } from './statusTag'
 import { noteTimelineEntry, timelineEntry } from './timeline'
 import { staffName } from './staff'
 import { htmlContent, textContent, radioItems } from './utils'
@@ -151,7 +150,7 @@ export const withdrawalReasonLabels: Record<ExternalReferralWithdrawalDto['withd
 }
 
 export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, currentUsername?: string): TimelineEntry => {
-  type ServiceStatus = ServiceResult['serviceStatus']
+  type ServiceStatus = ExternalReferralDto['status']
 
   const { type, changes } = auditRecord
 
@@ -193,7 +192,7 @@ export const externalReferralTimelineEntry = (auditRecord: AuditRecordDto, curre
 
   const html = renderMacro('timelineEntry', {
     type,
-    status: newStatus ? serviceStatusTag(newStatus) : undefined,
+    status: newStatus ? externalReferralStatusTag(newStatus) : undefined,
     values: changeValues,
     isChange,
   })
@@ -218,7 +217,7 @@ export const summaryListRows = (caseData: CaseDto, referral?: ExternalReferralDt
     rows.push(summaryListRow('Date submitted', formatDateAndDaysAgo(referral.submission.submissionDate)))
     if (includeStatus) {
       rows.push(
-        summaryListRow('Status', statusTag(serviceStatusTag(referral.status as ServiceResult['serviceStatus'])), {
+        summaryListRow('Status', statusTag(externalReferralStatusTag(referral.status)), {
           type: 'html',
         }),
       )
@@ -252,7 +251,7 @@ export const outcomeDetailsSummaryListRows = (referral: ExternalReferralDto) => 
   }
 
   return [
-    summaryListRow('Status', statusTag(serviceStatusTag(status as ServiceResult['serviceStatus'])), { type: 'html' }),
+    summaryListRow('Status', statusTag(externalReferralStatusTag(status)), { type: 'html' }),
     summaryListRow(fieldMapping.outcomeNote.label, outcomeNote, { type: 'textBlock', noValue: 'No details added' }),
   ]
 }

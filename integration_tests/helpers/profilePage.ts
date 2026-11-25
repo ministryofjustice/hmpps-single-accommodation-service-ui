@@ -3,7 +3,7 @@ import {
   AccommodationSummariesDto,
   AccommodationSummaryDto,
   CaseDto,
-  EligibilityDto,
+  EligibilityV2Dto,
   ProposedAccommodationDto,
 } from '@sas/api'
 import casesApi from '../mockApis/cases'
@@ -24,7 +24,7 @@ export const stubProfilePage = async ({
 }: {
   crn: string
   caseData: CaseDto
-  eligibility?: EligibilityDto
+  eligibility?: EligibilityV2Dto
   referrals?: AccommodationReferralDto[]
   proposedAddresses?: ProposedAccommodationDto[]
   accommodationHistory?: AccommodationSummaryDto[]

@@ -11,10 +11,10 @@ import {
   dutyToReferFactory,
   eligibilityFactory,
   serviceResultFactory,
+  crsServiceResultFactory,
   accommodationSummariesFactory,
   accommodationSummaryFactory,
   proposedAccommodationFactory,
-  crsServiceResultFactory,
 } from '../../../server/testutils/factories'
 import { stubProfilePage } from '../../helpers/profilePage'
 import { stubCaseListPage } from '../../helpers/caseListPage'
@@ -27,11 +27,18 @@ test.describe('Profile Tracker Page', () => {
     const dutyToRefer = dutyToReferFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
       crn,
-      dtr: { serviceResult: serviceResultFactory.build(), submission: dutyToRefer.submission },
+      dtr: {
+        serviceResult: serviceResultFactory.build({ serviceStatus: 'DTR_SUBMITTED' }),
+        actionPosition: 0,
+        submission: dutyToRefer.submission,
+      },
+      cas1: {
+        serviceResult: serviceResultFactory.build({ serviceStatus: 'CAS1_UPCOMING', actionStartDate: '2099-01-01' }),
+        actionPosition: 1,
+      },
+      cas2: { serviceResult: serviceResultFactory.cas2().build(), actionPosition: -1 },
+      cas3: { serviceResult: serviceResultFactory.cas3().build(), actionPosition: -1 },
       crs: crsServiceResultFactory.build(),
-      cas1: { serviceResult: serviceResultFactory.build() },
-      cas2: { serviceResult: serviceResultFactory.build() },
-      cas3: { serviceResult: serviceResultFactory.build() },
     })
     const referrals = referralFactory.buildReferralHistoryList(4)
     const proposedAddresses = [
@@ -56,7 +63,7 @@ test.describe('Profile Tracker Page', () => {
 
     await profileTrackerPage.shouldShowCaseDetails(caseData)
     await profileTrackerPage.shouldShowEligibility(eligibility)
-    await profileTrackerPage.shouldShowNextActions(eligibility.caseActions)
+    await profileTrackerPage.shouldShowNextActions(eligibility)
     await profileTrackerPage.shouldShowProposedAddresses(proposedAddresses)
     await profileTrackerPage.shouldShowReferralHistory(referrals)
     await profileTrackerPage.shouldShowAccommodationHistory(accommodationHistory)
@@ -67,7 +74,6 @@ test.describe('Profile Tracker Page', () => {
     const caseData = caseFactory.build({ crn })
     const eligibility = eligibilityFactory.build({
       crn,
-      caseActions: [],
     })
 
     await stubCaseListPage([caseData])

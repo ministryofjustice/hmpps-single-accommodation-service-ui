@@ -4,7 +4,7 @@ import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import uiPaths from '../paths/ui'
-import { setupCaseList } from '../utils/cases'
+import { queryToFilters, setupCaseList } from '../utils/cases'
 import { addErrorToFlash, addUserInputToFlash, fetchErrorsAndUserInput, validateCrn } from '../utils/validation'
 import CustomListService from '../services/customListService'
 import { setActiveCaseListTab, setCaseListFilters } from '../utils/navigation'
@@ -40,10 +40,12 @@ export default class CustomListController {
         peopleType: 'NFA_RISK',
         ...req.query,
       })
+      const filters = queryToFilters(req.query, req.originalUrl, null, null)
+
       await this.auditService.logPageView(Page.CUSTOM_LIST_SHOW, eventDetails)
       return res.render('pages/customList/show', {
         changeListHref: uiPaths.customList.addCrns.pattern,
-        caseListSettings: setupCaseList(req, username, cases, null, null),
+        caseListSettings: setupCaseList(req, username, cases, null, filters),
       })
     }
   }

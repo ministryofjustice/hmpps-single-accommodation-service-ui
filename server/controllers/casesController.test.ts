@@ -24,7 +24,6 @@ import {
   casesTabs,
   casesToRows,
   caseToRows,
-  queryToFilters,
   recentSearchItems,
 } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
@@ -113,7 +112,7 @@ describe('casesController', () => {
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
       userService.getMyTeamMembers.mockResolvedValue(apiResponseFactory.buildResponse(teamMembers))
-      jest.spyOn(backLinksUtils, 'setCaseListUrl')
+      jest.spyOn(navUtils, 'setActiveCaseListTab')
     })
 
     it('renders the case list page for the current user by default', async () => {
@@ -184,7 +183,7 @@ describe('casesController', () => {
       await casesController.index()(request, response, next)
 
       expect(request.session.caseListFilters).toEqual(
-        'searchTerm=some-crn&riskLevel=HIGH&teamCode=team-code&peopleType=HOUSED',
+        'searchTerm=some-crn&riskLevel=HIGH&assignedTo=team_team-code&peopleType=HOUSED',
       )
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
       expect(userService.getMyTeamMembers).toHaveBeenCalledWith(TEST_TOKEN)

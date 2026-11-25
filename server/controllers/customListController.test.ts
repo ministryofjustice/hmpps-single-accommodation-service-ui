@@ -86,7 +86,7 @@ describe('customListController', () => {
         resultsSummary: casesResultsSummary(cases),
         casesTableColumns: casesTableColumns(),
         casesRows: casesToRows(cases, user.username),
-        filters: null,
+        filters: [],
         query: {},
         assignedToOptions: null,
         riskLevelOptions: [
@@ -121,6 +121,7 @@ describe('customListController', () => {
       const cases = caseFactory.buildList(1)
       const query = { peopleType: 'NFA_RISK', riskLevel: 'HIGH' }
       request.query = query
+      request.originalUrl = '/custom-list?peopleType=NFA_RISK&riskLevel=HIGH'
       customListService.getCustomListCrns.mockResolvedValue(
         apiResponseFactory.buildResponse<ApiResponseDtoListString>([cases.map(c => c.crn).join(',')]),
       )
@@ -131,6 +132,14 @@ describe('customListController', () => {
       expect(setCaseListFilters).toHaveBeenCalledWith(request)
       expect(request.session.caseListFilters).toBe('peopleType=NFA_RISK&riskLevel=HIGH')
       expect(customListService.getCustomListCases).toHaveBeenCalledWith(TEST_TOKEN, query)
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/customList/show',
+        expect.objectContaining({
+          caseListSettings: expect.objectContaining({
+            filters: [{ text: 'RoSH: High', href: '/custom-list?peopleType=NFA_RISK' }],
+          }),
+        }),
+      )
     })
   })
   describe('addCrns', () => {

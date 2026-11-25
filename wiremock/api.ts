@@ -27,7 +27,7 @@ import {
   AuditRecordDto,
   CaseDto,
   DutyToReferDto,
-  EligibilityDto,
+  EligibilityV2Dto,
   ExternalReferralDto,
   ProposedAccommodationDto,
 } from '@sas/api'
@@ -57,7 +57,7 @@ async function stubEligibility() {
   for await (const caseDto of fullCases) {
     await eligibilityApi.stubGetEligibilityByCrn(
       caseDto.crn,
-      (eligibility as Record<string, EligibilityDto>)[caseDto.crn],
+      (eligibility as Record<string, EligibilityV2Dto>)[caseDto.crn],
     )
 
     if (upstreamFailures[caseDto.crn]?.includes('eligibility')) {

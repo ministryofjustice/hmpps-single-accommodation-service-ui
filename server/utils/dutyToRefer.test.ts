@@ -1,11 +1,12 @@
 import { Request } from 'express'
 import { mock } from 'jest-mock-extended'
-import { DtrSubmissionDto, ServiceResult } from '@sas/api'
+import { DtrSubmissionDto, ServiceResultV2 } from '@sas/api'
 import {
   detailsForStatus,
   detailsSummaryListRows,
   dutyToReferStatusCard,
   dutyToReferTimelineEntry,
+  dutyToReferToDtrServiceResult,
   linksForStatus,
   outcomeDetailsSummaryListRows,
   outcomeSupportText,
@@ -21,12 +22,27 @@ import {
   dtrServiceResultFactory,
   dtrSubmissionFactory,
   dutyToReferFactory,
-  serviceResultFactory,
 } from '../testutils/factories'
 import { formatDateAndDaysAgo } from './dates'
 
 describe('duty to refer utils', () => {
   let req: Request
+
+  describe('dutyToReferToDtrServiceResult', () => {
+    it.each([
+      ['SUBMITTED', 'DTR_SUBMITTED'],
+      ['ACCEPTED', 'DTR_ACCEPTED'],
+      ['NOT_ACCEPTED', 'DTR_NOT_ACCEPTED'],
+      ['WITHDRAWN', 'DTR_NOT_STARTED'],
+    ] as const)('maps %s to %s', (status, serviceStatus) => {
+      const dtr = dutyToReferFactory.build({ status })
+      const result = dutyToReferToDtrServiceResult(dtr)
+
+      expect(result.serviceResult.serviceStatus).toBe(serviceStatus)
+      expect(result.actionPosition).toBe(-1)
+      expect(result.submission).toEqual(status === 'WITHDRAWN' ? null : dtr.submission)
+    })
+  })
 
   describe('dutyToReferStatusCard', () => {
     const submission: DtrSubmissionDto = dtrSubmissionFactory.build({
@@ -41,22 +57,22 @@ describe('duty to refer utils', () => {
     // See: https://hmpps-single-accommodation-service-prototype-main.apps.live.cloud-platform.service.justice.gov.uk/10-0/_statuses?r=t#dtr
     const testCases: {
       title: string
-      result: Partial<ServiceResult>
+      result: Partial<ServiceResultV2> & Pick<ServiceResultV2, 'serviceStatus'>
       caseId?: string
       submission?: DtrSubmissionDto
     }[] = [
-      { title: 'NOT_REQUIRED', result: { serviceStatus: 'NOT_REQUIRED' } },
+      { title: 'NOT_REQUIRED', result: { serviceStatus: 'DTR_NOT_REQUIRED' } },
       {
         title: 'UPCOMING',
         result: {
-          serviceStatus: 'UPCOMING',
-          action: { type: 'SUBMIT_DTR_REFERRAL', startDate: '2026-02-23', service: 'DTR' },
+          serviceStatus: 'DTR_UPCOMING',
+          actionStartDate: '2026-02-23',
         },
       },
-      { title: 'NOT_STARTED', result: { serviceStatus: 'NOT_STARTED' } },
-      { title: 'SUBMITTED', result: { serviceStatus: 'SUBMITTED' }, submission },
-      { title: 'ACCEPTED', result: { serviceStatus: 'ACCEPTED' }, submission },
-      { title: 'NOT_ACCEPTED', result: { serviceStatus: 'NOT_ACCEPTED' }, submission },
+      { title: 'NOT_STARTED', result: { serviceStatus: 'DTR_NOT_STARTED' } },
+      { title: 'SUBMITTED', result: { serviceStatus: 'DTR_SUBMITTED' }, submission },
+      { title: 'ACCEPTED', result: { serviceStatus: 'DTR_ACCEPTED' }, submission },
+      { title: 'NOT_ACCEPTED', result: { serviceStatus: 'DTR_NOT_ACCEPTED' }, submission },
     ]
 
     beforeEach(() => {
@@ -69,12 +85,7 @@ describe('duty to refer utils', () => {
 
     it.each(testCases)('returns a $title duty to refer status card object', ({ result, submission: dtrSubmission }) => {
       const dutyToRefer = dtrServiceResultFactory.build({
-        serviceResult: serviceResultFactory.build({
-          action: undefined,
-          failureReasons: [],
-          url: undefined,
-          ...result,
-        }),
+        serviceResult: result,
         submission: dtrSubmission,
       })
 
@@ -99,15 +110,16 @@ describe('duty to refer utils', () => {
     ]
 
     it.each([
-      ['NOT_STARTED' as const, []],
-      ['SUBMITTED' as const, rows],
-      ['NOT_ACCEPTED' as const, rows],
-      ['ACCEPTED' as const, rows],
-      ['NOT_ELIGIBLE' as const, []],
+      ['DTR_NOT_STARTED' as const, []],
+      ['DTR_SUBMITTED' as const, rows],
+      ['DTR_NOT_ACCEPTED' as const, rows],
+      ['DTR_ACCEPTED' as const, rows],
+      ['DTR_UPSTREAM_ERROR' as const, []],
       [undefined, []],
     ])('returns details for status %s', (status, expectedDetails) => {
-      const serviceResult = serviceResultFactory.build({ serviceStatus: status })
-      const dutyToRefer = dtrServiceResultFactory.build({ serviceResult, submission })
+      const dutyToRefer = status
+        ? dtrServiceResultFactory.build({ serviceResult: { serviceStatus: status }, submission })
+        : undefined
 
       const details = detailsForStatus(dutyToRefer)
 

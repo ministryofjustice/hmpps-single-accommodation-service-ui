@@ -1,14 +1,14 @@
 import {
   Cas1ApplicationDto,
   Cas1PlacementPairDto,
-  Cas1ServiceResult,
+  Cas1ServiceResultWrapper,
   Cas2ApplicationDto,
-  Cas2ServiceResult,
+  Cas2ServiceResultWrapper,
   Cas3ApplicationDto,
   Cas3ExternalPreviousBookingDto,
-  Cas3ServiceResult,
-  EligibilityDto,
-  ServiceResult,
+  Cas3ServiceResultWrapper,
+  EligibilityV2Dto,
+  ServiceResultV2,
 } from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
 import { SummaryListRow, TextOrHtmlContent } from '@govuk/ui'
@@ -39,46 +39,47 @@ const cas1WithdrawalReasonLabels: Record<string, string> = {
 }
 
 const isHiddenForFailureReason = (
-  serviceResult: ServiceResult | undefined,
-  reasons: ServiceResult['failureReasons'],
+  serviceResult: ServiceResultV2 | undefined,
+  reasons: ServiceResultV2['failureReasons'],
 ): boolean =>
-  serviceResult?.serviceStatus === 'NOT_ELIGIBLE' &&
+  serviceResult !== undefined &&
+  serviceResult.serviceStatus.includes('NOT_ELIGIBLE') &&
   (serviceResult.failureReasons?.some(reason => reasons.includes(reason)) ?? false)
 
-export const linksForCas1Status = (serviceResult?: ServiceResult): Link[] => {
+export const linksForCas1Status = (serviceResult?: ServiceResultV2): Link[] => {
   const { serviceStatus, url } = serviceResult || {}
 
   const link: Omit<Link, 'text'> = { href: url, external: true }
 
   switch (serviceStatus) {
-    case 'NOT_STARTED':
+    case 'CAS1_NOT_STARTED':
       return [{ text: 'Start application', ...link }]
-    case 'NOT_SUBMITTED':
+    case 'CAS1_NOT_SUBMITTED':
       return [{ text: 'Continue application', ...link }]
-    case 'APPLICATION_REJECTED':
+    case 'CAS1_APPLICATION_REJECTED':
       return [{ text: 'Start new application', ...link }]
-    case 'ARRIVED':
-    case 'SUBMITTED':
-    case 'INFO_REQUESTED':
-    case 'PLACEMENT_BOOKED':
-    case 'PLACEMENT_REQUEST_SUBMITTED':
+    case 'CAS1_ARRIVED':
+    case 'CAS1_SUBMITTED':
+    case 'CAS1_INFO_REQUESTED':
+    case 'CAS1_PLACEMENT_BOOKED':
+    case 'CAS1_PLACEMENT_REQUEST_SUBMITTED':
       return [{ text: 'View application', ...link }]
-    case 'NOT_ARRIVED':
-    case 'PLACEMENT_CANCELLED':
-    case 'PLACEMENT_REQUEST_REJECTED':
-    case 'PLACEMENT_REQUEST_WITHDRAWN':
+    case 'CAS1_NOT_ARRIVED':
+    case 'CAS1_PLACEMENT_CANCELLED':
+    case 'CAS1_PLACEMENT_REQUEST_REJECTED':
+    case 'CAS1_PLACEMENT_REQUEST_WITHDRAWN':
       return [{ text: 'Create new placement request', ...link }]
-    case 'PLACEMENT_REQUEST_NOT_STARTED':
+    case 'CAS1_PLACEMENT_REQUEST_NOT_STARTED':
       return [{ text: 'Create placement request', ...link }]
-    case 'NOT_ELIGIBLE':
-    case 'UPCOMING':
+    case 'CAS1_NOT_ELIGIBLE':
+    case 'CAS1_UPCOMING':
     default:
       return undefined
   }
 }
 
 export const linksForCas2Status = (
-  serviceResult?: ServiceResult,
+  serviceResult?: ServiceResultV2,
   cas2Application?: Cas2ApplicationDto | null,
   crn?: string,
 ) => {
@@ -86,19 +87,19 @@ export const linksForCas2Status = (
   const link: Omit<Link, 'text'> = { href: url, external: true }
 
   switch (serviceStatus) {
-    case 'NOT_STARTED':
+    case 'CAS2_NOT_STARTED':
       return [{ text: 'Start application', ...link }]
-    case 'NOT_SUBMITTED':
-    case 'MORE_INFORMATION_NEEDED':
+    case 'CAS2_NOT_SUBMITTED':
+    case 'CAS2_MORE_INFORMATION_NEEDED':
       return [{ text: 'Continue application', ...link }]
-    case 'SUBMITTED':
-    case 'AWAITING_DECISION':
-    case 'ON_WAITING_LIST':
-    case 'PLACE_OFFERED':
-    case 'OFFER_ACCEPTED':
-    case 'ARRIVED':
+    case 'CAS2_SUBMITTED':
+    case 'CAS2_AWAITING_DECISION':
+    case 'CAS2_ON_WAITING_LIST':
+    case 'CAS2_PLACE_OFFERED':
+    case 'CAS2_OFFER_ACCEPTED':
+    case 'CAS2_ARRIVED':
       return [{ text: 'View application', ...link }]
-    case 'AWAITING_ARRIVAL':
+    case 'CAS2_AWAITING_ARRIVAL':
       if (config.flags.cas2ManualArrivalEnabled && cas2Application && crn) {
         const markAsArrivedLink: Omit<Link, 'text'> = {
           href: uiPaths.applications.arrival({ crn, applicationId: cas2Application.id }),
@@ -110,55 +111,59 @@ export const linksForCas2Status = (
         ]
       }
       return [{ text: 'View application', ...link }]
-    case 'OFFER_DECLINED_OR_WITHDRAWN':
-    case 'CANCELLED':
-    case 'WITHDRAWN':
+    case 'CAS2_OFFER_DECLINED_OR_WITHDRAWN':
+    case 'CAS2_CANCELLED':
+    case 'CAS2_WITHDRAWN':
       return [{ text: 'Start new application', ...link }]
     default:
       return undefined
   }
 }
 
-export const linksForCas3Status = (serviceResult?: ServiceResult) => {
+export const linksForCas3Status = (serviceResult?: ServiceResultV2) => {
   const { serviceStatus, url } = serviceResult || {}
 
   const link: Omit<Link, 'text'> = { href: url, external: true }
 
   switch (serviceStatus) {
-    case 'NOT_STARTED':
+    case 'CAS3_NOT_STARTED':
       return [{ text: 'Start referral', ...link }]
-    case 'ARRIVED':
-    case 'SUBMITTED':
-    case 'BEDSPACE_OFFERED':
-    case 'BOOKING_CONFIRMED':
-    case 'BOOKING_CANCELLED':
+    case 'CAS3_ARRIVED':
+    case 'CAS3_SUBMITTED':
+    case 'CAS3_BEDSPACE_OFFERED':
+    case 'CAS3_BOOKING_CONFIRMED':
+    case 'CAS3_BOOKING_CANCELLED':
       return [{ text: 'View referral', ...link }]
-    case 'NOT_SUBMITTED':
+    case 'CAS3_NOT_SUBMITTED':
       return [{ text: 'Continue referral', ...link }]
-    case 'REJECTED':
+    case 'CAS3_REJECTED':
       return [{ text: 'Start new referral', ...link }]
-    case 'CANNOT_START_YET':
-    case 'NOT_ELIGIBLE':
-    case 'UPCOMING':
+    case 'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS_ACCOMMODATION':
+    case 'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS':
+    case 'CAS3_CANNOT_START_YET_SUBMIT_CRS_ACCOMMODATION':
+    case 'CAS3_CANNOT_START_YET_SUBMIT_CRS':
+    case 'CAS3_CANNOT_START_YET_SUBMIT_DTR':
+    case 'CAS3_NOT_ELIGIBLE':
+    case 'CAS3_UPCOMING':
     default:
       return undefined
   }
 }
 
-const upcomingStartHint = (serviceResult?: ServiceResult): string | undefined => {
-  const { serviceStatus, action } = serviceResult ?? {}
+const upcomingStartHint = (serviceResult?: ServiceResultV2): string | undefined => {
+  const { serviceStatus, actionStartDate } = serviceResult ?? {}
 
-  if (serviceStatus === 'UPCOMING' && action?.startDate) {
-    return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
+  if (['CAS1_UPCOMING', 'CAS2_UPCOMING', 'CAS3_UPCOMING'].includes(serviceStatus) && actionStartDate) {
+    return `Start referral from ${formatDate(actionStartDate)} (${formatDate(actionStartDate, 'days ago/in')}).`
   }
 
   return undefined
 }
 
-const hintForCas1Status = (serviceResult?: ServiceResult): string | undefined => {
+const hintForCas1Status = (serviceResult?: ServiceResultV2): string | undefined => {
   const { serviceStatus, failureReasons } = serviceResult ?? {}
 
-  if (serviceStatus === 'NOT_ELIGIBLE') {
+  if (serviceStatus === 'CAS1_NOT_ELIGIBLE') {
     if (failureReasons.includes('MALE_NOT_HIGH_RISK_TIER') || failureReasons.includes('NON_MALE_NOT_HIGH_RISK_TIER'))
       return 'Tier not eligible for this level of supervision.'
   }
@@ -166,14 +171,14 @@ const hintForCas1Status = (serviceResult?: ServiceResult): string | undefined =>
   return upcomingStartHint(serviceResult)
 }
 
-const hintForCas2Status = (serviceResult?: ServiceResult): string | undefined => {
+const hintForCas2Status = (serviceResult?: ServiceResultV2): string | undefined => {
   return upcomingStartHint(serviceResult)
 }
 
-const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined => {
+const hintForCas3Status = (serviceResult?: ServiceResultV2): string | undefined => {
   const { serviceStatus, failureReasons } = serviceResult ?? {}
 
-  if (serviceStatus === 'NOT_ELIGIBLE') {
+  if (serviceStatus === 'CAS3_NOT_ELIGIBLE') {
     if (failureReasons.includes('INVALID_CURRENT_ACCOMMODATION_TYPE')) {
       return 'Only for prison leavers, move on from Approved premises or CAS2.'
     }
@@ -181,7 +186,7 @@ const hintForCas3Status = (serviceResult?: ServiceResult): string | undefined =>
     return 'Not at risk of homelessness.'
   }
 
-  if (serviceStatus === 'BEDSPACE_OFFERED') {
+  if (serviceStatus === 'CAS3_BEDSPACE_OFFERED') {
     return 'Bedspace details are sent by email'
   }
 
@@ -261,20 +266,20 @@ const placementHistoryText = ({ requestForPlacement, placement }: Cas1PlacementP
 }
 
 const contentForCas1Status = (
-  serviceResult?: ServiceResult,
+  serviceResult?: ServiceResultV2,
   cas1Application?: Cas1ApplicationDto,
 ): TextOrHtmlContent[] => {
   const { serviceStatus } = serviceResult ?? {}
 
   switch (serviceStatus) {
-    case 'PLACEMENT_REQUEST_WITHDRAWN':
-    case 'PLACEMENT_BOOKED':
-    case 'PLACEMENT_REQUEST_SUBMITTED':
-    case 'PLACEMENT_REQUEST_REJECTED':
-    case 'PLACEMENT_REQUEST_NOT_STARTED':
-    case 'PLACEMENT_CANCELLED':
-    case 'NOT_ARRIVED':
-    case 'ARRIVED': {
+    case 'CAS1_PLACEMENT_REQUEST_WITHDRAWN':
+    case 'CAS1_PLACEMENT_BOOKED':
+    case 'CAS1_PLACEMENT_REQUEST_SUBMITTED':
+    case 'CAS1_PLACEMENT_REQUEST_REJECTED':
+    case 'CAS1_PLACEMENT_REQUEST_NOT_STARTED':
+    case 'CAS1_PLACEMENT_CANCELLED':
+    case 'CAS1_NOT_ARRIVED':
+    case 'CAS1_ARRIVED': {
       const { placementHistory } = cas1Application ?? {}
       if (!placementHistory?.length) return undefined
       const history = placementHistory.map(placementHistoryText).filter((entry): entry is string => entry !== undefined)
@@ -295,13 +300,13 @@ const contentForCas1Status = (
   }
 }
 
-const cas2NotEligibleSummaries: Partial<Record<ServiceResult['failureReasons'][number], string>> = {
+const cas2NotEligibleSummaries: Partial<Record<ServiceResultV2['failureReasons'][number], string>> = {
   INVALID_TIER: 'Tier not eligible',
   UNDER_18: 'Age (applicant is under 18)',
   SEXUAL_OFFENCE_REGISTRATIONS_PRESENT: 'Sexual offence history',
 }
 
-const cas2NotEligibleReasons: Partial<Record<ServiceResult['failureReasons'][number], string>> = {
+const cas2NotEligibleReasons: Partial<Record<ServiceResultV2['failureReasons'][number], string>> = {
   INVALID_TIER: 'Tier not eligible.',
   SEXUAL_OFFENCE_REGISTRATIONS_PRESENT: 'Not eligible due to sexual offence history.',
   UNDER_18: 'Not eligible as applicant is under 18.',
@@ -311,10 +316,10 @@ const cas2NotEligibleReasons: Partial<Record<ServiceResult['failureReasons'][num
   IN_COMMUNITY: 'Not eligible unless at risk of recall.',
 }
 
-const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
+const contentForCas2Status = (serviceResult?: ServiceResultV2): TextOrHtmlContent[] => {
   const { serviceStatus, failureReasons } = serviceResult ?? {}
 
-  if (serviceStatus === 'NOT_ELIGIBLE') {
+  if (serviceStatus?.includes('NOT_ELIGIBLE')) {
     if (failureReasons.length >= 2) {
       const bullets = failureReasons.map(reason => cas2NotEligibleSummaries[reason]).filter(Boolean)
       return [htmlContent(bulletList('Not eligible due to:', bullets))]
@@ -331,48 +336,39 @@ const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[
 }
 
 const contentForCas3Status = (
-  serviceResult?: ServiceResult,
+  serviceResult?: ServiceResultV2,
   cas3Application?: Cas3ApplicationDto,
 ): TextOrHtmlContent[] => {
   const { serviceStatus } = serviceResult ?? {}
+  const requirementTemplate = (requirement: string) => `You need to ${requirement} before you can make a CAS3 referral.`
 
   switch (serviceStatus) {
-    case 'CANNOT_START_YET': {
-      const { blockingStatusReason } = serviceResult ?? {}
-      const requirementTemplate = (requirement: string) =>
-        `You need to ${requirement} before you can make a CAS3 referral.`
-
-      switch (blockingStatusReason) {
-        case 'SUBMIT_CRS_BEFORE_CAS3':
-          return [textContent(requirementTemplate('submit a CRS referral'))]
-        case 'SUBMIT_DTR_BEFORE_CAS3':
-          return [textContent(requirementTemplate('add DTR referral details'))]
-        case 'SUBMIT_DTR_AND_CRS_BEFORE_CAS3':
-          return [
-            htmlContent(
-              bulletList('Before you can make a CAS3 referral, you need to:', [
-                'Add DTR referral details',
-                'Submit a CRS referral',
-              ]),
-            ),
-          ]
-        case 'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3':
-          return [textContent(requirementTemplate('submit a CRS accommodation referral'))]
-        case 'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3':
-          return [
-            htmlContent(
-              bulletList('Before you can make a CAS3 referral, you need to:', [
-                'Add DTR referral details',
-                'Submit a CRS accommodation referral',
-              ]),
-            ),
-          ]
-        default:
-          return undefined
-      }
-    }
-    case 'BEDSPACE_OFFERED':
-    case 'SUBMITTED': {
+    case 'CAS3_CANNOT_START_YET_SUBMIT_CRS':
+      return [textContent(requirementTemplate('submit a CRS referral'))]
+    case 'CAS3_CANNOT_START_YET_SUBMIT_DTR':
+      return [textContent(requirementTemplate('add DTR referral details'))]
+    case 'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS':
+      return [
+        htmlContent(
+          bulletList('Before you can make a CAS3 referral, you need to:', [
+            'Add DTR referral details',
+            'Submit a CRS referral',
+          ]),
+        ),
+      ]
+    case 'CAS3_CANNOT_START_YET_SUBMIT_CRS_ACCOMMODATION':
+      return [textContent(requirementTemplate('submit a CRS accommodation referral'))]
+    case 'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS_ACCOMMODATION':
+      return [
+        htmlContent(
+          bulletList('Before you can make a CAS3 referral, you need to:', [
+            'Add DTR referral details',
+            'Submit a CRS accommodation referral',
+          ]),
+        ),
+      ]
+    case 'CAS3_BEDSPACE_OFFERED':
+    case 'CAS3_SUBMITTED': {
       const { previousBookings } = cas3Application ?? {}
       if (!previousBookings?.length) return undefined
       const history = previousBookings.map(bookingHistoryText).filter((entry): entry is string => entry !== undefined)
@@ -394,7 +390,7 @@ const contentForCas3Status = (
 }
 
 const detailsForCas2Status = (
-  serviceResult: ServiceResult,
+  serviceResult: ServiceResultV2,
   cas2Application?: Cas2ApplicationDto | null,
 ): SummaryListRow[] => {
   if (!cas2Application) return []
@@ -415,29 +411,29 @@ const detailsForCas2Status = (
     )
 
   switch (serviceResult.serviceStatus) {
-    case 'NOT_SUBMITTED':
+    case 'CAS2_NOT_SUBMITTED':
       return [
         summaryListRow('Application started', formatDateAndDaysAgo(createdAt)),
         summaryListRow('Started by', createdBy.name),
       ]
-    case 'MORE_INFORMATION_NEEDED':
-    case 'SUBMITTED':
-    case 'AWAITING_DECISION':
-    case 'ON_WAITING_LIST':
-    case 'PLACE_OFFERED':
-    case 'OFFER_ACCEPTED':
-    case 'AWAITING_ARRIVAL':
-    case 'WITHDRAWN':
+    case 'CAS2_MORE_INFORMATION_NEEDED':
+    case 'CAS2_SUBMITTED':
+    case 'CAS2_AWAITING_DECISION':
+    case 'CAS2_ON_WAITING_LIST':
+    case 'CAS2_PLACE_OFFERED':
+    case 'CAS2_OFFER_ACCEPTED':
+    case 'CAS2_AWAITING_ARRIVAL':
+    case 'CAS2_WITHDRAWN':
       return [submittedRow(), submittedByRow()]
-    case 'ARRIVED':
+    case 'CAS2_ARRIVED':
       return [submittedRow(), submittedByRow(), arrivedRow()]
-    case 'OFFER_DECLINED_OR_WITHDRAWN':
+    case 'CAS2_OFFER_DECLINED_OR_WITHDRAWN':
       return [
         summaryListRow('Reason', submittedApplication?.offerDeclinedReason ?? undefined),
         submittedRow(),
         submittedByRow(),
       ]
-    case 'CANCELLED':
+    case 'CAS2_CANCELLED':
       return [
         summaryListRow('Reason', submittedApplication?.cancelledReason ?? undefined),
         submittedRow(),
@@ -462,7 +458,10 @@ const placementDurationText = (durationDays?: number | null): string | undefined
   return `${weekText}, ${dayText}`
 }
 
-const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Cas1ApplicationDto): SummaryListRow[] => {
+const detailsForCas1Status = (
+  serviceResult: ServiceResultV2,
+  cas1Application?: Cas1ApplicationDto,
+): SummaryListRow[] => {
   const { serviceStatus } = serviceResult ?? {}
   if (!cas1Application) return []
   const { application, assessment, requestForPlacement, placement } = cas1Application
@@ -475,57 +474,57 @@ const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Ca
   const requestSubmittedByRow = () => summaryListRow('Request submitted by', requestForPlacement?.submittedBy?.name)
 
   switch (serviceStatus) {
-    case 'NOT_SUBMITTED':
+    case 'CAS1_NOT_SUBMITTED':
       return [
         summaryListRow('Application started', formatDateAndDaysAgo(application?.createdAt)),
         summaryListRow('Started by', application?.createdBy?.name),
       ]
-    case 'SUBMITTED':
-    case 'INFO_REQUESTED':
+    case 'CAS1_SUBMITTED':
+    case 'CAS1_INFO_REQUESTED':
       return [submittedRow(), submittedByRow()]
-    case 'APPLICATION_REJECTED':
+    case 'CAS1_APPLICATION_REJECTED':
       return [
         summaryListRow('Decision', assessment?.rejectionRationale ? `${assessment.rejectionRationale}` : 'Reject'),
         submittedRow(),
         submittedByRow(),
       ]
-    case 'PLACEMENT_BOOKED':
+    case 'CAS1_PLACEMENT_BOOKED':
       return [
         summaryListRow('Expected arrival', formatDateAndDaysAgo(requestForPlacement?.expectedArrivalDate ?? undefined)),
         summaryListRow('Duration', placementDurationText(requestForPlacement?.durationDays)),
         requestSubmittedByRow(),
       ]
-    case 'ARRIVED':
+    case 'CAS1_ARRIVED':
       return [
         summaryListRow('Arrival date', formatDateAndDaysAgo(placement?.actualArrivalDate ?? undefined)),
         summaryListRow('Expected departure', formatDateAndDaysAgo(placement?.expectedDepartureDate ?? undefined)),
         requestSubmittedByRow(),
       ]
-    case 'NOT_ARRIVED':
+    case 'CAS1_NOT_ARRIVED':
       return [
         summaryListRow('Expected arrival', formatDateAndDaysAgo(requestForPlacement?.expectedArrivalDate ?? undefined)),
         requestSubmittedByRow(),
         expiresRow(),
       ]
-    case 'PLACEMENT_CANCELLED':
+    case 'CAS1_PLACEMENT_CANCELLED':
       return [
         summaryListRow('Cancellation reason', placement?.cancellationReason ?? undefined),
         summaryListRow('Expected arrival', formatDateAndDaysAgo(requestForPlacement?.expectedArrivalDate ?? undefined)),
         requestSubmittedByRow(),
         expiresRow(),
       ]
-    case 'PLACEMENT_REQUEST_NOT_STARTED':
+    case 'CAS1_PLACEMENT_REQUEST_NOT_STARTED':
       return [submittedByRow(), expiresRow()]
-    case 'PLACEMENT_REQUEST_SUBMITTED':
+    case 'CAS1_PLACEMENT_REQUEST_SUBMITTED':
       return [requestSubmittedRow(), requestSubmittedByRow(), expiresRow()]
-    case 'PLACEMENT_REQUEST_REJECTED':
+    case 'CAS1_PLACEMENT_REQUEST_REJECTED':
       return [
         summaryListRow('Rejection reason', requestForPlacement?.rejectionReason ?? undefined),
         requestSubmittedRow(),
         requestSubmittedByRow(),
         expiresRow(),
       ]
-    case 'PLACEMENT_REQUEST_WITHDRAWN':
+    case 'CAS1_PLACEMENT_REQUEST_WITHDRAWN':
       return [
         summaryListRow(
           'Withdrawal reason',
@@ -543,29 +542,29 @@ const detailsForCas1Status = (serviceResult: ServiceResult, cas1Application?: Ca
 }
 
 const detailsForCas3Status = (
-  serviceResult?: ServiceResult,
+  serviceResult?: ServiceResultV2,
   cas3Application?: Cas3ApplicationDto,
 ): SummaryListRow[] => {
   const { serviceStatus } = serviceResult ?? {}
   if (!cas3Application) return []
   switch (serviceStatus) {
-    case 'NOT_SUBMITTED':
+    case 'CAS3_NOT_SUBMITTED':
       return [
         summaryListRow('Referral started', formatDateAndDaysAgo(cas3Application.createdAt ?? undefined)),
         summaryListRow('Started by', cas3Application.createdBy?.name ?? undefined),
       ]
-    case 'SUBMITTED':
+    case 'CAS3_SUBMITTED':
       return [
         summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
         summaryListRow('Submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
-    case 'REJECTED':
+    case 'CAS3_REJECTED':
       return [
         summaryListRow('Rejection reason', cas3Application?.applicationRejectedReason ?? undefined),
         summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
         summaryListRow('Submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
-    case 'BEDSPACE_OFFERED':
+    case 'CAS3_BEDSPACE_OFFERED':
       return [
         summaryListRow(
           'Provisional offer sent',
@@ -573,7 +572,7 @@ const detailsForCas3Status = (
         ),
         summaryListRow('Referral submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
-    case 'BOOKING_CONFIRMED': {
+    case 'CAS3_BOOKING_CONFIRMED': {
       const { premises } = cas3Application ?? {}
       const address = cas3PremisesToAccommodationAddress(premises)
       const duration = placementDurationText(daysBetween(premises?.startDate, premises?.endDate))
@@ -587,7 +586,7 @@ const detailsForCas3Status = (
         summaryListRow('Referral submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
     }
-    case 'BOOKING_CANCELLED': {
+    case 'CAS3_BOOKING_CANCELLED': {
       const { cancellation, premises, createdBy } = cas3Application
       const bookingDates =
         premises?.startDate && premises.endDate
@@ -600,7 +599,7 @@ const detailsForCas3Status = (
         summaryListRow('Referral submitted by', createdBy?.name ?? undefined),
       ]
     }
-    case 'ARRIVED':
+    case 'CAS3_ARRIVED':
       return [
         summaryListRow('Arrival date', formatDateAndDaysAgo(cas3Application?.premises.startDate ?? undefined)),
         summaryListRow('Expected departure date', formatDateAndDaysAgo(cas3Application?.premises.endDate ?? undefined)),
@@ -611,21 +610,24 @@ const detailsForCas3Status = (
   }
 }
 
-const statusFields = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
+const statusFields = (serviceResult?: ServiceResultV2): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
   const { serviceStatus } = serviceResult ?? {}
 
   return {
-    inactive: serviceStatus === 'NOT_ELIGIBLE',
-    blocked: serviceStatus === 'CANNOT_START_YET',
+    inactive: serviceStatus?.includes('NOT_ELIGIBLE') ?? false,
+    blocked: serviceStatus?.includes('CANNOT_START_YET') ?? false,
     status: serviceStatusTag(serviceStatus),
   }
 }
 
-const statusFieldsForCas2 = (serviceResult?: ServiceResult): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
+const statusFieldsForCas2 = (serviceResult?: ServiceResultV2): Pick<StatusCard, 'inactive' | 'blocked' | 'status'> => {
   return statusFields(serviceResult)
 }
 
-export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceResult): StatusCard | undefined => {
+export const cas1StatusCard = ({
+  serviceResult,
+  cas1Application,
+}: Cas1ServiceResultWrapper): StatusCard | undefined => {
   if (isHiddenForFailureReason(serviceResult, ['NOT_IN_PRISON_OR_CAS1_ACCOMMODATION'])) return undefined
 
   return {
@@ -638,7 +640,10 @@ export const cas1StatusCard = ({ serviceResult, cas1Application }: Cas1ServiceRe
   }
 }
 
-export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceResult, crn: string): StatusCard => ({
+export const cas2StatusCard = (
+  { serviceResult, cas2Application }: Cas2ServiceResultWrapper,
+  crn: string,
+): StatusCard => ({
   heading: 'Short-term accommodation (CAS2)',
   ...statusFieldsForCas2(serviceResult),
   hint: hintForCas2Status(serviceResult),
@@ -647,7 +652,7 @@ export const cas2StatusCard = ({ serviceResult, cas2Application }: Cas2ServiceRe
   content: contentForCas2Status(serviceResult),
 })
 
-export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceResult): StatusCard => ({
+export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceResultWrapper): StatusCard => ({
   heading: 'CAS3 (transitional accommodation)',
   ...statusFields(serviceResult),
   hint: hintForCas3Status(serviceResult),
@@ -656,7 +661,7 @@ export const cas3StatusCard = ({ serviceResult, cas3Application }: Cas3ServiceRe
   content: contentForCas3Status(serviceResult, cas3Application),
 })
 
-export const eligibilityToEligibilityCards = (eligibility: EligibilityDto, crn: string): StatusCard[] =>
+export const eligibilityToEligibilityCards = (eligibility: EligibilityV2Dto, crn: string): StatusCard[] =>
   [
     dutyToReferStatusCard(crn, eligibility.dtr),
     crsStatusCard(eligibility.crs),

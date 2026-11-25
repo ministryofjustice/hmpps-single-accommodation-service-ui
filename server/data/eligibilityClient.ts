@@ -1,6 +1,6 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { ApiResponseDtoEligibilityDto } from '@sas/api'
+import { ApiResponseDtoEligibilityV2Dto } from '@sas/api'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -11,6 +11,6 @@ export default class EligibilityClient extends RestClient {
   }
 
   getEligibility(token: string, crn: string) {
-    return this.get<ApiResponseDtoEligibilityDto>({ path: apiPaths.cases.eligibility({ crn }) }, asUser(token))
+    return this.get<ApiResponseDtoEligibilityV2Dto>({ path: apiPaths.cases.eligibility({ crn }) }, asUser(token))
   }
 }

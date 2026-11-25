@@ -36,7 +36,7 @@ export default {
       notes: externalReferralsPath.path(':id/notes'),
       withdrawal: externalReferralsPath.path(':id/withdrawal'),
     },
-    eligibility: casePath.path('eligibility'),
+    eligibility: casePath.path('v2/eligibility'),
     referrals: casePath.path('applications'),
     proposedAddresses: {
       index: proposedAddressesPath,

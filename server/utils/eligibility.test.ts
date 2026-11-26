@@ -62,7 +62,7 @@ const cas3Application: NonNullable<Cas3ServiceResult['cas3Application']> = {
   applicationStatus: 'SUBMITTED',
   uiUrl: 'https://example.com/referral',
   applicationSubmittedDate: '2026-06-02',
-  applicationSubmittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+  createdBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
   bookingProvisionalOfferSentDate: '2026-06-15',
   premises: {
     addressLine1: '1 Test Street',

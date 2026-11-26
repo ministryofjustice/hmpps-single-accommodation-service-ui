@@ -549,6 +549,11 @@ const detailsForCas3Status = (
   const { serviceStatus } = serviceResult ?? {}
   if (!cas3Application) return []
   switch (serviceStatus) {
+    case 'NOT_SUBMITTED':
+      return [
+        summaryListRow('Referral started', formatDateAndDaysAgo(cas3Application.createdAt ?? undefined)),
+        summaryListRow('Started by', cas3Application.createdBy?.name ?? undefined),
+      ]
     case 'SUBMITTED':
       return [
         summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),

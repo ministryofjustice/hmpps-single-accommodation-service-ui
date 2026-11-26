@@ -806,6 +806,27 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CONFIRMED st
 
 exports[`cas3 status card details renders detail rows for a NOT_STARTED status 1`] = `[]`;
 
+exports[`cas3 status card details renders detail rows for a NOT_SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Referral started",
+    },
+    "value": {
+      "text": "1 June 2026 (61 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Started by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
 exports[`cas3 status card details renders detail rows for a REJECTED status 1`] = `
 [
   {

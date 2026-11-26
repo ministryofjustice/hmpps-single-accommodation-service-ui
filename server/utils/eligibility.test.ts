@@ -612,6 +612,7 @@ describe('cas3 status card', () => {
   describe('details', () => {
     const detailStatuses: ServiceResult['serviceStatus'][] = [
       'NOT_STARTED',
+      'NOT_SUBMITTED',
       'SUBMITTED',
       'REJECTED',
       'BEDSPACE_OFFERED',

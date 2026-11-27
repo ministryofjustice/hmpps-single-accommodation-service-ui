@@ -1,16 +1,14 @@
 import { expect, test } from '@playwright/test'
 import hmppsAuth from '../mockApis/hmppsAuth'
-import casesApi from '../mockApis/cases'
-import userApi from '../mockApis/user'
 
 import { login, resetStubs } from '../testUtils'
 import CasesListPage from '../pages/cases/listPage'
 import config from '../../server/config'
+import { stubCaseListPage } from '../helpers/caseListPage'
 
 test.describe('SignIn', () => {
   test.beforeEach(async () => {
-    await casesApi.stubGetCases()
-    await userApi.stubGetTeams()
+    await stubCaseListPage()
   })
 
   test.afterEach(async () => {

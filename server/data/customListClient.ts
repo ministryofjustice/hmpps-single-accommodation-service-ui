@@ -1,7 +1,7 @@
 import { asUser, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { ApiResponseDtoListCaseDto, ApiResponseDtoListString } from '@sas/api'
-import { GetCasesQuery } from '@sas/ui'
+import { GetCasesApiQuery } from '@sas/ui'
 import config from '../config'
 import logger from '../../logger'
 import apiPaths from '../paths/api'
@@ -25,7 +25,7 @@ export default class CustomListClient extends RestClient {
     )
   }
 
-  getCustomListCases(token: string, query: GetCasesQuery) {
+  getCustomListCases(token: string, query: GetCasesApiQuery) {
     return this.get<ApiResponseDtoListCaseDto>(
       { path: apiPaths.customList.getCases({}), query, timeout: config.timeoutOverrides.sasCasesApi },
       asUser(token),

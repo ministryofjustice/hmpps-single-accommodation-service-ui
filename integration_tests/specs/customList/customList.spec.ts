@@ -57,7 +57,12 @@ test.describe('custom list', () => {
     // AND I should see the change list link
     await showCaseListPage.shouldShowLink('Change list', '/custom-list/add-crns')
     // AND I should see the list of cases
-    await showCaseListPage.shouldShowCases(cases)
+    await showCaseListPage.shouldShowCases(cases, undefined, true)
+    // AND the assigned to filter should not be present
+    await casesListPage.verifyFilters({
+      searchTerm: '',
+      riskLevel: '',
+    })
   })
   test('should allow a user to navigate to a profile via the custom list', async ({ page }) => {
     const cases = [caseFactory.build({ crn: 'X123456' }), caseFactory.build({ crn: 'X654321' })]
@@ -180,7 +185,7 @@ test.describe('custom list', () => {
     // AND I should see the change list link
     await showCaseListPage.shouldShowLink('Change list', '/custom-list/add-crns')
     // AND I should see the list of cases
-    await showCaseListPage.shouldShowCases(cases)
+    await showCaseListPage.shouldShowCases(cases, undefined, true)
 
     // When I click the change link
     await showCaseListPage.clickLink('Change list')
@@ -210,6 +215,6 @@ test.describe('custom list', () => {
     // AND I should see the change list link
     await showCaseListPage.shouldShowLink('Change list', '/custom-list/add-crns')
     // AND I should see the list of cases
-    await showCaseListPage.shouldShowCases(newCases)
+    await showCaseListPage.shouldShowCases(newCases, undefined, true)
   })
 })

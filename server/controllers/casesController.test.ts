@@ -18,12 +18,12 @@ import {
 } from '../testutils/factories'
 import {
   caseAssignedTo,
+  caseListSettingsType,
   casesResultsSummary,
   casesTableColumns,
   casesTabs,
   casesToRows,
   caseToRows,
-  queryToFilters,
   recentSearchItems,
 } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
@@ -93,27 +93,45 @@ describe('casesController', () => {
 
   describe('index', () => {
     const teams = [{ code: 'team-code', name: 'Team Name' }]
-    const baseContext = {
-      assignedToOptions: [
-        { value: '', text: 'You (J. Doe)' },
-        { value: 'team-code', text: 'Team Name' },
-      ],
-      riskLevelOptions: [
-        { value: '', text: 'All' },
-        { value: 'VERY_HIGH', text: 'Very high' },
-        { value: 'HIGH', text: 'High' },
-        { value: 'MEDIUM', text: 'Medium' },
-        { value: 'LOW', text: 'Low' },
-      ],
-    }
+    const teamMembers = [{ username: 'username', forename: 'forename', surname: 'surname' }]
+    const riskLevelOptions = [
+      { value: '', text: 'All' },
+      { value: 'VERY_HIGH', text: 'Very high' },
+      { value: 'HIGH', text: 'High' },
+      { value: 'MEDIUM', text: 'Medium' },
+      { value: 'LOW', text: 'Low' },
+    ]
+    const expectedAssignedToOptions = (
+      selected: 'user' | 'team' | 'member',
+    ): caseListSettingsType['assignedToOptions'] => ({
+      user: { value: '', text: 'You (J. Doe)', selected: selected === 'user' },
+      teams: [{ value: 'team-code', text: 'Team Name', selected: selected === 'team' }],
+      teamMembers: [{ value: 'username', text: 'forename surname', selected: selected === 'member' }],
+    })
 
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
+      userService.getMyTeamMembers.mockResolvedValue(apiResponseFactory.buildResponse(teamMembers))
+      jest.spyOn(navUtils, 'setActiveCaseListTab')
     })
 
     it('renders the case list page for the current user by default', async () => {
       const cases = caseFactory.buildList(3)
       casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
+
+      request.query = {}
+      const expectedContext: caseListSettingsType = {
+        riskLevelOptions,
+        tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
+        peopleType: 'NFA_RISK',
+        resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
+        casesRows: casesToRows(cases),
+        filters: [],
+        query: {},
+        assignedToOptions: expectedAssignedToOptions('user'),
+      }
+
       await casesController.index()(request, response, next)
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CASES_LIST, {
         who: user.username,
@@ -124,57 +142,82 @@ describe('casesController', () => {
       expect(setActiveCaseListTab).toHaveBeenCalledWith(request, response, 'case-list')
       expect(setCaseListFilters).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(userService.getMyTeamMembers).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        caseListSettings: {
-          ...baseContext,
-          tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
-          peopleType: 'NFA_RISK',
-          resultsSummary: casesResultsSummary(cases),
-          casesTableColumns: casesTableColumns(),
-          casesRows: casesToRows(cases),
-          filters: [],
-          query: {},
-          disabledFields: [],
-        },
+        caseListSettings: expectedContext,
       })
     })
 
-    it('renders a filtered case list page', async () => {
+    it('renders a filtered case list page - team', async () => {
       const cases = caseFactory.buildList(3, { riskLevel: 'HIGH' })
       casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
 
       request.query = {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
-        teamCode: 'team-code',
+        assignedTo: 'team_team-code',
         peopleType: 'HOUSED',
       }
-      request.originalUrl = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH'
-
+      request.originalUrl = '/?assignedTo=team_team-code&searchTerm=some-crn&riskLevel=HIGH'
+      const expectedContext: caseListSettingsType = {
+        riskLevelOptions,
+        tabs: casesTabs(request.originalUrl, 'HOUSED'),
+        peopleType: 'HOUSED',
+        resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
+        casesRows: casesToRows(cases, user.username),
+        filters: [
+          { href: '/?assignedTo=team_team-code&riskLevel=HIGH', text: '‘some-crn’' },
+          { href: '/?searchTerm=some-crn&riskLevel=HIGH', text: 'Assigned to: Team Name' },
+          { href: '/?assignedTo=team_team-code&searchTerm=some-crn', text: 'RoSH: High' },
+        ],
+        query: {
+          searchTerm: 'some-crn',
+          riskLevel: 'HIGH',
+          assignedTo: 'team_team-code',
+          peopleType: 'HOUSED',
+        },
+        assignedToOptions: expectedAssignedToOptions('team'),
+      }
       await casesController.index()(request, response, next)
 
       expect(request.session.caseListFilters).toEqual(
-        'searchTerm=some-crn&riskLevel=HIGH&teamCode=team-code&peopleType=HOUSED',
+        'searchTerm=some-crn&riskLevel=HIGH&assignedTo=team_team-code&peopleType=HOUSED',
       )
+      expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(userService.getMyTeamMembers).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
         peopleType: 'HOUSED',
+        assignedToUsername: undefined,
       })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        caseListSettings: {
-          ...baseContext,
-          tabs: casesTabs(request.originalUrl, 'HOUSED'),
-          peopleType: 'HOUSED',
-          resultsSummary: casesResultsSummary(cases),
-          filters: queryToFilters(request.query, request.originalUrl, teams),
-          casesTableColumns: casesTableColumns(),
-          casesRows: casesToRows(cases, 'user1'),
-          query: request.query,
-          disabledFields: [],
-        },
+        caseListSettings: expectedContext,
+      })
+    })
+
+    it('filters the case list by a team member', async () => {
+      const cases = caseFactory.buildList(2)
+      casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
+      request.query = { assignedTo: 'member_username', peopleType: 'HOUSED' }
+      request.originalUrl = '/?assignedTo=member_username&peopleType=HOUSED'
+
+      await casesController.index()(request, response, next)
+
+      expect(casesService.getCases).toHaveBeenCalledTimes(1)
+      expect(casesService.getCases.mock.calls[0]).toStrictEqual([
+        TEST_TOKEN,
+        { peopleType: 'HOUSED', assignedToUsername: 'username', teamCode: undefined },
+      ])
+      expect(response.render).toHaveBeenCalledWith('pages/index', {
+        caseListSettings: expect.objectContaining({
+          casesRows: casesToRows(cases),
+          filters: [{ text: 'Assigned to: forename surname', href: '/?peopleType=HOUSED' }],
+          assignedToOptions: expectedAssignedToOptions('member'),
+        }),
       })
     })
   })

@@ -51,7 +51,7 @@
                     </optgroup>
                   {% endif %}
                   {% if caseListSettings.assignedToOptions.teamMembers %}
-                    <optgroup label="Teams members">
+                    <optgroup label="Team members">
                       {% for teamMember in caseListSettings.assignedToOptions.teamMembers %}
                         <option value="member_{{ teamMember.value }}" {% if teamMember.selected %}selected{% endif %}>
                           {{ teamMember.text }}

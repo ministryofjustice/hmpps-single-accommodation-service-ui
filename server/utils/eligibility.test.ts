@@ -1,4 +1,11 @@
-import { Cas1ServiceResult, Cas3ServiceResult, Cas2ServiceResult, ServiceResult } from '@sas/api'
+import {
+  Cas1ServiceResult,
+  Cas3ServiceResult,
+  Cas2ServiceResult,
+  ServiceResult,
+  Cas2SubmittedApplicationSummaryDto,
+  Cas2ApplicationDto,
+} from '@sas/api'
 import { Link, StatusCard } from '@sas/ui'
 import {
   cas1StatusCard,
@@ -55,7 +62,7 @@ const cas3Application: NonNullable<Cas3ServiceResult['cas3Application']> = {
   applicationStatus: 'SUBMITTED',
   uiUrl: 'https://example.com/referral',
   applicationSubmittedDate: '2026-06-02',
-  applicationSubmittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+  createdBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
   bookingProvisionalOfferSentDate: '2026-06-15',
   premises: {
     addressLine1: '1 Test Street',
@@ -605,6 +612,7 @@ describe('cas3 status card', () => {
   describe('details', () => {
     const detailStatuses: ServiceResult['serviceStatus'][] = [
       'NOT_STARTED',
+      'NOT_SUBMITTED',
       'SUBMITTED',
       'REJECTED',
       'BEDSPACE_OFFERED',
@@ -699,7 +707,6 @@ describe('cas2 status card', () => {
       'PLACE_OFFERED',
       'OFFER_ACCEPTED',
       'AWAITING_ARRIVAL',
-      'ARRIVED',
       'OFFER_DECLINED_OR_WITHDRAWN',
       'CANCELLED',
       'WITHDRAWN',
@@ -709,6 +716,23 @@ describe('cas2 status card', () => {
       const serviceResult = serviceResultFactory.build({ serviceStatus: status })
 
       expect(cas2StatusCard({ serviceResult, cas2Application }, 'X123456').details).toMatchSnapshot()
+    })
+
+    it('renders details for an ARRIVED status', () => {
+      const serviceResult = serviceResultFactory.build({ serviceStatus: 'ARRIVED' })
+      const submittedApplication: Cas2SubmittedApplicationSummaryDto = {
+        latestAssessmentStatus: 'AWAITING_ARRIVAL',
+        submittedAt: '2026-11-01',
+        markedAsArrived: {
+          dateTime: '2026-11-02T12:34:56',
+          arrivedByName: 'Bob Smith',
+          arrivedByUsername: 'BobSmith',
+        },
+      }
+
+      const application: Cas2ApplicationDto = { ...cas2Application, submittedApplication }
+
+      expect(cas2StatusCard({ serviceResult, cas2Application: application }, 'X123456').details).toMatchSnapshot()
     })
   })
 

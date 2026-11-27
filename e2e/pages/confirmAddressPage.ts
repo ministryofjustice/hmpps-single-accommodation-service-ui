@@ -1,15 +1,11 @@
-import { expect, Page } from '@playwright/test'
+import BasePage from './basePage'
 
-export default class ConfirmAddressPage {
-  constructor(private readonly page: Page) {}
-
+export default class ConfirmAddressPage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expect(
-      this.page.getByRole('heading', {
-        name: /Do you want to confirm this as the next address/,
-        level: 1,
-      }),
-    ).toBeVisible()
+    await this.expectHeadingToBeDisplayed({
+      name: /Do you want to confirm this as the next address/,
+      level: 1,
+    })
   }
 
   async confirmAddress() {

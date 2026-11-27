@@ -8,6 +8,7 @@
         "description": "viciously well-worn"
       },
       "verificationStatus": "FAILED",
+      "verificationReason": "Address is not suitable",
       "address": {
         "postcode": "JF77 5FZ",
         "subBuildingName": "Suite 612",
@@ -30,6 +31,7 @@
         "description": "phooey kissingly what"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "YES",
       "address": {
         "postcode": "KY0 2GX",
@@ -55,6 +57,7 @@
         "description": "meanwhile tenderly"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "NO",
       "address": {
         "postcode": "DG4 4JY",
@@ -80,6 +83,7 @@
         "description": "among"
       },
       "verificationStatus": "FAILED",
+      "verificationReason": "Address is not suitable",
       "address": {
         "postcode": "KU37 3SE",
         "buildingNumber": "65",
@@ -101,6 +105,7 @@
         "description": "rectangular oh abaft"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "NO",
       "address": {
         "postcode": "RX8 8UQ",
@@ -123,6 +128,7 @@
         "description": "limply obnoxiously"
       },
       "verificationStatus": "FAILED",
+      "verificationReason": "Address is not suitable",
       "address": {
         "postcode": "LT57 8NY",
         "subBuildingName": "Apt. 288",
@@ -148,6 +154,7 @@
         "description": "sunbathe"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "NO",
       "address": {
         "postcode": "II08 8TF",
@@ -191,6 +198,7 @@
         "description": "on uniform sheathe"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "TO_BE_DECIDED",
       "address": {
         "postcode": "MF03 1DO",
@@ -215,6 +223,7 @@
         "description": "gigantic excepting blaspheme"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "YES",
       "address": {
         "postcode": "IM27 6CM",
@@ -238,6 +247,7 @@
         "description": "since"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "YES",
       "address": {
         "postcode": "MF55 7NV",
@@ -260,6 +270,7 @@
         "description": "ack"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "YES",
       "address": {
         "postcode": "BY55 1KD",
@@ -285,6 +296,7 @@
         "description": "slight yearningly"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "YES",
       "address": {
         "postcode": "KF7 1KG",
@@ -307,6 +319,7 @@
         "description": "pushy"
       },
       "verificationStatus": "PASSED",
+      "verificationReason": "Address is suitable",
       "nextAccommodationStatus": "NO",
       "address": {
         "postcode": "QK59 7PW",

@@ -74,7 +74,12 @@ test.describe('List of cases', () => {
     await casesListPage.clickCaseLink(filteredCase)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, filteredCase)
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(
+      page,
+      filteredCase,
+      `/?peopleType=NFA_RISK&searchTerm=${prisonNumber}&teamCode=team-one-code&riskLevel=${riskLevel}`,
+      'Case list',
+    )
 
     // WHEN I click on the Case list link
     await profileTrackerPage.clickLink('Case list', page.locator('.govuk-breadcrumbs'))

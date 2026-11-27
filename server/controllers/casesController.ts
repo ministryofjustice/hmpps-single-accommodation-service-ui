@@ -12,6 +12,7 @@ import {
   validateSearchCrn,
   searchResultsSummary,
   setupCaseList,
+  recentSearchItems,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -26,8 +27,8 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import { setCaseListUrl } from '../utils/backlinks'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import { setActiveCaseListTab, setCaseListFilters } from '../utils/navigation'
+import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
 
@@ -46,11 +47,13 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
+      setActiveCaseListTab(req, res, 'case-list')
+      setCaseListFilters(req)
+
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
       const { query } = req
       const { peopleType = 'NFA_RISK' } = query
-      setCaseListUrl(req)
       const {
         data: { teams, cases },
       } = await collectApiResponses({
@@ -67,6 +70,7 @@ export default class CasesController {
 
   search(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
+      setActiveCaseListTab(req, res, 'search')
       const searchTerm = req.query.searchTerm ?? req.session.searchTerm
       delete req.session.searchTerm
       let caseData: CaseDto | null = null
@@ -76,9 +80,9 @@ export default class CasesController {
         correlationId: req.id,
       })
 
+      const { token } = res.locals.user
       const isValidSearchCrn = searchTerm != null && validateSearchCrn(req, searchTerm)
       if (isValidSearchCrn) {
-        const { token } = res.locals.user
         try {
           const { data } = await this.casesService.searchByCrn(token, searchTerm)
           caseData = data
@@ -90,12 +94,15 @@ export default class CasesController {
         }
       }
 
+      const { data: recentSearches } = await this.casesService.getRecentSearches(token)
+
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       return res.render('pages/search', {
         crn: searchTerm,
         resultsSummary: isValidSearchCrn ? searchResultsSummary(searchTerm, caseData) : undefined,
         casesTableColumns: casesTableColumns(),
         casesRows: caseToRows(caseData),
+        recentSearches: recentSearchItems(recentSearches),
         errors,
         errorSummary,
       })
@@ -110,7 +117,6 @@ export default class CasesController {
       })
       const { crn } = req.params
       const { token } = res.locals.user
-
       const { data: caseData } = await this.casesService.getCase(token, crn)
 
       if (caseData.userAccess === 'LIMITED') {

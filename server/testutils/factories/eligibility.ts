@@ -12,15 +12,17 @@ export default Factory.define<EligibilityDto>(() => {
   const crs = crsServiceResultFactory.build()
   const dtr = dtrServiceResultFactory.build()
   const pa = { serviceResult: serviceResultFactory.pa().build() }
+  const ppc = { serviceResult: serviceResultFactory.ppc().build() }
 
   return {
     crn: crn(),
-    caseActions: [cas1, cas2, cas3, crs, dtr, pa].flatMap(result => result.serviceResult.action).filter(Boolean),
+    caseActions: [cas1, cas2, cas3, crs, dtr, pa, ppc].flatMap(result => result.serviceResult.action).filter(Boolean),
     cas1,
     cas2,
     cas3,
     crs,
     dtr,
     pa,
+    ppc,
   }
 })

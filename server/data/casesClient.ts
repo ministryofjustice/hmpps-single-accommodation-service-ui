@@ -84,4 +84,11 @@ export default class CasesClient extends RestClient {
       asUser(token),
     )
   }
+
+  getRecentSearches(token: string) {
+    return this.get<ApiResponseDtoListCaseDto>(
+      { path: apiPaths.cases.recentSearches({}), timeout: config.timeoutOverrides.sasCasesApi },
+      asUser(token),
+    )
+  }
 }

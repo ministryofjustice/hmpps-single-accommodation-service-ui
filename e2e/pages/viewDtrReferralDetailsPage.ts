@@ -1,15 +1,12 @@
-import { expect, Page } from '@playwright/test'
+import { expect } from '@playwright/test'
+import BasePage from './basePage'
 
-export default class ViewDtrReferralDetailsPage {
-  constructor(private readonly page: Page) {}
-
+export default class ViewDtrReferralDetailsPage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expect(
-      this.page.getByRole('heading', {
-        name: 'Duty to Refer (DTR)',
-        level: 1,
-      }),
-    ).toBeVisible()
+    await this.expectHeadingToBeDisplayed({
+      name: 'Duty to Refer (DTR)',
+      level: 1,
+    })
   }
 
   async clickAddOutcome() {

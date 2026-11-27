@@ -392,27 +392,6 @@ exports[`cas2 status card content renders additional content for NOT_ELIGIBLE st
 ]
 `;
 
-exports[`cas2 status card details renders detail rows for a ARRIVED status 1`] = `
-[
-  {
-    "key": {
-      "text": "Submitted",
-    },
-    "value": {
-      "text": "2 June 2026 (60 days ago)",
-    },
-  },
-  {
-    "key": {
-      "text": "Submitted by",
-    },
-    "value": {
-      "text": "Joe Bloggs",
-    },
-  },
-]
-`;
-
 exports[`cas2 status card details renders detail rows for a AWAITING_ARRIVAL status 1`] = `
 [
   {
@@ -660,6 +639,35 @@ exports[`cas2 status card details renders detail rows for a WITHDRAWN status 1`]
 ]
 `;
 
+exports[`cas2 status card details renders details for an ARRIVED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Submitted",
+    },
+    "value": {
+      "text": "1 November 2026 (in 92 days)",
+    },
+  },
+  {
+    "key": {
+      "text": "Submitted by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+  {
+    "key": {
+      "text": "Marked as arrived by",
+    },
+    "value": {
+      "text": "Bob Smith (in 93 days)",
+    },
+  },
+]
+`;
+
 exports[`cas3 status card content previous bookings renders previous bookings 1`] = `
 [
   {
@@ -797,6 +805,27 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CONFIRMED st
 `;
 
 exports[`cas3 status card details renders detail rows for a NOT_STARTED status 1`] = `[]`;
+
+exports[`cas3 status card details renders detail rows for a NOT_SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Referral started",
+    },
+    "value": {
+      "text": "1 June 2026 (61 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Started by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
 
 exports[`cas3 status card details renders detail rows for a REJECTED status 1`] = `
 [

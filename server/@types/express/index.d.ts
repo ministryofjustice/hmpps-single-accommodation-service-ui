@@ -6,7 +6,8 @@ export declare module 'express-session' {
     returnTo: string
     multiPageFormData?: MultiPageFormData
     pageReferers: Record<string, string>
-    caseListUrl?: string
+    activeCaseListTab?: string
+    caseListFilters?: string
     searchTerm?: string
     userTelemetry?: {
       username: string

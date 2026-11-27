@@ -1,22 +1,91 @@
-import { getActivePage } from './navigation'
+import { mock } from 'jest-mock-extended'
+import { Request, Response } from 'express'
+import { getActivePage, getCaseListUrl, setActiveCaseListTab, setCaseListFilters } from './navigation'
 
 describe('getActivePage', () => {
-  it('returns "caseList" for the case list page', () => {
-    expect(getActivePage('/')).toEqual('caseList')
+  it('returns "case-list" for the case list page', () => {
+    const req = mock<Request>({
+      session: { activeCaseListTab: '/' },
+    })
+    expect(getActivePage(req)).toEqual('case-list')
   })
 
   it('returns "search" for the search page', () => {
-    expect(getActivePage('/search')).toEqual('search')
+    const req = mock<Request>({
+      session: { activeCaseListTab: '/search' },
+    })
+    expect(getActivePage(req)).toEqual('search')
   })
 
-  it('returns "caseList" for other pages', () => {
-    expect(getActivePage('/cases/X123456')).toEqual('caseList')
+  it('returns "cases" for other pages', () => {
+    const req = mock<Request>({
+      session: { activeCaseListTab: '/cases/X123456' },
+    })
+    expect(getActivePage(req)).toEqual('case-list')
   })
 
-  it('returns "customList" for the custom list page', () => {
-    expect(getActivePage('/custom-list')).toEqual('customList')
+  it('returns "custom-list" for the custom list page', () => {
+    const req = mock<Request>({
+      session: { activeCaseListTab: '/custom-list' },
+    })
+    expect(getActivePage(req)).toEqual('custom-list')
   })
-  it('returns "customList" for the custom list pages', () => {
-    expect(getActivePage('/custom-list/add-crns')).toEqual('customList')
+  it('returns "custom-list" for the custom list pages', () => {
+    const req = mock<Request>({
+      session: { activeCaseListTab: '/custom-list/add-crns' },
+    })
+    expect(getActivePage(req)).toEqual('custom-list')
+  })
+})
+describe('setActiveCaseListTab', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+  it('sets the case list URL to / when path is /cases', () => {
+    const request = mock<Request>({})
+
+    const res = mock<Response>()
+    setActiveCaseListTab(request, res, 'case-list')
+
+    expect(request.session.activeCaseListTab).toEqual('/')
+    expect(getCaseListUrl(request)).toEqual('/')
+  })
+
+  it('sets the case list URL to /search when path starts with /search', () => {
+    const request = mock<Request>({})
+
+    const res = mock<Response>()
+    setActiveCaseListTab(request, res, 'search')
+
+    expect(request.session.activeCaseListTab).toEqual('/search')
+    expect(getCaseListUrl(request)).toEqual('/search')
+  })
+
+  it('sets the case list URL to /custom-list when path starts with /custom-list', () => {
+    const request = mock<Request>({})
+
+    const res = mock<Response>()
+    setActiveCaseListTab(request, res, 'custom-list')
+
+    expect(request.session.activeCaseListTab).toEqual('/custom-list')
+    expect(getCaseListUrl(request)).toEqual('/custom-list')
+  })
+})
+
+describe('setCaseListFilters', () => {
+  it('sets the case list filters to the query string when peopleType is present', () => {
+    const request = mock<Request>({
+      query: {
+        teamCode: 'YES',
+        a: 'b',
+        peopleType: 'NFA_RISK',
+      },
+      originalUrl: '/cases/?teamCode=YES&a=b',
+    })
+
+    setCaseListFilters(request)
+
+    expect(request.session.caseListFilters).toEqual('teamCode=YES&a=b&peopleType=NFA_RISK')
+    expect(getCaseListUrl(request)).toEqual('/?teamCode=YES&a=b&peopleType=NFA_RISK')
   })
 })

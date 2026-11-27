@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { mock } from 'jest-mock-extended'
+import { mock, mockReset } from 'jest-mock-extended'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import CasesController from './casesController'
 import AuditService, { Page } from '../services/auditService'
@@ -18,12 +18,13 @@ import {
 } from '../testutils/factories'
 import {
   caseAssignedTo,
+  caseListSettingsType,
   casesResultsSummary,
   casesTableColumns,
   casesTabs,
   casesToRows,
   caseToRows,
-  queryToFilters,
+  recentSearchItems,
 } from '../utils/cases'
 import EligibilityService from '../services/eligibilityService'
 import DutyToReferService from '../services/dutyToReferService'
@@ -35,11 +36,11 @@ import AccommodationService from '../services/accommodationService'
 import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '../utils/accommodationSummary'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import * as backLinksUtils from '../utils/backlinks'
 import * as validationUtils from '../utils/validation'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
+import * as navUtils from '../utils/navigation'
 
 describe('casesController', () => {
   const TEST_TOKEN = 'test-token'
@@ -59,6 +60,9 @@ describe('casesController', () => {
   const accommodationService = mock<AccommodationService>()
   const userService = mock<UserService>()
   const externalReferralsService = mock<ExternalReferralsService>()
+  const setActiveCaseListTab = jest.spyOn(navUtils, 'setActiveCaseListTab')
+  const setCaseListFilters = jest.spyOn(navUtils, 'setCaseListFilters')
+  jest.spyOn(navUtils, 'getCaseListUrl')
 
   const casesController = new CasesController(
     auditService,
@@ -74,28 +78,41 @@ describe('casesController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    mockReset(auditService)
+    mockReset(casesService)
+    mockReset(referralsService)
+    mockReset(eligibilityService)
+    mockReset(dutyToReferService)
+    mockReset(proposedAddressesService)
+    mockReset(accommodationService)
+    mockReset(userService)
+    mockReset(externalReferralsService)
     request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request.query = {}
   })
 
   describe('index', () => {
     const teams = [{ code: 'team-code', name: 'Team Name' }]
-    const baseContext = {
-      assignedToOptions: [
-        { value: '', text: 'You (J. Doe)' },
-        { value: 'team-code', text: 'Team Name' },
-      ],
-      riskLevelOptions: [
-        { value: '', text: 'All' },
-        { value: 'VERY_HIGH', text: 'Very high' },
-        { value: 'HIGH', text: 'High' },
-        { value: 'MEDIUM', text: 'Medium' },
-        { value: 'LOW', text: 'Low' },
-      ],
-    }
+    const teamMembers = [{ username: 'username', forename: 'forename', surname: 'surname' }]
+    const riskLevelOptions = [
+      { value: '', text: 'All' },
+      { value: 'VERY_HIGH', text: 'Very high' },
+      { value: 'HIGH', text: 'High' },
+      { value: 'MEDIUM', text: 'Medium' },
+      { value: 'LOW', text: 'Low' },
+    ]
+    const expectedAssignedToOptions = (
+      selected: 'user' | 'team' | 'member',
+    ): caseListSettingsType['assignedToOptions'] => ({
+      user: { value: '', text: 'You (J. Doe)', selected: selected === 'user' },
+      teams: [{ value: 'team-code', text: 'Team Name', selected: selected === 'team' }],
+      teamMembers: [{ value: 'username', text: 'forename surname', selected: selected === 'member' }],
+    })
 
     beforeEach(() => {
       userService.getTeams.mockResolvedValue(apiResponseFactory.buildResponse(teams))
-      jest.spyOn(backLinksUtils, 'setCaseListUrl')
+      userService.getMyTeamMembers.mockResolvedValue(apiResponseFactory.buildResponse(teamMembers))
+      jest.spyOn(navUtils, 'setActiveCaseListTab')
     })
 
     it('renders the case list page for the current user by default', async () => {
@@ -103,64 +120,104 @@ describe('casesController', () => {
       casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
 
       request.query = {}
+      const expectedContext: caseListSettingsType = {
+        riskLevelOptions,
+        tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
+        peopleType: 'NFA_RISK',
+        resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
+        casesRows: casesToRows(cases),
+        filters: [],
+        query: {},
+        assignedToOptions: expectedAssignedToOptions('user'),
+      }
 
       await casesController.index()(request, response, next)
-
       expect(auditService.logPageView).toHaveBeenCalledWith(Page.CASES_LIST, {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
+      expect(request.session.activeCaseListTab).toEqual('/')
+      expect(request.session.caseListFilters).toEqual('')
+      expect(setActiveCaseListTab).toHaveBeenCalledWith(request, response, 'case-list')
+      expect(setCaseListFilters).toHaveBeenCalledWith(request)
       expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(userService.getMyTeamMembers).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        caseListSettings: {
-          ...baseContext,
-          tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
-          peopleType: 'NFA_RISK',
-          resultsSummary: casesResultsSummary(cases),
-          casesTableColumns: casesTableColumns(),
-          casesRows: casesToRows(cases),
-          filters: [],
-          query: {},
-          disabledFields: [],
-        },
+        caseListSettings: expectedContext,
       })
     })
 
-    it('renders a filtered case list page', async () => {
+    it('renders a filtered case list page - team', async () => {
       const cases = caseFactory.buildList(3, { riskLevel: 'HIGH' })
       casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
 
       request.query = {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
-        teamCode: 'team-code',
+        assignedTo: 'team_team-code',
         peopleType: 'HOUSED',
       }
-      request.originalUrl = '/?teamCode=team-code&searchTerm=some-crn&riskLevel=HIGH'
-
+      request.originalUrl = '/?assignedTo=team_team-code&searchTerm=some-crn&riskLevel=HIGH'
+      const expectedContext: caseListSettingsType = {
+        riskLevelOptions,
+        tabs: casesTabs(request.originalUrl, 'HOUSED'),
+        peopleType: 'HOUSED',
+        resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
+        casesRows: casesToRows(cases, user.username),
+        filters: [
+          { href: '/?assignedTo=team_team-code&riskLevel=HIGH', text: '‘some-crn’' },
+          { href: '/?searchTerm=some-crn&riskLevel=HIGH', text: 'Assigned to: Team Name' },
+          { href: '/?assignedTo=team_team-code&searchTerm=some-crn', text: 'RoSH: High' },
+        ],
+        query: {
+          searchTerm: 'some-crn',
+          riskLevel: 'HIGH',
+          assignedTo: 'team_team-code',
+          peopleType: 'HOUSED',
+        },
+        assignedToOptions: expectedAssignedToOptions('team'),
+      }
       await casesController.index()(request, response, next)
 
+      expect(request.session.caseListFilters).toEqual(
+        'searchTerm=some-crn&riskLevel=HIGH&assignedTo=team_team-code&peopleType=HOUSED',
+      )
+      expect(userService.getTeams).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(userService.getMyTeamMembers).toHaveBeenCalledWith(TEST_TOKEN)
       expect(casesService.getCases).toHaveBeenCalledWith(TEST_TOKEN, {
         searchTerm: 'some-crn',
         riskLevel: 'HIGH',
         teamCode: 'team-code',
         peopleType: 'HOUSED',
+        assignedToUsername: undefined,
       })
-      expect(backLinksUtils.setCaseListUrl).toHaveBeenCalledWith(request)
       expect(response.render).toHaveBeenCalledWith('pages/index', {
-        caseListSettings: {
-          ...baseContext,
-          tabs: casesTabs(request.originalUrl, 'HOUSED'),
-          peopleType: 'HOUSED',
-          resultsSummary: casesResultsSummary(cases),
-          filters: queryToFilters(request.query, request.originalUrl, teams),
-          casesTableColumns: casesTableColumns(),
-          casesRows: casesToRows(cases, 'user1'),
-          query: request.query,
-          disabledFields: [],
-        },
+        caseListSettings: expectedContext,
+      })
+    })
+
+    it('filters the case list by a team member', async () => {
+      const cases = caseFactory.buildList(2)
+      casesService.getCases.mockResolvedValue(apiResponseFactory.caseList(cases))
+      request.query = { assignedTo: 'member_username', peopleType: 'HOUSED' }
+      request.originalUrl = '/?assignedTo=member_username&peopleType=HOUSED'
+
+      await casesController.index()(request, response, next)
+
+      expect(casesService.getCases).toHaveBeenCalledTimes(1)
+      expect(casesService.getCases.mock.calls[0]).toStrictEqual([
+        TEST_TOKEN,
+        { peopleType: 'HOUSED', assignedToUsername: 'username', teamCode: undefined },
+      ])
+      expect(response.render).toHaveBeenCalledWith('pages/index', {
+        caseListSettings: expect.objectContaining({
+          casesRows: casesToRows(cases),
+          filters: [{ text: 'Assigned to: forename surname', href: '/?peopleType=HOUSED' }],
+          assignedToOptions: expectedAssignedToOptions('member'),
+        }),
       })
     })
   })
@@ -170,10 +227,20 @@ describe('casesController', () => {
       jest
         .spyOn(validationUtils, 'fetchErrorsAndUserInput')
         .mockReturnValue({ errors: {}, errorSummary: [], userInput: {} })
+      casesService.getRecentSearches.mockResolvedValue(apiResponseFactory.caseList([]))
     })
 
     it('renders the search page', async () => {
-      request.query = {}
+      request = mock<Request>({
+        id: 'request-id',
+        originalUrl: '/',
+        session: {
+          activeCaseListTab: '/',
+          caseListFilters: '?peopleType=NFA_RISK&searchTerm=&teamCode=N07CAT&riskLevel=',
+          searchTerm: undefined,
+        },
+      })
+      request.query = { peopleType: 'NFA_RISK' }
 
       await casesController.search()(request, response, next)
 
@@ -181,13 +248,18 @@ describe('casesController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
-      expect(casesService.getCases).not.toHaveBeenCalled()
+      expect(request.session.activeCaseListTab).toEqual('/search')
+      expect(request.session.caseListFilters).toEqual('?peopleType=NFA_RISK&searchTerm=&teamCode=N07CAT&riskLevel=')
+      expect(setActiveCaseListTab).toHaveBeenCalledWith(request, response, 'search')
+      expect(setCaseListFilters).not.toHaveBeenCalled()
+      expect(casesService.searchByCrn).not.toHaveBeenCalled()
       expect(response.render).toHaveBeenCalledWith('pages/search', {
         casesRows: [],
         casesTableColumns: casesTableColumns(),
         crn: undefined,
         errors: {},
         errorSummary: [],
+        recentSearches: [],
         resultsSummary: undefined,
       })
     })
@@ -199,12 +271,14 @@ describe('casesController', () => {
       await casesController.search()(request, response, next)
 
       expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
+      expect(request.session.searchTerm).toEqual('X123456')
       expect(response.render).toHaveBeenCalledWith('pages/search', {
         casesRows: caseToRows(caseData),
         casesTableColumns: casesTableColumns(),
         crn: 'X123456',
         errors: {},
         errorSummary: [],
+        recentSearches: [],
         resultsSummary: `Result for ‘X123456’`,
       })
     })
@@ -227,8 +301,25 @@ describe('casesController', () => {
       )
     })
 
+    it('renders the search page with recent searches', async () => {
+      request.query = {}
+      const recentSearches = caseFactory.buildList(3)
+      casesService.getRecentSearches.mockResolvedValue(apiResponseFactory.caseList(recentSearches))
+
+      await casesController.search()(request, response, next)
+
+      expect(casesService.getRecentSearches).toHaveBeenCalledWith(TEST_TOKEN)
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          recentSearches: recentSearchItems(recentSearches),
+        }),
+      )
+    })
+
     it('renders a 0 results summary when a valid CRN returns a 404', async () => {
       request.query = { searchTerm: 'X123456' }
+      request.session.searchTerm = 'X654321'
       const notFoundError: SanitisedError = new Error('Not found')
       notFoundError.responseStatus = 404
       casesService.searchByCrn.mockRejectedValue(notFoundError)
@@ -236,18 +327,21 @@ describe('casesController', () => {
       await casesController.search()(request, response, next)
 
       expect(casesService.searchByCrn).toHaveBeenCalledWith(TEST_TOKEN, 'X123456')
+      expect(Object.prototype.hasOwnProperty.call(request.session, 'searchTerm')).toBe(false)
       expect(response.render).toHaveBeenCalledWith('pages/search', {
         casesRows: [],
         casesTableColumns: casesTableColumns(),
         crn: 'X123456',
         errors: {},
         errorSummary: [],
+        recentSearches: [],
         resultsSummary: `0 results for ‘X123456’`,
       })
     })
 
     it('renders a validation error when the CRN is invalid', async () => {
       request.query = { searchTerm: 'not-a-crn' }
+      request.session.searchTerm = 'X123456'
       const errors = { searchTerm: { text: 'Enter a valid CRN' } }
       const errorSummary = [{ text: 'Enter a valid CRN', href: '#searchTerm' }]
       jest.spyOn(validationUtils, 'fetchErrorsAndUserInput').mockReturnValue({ errors, errorSummary, userInput: {} })
@@ -258,13 +352,15 @@ describe('casesController', () => {
         'errors',
         JSON.stringify({ searchTerm: { text: 'Enter a valid CRN' } }),
       )
-      expect(casesService.getCases).not.toHaveBeenCalled()
+      expect(casesService.searchByCrn).not.toHaveBeenCalled()
+      expect(Object.prototype.hasOwnProperty.call(request.session, 'searchTerm')).toBe(false)
       expect(response.render).toHaveBeenCalledWith('pages/search', {
         casesRows: [],
         casesTableColumns: casesTableColumns(),
         crn: 'not-a-crn',
         errors,
         errorSummary,
+        recentSearches: [],
         resultsSummary: undefined,
       })
     })
@@ -374,6 +470,7 @@ describe('casesController', () => {
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       proposedAddressesService.getProposedAddresses.mockResolvedValue({ data: { proposed: [], failedChecks: [] } })
       accommodationService.getAccommodationSummary.mockResolvedValue(apiResponseFactory.accommodationSummaries())
+      externalReferralsService.search.mockResolvedValue(apiResponseFactory.externalReferrals([]))
 
       eligibilityService.getEligibility.mockResolvedValue(apiResponseFactory.withUpstreamFailures())
       referralsService.getReferralHistory.mockResolvedValue(apiResponseFactory.withUpstreamFailures())

@@ -29,6 +29,7 @@ export default defineConfig<TestOptions>({
   workers: 2,
   reporter: [
     ['list'],
+    ...(process.env.CI ? ([['github']] as const) : []),
     ['html', { outputFolder: '../test_results/e2e/report' }],
     ['playwright-ctrf-json-reporter', { outputDir: 'test_results/e2e/ctrf', outputFile: 'ctrf-report.json' }],
   ],
@@ -37,6 +38,7 @@ export default defineConfig<TestOptions>({
   use: {
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
   },
   projects: [
     {

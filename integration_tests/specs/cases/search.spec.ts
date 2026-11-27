@@ -16,6 +16,7 @@ test.describe('Find a person', () => {
 
     await casesApi.stubSearchByCrn(searchCase.crn, searchCase)
     await casesApi.stubGetCases(cases)
+    await casesApi.stubGetRecentSearches()
 
     await stubProfilePage({ crn: searchCase.crn, caseData: searchCase })
 
@@ -35,6 +36,9 @@ test.describe('Find a person', () => {
     // THEN I should see the search page
     const searchPage = await SearchPage.verifyOnPage(page)
 
+    // AND I should not see any recent searches
+    await searchPage.shouldNotShowRecentSearches()
+
     // WHEN I click the search button without entering any search term
     await searchPage.clickButton('Search')
 
@@ -53,7 +57,7 @@ test.describe('Find a person', () => {
     await searchPage.clickCaseLink(searchCase)
 
     // THEN I should see the profile tracker page
-    await ProfileTrackerPage.verifyOnPage(page, searchCase)
+    await ProfileTrackerPage.verifyOnProfileTrackerPage(page, searchCase, '/search', 'Search')
   })
 
   test('should show no results message when case not found', async ({ page }) => {
@@ -61,6 +65,7 @@ test.describe('Find a person', () => {
     await stubCaseListPage(cases)
     const searchTerm = 'X111111'
     await casesApi.stubSearchByCrn(searchTerm)
+    await casesApi.stubGetRecentSearches()
 
     // WHEN I sign in
     await login(page)
@@ -80,5 +85,30 @@ test.describe('Find a person', () => {
 
     // THEN I should see no results message
     await searchPage.shouldShowResultsSummary(`0 results for ‘${searchTerm}’`)
+  })
+
+  test('should show recent searches and navigate to profile', async ({ page }) => {
+    await stubCaseListPage()
+    const recentSearches = caseFactory.buildList(10)
+    const recentCase = recentSearches[0]
+    await casesApi.stubGetRecentSearches(recentSearches)
+    await stubProfilePage({ crn: recentCase.crn, caseData: recentCase })
+
+    // WHEN I sign in
+    await login(page)
+
+    // AND I navigate to the search page
+    const casesListPage = await CasesListPage.verifyOnPage(page)
+    await casesListPage.clickLink('Search')
+
+    // THEN I should see my recent searches
+    const searchPage = await SearchPage.verifyOnPage(page)
+    await searchPage.shouldShowRecentSearches(recentSearches)
+
+    // WHEN I click on a recent search
+    await searchPage.clickRecentSearch(recentCase)
+
+    // THEN I should see the profile tracker page
+    await ProfileTrackerPage.verifyOnPage(page, recentCase)
   })
 })

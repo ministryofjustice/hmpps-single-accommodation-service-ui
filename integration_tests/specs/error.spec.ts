@@ -8,6 +8,7 @@ import config from '../../server/config'
 test.describe('error handling', () => {
   test.beforeEach(async () => {
     await userApi.stubGetTeams()
+    await userApi.stubGetTeamMembers()
   })
 
   test.afterEach(async () => {

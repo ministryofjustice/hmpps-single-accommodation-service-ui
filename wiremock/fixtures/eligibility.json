@@ -89,7 +89,8 @@
         "serviceStatus": "COMPLETED",
         "failureReasons": []
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "P712106": {
     "crn": "P712106",
@@ -197,7 +198,8 @@
           "service": "PA"
         }
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "T274481": {
     "crn": "T274481",
@@ -307,7 +309,8 @@
         "serviceStatus": "COMPLETED",
         "failureReasons": []
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "V938951": {
     "crn": "V938951",
@@ -413,7 +416,8 @@
           "service": "PA"
         }
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "T229440": {
     "crn": "T229440",
@@ -527,7 +531,8 @@
         "serviceStatus": "COMPLETED",
         "failureReasons": []
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "H271226": {
     "crn": "H271226",
@@ -646,7 +651,8 @@
           "service": "PA"
         }
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "U934069": {
     "crn": "U934069",
@@ -779,7 +785,8 @@
         "serviceStatus": "COMPLETED",
         "failureReasons": []
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "I322559": {
     "crn": "I322559",
@@ -888,7 +895,8 @@
         "serviceStatus": "COMPLETED",
         "failureReasons": []
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "L247269": {
     "crn": "L247269",
@@ -948,7 +956,8 @@
         "serviceStatus": "COMPLETED",
         "failureReasons": []
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "F608163": {
     "crn": "F608163",
@@ -1074,7 +1083,8 @@
           "service": "PA"
         }
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   },
   "N583271": {
     "crn": "N583271",
@@ -1159,6 +1169,7 @@
         "serviceStatus": "COMPLETED",
         "failureReasons": []
       }
-    }
+    },
+    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
   }
 }

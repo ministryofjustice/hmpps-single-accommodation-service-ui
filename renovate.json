@@ -50,5 +50,7 @@
     "minimumReleaseAge": null
   },
   "platformCommit": "enabled",
-  "dependencyDashboard": true
+  "dependencyDashboard": {
+    "enabled": true
+  }
 }

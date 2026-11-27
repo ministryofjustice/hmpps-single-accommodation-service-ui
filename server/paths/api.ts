@@ -11,6 +11,7 @@ export default {
   cases: {
     index: path('/case-list'),
     search: path('/search/:crn'),
+    recentSearches: path('/case-list/search-history'),
     show: casePath,
     applications: {
       arrival: casePath.path('applications/:applicationId/arrival'),
@@ -52,6 +53,7 @@ export default {
   user: {
     me: path('/users/me'),
     teams: path('/user/teams'),
+    myTeamMembers: path('/users/me/team-members'),
   },
   customList: {
     getCases: path('/case-list/custom'),

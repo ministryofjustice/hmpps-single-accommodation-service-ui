@@ -10,7 +10,7 @@ export type Cas3ApplicationDto = {
   createdAt: string
   applicationStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'REQUESTED_FURTHER_INFORMATION' | 'REJECTED'
   applicationSubmittedDate?: string | null
-  applicationSubmittedBy?: Cas3StaffDto | null
+  createdBy?: Cas3StaffDto | null
   applicationRejectedReason?: string | null
   assessmentStatus?: 'UNALLOCATED' | 'IN_REVIEW' | 'READY_TO_PLACE' | 'CLOSED' | 'REJECTED'
   bookingStatus?: 'PROVISIONAL' | 'CONFIRMED' | 'ARRIVED' | 'NOT_MINUS_ARRIVED' | 'DEPARTED' | 'CANCELLED' | 'CLOSED'

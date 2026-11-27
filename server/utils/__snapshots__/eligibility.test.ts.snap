@@ -806,6 +806,27 @@ exports[`cas3 status card details renders detail rows for a BOOKING_CONFIRMED st
 
 exports[`cas3 status card details renders detail rows for a NOT_STARTED status 1`] = `[]`;
 
+exports[`cas3 status card details renders detail rows for a NOT_SUBMITTED status 1`] = `
+[
+  {
+    "key": {
+      "text": "Referral started",
+    },
+    "value": {
+      "text": "1 June 2026 (61 days ago)",
+    },
+  },
+  {
+    "key": {
+      "text": "Started by",
+    },
+    "value": {
+      "text": "Joe Bloggs",
+    },
+  },
+]
+`;
+
 exports[`cas3 status card details renders detail rows for a REJECTED status 1`] = `
 [
   {
@@ -1690,6 +1711,26 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE no conditional re
   "content": [
     {
       "text": "Must have a conditional release date to start application.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE not at risk of homelessness status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not at risk of homelessness.",
     },
   ],
   "details": [],

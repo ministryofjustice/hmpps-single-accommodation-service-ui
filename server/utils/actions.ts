@@ -3,6 +3,7 @@ import { formatDate } from './dates'
 import config from '../config'
 
 export const actionsMap: Record<CaseAction['type'], string> = {
+  START_PPC: 'Start PPC',
   ADD_AND_CONFIRM_PROPOSED_ADDRESS: 'Add and confirm proposed address',
   ADD_DTR_OUTCOME: 'Add DTR referral outcome',
   ADD_DTR_REFERRAL_DETAILS: 'Add DTR referral details',

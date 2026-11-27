@@ -63,7 +63,6 @@ export const proposedAddressStatusCard = (proposedAddress: ProposedAccommodation
 
 const linksForStatus = (status: ProposedAddressDisplayStatus, crn: string, id: string) => {
   const detailsLink = { text: 'View details', href: uiPaths.proposedAddresses.show({ crn, id }) }
-
   switch (status) {
     case 'PASSED':
       return [
@@ -144,7 +143,10 @@ export const checkYourAnswersRows = (
       summaryListRow(
         'Set as next address',
         formatProposedAddressNextAccommodation(sessionData.nextAccommodationStatus),
-        { type: 'html', actions: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }] },
+        {
+          type: 'html',
+          actions: [{ text: 'Change', href: uiPaths.proposedAddresses.nextAccommodation({ crn }) }],
+        },
       ),
     )
   }
@@ -152,10 +154,13 @@ export const checkYourAnswersRows = (
   return rows
 }
 
-const formatStatusWithReason = (data: ProposedAddressFormData) => {
-  const status = formatProposedAddressStatus(data.verificationStatus)
-  if (data.verificationStatus === 'FAILED') {
-    return toParagraphs([status, 'Not suitable'])
+const formatStatusWithReason = ({
+  verificationStatus,
+  verificationReason,
+}: Pick<ProposedAccommodationDto, 'verificationStatus' | 'verificationReason'>) => {
+  const status = formatProposedAddressStatus(verificationStatus)
+  if (verificationStatus !== 'NOT_CHECKED_YET' && verificationReason) {
+    return `${toParagraphs([status])}${textBlock(verificationReason)}`
   }
   return status
 }
@@ -214,21 +219,40 @@ const validateTypeFromSession = (req: Request, sessionData: ProposedAddressFormD
   return validateAndFlashErrors(req, errors)
 }
 
+const verificationReasonFields: Partial<Record<ProposedAccommodationDto['verificationStatus'], string>> = {
+  PASSED: 'verificationReasonPassed',
+  FAILED: 'verificationReasonFailed',
+}
+
 export const updateStatusFromRequest = async (
   req: Request,
   formDataManager: MultiPageFormManager<'proposedAddress'>,
 ) => {
   const { verificationStatus } = req.body || {}
+  const reasonField = verificationReasonFields[verificationStatus as ProposedAccommodationDto['verificationStatus']]
 
   return formDataManager.update(req.params.crn, req.session, {
     verificationStatus,
+    verificationReason: reasonField ? req.body[reasonField] : undefined,
     nextAccommodationStatus: undefined,
   })
 }
 
-const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData) => {
+const validateStatusFromSession = (req: Request, sessionData: ProposedAddressFormData, requireReason: boolean) => {
   const errors: Record<string, string> = {
     verificationStatus: validateRadioButton(sessionData?.verificationStatus, 'status'),
+  }
+
+  const reasonField = verificationReasonFields[sessionData?.verificationStatus]
+  if (reasonField) {
+    errors[reasonField] =
+      (requireReason &&
+        validateMandatoryText(
+          sessionData.verificationReason,
+          sessionData.verificationStatus === 'PASSED' ? 'address is suitable' : 'address is not suitable',
+          'reason',
+        )) ||
+      validateMaxLength(sessionData.verificationReason, 'Reason', 4000)
   }
 
   return validateAndFlashErrors(req, errors)
@@ -261,7 +285,6 @@ const validateNextAccommodationFromSession = (req: Request, sessionData: Propose
 
 export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const { crn } = req.params
-
   if (!sessionData) return uiPaths.cases.show({ crn })
 
   const redirect =
@@ -274,17 +297,20 @@ export const validateUpToAddress = (req: Request, sessionData: ProposedAddressFo
 export const validateUpToType = (req: Request, sessionData: ProposedAddressFormData): string | null => {
   const addressRedirect = validateUpToAddress(req, sessionData)
   if (addressRedirect) return addressRedirect
-
   return !validateTypeFromSession(req, sessionData)
     ? uiPaths.proposedAddresses.type({ crn: req.params.crn })
     : undefined
 }
 
-export const validateUpToStatus = (req: Request, sessionData: ProposedAddressFormData): string | null => {
+export const validateUpToStatus = (
+  req: Request,
+  sessionData: ProposedAddressFormData,
+  { requireReason = false }: { requireReason?: boolean } = {},
+): string | null => {
   const typeRedirect = validateUpToType(req, sessionData)
   if (typeRedirect) return typeRedirect
 
-  return !validateStatusFromSession(req, sessionData)
+  return !validateStatusFromSession(req, sessionData, requireReason)
     ? uiPaths.proposedAddresses.status({ crn: req.params.crn })
     : undefined
 }
@@ -326,11 +352,13 @@ export const formDataToRequestBody = ({
   accommodationTypeCode,
   address,
   verificationStatus,
+  verificationReason,
   nextAccommodationStatus,
 }: ProposedAddressFormData): ProposedAccommodationDetailCommand => ({
   accommodationTypeCode,
   address,
   verificationStatus,
+  verificationReason: verificationReason || null,
   nextAccommodationStatus: nextAccommodationStatus ?? 'TO_BE_DECIDED',
 })
 
@@ -356,7 +384,8 @@ export const addressDetailRows = (proposedAddress: ProposedAccommodationDto): Su
     summaryListRow('Housing arrangement', proposedAddress.accommodationType?.description || '', {
       actions: [editLink('type')],
     }),
-    summaryListRow('Address checks', formatProposedAddressStatus(proposedAddress.verificationStatus), {
+    summaryListRow('Address checks', formatStatusWithReason(proposedAddress), {
+      type: 'html',
       actions: [editLink('status')],
     }),
     proposedAddress.verificationStatus === 'PASSED' &&
@@ -368,7 +397,6 @@ export const addressDetailRows = (proposedAddress: ProposedAccommodationDto): Su
 
 export const nextActionButton = (proposedAddress: ProposedAccommodationDto): Button => {
   const { crn, id, verificationStatus, nextAccommodationStatus } = proposedAddress
-
   if (verificationStatus === 'NOT_CHECKED_YET') {
     return {
       text: 'Add checks',
@@ -465,10 +493,17 @@ export const addressTimelineEntry = (
   return timelineEntry(label, html, auditRecord.commitDate, staffName(auditRecord.authorDetails, currentUsername))
 }
 
+const withoutVerificationReason = (auditRecord: AuditRecordDto): AuditRecordDto => ({
+  ...auditRecord,
+  changes: auditRecord.changes.filter(change => change.field !== 'verificationReason'),
+})
+
 export const addressTimeline = (auditRecords: AuditRecordDto[], currentUsername?: string): TimelineEntry[] => {
   let fieldValues: AuditFieldValues = {}
 
-  return [...auditRecords]
+  return auditRecords
+    .map(withoutVerificationReason)
+    .filter(auditRecord => auditRecord.type !== 'UPDATE' || auditRecord.changes.length > 0)
     .reverse()
     .map(auditRecord => {
       const entry = addressTimelineEntry(auditRecord, fieldValues, currentUsername)

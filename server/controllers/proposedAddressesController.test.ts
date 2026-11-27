@@ -37,7 +37,7 @@ import { addressLines, formatAddress } from '../utils/addresses'
 import { caseAssignedTo, displayName } from '../utils/cases'
 import ReferenceDataService from '../services/referenceDataService'
 import { radioItems } from '../utils/utils'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import breadcrumbs from '../utils/breadcrumbs'
 
 describe('proposedAddressesController', () => {
   let request: Request
@@ -106,10 +106,12 @@ describe('proposedAddressesController', () => {
     referenceDataService.getAccommodationTypes.mockResolvedValue(apiResponseFactory.referenceData(accommodationTypes))
 
     request = mock<Request>({
+      path: '/search',
       id: 'request-id',
       params: { crn: 'CRN123', id: 'address-id' },
       session: {
         save: jest.fn().mockImplementation((callback: () => unknown) => callback()),
+        activeCaseListTab: '/',
       },
     })
 
@@ -130,8 +132,6 @@ describe('proposedAddressesController', () => {
 
     jest.spyOn(controller.formData, 'remove')
     jest.spyOn(controller.formData, 'update')
-
-    jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.cases.show({ crn: 'CRN123' }))
   })
 
   describe('show', () => {
@@ -559,6 +559,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
+
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         address: formatAddress(address),
         name: 'James Smith',
@@ -578,6 +579,7 @@ describe('proposedAddressesController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/type', {
         crn: 'CRN123',
+
         backLinkHref: uiPaths.proposedAddresses.selectAddress({ crn: 'CRN123' }),
         address: formatAddress(address),
         name: 'James Smith',
@@ -664,7 +666,7 @@ describe('proposedAddressesController', () => {
         address,
         accommodationTypeCode,
       })
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
 
       await controller.status()(request, response, next)
 
@@ -674,6 +676,7 @@ describe('proposedAddressesController', () => {
       })
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
+
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         address: formatAddress(address),
         errors: {},
@@ -688,17 +691,28 @@ describe('proposedAddressesController', () => {
         accommodationTypeCode,
         verificationStatus: 'NOT_CHECKED_YET',
       })
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
+      jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.proposedAddresses.type({ crn: 'CRN123' }))
       await controller.status()(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('pages/proposed-address/status', {
         crn: 'CRN123',
+
         backLinkHref: '/cases/CRN123/proposed-addresses/type',
         address: formatAddress(address),
         errors: {},
         errorSummary: [],
         verificationStatusItems: radioItems(verificationStatusLabels, 'NOT_CHECKED_YET'),
       })
+    })
+
+    it('renders status page with the reason from session data', async () => {
+      setSessionData({ address, accommodationTypeCode, verificationStatus: 'PASSED', verificationReason: 'Suitable' })
+      await controller.status()(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/proposed-address/status',
+        expect.objectContaining({ verificationReasonPassed: 'Suitable' }),
+      )
     })
 
     it('redirects when the session data is invalid', async () => {
@@ -725,7 +739,7 @@ describe('proposedAddressesController', () => {
     })
 
     it('redirects to next accommodation when status is PASSED', async () => {
-      request.body = { verificationStatus: 'PASSED' }
+      request.body = { verificationStatus: 'PASSED', verificationReasonPassed: 'Suitable' }
 
       await controller.saveStatus()(request, response, next)
 
@@ -734,6 +748,14 @@ describe('proposedAddressesController', () => {
 
     it('redirects to status when status invalid', async () => {
       request.body = { verificationStatus: undefined }
+
+      await controller.saveStatus()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+    })
+
+    it('redirects to status when status is PASSED and no reason is given', async () => {
+      request.body = { verificationStatus: 'PASSED' }
 
       await controller.saveStatus()(request, response, next)
 
@@ -748,7 +770,7 @@ describe('proposedAddressesController', () => {
         accommodationTypeCode,
         verificationStatus: 'PASSED',
       })
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+      jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
 
       await controller.nextAccommodation()(request, response, next)
 
@@ -775,7 +797,7 @@ describe('proposedAddressesController', () => {
         nextAccommodationStatus: 'TO_BE_DECIDED',
       })
 
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
+      jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.proposedAddresses.status({ crn: 'CRN123' }))
 
       await controller.nextAccommodation()(request, response, next)
 
@@ -825,9 +847,7 @@ describe('proposedAddressesController', () => {
     it('renders check your answers', async () => {
       setSessionData(fullSessionData)
 
-      jest
-        .spyOn(backlinks, 'getPageBackLink')
-        .mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
+      jest.spyOn(backlinks, 'default').mockReturnValue(uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }))
 
       await controller.checkYourAnswers()(request, response, next)
 
@@ -839,6 +859,7 @@ describe('proposedAddressesController', () => {
         crn: 'CRN123',
         tableRows: checkYourAnswersRows(fullSessionData, 'CRN123', accommodationTypes),
         backLinkHref: uiPaths.proposedAddresses.nextAccommodation({ crn: 'CRN123' }),
+
         errors: {},
         errorSummary: [],
       })
@@ -898,6 +919,7 @@ describe('proposedAddressesController', () => {
       request.headers.referer = '/referrer'
       request.params.page = page
       request.params.id = 'address-id'
+      request.originalUrl = '/'
       const proposedAddress = proposedAccommodationFactory.build({ crn: 'CRN123', id: 'address-id' })
       proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
 
@@ -934,7 +956,10 @@ describe('proposedAddressesController', () => {
 
     describe('if the Check your answer page has been reached', () => {
       it('clears session data and redirects to the case details page', async () => {
-        setSessionData({ ...fullSessionData, redirect: uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }) })
+        setSessionData({
+          ...fullSessionData,
+          redirect: uiPaths.proposedAddresses.checkYourAnswers({ crn: 'CRN123' }),
+        })
 
         await controller.cancel()(request, response, next)
 
@@ -975,7 +1000,7 @@ describe('proposedAddressesController', () => {
 
     describe('saveStatus', () => {
       it('redirects to the Next accommodation page when status is PASSED', async () => {
-        request.body = { verificationStatus: 'PASSED' }
+        request.body = { verificationStatus: 'PASSED', verificationReasonPassed: 'Suitable' }
 
         await controller.saveStatus()(request, response, next)
 
@@ -1022,7 +1047,7 @@ describe('proposedAddressesController', () => {
 
     describe('saveStatus', () => {
       it('redirects to the Next accommodation page when status is PASSED', async () => {
-        request.body = { verificationStatus: 'PASSED' }
+        request.body = { verificationStatus: 'PASSED', verificationReasonPassed: 'Suitable' }
 
         await controller.saveStatus()(request, response, next)
 
@@ -1048,7 +1073,7 @@ describe('proposedAddressesController', () => {
         nextAccommodationStatus: 'YES',
       })
 
-      jest.spyOn(backlinks, 'getPageBackLink').mockReturnValue('/foo')
+      jest.spyOn(backlinks, 'default').mockReturnValue('/foo')
       casesService.getCase.mockResolvedValue(apiResponseFactory.case(caseData))
       proposedAddressesService.getProposedAddress.mockResolvedValue(apiResponseFactory.proposedAddress(proposedAddress))
 

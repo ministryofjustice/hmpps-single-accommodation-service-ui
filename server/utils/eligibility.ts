@@ -309,6 +309,7 @@ const cas2NotEligibleReasons: Partial<Record<ServiceResult['failureReasons'][num
   IN_PRISON_NO_RELEASE_DATE: 'Must have a conditional release date to start application.',
   IN_CAS2_ACCOMMODATION: 'Not eligible as applicant is currently in a CAS2 property.',
   IN_COMMUNITY: 'Not eligible unless at risk of recall.',
+  HAS_NEXT_ACCOMMODATION: 'Not at risk of homelessness.',
 }
 
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {

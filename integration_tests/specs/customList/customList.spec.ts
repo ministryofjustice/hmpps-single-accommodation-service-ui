@@ -58,7 +58,11 @@ test.describe('custom list', () => {
     await showCaseListPage.shouldShowLink('Change list', '/custom-list/add-crns')
     // AND I should see the list of cases
     await showCaseListPage.shouldShowCases(cases, undefined, true)
-    // todo should not show assigned to
+    // AND the assigned to filter should not be present
+    await casesListPage.verifyFilters({
+      searchTerm: '',
+      riskLevel: '',
+    })
   })
   test('should allow a user to navigate to a profile via the custom list', async ({ page }) => {
     const cases = [caseFactory.build({ crn: 'X123456' }), caseFactory.build({ crn: 'X654321' })]

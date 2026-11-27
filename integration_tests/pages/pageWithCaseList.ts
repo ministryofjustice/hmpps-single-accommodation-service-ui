@@ -81,10 +81,32 @@ export default class PageWithCaseList extends AbstractPage {
     await this.clickButton('Apply filters')
   }
 
-  async verifyFilters({ searchTerm, assignedTo, riskLevel }: Record<string, string>) {
-    await this.verifyTextInput('Filter by name, CRN or prison number', searchTerm)
-    await this.verifySelectInput('Assigned to', assignedTo)
-    await this.verifySelectInput('RoSH', riskLevel)
+  async verifyFilters({
+    searchTerm,
+    assignedTo,
+    riskLevel,
+  }: {
+    searchTerm?: string
+    assignedTo?: string
+    riskLevel?: string
+  }) {
+    if (searchTerm !== undefined) {
+      await this.verifyTextInput('Filter by name, CRN or prison number', searchTerm)
+    } else {
+      await expect(this.page.getByRole('textbox', { name: 'Filter by name, CRN or prison number' })).not.toBeVisible()
+    }
+
+    if (assignedTo !== undefined) {
+      await this.verifySelectInput('Assigned to', assignedTo)
+    } else {
+      await expect(this.page.getByRole('combobox', { name: 'Assigned to' })).not.toBeVisible()
+    }
+
+    if (riskLevel !== undefined) {
+      await this.verifySelectInput('RoSH', riskLevel)
+    } else {
+      await expect(this.page.getByRole('combobox', { name: 'RoSH' })).not.toBeVisible()
+    }
   }
 
   async shouldShowFilterTags(filters: Record<string, string>) {

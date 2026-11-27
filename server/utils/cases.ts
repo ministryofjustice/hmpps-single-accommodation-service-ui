@@ -185,16 +185,11 @@ export const validateSearchCrn = (req: Request, crn?: string) => {
   return validateAndFlashErrors(req, errors)
 }
 
-export enum CaseListFields {
-  Search = 'search',
-  AssignedTo = 'assignedTo',
-  Rosh = 'rosh',
-}
 export const setupCaseList = (
   req: IndexRequest,
   username: string,
   cases: Case[],
-  assignedToOptions: assignedToOptionsType,
+  assignedToOptions: assignedToOptionsType | null,
   filters: { text: string; href: string }[],
 ) => {
   const { query } = req

@@ -55,19 +55,17 @@ export default class CasesController {
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
 
-      // AssignedTo Filter, team or team member
       const { assignedTo, ...queryParams } = req.query
       const assignedToUsername = assignedTo?.startsWith('member_') ? assignedTo.substring('member_'.length) : undefined
       const teamCode = assignedTo?.startsWith('team_') ? assignedTo.substring('team_'.length) : undefined
 
-      // set up the API query
       const casesQuery: GetCasesApiQuery = {
         ...queryParams,
         peopleType: queryParams.peopleType ?? 'NFA_RISK',
         assignedToUsername,
         teamCode,
       }
-      // Get the data from the API
+
       const {
         data: { teams, teamMembers, cases },
       } = await collectApiResponses({
@@ -76,7 +74,6 @@ export default class CasesController {
         cases: this.casesService.getCases(token, casesQuery),
       })
 
-      // set up the case list
       const assignedToOptions = setupAssignedToOptions(userFullName, teams, teamMembers, assignedToUsername || teamCode)
       const filters = queryToFilters(casesQuery, req.originalUrl, teams, teamMembers)
       const caseListSettings = setupCaseList(req, teamCode ? username : null, cases, assignedToOptions, filters)

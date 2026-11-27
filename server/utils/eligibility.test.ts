@@ -107,6 +107,7 @@ describe('linksForService', () => {
     { service: 'cas1', status: 'CAS1_PLACEMENT_REQUEST_REJECTED', expected: ['Create new placement request'] },
     { service: 'cas1', status: 'CAS1_PLACEMENT_REQUEST_WITHDRAWN', expected: ['Create new placement request'] },
     { service: 'cas1', status: 'CAS1_PLACEMENT_REQUEST_NOT_STARTED', expected: ['Create placement request'] },
+    { service: 'cas1', status: 'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED', expected: ['Create placement request'] },
     { service: 'cas1', status: 'CAS1_NOT_ELIGIBLE', expected: undefined },
     { service: 'cas1', status: 'CAS1_UPCOMING', expected: undefined },
     { service: 'cas2', status: 'CAS2_NOT_STARTED', expected: ['Start application'] },
@@ -481,6 +482,21 @@ describe('cas1 status card', () => {
       expect(cas1StatusCard({ serviceResult, cas1Application, actionPosition: -1 }).details).toMatchSnapshot()
     })
 
+    it('preserves the submitted-by and expiry details for a not-submitted placement request', () => {
+      const notStartedCard = cas1StatusCard({
+        serviceResult: serviceResultFactory.build({ serviceStatus: 'CAS1_PLACEMENT_REQUEST_NOT_STARTED' }),
+        cas1Application,
+        actionPosition: -1,
+      })
+      const notSubmittedCard = cas1StatusCard({
+        serviceResult: serviceResultFactory.build({ serviceStatus: 'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED' }),
+        cas1Application,
+        actionPosition: -1,
+      })
+
+      expect(notSubmittedCard.details).toEqual(notStartedCard.details)
+    })
+
     it.each([
       [0, '0 days'],
       [1, '1 day'],
@@ -517,6 +533,7 @@ describe('cas1 status card', () => {
         'CAS1_PLACEMENT_REQUEST_SUBMITTED',
         'CAS1_PLACEMENT_REQUEST_REJECTED',
         'CAS1_PLACEMENT_REQUEST_NOT_STARTED',
+        'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED',
         'CAS1_PLACEMENT_CANCELLED',
         'CAS1_NOT_ARRIVED',
         'CAS1_ARRIVED',

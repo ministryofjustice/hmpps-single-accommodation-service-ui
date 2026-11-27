@@ -70,6 +70,7 @@ export const linksForCas1Status = (serviceResult?: ServiceResultV2): Link[] => {
     case 'CAS1_PLACEMENT_REQUEST_WITHDRAWN':
       return [{ text: 'Create new placement request', ...link }]
     case 'CAS1_PLACEMENT_REQUEST_NOT_STARTED':
+    case 'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED':
       return [{ text: 'Create placement request', ...link }]
     case 'CAS1_NOT_ELIGIBLE':
     case 'CAS1_UPCOMING':
@@ -136,6 +137,7 @@ export const linksForCas3Status = (serviceResult?: ServiceResultV2) => {
       return [{ text: 'View referral', ...link }]
     case 'CAS3_NOT_SUBMITTED':
       return [{ text: 'Continue referral', ...link }]
+    case 'CAS3_NOT_STARTED_NEW':
     case 'CAS3_REJECTED':
       return [{ text: 'Start new referral', ...link }]
     case 'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS_ACCOMMODATION':
@@ -277,6 +279,7 @@ const contentForCas1Status = (
     case 'CAS1_PLACEMENT_REQUEST_SUBMITTED':
     case 'CAS1_PLACEMENT_REQUEST_REJECTED':
     case 'CAS1_PLACEMENT_REQUEST_NOT_STARTED':
+    case 'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED':
     case 'CAS1_PLACEMENT_CANCELLED':
     case 'CAS1_NOT_ARRIVED':
     case 'CAS1_ARRIVED': {
@@ -514,6 +517,7 @@ const detailsForCas1Status = (
         expiresRow(),
       ]
     case 'CAS1_PLACEMENT_REQUEST_NOT_STARTED':
+    case 'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED':
       return [submittedByRow(), expiresRow()]
     case 'CAS1_PLACEMENT_REQUEST_SUBMITTED':
       return [requestSubmittedRow(), requestSubmittedByRow(), expiresRow()]

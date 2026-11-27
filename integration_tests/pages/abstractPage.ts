@@ -103,6 +103,10 @@ export default class AbstractPage {
     await this.page.getByRole('radio', { name: label, exact: true }).check()
   }
 
+  async selectCheckboxByLabel(label: string) {
+    await this.page.getByRole('checkbox', { name: label, exact: true }).check()
+  }
+
   async selectOptionByLabel(label: string, value: string) {
     await this.page.getByRole('combobox', { name: label }).selectOption(value)
   }

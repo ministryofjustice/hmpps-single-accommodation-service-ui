@@ -23,6 +23,7 @@ import {
   eligibilityFactory,
   serviceResultFactory,
 } from '../testutils/factories'
+import uiPaths from '../paths/ui'
 
 const cas1Application: NonNullable<Cas1ServiceResult['cas1Application']> = {
   uiUrl: 'https://example.com/application',
@@ -775,11 +776,12 @@ describe('eligibilityToEligibilityCards', () => {
 
     const cards = eligibilityToEligibilityCards(eligibility, crn)
 
-    expect(cards).toHaveLength(4)
-    expect(cards[0].heading).toContain('Duty to Refer (DTR)')
-    expect(cards[1].heading).toContain('Commissioned Rehabilitative Services (CRS)')
-    expect(cards[2].heading).toContain('Approved premises (CAS1)')
-    expect(cards[3].heading).toContain('CAS3 (transitional accommodation)')
+    expect(cards).toHaveLength(5)
+    expect(cards[0].heading).toContain('CAS applications')
+    expect(cards[1].heading).toContain('Duty to Refer (DTR)')
+    expect(cards[2].heading).toContain('Commissioned Rehabilitative Services (CRS)')
+    expect(cards[3].heading).toContain('Approved premises (CAS1)')
+    expect(cards[4].heading).toContain('CAS3 (transitional accommodation)')
   })
 
   it('hides the CAS1 card when the person is not in prison or CAS1 accommodation', () => {
@@ -836,8 +838,8 @@ describe('eligibilityToEligibilityCards', () => {
 
       const cards = eligibilityToEligibilityCards(eligibility, crn)
 
-      expect(cards).toHaveLength(5)
-      expect(cards[3].heading).toContain('Short-term accommodation (CAS2)')
+      expect(cards).toHaveLength(6)
+      expect(cards[4].heading).toContain('Short-term accommodation (CAS2)')
     })
 
     it('links to mark the actual CAS2 application as arrived', () => {
@@ -867,6 +869,12 @@ describe('eligibilityToEligibilityCards', () => {
   it('returns an array of eligibility card objects', () => {
     const eligibility = eligibilityFactory.build({
       crn,
+      ppc: {
+        serviceResult: serviceResultFactory.build({
+          serviceStatus: 'NOT_STARTED',
+          url: uiPaths.publicProtectionCheck.start({ crn }),
+        }),
+      },
       cas1: {
         serviceResult: serviceResultFactory.build({
           serviceStatus: 'NOT_STARTED',

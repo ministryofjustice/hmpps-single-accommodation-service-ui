@@ -1,0 +1,60 @@
+{% extends "partials/layout.njk" %}
+
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block containerStart %}
+  {% if backLinkHref %}
+  {{
+    govukBackLink({
+        text: "Back",
+        href: backLinkHref
+    })
+  }}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if errorSummary and errorSummary.length %}
+        {{
+          govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+          })
+        }}
+      {% endif %}
+
+      <h1 class="govuk-heading-l">{{ pageTitle | default(page and page.pageTitle) }}</h1>
+      {{
+        govukSummaryList({
+            rows: tableRows
+        })
+      }}
+      {% if submitButtonText %}
+        <form method="post" novalidate="">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% block formContent %}{% endblock %}
+
+          <div class="govuk-button-group">
+            {{
+              govukButton({
+                  text: submitButtonText,
+                  preventDoubleClick: true
+              })
+            }}
+          </div>
+        </form>
+    {% endif %}
+    </div>
+  </div>
+{% endblock %}

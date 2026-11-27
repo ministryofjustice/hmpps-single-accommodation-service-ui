@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`publicProtectionCheck publicProtectionQuestionPages page data should match snapshot 1`] = `
+{
+  "instructions": {
+    "content": "<p class="govuk-body">Before starting any CAS referral, consider the level of public protection needed to manage the person's risks and needs.</p><p class="govuk-body">Your input should be based on:</p><ul class="govuk-list govuk-list--bullet"><li>risk to others and self on release</li><li>level of supervision and interventions needed</li><li>accommodation and support needs</li></ul>",
+    "pageTitle": "Check public protection needs",
+  },
+  "measures": {
+    "content": "<p class="govuk-body">Thinking about the public protection risk that Tariq Garcia poses.</p><p class="govuk-body">Could stable accommodation, along with appropriate controls and support be enough to manage that risk in the community?</p>",
+    "guidance": "<p>This can be things like:</p><h2  class="govuk-heading-m">Control measures</h2><ul class="govuk-list govuk-list--bullet"><li>external CCTV coverage and monitoring arrangements</li><li>drug or alcohol testing as part of their licence agreement</li><li>electronic monitoring or curfews</li><li>licence conditions restricting behaviour, contact or movement</li><li>regular probation oversight and multi-agency support</li></ul><h2  class="govuk-heading-m">Support</h2><ul class="govuk-list govuk-list--bullet"><li>help accessing services and benefits</li><li>planning for long-term accommodation</li><li>practical resettlement support</li><li>regular property visits</li><li>regular support worker contact</li><li>support developing independent living skills</li></ul>",
+    "pageTitle": "Managing public protection risks and needs",
+    "questions": [
+      {
+        "hint": "Select all that apply",
+        "items": [
+          {
+            "checked": false,
+            "text": "Stable accommodation",
+            "value": "stableAccommodation",
+          },
+          {
+            "checked": false,
+            "text": "Control measures in the community",
+            "value": "controlMeasures",
+          },
+          {
+            "checked": false,
+            "text": "Practical support and guidance",
+            "value": "practicalSupport",
+          },
+          {
+            "divider": "Or",
+          },
+          {
+            "behaviour": "exclusive",
+            "checked": false,
+            "hint": {
+              "text": "This person needs an enhanced level of supervision and risk management",
+            },
+            "text": "None of the above are enough",
+            "value": "none",
+          },
+        ],
+        "label": "Which factors could manage personName's risks and needs in the community",
+        "name": "controlMeasures",
+        "required": "Select one or more measures",
+        "type": "checkBox",
+      },
+    ],
+  },
+  "risk": {
+    "content": "<p class="govuk-body">Some people may pose significant risks to others or to themselves that require enhanced supervision and management,especially directly following release.</p>",
+    "guidance": "<p>This can be things like:</p><ul class="govuk-list govuk-list--bullet"><li>Serious concerns about being managed safely in the community</li><li>able to live independently in shared accommodation</li></ul>",
+    "pageTitle": "Public protection risk and needs",
+    "questions": [
+      {
+        "items": [
+          {
+            "checked": false,
+            "text": "Yes",
+            "value": "yes",
+          },
+          {
+            "checked": false,
+            "text": "No",
+            "value": "no",
+          },
+        ],
+        "label": "Could personName's risks be managed safely through stable accommodation and control measures?",
+        "name": "riskManagement",
+        "required": "Choose an answer",
+        "type": "radio",
+      },
+    ],
+  },
+  "support-needs": {
+    "content": "<p class="govuk-body">Stable accommodation and practical support may be enough to meet some people's needs</p>",
+    "guidance": "<p>This can be things like:</p><ul class="govuk-list govuk-list--bullet"><li>help accessing services and benefits</li><li>planning for long-term accommodation</li><li>practical resettlement support</li><li>regular property visits</li><li>regular support worker contact</li><li>support developing independent living skills</li></ul>",
+    "pageTitle": "Support needs",
+    "questions": [
+      {
+        "items": [
+          {
+            "checked": false,
+            "text": "Yes",
+            "value": "yes",
+          },
+          {
+            "checked": false,
+            "hint": {
+              "text": "Risks can be appropriately managed through other control measures",
+            },
+            "text": "No",
+            "value": "no",
+          },
+        ],
+        "label": "Would stable accommodation and practical support be enough to meet personName's support needs?",
+        "name": "supportNeeds",
+        "required": "Choose if needs can be met by accommodation and support",
+        "type": "radio",
+      },
+      {
+        "label": "Give further information",
+        "name": "needsDetails",
+        "type": "textArea",
+      },
+    ],
+  },
+}
+`;

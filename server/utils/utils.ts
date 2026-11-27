@@ -1,5 +1,5 @@
 import { HtmlContent, TextContent } from '@govuk/ui'
-import { ErrorMessages, RadioItem, SelectOption } from '@sas/ui'
+import { CheckboxItem, ErrorMessages, RadioItem, SelectOption } from '@sas/ui'
 import { errorDateParts } from './validation'
 
 const properCase = (word: string): string =>
@@ -71,6 +71,23 @@ export const radioItems = (labels: Record<string, string>, selectedValue?: strin
     text,
     checked: selectedValue === value,
   }))
+
+export const checkboxItems = (
+  labels: Record<string, string | CheckboxItem>,
+  selectedValue?: string | string[],
+  options: { divider?: string } = {},
+): CheckboxItem[] => {
+  const items: CheckboxItem[] = Object.entries(labels).map(([value, optLabel]) => ({
+    value,
+    ...(typeof optLabel === 'string' ? { text: optLabel } : optLabel),
+    checked: (Array.isArray(selectedValue) ? selectedValue : [selectedValue]).includes(value),
+  }))
+  if (items.length && options.divider) {
+    items.splice(-1, 0, options.divider ? { divider: options.divider } : undefined)
+    items[items.length - 1].behaviour = 'exclusive'
+  }
+  return items
+}
 
 export const dateFieldValues = (
   fieldName: string,

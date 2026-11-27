@@ -1,4 +1,4 @@
-import { CommissionedRehabilitativeServicesDto, ServiceResult } from '@sas/api'
+import { CommissionedRehabilitativeServicesDto, ServiceResultV2 } from '@sas/api'
 import { crsStatusCard } from './crs'
 import { crsServiceResultFactory, crsSubmissionFactory, serviceResultFactory } from '../testutils/factories'
 
@@ -15,23 +15,32 @@ describe('CRS utilities', () => {
     // See: https://hmpps-single-accommodation-service-prototype-main.apps.live.cloud-platform.service.justice.gov.uk/10-0/_statuses?r=t#crs
     const testCases: {
       title: string
-      result: Partial<ServiceResult>
+      result: Partial<ServiceResultV2>
       submission?: CommissionedRehabilitativeServicesDto
     }[] = [
-      { title: 'NOT_ELIGIBLE', result: { serviceStatus: 'NOT_ELIGIBLE' } },
-      { title: 'NOT_REQUIRED', result: { serviceStatus: 'NOT_REQUIRED' } },
+      { title: 'NOT_REQUIRED', result: { serviceStatus: 'CRS_NOT_REQUIRED' } },
+      { title: 'UPSTREAM_ERROR', result: { serviceStatus: 'CRS_UPSTREAM_ERROR' } },
       {
-        title: 'UPCOMING',
-        result: {
-          serviceStatus: 'UPCOMING',
-          action: { type: 'SUBMIT_CRS_ACCOMMODATION_REFERRAL', startDate: '2027-03-25', service: 'CRS' },
-        },
+        title: 'UPCOMING_REFERRAL',
+        result: { serviceStatus: 'CRS_UPCOMING_REFERRAL', actionStartDate: '2027-03-25' },
       },
-      { title: 'NOT_STARTED', result: { serviceStatus: 'NOT_STARTED', url: 'https://example.com/start' } },
+      {
+        title: 'UPCOMING_ACCOMMODATION_REFERRAL',
+        result: { serviceStatus: 'CRS_UPCOMING_ACCOMMODATION_REFERRAL', actionStartDate: '2027-03-25' },
+      },
+      { title: 'UPCOMING_WITHOUT_DATE', result: { serviceStatus: 'CRS_UPCOMING_REFERRAL' } },
+      {
+        title: 'NOT_STARTED_REFERRAL',
+        result: { serviceStatus: 'CRS_NOT_STARTED_REFERRAL', url: 'https://example.com/start' },
+      },
+      {
+        title: 'NOT_STARTED_ACCOMMODATION_REFERRAL',
+        result: { serviceStatus: 'CRS_NOT_STARTED_ACCOMMODATION_REFERRAL', url: 'https://example.com/start' },
+      },
       {
         title: 'SUBMITTED',
         result: {
-          serviceStatus: 'SUBMITTED',
+          serviceStatus: 'CRS_SUBMITTED',
           url: 'https://example.com/view-referral',
         },
         submission: crsSubmissionFactory.build({
@@ -43,8 +52,8 @@ describe('CRS utilities', () => {
     it.each(testCases)('returns a status card for a $title CRS service result', ({ result, submission }) => {
       const crsServiceResult = crsServiceResultFactory.build({
         serviceResult: serviceResultFactory.build({
-          serviceStatus: 'NOT_REQUIRED',
-          action: undefined,
+          serviceStatus: 'CRS_NOT_REQUIRED',
+          actionStartDate: undefined,
           failureReasons: [],
           url: undefined,
           ...result,

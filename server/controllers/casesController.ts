@@ -138,7 +138,7 @@ export default class CasesController {
         caseData,
         upstreamFailures,
         assignedTo: caseAssignedTo(caseData, res.locals?.user?.username),
-        nextActions: renderActions(data.eligibility?.caseActions),
+        nextActions: renderActions(data.eligibility),
         noFixedAbode: noFixedAbodeAlert(data.accommodationSummaries),
         nextAccommodationCard: accommodationCard('next', data.accommodationSummaries?.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', data.accommodationSummaries?.currentAccommodation),

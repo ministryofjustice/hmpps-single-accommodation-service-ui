@@ -31,41 +31,51 @@
   "V938951": {
     "crn": "V938951",
     "caseId": "fca36149-0b0b-4008-99f2-8095006b7b6a",
-    "status": "NOT_ACCEPTED",
+    "status": "SUBMITTED",
     "submission": {
-      "id": "d95c6e37-c03f-4b9b-a60d-cea4c8c74b9f",
+      "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
       "localAuthority": {
-        "localAuthorityAreaId": "919b70c2-da58-45a8-b781-687a485db329",
-        "localAuthorityAreaName": "Ashford"
+        "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
+        "localAuthorityAreaName": "Rugby"
       },
-      "referenceNumber": "CEI1V6BTWY",
-      "submissionDate": "2025-09-13",
-      "outcomeReason": "NO_LOCAL_CONNECTION",
-      "createdBy": "Winfield Dickens",
-      "createdAt": "2026-05-03T03:29:42.897Z"
+      "referenceNumber": "H4YDDVJYEJ",
+      "submissionDate": "2025-08-17",
+      "createdBy": "Ward Mraz-Hilll",
+      "createdAt": "2026-02-17T00:35:24.023Z"
     }
   },
   "T229440": {
     "crn": "T229440",
     "caseId": "5e7239ea-95ed-41b5-93a5-4f06e8aa3373",
-    "status": "SUBMITTED",
-    "submission": null
+    "status": "NOT_ACCEPTED",
+    "submission": {
+      "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
+      "localAuthority": {
+        "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
+        "localAuthorityAreaName": "Rugby"
+      },
+      "referenceNumber": "H4YDDVJYEJ",
+      "submissionDate": "2025-08-17",
+      "createdBy": "Ward Mraz-Hilll",
+      "createdAt": "2026-02-17T00:35:24.023Z",
+      "outcomeReason": "NO_LOCAL_CONNECTION"
+    }
   },
   "H271226": {
     "crn": "H271226",
     "caseId": "873642d9-a3f6-4c10-9eae-062e31d18cbe",
-    "status": "NOT_ACCEPTED",
+    "status": "ACCEPTED",
     "submission": {
-      "id": "e9cde48a-5f60-4e14-9464-49d89ad24cc7",
+      "id": "c9a2f4f2-ab5e-445d-8e38-d1ab36597604",
       "localAuthority": {
-        "localAuthorityAreaId": "d97c8005-3fbe-4b0d-8c0e-999e8d4109db",
-        "localAuthorityAreaName": "Oldham"
+        "localAuthorityAreaId": "47e21b87-58af-4497-8a17-62c67f651275",
+        "localAuthorityAreaName": "Rugby"
       },
-      "referenceNumber": "OVI1MX1YRB",
-      "submissionDate": "2026-04-07",
-      "outcomeReason": "REJECTED_FOR_ANOTHER_REASON",
-      "createdBy": "Miss Elsie Reilly",
-      "createdAt": "2025-07-30T20:46:34.105Z"
+      "referenceNumber": "H4YDDVJYEJ",
+      "submissionDate": "2025-08-17",
+      "createdBy": "Ward Mraz-Hilll",
+      "createdAt": "2026-02-17T00:35:24.023Z",
+      "outcomeReason": "PREVENTION_AND_RELIEF_DUTY"
     }
   },
   "U934069": {
@@ -73,16 +83,16 @@
     "caseId": "14d110ee-8c2c-4b59-aabe-947d90b2469a",
     "status": "ACCEPTED",
     "submission": {
-      "id": "4d984ce9-f66f-4df4-91a0-d98fb1804717",
+      "id": "dd461fc9-50ce-4798-9c2f-593ec90e8d69",
       "localAuthority": {
-        "localAuthorityAreaId": "dc288bea-85d5-4f02-956b-d4853238ee7b",
-        "localAuthorityAreaName": "Carlisle"
+        "localAuthorityAreaId": "a009ea3a-8186-4820-a702-935e408ea4a5",
+        "localAuthorityAreaName": "Rutland"
       },
-      "referenceNumber": "NYUK6MNEFS",
-      "submissionDate": "2026-04-25",
-      "outcomeReason": "PRIORITY_NEED",
-      "createdBy": "Micheal Grimes",
-      "createdAt": "2025-11-20T07:01:11.296Z"
+      "referenceNumber": "HBXPJ3KVEQ",
+      "submissionDate": "2025-07-25",
+      "createdBy": "Judy Parisian",
+      "createdAt": "2026-03-01T01:46:36.177Z",
+      "outcomeReason": "PRIORITY_NEED"
     }
   },
   "I322559": {

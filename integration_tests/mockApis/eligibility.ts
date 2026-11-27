@@ -1,11 +1,11 @@
 import type { SuperAgentRequest } from 'superagent'
-import { EligibilityDto } from '@sas/api'
+import { EligibilityV2Dto } from '@sas/api'
 import { stubFor, stubApiError, stubApiUpstreamFailure } from './wiremock'
 import { apiResponseFactory } from '../../server/testutils/factories'
 import apiPaths from '../../server/paths/api'
 
 export default {
-  stubGetEligibilityByCrn: (crn: string, eligibilityData?: EligibilityDto): SuperAgentRequest =>
+  stubGetEligibilityByCrn: (crn: string, eligibilityData?: EligibilityV2Dto): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',

@@ -1,10 +1,9 @@
 {
   "S511935": {
     "crn": "S511935",
-    "caseActions": [],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "PLACEMENT_REQUEST_WITHDRAWN",
+        "serviceStatus": "CAS1_PLACEMENT_REQUEST_WITHDRAWN",
         "failureReasons": [],
         "url": "https://cas1/create-new-placement-request"
       },
@@ -34,22 +33,31 @@
           "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
           "status": "AWAITING_PLACEMENT",
           "createdAt": "2026-01-10T09:00:00.000Z",
-          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "createdBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-01-12T09:00:00.000Z",
           "expiresAt": "2027-01-29"
         },
         "requestForPlacement": {
           "status": "REQUEST_WITHDRAWN",
-          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-08-29T09:00:00.000Z",
           "withdrawalReason": "ERROR_IN_PLACEMENT_REQUEST",
           "withdrawalDate": "2026-09-01T09:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "NOT_SUBMITTED",
+        "serviceStatus": "CAS2_NOT_SUBMITTED",
         "failureReasons": [],
         "url": "https://cas2/continue"
       },
@@ -62,79 +70,60 @@
           "username": "alex.morgan",
           "userType": "PROBATION_PRACTITIONER"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
-        "failureReasons": ["S_TIER"]
-      }
+        "serviceStatus": "CAS3_NOT_ELIGIBLE",
+        "failureReasons": []
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
+        "serviceStatus": "CRS_NOT_REQUIRED",
         "failureReasons": ["DTR_REFERRAL_EXPIRED"]
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_REQUIRED",
+        "serviceStatus": "DTR_NOT_REQUIRED",
         "failureReasons": []
       },
-      "submission": null
+      "submission": null,
+      "actionPosition": -1
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "COMPLETED",
+        "serviceStatus": "PA_COMPLETED",
         "failureReasons": []
-      }
+      },
+      "actionPosition": -1
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "P712106": {
     "crn": "P712106",
-    "caseActions": [
-      {
-        "type": "START_APPROVED_PREMISE_APPLICATION",
-        "startDate": "2027-06-08",
-        "service": "CAS1"
-      },
-      {
-        "type": "START_CAS3_REFERRAL",
-        "startDate": "2026-12-15",
-        "service": "CAS3"
-      },
-      {
-        "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL",
-        "startDate": "2027-03-25",
-        "service": "CRS"
-      },
-      {
-        "type": "SUBMIT_DTR_REFERRAL",
-        "startDate": "2026-02-23",
-        "service": "DTR"
-      },
-      {
-        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null,
-        "service": "PA"
-      }
-    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
+        "serviceStatus": "CAS1_UPCOMING",
         "failureReasons": [],
-        "action": {
-          "type": "START_APPROVED_PREMISE_APPLICATION",
-          "startDate": "2027-06-08",
-          "service": "CAS1"
-        }
-      }
+        "actionStartDate": "2027-06-08"
+      },
+      "actionPosition": 0
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "MORE_INFORMATION_NEEDED",
+        "serviceStatus": "CAS2_MORE_INFORMATION_NEEDED",
         "failureReasons": [],
         "url": "https://cas2/continue"
       },
@@ -151,67 +140,55 @@
           "latestAssessmentStatus": "MORE_INFO_REQUESTED",
           "submittedAt": "2026-06-04T11:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
+        "serviceStatus": "CAS3_UPCOMING",
         "failureReasons": [],
-        "action": {
-          "type": "START_CAS3_REFERRAL",
-          "startDate": "2026-12-15",
-          "service": "CAS3"
-        }
-      }
+        "actionStartDate": "2026-12-15"
+      },
+      "actionPosition": 1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
+        "serviceStatus": "CRS_UPCOMING_ACCOMMODATION_REFERRAL",
         "failureReasons": [],
-        "action": {
-          "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL",
-          "startDate": "2027-03-25",
-          "service": "CRS"
-        }
+        "actionStartDate": "2027-03-25"
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": 2
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "UPCOMING",
+        "serviceStatus": "DTR_UPCOMING",
         "failureReasons": [],
-        "action": {
-          "type": "SUBMIT_DTR_REFERRAL",
-          "startDate": "2026-02-23",
-          "service": "DTR"
-        }
+        "actionStartDate": "2026-02-23"
       },
-      "submission": null
+      "submission": null,
+      "actionPosition": 3
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "action": {
-          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null,
-          "service": "PA"
-        }
-      }
+        "serviceStatus": "PA_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": 4
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "T274481": {
     "crn": "T274481",
-    "caseActions": [
-      { "type": "START_APPROVED_PREMISE_APPLICATION", "service": "CAS1" },
-      { "type": "START_CAS3_REFERRAL", "service": "CAS3" },
-      { "type": "SUBMIT_CRS_ACCOMMODATION_REFERRAL", "service": "CRS" },
-      { "type": "SUBMIT_DTR_REFERRAL", "service": "DTR" }
-    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "CAS1_SUBMITTED",
         "failureReasons": [],
         "url": "https://cas1/create-new-placement-request"
       },
@@ -240,22 +217,31 @@
           "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
           "status": "AWAITING_PLACEMENT",
           "createdAt": "2026-01-10T09:00:00.000Z",
-          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "createdBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-01-12T09:00:00.000Z",
           "expiresAt": "2027-01-29"
         },
         "requestForPlacement": {
           "status": "REQUEST_WITHDRAWN",
-          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-08-29T09:00:00.000Z",
           "withdrawalReason": "ERROR_IN_PLACEMENT_REQUEST",
           "withdrawalDate": "2026-09-01T09:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "ARRIVED",
+        "serviceStatus": "CAS2_ARRIVED",
         "failureReasons": [],
         "url": "https://cas2/view"
       },
@@ -273,11 +259,12 @@
           "submittedAt": "2026-05-30T14:20:00.000Z",
           "markedAsArrivedDateTime": "2026-11-13T10:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "NOT_SUBMITTED",
+        "serviceStatus": "CAS3_NOT_SUBMITTED",
         "failureReasons": [],
         "url": "https://cas3/continue"
       },
@@ -286,51 +273,55 @@
         "createdAt": "2026-05-25T09:00:00.000Z",
         "applicationStatus": "IN_PROGRESS",
         "uiUrl": "https://cas3/continue"
-      }
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "CRS_NOT_STARTED_ACCOMMODATION_REFERRAL",
         "failureReasons": [],
         "url": "https://crs/start"
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": 2
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "DTR_NOT_STARTED",
         "failureReasons": [],
         "url": "https://dtr/add"
       },
-      "submission": null
+      "submission": null,
+      "actionPosition": -1
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "COMPLETED",
+        "serviceStatus": "PA_COMPLETED",
         "failureReasons": []
-      }
+      },
+      "actionPosition": -1
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "V938951": {
     "crn": "V938951",
-    "caseActions": [
-      {
-        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null,
-        "service": "PA"
-      }
-    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "CAS1_SUBMITTED",
         "failureReasons": [],
         "url": "https://cas1/view"
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "ON_WAITING_LIST",
+        "serviceStatus": "CAS2_ON_WAITING_LIST",
         "failureReasons": [],
         "url": "https://cas2/view"
       },
@@ -347,11 +338,12 @@
           "latestAssessmentStatus": "ON_WAITING_LIST",
           "submittedAt": "2026-05-22T12:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "CAS3_SUBMITTED",
         "failureReasons": [],
         "url": "https://cas3/view"
       },
@@ -375,22 +367,24 @@
             }
           }
         ]
-      }
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "CRS_SUBMITTED",
         "failureReasons": [],
         "url": "https://crs/view"
       },
       "commissionedRehabilitativeServices": {
         "status": "LIVE",
         "submissionDate": "2026-05-28"
-      }
+      },
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "DTR_SUBMITTED",
         "failureReasons": [],
         "url": "https://dtr/view"
       },
@@ -404,27 +398,30 @@
         "submissionDate": "2025-08-17",
         "createdBy": "Ward Mraz-Hilll",
         "createdAt": "2026-02-17T00:35:24.023Z"
-      }
+      },
+      "actionPosition": -1,
+      "caseId": "fca36149-0b0b-4008-99f2-8095006b7b6a"
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "action": {
-          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null,
-          "service": "PA"
-        }
-      }
+        "serviceStatus": "PA_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": 0
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "T229440": {
     "crn": "T229440",
-    "caseActions": [],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "APPLICATION_REJECTED",
+        "serviceStatus": "CAS1_APPLICATION_REJECTED",
         "failureReasons": [],
         "url": "https://cas1/start-new"
       },
@@ -453,16 +450,24 @@
           "id": "b2c3d4e5-f6a7-4a4a-9c3e-101c4a4a4a4a",
           "status": "REJECTED",
           "createdAt": "2026-08-26T09:00:00.000Z",
-          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "createdBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-08-29T09:00:00.000Z",
           "expiresAt": "2027-01-29"
         },
-        "assessment": { "decision": "REJECTED", "rejectionRationale": "Not enough detail" }
-      }
+        "assessment": {
+          "decision": "REJECTED",
+          "rejectionRationale": "Not enough detail"
+        }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "PLACE_OFFERED",
+        "serviceStatus": "CAS2_PLACE_OFFERED",
         "failureReasons": [],
         "url": "https://cas2/view"
       },
@@ -479,11 +484,12 @@
           "latestAssessmentStatus": "PLACE_OFFERED",
           "submittedAt": "2026-05-12T15:40:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "REJECTED",
+        "serviceStatus": "CAS3_REJECTED",
         "failureReasons": [],
         "url": "https://cas3/start-new"
       },
@@ -499,18 +505,20 @@
           "username": "ward.mraz-hilll",
           "staffCode": "STAFF1"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
+        "serviceStatus": "CRS_NOT_REQUIRED",
         "failureReasons": ["DTR_REFERRAL_EXPIRED"]
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_ACCEPTED",
+        "serviceStatus": "DTR_NOT_ACCEPTED",
         "failureReasons": [],
         "url": "https://dtr/view"
       },
@@ -523,36 +531,40 @@
         "referenceNumber": "H4YDDVJYEJ",
         "submissionDate": "2025-08-17",
         "createdBy": "Ward Mraz-Hilll",
-        "createdAt": "2026-02-17T00:35:24.023Z"
-      }
+        "createdAt": "2026-02-17T00:35:24.023Z",
+        "outcomeReason": "NO_LOCAL_CONNECTION"
+      },
+      "actionPosition": -1,
+      "caseId": "5e7239ea-95ed-41b5-93a5-4f06e8aa3373"
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "COMPLETED",
+        "serviceStatus": "PA_COMPLETED",
         "failureReasons": []
-      }
+      },
+      "actionPosition": -1
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "H271226": {
     "crn": "H271226",
-    "caseActions": [
-      {
-        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null,
-        "service": "PA"
-      }
-    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "INFO_REQUESTED",
+        "serviceStatus": "CAS1_INFO_REQUESTED",
         "failureReasons": [],
         "url": "https://cas1/view"
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "OFFER_ACCEPTED",
+        "serviceStatus": "CAS2_OFFER_ACCEPTED",
         "failureReasons": [],
         "url": "https://cas2/view"
       },
@@ -569,11 +581,12 @@
           "latestAssessmentStatus": "OFFER_ACCEPTED",
           "submittedAt": "2026-05-08T10:30:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "BEDSPACE_OFFERED",
+        "serviceStatus": "CAS3_BEDSPACE_OFFERED",
         "failureReasons": [],
         "url": "https://cas3/view"
       },
@@ -610,22 +623,24 @@
             }
           }
         ]
-      }
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "CRS_SUBMITTED",
         "failureReasons": [],
         "url": "https://crs/view"
       },
       "commissionedRehabilitativeServices": {
         "status": "LIVE",
         "submissionDate": "2026-05-28"
-      }
+      },
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "ACCEPTED",
+        "serviceStatus": "DTR_ACCEPTED",
         "failureReasons": [],
         "url": "https://dtr/view"
       },
@@ -638,28 +653,32 @@
         "referenceNumber": "H4YDDVJYEJ",
         "submissionDate": "2025-08-17",
         "createdBy": "Ward Mraz-Hilll",
-        "createdAt": "2026-02-17T00:35:24.023Z"
-      }
+        "createdAt": "2026-02-17T00:35:24.023Z",
+        "outcomeReason": "PREVENTION_AND_RELIEF_DUTY"
+      },
+      "actionPosition": -1,
+      "caseId": "873642d9-a3f6-4c10-9eae-062e31d18cbe"
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "action": {
-          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null,
-          "service": "PA"
-        }
-      }
+        "serviceStatus": "PA_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": 0
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "U934069": {
     "crn": "U934069",
-    "caseActions": [],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "PLACEMENT_BOOKED",
+        "serviceStatus": "CAS1_PLACEMENT_BOOKED",
         "failureReasons": [],
         "url": "https://cas1/view"
       },
@@ -689,22 +708,31 @@
           "id": "5f9c3e10-1c4a-4a4a-9c3e-101c4a4a4a4a",
           "status": "PLACEMENT_ALLOCATED",
           "createdAt": "2026-07-01T09:00:00.000Z",
-          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "createdBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-07-02T09:00:00.000Z",
           "expiresAt": "2027-01-29"
         },
         "requestForPlacement": {
           "status": "PLACEMENT_BOOKED",
-          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-08-01T09:00:00.000Z",
           "expectedArrivalDate": "2026-09-09",
           "durationDays": 59
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "AWAITING_ARRIVAL",
+        "serviceStatus": "CAS2_AWAITING_ARRIVAL",
         "failureReasons": [],
         "url": "https://cas2/view"
       },
@@ -721,11 +749,12 @@
           "latestAssessmentStatus": "AWAITING_ARRIVAL",
           "submittedAt": "2026-04-29T11:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "BOOKING_CONFIRMED",
+        "serviceStatus": "CAS3_BOOKING_CONFIRMED",
         "failureReasons": [],
         "url": "https://cas3/view"
       },
@@ -749,22 +778,24 @@
           "startDate": "2026-09-01",
           "endDate": "2026-12-01"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "SUBMITTED",
+        "serviceStatus": "CRS_SUBMITTED",
         "failureReasons": [],
         "url": "https://crs/view"
       },
       "commissionedRehabilitativeServices": {
         "status": "LIVE",
         "submissionDate": "2026-05-28"
-      }
+      },
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "ACCEPTED",
+        "serviceStatus": "DTR_ACCEPTED",
         "failureReasons": [],
         "url": "https://dtr/view"
       },
@@ -777,23 +808,32 @@
         "referenceNumber": "HBXPJ3KVEQ",
         "submissionDate": "2025-07-25",
         "createdBy": "Judy Parisian",
-        "createdAt": "2026-03-01T01:46:36.177Z"
-      }
+        "createdAt": "2026-03-01T01:46:36.177Z",
+        "outcomeReason": "PRIORITY_NEED"
+      },
+      "actionPosition": -1,
+      "caseId": "14d110ee-8c2c-4b59-aabe-947d90b2469a"
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "COMPLETED",
+        "serviceStatus": "PA_COMPLETED",
         "failureReasons": []
-      }
+      },
+      "actionPosition": -1
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "I322559": {
     "crn": "I322559",
-    "caseActions": [],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "PLACEMENT_CANCELLED",
+        "serviceStatus": "CAS1_PLACEMENT_CANCELLED",
         "failureReasons": [],
         "url": "https://cas1/create-new-placement-request"
       },
@@ -806,13 +846,21 @@
           "id": "c3d4e5f6-a7b8-4a4a-9c3e-101c4a4a4a4a",
           "status": "AWAITING_PLACEMENT",
           "createdAt": "2026-01-10T09:00:00.000Z",
-          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "createdBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-01-12T09:00:00.000Z",
           "expiresAt": "2027-01-29"
         },
         "requestForPlacement": {
           "status": "REQUEST_SUBMITTED",
-          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-08-01T09:00:00.000Z",
           "expectedArrivalDate": "2026-08-24"
         },
@@ -820,11 +868,12 @@
           "status": "CANCELLED",
           "cancellationReason": "Over capacity"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "OFFER_DECLINED_OR_WITHDRAWN",
+        "serviceStatus": "CAS2_OFFER_DECLINED_OR_WITHDRAWN",
         "failureReasons": [],
         "url": "https://cas2/start-new"
       },
@@ -842,11 +891,12 @@
           "offerDeclinedReason": "The offered accommodation was unsuitable.",
           "submittedAt": "2026-04-18T09:45:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "BOOKING_CANCELLED",
+        "serviceStatus": "CAS3_BOOKING_CANCELLED",
         "failureReasons": [],
         "url": "https://cas3/view"
       },
@@ -872,44 +922,54 @@
           "startDate": "2026-08-15",
           "endDate": "2026-11-15"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "CRS_NOT_STARTED_REFERRAL",
         "failureReasons": [],
         "url": "https://crs/start"
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "DTR_NOT_STARTED",
         "failureReasons": [],
         "url": "https://dtr/add"
       },
-      "submission": null
+      "submission": null,
+      "actionPosition": -1
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "COMPLETED",
+        "serviceStatus": "PA_COMPLETED",
         "failureReasons": []
-      }
+      },
+      "actionPosition": -1
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "L247269": {
     "crn": "L247269",
-    "caseActions": [],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "NOT_ELIGIBLE",
+        "serviceStatus": "CAS1_NOT_ELIGIBLE",
         "failureReasons": ["MALE_NOT_HIGH_RISK_TIER"]
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "CANCELLED",
+        "serviceStatus": "CAS2_CANCELLED",
         "failureReasons": [],
         "url": "https://cas2/start-new"
       },
@@ -927,50 +987,54 @@
           "cancelledReason": "The application was cancelled.",
           "submittedAt": "2026-04-10T13:20:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "CANNOT_START_YET",
-        "failureReasons": ["DTR_REFERRAL_EXPIRED", "CRS_NOT_SUBMITTED"]
-      }
+        "serviceStatus": "CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS",
+        "failureReasons": ["DTR_REFERRAL_EXPIRED"]
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "CRS_NOT_STARTED_REFERRAL",
         "failureReasons": [],
         "url": "https://crs/start"
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "DTR_NOT_STARTED",
         "failureReasons": [],
         "url": "https://dtr/add"
       },
-      "submission": null
+      "submission": null,
+      "actionPosition": -1
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "COMPLETED",
+        "serviceStatus": "PA_COMPLETED",
         "failureReasons": []
-      }
+      },
+      "actionPosition": -1
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "F608163": {
     "crn": "F608163",
-    "caseActions": [
-      {
-        "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-        "startDate": null,
-        "service": "PA"
-      }
-    ],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "PLACEMENT_REQUEST_NOT_STARTED",
+        "serviceStatus": "CAS1_PLACEMENT_REQUEST_NOT_STARTED",
         "failureReasons": [],
         "url": "https://cas1/create-placement-request"
       },
@@ -982,7 +1046,11 @@
           "id": "a1b2c3d4-e5f6-4a4a-9c3e-101c4a4a4a4a",
           "status": "AWAITING_PLACEMENT",
           "createdAt": "2026-01-10T09:00:00.000Z",
-          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "createdBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-01-12T09:00:00.000Z",
           "expiresAt": "2027-01-29"
         },
@@ -1028,11 +1096,12 @@
             }
           }
         ]
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "WITHDRAWN",
+        "serviceStatus": "CAS2_WITHDRAWN",
         "failureReasons": [],
         "url": "https://cas2/start-new"
       },
@@ -1049,49 +1118,54 @@
           "latestAssessmentStatus": "WITHDRAWN",
           "submittedAt": "2026-04-01T16:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "CANNOT_START_YET",
-        "failureReasons": ["CRS_NOT_SUBMITTED"]
-      }
+        "serviceStatus": "CAS3_CANNOT_START_YET_SUBMIT_CRS",
+        "failureReasons": []
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "CRS_NOT_STARTED_REFERRAL",
         "failureReasons": [],
         "url": "https://crs/start"
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "DTR_NOT_STARTED",
         "failureReasons": [],
         "url": "https://dtr/add"
       },
-      "submission": null
+      "submission": null,
+      "actionPosition": -1
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
-        "failureReasons": [],
-        "action": {
-          "type": "ADD_AND_CONFIRM_PROPOSED_ADDRESS",
-          "startDate": null,
-          "service": "PA"
-        }
-      }
+        "serviceStatus": "PA_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": 0
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   },
   "N583271": {
     "crn": "N583271",
-    "caseActions": [],
     "cas1": {
       "serviceResult": {
-        "serviceStatus": "PLACEMENT_REQUEST_WITHDRAWN",
+        "serviceStatus": "CAS1_PLACEMENT_REQUEST_WITHDRAWN",
         "failureReasons": [],
         "url": "https://cas1/create-new-placement-request"
       },
@@ -1121,55 +1195,75 @@
           "id": "d4e5f6a7-b8c9-4a4a-9c3e-101c4a4a4a4a",
           "status": "AWAITING_PLACEMENT",
           "createdAt": "2026-01-10T09:00:00.000Z",
-          "createdBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "createdBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-01-12T09:00:00.000Z",
           "expiresAt": "2027-01-29"
         },
         "requestForPlacement": {
           "status": "REQUEST_WITHDRAWN",
-          "submittedBy": { "name": "Joe Bloggs", "username": "joe.bloggs", "staffCode": "N54A123" },
+          "submittedBy": {
+            "name": "Joe Bloggs",
+            "username": "joe.bloggs",
+            "staffCode": "N54A123"
+          },
           "submittedAt": "2026-08-29T09:00:00.000Z",
           "withdrawalReason": "ERROR_IN_PLACEMENT_REQUEST",
           "withdrawalDate": "2026-09-01T09:00:00.000Z"
         }
-      }
+      },
+      "actionPosition": -1
     },
     "cas2": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "CAS2_NOT_STARTED",
         "failureReasons": [],
         "url": "https://cas2/start"
-      }
+      },
+      "actionPosition": -1
     },
     "cas3": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "CAS3_NOT_STARTED",
         "failureReasons": [],
         "url": "https://cas3/start"
-      }
+      },
+      "actionPosition": -1
     },
     "crs": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "CRS_NOT_STARTED_REFERRAL",
         "failureReasons": [],
         "url": "https://crs/start"
       },
-      "commissionedRehabilitativeServices": null
+      "commissionedRehabilitativeServices": null,
+      "actionPosition": -1
     },
     "dtr": {
       "serviceResult": {
-        "serviceStatus": "NOT_STARTED",
+        "serviceStatus": "DTR_NOT_STARTED",
         "failureReasons": [],
         "url": "https://dtr/add"
       },
-      "submission": null
+      "submission": null,
+      "actionPosition": -1
     },
     "pa": {
       "serviceResult": {
-        "serviceStatus": "COMPLETED",
+        "serviceStatus": "PA_COMPLETED",
         "failureReasons": []
-      }
+      },
+      "actionPosition": -1
     },
-    "ppc": { "serviceResult": { "serviceStatus": "PPC_NOT_STARTED", "failureReasons": [] } }
+    "ppc": {
+      "serviceResult": {
+        "serviceStatus": "PPC_NOT_STARTED",
+        "failureReasons": []
+      },
+      "actionPosition": -1
+    }
   }
 }

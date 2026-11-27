@@ -1,11 +1,11 @@
-import { CaseAction, ServiceResult } from '@sas/api'
+import { CaseAction, ServiceResultV2 } from '@sas/api'
 import { StatusCard } from '@sas/ui'
 import { cas1StatusCard, cas2StatusCard, cas3StatusCard } from '../utils/eligibility'
 import { dutyToReferStatusCard } from '../utils/dutyToRefer'
 import { crsStatusCard } from '../utils/crs'
 import { statusCard, statusTag } from '../utils/macros'
 import { serviceStatusTag } from '../utils/statusTag'
-import { actionsMap, renderActions } from '../utils/actions'
+import { actionsMap, formatAction } from '../utils/actions'
 import { exampleApplications, exampleDate } from './fixtures'
 
 type Service = CaseAction['service']
@@ -19,8 +19,7 @@ export type GraphStatus = {
 
 export type GraphOutcome = {
   status: string
-  failureReasons?: ServiceResult['failureReasons']
-  blockingReason?: ServiceResult['blockingStatusReason']
+  failureReasons?: ServiceResultV2['failureReasons']
 }
 
 export type GraphStatuses = Record<string, GraphStatus>
@@ -46,42 +45,30 @@ const metadata = (outcome: GraphOutcome, statuses: GraphStatuses): GraphStatus =
   return meta
 }
 
-const isServiceStatus = (status: string): status is ServiceResult['serviceStatus'] => {
-  const tag = serviceStatusTag(status as ServiceResult['serviceStatus'])
-  return status === 'UNKNOWN' || (typeof tag?.text === 'string' && tag.text !== 'Unknown')
+const isServiceStatus = (status: string): status is ServiceResultV2['serviceStatus'] => {
+  const tag = serviceStatusTag(status as ServiceResultV2['serviceStatus'])
+  return typeof tag?.text === 'string' && tag.text !== 'Unknown'
 }
 
 export const graphServiceResult = (
   outcome: GraphOutcome,
-  failureReasons: ServiceResult['failureReasons'],
+  failureReasons: ServiceResultV2['failureReasons'],
   statuses: GraphStatuses,
-): ServiceResult => {
+): ServiceResultV2 => {
   const meta = metadata(outcome, statuses)
-  let status = outcome.status.slice(meta.service.length + 1)
-  if (meta.upcoming) status = 'UPCOMING'
-  else if (status.startsWith('CANNOT_START_YET_')) status = 'CANNOT_START_YET'
-  else if (status.startsWith('NOT_STARTED_')) status = 'NOT_STARTED'
-  else if (status === 'PLACEMENT_REQUEST_NOT_SUBMITTED') status = 'PLACEMENT_REQUEST_NOT_STARTED'
-  if (!isServiceStatus(status)) throw new Error(`Unsupported UI status: ${outcome.status}`)
+  if (!isServiceStatus(outcome.status)) throw new Error(`Unsupported UI status: ${outcome.status}`)
   const reasons = [...new Set([...(outcome.failureReasons ?? []), ...(failureReasons ?? [])])]
   return {
-    serviceStatus: status,
+    serviceStatus: outcome.status,
     failureReasons: reasons,
-    blockingStatusReason: outcome.blockingReason,
     url: '#',
-    action: meta.actionType
-      ? {
-          type: meta.actionType,
-          service: meta.service,
-          startDate: meta.upcoming ? exampleDate(14) : undefined,
-        }
-      : undefined,
+    actionStartDate: meta.upcoming ? exampleDate(14) : undefined,
   }
 }
 
 export const previewCard = (
   outcome: GraphOutcome,
-  failureReasons: ServiceResult['failureReasons'],
+  failureReasons: ServiceResultV2['failureReasons'],
   statuses: GraphStatuses,
 ): StatusCard | undefined => {
   const meta = metadata(outcome, statuses)
@@ -89,18 +76,21 @@ export const previewCard = (
   const examples = exampleApplications(serviceResult.serviceStatus)
   switch (meta.service) {
     case 'CAS1':
-      return cas1StatusCard({ serviceResult, cas1Application: examples.cas1 })
+      return cas1StatusCard({ serviceResult, actionPosition: -1, cas1Application: examples.cas1 })
     case 'CAS2':
-      return cas2StatusCard({ serviceResult, cas2Application: examples.cas2 }, 'PREVIEW')
+      return cas2StatusCard({ serviceResult, actionPosition: -1, cas2Application: examples.cas2 }, 'PREVIEW')
     case 'CAS3':
-      return cas3StatusCard({ serviceResult, cas3Application: examples.cas3 })
+      return cas3StatusCard({ serviceResult, actionPosition: -1, cas3Application: examples.cas3 })
     case 'DTR':
-      return dutyToReferStatusCard('PREVIEW', { serviceResult, submission: examples.submission })
+      return dutyToReferStatusCard('PREVIEW', { serviceResult, actionPosition: -1, submission: examples.submission })
     case 'CRS':
       return crsStatusCard({
         serviceResult,
+        actionPosition: -1,
         commissionedRehabilitativeServices:
-          serviceResult.serviceStatus === 'SUBMITTED' ? { status: 'LIVE', submissionDate: exampleDate(-2) } : undefined,
+          serviceResult.serviceStatus === 'CRS_SUBMITTED'
+            ? { status: 'LIVE', submissionDate: exampleDate(-2) }
+            : undefined,
       })
     default:
       throw new Error(`No eligibility card for service: ${meta.service}`)
@@ -109,12 +99,13 @@ export const previewCard = (
 
 export const statusCardPreview = (
   outcome: GraphOutcome,
-  failureReasons: ServiceResult['failureReasons'],
+  failureReasons: ServiceResultV2['failureReasons'],
   statuses: GraphStatuses,
 ): string => {
   const meta = metadata(outcome, statuses)
-  if (meta.service === 'PA') {
-    return `<p>Proposed address: <b>${escape(meta.text)}</b>. The UI has no corresponding eligibility card.</p>`
+  if (meta.service === 'PA' || meta.service === 'PPC') {
+    const service = meta.service === 'PA' ? 'Proposed address' : 'Public protection checker'
+    return `<p>${service}: <b>${escape(meta.text)}</b>. The UI has no corresponding eligibility card.</p>`
   }
   const card = previewCard(outcome, failureReasons, statuses)
   if (!card) return '<p class="muted">The UI hides this card for this outcome.</p>'
@@ -137,8 +128,6 @@ export const statusActionPreview = (outcome: GraphOutcome, statuses: GraphStatus
   const meta = metadata(outcome, statuses)
   if (!meta.actionType) return '<p class="card-action"><b>Action:</b> None</p>'
   if (!Object.hasOwn(actionsMap, meta.actionType)) throw new Error(`Missing UI action label: ${meta.actionType}`)
-  const actions = renderActions([
-    { type: meta.actionType, service: meta.service, startDate: meta.upcoming ? exampleDate(14) : undefined },
-  ])
-  return `<p class="card-action"><b>Action:</b> ${actions.join('')}</p>`
+  const action = formatAction(meta.actionType, meta.upcoming ? exampleDate(14) : undefined)
+  return `<p class="card-action"><b>Action:</b> ${action}</p>`
 }

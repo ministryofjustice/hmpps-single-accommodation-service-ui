@@ -384,7 +384,7 @@ describe('casesController', () => {
         caseData,
         upstreamFailures: [],
         assignedTo: caseAssignedTo(caseData, response.locals.user.username),
-        nextActions: renderActions(eligibility.caseActions),
+        nextActions: renderActions(eligibility),
         noFixedAbode: noFixedAbodeAlert(accommodationSummaries),
         nextAccommodationCard: accommodationCard('next', accommodationSummaries.nextAccommodation),
         currentAccommodationCard: accommodationCard('current', accommodationSummaries.currentAccommodation),

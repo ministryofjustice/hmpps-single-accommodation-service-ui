@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import vm from 'node:vm'
 import { execFileSync } from 'node:child_process'
-import { ServiceResult } from '@sas/api'
 import { statusCard } from '../utils/macros'
 import { exampleApplications, exampleDate } from './fixtures'
 import { graphServiceResult, GraphStatuses, previewCard } from './statusCardPreview'
@@ -24,9 +23,12 @@ describe('generated status card preview', () => {
       'NOT_ARRIVED',
       'PLACEMENT_CANCELLED',
       'PLACEMENT_REQUEST_NOT_STARTED',
+      'PLACEMENT_REQUEST_NOT_SUBMITTED',
       'PLACEMENT_REQUEST_SUBMITTED',
       'PLACEMENT_REQUEST_REJECTED',
       'PLACEMENT_REQUEST_WITHDRAWN',
+      'UPCOMING',
+      'UPSTREAM_ERROR',
     ],
     CAS2: [
       'NOT_ELIGIBLE',
@@ -42,21 +44,47 @@ describe('generated status card preview', () => {
       'WITHDRAWN',
       'CANCELLED',
       'OFFER_DECLINED_OR_WITHDRAWN',
+      'ARRIVED',
+      'UPCOMING',
+      'UPSTREAM_ERROR',
     ],
     CAS3: [
       'NOT_ELIGIBLE',
       'NOT_STARTED',
       'NOT_SUBMITTED',
-      'CANNOT_START_YET',
+      'CANNOT_START_YET_SUBMIT_DTR',
+      'CANNOT_START_YET_SUBMIT_CRS',
+      'CANNOT_START_YET_SUBMIT_DTR_CRS',
+      'CANNOT_START_YET_SUBMIT_CRS_ACCOMMODATION',
+      'CANNOT_START_YET_SUBMIT_DTR_CRS_ACCOMMODATION',
+      'NOT_STARTED_NEW',
       'SUBMITTED',
       'REJECTED',
       'BEDSPACE_OFFERED',
       'BOOKING_CONFIRMED',
       'BOOKING_CANCELLED',
       'ARRIVED',
+      'NOT_ARRIVED',
+      'UPCOMING',
+      'UPSTREAM_ERROR',
     ],
-    DTR: ['NOT_REQUIRED', 'NOT_STARTED', 'SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED'],
-    CRS: ['NOT_REQUIRED', 'NOT_ELIGIBLE', 'NOT_STARTED', 'SUBMITTED'],
+    DTR: ['NOT_REQUIRED', 'NOT_STARTED', 'SUBMITTED', 'ACCEPTED', 'NOT_ACCEPTED', 'UPCOMING', 'UPSTREAM_ERROR'],
+    CRS: [
+      'NOT_REQUIRED',
+      'NOT_STARTED_REFERRAL',
+      'NOT_STARTED_ACCOMMODATION_REFERRAL',
+      'UPCOMING_REFERRAL',
+      'UPCOMING_ACCOMMODATION_REFERRAL',
+      'SUBMITTED',
+      'UPSTREAM_ERROR',
+    ],
+    PPC: [
+      'NOT_STARTED',
+      'NOT_REQUIRED',
+      'COMPLETED_PUBLIC_PROTECTION_REQUIRED',
+      'COMPLETED_PUBLIC_PROTECTION_NOT_REQUIRED',
+      'UPSTREAM_ERROR',
+    ],
   } satisfies Partial<Record<GraphStatuses[string]['service'], string[]>>
 
   Object.entries(scenarios).forEach(([service, values]) => {
@@ -65,8 +93,6 @@ describe('generated status card preview', () => {
     })
   })
   statuses.PA_UNKNOWN = { service: 'PA', text: '<Example address>' }
-  statuses.CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED = { service: 'CAS1', text: 'Not submitted' }
-  statuses.CAS2_NOT_STARTED_PRISON = { service: 'CAS2', text: 'Not started' }
   statuses.CAS3_UPCOMING = { service: 'CAS3', text: 'Upcoming', upcoming: true, actionType: 'START_CAS3_REFERRAL' }
 
   const call = (expression: string): string => vm.runInContext(expression, context)
@@ -103,11 +129,24 @@ describe('generated status card preview', () => {
 
   afterEach(() => jest.useRealTimers())
 
-  it.each(Object.keys(statuses).filter(status => !status.startsWith('PA_')))('renders the real UI for %s', status => {
-    const card = previewCard({ status }, [], statuses)
-    const expected = disableLinks(statusCard(card))
-    expect(call(`statusCardPreview({status: ${JSON.stringify(status)}})`)).toContain(expected)
-  })
+  it.each(Object.keys(statuses).filter(status => !status.startsWith('PA_') && !status.startsWith('PPC_')))(
+    'renders the real UI for %s',
+    status => {
+      const card = previewCard({ status }, [], statuses)
+      const expected = disableLinks(statusCard(card))
+      expect(call(`statusCardPreview({status: ${JSON.stringify(status)}})`)).toContain(expected)
+    },
+  )
+
+  it.each(Object.keys(statuses).filter(status => status.startsWith('PPC_')))(
+    'explains that %s has no eligibility card',
+    status => {
+      expect(call(`statusCardPreview({status: ${JSON.stringify(status)}})`)).toContain(
+        'The UI has no corresponding eligibility card.',
+      )
+      expect(call(`statusCardTag({status: ${JSON.stringify(status)}})`)).toContain('govuk-tag')
+    },
+  )
 
   it('is self-contained and does not embed server configuration', () => {
     expect(fragment).not.toMatch(/<script[^>]+src=|<link\b|url\(/i)
@@ -177,23 +216,26 @@ describe('generated status card preview', () => {
     expect(html.match(/Age \(applicant is under 18\)/g)).toHaveLength(1)
   })
 
-  it.each<ServiceResult['blockingStatusReason']>([
-    'SUBMIT_DTR_BEFORE_CAS3',
-    'SUBMIT_CRS_BEFORE_CAS3',
-    'SUBMIT_CRS_ACCOMMODATION_BEFORE_CAS3',
-    'SUBMIT_DTR_AND_CRS_BEFORE_CAS3',
-    'SUBMIT_DTR_AND_CRS_ACCOMMODATION_BEFORE_CAS3',
-  ])('passes blocking reason %s to the real UI', blockingReason => {
-    const outcome = { status: 'CAS3_CANNOT_START_YET', blockingReason }
-    expect(call(`statusCardPreview(${JSON.stringify(outcome)}, [])`)).toContain(
-      statusCard(previewCard(outcome, [], statuses)),
-    )
+  it.each([
+    ['CAS3_CANNOT_START_YET_SUBMIT_DTR', ['add DTR referral details']],
+    ['CAS3_CANNOT_START_YET_SUBMIT_CRS', ['submit a CRS referral']],
+    ['CAS3_CANNOT_START_YET_SUBMIT_CRS_ACCOMMODATION', ['submit a CRS accommodation referral']],
+    ['CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS', ['Add DTR referral details', 'Submit a CRS referral']],
+    [
+      'CAS3_CANNOT_START_YET_SUBMIT_DTR_CRS_ACCOMMODATION',
+      ['Add DTR referral details', 'Submit a CRS accommodation referral'],
+    ],
+  ])('renders requirements for %s', (status, requirements) => {
+    const html = call(`statusCardPreview(${JSON.stringify({ status })}, [])`)
+    requirements.forEach(requirement => expect(html).toContain(requirement))
   })
 
-  it('normalises graph-only status variants', () => {
-    expect(graphServiceResult({ status: 'CAS2_NOT_STARTED_PRISON' }, [], statuses).serviceStatus).toBe('NOT_STARTED')
+  it('preserves V2 status variants', () => {
+    expect(graphServiceResult({ status: 'CAS3_NOT_STARTED_NEW' }, [], statuses).serviceStatus).toBe(
+      'CAS3_NOT_STARTED_NEW',
+    )
     expect(graphServiceResult({ status: 'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED' }, [], statuses).serviceStatus).toBe(
-      'PLACEMENT_REQUEST_NOT_STARTED',
+      'CAS1_PLACEMENT_REQUEST_NOT_SUBMITTED',
     )
   })
 
@@ -235,30 +277,49 @@ describe('generated status card preview', () => {
   })
 
   it('supplies stage-consistent example data without presentation rules', () => {
-    const draft = exampleApplications('NOT_SUBMITTED')
+    const draft = exampleApplications('CAS1_NOT_SUBMITTED')
     expect(draft.cas1.application.status).toBe('STARTED')
     expect(draft.cas1.application.submittedAt).toBeUndefined()
     expect(draft.cas1.assessment).toBeUndefined()
     expect(draft.cas1.placement).toBeUndefined()
-    expect(draft.cas2.submittedApplication).toBeUndefined()
-    expect(draft.cas3.applicationStatus).toBe('IN_PROGRESS')
-    expect(draft.cas3.applicationSubmittedDate).toBeUndefined()
-    const submitted = exampleApplications('SUBMITTED')
+    expect(exampleApplications('CAS2_NOT_SUBMITTED').cas2.submittedApplication).toBeUndefined()
+    expect(exampleApplications('CAS3_NOT_SUBMITTED').cas3.applicationStatus).toBe('IN_PROGRESS')
+    expect(exampleApplications('CAS3_NOT_SUBMITTED').cas3.applicationSubmittedDate).toBeUndefined()
+    const submitted = exampleApplications('CAS1_SUBMITTED')
     expect(submitted.cas1.application.status).toBe('AWAITING_ASSESSMENT')
     expect(submitted.cas1.placement).toBeUndefined()
-    expect(exampleApplications('INFO_REQUESTED').cas1.application.status).toBe('REQUESTED_FURTHER_INFORMATION')
-    expect(exampleApplications('APPLICATION_REJECTED').cas1.assessment.decision).toBe('REJECTED')
-    expect(exampleApplications('PLACEMENT_REQUEST_WITHDRAWN').cas1.requestForPlacement.status).toBe('REQUEST_WITHDRAWN')
-    expect(exampleApplications('PLACEMENT_BOOKED').cas1.placement.actualArrivalDate).toBeUndefined()
-    expect(exampleApplications('ARRIVED').cas1.placement.status).toBe('ARRIVED')
-    expect(exampleApplications('MORE_INFORMATION_NEEDED').cas2.submittedApplication.latestAssessmentStatus).toBe(
+    expect(exampleApplications('CAS1_INFO_REQUESTED').cas1.application.status).toBe('REQUESTED_FURTHER_INFORMATION')
+    expect(exampleApplications('CAS1_APPLICATION_REJECTED').cas1.assessment.decision).toBe('REJECTED')
+    expect(exampleApplications('CAS1_PLACEMENT_REQUEST_WITHDRAWN').cas1.requestForPlacement.status).toBe(
+      'REQUEST_WITHDRAWN',
+    )
+    expect(exampleApplications('CAS1_PLACEMENT_BOOKED').cas1.placement.actualArrivalDate).toBeUndefined()
+    expect(exampleApplications('CAS1_ARRIVED').cas1.placement.status).toBe('ARRIVED')
+    expect(exampleApplications('CAS2_MORE_INFORMATION_NEEDED').cas2.submittedApplication.latestAssessmentStatus).toBe(
       'MORE_INFO_REQUESTED',
     )
-    expect(exampleApplications('BOOKING_CONFIRMED').cas3.bookingStatus).toBe('CONFIRMED')
-    expect(exampleApplications('REJECTED').cas3.applicationStatus).toBe('REJECTED')
-    expect(exampleApplications('NOT_STARTED').cas1).toBeUndefined()
-    expect(exampleApplications('NOT_STARTED').cas2).toBeUndefined()
-    expect(exampleApplications('NOT_STARTED').cas3).toBeUndefined()
-    expect(exampleApplications('NOT_STARTED').submission).toBeUndefined()
+    expect(exampleApplications('CAS3_BOOKING_CONFIRMED').cas3.bookingStatus).toBe('CONFIRMED')
+    expect(exampleApplications('CAS3_REJECTED').cas3.applicationStatus).toBe('REJECTED')
+    expect(exampleApplications('CAS1_NOT_STARTED').cas1).toBeUndefined()
+    expect(exampleApplications('CAS2_NOT_STARTED').cas2).toBeUndefined()
+    expect(exampleApplications('CAS3_NOT_STARTED_NEW').cas3).toBeUndefined()
+    expect(exampleApplications('DTR_NOT_STARTED').submission).toBeUndefined()
+  })
+
+  it.each([
+    'CAS1_NOT_STARTED',
+    'CAS2_UPCOMING',
+    'CAS3_NOT_STARTED_NEW',
+    'CAS3_CANNOT_START_YET_SUBMIT_CRS_ACCOMMODATION',
+    'CAS3_UPSTREAM_ERROR',
+  ] as const)('does not provide an application for %s', status => {
+    const examples = exampleApplications(status)
+    expect([examples.cas1, examples.cas2, examples.cas3]).toEqual([undefined, undefined, undefined])
+  })
+
+  it('only applies CAS1 placement data to CAS1 statuses', () => {
+    expect(exampleApplications('CAS1_ARRIVED').cas1.placement.status).toBe('ARRIVED')
+    expect(exampleApplications('CAS3_ARRIVED').cas1.placement).toBeUndefined()
+    expect(exampleApplications('CAS3_ARRIVED').cas3.bookingStatus).toBe('ARRIVED')
   })
 })

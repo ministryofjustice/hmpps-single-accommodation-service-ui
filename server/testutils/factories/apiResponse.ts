@@ -6,7 +6,7 @@ import {
   ApiResponseDtoAccommodationSummariesDto,
   ApiResponseDtoCaseDto,
   ApiResponseDtoDutyToReferDto,
-  ApiResponseDtoEligibilityDto,
+  ApiResponseDtoEligibilityV2Dto,
   ApiResponseDtoListAccommodationReferralDto,
   ApiResponseDtoListAccommodationSummaryDto,
   ApiResponseDtoListAuditRecordDto,
@@ -18,7 +18,7 @@ import {
   AuditRecordDto,
   CaseDto,
   DutyToReferDto,
-  EligibilityDto,
+  EligibilityV2Dto,
   ExternalReferralDto,
   ProposedAccommodationDto,
   ReferenceDataDto,
@@ -68,8 +68,8 @@ class ApiResponseFactory extends Factory<ApiResponse> {
     return this.buildResponse<ApiResponseDtoListExternalReferralDto>(referrals)
   }
 
-  eligibility(eligibility?: EligibilityDto) {
-    return this.buildResponse<ApiResponseDtoEligibilityDto>(eligibility || eligibilityFactory.build())
+  eligibility(eligibility?: EligibilityV2Dto) {
+    return this.buildResponse<ApiResponseDtoEligibilityV2Dto>(eligibility || eligibilityFactory.build())
   }
 
   proposedAddresses(proposedAddresses?: ProposedAccommodationDto[]) {

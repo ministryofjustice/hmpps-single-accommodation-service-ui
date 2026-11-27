@@ -6,7 +6,6 @@ import {
   casesToRows,
   personCell,
   queryToFilters,
-  actionsCell,
   displayName,
   assignedToOptions,
   updateQueryParams,
@@ -16,7 +15,7 @@ import {
 } from './cases'
 import { accommodationCell, accommodationStatusCell } from './accommodationSummary'
 import { statusCell } from './macros'
-import { actionFactory, assignedUserFactory, caseFactory } from '../testutils/factories'
+import { assignedUserFactory, caseFactory } from '../testutils/factories'
 import * as staffUtils from './staff'
 
 describe('cases utilities', () => {
@@ -98,21 +97,6 @@ describe('cases utilities', () => {
 
     it('renders a formatted cell including Assigned to', () => {
       expect(personCell(personFullAccess, 'You (John Doe)')).toMatchSnapshot()
-    })
-  })
-
-  describe('actionsCell macro', () => {
-    it('renders a formatted cell for a given list of actions', () => {
-      const actions = [
-        actionFactory.build({ service: 'DTR', type: 'ADD_DTR_REFERRAL_DETAILS', startDate: null }),
-        actionFactory.build({ service: 'CRS', type: 'SUBMIT_CRS_REFERRAL', startDate: '2026-07-23' }),
-      ]
-
-      expect(actionsCell(actions)).toMatchSnapshot()
-    })
-
-    it('renders an empty cell when no actions are provided', () => {
-      expect(actionsCell([])).toMatchSnapshot()
     })
   })
 

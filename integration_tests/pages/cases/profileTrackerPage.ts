@@ -1,12 +1,11 @@
 import { expect, Locator, Page } from '@playwright/test'
 import {
   CaseDto as Case,
-  EligibilityDto as Eligibility,
+  EligibilityV2Dto as Eligibility,
   AccommodationReferralDto as Referral,
   AccommodationSummariesDto,
   AccommodationSummaryDto,
   ProposedAccommodationDto,
-  CaseAction,
   ExternalReferralDto,
 } from '@sas/api'
 import { formatDate } from '../../../server/utils/dates'
@@ -22,9 +21,8 @@ import {
 import { addressLines, formatAddress } from '../../../server/utils/addresses'
 import PageWithCaseDetails from './pageWithCaseDetails'
 import { accommodationType, settledTag } from '../../../server/utils/accommodationSummary'
-import { actionsMap } from '../../../server/utils/actions'
+import { renderActions } from '../../../server/utils/actions'
 import { displayName } from '../../../server/utils/cases'
-import config from '../../../server/config'
 import { externalReferralCards } from '../../../server/utils/externalReferrals'
 
 export default class ProfileTrackerPage extends PageWithCaseDetails {
@@ -65,20 +63,14 @@ export default class ProfileTrackerPage extends PageWithCaseDetails {
     }
   }
 
-  async shouldShowNextActions(actions: CaseAction[]) {
+  async shouldShowNextActions(eligibility: Eligibility) {
     const nextActionsCard = this.page.locator('.sas-card--block', { hasText: 'Next actions' })
-    const visibleActions = actions.filter(action => !(action.service === 'CAS2' && !config.flags.cas2Enabled))
+    const actions = renderActions(eligibility)
+    const items = nextActionsCard.getByRole('listitem')
 
-    for await (const action of visibleActions) {
-      const actionElement = nextActionsCard.getByRole('listitem').nth(visibleActions.indexOf(action))
-      await expect(actionElement).toContainText(actionsMap[action.type])
-      if (action.startDate) {
-        const datetimeElement = actionElement.getByRole('time')
-        await expect(datetimeElement).toContainText(formatDate(action.startDate, 'days ago/in'))
-        await expect(datetimeElement).toHaveAttribute('datetime', action.startDate)
-        await expect(datetimeElement).toHaveAttribute('title', formatDate(action.startDate))
-        await expect(nextActionsCard.getByRole('listitem')).toHaveCount(visibleActions.length)
-      }
+    await expect(items).toHaveCount(actions.length)
+    for await (const [index, action] of actions.entries()) {
+      await this.assertEqualHtml(items.nth(index), action)
     }
   }
 

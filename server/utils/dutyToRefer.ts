@@ -2,14 +2,14 @@ import { Request } from 'express'
 import {
   AuditRecordDto,
   CaseDto,
-  DtrServiceResult,
+  DtrServiceResultWrapper,
   DtrSubmissionDto,
   DutyToReferDto,
   FieldChange,
-  ServiceResult,
+  ServiceResultV2,
 } from '@sas/api'
 import { SummaryListRow, TimelineEntry } from '@govuk/ui'
-import { Link, StatusCard, TimelineValue } from '@sas/ui'
+import { Link, StatusCard, StatusTag, TimelineValue } from '@sas/ui'
 import { dateFieldParts, formatDate, formatDateAndDaysAgo, isoDateToDateInput } from './dates'
 import uiPaths from '../paths/ui'
 import {
@@ -44,29 +44,40 @@ export const submissionFormValues = (dtr: DutyToReferDto | undefined): Record<st
   }
 }
 
-export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceResult => ({
+const dtrServiceStatuses: Record<DutyToReferDto['status'], ServiceResultV2['serviceStatus']> = {
+  SUBMITTED: 'DTR_SUBMITTED',
+  ACCEPTED: 'DTR_ACCEPTED',
+  NOT_ACCEPTED: 'DTR_NOT_ACCEPTED',
+  WITHDRAWN: 'DTR_NOT_STARTED',
+}
+
+export const dutyToReferToDtrServiceResult = (dtr: DutyToReferDto): DtrServiceResultWrapper => ({
   caseId: dtr.caseId,
-  serviceResult: { serviceStatus: dtr.status, failureReasons: [] },
-  submission: dtr.submission,
+  serviceResult: {
+    serviceStatus: dtrServiceStatuses[dtr.status],
+    failureReasons: [],
+  },
+  actionPosition: -1,
+  submission: dtr.status === 'WITHDRAWN' ? null : dtr.submission,
 })
 
-const hintForDTR = (result: ServiceResult) => {
-  const { serviceStatus, action } = result ?? {}
+const hintForDTR = (result: ServiceResultV2) => {
+  const { serviceStatus, actionStartDate } = result ?? {}
 
-  if (serviceStatus === 'UPCOMING' && action?.startDate) {
-    return `Start referral from ${formatDate(action.startDate)} (${formatDate(action.startDate, 'days ago/in')}).`
+  if (serviceStatus === 'DTR_UPCOMING' && actionStartDate) {
+    return `Start referral from ${formatDate(actionStartDate)} (${formatDate(actionStartDate, 'days ago/in')}).`
   }
 
   return undefined
 }
 
-export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResult): StatusCard => {
+export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResultWrapper): StatusCard => {
   const { serviceResult } = dutyToRefer || {}
   const { serviceStatus } = serviceResult || {}
 
   return {
     heading: 'Duty to Refer (DTR)',
-    inactive: serviceStatus === 'NOT_REQUIRED',
+    inactive: serviceStatus === 'DTR_NOT_REQUIRED',
     hint: hintForDTR(serviceResult),
     status: serviceStatusTag(serviceStatus),
     details: detailsForStatus(dutyToRefer),
@@ -74,7 +85,7 @@ export const dutyToReferStatusCard = (crn?: string, dutyToRefer?: DtrServiceResu
   }
 }
 
-export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => {
+export const linksForStatus = (dtr?: DtrServiceResultWrapper, crn?: string): Link[] => {
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
 
@@ -84,11 +95,11 @@ export const linksForStatus = (dtr?: DtrServiceResult, crn?: string): Link[] => 
   }
 
   switch (status) {
-    case 'NOT_ACCEPTED':
-    case 'ACCEPTED':
-    case 'SUBMITTED':
+    case 'DTR_NOT_ACCEPTED':
+    case 'DTR_ACCEPTED':
+    case 'DTR_SUBMITTED':
       return [link]
-    case 'NOT_STARTED':
+    case 'DTR_NOT_STARTED':
       return [{ text: 'Add referral details', href: uiPaths.dutyToRefer.submission({ crn }) }]
     default:
       return []
@@ -110,11 +121,19 @@ export const summaryListRows = (caseData: CaseDto, dutyToRefer: DutyToReferDto =
   return rows
 }
 
+const dutyToReferStatusTag = (status?: DutyToReferDto['status']): StatusTag =>
+  ({
+    SUBMITTED: { text: 'Submitted', colour: 'yellow' },
+    ACCEPTED: { text: 'Accepted', colour: 'green' },
+    NOT_ACCEPTED: { text: 'Not accepted', colour: 'grey' },
+    WITHDRAWN: { text: 'Withdrawn', colour: 'orange' },
+  })[status] || { text: 'Unknown' }
+
 export const detailsSummaryListRows = (dutyToRefer: DutyToReferDto = undefined) => {
   const rows = []
 
   if (dutyToRefer?.status === 'SUBMITTED' || dutyToRefer?.status === 'WITHDRAWN') {
-    rows.push(summaryListRow('Status', statusTag(serviceStatusTag(dutyToRefer.status)), { type: 'html' }))
+    rows.push(summaryListRow('Status', statusTag(dutyToReferStatusTag(dutyToRefer.status)), { type: 'html' }))
   }
   rows.push(
     summaryListRow(
@@ -138,7 +157,7 @@ export const outcomeDetailsSummaryListRows = (dutyToRefer: DutyToReferDto = unde
   return [
     summaryListRow(
       'Status',
-      `${statusTag(serviceStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
+      `${statusTag(dutyToReferStatusTag(dutyToRefer.status))} <p class="govuk-!-margin-top-4">${outcomeSupportText(dutyToRefer)}</p>`,
       { type: 'html' },
     ),
     summaryListRow('Reason', outcomeReasonSummaryLabels[dutyToRefer.submission.outcomeReason]),
@@ -151,22 +170,21 @@ export const outcomeSupportText = (dutyToRefer: DutyToReferDto): string =>
     ? `${dutyToRefer.submission?.localAuthority?.localAuthorityAreaName} will not support this person with housing`
     : `${dutyToRefer.submission?.localAuthority?.localAuthorityAreaName} agreed to support this person with housing`
 
-export const detailsForStatus = (dtr?: DtrServiceResult): SummaryListRow[] => {
+export const detailsForStatus = (dtr?: DtrServiceResultWrapper): SummaryListRow[] => {
   const status = dtr?.serviceResult?.serviceStatus
   const submission = dtr?.submission
 
   switch (status) {
-    case 'NOT_ACCEPTED':
-    case 'ACCEPTED':
-    case 'SUBMITTED':
+    case 'DTR_NOT_ACCEPTED':
+    case 'DTR_ACCEPTED':
+    case 'DTR_SUBMITTED':
       return [
         summaryListRow('Submitted to', submission?.localAuthority?.localAuthorityAreaName),
         summaryListRow('Reference', submission?.referenceNumber, { noValue: 'No reference added' }),
         summaryListRow('Submitted', formatDateAndDaysAgo(submission?.submissionDate)),
         summaryListRow('Submitted by', submission?.createdBy),
       ]
-    case 'NOT_ELIGIBLE':
-    case 'NOT_STARTED':
+    case 'DTR_NOT_STARTED':
     default:
       return []
   }
@@ -355,7 +373,7 @@ export const dutyToReferTimelineEntry = (auditRecord: AuditRecordDto, currentUse
 
   const html = renderMacro('timelineDutyToRefer', {
     type,
-    status: status ? serviceStatusTag(status) : undefined,
+    status: status ? dutyToReferStatusTag(status) : undefined,
     summary,
     values,
     isChange,

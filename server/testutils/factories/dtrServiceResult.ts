@@ -1,58 +1,62 @@
-import { DtrServiceResult, ServiceResult } from '@sas/api'
+import { DtrServiceResultWrapper, ServiceResultV2 } from '@sas/api'
 import { Factory } from 'fishery'
 import serviceResultFactory from './serviceResult'
 import dtrSubmissionFactory from './dutyToReferSubmission'
 
-class DtrServiceResultFactory extends Factory<DtrServiceResult> {
+class DtrServiceResultFactory extends Factory<DtrServiceResultWrapper> {
   notRequired() {
     return this.params({
-      serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_REQUIRED' }),
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'DTR_NOT_REQUIRED' }),
       submission: null,
     })
   }
 
   upcoming() {
     return this.params({
-      serviceResult: serviceResultFactory.build({ serviceStatus: 'UPCOMING' }),
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'DTR_UPCOMING' }),
       submission: null,
     })
   }
 
   notStarted() {
     return this.params({
-      serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_STARTED' }),
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'DTR_NOT_STARTED' }),
       submission: null,
     })
   }
 
   submitted() {
     return this.params({
-      serviceResult: serviceResultFactory.build({ serviceStatus: 'SUBMITTED' }),
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'DTR_SUBMITTED' }),
       submission: dtrSubmissionFactory.build(),
     })
   }
 
   accepted() {
     return this.params({
-      serviceResult: serviceResultFactory.build({ serviceStatus: 'ACCEPTED' }),
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'DTR_ACCEPTED' }),
       submission: dtrSubmissionFactory.build(),
     })
   }
 
   notAccepted() {
     return this.params({
-      serviceResult: serviceResultFactory.build({ serviceStatus: 'NOT_ACCEPTED' }),
+      serviceResult: serviceResultFactory.build({ serviceStatus: 'DTR_NOT_ACCEPTED' }),
       submission: dtrSubmissionFactory.build(),
     })
   }
 }
 
-const noSubmissionStatuses: Array<ServiceResult['serviceStatus']> = ['NOT_STARTED', 'NOT_REQUIRED', 'UPCOMING']
-
-export default DtrServiceResultFactory.define(() => {
-  const serviceResult = serviceResultFactory.dtr().build()
+const noSubmissionStatuses: Array<ServiceResultV2['serviceStatus']> = [
+  'DTR_NOT_STARTED',
+  'DTR_NOT_REQUIRED',
+  'DTR_UPCOMING',
+]
+export default DtrServiceResultFactory.define(({ params }) => {
+  const serviceResult = serviceResultFactory.dtr().build(params.serviceResult)
   return {
     serviceResult,
+    actionPosition: -1,
     submission: noSubmissionStatuses.includes(serviceResult.serviceStatus) ? null : dtrSubmissionFactory.build(),
   }
 })

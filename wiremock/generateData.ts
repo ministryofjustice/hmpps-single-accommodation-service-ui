@@ -2,7 +2,13 @@
 import fs from 'fs'
 import path from 'path'
 import { faker } from '@faker-js/faker'
-import { CaseDto, DtrServiceResult, DutyToReferDto, ExternalReferralDto, ProposedAccommodationDto } from '@sas/api'
+import {
+  CaseDto,
+  DtrServiceResultWrapper,
+  DutyToReferDto,
+  ExternalReferralDto,
+  ProposedAccommodationDto,
+} from '@sas/api'
 import {
   accommodationSummaryFactory,
   auditRecordFactory,
@@ -80,15 +86,16 @@ if (generate.referrals) {
 }
 
 if (generate.dutyToRefer) {
-  const toDutyToReferStatus = (dtr: DtrServiceResult): DutyToReferDto['status'] => {
+  const toDutyToReferStatus = (dtr: DtrServiceResultWrapper): DutyToReferDto['status'] => {
     const { serviceStatus } = dtr.serviceResult
 
     switch (serviceStatus) {
-      case 'SUBMITTED':
-      case 'ACCEPTED':
-      case 'NOT_ACCEPTED':
-      case 'WITHDRAWN':
-        return serviceStatus
+      case 'DTR_SUBMITTED':
+        return 'SUBMITTED'
+      case 'DTR_ACCEPTED':
+        return 'ACCEPTED'
+      case 'DTR_NOT_ACCEPTED':
+        return 'NOT_ACCEPTED'
       default:
         if (dtr.submission?.withdrawalReason) {
           return 'WITHDRAWN'
@@ -98,7 +105,7 @@ if (generate.dutyToRefer) {
     }
   }
 
-  const dtrServiceResultToDutyToRefer = (crn: string, dtr: DtrServiceResult): DutyToReferDto => ({
+  const dtrServiceResultToDutyToRefer = (crn: string, dtr: DtrServiceResultWrapper): DutyToReferDto => ({
     crn,
     caseId: dtr.caseId ?? faker.string.uuid(),
     status: toDutyToReferStatus(dtr),

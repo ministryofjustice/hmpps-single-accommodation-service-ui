@@ -1,20 +1,5 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`CRS utilities crsStatusCard returns a status card for a NOT_ELIGIBLE CRS service result 1`] = `
-{
-  "details": undefined,
-  "heading": "Commissioned Rehabilitative Services (CRS)",
-  "hint": "No referral needed for accommodation.
-You can still complete a CRS for other requirements.",
-  "inactive": true,
-  "links": undefined,
-  "status": {
-    "colour": "grey",
-    "text": "Not eligible",
-  },
-}
-`;
-
 exports[`CRS utilities crsStatusCard returns a status card for a NOT_REQUIRED CRS service result 1`] = `
 {
   "details": undefined,
@@ -29,7 +14,27 @@ exports[`CRS utilities crsStatusCard returns a status card for a NOT_REQUIRED CR
 }
 `;
 
-exports[`CRS utilities crsStatusCard returns a status card for a NOT_STARTED CRS service result 1`] = `
+exports[`CRS utilities crsStatusCard returns a status card for a NOT_STARTED_ACCOMMODATION_REFERRAL CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": "No open CRS accommodation referral.",
+  "inactive": false,
+  "links": [
+    {
+      "external": true,
+      "href": "https://example.com/start",
+      "text": "Start referral",
+    },
+  ],
+  "status": {
+    "colour": "orange",
+    "text": "Not started",
+  },
+}
+`;
+
+exports[`CRS utilities crsStatusCard returns a status card for a NOT_STARTED_REFERRAL CRS service result 1`] = `
 {
   "details": undefined,
   "heading": "Commissioned Rehabilitative Services (CRS)",
@@ -78,7 +83,7 @@ exports[`CRS utilities crsStatusCard returns a status card for a SUBMITTED CRS s
 }
 `;
 
-exports[`CRS utilities crsStatusCard returns a status card for a UPCOMING CRS service result 1`] = `
+exports[`CRS utilities crsStatusCard returns a status card for a UPCOMING_ACCOMMODATION_REFERRAL CRS service result 1`] = `
 {
   "details": undefined,
   "heading": "Commissioned Rehabilitative Services (CRS)",
@@ -88,6 +93,48 @@ exports[`CRS utilities crsStatusCard returns a status card for a UPCOMING CRS se
   "status": {
     "colour": "yellow",
     "text": "Upcoming",
+  },
+}
+`;
+
+exports[`CRS utilities crsStatusCard returns a status card for a UPCOMING_REFERRAL CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": "Start referral from 25 March 2027 (in 289 days).",
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "yellow",
+    "text": "Upcoming",
+  },
+}
+`;
+
+exports[`CRS utilities crsStatusCard returns a status card for a UPCOMING_WITHOUT_DATE CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": undefined,
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "yellow",
+    "text": "Upcoming",
+  },
+}
+`;
+
+exports[`CRS utilities crsStatusCard returns a status card for a UPSTREAM_ERROR CRS service result 1`] = `
+{
+  "details": undefined,
+  "heading": "Commissioned Rehabilitative Services (CRS)",
+  "hint": undefined,
+  "inactive": false,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Upstream",
   },
 }
 `;

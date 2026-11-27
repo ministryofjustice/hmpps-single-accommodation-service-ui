@@ -1,15 +1,11 @@
-import { expect, Page } from '@playwright/test'
+import BasePage from './basePage'
 
-export default class LivingArrangementPage {
-  constructor(private readonly page: Page) {}
-
+export default class LivingArrangementPage extends BasePage {
   async expectPageToBeDisplayed() {
-    await expect(
-      this.page.getByRole('heading', {
-        name: /Which best describes the living arrangement/,
-        level: 1,
-      }),
-    ).toBeVisible()
+    await this.expectHeadingToBeDisplayed({
+      name: /Which best describes the living arrangement/,
+      level: 1,
+    })
   }
 
   async selectLivingArrangement(option: string) {

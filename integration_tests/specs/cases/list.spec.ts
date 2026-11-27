@@ -1,4 +1,5 @@
 import { test } from '@playwright/test'
+import { TeamMemberDto } from '@sas/api'
 import { login } from '../../testUtils'
 import casesApi from '../../mockApis/cases'
 import CasesListPage from '../../pages/cases/listPage'
@@ -16,11 +17,22 @@ test.describe('List of cases', () => {
       { code: 'team-one-code', name: 'Team One' },
       { code: 'team-two-code', name: 'Team Two' },
     ]
-    await stubCaseListPage(cases, teams)
+    const teamMembers: TeamMemberDto[] = [
+      { username: 'teamMember1', forename: 'forenameOne', surname: 'surnameOne' },
+      { username: 'teamMember2', forename: 'Forenametwo', surname: 'Surnametwo' },
+    ]
+    const [filteredCase] = cases
+    const [teamMember] = teamMembers
+    filteredCase.assignedTo = teamMember
+    await stubCaseListPage(cases, teams, teamMembers)
 
-    const filteredCase = cases[0]
     const { prisonNumber, riskLevel } = filteredCase
-    await casesApi.stubGetCases([filteredCase], { searchTerm: prisonNumber, riskLevel })
+    await casesApi.stubGetCases([filteredCase], { searchTerm: prisonNumber, riskLevel, teamCode: teams[0].code })
+    await casesApi.stubGetCases([filteredCase], {
+      searchTerm: prisonNumber,
+      riskLevel,
+      assignedToUsername: teamMember.username,
+    })
 
     await stubProfilePage({ crn: filteredCase.crn, caseData: filteredCase })
 
@@ -33,7 +45,7 @@ test.describe('List of cases', () => {
     // AND the filters should be set to default values
     await casesListPage.verifyFilters({
       searchTerm: '',
-      teamCode: '',
+      assignedTo: '',
       riskLevel: '',
     })
 
@@ -59,7 +71,7 @@ test.describe('List of cases', () => {
     // AND the filters are populated with the selected values
     await casesListPage.verifyFilters({
       searchTerm: prisonNumber,
-      teamCode: 'team-one-code',
+      assignedTo: 'team_team-one-code',
       riskLevel,
     })
 
@@ -74,7 +86,12 @@ test.describe('List of cases', () => {
     await casesListPage.clickCaseLink(filteredCase)
 
     // THEN I should see the profile tracker page
-    const profileTrackerPage = await ProfileTrackerPage.verifyOnPage(page, filteredCase)
+    const profileTrackerPage = await ProfileTrackerPage.verifyOnProfileTrackerPage(
+      page,
+      filteredCase,
+      `/?peopleType=NFA_RISK&searchTerm=${prisonNumber}&assignedTo=team_team-one-code&riskLevel=${riskLevel}`,
+      'Case list',
+    )
 
     // WHEN I click on the Case list link
     await profileTrackerPage.clickLink('Case list', page.locator('.govuk-breadcrumbs'))
@@ -87,6 +104,25 @@ test.describe('List of cases', () => {
       '': `‘${prisonNumber}’`,
       RoSH: formatRiskLevel(riskLevel),
       'Assigned to': 'Team One',
+    })
+
+    // WHEN I filter by a team member instead
+    await casesListPage.applyFilters({
+      teamName: `${teamMember.forename} ${teamMember.surname}`,
+    })
+
+    // THEN the relevant case is shown without the team assignment label
+    await casesListPage.shouldShowResultsSummary('Showing 1 person')
+    await casesListPage.shouldShowCases([filteredCase])
+    await casesListPage.verifyFilters({
+      searchTerm: prisonNumber,
+      assignedTo: `member_${teamMember.username}`,
+      riskLevel,
+    })
+    await casesListPage.shouldShowFilterTags({
+      '': `‘${prisonNumber}’`,
+      RoSH: formatRiskLevel(riskLevel),
+      'Assigned to': `${teamMember.forename} ${teamMember.surname}`,
     })
   })
 

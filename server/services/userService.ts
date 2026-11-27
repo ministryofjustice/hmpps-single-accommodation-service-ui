@@ -7,6 +7,10 @@ export default class UserService {
     return this.userClient.getTeams(token)
   }
 
+  getMyTeamMembers(token: string) {
+    return this.userClient.getMyTeamMembers(token)
+  }
+
   async getUserLocationCode(token: string): Promise<string> {
     const response = await this.userClient.getMe(token)
     const { data } = response

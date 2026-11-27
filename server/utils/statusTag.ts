@@ -4,6 +4,13 @@ import { StatusTag } from '@sas/ui'
 // eslint-disable-next-line import/prefer-default-export
 export const serviceStatusTag = (status?: ServiceResult['serviceStatus']): StatusTag =>
   ({
+    UPSTREAM_ERROR: { text: 'Upstream', colour: 'grey' },
+    PPC_NOT_STARTED: { text: 'PPC not started', colour: 'orange' },
+    PPC_COMPLETED_PUBLIC_PROTECTION_REQUIRED: { text: 'PPC completed (public protection required)', colour: 'green' },
+    PPC_COMPLETED_PUBLIC_PROTECTION_NOT_REQUIRED: {
+      text: 'PPC completed (public protection not required)',
+      colour: 'green',
+    },
     NOT_REQUIRED: { text: 'Not required', colour: 'grey' },
     NOT_ELIGIBLE: { text: 'Not eligible', colour: 'grey' },
     CANNOT_START_YET: { text: 'Cannot start yet', colour: 'grey' },

@@ -309,6 +309,7 @@ const cas2NotEligibleReasons: Partial<Record<ServiceResult['failureReasons'][num
   IN_PRISON_NO_RELEASE_DATE: 'Must have a conditional release date to start application.',
   IN_CAS2_ACCOMMODATION: 'Not eligible as applicant is currently in a CAS2 property.',
   IN_COMMUNITY: 'Not eligible unless at risk of recall.',
+  HAS_NEXT_ACCOMMODATION: 'Not at risk of homelessness.',
 }
 
 const contentForCas2Status = (serviceResult?: ServiceResult): TextOrHtmlContent[] => {
@@ -549,16 +550,21 @@ const detailsForCas3Status = (
   const { serviceStatus } = serviceResult ?? {}
   if (!cas3Application) return []
   switch (serviceStatus) {
+    case 'NOT_SUBMITTED':
+      return [
+        summaryListRow('Referral started', formatDateAndDaysAgo(cas3Application.createdAt ?? undefined)),
+        summaryListRow('Started by', cas3Application.createdBy?.name ?? undefined),
+      ]
     case 'SUBMITTED':
       return [
         summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
-        summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+        summaryListRow('Submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
     case 'REJECTED':
       return [
         summaryListRow('Rejection reason', cas3Application?.applicationRejectedReason ?? undefined),
         summaryListRow('Submitted', formatDateAndDaysAgo(cas3Application?.applicationSubmittedDate ?? undefined)),
-        summaryListRow('Submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+        summaryListRow('Submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
     case 'BEDSPACE_OFFERED':
       return [
@@ -566,7 +572,7 @@ const detailsForCas3Status = (
           'Provisional offer sent',
           formatDateAndDaysAgo(cas3Application?.bookingProvisionalOfferSentDate ?? undefined),
         ),
-        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+        summaryListRow('Referral submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
     case 'BOOKING_CONFIRMED': {
       const { premises } = cas3Application ?? {}
@@ -579,11 +585,11 @@ const detailsForCas3Status = (
           'Booking dates',
           `${formatDate(premises?.startDate)} to ${formatDate(premises?.endDate)}${duration ? ` (${duration})` : ''}`,
         ),
-        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+        summaryListRow('Referral submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
     }
     case 'BOOKING_CANCELLED': {
-      const { cancellation, premises, applicationSubmittedBy } = cas3Application
+      const { cancellation, premises, createdBy } = cas3Application
       const bookingDates =
         premises?.startDate && premises.endDate
           ? `${formatDate(premises.startDate)} to ${formatDate(premises.endDate)}`
@@ -592,14 +598,14 @@ const detailsForCas3Status = (
       return [
         summaryListRow('Cancellation reason', cancellation?.cancellationReason ?? undefined),
         summaryListRow('Booking dates', bookingDates),
-        summaryListRow('Referral submitted by', applicationSubmittedBy?.name ?? undefined),
+        summaryListRow('Referral submitted by', createdBy?.name ?? undefined),
       ]
     }
     case 'ARRIVED':
       return [
         summaryListRow('Arrival date', formatDateAndDaysAgo(cas3Application?.premises.startDate ?? undefined)),
         summaryListRow('Expected departure date', formatDateAndDaysAgo(cas3Application?.premises.endDate ?? undefined)),
-        summaryListRow('Referral submitted by', cas3Application?.applicationSubmittedBy.name ?? undefined),
+        summaryListRow('Referral submitted by', cas3Application?.createdBy.name ?? undefined),
       ]
     default:
       return []

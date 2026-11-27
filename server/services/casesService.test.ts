@@ -1,4 +1,4 @@
-import { GetCasesQuery } from '@sas/ui'
+import { GetCasesApiQuery } from '@sas/ui'
 import CasesClient from '../data/casesClient'
 import CasesService from './casesService'
 import { apiResponseFactory } from '../testutils/factories'
@@ -20,7 +20,7 @@ describe('CasesService', () => {
 
     casesClient.getCases.mockResolvedValue(response)
 
-    const query: GetCasesQuery = { searchTerm: 'foo', riskLevel: 'MEDIUM', teamCode: 'team-code-id' }
+    const query: GetCasesApiQuery = { searchTerm: 'foo', riskLevel: 'MEDIUM', teamCode: 'team-code-id' }
 
     const result = await casesService.getCases(token, query)
 
@@ -59,5 +59,16 @@ describe('CasesService', () => {
     await casesService.submitCas2Arrival(token, 'X123456', 'application-123', arrival)
 
     expect(casesClient.submitCas2Arrival).toHaveBeenCalledWith(token, 'X123456', 'application-123', arrival)
+  })
+
+  it('should call getRecentSearches and return the cases', async () => {
+    const response = apiResponseFactory.caseList()
+
+    casesClient.getRecentSearches.mockResolvedValue(response)
+
+    const result = await casesService.getRecentSearches(token)
+
+    expect(casesClient.getRecentSearches).toHaveBeenCalledWith(token)
+    expect(result).toEqual(response)
   })
 })

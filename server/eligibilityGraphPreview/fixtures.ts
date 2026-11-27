@@ -129,7 +129,7 @@ export const exampleApplications = (status: ServiceResult['serviceStatus']) => {
     createdAt: exampleDate(-3),
     applicationStatus: cas3ApplicationStatus,
     applicationSubmittedDate: draft ? undefined : exampleDate(-2),
-    applicationSubmittedBy: draft ? undefined : staff,
+    createdBy: draft ? undefined : staff,
     applicationRejectedReason: status === 'REJECTED' ? 'Example rejection reason' : undefined,
     bookingStatus: cas3BookingStates[status],
     bookingProvisionalOfferSentDate: cas3BookingStates[status] ? exampleDate(-1) : undefined,

@@ -28,13 +28,14 @@ class ProposedAccommodationFactory extends Factory<ProposedAccommodationDto> {
   confirmed() {
     return this.params({
       verificationStatus: 'PASSED',
+      verificationReason: faker.lorem.sentence(),
       nextAccommodationStatus: 'YES',
     })
   }
 }
 
-export default ProposedAccommodationFactory.define(() => {
-  const verificationStatus = faker.helpers.arrayElement(verificationStatuses)
+export default ProposedAccommodationFactory.define(({ params }) => {
+  const verificationStatus = params.verificationStatus ?? faker.helpers.arrayElement(verificationStatuses)
   const nextAccommodationStatus =
     verificationStatus === 'PASSED' ? faker.helpers.arrayElement(nextAccommodationStatuses) : undefined
   return {
@@ -42,6 +43,7 @@ export default ProposedAccommodationFactory.define(() => {
     crn: crn(),
     accommodationType: faker.helpers.arrayElement(accommodationTypes),
     verificationStatus,
+    verificationReason: verificationStatus === 'NOT_CHECKED_YET' ? undefined : faker.lorem.sentence(),
     nextAccommodationStatus,
     address: addressFactory.build(),
     createdAt: faker.date.recent({ days: 10 }).toISOString(),

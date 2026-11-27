@@ -55,7 +55,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Address checks",
     },
     "value": {
-      "text": "Failed",
+      "html": "<p>Failed</p><div class="sas-text-block">Not suitable</div>",
     },
   },
 ]
@@ -116,7 +116,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Address checks",
     },
     "value": {
-      "text": "Not checked",
+      "html": "Not checked",
     },
   },
 ]
@@ -177,7 +177,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Address checks",
     },
     "value": {
-      "text": "Passed",
+      "html": "<p>Passed</p><div class="sas-text-block">Suitable</div>",
     },
   },
   {
@@ -254,7 +254,7 @@ exports[`Proposed addresses utilities addressDetailRows returns the correct rows
       "text": "Address checks",
     },
     "value": {
-      "text": "Passed",
+      "html": "<p>Passed</p><div class="sas-text-block">Suitable</div>",
     },
   },
   {
@@ -792,4 +792,6 @@ exports[`Proposed addresses utilities proposedAddressStatusCard returns a status
 }
 `;
 
-exports[`Proposed addresses utilities summaryListRows formats status when checks failed with reason 1`] = `"<p>Failed</p><p>Not suitable</p>"`;
+exports[`Proposed addresses utilities summaryListRows formats status when checks FAILED with reason 1`] = `"<p>Failed</p><div class="sas-text-block">Not suitable</div>"`;
+
+exports[`Proposed addresses utilities summaryListRows formats status when checks PASSED with reason 1`] = `"<p>Passed</p><div class="sas-text-block">Suitable</div>"`;

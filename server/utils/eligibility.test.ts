@@ -62,7 +62,7 @@ const cas3Application: NonNullable<Cas3ServiceResult['cas3Application']> = {
   applicationStatus: 'SUBMITTED',
   uiUrl: 'https://example.com/referral',
   applicationSubmittedDate: '2026-06-02',
-  applicationSubmittedBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
+  createdBy: { name: 'Joe Bloggs', username: 'joe.bloggs', staffCode: 'STAFF1' },
   bookingProvisionalOfferSentDate: '2026-06-15',
   premises: {
     addressLine1: '1 Test Street',
@@ -281,6 +281,10 @@ describe('eligibilityStatusCard', () => {
       {
         title: 'NOT_ELIGIBLE currently in community',
         result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_COMMUNITY'] },
+      },
+      {
+        title: 'NOT_ELIGIBLE not at risk of homelessness',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['HAS_NEXT_ACCOMMODATION'] },
       },
       {
         title: 'NOT_ELIGIBLE multiple failure reasons',
@@ -612,6 +616,7 @@ describe('cas3 status card', () => {
   describe('details', () => {
     const detailStatuses: ServiceResult['serviceStatus'][] = [
       'NOT_STARTED',
+      'NOT_SUBMITTED',
       'SUBMITTED',
       'REJECTED',
       'BEDSPACE_OFFERED',

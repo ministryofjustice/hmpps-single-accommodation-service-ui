@@ -5,6 +5,10 @@
 import type { CaseAction } from './CaseAction'
 export type ServiceResult = {
   serviceStatus:
+    | 'UPSTREAM_ERROR'
+    | 'PPC_NOT_STARTED'
+    | 'PPC_COMPLETED_PUBLIC_PROTECTION_REQUIRED'
+    | 'PPC_COMPLETED_PUBLIC_PROTECTION_NOT_REQUIRED'
     | 'UNKNOWN'
     | 'OFFER_DECLINED_OR_WITHDRAWN'
     | 'NOT_REQUIRED'
@@ -43,6 +47,7 @@ export type ServiceResult = {
   link?: string | null
   url?: string | null
   linkType?:
+    | 'PPC_START_CHECKER'
     | 'CAS1_START_APPLICATION'
     | 'CAS1_VIEW_APPLICATION'
     | 'CAS2_START_APPLICATION'

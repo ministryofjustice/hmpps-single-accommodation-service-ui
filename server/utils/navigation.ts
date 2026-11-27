@@ -1,8 +1,33 @@
-import paths from '../paths/ui'
+import { IndexRequest } from '@sas/ui'
+import { Response } from 'express'
+import uiPaths from '../paths/ui'
 
-// eslint-disable-next-line import/prefer-default-export
-export const getActivePage = (path: string): string => {
-  if (path === paths.cases.search.pattern) return 'search'
-  if (path.startsWith(paths.customList.index.pattern)) return 'customList'
-  return 'caseList'
+export const getActivePage = (req: IndexRequest): string => {
+  if (getCaseListUrl(req).startsWith(uiPaths.cases.search.pattern)) return 'search'
+  if (getCaseListUrl(req).startsWith(uiPaths.customList.index.pattern)) return 'custom-list'
+  return 'case-list'
+}
+
+export const getCaseListUrl = (req: IndexRequest): string => {
+  const activeTab = req.session.activeCaseListTab || uiPaths.cases.index({})
+  const filters = req.session.caseListFilters
+  return filters && !activeTab.startsWith(uiPaths.cases.search.pattern) ? `${activeTab}?${filters}` : activeTab
+}
+
+export const setCaseListFilters = (req: IndexRequest): void => {
+  req.session.caseListFilters = req?.query && new URLSearchParams(req.query).toString()
+}
+
+export const setActiveCaseListTab = (
+  req: IndexRequest,
+  res: Response,
+  tab: 'custom-list' | 'case-list' | 'search',
+): void => {
+  res.locals.activePage = tab
+
+  req.session.activeCaseListTab = {
+    'custom-list': uiPaths.customList.index({}),
+    'case-list': uiPaths.cases.index({}),
+    search: uiPaths.cases.search({}),
+  }[tab]
 }

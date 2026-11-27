@@ -5,12 +5,13 @@ import { ApiResponseDtoListString, ErrorResponse } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import { user } from '../routes/testutils/appSetup'
 import { apiResponseFactory, caseFactory } from '../testutils/factories'
-import { casesResultsSummary, casesTableColumns, casesTabs, casesToRows } from '../utils/cases'
+import { caseListSettingsType, casesResultsSummary, casesTableColumns, casesTabs, casesToRows } from '../utils/cases'
 import CustomListController from './customListController'
 import CustomListService from '../services/customListService'
 import * as validationUtils from '../utils/validation'
 import uiPaths from '../paths/ui'
 import { listOfCrns } from '../testutils/crn'
+import * as navUtils from '../utils/navigation'
 
 describe('customListController', () => {
   const TEST_TOKEN = 'test-token'
@@ -23,27 +24,30 @@ describe('customListController', () => {
 
   const auditService = mock<AuditService>()
   const customListService = mock<CustomListService>()
+  const setCaseListFilters = jest.spyOn(navUtils, 'setCaseListFilters')
 
   const customListController = new CustomListController(auditService, customListService)
 
   beforeEach(() => {
     jest.clearAllMocks()
     request = mock<Request>({ id: 'request-id', originalUrl: '/' })
+    request.query = {}
+  })
+
+  describe('setActiveCaseListUrl', () => {
+    it('sets the active tab to the custom list and continues to the next handler', () => {
+      const nextHandler = jest.fn()
+      customListController.setActiveCaseListUrl(request, response, nextHandler)
+
+      expect(response.locals.activePage).toBe('custom-list')
+      expect(request.session.activeCaseListTab).toBe('/custom-list')
+      expect(nextHandler).toHaveBeenCalled()
+    })
   })
 
   describe('index', () => {
-    const baseContext = {
-      assignedToOptions: [{ value: '', text: 'You (J. Doe)' }],
-      riskLevelOptions: [
-        { value: '', text: 'All' },
-        { value: 'VERY_HIGH', text: 'Very high' },
-        { value: 'HIGH', text: 'High' },
-        { value: 'MEDIUM', text: 'Medium' },
-        { value: 'LOW', text: 'Low' },
-      ],
-    }
-
     it('renders the create custom list page when no list already exits', async () => {
+      request.session.caseListFilters = 'riskLevel=HIGH'
       customListService.getCustomListCrns.mockResolvedValue(
         apiResponseFactory.buildResponse<ApiResponseDtoListString>([]),
       )
@@ -53,6 +57,9 @@ describe('customListController', () => {
         who: user.username,
         correlationId: 'request-id',
       })
+      expect(setCaseListFilters).toHaveBeenCalledWith(request)
+      expect(request.session.caseListFilters).toBe('')
+      expect(customListService.getCustomListCases).not.toHaveBeenCalled()
       expect(response.render).toHaveBeenCalledWith('pages/customList/index', {
         addCrnsHref: '/custom-list/add-crns',
       })
@@ -73,19 +80,26 @@ describe('customListController', () => {
       })
       expect(customListService.getCustomListCrns).toHaveBeenCalledWith(TEST_TOKEN)
       expect(customListService.getCustomListCases).toHaveBeenCalledWith(TEST_TOKEN, { peopleType: 'NFA_RISK' })
+      const expectedSettings: caseListSettingsType = {
+        tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
+        peopleType: 'NFA_RISK',
+        resultsSummary: casesResultsSummary(cases),
+        casesTableColumns: casesTableColumns(),
+        casesRows: casesToRows(cases, user.username),
+        filters: [],
+        query: {},
+        assignedToOptions: null,
+        riskLevelOptions: [
+          { value: '', text: 'All' },
+          { value: 'VERY_HIGH', text: 'Very high' },
+          { value: 'HIGH', text: 'High' },
+          { value: 'MEDIUM', text: 'Medium' },
+          { value: 'LOW', text: 'Low' },
+        ],
+      }
       expect(response.render).toHaveBeenCalledWith('pages/customList/show', {
         changeListHref: '/custom-list/add-crns',
-        caseListSettings: {
-          ...baseContext,
-          tabs: casesTabs(request.originalUrl, 'NFA_RISK'),
-          peopleType: 'NFA_RISK',
-          resultsSummary: casesResultsSummary(cases),
-          casesTableColumns: casesTableColumns(),
-          casesRows: casesToRows(cases),
-          filters: [],
-          query: {},
-          disabledFields: ['assignedTo'],
-        },
+        caseListSettings: expectedSettings,
       })
     })
 
@@ -101,6 +115,31 @@ describe('customListController', () => {
 
       expect(request.body).toEqual({ crnList: ['CRN1,CRN2'] })
       expect(addUserInputToFlash).toHaveBeenCalledWith(request)
+    })
+
+    it('stores the case list filters from the query when a list already exists', async () => {
+      const cases = caseFactory.buildList(1)
+      const query = { peopleType: 'NFA_RISK', riskLevel: 'HIGH' }
+      request.query = query
+      request.originalUrl = '/custom-list?peopleType=NFA_RISK&riskLevel=HIGH'
+      customListService.getCustomListCrns.mockResolvedValue(
+        apiResponseFactory.buildResponse<ApiResponseDtoListString>([cases.map(c => c.crn).join(',')]),
+      )
+      customListService.getCustomListCases.mockResolvedValue(apiResponseFactory.caseList(cases))
+
+      await customListController.index()(request, response, next)
+
+      expect(setCaseListFilters).toHaveBeenCalledWith(request)
+      expect(request.session.caseListFilters).toBe('peopleType=NFA_RISK&riskLevel=HIGH')
+      expect(customListService.getCustomListCases).toHaveBeenCalledWith(TEST_TOKEN, query)
+      expect(response.render).toHaveBeenCalledWith(
+        'pages/customList/show',
+        expect.objectContaining({
+          caseListSettings: expect.objectContaining({
+            filters: [{ text: 'RoSH: High', href: '/custom-list?peopleType=NFA_RISK' }],
+          }),
+        }),
+      )
     })
   })
   describe('addCrns', () => {
@@ -267,6 +306,12 @@ describe('customListController', () => {
         crnAddedText,
         showHref: uiPaths.customList.index.pattern,
       })
+    })
+    it('redirects when no CRN list provided', async () => {
+      request.query = {}
+      await customListController.confirmation()(request, response, next)
+
+      expect(response.redirect).toHaveBeenCalledWith(uiPaths.customList.index.pattern)
     })
   })
 })

@@ -1,5 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
-import { TeamDto } from '@sas/api'
+import { TeamDto, TeamMemberDto } from '@sas/api'
 import type { ApiResponseDtoUserDto } from '@sas/api'
 import { stubFor } from './wiremock'
 import apiPaths from '../../server/paths/api'
@@ -32,6 +32,18 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: apiResponseFactory.buildResponse(teams),
+      },
+    }),
+  stubGetTeamMembers: (teamMembers: TeamMemberDto[] = []): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: apiPaths.user.myTeamMembers({}),
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: apiResponseFactory.buildResponse(teamMembers),
       },
     }),
 }

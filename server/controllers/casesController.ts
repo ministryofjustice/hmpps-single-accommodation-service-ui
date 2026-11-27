@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
-import { IndexRequest } from '@sas/ui'
+import { GetCasesApiQuery, IndexRequest } from '@sas/ui'
 import { CaseDto } from '@sas/api'
 import AuditService, { Page } from '../services/auditService'
 import CasesService from '../services/casesService'
@@ -12,6 +12,9 @@ import {
   validateSearchCrn,
   searchResultsSummary,
   setupCaseList,
+  queryToFilters,
+  setupAssignedToOptions,
+  recentSearchItems,
 } from '../utils/cases'
 import ReferralsService from '../services/referralsService'
 import EligibilityService from '../services/eligibilityService'
@@ -26,8 +29,8 @@ import { accommodationCard, accommodationHistoryRows, noFixedAbodeAlert } from '
 import { collectApiResponses } from '../utils/apiResponses'
 import UserService from '../services/userService'
 import { renderActions } from '../utils/actions'
-import { setCaseListUrl } from '../utils/backlinks'
-import { breadcrumbs } from '../utils/breadcrumbs'
+import { setActiveCaseListTab, setCaseListFilters } from '../utils/navigation'
+import breadcrumbs from '../utils/breadcrumbs'
 import ExternalReferralsService from '../services/externalReferralsService'
 import { externalReferralCards } from '../utils/externalReferrals'
 
@@ -46,18 +49,34 @@ export default class CasesController {
 
   index(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
+      setActiveCaseListTab(req, res, 'case-list')
+      setCaseListFilters(req)
+
       const { token, username, displayName: userFullName } = res.locals.user
       await this.auditService.logPageView(Page.CASES_LIST, { who: username, correlationId: req.id })
-      const { query } = req
-      const { peopleType = 'NFA_RISK' } = query
-      setCaseListUrl(req)
+
+      const { assignedTo, ...queryParams } = req.query
+      const assignedToUsername = assignedTo?.startsWith('member_') ? assignedTo.substring('member_'.length) : undefined
+      const teamCode = assignedTo?.startsWith('team_') ? assignedTo.substring('team_'.length) : undefined
+
+      const casesQuery: GetCasesApiQuery = {
+        ...queryParams,
+        peopleType: queryParams.peopleType ?? 'NFA_RISK',
+        assignedToUsername,
+        teamCode,
+      }
+
       const {
-        data: { teams, cases },
+        data: { teams, teamMembers, cases },
       } = await collectApiResponses({
         teams: this.userService.getTeams(token),
-        cases: this.casesService.getCases(token, { ...query, peopleType }),
+        teamMembers: this.userService.getMyTeamMembers(token),
+        cases: this.casesService.getCases(token, casesQuery),
       })
-      const caseListSettings = setupCaseList(req, username, cases, userFullName, teams)
+
+      const assignedToOptions = setupAssignedToOptions(userFullName, teams, teamMembers, assignedToUsername || teamCode)
+      const filters = queryToFilters(casesQuery, req.originalUrl, teams, teamMembers)
+      const caseListSettings = setupCaseList(req, teamCode ? username : null, cases, assignedToOptions, filters)
 
       return res.render('pages/index', {
         caseListSettings,
@@ -67,6 +86,7 @@ export default class CasesController {
 
   search(): RequestHandler {
     return async (req: IndexRequest, res: Response) => {
+      setActiveCaseListTab(req, res, 'search')
       const searchTerm = req.query.searchTerm ?? req.session.searchTerm
       delete req.session.searchTerm
       let caseData: CaseDto | null = null
@@ -76,9 +96,9 @@ export default class CasesController {
         correlationId: req.id,
       })
 
+      const { token } = res.locals.user
       const isValidSearchCrn = searchTerm != null && validateSearchCrn(req, searchTerm)
       if (isValidSearchCrn) {
-        const { token } = res.locals.user
         try {
           const { data } = await this.casesService.searchByCrn(token, searchTerm)
           caseData = data
@@ -90,12 +110,15 @@ export default class CasesController {
         }
       }
 
+      const { data: recentSearches } = await this.casesService.getRecentSearches(token)
+
       const { errors, errorSummary } = fetchErrorsAndUserInput(req)
       return res.render('pages/search', {
         crn: searchTerm,
         resultsSummary: isValidSearchCrn ? searchResultsSummary(searchTerm, caseData) : undefined,
         casesTableColumns: casesTableColumns(),
         casesRows: caseToRows(caseData),
+        recentSearches: recentSearchItems(recentSearches),
         errors,
         errorSummary,
       })
@@ -110,7 +133,6 @@ export default class CasesController {
       })
       const { crn } = req.params
       const { token } = res.locals.user
-
       const { data: caseData } = await this.casesService.getCase(token, crn)
 
       if (caseData.userAccess === 'LIMITED') {

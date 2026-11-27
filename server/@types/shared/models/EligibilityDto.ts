@@ -9,6 +9,7 @@ import type { CaseAction } from './CaseAction'
 import type { CrsServiceResult } from './CrsServiceResult'
 import type { DtrServiceResult } from './DtrServiceResult'
 import type { PaServiceResult } from './PaServiceResult'
+import type { PpcServiceResult } from './PpcServiceResult'
 export type EligibilityDto = {
   crn: string
   cas1: Cas1ServiceResult
@@ -17,5 +18,6 @@ export type EligibilityDto = {
   dtr: DtrServiceResult
   crs: CrsServiceResult
   pa: PaServiceResult
+  ppc: PpcServiceResult
   caseActions: Array<CaseAction>
 }

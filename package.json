@@ -56,7 +56,7 @@
       ]
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!@faker-js).+"
+      "node_modules/(?!@faker-js|connect-redis).+"
     ],
     "collectCoverage": true,
     "collectCoverageFrom": [
@@ -70,6 +70,7 @@
       "<rootDir>/server/testutils/jest.setup.ts"
     ],
     "moduleNameMapper": {
+      "^connect-redis$": "<rootDir>/node_modules/connect-redis/dist/connect-redis.js",
       "^https-proxy-agent$": "<rootDir>/node_modules/https-proxy-agent/dist/index.js"
     },
     "testEnvironment": "node",
@@ -118,7 +119,7 @@
     "bunyan-format": "^0.2.1",
     "compression": "^1.8.2",
     "connect-flash": "^0.1.1",
-    "connect-redis": "^10.0.0",
+    "connect-redis": "^11.0.0",
     "csrf-sync": "^4.2.1",
     "dotenv": "18.0.4",
     "express": "^5.2.1",

@@ -1725,6 +1725,26 @@ exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE no conditional re
 }
 `;
 
+exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE not at risk of homelessness status card 1`] = `
+{
+  "blocked": false,
+  "content": [
+    {
+      "text": "Not at risk of homelessness.",
+    },
+  ],
+  "details": [],
+  "heading": "Short-term accommodation (CAS2)",
+  "hint": undefined,
+  "inactive": true,
+  "links": undefined,
+  "status": {
+    "colour": "grey",
+    "text": "Not eligible",
+  },
+}
+`;
+
 exports[`eligibilityStatusCard for cas2 renders a NOT_ELIGIBLE sexual offence history status card 1`] = `
 {
   "blocked": false,

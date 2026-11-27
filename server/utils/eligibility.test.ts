@@ -283,6 +283,10 @@ describe('eligibilityStatusCard', () => {
         result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['IN_COMMUNITY'] },
       },
       {
+        title: 'NOT_ELIGIBLE not at risk of homelessness',
+        result: { serviceStatus: 'NOT_ELIGIBLE', failureReasons: ['HAS_NEXT_ACCOMMODATION'] },
+      },
+      {
         title: 'NOT_ELIGIBLE multiple failure reasons',
         result: {
           serviceStatus: 'NOT_ELIGIBLE',
